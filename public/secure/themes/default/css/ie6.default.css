@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+/* CSS Document - for Internet Explorer 6*/
+
+
+/*Centers entire page*/
+/*End of centering entire page*/
+
+
+/*Masthead*/
+#masthead img {
+	width:760px;
+	margin-bottom:-2px
+	}
+
+
+/*ticker ifram*/
+#dtickerifrm {
+width:760px;
+	height:18px
+	}
+
+
+/*Navigation bar*/
+#navbar ul {
+	margin:0 0 0 -16px
+	}
+
+#navbar li {
+	line-height:18px
+	}
+
+#navbar .title {
+	line-height:18px
+	}
+
+#navbar .seperator {
+	background:transparent url(../images/bg_silver.gif) repeat-x;
+	height:1px
+	}
+
+
+/*Menu bar*/
+#menu a {
+	padding:5px 4px 3px 4px;
+	vertical-align:55%;
+	line-height:11px
+	}
+
+#menu #image {
+	background:#ffc url(../images/menu_corner_g.gif) no-repeat;
+	width:26px;
+	height:21px;
+	margin:0 -2px -5px 0;
+	border:0
+	}
+
+
+/*main content*/
+#main {
+	padding:4px 4px 4px 0
+	}
+
+.category {
+	padding:-3px 4px 4px -3px
+	}
+
+.cat_content h4 {
+	font-size:1.1em
+	}
+
+.cat_title h2 {
+	font-size:1.5em
+	}
+
+.text_title img {
+	padding:2px
+	}

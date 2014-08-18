@@ -1,0 +1,269 @@
+<?php /* settings.php */
+
+header('p3p: CP="ALL DSP COR CURa ADMa DEVa TAIa OUR BUS IND UNI COM NAV INT"');
+# Make explicitly sure the client sets the correct encoding when displaying the generated HTML file.
+header('Content-Type: text/html; charset=UTF-8');
+# Attempt to hide the server.
+header('Server: SillyServer');
+# Attempt to hide PHP.
+header('X-Powered-By: Jonnie Do-Good');
+
+
+/*
+ *---------------------------------------------------------------
+ * APPLICATION CONSTANTS
+ *---------------------------------------------------------------
+ *
+ * Constants defining the application
+ *
+ */
+# Define backslash or forward slash for *NIX and IIS systems.
+define('DS', DIRECTORY_SEPARATOR);
+
+# Attempt to determine the full-server path to the 'root' folder in order to reduce the possibility of path problems. (ends with a slash)
+define('BASE_PATH', realpath(dirname(__FILE__)).DS);
+
+# Define the path to data. (ends with a slash)
+define('DATA_FILES', BASE_PATH.'data'.DS);
+
+# Get the path definitions.
+require DATA_FILES.'path_definitions.php';
+
+# Define the complete path to the root of the domain we are at (ie. /hsphere/home/user/domain.com) (does't end in a slash)
+define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT']);
+
+# Extrapolate the domain name (ie. sub.domain.com)
+$fulldomain=$_SERVER['SERVER_NAME'];
+# Force lowercase.
+$fulldomain=strtolower($fulldomain);
+# Define the full domain name (ie. sub.domain.com/)-(ends with a slash)
+define('FULL_DOMAIN', $fulldomain.'/');
+
+# Create array and fill with sub-domains (ie. www., admin., www.admin.)
+$dn_prefixes=array('www.');
+# Remove sub domain.
+$domain=str_replace($dn_prefixes, '', $fulldomain);
+# The domain name that we use (ie. domain.com) (does not end with a slash)
+define('DOMAIN_NAME', $domain);
+
+# The domain name of the developement application. (doesn't end with a slash)
+define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
+
+# The domain name of the staging application. (doesn't end with a slash)
+define('STAGING_DOMAIN', 'test.jamtheforce.com');
+
+$protocal='https://';
+if(empty($_SERVER['HTTPS']) OR ($_SERVER['HTTPS']=='off'))
+{
+	$protocal='http://';
+}
+# The of the current URL. (ie https:// or http://)
+define('PROTOCAL', $protocal);
+
+# Set to TRUE to see the nasty errors for debugging, FALSE to hide them.
+if(DOMAIN_NAME===DEVELOPMENT_DOMAIN)
+{
+	define('RUN_ON_DEVELOPMENT', TRUE);
+}
+else
+{
+	define('RUN_ON_DEVELOPMENT', FALSE);
+}
+
+# Set to TRUE if on the staging site, FALSE if not.
+if(DOMAIN_NAME===STAGING_DOMAIN)
+{
+	define('RUN_ON_STAGING', TRUE);
+}
+else
+{
+	define('RUN_ON_STAGING', FALSE);
+}
+
+# Define the url that points to our application. (ends with a slash)
+define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+
+# The url to the downloads folder. (ends with a slash)
+define('DOWNLOADS', APPLICATION_URL.'download/');
+
+# Extrapolate the sub-domain we are at (ie. store)
+$subdomain=preg_replace('/^(?:([^\.]+)\.)?'.DOMAIN_NAME.'$/', '\1', $fulldomain);
+# Define the sub-domain we are at  (ie. store).
+define('SUB_DOMAIN', $subdomain);
+
+# Define the rest of the URL where we are at. (ie. folder/file.php)
+define('HERE', ltrim($_SERVER['PHP_SELF'], '/'));
+
+# Check if there is a GET query attached to the url we are at and define it as a constant.
+define('GET_QUERY', ((!empty($_SERVER['QUERY_STRING'])) ? '?'.$_SERVER['QUERY_STRING'] : ''));
+
+# Define the complete URL where we are at. (ie subdomain.example.com/file.php?data=1)
+define('FULL_URL', FULL_DOMAIN.HERE.GET_QUERY);
+
+# Define the name of the page we are at (ie. file.php)
+$filenamearray=explode('/', HERE);
+define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
+
+
+
+#####################################################################################
+# DON'T EDIT ABOVE THIS LINE ########################################################
+#####################################################################################
+/*
+ *---------------------------------------------------------------
+ * SYSTEM VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables needed by the application
+ *
+ */
+# Get the database definitions.
+require DATA_FILES.'database_definitions.php';
+
+# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
+if(RUN_ON_STAGING===TRUE)
+{
+	define('SECURE_URL', APPLICATION_URL.'secure/');
+}
+else
+{
+	define('SECURE_URL', 'https://'.DOMAIN_NAME.'/secure/');
+}
+
+if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
+{
+	# Turn Debugging on or off.
+	define('DEBUG_APP', TRUE);
+}
+else
+{
+	# Turn Debugging on or off.
+	define('DEBUG_APP', FALSE);
+}
+
+# Define SECURE_HERE as the rest of the URL when we are at a secure connection. (ie. folder/file.php)
+define('SECURE_HERE', substr(HERE, 7));
+
+# The port the server is using for ssl. (default is 443)
+define('SECURE_PORT', '443');
+
+# Get the Validator Class.
+require_once MODULES.'Validator'.DS.'Validator.php';
+# Instantiate a general Validating object.
+$validator=Validator::getInstance();
+
+# The url to the ssl secure images folder. (ends with a slash)
+define('IMAGES', (($validator->isSSL()===TRUE) ? SECURE_URL.'images/' : APPLICATION_URL.'images/'));
+
+# The complete url with scheme. (ends with a slash ie https://secure.domain.com/)
+define('COMPLETE_URL', PROTOCAL.FULL_URL);
+
+# Define where the scripts/ directory is (ie. http://Domain.com/scripts/) (ends with a slash)
+define('SCRIPTS', (($validator->isSSL()===TRUE) ? SECURE_URL.'scripts/' : APPLICATION_URL.'scripts/'));
+
+# The url that points to our public audio page (media/audio/).
+define('AUDIO_URL', APPLICATION_URL.'media/audio/');
+
+# The url that points to our public videos page (media/videos/).
+define('VIDEOS_URL', APPLICATION_URL.'media/videos/');
+
+# The url that points to our admin pages.
+define('ADMIN_URL', SECURE_URL.'admin/');
+
+# The url we redirect to the login page.
+define('LOGIN_PAGE', SECURE_URL.'login/');
+
+# The url we redirect to the logout page.
+define('LOGOUT_PAGE', LOGIN_PAGE.'logout/');
+
+# Where do we go for errors?
+define('ERROR_PAGE', APPLICATION_URL.'error/');
+
+# The url we redirect visitors to if the page access is restricted.
+define('REDIRECT_TO_LOGIN', LOGIN_PAGE);
+
+# The default url we redirect members to after logging in
+define('REDIRECT_AFTER_LOGIN', SECURE_URL.'MyAccount/');
+
+# The url we redirect to on logout.
+define('REDIRECT_ON_LOGOUT', APPLICATION_URL);
+
+# The url we redirect to in any other case.
+define('DEFAULT_REDIRECT', APPLICATION_URL);
+
+# Define the PayPal email address.
+# Sandbox Merchant: facilitator@jamtheforce.com
+# Production Merchant: info@jamtheforce.com
+if(DEBUG_APP===TRUE)
+{
+	# Turn Debugging on or off.
+	define('PP_EMAIL', 'facilitator@jamtheforce.com');
+}
+else
+{
+	# Turn Debugging on or off.
+	define('PP_EMAIL', 'info@jamtheforce.com');
+}
+
+# Define the URL to the PayPal processing script.
+define('PAYPAL_URL', SECURE_URL.'PayPal.php');
+
+# The length of time (in seconds) the cookies should remain active if "remember me" was selected on login. (default is 14 days)
+define('LOGIN_LIFE', 60*60*24*14);
+
+# The length of time (in seconds) the cookies should remain active if "remember me" was not selected on login. (default is 2 days)
+define('LOGIN_LIFE_SHORT', 60*60*24*2);
+
+# Define where cookies may be active. ('/' means the entire domain)
+define('COOKIE_PATH', '/');
+
+# Name sessions. (needs to be alphanumeric with no periods[.]- can't be soley digits; must contain at least one letter)
+define('SESSIONS_NAME', 'JTFSESSID');
+
+# By default do we check for cookies via Javascript? TRUE means "yes", FALSE means "no".
+$check_cookies=FALSE;
+
+# Set to TRUE if we want to login the user and redirect our users to the members page after they confirm their membership.
+define('REDIRECT_AFTER_CONFIRMATION', FALSE);
+
+# Set to TRUE if we let our members update their usernames, FALSE for no.
+define('ALLOW_USERNAME_CHANGE', TRUE);
+
+# Set to TRUE to let our members use the 'remember me' feature, FALSE for no.
+define('ALLOW_REMEMBER_ME', FALSE);
+
+# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
+define('WP_INSTALLED', FALSE);
+
+# Define the string to use as an encryption key for securely encrypting strings (ie passwords.)
+define('MYKEY', 'ontopoftheworld');
+
+# Get the API definitions.
+require DATA_FILES.'API_definitions.php';
+
+# Define the timezone.
+define('TIMEZONE','US/Pacific');
+
+# Get the definitions of user privileges.
+require DATA_FILES.'user_privileges.php';
+
+# Create a default variable for the titles of errors.
+$alert_title='Attention:';
+
+#####################################################################################
+# DON'T EDIT BELOW THIS LINE ########################################################
+#####################################################################################
+
+
+/*
+ *---------------------------------------------------------------
+ * EMAILING DEFINITIONS
+ *---------------------------------------------------------------
+ *
+ * Emailing values needed by the Email class.
+ *
+ */
+require DATA_FILES.'email_definitions.php';
+
+# Get the initiate script.
+require DATA_FILES.'init.php';

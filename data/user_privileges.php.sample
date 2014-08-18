@@ -1,0 +1,72 @@
+<?php /* data/user_privileges.php */
+
+# Define User priveleges
+
+# 1=Admin
+# 2=Regular User
+# 3=Banned User
+# 4=Test User
+# 5=Manager
+# 6=
+# 7=Google Apps User
+# 140=Announcement
+# 141=Announcement Administrator
+# 142=Announcement Authorized User
+# 143=Announcement Unauthorized User
+# 144=Announcement Candidate
+# 150=Video
+# 151=Video Administrator
+# 152=Video Authorized User
+# 153=Video Unauthorized User
+# 154=Video Candidate
+# 160=Audio
+# 161=Audio Administrator
+# 162=Audio Authorized User
+# 163=Audio Unauthorized User
+# 164=Audio Candidate
+  # Administrators only
+	define('ADMIN_USERS', '1');
+	# Define the email we use to contact the admin.
+	define('ADMIN_EMAIL', 'webmaster@jamtheforce.com');
+
+  # Managers
+	define('MAN_USERS', ADMIN_USERS.' 5');
+
+  # File Server Users
+	define('GAPPS_USERS', MAN_USERS.' 7');
+
+  # Announcement Administrators
+	define('ANNOUNCEMENT_ADMIN_USERS', MAN_USERS.' 141');
+  # Announcement Authorized Users
+	define('ANNOUNCEMENT_USERS', ANNOUNCEMENT_ADMIN_USERS.' 142');
+  # Announcement candidates.
+	define('ANNOUNCEMENT_CANDIDATES', '144');
+	# Define the email we use to contact the Announcement admin.
+	define('ANNOUNCEMENT_ADMIN_EMAIL', 'client@jamtheforce.com');
+
+  # Video Administrators
+	define('VIDEO_ADMIN_USERS', MAN_USERS.' 151');
+  # Video Authorized Users
+	define('VIDEO_USERS', VIDEO_ADMIN_USERS.' 152');
+  # Video candidates.
+	define('VIDEO_CANDIDATES', '154');
+	# Define the email we use to contact the Video admin.
+	define('VIDEO_ADMIN_EMAIL', 'client@jamtheforce.com');
+
+  # Audio Administrators
+	define('AUDIO_ADMIN_USERS', MAN_USERS.' 161');
+  # Audio Authorized Users
+	define('AUDIO_USERS', AUDIO_ADMIN_USERS.' 162');
+  # Audio candidates.
+	define('AUDIO_CANDIDATES', '164');
+	# Define the email we use to contact the Audio admin.
+	define('AUDIO_ADMIN_EMAIL', 'client@jamtheforce.com');
+
+  # All Admins and Managers
+	define('ALL_ADMIN_MAN', MAN_USERS.'1 5 141 151');
+  # All logged in users
+	define('ALL_USERS', MAN_USERS.' 2 4 6 141 142 151 152 161 162');
+  # All authorized branch users
+	define('ALL_BRANCH_USERS', MAN_USERS.' 4 141 142 151 152 161 162');
+  # All candidates
+	define('ALL_CANDIDATES', ANNOUNCEMENT_CANDIDATES.' '.VIDEO_CANDIDATES.' '.AUDIO_CANDIDATES);

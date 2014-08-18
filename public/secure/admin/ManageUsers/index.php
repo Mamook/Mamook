@@ -1,0 +1,156 @@
+<?php /* public/secure/admin/ManageUsers/index.php */
+
+ob_start(); # Begin output buffering
+
+try
+{
+	# Define the location of this page.
+	define('HERE_PATH', 'secure/admin/ManageUsers/index.php');
+	/*
+	** In settings we
+	** define application settings
+	** define system settings
+	** start a new session
+	** connect to the Database
+	*/
+	require_once '../../../../settings.php';
+	# Get the FormGenerator Class.
+	require_once MODULES.'Form'.DS.'FormGenerator.php';
+	# Get the FormProcessor Class.
+	require_once MODULES.'Form'.DS.'AccountFormProcessor.php';
+	# Get the PageNavigator Class.
+	require_once MODULES.'PageNavigator'.DS.'PageNavigator.php';
+
+	# Check if the logged in User is an Admin.
+	$login->checkLogin(ALL_ADMIN_MAN);
+
+	$login->findUserData();
+
+	# Create a new User object.
+	$user_obj=new User();
+
+	$display='';
+	$head='';
+	# Create an empty variable for passed params.
+	$params='';
+	# Create an empty variable for the "AND" SQL statment.
+	$and_sql='';
+
+	$order_field='ID';
+	$order_direction='ASC';
+	# Check if there is GET data.
+	if(isset($_GET['orderby']) && ($_GET['orderby']=='ID' || $_GET['orderby']=='Username' || $_GET['orderby']=='FirstName' || $_GET['orderby']=='LastName'))
+	{
+		if($_GET['orderby']=='ID') { $order_field='ID'; $params='orderby=ID'; }
+		if($_GET['orderby']=='Username') { $order_field='username'; $params='orderby=Username'; }
+		if($_GET['orderby']=='FirstName') { $order_field='fname'; $params='orderby=FirstName'; }
+		if($_GET['orderby']=='LastName') { $order_field='lname'; $params='orderby=LastName'; }
+		if(isset($_GET['dir']) && ($_GET['dir']=='ASC' || $_GET['dir']=='DESC'))
+		{
+			$order_direction=$_GET['dir'];
+			$params.='&dir='.$_GET['dir'];
+		}
+	}
+
+	# Check if the User is NOT a site admin.
+	if($login->checkAccess(ADMIN_USERS)===FALSE)
+	{
+		# Get the Branch class.
+		require_once MODULES.'Content'.DS.'Branch.php';
+		# Instantiate a new Branch object.
+		$branch=new Branch();
+		# Retrieve all branches from the branches table.
+		$retrieve_branches=$branch->getBranches(NULL, '`id`, `branch`');
+		# Get all retrieved branches.
+		$all_branches=$branch->getAllBranches();
+		# Create an empty array to hold the branch user level values.
+		$branch_levels = array();
+		# Loop through the branch rows.
+		foreach($all_branches as $row)
+		{
+			# Set the branches and their id's to the branches array.
+			$branch_id=$row->id;
+			$branch_name=$row->branch;
+			# Set the branch admin level to the $branch_admin variable.
+			$branch_admin=substr_replace($branch_id, 1, -1, 1);
+			# Check the User's level.
+			if($login->checkAccess($branch_admin)===TRUE)
+			{
+				# Set the branch user level to the $branch_levels array.
+				$branch_levels[]=substr_replace($branch_id, 2, -1, 1);
+				# Set the branch candidate level to the $branch_levels array.
+				$branch_levels[]=substr_replace($branch_id, 4, -1, 1);
+				# Set the branch author level to the $branch_levels array.
+				$branch_levels[]=substr_replace($branch_id, 5, -1, 1);
+			}
+		}
+		# Implode the $branch_levels array to stings saparated by pipes (|).
+		$branch_levels=implode('|', $branch_levels);
+		# Create the "AND" SQL statement.
+		$and_sql='WHERE `level` REGEXP '.$db->quote('-('.$branch_levels.')-');
+	}
+
+	# Create a new PageNavigator object.
+	$paginator=new PageNavigator(25, 4, CURRENT_PAGE, 'page', $user_obj->countUsers(NULL, $and_sql), $params);
+	$paginator->setStrNext('Next Page');
+	$paginator->setStrPrevious('Previous Page');
+
+	# Get the Users
+	$fields='`ID`, `username`, `level`, `fname`, `lname`';
+	$user_obj->getUsers($paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), $fields, $order_field, $order_direction, $and_sql);
+
+	$records=$user_obj->getAllUsers();
+
+	# Reverse the value of $order_direction.
+	$order_direction=(($order_direction=='ASC') ? 'DESC' : 'ASC');
+
+	# Check if there is GET data and that the passed variable is $_GET['user'].
+	if(isset($_GET['user']))
+	{
+		# Set the User ID to the data member; effectively cleaning it.
+		$user_obj->setID($_GET['user']);
+		# Set the data member to a variable.
+		$id=$user_obj->getID();
+		# Find the User's username and set it to a variable.
+		$current_username=$user_obj->findUsername($id);
+
+		# Make sure the User is an admin.
+		if($login->checkAccess(ADMIN_USERS)===TRUE)
+		{
+			$head='<h3>Please use the form below to update user: '.$current_username.'</h3>';
+
+			# Get the User's display name and set it to a variable.
+			$display_name=$user_obj->findDisplayName($id);
+			# Set the page title.
+			$page_title=$display_name.'\'s Profile';
+		}
+	}
+
+	$form_processor=new AccountFormProcessor();
+	require TEMPLATES.'forms'.DS.'account_form.php';
+
+	# Set the default style sheet(s) we are using for the site. (must be absolute location)
+	//$doc->setStyle(THEME.'css/secure.css');
+	# Do we need some javascripts? (Use the script file name before the ".js".)
+	$doc->setJavaScripts('uniform');
+	# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
+	$doc->setFooterJS('uniform-file');
+
+	/*
+	** In the page template we
+	** get the header
+	** get the masthead
+	** get the subnavbar
+	** get the navbar
+	** get the page view
+	** get the quick registration box
+	** get the footer
+	*/
+	require TEMPLATES.'page.php';
+}
+catch(Exception $e)
+{
+	$exception=new ExceptionHandler($e->getCode(),$e->getMessage(),$e->getFile(),$e->getLine(),$e->getTrace());
+}
+
+ob_flush(); # Send the buffer to the user's browser.

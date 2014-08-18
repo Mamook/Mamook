@@ -1,0 +1,8 @@
+﻿Hello,
+
+$mesg
+
+==================================
+You have received this message as a registered member at the Center for World Indigenous Studies (http://cwis.org).
+If you you would like to discontinue receiving these messages, simply login to you account at https://www.cwis.org/secure/MyAccount/privacy.php, select/deselect the appropriate settings and then click "Update".
+

@@ -1,0 +1,121 @@
+<?php /* data/init.php */
+
+/*
+ *---------------------------------------------------------------
+ * SYSTEM VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables to get everything in line.
+ *
+ */
+
+# Make sure PHP is using UTF-8 character encoding.
+mb_internal_encoding('UTF-8');
+
+# Set the date (and time)
+	# First, the timezone.
+	putenv('TZ='.TIMEZONE);
+	date_default_timezone_set(TIMEZONE);
+	# Y-m-d (ie: 2008-12-09)
+	define('YEAR_MM_DD', date('Y-m-d'));
+	# F d, Y (ie: December 09, 2008)
+	define('MONTH_DD_YEAR', date('F d, Y'));
+	# Y-m-d G:i:s (ie: 2008-12-09 21:09:33)
+	define('YEAR_MM_DD_TIME', date('Y-m-d G:i:s'));
+	# F d, Y - G:i:s (ie: December 09, 2008 - 21:09:33)
+	define('MONTH_DD_YEAR_TIME', date('F d, Y - G:i:s'));
+	# F d, Y - g:i:s a (T) (ie: December 09, 2008 - 9:09:33 pm (PST))
+	define('MONTH_DD_YEAR_12TIME_TZ', date('F d, Y - g:i:s a (T)'));
+
+# Make sure the utility methods are available (get the WebUtility Class).
+require_once MODULES.'Utility'.DS.'WebUtility.php';
+
+# If WordPress is installed, get the appropriate settings.
+if(WP_INSTALLED===TRUE)
+{
+	require_once DATA_FILES.'WordPress_settings.php';
+}
+
+# Get the Document Class.
+require_once MODULES.'Document'.DS.'Document.php';
+# Create a new Document object.
+$doc=Document::getInstance();
+
+# How do we handle errors?
+error_reporting(0);
+
+# Get the ExceptionHandler Class.
+require_once MODULES.'ExceptionHandler'.DS.'ExceptionHandler.php';
+# No custom error handling if we are already on the error page.
+if(strpos(APPLICATION_URL.HERE, ERROR_PAGE)===FALSE)
+{
+	# Set custom error handling
+	set_error_handler('myErrorHandler');
+}
+
+# For IE7 Sessions.
+if(HERE!==HERE_PATH)
+{
+	throw new Exception('On the page '.FULL_URL.', the constant "HERE" ('.HERE.') did not match the constant "HERE_PATH" ('.HERE_PATH.')', E_RECOVERABLE_ERROR);
+}
+
+# Get the DB Class needed to operate with MySQL.
+require_once MODULES.'Database'.DS.'ezdb.class.php';
+DB::init();
+$db=DB::get_instance();
+$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+# Get the Theme Class.
+require_once MODULES.'Document'.DS.'Theme.php';
+# Create a new Theme object.
+$theme=new Theme();
+
+# Define THEME as the URL to the default symlink theme folder. (ends with a slash)
+define('THEME', (($validator->isSSL()===TRUE) ? SECURE_URL.'themes/'.$theme->getName().'/' : APPLICATION_URL.'themes/'.$theme->getName().'/'));
+
+# The absolute path to the default symlink theme folder. (ends with a slash)
+define('THEME_PATH', (($validator->isSSL()===TRUE) ? BASE_PATH.'public'.DS.'secure'.DS.'themes'.DS.$theme->getName().DS : BASE_PATH.'public'.DS.'themes'.DS.$theme->getName().DS));
+
+# Create a variable for the site designer's website.
+$designer_site=$theme->getWebsite();
+# Set the designer for the designer meta tag in header.php
+$meta_designer=$theme->getDesigner().((!empty($designer_site)) ? ', '.$designer_site : '');
+
+if(!preg_match('/\bsecure\b(?!\/login)/i', $_SERVER['REQUEST_URI'], $matches))
+{
+	# Set the default style sheet(s) we are using for the front-end of the site. (must be absolute location)
+	$doc->setStyle(THEME.'css/default.css');
+}
+else
+{
+	# Set the secure style sheet(s) we are using for the back-end of the site. (must be absolute location)
+	$doc->setStyle(THEME.'css/secure.css');
+}
+
+# Set the default JavaScripts we are using for the site.
+$doc->setJavaScripts('plugins');
+
+# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
+$doc->setFooterJS('scripts');
+
+# Get the Session Class
+require_once MODULES.'Session'.DS.'Session.php';
+# Check if there is a session id set the the $sesh_id variable.
+$sesh_id=((isset($sesh_id)) ? $sesh_id : NULL);
+# Create a new session object, thus starting a new session.
+$session=Session::getInstance(NULL, NULL, NULL, $sesh_id);
+# Remember what page we're on.
+$session->setPostLogin();
+
+# Set the link for the page image to the default of "lightbox". This will cause the image to open in a popup.
+$image_link='lightbox';
+
+# Get the Login Class.
+require_once MODULES.'User'.DS.'Login.php';
+# Instantiate the Login Class.
+$login=new Login();
+
+# Get the Content Class.
+require_once MODULES.'Content'.DS.'Content.php';
+# Create a new Content object.
+$main_content=Content::getInstance();

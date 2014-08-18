@@ -1,0 +1,98 @@
+<?php /* data/WordPress_settings.php */
+
+/*
+ *---------------------------------------------------------------
+ * WORDPRESS VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables needed by the WordPress application
+ *
+ */
+# The prefix (if any) for the WordPress Database tables.
+define('WP_DBPREFIX', 'ss_');
+
+/*
+ * Authentication Unique Keys and Salts.
+ *
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define('AUTH_KEY',         '');
+define('SECURE_AUTH_KEY',  '');
+define('LOGGED_IN_KEY',    '');
+define('NONCE_KEY',        '');
+define('AUTH_SALT',        '');
+define('SECURE_AUTH_SALT', '');
+define('LOGGED_IN_SALT',   '');
+define('NONCE_SALT',       '');
+
+# The folder WordPress is installed in (ie wordpress/folder).
+define('WP_FOLDER', '');
+
+# The complete path to the folder WordPress is installed in (ie wordpress/folder).
+define('WP_PATH', ROOT_PATH.DS.WP_FOLDER);
+
+# The URL for the WordPress application. (no trailing slash)
+define('WP_SITEURL', APPLICATION_URL.WP_FOLDER);
+
+# The address to type in a browser to reach the WordPress blog. (no trailing slash)
+define('WP_HOME', WP_SITEURL);
+
+# Is the WordPress installation secure?
+//define('WP_SECURE', FALSE);
+
+
+# The following constants are also defined in wp-includes/default-constants.php. Please check this file and compare values after any major WordPress update.
+
+	# The full local path of the wp-content directory. (no trailing slash)
+	define('WP_CONTENT_DIR', WP_PATH.DS.'wp-content');
+
+	# The full URI to the wp-content directory. (no trailing slash)
+	define( 'WP_CONTENT_URL', WP_SITEURL.'/wp-content');
+
+	/*
+	 * Allows for the plugins directory to be moved from the default location. (full url, no trailing slash)
+	 *
+	 * @since 2.6.0
+	 */
+	define('WP_PLUGIN_URL', WP_CONTENT_URL.DS.'plugins');
+
+	/*
+	 * Used to guarantee unique hash cookies
+	 *
+	 * @since 1.5
+	 */
+	define('COOKIEHASH', md5(WP_SITEURL));
+
+	# @since 2.0.0
+	define('USER_COOKIE', 'wordpressuser_'.COOKIEHASH);
+
+	# @since 2.0.0
+	define('PASS_COOKIE', 'wordpresspass_'.COOKIEHASH);
+
+	# @since 2.5.0
+	define('AUTH_COOKIE', 'wordpress_'.COOKIEHASH);
+
+	# @since 2.6.0
+	define('SECURE_AUTH_COOKIE', 'wordpress_sec_'.COOKIEHASH);
+
+	# @since 2.6.0
+	define('LOGGED_IN_COOKIE', 'wordpress_logged_in_'.COOKIEHASH);
+
+	# Define where cookies may be active. ('/' means the entire domain)
+	define('COOKIEPATH', COOKIE_PATH);
+
+	# @since 1.5.0
+	define('SITECOOKIEPATH', COOKIEPATH);
+
+	# @since 2.6.0
+	define('ADMIN_COOKIE_PATH', COOKIEPATH);
+
+	# @since 2.6.0
+	define('PLUGINS_COOKIE_PATH', COOKIEPATH);
+
+	# @since 2.0.0
+	define('COOKIE_DOMAIN', '.'.DOMAIN_NAME);

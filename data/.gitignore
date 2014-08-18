@@ -1,0 +1,12 @@
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+!API_definitions.php.sample
+!database_definitions.php.sample
+!email_definitions.php.sample
+!formmail.ini.sample
+!init.php.sample
+!path_definitions.php
+!user_privileges.php.sample
+!WordPress_settings.php.sample

@@ -1,0 +1,12 @@
+﻿Hello,
+
+You received an email from someone through a form on the cwis.org website:
+
+From: $realname
+Email: $email
+Subject: $subject
+Message:
+==================================
+
+$mesg
+

@@ -1,0 +1,12 @@
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+!ads
+!audio
+!books
+!no.image.available.gif
+!notfound.jpg
+!original
+!profile
+!videos

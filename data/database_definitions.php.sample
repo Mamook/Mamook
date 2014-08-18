@@ -1,0 +1,53 @@
+<?php /* data/database_definitions.php */
+
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
+{
+	# The hostname for the Database.
+	define('HOSTNAME', '');
+
+	# The name of the Database.
+	define('DBASE', '');
+
+	# The Database username
+	define('DBUSER', '');
+
+	# The Database password.
+	define('DBPASS', '');
+
+	# The prefix (if any) for our Database tables.
+	define('DBPREFIX', '');
+}
+elseif(RUN_ON_STAGING===TRUE)
+{
+	# The hostname for the Developement Database.
+	define('HOSTNAME', '');
+
+	# The name of the Developement Database.
+	define('DBASE', '');
+
+	# The Developement Database username
+	define('DBUSER', '');
+
+	# The Developement Database password.
+	define('DBPASS', '');
+
+	# The prefix (if any) for the Developement Database tables.
+	define('DBPREFIX', '');
+}
+else
+{
+	# The hostname for the Developement Database.
+	define('HOSTNAME', 'localhost');
+
+	# The name of the Developement Database.
+	define('DBASE', '');
+
+	# The Developement  username
+	define('DBUSER', 'jamtheforce');
+
+	# The Developement Database password.
+	define('DBPASS', '');
+
+	# The prefix (if any) for the Developement Database tables.
+	define('DBPREFIX', '');
+}

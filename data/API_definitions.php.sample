@@ -1,0 +1,113 @@
+<?php  /* data/API_definitions.php */
+
+# AddThis Variables
+define('ADDTHIS_ID','');
+define('ADDTHIS_APP_ID', '');
+
+# Amazon Variables
+define('AMAZON_ACCESS_KEY','');
+define('AMAZON_ASS_TAG','');
+define('AMAZON_SECRET_KEY','');
+
+# Bit.ly Variables
+define('BITLY_USERNAME','');
+define('BITLY_KEY', '');
+
+# Facebook Variables
+define('FB_APP_ID', '');
+define('FB_APP_SECRET', '');
+define('FB_ID', '');
+define('FB_SESSION', '');
+define('FB_TOKEN', '');
+define('FB_URL', '');
+
+
+/* Google AJAX Search API Key */
+if(defined('DOMAIN_NAME'))
+{
+	# Development sites.
+	if(DOMAIN_NAME==DEVELOPMENT_DOMAIN)
+	{
+		define('GOOGLEAPIKEY', '');
+	}
+	# Production sites.
+	elseif(DOMAIN_NAME=='jamtheforce.com')
+	{
+		define('GOOGLEAPIKEY', '');
+	}
+}
+/* end Google AJAX Search API Key */
+
+# Google API variables
+
+# Get the contents of the ini file and set it to a string.
+$google_access_token=file_get_contents(DATA_FILES.'google_youtube_token.ini');
+define('GOOGLE_ACCESS_TOKEN', $google_access_token);
+define('GOOGLE_CLIENT_ID', '');
+define('GOOGLE_CLIENT_SECRET', '');
+define('GOOGLE_REFRESH_TOKEN', '');
+
+/* reCaptcha API keys (see reCaptcha.net) */
+# Development sites.
+if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
+{
+	define('PUBLICKEY', '');
+	define('PRIVATEKEY', '-');
+}
+# Production sites.
+else
+{
+	define('PUBLICKEY', '');
+	define('PRIVATEKEY', '');
+}
+/* end reCaptcha API keys */
+
+# Soundcloud Variables
+define('SOUNDCLOUD_AUTH_URL', 'https://soundcloud.com/connect');
+define('SOUNDCLOUD_CLIENT_ID','');
+define('SOUNDCLOUD_CLIENT_SECRET', '');
+define('SOUNDCLOUD_TOKEN', '');
+define('SOUNDCLOUD_TOKEN_URL', 'https://api.soundcloud.com/oauth2/token');
+define('SOUNDCLOUD_USER_ID', '');
+define('SOUNDCLOUD_USERNAME', '');
+define('SOUNDCLOUD_PERMALINK', '');
+define('SOUNDCLOUD_URL', '');
+
+# Twitter Variables
+define('TWITTER_USERNAME','');
+define('TWITTER_PASSWORD', '');
+define('TWITTER_CONSUMER_KEY', '');
+define('TWITTER_CONSUMER_SECRET', '');
+if(defined('SECURE_URL')) define('TWITTER_CALLBACK', SECURE_URL.'xhr/index.php');
+define('TWITTER_TOKEN', '');
+define('TWITTER_TOKEN_SECRET', '');
+define('TWITTER_URL', '');
+
+# Vimeo Variables
+define('VIMEO_CONSUMER_KEY','');
+define('VIMEO_SECRET_KEY','');
+define('VIMEO_URL', '');
+
+# Websnapr Variables
+define('WEBSNAPR_DEV_KEY', '');
+
+/* YouTube Variables */
+# Development sites.
+if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
+{
+	define('YOUTUBE_SESSION_TOKEN', '');
+}
+# Production sites.
+else
+{
+	define('YOUTUBE_SESSION_TOKEN', NULL);
+}
+define('YOUTUBE_CLIENT_ID','');
+define('YOUTUBE_CLIENT_SECRET','');
+define('YOUTUBE_DEV_KEY','');
+define('YOUTUBE_REFRESH_TOKEN', '');
+define('YOUTUBE_USERNAME','');
+define('YOUTUBE_CHANNELID','');
+define('YOUTUBE_USERID', '');
+define('YOUTUBE_URL', '');
+/* end YouTube Variables */

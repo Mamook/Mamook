@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+#main .divider {
+	width:468px;
+	height:0;
+	border:1px solid #d0d0d0;
+	margin:15px 0
+}
+
+#main .amazon_product_detailed {
+	position:relative;
+	float:left;
+	width:140px;
+	min-height:160px;
+	margin:8px 18px 0 0
+}
+
+#main .amazon_product_detailed img.image {
+	float:left;
+	clear:left;
+	max-width:135px;
+	max-height:165px
+}
+
+#main .amazon_product_detailed .information {
+	max-width:148px;
+	float:left;
+	clear:right;
+	margin:10px 4px 30px 4px
+}
+
+#main .amazon_product {
+	position:relative;
+	float:left;
+	width:220px;
+	min-height:160px;
+	margin:8px 18px 20px 0
+}
+
+#main .amazon_product img.image {
+	float:left;
+	clear:left;
+	max-width:96px
+}
+
+#main .amazon_product .information {
+	position:absolute;
+	top:0;
+	left:100px;
+	max-width:110px;
+	margin:0 0 30px 0
+}
+
+#main .amazon_product .information ul, #main .amazon_product_detailed .information ul {
+	list-style:none inside
+}
+
+#main .amazon_product .title, #main .amazon_product_detailed .title {
+	padding:0;
+	font-weight:bold;
+	font-size:14px;
+	line-height:14px;
+	color:#404040
+}
+
+#main .amazon_product .author h4, #main .amazon_product .publisher h4, #main .amazon_product_detailed .author h4, #main .amazon_product_detailed .publisher h4, #main .product_detailed .author h4, #main .product_detailed .publisher h4 {
+	color:#300;
+	text-transform:none
+}
+
+#main .amazon_product .buy_new {
+	color:#060
+}
+
+#main .amazon_product .buy_new h4 {
+	color:#404040;
+	display:inline
+}
+
+#main .amazon_product .submit {
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:112px;
+	height:23px;
+	background:url(../images/buttons/Amazon.png) no-repeat top left;
+	margin:20px 0 0 0
+}
+
+#main .amazon_product .submit:hover {
+	background-position:bottom left
+}
+
+#main .map_product, #main .product_detailed {
+	position:relative;
+	margin:20px 0 0 0
+}
+
+#main .map_product ul {
+	width:474px;
+	border-top:1px solid #a0a0a1;
+	padding:20px 0 10px 0;
+	font:normal 12px/12px Helvetica, Arial, Verdana, sans-serif
+}
+
+#main .map_product .title, #main .product_detailed .title {
+	padding:0;
+	font:bold 14px/14px "Trebuchet MS", Helvetica, Arial, sans-serif;
+	color:#663700;
+	margin:0 0 4px 0
+}
+
+#main .map_product .desc, #main .product_detailed .desc {
+	width:474px;
+	font:normal 11px/14px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+	color:#000000;
+	margin:6px 10px 10px 10px
+}
+
+#main .map_product li.link a:link, #main .map_product li.link a:visited {
+	float:right;
+	color:#f05033;
+	font-weight:bold;
+	text-decoration:none
+}
+
+#main .map_product li.link a:hover, #main .map_product li.link a:active {
+	float:right;
+	color:#663700;
+	font-weight:bold;
+	text-decoration:none
+}
+
+#main .product_detailed ul {
+	width:474px;
+	padding:0 0 10px 0;
+	font:normal 11px/14px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+	color:#000000;
+}
+
+#main .product_detailed .us-history-img {
+	float:left;
+	clear:both;
+	padding:30px 30px 0 0;
+}

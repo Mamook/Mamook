@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+/* CSS Document - for Internet Explorer 5 for Mac*/
+html, body {
+	height:auto
+	}
+
+
+/*Navigation bar*/
+#navbar {
+	float:none;
+	position:absolute;
+	top:148px;
+	}
+
+
+/*Menu bar*/
+#menu a {
+	margin:0 -1px 0 -3px;
+	padding:5px 4px 2px 4px
+	}
+
+#menu #image {
+	margin:0 -2px -5px 0
+	}
+
+
+/*main content*/
+#main {
+	}
+
+.cat_content h4 {
+	font-size:1.1em
+	}
+
+.cat_title h2 {
+	font-size:1.5em
+	}
+
+.col1 {
+	width:254px
+	}
+
+.col2 {
+	width:254px
+	}

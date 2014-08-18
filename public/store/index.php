@@ -1,0 +1,122 @@
+<?php /* public/store/index.php */
+
+ob_start(); # Begin output buffering
+
+try
+{
+	# Define the location of this page.
+	define('HERE_PATH', 'store/index.php');
+	/*
+	** In settings we
+	 ** define application settings
+	 ** define system settings
+	 ** start a new session
+	 ** connect to the Database
+	 */
+	require_once '../../settings.php';
+	# Get the PageNavigator Class.
+	require_once MODULES.'PageNavigator'.DS.'PageNavigator.php';
+	# Get the Product Class.
+	require_once MODULES.'Product'.DS.'Product.php';
+
+	# Create a new Product object
+	$product_obj=new Product();
+
+	# Create an empty variable to hold the XHTML.
+	$display='';
+
+	# Check if there is GET data.
+	if(isset($_GET['product']))
+	{
+		# Get the Product content.
+		$product_obj->getProducts('Books-Maps-Music', 1, '*', 'title', 'ASC', ' `id` = '.$db->quote($_GET['product']));
+		# Display the Product content.
+		$displayed_products=$product_obj->displayProduct('product', $product_obj->getTitle(), 'MediumImage');
+		foreach($displayed_products as $displayed_product)
+		{
+			# Add the XHTML to the display variable.
+			$display.='<div class="product detailed">';
+			$display.=$displayed_product['buy'];
+			$display.=$displayed_product['price'];
+			$display.=$displayed_product['image'];
+			$display.='<div class="info">';
+			$display.=$displayed_product['author'];
+			$display.=$displayed_product['publisher'];
+			$display.='</div>';
+			$display.=$displayed_product['description'];
+			$display.=$displayed_product['content'];
+			$display.=$displayed_product['editorial_review'];
+			$display.='</div>';
+		}
+		# Set the product's title as the page title.
+		$page_title=$displayed_product['title'];
+	}
+	else
+	{
+		# Create the "AND" portion of the sql statement that requires the category id for "Top Picks".
+		$and_sql='(`category` REGEXP \'-22-\')';
+
+		# Set "Top Picks" as the page's sub title.
+		$sub_title='Top Picks';
+
+		# Create a new PageNavigator object.
+		$paginator=new PageNavigator(8, 4, CURRENT_PAGE, 'page', $product_obj->countAllRecords('Books-Maps-Nusic-Top Picks', NULL, $and_sql));
+		$paginator->setStrFirst('');
+		$paginator->setStrLast('');
+		$paginator->setStrNext('Next Page');
+		$paginator->setStrPrevious('Previous Page');
+
+		# Get the Product content.
+		$product_obj->getProducts('Books-Maps-Music-Top Picks', $paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', 'title', 'ASC', $and_sql);
+
+		# Display the Product content.
+		$displayed_products=$product_obj->displayProduct($paginator->getFirstParamName(), rtrim(WebUtility::removeIndex(HERE), '/').'.TopPicks', 'MediumImage', 50);
+		if(!empty($displayed_products))
+		{
+			foreach($displayed_products as $displayed_product)
+			{
+				# Add the XHTML to the display variable.
+				$display.='<div class="product">';
+				$display.=$displayed_product['image'];
+				$display.='<div class="info">';
+				$display.=$displayed_product['title'];
+				if(empty($displayed_product['author']))
+				{
+					$display.=$displayed_product['publisher'];
+				}
+				else
+				{
+					$display.=$displayed_product['author'];
+				}
+				$display.=$displayed_product['price'];
+				$display.='</div>';
+				$display.=$displayed_product['buy'];
+				$display.='</div>';
+			}
+
+			# Add the pagenavigator to the display variable.
+			$display.=$paginator->getNavigator();
+		}
+	}
+
+	# Do we need some more CSS?
+	$doc->setStyle(THEME.'css/store.css');
+
+	/*
+	 ** In the page template we
+	 ** get the header
+	 ** get the masthead
+	 ** get the subnavbar
+	 ** get the navbar
+	 ** get the page view
+	 ** get the quick registration box
+	 ** get the footer
+	 */
+	require TEMPLATES.'page.php';
+}
+catch(Exception $e)
+{
+	$exception=new ExceptionHandler($e->getCode(),$e->getMessage(),$e->getFile(),$e->getLine(),$e->getTrace());
+}
+
+ob_flush(); # Send the buffer to the user's browser.

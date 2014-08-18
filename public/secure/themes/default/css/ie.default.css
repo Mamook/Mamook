@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+/* CSS Document - for Internet Explorer*/
+
+/**********************************/
+/***       Core HTML Setup      ***/
+/***        CSS3 Document       ***/
+/**********************************/
+
+
+/*centers entire page*/
+body {
+	text-align:center
+}
+/*end of centering entire page*/
+
+
+/* Menu Bars */
+#navbar .menu1 li {
+	margin-left:-17px
+}
+
+#menu2, #media {
+	float:none
+}
+
+#menu2 li {
+	margin:0 0 8px -15px
+}
+
+#media {
+	font-size:10px
+}
+
+
+/* Main Content */
+#main {
+	min-height:476px
+}
+
+#main .subcontent .date {
+	margin-left:-16px
+}
+
+
+/* Boxed Content */
+#box1b .subcontent .date, #box1c .subcontent .date {
+	margin-left:-15px
+}
+
+#box2 {
+	width:209px;
+	padding:10px 10px 10px 0
+}
+
+
+/* Forms */
+#box2 form h3 {
+	padding:20px 0;
+	white-space:nowrap
+}
+
+#box2 label {
+	line-height:18px;
+	white-space:nowrap
+}
+
+#box2 .submit {
+	margin:4px 0 0 -2px
+}
+
+#box2 .text {
+	position:absolute;
+	top:53px;
+	left:20px
+}
+
+#box2 #pointer {
+	position:absolute;
+	top:55px;
+	left:192px
+}
+
+
+/* Footer */
+#info {
+	font-size:10px
+}
