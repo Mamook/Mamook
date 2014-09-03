@@ -36,37 +36,37 @@
 	define('GAPPS_USERS', MAN_USERS.' 7');
 
   # Announcement Administrators
-	define('ANNOUNCEMENT_ADMIN_USERS', MAN_USERS.' 141');
+	define('ANNOUNCEMENT_ADMIN_USERS', MAN_USERS.' 51');
   # Announcement Authorized Users
-	define('ANNOUNCEMENT_USERS', ANNOUNCEMENT_ADMIN_USERS.' 142');
+	define('ANNOUNCEMENT_USERS', ANNOUNCEMENT_ADMIN_USERS.' 52');
   # Announcement candidates.
-	define('ANNOUNCEMENT_CANDIDATES', '144');
+	define('ANNOUNCEMENT_CANDIDATES', '54');
 	# Define the email we use to contact the Announcement admin.
 	define('ANNOUNCEMENT_ADMIN_EMAIL', 'client@jamtheforce.com');
 
   # Video Administrators
-	define('VIDEO_ADMIN_USERS', MAN_USERS.' 151');
+	define('VIDEO_ADMIN_USERS', MAN_USERS.' 61');
   # Video Authorized Users
-	define('VIDEO_USERS', VIDEO_ADMIN_USERS.' 152');
+	define('VIDEO_USERS', VIDEO_ADMIN_USERS.' 62');
   # Video candidates.
-	define('VIDEO_CANDIDATES', '154');
+	define('VIDEO_CANDIDATES', '64');
 	# Define the email we use to contact the Video admin.
 	define('VIDEO_ADMIN_EMAIL', 'client@jamtheforce.com');
 
   # Audio Administrators
-	define('AUDIO_ADMIN_USERS', MAN_USERS.' 161');
+	define('AUDIO_ADMIN_USERS', MAN_USERS.' 71');
   # Audio Authorized Users
-	define('AUDIO_USERS', AUDIO_ADMIN_USERS.' 162');
+	define('AUDIO_USERS', AUDIO_ADMIN_USERS.' 72');
   # Audio candidates.
-	define('AUDIO_CANDIDATES', '164');
+	define('AUDIO_CANDIDATES', '74');
 	# Define the email we use to contact the Audio admin.
 	define('AUDIO_ADMIN_EMAIL', 'client@jamtheforce.com');
 
   # All Admins and Managers
-	define('ALL_ADMIN_MAN', MAN_USERS.'1 5 141 151');
+	define('ALL_ADMIN_MAN', MAN_USERS.'1 5 51 61');
   # All logged in users
-	define('ALL_USERS', MAN_USERS.' 2 4 6 141 142 151 152 161 162');
+	define('ALL_USERS', MAN_USERS.' 2 4 6 51 62 71');
   # All authorized branch users
-	define('ALL_BRANCH_USERS', MAN_USERS.' 4 141 142 151 152 161 162');
+	define('ALL_BRANCH_USERS', MAN_USERS.' 4 51 62 71');
   # All candidates
 	define('ALL_CANDIDATES', ANNOUNCEMENT_CANDIDATES.' '.VIDEO_CANDIDATES.' '.AUDIO_CANDIDATES);
