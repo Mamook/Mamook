@@ -1,9 +1,11 @@
 <?php /* application/views/webSupport/index.php */
 
-echo '<section id="main" class="main contact">',
+echo '<section id="main" class="main">',
 	'<div class="main-1"></div>',
 	'<div class="main-2">',
+		# Get the main content.
 		$display_content,
+		$display,
 		$display_quote,
 	'</div>',
 	'<div class="main-3"></div>',

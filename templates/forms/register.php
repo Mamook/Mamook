@@ -34,7 +34,7 @@ $register->addFormPart('<label class="label" for="password_conf">Confirm Passwor
 $register->addElement('password', array('name'=>'password_conf', 'id'=>'password_conf'));
 $register->addFormPart('</li>');
 $register->addFormPart('<li>');
-$register->addFormPart('<label for="recaptcha_response_field" class="label"><a href="http://www.google.com/recaptcha/learnmore" title="What is reCaptcha?" target="_blank">reCaptch<span>?</span></a></label>');
+$register->addFormPart('<label for="recaptcha_response_field" class="label"><a href="http://www.google.com/recaptcha/intro/index.html" title="What is reCaptcha?" target="_blank">reCaptch<span>?</span></a></label>');
 $register->addFormPart('<div class="reCaptcha">');
 $register->addFormPart($register->reCaptchaGetHTML(PUBLICKEY, $login->getReCaptchaError(), TRUE));
 $register->addFormPart('</div>');

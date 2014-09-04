@@ -60,7 +60,7 @@ if($login->checkAccess(ALL_BRANCH_USERS)===TRUE)
 				'</li>',
 			'</ul>',
 	'</li>',
-	'<li class="list-nav-2 hover', Document::addHereClass(ADMIN_URL.'admin/ManageContent/products/', FALSE, FALSE), '">',
+	'<li class="list-nav-2 hover', Document::addHereClass(ADMIN_URL.'ManageContent/products/', FALSE, FALSE), '">',
 		'<a href="', ADMIN_URL, 'ManageContent/products/" title="Add / Edit / Delete a Product">Products</a>',
 			'<ul class="nav-3">',
 				'<li class="list-nav-3', Document::addHereClass(ADMIN_URL.'ManageContent/products/', FALSE, FALSE), '">',

@@ -9,7 +9,7 @@
  *
  */
 # Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
-define('USE_SMTP', TRUE);
+define('USE_SMTP', FALSE);
 
 if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING===FALSE)
 {
@@ -32,7 +32,7 @@ else
 define('SMTP_USER', '');
 
 # Define the password to use for SMTP (only needed if SMTP is set to TRUE)
-define('SMTP_PASS', '!');
+define('SMTP_PASS', '');
 
 # Define the email to use in the "from" field for SMTP (only needed if SMTP is set to TRUE)
 define('SMTP_FROM', SMTP_USER);

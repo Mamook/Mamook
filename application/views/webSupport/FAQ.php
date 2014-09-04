@@ -1,6 +1,6 @@
 <?php /* application/views/webSupport/FAQ.php */
 
-echo '<section id="main" class="main contact">',
+echo '<section id="main" class="main faq">',
 	'<div class="main-1"></div>',
 	'<div class="main-2">',
 		$display_content,

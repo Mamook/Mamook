@@ -39,10 +39,6 @@ if(defined('DOMAIN_NAME'))
 /* end Google AJAX Search API Key */
 
 # Google API variables
-
-# Get the contents of the ini file and set it to a string.
-$google_access_token=file_get_contents(DATA_FILES.'google_youtube_token.ini');
-define('GOOGLE_ACCESS_TOKEN', $google_access_token);
 define('GOOGLE_CLIENT_ID', '');
 define('GOOGLE_CLIENT_SECRET', '');
 define('GOOGLE_REFRESH_TOKEN', '');
@@ -52,7 +48,7 @@ define('GOOGLE_REFRESH_TOKEN', '');
 if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
 {
 	define('PUBLICKEY', '');
-	define('PRIVATEKEY', '-');
+	define('PRIVATEKEY', '');
 }
 # Production sites.
 else

@@ -127,7 +127,7 @@ if(RUN_ON_STAGING===TRUE)
 }
 else
 {
-	define('SECURE_URL', 'https://'.DOMAIN_NAME.'/secure/');
+	define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
 }
 
 if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
