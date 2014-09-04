@@ -32,7 +32,8 @@ if(isset($_GET['content']))
 			}
 		}
 
-		$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $content->getText(TRUE));
+		$text=$content->getText(TRUE);
+		//$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $content->getText(TRUE));
 		$text=str_ireplace(array('<br />','&lt;br /&gt;'), '', $text);
 
 		$image_options[0]='';

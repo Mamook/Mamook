@@ -283,9 +283,9 @@ class Content
 		# Clean it up.
 		$text=trim($text);
 		# Convert new lines to breaks.
-		$text=nl2br($text);
+		//$text=nl2br($text);
 		# Replace any domain tokens with the current domain name.
-		$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
+		//$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
 		# Set the data member.
 		$this->text=$text;
 	} #==== End -- setText
