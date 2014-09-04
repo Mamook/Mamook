@@ -185,13 +185,16 @@ if(empty($duplicates))
 			$publishers=$sc_object->getAllPublishers();
 			$pub_options[0]='';
 			$pub_options['add']='Add Publisher';
-			foreach($publishers as $row)
+			if(!empty($publishers))
 			{
-				$pub_options[$row->id]=$row->name;
-				if($row->id==$sc_object->getPublisherID())
+				foreach($publishers as $row)
 				{
-					# Set the selected institution to the default.
-					$pub_options['selected']=$row->name;
+					$pub_options[$row->id]=$row->name;
+					if($row->id==$sc_object->getPublisherID())
+					{
+						# Set the selected institution to the default.
+						$pub_options['selected']=$row->name;
+					}
 				}
 			}
 			if($sc_object->getPublisherID()==='add')
@@ -271,22 +274,28 @@ if(empty($duplicates))
 			# Check if there is GET data and it is for the post.
 			if(!isset($_GET['post']))
 			{
-				$fg->addFormPart('<li>');
-				# Get whether or not the post should be posted to Facebook from the data member and set it to a variable.
-				$facebook=$populator->getFacebook();
-				# Make the Facebook value digestible to the form.
-				$facebook=(($facebook===NULL) ? '' : 'post');
-				$fg->addFormPart('<label class="label" for="facebook">Post on <span class="facebook" title="Facebook">Facebook</span></label>');
-				$fg->addElement('checkbox', array('name'=>'facebook', 'value'=>'post', 'id'=>'facebook', 'checked'=>$facebook, 'title'=>'Post on Facebook'));
-				$fg->addFormPart('</li>');
-				$fg->addFormPart('<li>');
-				# Get whether or not the post should be posted to Twitter from the data member and set it to a variable.
-				$twitter=$populator->getTwitter();
-				# Make the Twitter value digestible to the form.
-				$twitter=(($twitter===NULL) ? '' : 'tweet');
-				$fg->addFormPart('<label class="label" for="twitter">Tweet on <span class="twitter" title="Twitter">Twitter</span></label>');
-				$fg->addElement('checkbox', array('name'=>'twitter', 'value'=>'tweet', 'id'=>'twitter', 'checked'=>$twitter, 'title'=>'Tweet on Twitter'));
-				$fg->addFormPart('</li>');
+				if(FB_APP_ID!="" && FB_APP_SECRET!='' && FB_ID!='' && FB_SESSION!='' && FB_TOKEN!='' && FB_URL!='')
+				{
+					$fg->addFormPart('<li>');
+					# Get whether or not the post should be posted to Facebook from the data member and set it to a variable.
+					$facebook=$populator->getFacebook();
+					# Make the Facebook value digestible to the form.
+					$facebook=(($facebook===NULL) ? '' : 'post');
+					$fg->addFormPart('<label class="label" for="facebook">Post on <span class="facebook" title="Facebook">Facebook</span></label>');
+					$fg->addElement('checkbox', array('name'=>'facebook', 'value'=>'post', 'id'=>'facebook', 'checked'=>$facebook, 'title'=>'Post on Facebook'));
+					$fg->addFormPart('</li>');
+				}
+				if(TWITTER_USERNAME!="" && TWITTER_PASSWORD!='' && TWITTER_CONSUMER_KEY!='' && TWITTER_CONSUMER_SECRET!='' && TWITTER_CALLBACK!='' && TWITTER_TOKEN!='' && TWITTER_TOKEN_SECRET!='' && TWITTER_URL!='')
+				{
+					$fg->addFormPart('<li>');
+					# Get whether or not the post should be posted to Twitter from the data member and set it to a variable.
+					$twitter=$populator->getTwitter();
+					# Make the Twitter value digestible to the form.
+					$twitter=(($twitter===NULL) ? '' : 'tweet');
+					$fg->addFormPart('<label class="label" for="twitter">Tweet on <span class="twitter" title="Twitter">Twitter</span></label>');
+					$fg->addElement('checkbox', array('name'=>'twitter', 'value'=>'tweet', 'id'=>'twitter', 'checked'=>$twitter, 'title'=>'Tweet on Twitter'));
+					$fg->addFormPart('</li>');
+				}
 			}
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
