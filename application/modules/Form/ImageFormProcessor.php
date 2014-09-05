@@ -389,16 +389,16 @@ class ImageFormProcessor extends FormProcessor
 
 
 
-	/*** private methods ***/
+	/*** protected methods ***/
 
 	/**
 	 * processImageBack
 	 *
 	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch an image.
 	 *
-	 * @access	private
+	 * @access	protected
 	 */
-	private function processImageBack()
+	protected function processImageBack()
 	{
 		try
 		{
@@ -427,7 +427,7 @@ class ImageFormProcessor extends FormProcessor
 	 *
 	 * @access	private
 	 */
-	private function processImageDelete()
+	protected function processImageDelete()
 	{
 		try
 		{
@@ -530,8 +530,33 @@ class ImageFormProcessor extends FormProcessor
 								{
 									try
 									{
-										/** FIX THIS QUERY OR IMPLEMENT nnDB IN MYSQL **/
-										# Remove the file from all `subcontent`, `content`, and `product` records.
+										# DRAVEN: We should be using prepared statements!
+										# Remove the file from all `content` records.
+										$db_submit=$db->query('UPDATE '.
+										'`'.DBPREFIX.'content` '.
+										'SET '.
+										DBPREFIX.'content.image = NULL '.
+										'WHERE '.
+										DBPREFIX.'content.image = '.$db->quote($db->escape($image_name)));
+
+										# Remove the file from all `products` records.
+										$db_submit=$db->query('UPDATE '.
+										'`'.DBPREFIX.'products` '.
+										'SET '.
+										DBPREFIX.'products.image = NULL '.
+										'WHERE '.
+										DBPREFIX.'products.image = '.$db->quote($id);
+
+										# Remove the file from all `subcontent` records.
+										$db_submit=$db->query('UPDATE '.
+										'`'.DBPREFIX.'subcontent` '.
+										'SET '.
+										DBPREFIX.'subcontent.image = NULL '.
+										'WHERE '.
+										DBPREFIX.'subcontent.image = '.$db->quote($id);
+
+										# DRAVEN: Does not work if a table is empty.
+										/*
 										$db_submit=$db->query('UPDATE '.
 										'`'.DBPREFIX.'subcontent`, '.
 										'`'.DBPREFIX.'products`, '.
@@ -546,6 +571,7 @@ class ImageFormProcessor extends FormProcessor
 										DBPREFIX.'products.image = '.$db->quote($id).' '.
 										'OR '.
 										DBPREFIX.'content.image = '.$db->quote($db->escape($image_name)));
+										*/
 
 										if(empty($db_submit))
 										{
@@ -620,10 +646,10 @@ class ImageFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted form selecting an image to add to a post.
 	 *
-	 * @access	private
+	 * @access	protected
 	 * @return	string
 	 */
-	private function processImageSelect()
+	protected function processImageSelect()
 	{
 		# Check if this is a image select page.
 		if(isset($_GET['select']))
@@ -674,9 +700,9 @@ class ImageFormProcessor extends FormProcessor
 	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User
 	 * to this form to aquire an image.
 	 *
-	 * @access	private
+	 * @access	protected
 	 */
-	private function redirectImage($image_name, $action)
+	protected function redirectImage($image_name, $action)
 	{
 		try
 		{
@@ -751,9 +777,9 @@ class ImageFormProcessor extends FormProcessor
 	 *
 	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
 	 *
-	 * @access	private
+	 * @access	protected
 	 */
-	private function setSession()
+	protected function setSession()
 	{
 		try
 		{
@@ -790,6 +816,6 @@ class ImageFormProcessor extends FormProcessor
 		}
 	} #==== End -- setSession
 
-	/*** End private methods ***/
+	/*** End protected methods ***/
 
 } # End ImageFormProcessor class.
