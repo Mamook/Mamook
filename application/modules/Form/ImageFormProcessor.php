@@ -545,7 +545,7 @@ class ImageFormProcessor extends FormProcessor
 										'SET '.
 										DBPREFIX.'products.image = NULL '.
 										'WHERE '.
-										DBPREFIX.'products.image = '.$db->quote($id);
+										DBPREFIX.'products.image = '.$db->quote($id));
 
 										# Remove the file from all `subcontent` records.
 										$db_submit=$db->query('UPDATE '.
@@ -553,7 +553,7 @@ class ImageFormProcessor extends FormProcessor
 										'SET '.
 										DBPREFIX.'subcontent.image = NULL '.
 										'WHERE '.
-										DBPREFIX.'subcontent.image = '.$db->quote($id);
+										DBPREFIX.'subcontent.image = '.$db->quote($id));
 
 										# DRAVEN: Does not work if a table is empty.
 										/*
