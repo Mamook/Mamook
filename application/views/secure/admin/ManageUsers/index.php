@@ -72,7 +72,7 @@ if(isset($_GET['user']))
 	{
 		$img_title=$staff_obj->getImgTitle();
 		$user_image='<div class="profile-image">';
-		$user_image.='<a href="'.IMAGES.'profile/original/'.$img.'" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.'profile/'.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+		$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
 		$user_image.='</div>';
 		echo $user_image;
 	}

@@ -401,8 +401,8 @@ class VideoFormProcessor extends FormProcessor
 							{
 								# Create Thumbnails.
 								$cl2=new CommandLine('ffmpeg');
-								$cl2->runScript("-i ".BODEGA.'videos'.DS.$new_video_name." -ss 00:00:05 -f mjpeg ".IMAGES_PATH."videos".DS."original".DS.$clean_filename.".jpg");
-								$cl2->runScript("-i ".BODEGA.'videos'.DS.$new_video_name." -ss 00:00:05 -f mjpeg -vf scale=320:180 ".IMAGES_PATH."videos".DS.$clean_filename.".jpg");
+								$cl2->runScript("-i ".BODEGA.'videos'.DS.$new_video_name." -ss 00:00:05 -f mjpeg ".IMAGES_PATH."original".DS.$clean_filename.".jpg");
+								$cl2->runScript("-i ".BODEGA.'videos'.DS.$new_video_name." -ss 00:00:05 -f mjpeg -vf scale=320:180 ".IMAGES_PATH.$clean_filename.".jpg");
 
 								# Insert the thumbnail image into the `images` table.
 								$insert_image='INSERT INTO `'.DBPREFIX.'images` ('.
@@ -585,13 +585,13 @@ class VideoFormProcessor extends FormProcessor
 									# Check if the post should be posted on Facebook.com.
 									if($facebook==='post')
 									{
-										if(file_exists(IMAGES_PATH.'videos'.DS.'original'.DS.$thumbnail_file_name))
+										if(file_exists(IMAGES_PATH.'original'.DS.$thumbnail_file_name))
 										{
-											$image_name='videos'.DS.'original'.DS.$thumbnail_file_name;
+											$image_name='original'.DS.$thumbnail_file_name;
 										}
-										elseif(file_exists(IMAGES_PATH.'videos'.DS.'original'.DS.$clean_filename.'.jpg'))
+										elseif(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg'))
 										{
-											$image_name='videos'.DS.'original'.DS.$clean_filename.'.jpg';
+											$image_name='original'.DS.$clean_filename.'.jpg';
 										}
 										else
 										{

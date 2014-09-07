@@ -359,7 +359,7 @@ elseif(!isset($_GET['select']))
 				$image_obj=$audio_obj->getImageObj();
 
 				# Set the thumbnail to a variable.
-				$audio_obj->setThumbnailUrl($db->sanitize(IMAGES.'audio/'.$image_obj->getImage()));
+				$audio_obj->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 
 				$fg->addFormPart('<ul>');
 				$fg->addFormPart('<li class="file-current">');

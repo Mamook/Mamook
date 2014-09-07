@@ -94,7 +94,7 @@ if(!empty($audio_data['FileName']))
 			$thumbnail_no_ext=substr($audio_data['FileName'], 0, strrpos($audio_data['FileName'], '.'));
 
 			# Set the path to the original thumbnail on the server.
-			$original_thumbnail=IMAGES_PATH.'audio'.DS.'original'.DS.$thumbnail_no_ext.'.jpg';
+			$original_thumbnail=IMAGES_PATH.'original'.DS.$thumbnail_no_ext.'.jpg';
 
 			$audio_file_info=$getID3->analyze($audio_path);
 			if(isset($audio_file_info['comments']['picture'][0]))
@@ -114,7 +114,7 @@ if(!empty($audio_data['FileName']))
 				$file_handler=new FileHandler();
 
 				# Resize the image and save the new image to the target folder.
-				$resize_image=$file_handler->reduceImage($original_thumbnail, IMAGES_PATH.'audio'.DS.$thumbnail_no_ext.'.jpg', '320', '180', '75', FALSE);
+				$resize_image=$file_handler->reduceImage($original_thumbnail, IMAGES_PATH.$thumbnail_no_ext.'.jpg', '320', '180', '75', FALSE);
 
 				# Insert the thumbnail image into the `images` table.
 				$sql='INSERT INTO `'.DBPREFIX.'images` ('.

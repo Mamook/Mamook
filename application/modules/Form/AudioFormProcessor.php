@@ -564,13 +564,13 @@ class AudioFormProcessor extends FormProcessor
 									# Check if the post should be posted on Facebook.com.
 									if($facebook==='post')
 									{
-										if(file_exists(IMAGES_PATH.'audio'.DS.'original'.DS.$thumbnail_file_name))
+										if(file_exists(IMAGES_PATH.'original'.DS.$thumbnail_file_name))
 										{
-											$image_name='audio'.DS.'original'.DS.$thumbnail_file_name;
+											$image_name='original'.DS.$thumbnail_file_name;
 										}
-										elseif(file_exists(IMAGES_PATH.'audio'.DS.'original'.DS.$clean_filename.'.jpg'))
+										elseif(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg'))
 										{
-											$image_name='audio'.DS.'original'.DS.$clean_filename.'.jpg';
+											$image_name='original'.DS.$clean_filename.'.jpg';
 										}
 										else
 										{

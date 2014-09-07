@@ -2204,7 +2204,7 @@ class Audio
 				if(!isset($image_path) || !file_exists($image_path))
 				{
 					# Set the thumbnail to a variable.
-					$this->setThumbnailUrl(IMAGES.'audio/audio_default_thumbnail.jpg');
+					$this->setThumbnailUrl(IMAGES.'audio-default-thumbnail.jpg');
 					$alt_text='The default image for audio on '.DOMAIN_NAME;
 				}
 			}

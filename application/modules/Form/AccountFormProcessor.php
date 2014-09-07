@@ -345,13 +345,13 @@ class AccountFormProcessor extends FormProcessor
 							if($old_img!==NULL)
 							{
 								# Copy the original image over to the tmp folder (We'll move it back if anything goes wrong.)
-								if(rename(IMAGES_PATH.'profile'.DS.'original'.DS.$old_img, BASE_PATH.'tmp'.DS.'original.'.$old_img)===FALSE)
+								if(rename(IMAGES_PATH.'original'.DS.$old_img, BASE_PATH.'tmp'.DS.'original.'.$old_img)===FALSE)
 								{
 									# Create a message and send them to the "starting" point.
 									throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the temp folder for deletion.', E_RECOVERABLE_ERROR);
 								}
 								# Copy the user image over to the tmp folder (We'll move it back if anything goes wrong.)
-								if(rename(IMAGES_PATH.'profile'.DS.$old_img, BASE_PATH.'tmp'.DS.$old_img)===FALSE)
+								if(rename(IMAGES_PATH.$old_img, BASE_PATH.'tmp'.DS.$old_img)===FALSE)
 								{
 									# Create a message and send them to the "starting" point.
 									throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to the temp folder for deletion.', E_RECOVERABLE_ERROR);
@@ -363,7 +363,7 @@ class AccountFormProcessor extends FormProcessor
 							try
 							{
 								# Upload original thumbnail.
-								$image_upload=$upload_image->uploadImage(IMAGES_PATH.'profile'.DS.'original'.DS, IMAGES_PATH.'profile'.DS, $safe_username, $max_size, TRUE, 230, 300, 75, TRUE);
+								$image_upload=$upload_image->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $safe_username, $max_size, TRUE, 230, 300, 75, TRUE);
 
 								# Reset the image's new name.
 								$new_image_name=$upload_image->getName();
@@ -374,13 +374,13 @@ class AccountFormProcessor extends FormProcessor
 								if($moved_image===TRUE)
 								{
 									# Copy the original image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'profile'.DS.'original'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'original'.DS.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 									}
 									# Copy the user image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.'profile'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to its image folder from the temp folder.', E_RECOVERABLE_ERROR);
@@ -393,8 +393,8 @@ class AccountFormProcessor extends FormProcessor
 							if($upload_image->checkErrors()===TRUE)
 							{
 								# Remove uploaded image from the Images folder and the Original folder.
-								$upload_image->deleteFile(IMAGES_PATH.'profile'.$new_image_name);
-								$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.'original'.DS.$new_image_name);
+								$upload_image->deleteFile(IMAGES_PATH.$new_image_name);
+								$upload_image->deleteFile(IMAGES_PATH.'original'.DS.$new_image_name);
 								# Get any errors.
 								$image_errors=$upload_image->getErrors();
 								# Loop through the errors.
@@ -407,13 +407,13 @@ class AccountFormProcessor extends FormProcessor
 								if($moved_image===TRUE)
 								{
 									# Copy the original image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'profile'.DS.'original'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'original'.DS.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 									}
 									# Copy the user image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.'profile'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to its image folder from the temp folder.', E_RECOVERABLE_ERROR);
@@ -462,20 +462,20 @@ class AccountFormProcessor extends FormProcessor
 					if($uploaded_image===TRUE)
 					{
 						# Remove uploaded image from the Images folder and the Original folder.
-						$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.$new_image_name);
-						$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.'original'.DS.$new_image_name);
+						$upload_image->deleteFile(IMAGES_PATH.$new_image_name);
+						$upload_image->deleteFile(IMAGES_PATH.'original'.DS.$new_image_name);
 					}
 					# Check if a previous image file was moved to the temp folder.
 					if($moved_image===TRUE)
 					{
 						# Copy the original image back to it's destination directory.
-						if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'profile'.DS.'original'.DS.$old_img)===FALSE)
+						if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'original'.DS.$old_img)===FALSE)
 						{
 							# Create a message and send them to the "starting" point.
 							throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 						}
 						# Copy the user image back to it's destination directory.
-						if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.'profile'.DS.$old_img)===FALSE)
+						if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 						{
 							# Create a message and send them to the "starting" point.
 							throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to its image folder from the temp folder.', E_RECOVERABLE_ERROR);
@@ -611,19 +611,19 @@ class AccountFormProcessor extends FormProcessor
 								if($uploaded_image===TRUE)
 								{
 									# Remove uploaded image from the Images folder and the Original folder.
-									$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.$new_image_name);
-									$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.'original'.DS.$new_image_name);
+									$upload_image->deleteFile(IMAGES_PATH.$new_image_name);
+									$upload_image->deleteFile(IMAGES_PATH.'original'.DS.$new_image_name);
 								}
 								if($moved_image===TRUE)
 								{
 									# Copy the original image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'profile'.DS.'original'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'original'.DS.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 									}
 									# Copy the user image back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.'profile'.DS.$old_img)===FALSE)
+									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to its image folder from the temp folder.', E_RECOVERABLE_ERROR);
@@ -662,19 +662,19 @@ class AccountFormProcessor extends FormProcessor
 							if($uploaded_image===TRUE)
 							{
 								# Remove uploaded image from the Images folder and the Original folder.
-								$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.$new_image_name);
-								$upload_image->deleteFile(IMAGES_PATH.'profile'.DS.'original'.DS.$new_image_name);
+								$upload_image->deleteFile(IMAGES_PATH.$new_image_name);
+								$upload_image->deleteFile(IMAGES_PATH.'original'.DS.$new_image_name);
 							}
 							if($moved_image===TRUE)
 							{
 								# Copy the original image back to it's destination directory.
-								if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'profile'.DS.'original'.DS.$old_img)===FALSE)
+								if(rename(BASE_PATH.'tmp'.DS.'original.'.$old_img, IMAGES_PATH.'original'.DS.$old_img)===FALSE)
 								{
 									# Create a message and send them to the "starting" point.
 									throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 								}
 								# Copy the user image back to it's destination directory.
-								if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.'profile'.DS.$old_img)===FALSE)
+								if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 								{
 									# Create a message and send them to the "starting" point.
 									throw new Exception('There was an error moving '.$username.'\'s image, '.$old_img.' to its image folder from the temp folder.', E_RECOVERABLE_ERROR);

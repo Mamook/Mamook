@@ -14,7 +14,7 @@ echo '<section id="main" class="main secure">',
 		$cv=$user_obj->getCV();
 		if(!empty($img))
 		{
-			echo '<a href="'.IMAGES.'profile/original/'.$img.'" class="profile-image" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.'profile/'.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+			echo '<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
 		}
 		if(!empty($cv))
 		{
