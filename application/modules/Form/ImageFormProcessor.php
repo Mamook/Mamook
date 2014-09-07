@@ -341,7 +341,7 @@ class ImageFormProcessor extends FormProcessor
 								{
 									# Remove uploaded image from the Images folder and the Original folder.
 									$upload->deleteFile(IMAGES_PATH.$new_name);
-									$upload->deleteFile(IMAGES_PATH..'original'.DS.$new_name);
+									$upload->deleteFile(IMAGES_PATH.'original'.DS.$new_name);
 								}
 								if(!empty($id))
 								{
