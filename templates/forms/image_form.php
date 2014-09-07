@@ -24,6 +24,7 @@ if(!isset($_GET['select']))
 
 		# Set the image name to a variable.
 		$image_name=$image->getImage();
+
 		# Check if this is an edit or delete page.
 		if(isset($_GET['image']))
 		{
@@ -57,23 +58,7 @@ if(!isset($_GET['select']))
 		//$cat_options['add']='Add Category';
 		# Set the current categories to a variable.
 		$image_categories=array_flip((array)$image->getCategories());
-		$sub_folder='';
-		if(in_array(37, $image_categories))
-		{
-			$sub_folder='audio/';
-		}
-		elseif(in_array(1, $image_categories))
-		{
-			$sub_folder='books/';
-		}
-		elseif(in_array(2, $image_categories))
-		{
-			$sub_folder='maps/';
-		}
-		elseif(in_array(36, $image_categories))
-		{
-			$sub_folder='videos/';
-		}
+
 		# Loop through the categories.
 		foreach($categories as $row)
 		{
@@ -118,13 +103,19 @@ if(!isset($_GET['select']))
 		$fg->addElement('file', array('name'=>'image', 'id'=>'image'));
 		if(!empty($image_name))
 		{
+			$sub_folder=$image->getSubFolder();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.$sub_folder.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$sub_folder.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image', 'value'=>$image_name));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
 		}
+		$fg->addFormPart('</li>');
+		$fg->addFormPart('<li>');
+		$fg->addFormPart('<label class="label" for="image_width"><span class="required">*</span> Dimensions</label>');
+		$fg->addElement('text', array('name'=>'image_width', 'id'=>'image_width', 'value'=>$image->getWidth())).$fg->addFormPart('px ');
+		$fg->addElement('text', array('name'=>'image_height', 'id'=>'image_height', 'value'=>$image->getHeight())).$fg->addFormPart('px');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');

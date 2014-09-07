@@ -2052,7 +2052,7 @@ class User
 					$image_obj=new Image();
 					# Set the person's image to a variable.
 					$profile_image='<div class="profile-image">';
-					$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title, 'profile');
+					$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title);
 					$profile_image.='</div>';
 					# Set the image XHTML to the display content array.
 					$display_content['image']=$profile_image;

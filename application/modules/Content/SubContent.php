@@ -2473,31 +2473,8 @@ class SubContent
 								$image_obj=$this->getImage();
 								$image_cats=$image_obj->getCategories();
 								$image_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $image_obj->getImage());
-								# Create an empty variable for the image subfolder.
-								$sub_folder='';
-								# Check if this image has the "Books" or "Maps" category.
-								if(in_array('Audio', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='audio/';
-								}
-								elseif(in_array('Books', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='books/';
-								}
-								elseif(in_array('Maps', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='maps/';
-								}
-								elseif(in_array('Videos', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='videos/';
-								}
 								# Set the displayed image to a variable.
-								$image_content=$image_obj->displayImage(TRUE, NULL, NULL, $sub_folder);
+								$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
 								# Set the image content to the array.
 								$display_content[$id]['image']=$image_content;
 							}

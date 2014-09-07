@@ -392,29 +392,10 @@ if(empty($duplicates))
 				$sc_object->getThisImage($image_id);
 				# Set the File object to a variable.
 				$image=$sc_object->getImage();
-				# Set the current categories to a variable.
-				$image_categories=$image->getCategories();
 				$image_name=$image->getImage();
-				$sub_folder='';
-				if(in_array('Audio', $image_categories))
-				{
-					$sub_folder='audio/';
-				}
-				elseif(in_array('Books', $image_categories))
-				{
-					$sub_folder='books/';
-				}
-				elseif(in_array('Maps', $image_categories))
-				{
-					$sub_folder='maps/';
-				}
-				elseif(in_array('Videos', $image_categories))
-				{
-					$sub_folder='videos/';
-				}
 				$fg->addFormPart('<ul>');
 				$fg->addFormPart('<li class="file-current">');
-				$fg->addFormPart('<a href="'.IMAGES.$sub_folder.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$sub_folder.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
+				$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
 				$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 				$fg->addFormPart('</li>');
 				$fg->addFormPart('</ul>');

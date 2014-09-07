@@ -13,12 +13,14 @@ $image_categories=NULL;
 $image_contributor=$contributor->getContID();
 $image_description=NULL;
 $image_file_name='';
+$image_height='90';
 $image_hide=''; # 0=Hide image | NULL=Don't Hide image
 $image_last_edit=date('Y-m-d');
 $image_location='';
 $image_recent_contributor=NULL;
 $image_title=NULL;
 $image_unique=0;
+$image_width='120';
 
 # Check if there is GET data called "image".
 if(isset($_GET['image']))
@@ -30,9 +32,10 @@ if(isset($_GET['image']))
 	# Get the image from the `images` table.
 	if($image->getThisImage($image->getID())===TRUE)
 	{
-		/* Get the image's categories and set them to a local variable as a dash (-) separated string of the category id's. */
+		# Get the image's categories and set them to a local variable as a dash (-) separated string of the category id's.
 		# Set the categories to a local variable.
 		$categories_array=$image->getCategories();
+
 		# Check if there are any categories.
 		if(!empty($categories_array))
 		{
@@ -51,12 +54,18 @@ if(isset($_GET['image']))
 		$image_contributor=$image->getContID();
 		$image_description=$image->getDescription();
 		$image_file_name=$image->getImage();
+
+		# Get the sub folder, set the width and height.
+		$image->findSubFolder($categories_array, $image_file_name);
+
+		$image_height=$image->getHeight();
 		$image_hide=$image->getHide(); # 0=Hide image | NULL=Don't Hide image
 		$image_last_edit=date('Y-m-d');
 		$image_location=$image->getLocation();
 		$image_recent_contributor=$contributor->getContID();
 		$image_title=$image->getTitle();
 		$image_unique=1;
+		$image_width=$image->getWidth();
 	}
 }
 
@@ -67,10 +76,12 @@ $default_data=array(
 		'ContID'=>$image_contributor,
 		'Description'=>$image_description,
 		'Image'=>$image_file_name,
+		'Height'=>$image_height,
 		'Hide'=>$image_hide, # 0=Hide image | NULL=Don't Hide image
 		'LastEdit'=>$image_last_edit,
 		'Location'=>$image_location,
 		'RecentContID'=>$image_recent_contributor,
 		'Title'=>$image_title,
-		'Unique'=>$image_unique
+		'Unique'=>$image_unique,
+		'Width'=>$image_width
 	);

@@ -588,7 +588,7 @@ class Slideshow
 					require_once MODULES.'Media'.DS.'Image.php';
 					# Instantiate a new Image object.
 					$image=new Image();
-					$display.=$image->displayImage(TRUE, $img, $img_title, 'profile');
+					$display.=$image->displayImage(TRUE, $img, $img_title);
 					$display.='<h4 class="h-slide user_name"><a href="'.APPLICATION_URL.'profile/?person='.$id.'" title="'.$name.'">'.$name.'</a></h4>';
 					$display.='<p class="user-focus">'.$position_desc.'</p>';
 					$display.='</li>';

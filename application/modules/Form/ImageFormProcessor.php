@@ -148,32 +148,23 @@ class ImageFormProcessor extends FormProcessor
 
 						try
 						{
-							$sub_folder='';
-							if(in_array(37, $categories))
+							# Set a variable to FALSE indicating that this image is not related to media.
+							$media_image=FALSE;
+							# If the Audio or Videos key exists in the $categories array.
+							if(array_key_exists('Videos', $categories) || array_key_exists('Audio', $categories))
 							{
-								$sub_folder='audio'.DS;
+								# Set the variable to TRUE since Videos was in the array.
+								$media_image=TRUE;
 							}
-							elseif(in_array(1, $categories))
-							{
-								$sub_folder='books'.DS;
-							}
-							elseif(in_array(2, $categories))
-							{
-								$sub_folder='maps'.DS;
-							}
-							elseif(in_array(36, $categories))
-							{
-								$sub_folder='videos'.DS;
-							}
-							if($sub_folder=='videos'.DS || $sub_folder=='audio'.DS)
+							if($media_image===TRUE)
 							{
 								# Upload original thumbnail.
-								$document_upload=$upload->uploadImage(IMAGES_PATH.$sub_folder.'original'.DS, IMAGES_PATH.$sub_folder, $new_name, '7340032', TRUE, '320', '180', '75', FALSE, '800', '800', '100', FALSE);
+								$document_upload=$upload->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $new_name, '7340032', TRUE, '320', '180', '75', FALSE, '800', '800', '100', FALSE);
 							}
 							else
 							{
 								# Upload the image.
-								$document_upload=$upload->uploadImage(IMAGES_PATH.$sub_folder.'original'.DS, IMAGES_PATH.$sub_folder, $new_name);
+								$document_upload=$upload->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $new_name);
 							}
 							# Reset the image's new name.
 							$new_name=$upload->getName();
@@ -187,8 +178,8 @@ class ImageFormProcessor extends FormProcessor
 						if($upload->checkErrors()===TRUE)
 						{
 							# Remove uploaded image from the Images folder and the Original folder.
-							$upload->deleteFile(IMAGES_PATH.$sub_folder.$new_name);
-							$upload->deleteFile(IMAGES_PATH.$sub_folder.'original'.DS.$new_name);
+							$upload->deleteFile(IMAGES_PATH.$new_name);
+							$upload->deleteFile(IMAGES_PATH.'original'.DS.$new_name);
 							# Get any errors.
 							$document_errors=$upload->getErrors();
 							# Loop through the errors.
@@ -219,8 +210,8 @@ class ImageFormProcessor extends FormProcessor
 					if($uploaded_document===TRUE)
 					{
 						# Remove uploaded image from the Images folder and the Original folder.
-						$upload->deleteFile(IMAGES_PATH.$sub_folder.$new_name);
-						$upload->deleteFile(IMAGES_PATH.$sub_folder.'original'.DS.$new_name);
+						$upload->deleteFile(IMAGES_PATH.$new_name);
+						$upload->deleteFile(IMAGES_PATH.'original'.DS.$new_name);
 					}
 				}
 				else
@@ -349,8 +340,8 @@ class ImageFormProcessor extends FormProcessor
 								if($uploaded_document===TRUE)
 								{
 									# Remove uploaded image from the Images folder and the Original folder.
-									$upload->deleteFile(IMAGES_PATH.$sub_folder.$new_name);
-									$upload->deleteFile(IMAGES_PATH.$sub_folder.'original'.DS.$new_name);
+									$upload->deleteFile(IMAGES_PATH.$new_name);
+									$upload->deleteFile(IMAGES_PATH..'original'.DS.$new_name);
 								}
 								if(!empty($id))
 								{
@@ -369,8 +360,8 @@ class ImageFormProcessor extends FormProcessor
 							if($uploaded_document===TRUE)
 							{
 								# Remove uploaded image from the Images folder and the Original folder.
-								$upload->deleteFile(IMAGES_PATH.$sub_folder.$new_name);
-								$upload->deleteFile(IMAGES_PATH.$sub_folder.'original'.DS.$new_name);
+								$upload->deleteFile(IMAGES_PATH.$new_name);
+								$upload->deleteFile(IMAGES_PATH.'original'.DS.$new_name);
 							}
 							throw $e;
 						}

@@ -1121,20 +1121,12 @@ class Content
 		# Check if there is an image to display.
 		if(!empty($image_name))
 		{
-			# Separrate the image folder from the image name.
-			$image_folder=substr($image_name, 0, strrpos($image_name, '/'));
-			# Check if there is an image folder.
-			if(!empty($image_folder))
-			{
-				# Remove the folder portion from the image name.
-				$image_name=substr($image_name, strrpos($image_name, '/')+1);
-			}
 			# Get the Image class.
 			require_once MODULES.'Media'.DS.'Image.php';
 			# Instantiate a new Image object.
 			$image=new Image();
 			# Display the image using the image title if available, otherwise, use the page title.
-			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_folder, $image_link);
+			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_link);
 		}
 
 		# Display the content title

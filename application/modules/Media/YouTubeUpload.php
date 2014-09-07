@@ -157,26 +157,9 @@ if(!empty($video_data['FileName']))
 
 			# Set the current categories to a variable.
 			$image_categories=$image_obj->getCategories();
-			$sub_folder='';
-			if(in_array('Audio', $image_categories))
-			{
-				$sub_folder='audio';
-			}
-			elseif(in_array('Books', $image_categories))
-			{
-				$sub_folder='books';
-			}
-			elseif(in_array('Maps', $image_categories))
-			{
-				$sub_folder='maps';
-			}
-			elseif(in_array('Videos', $image_categories))
-			{
-				$sub_folder='videos';
-			}
 
 			# Set the path to the original thumbnail on the server.
-			$original_thumbnail=IMAGES_PATH.$sub_folder.DS.'original'.DS.$image_obj->getImage();
+			$original_thumbnail=IMAGES_PATH.'original'.DS.$image_obj->getImage();
 
 			# Call the API's thumbnails.set method to upload the image and associate
 			# it with the appropriate video.

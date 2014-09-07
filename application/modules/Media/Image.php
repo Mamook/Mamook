@@ -20,10 +20,12 @@ class Image
 	private $recent_contributor=NULL;
 	private $recent_cont_id=NULL;
 	private $description=NULL;
+	private $height=NULL;
 	private $hide;
 	private $last_edit='0000-00-00';
 	private $location=NULL;
 	private $title=NULL;
+	private $width=NULL;
 
 	/*** End data members ***/
 
@@ -363,6 +365,44 @@ class Image
 	} #==== End -- setDescription
 
 	/**
+	 * setHeight
+	 *
+	 * Sets the data member $height.
+	 *
+	 * @param	$height
+	 * @access	public
+	 */
+	public function setHeight($height)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value is empty.
+		if(!empty($height))
+		{
+			# Clean it up.
+			$height=trim($height);
+			# Check if the passed $height is an integer.
+			if($validator->isInt($height)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$height=(int)$height;
+			}
+			else
+			{
+				throw new Exception('The passed height was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$height=NULL;
+		}
+		# Set the data member.
+		$this->height=$height;
+	} #==== End -- setHeight
+
+	/**
 	 * setHide
 	 *
 	 * Sets the data member $hide.
@@ -467,6 +507,44 @@ class Image
 			$this->title=NULL;
 		}
 	} #==== End -- setTitle
+
+	/**
+	 * setWidth
+	 *
+	 * Sets the data member $width.
+	 *
+	 * @param	$width
+	 * @access	public
+	 */
+	public function setWidth($width)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value is empty.
+		if(!empty($width))
+		{
+			# Clean it up.
+			$width=trim($width);
+			# Check if the passed $width is an integer.
+			if($validator->isInt($width)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$width=(int)$width;
+			}
+			else
+			{
+				throw new Exception('The passed width was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$width=NULL;
+		}
+		# Set the data member.
+		$this->width=$width;
+	} #==== End -- setWidth
 
 	/*** End mutator methods ***/
 
@@ -583,6 +661,18 @@ class Image
 	} #==== End -- getDescription
 
 	/**
+	 * getHeight
+	 *
+	 * Returns the data member $height.
+	 *
+	 * @access	public
+	 */
+	public function getHeight()
+	{
+		return $this->height;
+	} #==== End -- getHeight
+
+	/**
 	 * getHide
 	 *
 	 * Returns the data member $hide.
@@ -630,6 +720,18 @@ class Image
 		return $this->title;
 	} #==== End -- getTitle
 
+	/**
+	 * getWidth
+	 *
+	 * Returns the data member $width.
+	 *
+	 * @access	public
+	 */
+	public function getWidth()
+	{
+		return $this->width;
+	} #==== End -- getWidth
+
 	/*** End accessor methods ***/
 
 
@@ -641,9 +743,10 @@ class Image
 	 *
 	 * Returns the number of images in the database.
 	 *
-	 * @param		$categories (The names and/or id's of the category(ies) to be retrieved. May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110')
-	 * @param		$limit 		(The limit of records to count.)
-	 * @param		$and_sql 	(Extra AND statements in the query.)
+	 * @param	$categories				The names and/or id's of the category(ies) to be retrieved.
+	 *										May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110'
+	 * @param	$limit 					The limit of records to count.)
+	 * @param	$and_sql				Extra AND statements in the query.)
 	 * @access	public
 	 */
 	public function countAllImages($categories=NULL, $limit=NULL, $and_sql=NULL)
@@ -747,35 +850,12 @@ class Image
 					$image_cats=$this->getCategories();
 					# Set the image's name data member to a local variable.
 					$image_name=$this->getImage();
-					# Create an empty variable for the image subfolder.
-					$sub_folder='';
-					# Check if this image has the "Books" or "Maps" category.
-					if(in_array('Audio', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='audio'.DS;
-					}
-					elseif(in_array('Books', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='books'.DS;
-					}
-					elseif(in_array('Maps', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='maps'.DS;
-					}
-					elseif(in_array('Videos', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='videos'.DS;
-					}
 					# Get the FileHandler class.
 					require_once MODULES.'FileHandler'.DS.'FileHandler.php';
 					# Instantiate a new FileHandler object.
 					$file_handler=new FileHandler();
 					# Delete the image.
-					if(($file_handler->deleteFile(IMAGES_PATH.$sub_folder.$image_name)===TRUE) && ($file_handler->deleteFile(IMAGES_PATH.$sub_folder.'original'.DS.$image_name)===TRUE))
+					if(($file_handler->deleteFile(IMAGES_PATH.$image_name)===TRUE) && ($file_handler->deleteFile(IMAGES_PATH.'original'.DS.$image_name)===TRUE))
 					{
 						try
 						{
@@ -828,12 +908,11 @@ class Image
 	 * @param	$return					TRUE to return the string, FALSE to echo it.
 	 * @param	$image_name				The name of the image to display.
 	 * @param	$image_title			The title of the image to display.
-	 * @param	$folder
 	 * @param	$image_link
 	 * @return	String
 	 * @access	public
 	 */
-	public function displayImage($return=FALSE, $image_name=NULL, $image_title=NULL, $folder=NULL, $image_link='lightbox')
+	public function displayImage($return=FALSE, $image_name=NULL, $image_title=NULL, $image_link='lightbox')
 	{
 		try
 		{
@@ -849,12 +928,6 @@ class Image
 				# Set the image title to the data member.
 				$this->setTitle($image_title);
 			}
-			# Check if an image folder was passed.
-			if(!empty($folder))
-			{
-				# Add a forward slash(/) to the folder.
-				$folder.='/';
-			}
 			# Try to get the image name from the data member and reset the variable.
 			$image_name=$this->getImage();
 			# Create an empty variable for the XHTML.
@@ -867,7 +940,7 @@ class Image
 					# Check if the image link is lightbox.
 					if($image_link=='lightbox')
 					{
-						$image_link='<a href="'.IMAGES.$folder.'original/'.$image_name.'" rel="lightbox" title="'.$this->getTitle().'" class="image-link" target="_blank">%s</a>';
+						$image_link='<a href="'.IMAGES.'original/'.$image_name.'" rel="lightbox" title="'.$this->getTitle().'" class="image-link" target="_blank">%s</a>';
 					}
 					else
 					{
@@ -880,7 +953,7 @@ class Image
 					$image_link='%s';
 				}
 				# Set the image markup to the display variable.
-				$display_image.=sprintf($image_link, '<img src="'.IMAGES.$folder.$image_name.'" class="image" alt="'.$this->getTitle().'" />');
+				$display_image.=sprintf($image_link, '<img src="'.IMAGES.$image_name.'" class="image" alt="'.$this->getTitle().'" />');
 			}
 			if($return===FALSE)
 			{
@@ -1065,31 +1138,8 @@ class Image
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
-					# Create an empty variable for the image subfolder.
-					$sub_folder='';
-					# Check if this image has the "Books" or "Maps" category.
-					if(in_array('Audio', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='audio/';
-					}
-					elseif(in_array('Books', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='books/';
-					}
-					elseif(in_array('Maps', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='maps/';
-					}
-					elseif(in_array('Videos', $image_cats))
-					{
-						# Set the image subfolder to the variable.
-						$sub_folder='videos/';
-					}
 					# Set the image markup to the $general_data variable.
-					$general_data='<td><a href="'.IMAGES.$sub_folder.'original/'.$image_name.'" title="'.$image_title.'" rel="lightbox"><img src="'.IMAGES.$sub_folder.$image_name.'" alt="'.$image_name.'" /></a></td>';
+					$general_data='<td><a href="'.IMAGES.'original/'.$image_name.'" title="'.$image_title.'" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image_name.'" /></a></td>';
 					# Add the title markup to the $general_data variable.
 					$general_data.='<td>'.(($select==='select') ? '<label for="image'.$image_id.'">' : '' ).'"'.$image_title.'"'.((!empty($image_desc)) ? ' <span class="entry">'.$image_desc.'</span>' : '').(($select==='select') ? '</label>' : '' ).'</td>';
 					# Check if there should be an edit button displayed.

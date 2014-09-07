@@ -2103,29 +2103,12 @@ class Audio
 
 				# Set the current categories to a variable.
 				$image_categories=$image_obj->getCategories();
-				$sub_folder='';
-				if(in_array('Audio', $image_categories))
-				{
-					$sub_folder='audio';
-				}
-				elseif(in_array('Books', $image_categories))
-				{
-					$sub_folder='books';
-				}
-				elseif(in_array('Maps', $image_categories))
-				{
-					$sub_folder='maps';
-				}
-				elseif(in_array('Videos', $image_categories))
-				{
-					$sub_folder='videos';
-				}
 
 				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$sub_folder.'/'.$image_obj->getImage()));
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 
 				# Relative path to thumbnail.
-				$image_path=IMAGES_PATH.$sub_folder.DS.$image_obj->getImage();
+				$image_path=IMAGES_PATH.$image_obj->getImage();
 			}
 
 			# Set the markup to a variable
@@ -2212,29 +2195,12 @@ class Audio
 
 				# Set the current categories to a variable.
 				$image_categories=$image_obj->getCategories();
-				$sub_folder='';
-				if(in_array('Audio', $image_categories))
-				{
-					$sub_folder='audio';
-				}
-				elseif(in_array('Books', $image_categories))
-				{
-					$sub_folder='books';
-				}
-				elseif(in_array('Maps', $image_categories))
-				{
-					$sub_folder='maps';
-				}
-				elseif(in_array('Videos', $image_categories))
-				{
-					$sub_folder='videos';
-				}
 
 				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$sub_folder.'/'.$image_obj->getImage()));
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 
 				# Relative path to thumbnail.
-				$image_path=IMAGES_PATH.$sub_folder.DS.$image_obj->getImage();
+				$image_path=IMAGES_PATH.$image_obj->getImage();
 				if(!isset($image_path) || !file_exists($image_path))
 				{
 					# Set the thumbnail to a variable.
@@ -2343,29 +2309,12 @@ class Audio
 
 					# Set the current categories to a variable.
 					$image_categories=$image_obj->getCategories();
-					$sub_folder='';
-					if(in_array('Audio', $image_categories))
-					{
-						$sub_folder='audio';
-					}
-					elseif(in_array('Books', $image_categories))
-					{
-						$sub_folder='books';
-					}
-					elseif(in_array('Maps', $image_categories))
-					{
-						$sub_folder='maps';
-					}
-					elseif(in_array('Videos', $image_categories))
-					{
-						$sub_folder='videos';
-					}
 
 					# Set the the thumbnail to a variable.
-					$this->setThumbnailUrl($db->sanitize(IMAGES.$sub_folder.'/'.$image_obj->getImage()));
+					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 
 					# Relative path to thumbnail.
-					$image_path=IMAGES_PATH.$sub_folder.DS.$image_obj->getImage();
+					$image_path=IMAGES_PATH.$image_obj->getImage();
 				}
 			}
 

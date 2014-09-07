@@ -1595,33 +1595,8 @@ class Product
 						# Check if there is an image to display.
 						if(!empty($image_obj))
 						{
-							# Create an empty variable for the image subfolder.
-							$sub_folder='';
-							# Get the image's categories.
-							$image_cats=$image_obj->getCategories();
-							# Check if this image has the "Audio", "Books", "Maps", or "Videos" category.
-							if(in_array('Audio', $image_cats))
-							{
-								# Set the image subfolder to the variable.
-								$sub_folder='audio';
-							}
-							elseif(in_array('Books', $image_cats))
-							{
-								# Set the image subfolder to the variable.
-								$sub_folder='books';
-							}
-							elseif(in_array('Maps', $image_cats))
-							{
-								# Set the image subfolder to the variable.
-								$sub_folder='maps';
-							}
-							elseif(in_array('Videos', $image_cats))
-							{
-								# Set the image subfolder to the variable.
-								$sub_folder='videos';
-							}
 							# Create a variable to hold the product image display XHTML.
-							$image_content=$image_obj->displayImage(TRUE, NULL, NULL, $sub_folder);
+							$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
 							# Set the image content to the array.
 							$display_product[$id]['image']=$image_content;
 						}
@@ -1743,33 +1718,8 @@ class Product
 							# Check if there is an Amazon image.
 							if((preg_match('/no\.image\.available\.gif/', $display_amazon[$asin]['image'])>0)&&!empty($image_obj))
 							{
-								# Create an empty variable for the image subfolder.
-								$sub_folder='';
-								# Get the image's categories.
-								$image_cats=$image_obj->getCategories();
-								# Check if this image has the "Audio", "Books", "Maps", or "Videos" category.
-								if(in_array('Audio', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='audio';
-								}
-								elseif(in_array('Books', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='books';
-								}
-								elseif(in_array('Maps', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='maps';
-								}
-								elseif(in_array('Videos', $image_cats))
-								{
-									# Set the image subfolder to the variable.
-									$sub_folder='videos';
-								}
 								# Create a variable to hold the product image display XHTML.
-								$image_content=$image_obj->displayImage(TRUE, NULL, NULL, $sub_folder);
+								$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
 								# Set the image content to the array.
 								$display_product[$id]['image']=$image_content;
 							}
@@ -1982,38 +1932,13 @@ class Product
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
-					# Create an empty variable for the image subfolder.
-					$sub_folder='';
 					$display_product_image='';
 					if(isset($product_image_id))
 					{
 						$product_obj->getThisImage($product_image_id);
 						$image_obj=$product_obj->getImage();
-						# Get the image's categories.
-						$image_cats=$image_obj->getCategories();
 						$product_image_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $image_obj->getImage());
-						# Check if this image has the "Books" or "Maps" category.
-						if(in_array('Audio', $image_cats))
-						{
-							# Set the image subfolder to the variable.
-							$sub_folder='audio/';
-						}
-						elseif(in_array('Books', $image_cats))
-						{
-							# Set the image subfolder to the variable.
-							$sub_folder='books/';
-						}
-						elseif(in_array('Maps', $image_cats))
-						{
-							# Set the image subfolder to the variable.
-							$sub_folder='maps/';
-						}
-						elseif(in_array('Videos', $image_cats))
-						{
-							# Set the image subfolder to the variable.
-							$sub_folder='videos/';
-						}
-						$display_product_image=$image_obj->displayImage(TRUE, NULL, NULL, $sub_folder);
+						$display_product_image=$image_obj->displayImage(TRUE, NULL, NULL);
 					}
 					elseif(!isset($product_image_id) && isset($display_amazon[$product_asin]))
 					{
