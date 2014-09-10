@@ -95,6 +95,8 @@ class ImageFormProcessor extends FormProcessor
 			$last_edit=$image->getLastEdit();
 			# Set the image's description to a variable.
 			$description=$image->getDescription();
+			# Set the image's height to a variable.
+			$height=$image->getHeight();
 			# Set the image's hide status to a variable.
 			$hide=$image->getHide();
 			# Set the image's location to a variable.
@@ -103,6 +105,8 @@ class ImageFormProcessor extends FormProcessor
 			$title=$image->getTitle();
 			# Set the image's unique status to a variable.
 			$unique=$populator->getUnique();
+			# Set the image's width to a variable.
+			$width=$image->getWidth();
 
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['image']) && ($_POST['image']=='Add Image' OR $_POST['image']=='Update')))
@@ -546,24 +550,6 @@ class ImageFormProcessor extends FormProcessor
 										'WHERE '.
 										DBPREFIX.'subcontent.image = '.$db->quote($id));
 
-										# DRAVEN: Does not work if a table is empty.
-										/*
-										$db_submit=$db->query('UPDATE '.
-										'`'.DBPREFIX.'subcontent`, '.
-										'`'.DBPREFIX.'products`, '.
-										'`'.DBPREFIX.'content` '.
-										'SET '.
-										DBPREFIX.'subcontent.image = NULL, '.
-										DBPREFIX.'products.image = NULL, '.
-										DBPREFIX.'content.image = NULL '.
-										'WHERE '.
-										DBPREFIX.'subcontent.image = '.$db->quote($id).' '.
-										'OR '.
-										DBPREFIX.'products.image = '.$db->quote($id).' '.
-										'OR '.
-										DBPREFIX.'content.image = '.$db->quote($db->escape($image_name)));
-										*/
-
 										if(empty($db_submit))
 										{
 											# Set a nice message to the session.
@@ -727,12 +713,12 @@ class ImageFormProcessor extends FormProcessor
 				}
 				if(isset($_SESSION['form']['audio']))
 				{
-					# Set the form's name as "post".
+					# Set the form's name as "audio".
 					$origin_form='audio';
 				}
 				if(isset($_SESSION['form']['video']))
 				{
-					# Set the form's name as "post".
+					# Set the form's name as "video".
 					$origin_form='video';
 				}
 				if(isset($_SESSION['form']['content']))
@@ -795,10 +781,12 @@ class ImageFormProcessor extends FormProcessor
 					'Description'=>$image->getDescription(),
 					'FormURL'=>$form_url,
 					'Image'=>$image->getImage(),
+					'Height'=>$image->getHeight(),
 					'Hide'=>$image->getHide(),
 					'Location'=>$image->getLocation(),
 					'Title'=>$image->getTitle(),
 					'Unique'=>$populator->getUnique(),
+					'Width'=>$image->getWidth()
 				);
 		}
 		catch(Exception $e)

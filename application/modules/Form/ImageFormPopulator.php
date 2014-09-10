@@ -129,7 +129,7 @@ class ImageFormPopulator extends FormPopulator
 				# Set the data array to a local variable.
 				$data=$this->getData();
 
-				/* Capture POST data. */
+				# Capture POST data.
 
 				# Check if the Image category was passed via POST data.
 				if(isset($_POST['category']))
@@ -149,8 +149,15 @@ class ImageFormPopulator extends FormPopulator
 				# Check if description POST data was sent.
 				if(isset($_POST['description']))
 				{
-					# Set the text to the Image data member effectively "cleaning" it.
+					# Set the description to the Image data member.
 					$data['Description']=$_POST['description'];
+				}
+
+				# Check if height POST data was sent.
+				if(isset($_POST['height']))
+				{
+					# Set the height to the Image data member.
+					$data['Height']=$_POST['height'];
 				}
 
 				# Check if the image id POST data was sent.
@@ -163,7 +170,7 @@ class ImageFormPopulator extends FormPopulator
 				# Check if the publish location was passed via POST data.
 				if(isset($_POST['location']))
 				{
-					# Set the author Image data member effectively "cleaning" it.
+					# Set the location to the Image data member.
 					$data['Location']=$_POST['location'];
 				}
 
@@ -184,6 +191,13 @@ class ImageFormPopulator extends FormPopulator
 					}
 					# Set the unique value to the data member.
 					$data['Unique']=$unique;
+				}
+
+				# Check if width POST data was sent.
+				if(isset($_POST['width']))
+				{
+					# Set the width to the Image data member.
+					$data['Width']=$_POST['width'];
 				}
 				# Reset the data array to the data member.
 				$this->setData($data);
