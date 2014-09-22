@@ -1,9 +1,16 @@
 <?php /* applications/views/secure/MyAccount/privacy.php */
 
-echo '<section id="main" class="main secure privacy">',
-	$display_content;
-	require TEMPLATES.'forms'.DS.'privacy.php';
-	echo $display_privacy_form,
+echo '<section id="main" class="main secure">',
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',

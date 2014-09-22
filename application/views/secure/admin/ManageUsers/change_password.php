@@ -1,11 +1,17 @@
 <?php /* applications/views/secure/admin/ManageUsers/change_password.php */
 
 echo '<section id="main" class="main secure username">',
-	$display_content,
-	'<h3>Use the form below to  change the password for ',$current_username,'</h3>';
-	# Get the form mail template.
-	require TEMPLATES.'forms'.DS.'change_password.php';
-	echo $display_pasword_form,
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		'<h3>Use the form below to  change the password for ',$current_username,'</h3>',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',

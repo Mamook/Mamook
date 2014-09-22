@@ -1,8 +1,8 @@
 <?php /* templates/forms/submit_email.php */
 
-$display_form='<div id="submit_email_form" class="form">';
+$display='<div id="submit_email_form" class="form">';
 	# Create and display form.
-	$display_form.='<h2>'.$head.'</h2>';
+	$display.='<h2>'.$head.'</h2>';
 	# Instantiate the FormGenerator object.
 	$fg=new FormGenerator('submit_email');
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
@@ -17,5 +17,5 @@ $display_form='<div id="submit_email_form" class="form">';
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
 	$fg->addFormPart('</fieldset>');
-	$display_form.=$fg->display();
-$display_form.='</div>';
+	$display.=$fg->display();
+$display.='</div>';

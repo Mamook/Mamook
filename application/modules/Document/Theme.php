@@ -140,10 +140,10 @@ class Theme
 	*/
 	public function displayMasthead()
 	{
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
-		# Set the Content instance to a variable.
-		$main_content=Content::getInstance();
 
 		$site_name=$main_content->getSiteName();
 		$site_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $site_name);

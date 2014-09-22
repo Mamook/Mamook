@@ -39,6 +39,8 @@ class PostFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -102,6 +104,8 @@ class PostFormProcessor extends FormProcessor
 			$premium=$sc->getPremium();
 			# Set the post's publisher id to a variable.
 			$publisher_id=$sc->getPublisherID();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the post's text to a variable.
 			$text=$sc->getText();
 			# Set the post's text language to a variable.
@@ -275,7 +279,7 @@ class PostFormProcessor extends FormProcessor
 								' `recent_contributor`,'.
 								' `last_edit`'.
 								') VALUES ('.
-								$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+								$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 								((!empty($link)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $link))).',' : ' NULL,').
 								((!empty($file_id)) ? ' '.$db->quote($file_id).',' : ' NULL,').
 								' '.$db->quote($availability).','.
@@ -301,7 +305,7 @@ class PostFormProcessor extends FormProcessor
 							# Reset the value for the message action.
 							$message_action='updated';
 							$sql='UPDATE `'.DBPREFIX.'subcontent` SET'.
-								' `title` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 								' `link` = '.((!empty($link)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $link))).',' : ' NULL,').
 								' `file` = '.((!empty($file_id)) ? ' '.$db->quote($file_id).',' : ' NULL,').
 								' `availability` = '.$db->quote($availability).','.

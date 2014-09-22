@@ -1,14 +1,15 @@
 <?php /* application/views/policy/dispute.php */
 
 echo '<section id="main" class="main">',
-	'<div class="main-1"></div>',
-	'<div class="main-2">',
+	'<div class="main-1">',
+		# Get the main content.
 		$display_content,
-		'<p>',$main_content->getAddress1(),'<br />',
-		$main_content->getAddress2(),'<br />',
-		$main_content->getCity(),', '.$main_content->getState(),' ',$main_content->getZipcode(),'</p>',
-		'<h3>Our phone number is:</h3><p>USA ',$main_content->getPhone(),'</p>',
+		$address,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
 		$display,
+		$display_quote,
 	'</div>',
 	'<div class="main-3"></div>',
 '</section>',

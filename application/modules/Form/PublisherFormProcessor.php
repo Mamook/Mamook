@@ -35,6 +35,8 @@ class PublisherFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -80,6 +82,8 @@ class PublisherFormProcessor extends FormProcessor
 			$info=$publisher->getInfo();
 			# Set the publisher's name to a variable.
 			$name=$publisher->getPublisher();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the publisher's unique status to a variable.
 			$unique=$populator->getUnique();
 
@@ -179,8 +183,8 @@ class PublisherFormProcessor extends FormProcessor
 							' `contributor`,'.
 							'`date`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $name))).', '.
-							((!empty($info)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $info))).', ' : '').
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).', '.
+							((!empty($info)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $info))).', ' : '').
 							$db->quote($contributor_id).', '.
 							$db->quote($date).
 							')';
@@ -191,11 +195,11 @@ class PublisherFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'publishers` SET
-								`name` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $name))).','.
+								`name` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).','.
 								' `contributor` = '.$db->quote($contributor_id).','.
 								' `recent_contributor` = '.$db->quote($recent_cont_id).','.
 								' `last_edit` = '.$db->quote($last_edit).','.
-								((!empty($info)) ? ' `info` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $info))) : '').
+								((!empty($info)) ? ' `info` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $info))) : '').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}

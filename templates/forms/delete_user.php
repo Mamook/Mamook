@@ -8,9 +8,9 @@ if(isset($current_username))
 	$which=$current_username.'\'s';
 }
 
-$display_delete_form='<div id="delete_form" class="form">';
+$display='<div id="delete_form" class="form">';
 	# create and display form
-	$display_delete_form.='<h2>Are you sure you want to delete '.$which.' account? (It will be permanently removed from the system)</h2>';
+	$display.='<h2>Are you sure you want to delete '.$which.' account? (It will be permanently removed from the system)</h2>';
 	# instantiate form generator object
 	$fg=new FormGenerator('delete');
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
@@ -25,5 +25,5 @@ $display_delete_form='<div id="delete_form" class="form">';
 	$fg->addElement('submit',array('name'=>'delete', 'value'=>'Delete Account'), '', NULL, 'submit-delete');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
-	$display_delete_form.=$fg->display();
-$display_delete_form.='</div>';
+	$display.=$fg->display();
+$display.='</div>';

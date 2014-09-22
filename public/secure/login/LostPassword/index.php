@@ -20,7 +20,9 @@ try
 	$login->sendAccountInfo();
 
 	$head='Please enter you email address to retrieve your account information.';
-	require TEMPLATES.'forms/submit_email.php';
+
+	# Get the submit_email form.
+	require TEMPLATES.'forms'.DS.'submit_email.php';
 
 	/*
 	** In the page template we

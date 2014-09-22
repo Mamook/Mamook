@@ -1,12 +1,14 @@
 <?php /* application/views/contact/index.php */
 
 echo '<section id="main" class="main contact">',
-	'<div class="main-1"></div>',
-	'<div class="main-2">',
+	'<div class="main-1">',
 		# Get the main content.
 		$display_content,
-		$address,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
 		$display,
+		$display_quote,
 	'</div>',
 	'<div class="main-3"></div>',
 '</section>',

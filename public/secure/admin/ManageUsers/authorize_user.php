@@ -66,6 +66,9 @@ try
 		$auth=$form_processor->findAuthorization($branch_ids, $id);
 
 		$head='Access levels for '.$current_username.':';
+
+		# Get the request authorization form.
+		require TEMPLATES.'forms'.DS.'request_auth.php';
 	}
 	else
 	{

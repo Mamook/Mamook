@@ -30,6 +30,9 @@ try
 	# Process the delete form if it has been submitted.
 	$form_processor->processDeleteAccount();
 
+	# Get the delete_user form.
+	require TEMPLATES.'forms'.DS.'delete_user.php';
+
 	# Set the default style sheet(s) we are using for the site. (must be absolute location)
 	//$doc->setStyle(THEME.'css/secure.css');
 	# Do we need some javascripts? (Use the script file name before the ".js".)

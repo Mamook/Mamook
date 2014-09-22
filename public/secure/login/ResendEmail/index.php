@@ -21,6 +21,9 @@ try
 
 	$head='Please enter you email address to recieve your activation email.';
 
+	# Get the submit_email form.
+	require TEMPLATES.'forms'.DS.'submit_email.php';
+
 	/*
 	** In the page template we
 	** get the header

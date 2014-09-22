@@ -79,8 +79,8 @@ else
 	{
 		$fg->addElement('hidden', array('name'=>'_staff_id', 'value'=>$account_staff_id));
 	}
-	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<fieldset>');
+	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<h4>Name:</h4>');
 	# Check if there is a WordPress installation.
 	if(WP_INSTALLED===TRUE)
@@ -305,7 +305,6 @@ else
 
 		}
 	}
-	$fg->addFormPart('</fieldset>');
 	$fg->addFormPart('<li>');
 	$button_value='Update';
 	$fg->addElement('submit', array('name'=>'account', 'value'=>$button_value), '', NULL, 'submit-account');
@@ -317,6 +316,7 @@ else
 	$fg->addElement('submit', array('name'=>'account', 'value'=>'Reset'), '', NULL, 'submit-reset');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
+	$fg->addFormPart('</fieldset>');
 	$display.=$fg->display();
 	$display.='</div>';
 }

@@ -65,11 +65,11 @@ try
 		if(!empty($publisher))
 		{
 			# Set the display xhtml to a variable for display to the user.
-			$profile='<div id="profile" class="profile post">';
-			$profile.=$publisher['info'];
-			$profile.=$publisher['contributor'];
-			$profile.=$publisher['recent_contributor'];
-			$profile.='</div>';
+			$display='<div id="profile" class="profile post">';
+			$display.=$publisher['info'];
+			$display.=$publisher['contributor'];
+			$display.=$publisher['recent_contributor'];
+			$display.='</div>';
 			# Set the page title to the publisher's name.
 			$page_title=$publisher['publisher'];
 		}
@@ -96,9 +96,9 @@ try
 		if(!empty($member))
 		{
 			# Set the display xhtml to a variable for display to the user.
-			$profile='<div id="profile" class="profile">';
-			$profile.=$member['image'];
-			$profile.=$member['organization'];
+			$display='<div id="profile" class="profile">';
+			$display.=$member['image'];
+			$display.=$member['organization'];
 			# Count the number of positions held.
 			$num_position=count($member['position']);
 			$position_fix='<span class="profile-position">'.
@@ -134,16 +134,16 @@ try
 					# Store the HTML markup in the new array.
 					$pos_focus[]='<li>'.$position['position'].(!empty($position['description']) ? ' - '.$position['description'] : '').'</li>';
 				}
-				$profile.=sprintf($position_fix, implode('', $pos_focus));
+				$display.=sprintf($position_fix, implode('', $pos_focus));
 			}
-			$profile.=$member['website'];
-			$profile.=$member['affiliation'];
-			$profile.=$member['region'];
-			$profile.=$member['country'];
-			$profile.=$member['interests'];
-			$profile.='<div class="empty"></div>';
-			$profile.=$member['bio'];
-			$profile.='</div>';
+			$display.=$member['website'];
+			$display.=$member['affiliation'];
+			$display.=$member['region'];
+			$display.=$member['country'];
+			$display.=$member['interests'];
+			$display.='<div class="empty"></div>';
+			$display.=$member['bio'];
+			$display.='</div>';
 			# Check if the person accepts emails from other users.
 			if($member['questions']===0)
 			{
@@ -194,7 +194,7 @@ try
 					# Get the form mail template.
 					require TEMPLATES.'forms'.DS.'email_form.php';
 
-					$profile.='<div class="contact">'.$display.'</div>';
+					$display.='<div class="contact">'.$display.'</div>';
 				}
 			}
 			# Set the page title as the person's display name.

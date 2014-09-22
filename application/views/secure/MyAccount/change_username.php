@@ -1,10 +1,16 @@
 <?php /* applications/views/secure/MyAccount/change_username.php */
 
 echo '<section id="main" class="main secure username">',
-	$display_content;
-	# Get the change_username form.
-	require TEMPLATES.'forms/change_username.php';
-	echo $display_username_form,
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',

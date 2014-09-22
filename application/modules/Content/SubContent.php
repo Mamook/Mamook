@@ -865,7 +865,7 @@ class SubContent
 	 *
 	 * Sets the data member $link.
 	 *
-	 * @param		$link
+	 * @param	$link
 	 * @access	public
 	 */
 	public function setLink($link)
@@ -1046,20 +1046,25 @@ class SubContent
 	 *
 	 * Sets the data member $text.
 	 *
-	 * @param		string 		$text
+	 * @param	string $text
 	 * @access	public
 	 */
 	public function setText($text)
 	{
+		# Bring the content object into scope.
+		global $main_content;
+
 		# Check if the value is empty.
 		if(!empty($text))
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Strip slashes and decode any html entities in UTF-8 charset.
 			$text=html_entity_decode(stripslashes($text), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$text=trim($text);
 			# Replace any domain tokens with the current domain name.
-			$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
 		}
 		else
 		{
@@ -1118,15 +1123,20 @@ class SubContent
 	 */
 	public function setTextTrans($text_trans)
 	{
+		# Bring the content object into scope.
+		global $main_content;
+
 		# Check if the value is empty.
 		if(!empty($text_trans))
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Strip slashes and decode any html entities in UTF-8 charset.
 			$text_trans=html_entity_decode(stripslashes($text_trans), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$text_trans=trim($text_trans);
 			# Replace any domain tokens with the current domain name.
-			$text_trans=str_ireplace('%{domain_name}', DOMAIN_NAME, $text_trans);
+			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text_trans);
 		}
 		else
 		{
@@ -1185,18 +1195,27 @@ class SubContent
 	 */
 	public function setTitle($title)
 	{
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
 		# Check if the value is empty.
 		if(!empty($title))
 		{
-			# Turn any html entities back to special characters, strip any html or php tags, and trim blank space off the front and back, turn any special characters into html entities including quotes, then decode all html entities making sure they are all UTF-8 encoded.
+			# The the site name.
+			$site_name=$main_content->getSiteName();
+			# Sanitize
+			# 	Turn any html entities back to special characters
+			#	Strip any html or php tags
+			#	Trim blank space off the front and back
+			#	Turn any special characters into html entities including quotes
+			#	Then decode all html entities making sure they are all UTF-8 encoded.
 			$title=$db->sanitize($title);
 			# Clean it up.
 			$title=trim($title);
 			# Replace any domain tokens with the current domain name.
-			$title=str_ireplace('%{domain_name}', DOMAIN_NAME, $title);
+			$title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $title);
 		}
 		else
 		{
@@ -3756,6 +3775,8 @@ class SubContent
 	 */
 	public function setDataMembers($row)
 	{
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
@@ -3870,10 +3891,12 @@ class SubContent
 				$this->setInstitutionID(NULL);
 			}
 
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Set the SubContent link to a variable.
 			$link=$row->link;
 			# Replace any domain tokens with the current domain name.
-			$link=str_ireplace('%{domain_name}', DOMAIN_NAME, $link);
+			$link=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $link);
 			# Set SubContent link to the data member.
 			$this->setLink($link);
 
@@ -3892,7 +3915,7 @@ class SubContent
 			# Set the SubContent text to a variable.
 			$text=$row->text;
 			# Replace any domain tokens with the current domain name.
-			$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
 			# Strip slashes and decode any html entities.
 			$text=((empty($text)) ? '' : html_entity_decode(stripslashes($text), ENT_COMPAT, 'UTF-8'));
 			# Convert new lines to <br />.
@@ -3924,7 +3947,7 @@ class SubContent
 			# Set the SubContent translated text to a variable.
 			$text_trans=$row->text_trans;
 			# Replace any domain tokens with the current domain name.
-			$text_trans=str_ireplace('%{domain_name}', DOMAIN_NAME, $text_trans);
+			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text_trans);
 			# Strip slashes and decode any html entities.
 			$text_trans=((empty($text_trans)) ? '' : html_entity_decode(stripslashes($text_trans), ENT_COMPAT, 'UTF-8'));
 			# Convert new lines to <br />.

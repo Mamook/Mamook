@@ -45,7 +45,7 @@ try
 			$register->addElement('hidden', array('name'=>'_post_login', 'value'=>$login->getPostLogin()));
 		}
 		$register->addElement('submit', array('name'=>'register', 'value'=>'Register'), '', NULL, 'submit-login');
-		$display_register='<div id="register">'.
+		$display='<div id="register">'.
 			'<h3>Register</h3>'.
 			'<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>'.
 			$register->display().
@@ -55,8 +55,11 @@ try
 	else
 	{
 		$main_content->setPageTitle('Login to '.DOMAIN_NAME);
-		$display_register='';
+		$display='';
 	}
+
+	# Get the login form.
+	require TEMPLATES.'forms'.DS.'login.php';
 
 	# Capture any errors.
 	$doc->setError($login->getError());

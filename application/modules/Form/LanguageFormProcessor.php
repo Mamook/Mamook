@@ -34,6 +34,8 @@ class LanguageFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -70,6 +72,8 @@ class LanguageFormProcessor extends FormProcessor
 			$language_name=$language->getLanguage();
 			# Set the language's ISO to a variable.
 			$iso=$language->getISO();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the language's unique status to a variable.
 			$unique=$populator->getUnique();
 
@@ -173,7 +177,7 @@ class LanguageFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'languages` SET '.
-								'`language` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $language_name))).
+								'`language` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $language_name))).
 								'`ISO` = '.((!empty($iso)) ? $db->quote($db->escape($iso)) : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';

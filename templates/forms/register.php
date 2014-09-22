@@ -1,8 +1,8 @@
 <?php /* templates/forms/register.php */
 
-$display_form='<div id="register" class="form">';
+$display='<div id="register" class="form">';
 # Create and display form.
-$display_form.=$head;
+$display.=$head;
 # Instantiate FormGenerator object.
 $register=new FormGenerator('register', REDIRECT_TO_LOGIN.'register/');
 $register->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
@@ -33,18 +33,21 @@ $register->addFormPart('<li>');
 $register->addFormPart('<label class="label" for="password_conf">Confirm Password</label>');
 $register->addElement('password', array('name'=>'password_conf', 'id'=>'password_conf'));
 $register->addFormPart('</li>');
-$register->addFormPart('<li>');
-$register->addFormPart('<label for="recaptcha_response_field" class="label"><a href="http://www.google.com/recaptcha/intro/index.html" title="What is reCaptcha?" target="_blank">reCaptch<span>?</span></a></label>');
-$register->addFormPart('<div class="reCaptcha">');
-$register->addFormPart($register->reCaptchaGetHTML(PUBLICKEY, $login->getReCaptchaError(), TRUE));
-$register->addFormPart('</div>');
-$register->addFormPart('</li>');
+if(CAPTCHA_PUBLICKEY!='' && CAPTCHA_PRIVATEKEY!='')
+{
+	$register->addFormPart('<li>');
+	$register->addFormPart('<label for="recaptcha_response_field" class="label"><a href="http://www.google.com/recaptcha/intro/index.html" title="What is reCaptcha?" target="_blank">reCaptch<span>?</span></a></label>');
+	$register->addFormPart('<div class="reCaptcha">');
+	$register->addFormPart($register->reCaptchaGetHTML(CAPTCHA_PUBLICKEY, $login->getReCaptchaError(), TRUE));
+	$register->addFormPart('</div>');
+	$register->addFormPart('</li>');
+}
 $register->addFormPart('<li>');
 $register->addElement('submit', array('name'=>'register', 'value'=>'Register'), '', NULL, 'submit-login');
 $register->addFormPart('</li>');
 $register->addFormPart('</ul>');
 $register->addFormPart('</fieldset>');
-$display_form.=$register->display();
+$display.=$register->display();
 # Clean $register.
 $register=NULL;
-$display_form.='</div>';
+$display.='</div>';

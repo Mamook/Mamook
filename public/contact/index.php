@@ -29,7 +29,6 @@ try
 	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail_error';
 	$head='<h1>Use the form below to send me an email</h1>';
 	$meta_desc='Contact form';
-	$recipients='General';
 
 	### DEBUGGING ###
 	if(DEBUG_APP===TRUE)
@@ -54,12 +53,12 @@ try
 		Please make sure you entered your name and a valid email address. If it still isn\'t working, rest assured that the webmaster has received an email and will work out the issue as soon as possible. You may try again later. Thanks.');
 	}
 
-	# Instantiate a new FormProcessor object.
+	# Instantiate a new EmailFormProcessor object.
 	$fp=new EmailFormProcessor();
 	$fp->setFormAction(APPLICATION_URL.WebUtility::removeIndex(HERE).$get_query);
 	$fp->setUpload(TRUE);
 
-	# Get the form mail template.
+	# Get the email form.
 	require TEMPLATES.'forms'.DS.'email_form.php';
 
 	if($main_content->getAddress1()!==NULL)

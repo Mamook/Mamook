@@ -1,15 +1,15 @@
 <?php /* templates/forms/request_auth.php */
 
-$display_request_auth_form='<div id="request_auth_form" class="form">';
+$display='<div id="request_auth_form" class="form">';
 # Check if the user is an admin.
 if($login->isAdmin()===TRUE)
 {
-	$display_request_auth_form.='<h3>You are an admin on this site. You are authorized to do anything.</h3>';
+	$display.='<h3>You are an admin on this site. You are authorized to do anything.</h3>';
 }
 else
 {
 	# Create and display form.
-	$display_request_auth_form.='<h3>'.$head.'</h3>';
+	$display.='<h3>'.$head.'</h3>';
 	# Instantiate FormGenerator object.
 	$fg=new FormGenerator('request_auth');
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
@@ -46,6 +46,6 @@ else
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
 	$fg->addFormPart('</fieldset>');
-	$display_request_auth_form.=$fg->display();
+	$display.=$fg->display();
 }
-$display_request_auth_form.='</div>';
+$display.='</div>';

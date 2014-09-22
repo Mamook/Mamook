@@ -1,15 +1,20 @@
-<?php /* application/views/secure/MyAccount/profile.php */
+<?php /* application/views/secure/MyAccount/index.php */
 
 echo '<section id="main" class="main secure">',
-	$display_content,
-	# Display the profile form.
-	$display,
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',
-	'<div id="box1a">',
-	'</div>',
-	'<div id="box1b">';
+	'<div id="box1a">';
 		$img=$user_obj->getImg();
 		$cv=$user_obj->getCV();
 		if(!empty($img))
@@ -24,7 +29,8 @@ echo '<section id="main" class="main secure">',
 			$user_cv.='</div>';
 			echo $user_cv;
 		}
-	echo '</div>',
+echo '</div>',
+	'<div id="box1b"></div>',
 	'<div id="box1c">',
 	'</div>',
 '</section>',

@@ -35,6 +35,8 @@ class ProductFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -105,6 +107,8 @@ class ProductFormProcessor extends FormProcessor
 			$publisher_id=$product_obj->getPublisher();
 			# Set the product's purchase link to a variable.
 			$purchase_link=$product_obj->getPurchaseLink();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the product's sort by to a variable.
 			$sort_by=$product_obj->getSortBy();
 			# Set the product's title to a variable.
@@ -237,15 +241,15 @@ class ProductFormProcessor extends FormProcessor
 							((!empty($author)) ? ' '.$db->quote($db->escape($author)).',' : '').
 							(($product_type=='internal' && !empty($button_id)) ? $db->quote($db->escape($button_id)).',' : '').
 							((!empty($category_ids)) ? ' '.$db->quote($category_ids).',' : '').
-							((!empty($content)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $content))).',' : '').
+							((!empty($content)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $content))).',' : '').
 							$db->quote($db->escape($currency)).','.
-							((!empty($description)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $description))).',' : '').
+							((!empty($description)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $description))).',' : '').
 							((!empty($file_id)) ? ' '.$db->quote($file_id).',' : '').
 							((!empty($image_id)) ? ' '.$db->quote($image_id).',' : '').
 							((!empty($price)) ? ' '.$db->quote($db->escape($price)).',' : '').
 							((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : '').
 							(($product_type=='external' && !empty($purchase_link)) ? ' '.$db->quote($purchase_link).',' : '').
-							' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).
+							' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).
 							')';
 						# Check if this is an UPDATE. If there is an ID, it's an UPDATE.
 						if(!empty($id))
@@ -258,15 +262,15 @@ class ProductFormProcessor extends FormProcessor
 								' `author` = '.((!empty($author)) ? ' '.$db->quote($author).',' : 'NULL,').
 								((!empty($category_ids)) ? ' `category` = '.$db->quote($category_ids).',' : '').
 								'`button_id` = '.$db->quote($db->escape($button_id)).','.
-								' `content` = '.((!empty($content)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $content))).',' : 'NULL,').
+								' `content` = '.((!empty($content)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $content))).',' : 'NULL,').
 								' `currency` = '.$db->quote($db->escape($currency)).', '.
-								' `description` = '.((!empty($description)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $description))).',' : 'NULL,').
+								' `description` = '.((!empty($description)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $description))).',' : 'NULL,').
 								((!empty($file_id)) ? ' `file` = '.$db->quote($file_id).',' : '').
 								((!empty($image_id)) ? ' `image` = '.$db->quote($image_id).',' : '').
 								' `price` = '.((!empty($price)) ? ' '.$db->quote($price).',' : 'NULL,').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
 								' `purchase_link` = '.$db->quote($purchase_link).','.
-								' `title` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}

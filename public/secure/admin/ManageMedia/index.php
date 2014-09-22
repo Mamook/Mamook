@@ -16,6 +16,7 @@ try
 	require_once '../../../../settings.php';
 
 	$login->checkLogin(ALL_BRANCH_USERS);
+	$display='';
 
 	/*
 	 ** In the page template we

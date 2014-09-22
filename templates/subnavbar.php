@@ -15,7 +15,7 @@ if($login->isLoggedIn()===TRUE)
 	}
 	else
 	{
-		$login_link.='<a href="'.SECURE_URL.'MyAccount/profile.php"'.Document::addHereClass(SECURE_URL.'MyAccount/').' title="MyAccount">MyAccount</a>';
+		$login_link.='<a href="'.SECURE_URL.'MyAccount/"'.Document::addHereClass(SECURE_URL.'MyAccount/').' title="MyAccount">MyAccount</a>';
 	}
 	$login_link.='</li>';
 

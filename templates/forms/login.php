@@ -1,8 +1,8 @@
 <?php /* templates/forms/login.php */
 
-$display_form='<div id="login" class="login form">';
+$display.='<div id="login" class="login form">';
 # Create and display form.
-$display_form.=$head;
+$display.=$head;
 # Instantiate FormGenerator object.
 $login_form=new FormGenerator('login', REDIRECT_TO_LOGIN);
 $login_form->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
@@ -31,8 +31,7 @@ $login_form->addFormPart('</li>');
 $login_form->addFormPart('</ul>');
 $login_form->addFormPart('</fieldset>');
 $login_form->addFormPart('<a href="'.REDIRECT_TO_LOGIN.'LostPassword/" class="helper" title="I lost my password">I lost my password</a>');
-$display_form.=$login_form->display();
+$display.=$login_form->display();
 # Clean update
 $login_form=NULL;
-$display_form.='</div>';
-echo $display_form;
+$display.='</div>';

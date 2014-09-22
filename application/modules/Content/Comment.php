@@ -106,7 +106,7 @@ class Comment
 	 *
 	 * Sets the data member $date.
 	 *
-	 * @param		$date
+	 * @param	$date
 	 * @access	protected
 	 */
 	protected function setDate($date)
@@ -131,20 +131,25 @@ class Comment
 	 *
 	 * Sets the data member $content.
 	 *
-	 * @param		string 		$content
+	 * @param	string					$content
 	 * @access	protected
 	 */
 	protected function setContent($content)
 	{
+		# Bring the content object into scope.
+		global $main_content;
+
 		# Check if the passed value is empty.
 		if(!empty($content))
 		{
+			# Get the site name.
+			$site_name=$main_content->getSiteName();
 			# Strip slashes and decode any html entities.
 			$content=html_entity_decode(stripslashes($content), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$content=trim($content);
-			# Replace any domain tokens with the current domain name.
-			$content=str_ireplace('%{domain_name}', DOMAIN_NAME, $content);
+			# Replace any domain or site name tokens with the current domain name and site name.
+			$content=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $content);
 			# Set the data member.
 			$this->content=$content;
 		}
@@ -160,7 +165,7 @@ class Comment
 	 *
 	 * Sets the data member $parent.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	protected
 	 */
 	protected function setParent($id)

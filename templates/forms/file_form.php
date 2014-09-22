@@ -9,7 +9,7 @@ $populator=$form_processor->getPopulator();
 $file=$populator->getFileObject();
 
 $select=TRUE;
-$file_form_display='';
+$display='';
 
 if(!isset($_GET['select']))
 {
@@ -38,13 +38,13 @@ if(!isset($_GET['select']))
 			}
 		}
 
-		$file_form_display='<div id="file_form" class="form">';
+		$display='<div id="file_form" class="form">';
 
 		# create and display form.
-		$file_form_display.='<h3>'.$head.'</h3>';
+		$display.='<h3>'.$head.'</h3>';
 
 		# Add the statement about requirements.
-		$file_form_display.='<span class="required">* = required field</span>';
+		$display.='<span class="required">* = required field</span>';
 
 		# Create an array to hold the available availability options.
 		$available_options=array(0=>'This site does not yet have the legal rights to display', 1=>'This site has the legal rights to display', 2=>'Internal document only', 3=>'Can not distribute');
@@ -166,17 +166,20 @@ if(!isset($_GET['select']))
 		$publishers=$publisher->getAllPublishers();
 		$pub_options[0]='';
 		$pub_options['add']='Add Publisher';
-		foreach($publishers as $row)
+		if(!empty($publishers))
 		{
-			$pub_options[$row->id]=$row->name;
-			if($row->name==$file->getPublisher())
+			foreach($publishers as $row)
 			{
-				# Set the selected publisher to the default.
-				$pub_options['selected']=$row->name;
-			}
-			elseif($populator->getPublisherOption()==='add')
-			{
-				$pub_options['selected']='Add Publisher';
+				$pub_options[$row->id]=$row->name;
+				if($row->name==$file->getPublisher())
+				{
+					# Set the selected publisher to the default.
+					$pub_options['selected']=$row->name;
+				}
+				elseif($populator->getPublisherOption()==='add')
+				{
+					$pub_options['selected']='Add Publisher';
+				}
 			}
 		}
 
@@ -296,8 +299,8 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('</ul>');
 		$fg->addFormPart('</fieldset>');
-		$file_form_display.=$fg->display();
-		$file_form_display.='</div>';
+		$display.=$fg->display();
+		$display.='</div>';
 	}
 	else
 	{
@@ -324,7 +327,7 @@ if(!isset($_GET['select']))
 		$file->setAllFiles($duplicates);
 		# Display the SubContent.
 		$display_array=$sc->displaySubContent(255, constant(strtoupper(str_replace(' ', '_', $branch_name)).'_USERS'));
-		$file_form_display.='<h3>The following file(s) seem to closely resemble the file you are submitting. If you feel your file is unique and would like to continue uploading it, simply click on the "Back" button below. Conversely, you may choose to edit an existing file or click <a href="'.SECURE_URL.WebUtility::removeIndex(SECURE_HERE).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without uploading.</h3>';
+		$display.='<h3>The following file(s) seem to closely resemble the file you are submitting. If you feel your file is unique and would like to continue uploading it, simply click on the "Back" button below. Conversely, you may choose to edit an existing file or click <a href="'.SECURE_URL.WebUtility::removeIndex(SECURE_HERE).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without uploading.</h3>';
 
 		# Instantiate a new formGenerator object.
 		$fg=new formGenerator('back_button');
@@ -335,34 +338,34 @@ if(!isset($_GET['select']))
 		# Add the button to the form.
 		$fg->addElement('submit', array('name'=>'file', 'value'=>'Back to the form!'), '', NULL, 'submit-back');
 		# Concatenate the "back button" to the duplicates to be displayed.
-		$file_form_display.=$fg->display();
+		$display.=$fg->display();
 
 		# Start an unordered list of the "subcontent" class and set it to a variable.
-		$file_form_display.='<ul class="file">';
+		$display.='<ul class="file">';
 		# Loop through the display subcontent array.
 		foreach($display_array as $display_duplicate)
 		{
 			# Add the post content to the post_form_display variable.
-			$file_form_display.='<li>';
-			$file_form_display.=$display_duplicate['date'];
-			$file_form_display.=$display_duplicate['title'];
-			$file_form_display.=$display_duplicate['text'];
-			$file_form_display.=$display_duplicate['text_trans'];
-			$file_form_display.='<div class="empty"></div>';
-			$file_form_display.=$display_duplicate['more'];
-			$file_form_display.=$display_duplicate['edit'];
-			$file_form_display.=$display_duplicate['delete'];
-			$file_form_display.=$display_duplicate['download'];
-			$file_form_display.='<div class="empty"></div>';
-			$file_form_display.='</li>';
+			$display.='<li>';
+			$display.=$display_duplicate['date'];
+			$display.=$display_duplicate['title'];
+			$display.=$display_duplicate['text'];
+			$display.=$display_duplicate['text_trans'];
+			$display.='<div class="empty"></div>';
+			$display.=$display_duplicate['more'];
+			$display.=$display_duplicate['edit'];
+			$display.=$display_duplicate['delete'];
+			$display.=$display_duplicate['download'];
+			$display.='<div class="empty"></div>';
+			$display.='</li>';
 		}
 		# Close the unordered list.
-		$file_form_display.='</ul>';
+		$display.='</ul>';
 		# Concatenate the Back button to the duplicates to be displayed.
-		$file_form_display.=$fg->display();
+		$display.=$fg->display();
 	}
 }
 
-$file_form_display.=$file->displayFileList('!1-!2-!3-!4-!5', $select);
+$display.=$file->displayFileList('!1-!2-!3-!4-!5', $select);
 
-$file_form_display=$display_delete_form.$file_form_display;
+$display=$display_delete_form.$display;

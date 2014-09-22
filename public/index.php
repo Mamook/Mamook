@@ -18,7 +18,7 @@ try
 	# Get the SubContent Class (also includes Content Class).
 	require_once MODULES.'Content'.DS.'SubContent.php';
 
-	$announcement='';
+	$display='';
 	$display_content='';
 
 	# Set a default variable for the "AND" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
@@ -57,14 +57,14 @@ try
 		# Loop through the announcement subcontent array.
 		foreach($announcement_subcontent as $display_subcontent)
 		{
-			$announcement='<div class="post">'."\n";
-			$announcement.=$display_subcontent['date'];
-			$announcement.=$display_subcontent['title'];
-			$announcement.=$display_subcontent['text'];
-			$announcement.=$display_subcontent['text_trans'];
-			$announcement.=$display_subcontent['more'];
-			$announcement.=$display_subcontent['download'];
-			$announcement.='</div>'."\n";
+			$display='<div class="post">'."\n";
+			$display.=$display_subcontent['date'];
+			$display.=$display_subcontent['title'];
+			$display.=$display_subcontent['text'];
+			$display.=$display_subcontent['text_trans'];
+			$display.=$display_subcontent['more'];
+			$display.=$display_subcontent['download'];
+			$display.='</div>'."\n";
 		}
 	}
 

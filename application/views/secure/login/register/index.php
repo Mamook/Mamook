@@ -1,11 +1,15 @@
 <?php /* application/views/secure/login/register/index.php */
 
 echo '<section id="main" class="main login">',
-	'<div class="main-1"></div>',
-	'<div class="main-2">',
+	'<div class="main-1">',
+		# Get the main content.
 		$display_content,
+	'</div>',
+	'<div class="main-2">',
 		'<p>If you are have trouble registering or logging in, please send us an <a href="', APPLICATION_URL, 'webSupport/" title="Email web support">email</a>.</p>',
-		$display_form,
+		# Display other content (forms).
+		$display,
+		$display_quote,
 	'</div>',
 	'<div class="main-3"></div>',
 '</section>',

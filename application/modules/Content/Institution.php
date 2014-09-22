@@ -298,11 +298,15 @@ class Institution
 	{
 		# Bring the Login object into scope.
 		global $login;
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
 		try
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Count the institutions.
 			$content_count=$this->countAllInstitutions();
 			# Check if there was returned content.
@@ -418,13 +422,13 @@ class Institution
 				foreach($all_institutions as $row)
 				{
 					# Instantiate a new Institution object.
-					$institution=New Institution();
+					$institution=new Institution();
 					# Set the relevant returned field values File data members.
 					$institution->setID($row->id);
 					$institution->setInstitution($row->institution);
 					# Set the relevant Institution data members to local variables.
 					$institution_id=$institution->getID();
-					$institution_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $institution->getInstitution());
+					$institution_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $institution->getInstitution());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;

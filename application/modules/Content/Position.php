@@ -386,6 +386,9 @@ class Position
 	 */
 	public function setDataMembers($row)
 	{
+		# Bring the content object into scope.
+		global $main_content;
+
 		try
 		{
 			# Set Position id to the data member.
@@ -394,10 +397,12 @@ class Position
 			# Set Position name to the data member.
 			$this->setPosition($row->position);
 
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Set the Position description to a variable.
 			$description=$row->description;
 			# Replace any domain tokens with the current domain name.
-			$description=str_ireplace('%{domain_name}', DOMAIN_NAME, $description);
+			$description=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $description);
 			# Set Position link to the data member.
 			$this->setDescription($description);
 		}

@@ -550,6 +550,11 @@ span em {
 	margin:0 20px;
 }
 
+#main .content_text ul {
+	list-style: square outside;
+	padding: 6px 0 6px 20px;
+}
+
 #main .content_text ol {
 	margin-left:40px
 }

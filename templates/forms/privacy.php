@@ -1,26 +1,35 @@
 <?php /* templates/forms/privacy.php */
 
+$person='me';
+# Check if the user was passed in the URL.
+if(isset($current_username))
+{
+	$person=$current_username;
+}
+
+$newsletter='';
+if($user->getNewsletter()!==NULL)
+{
+	$newsletter='checked';
+}
+$questions='';
+if($user->getQuestions()!==NULL)
+{
+	$questions='checked';
+}
+
 # Instantiate FormGenerator object.
 $fg=new FormGenerator('privacy');
 
-$display_privacy_form='<div id="privacy_form" class="form">';
+$display='<div id="privacy_form" class="form">';
 	# Create the form and set the xhtml to a variable for display.
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
-	$fg->addFormPart('<fieldset>');
 	$fg->addFormPart('<ul>');
+	$fg->addFormPart('<fieldset>');
 	$fg->addFormPart('<li>');
-	$newsletter='';
-	if($user->getNewsletter()!==NULL)
-	{
-		$newsletter='checked';
-	}
 	$fg->addElement('checkbox',array('name'=>'newsletter', 'checked'=>$newsletter, 'id'=>'newsletter'));
-	$fg->addFormPart('<label class="label-box" for="newsletter">Send me the '.DOMAIN_NAME.' newsletter</label>');
+	$fg->addFormPart('<label class="label-box" for="newsletter">Send '.$person.' the '.DOMAIN_NAME.' newsletter</label>');
 	$fg->addFormPart('</li>');
-	// $fg->addFormPart('<li>');
-	// 	$fg->addElement('checkbox',array('name'=>'ctm_newsletter', 'checked'=>$ctm_newsletter));
-	// 	$fg->addFormPart('<label class="label-box" for="ctm_newsletter">Send me the <abbr title="Center for Traditional Medicine">CTM</abbr> newsletter</label>');
-	// 	$fg->addFormPart('</li>');
 
 	# Loop through the branch id's.
 	foreach($branch_ids as $branch_num)
@@ -53,23 +62,15 @@ $display_privacy_form='<div id="privacy_form" class="form">';
 		{
 			$fg->addFormPart('<li>');
 			$fg->addElement('checkbox', array('name'=>$branch_id, 'checked'=>$notify, 'id'=>$branch_id));
-			$fg->addFormPart('<label class="label-box" for="'.$branch_id.'">Send me <a href="http://'.$branch->getDomain().'" target="_blank">'.$branch_name.'</a> updates</label>');
+			$fg->addFormPart('<label class="label-box" for="'.$branch_id.'">Send '.$person.' <a href="http://'.$branch->getDomain().'" target="_blank">'.$branch_name.'</a> updates</label>');
 			$fg->addFormPart('</li>');
 		}
 	}
 
-	$questions='';
-	if($user->getQuestions()!==NULL)
-	{
-		$questions='checked';
-	}
 	$fg->addFormPart('<li>');
 	$fg->addElement('checkbox', array('name'=>'questions', 'checked'=>$questions, 'id'=>'questions'));
-	$fg->addFormPart('<label class="label-box" for="questions">Allow '.DOMAIN_NAME.' Users to email me via a form on my <a href="'.APPLICATION_URL.'profile/?member='.$user->findUserID().'" title="View '.$user->findDisplayName().'\'s profile" target="_blank">profile page</a>.</label>');
+	$fg->addFormPart('<label class="label-box" for="questions">Allow '.DOMAIN_NAME.' Users to email '.$person.' via a form on '.((isset($current_username)) ? 'his/her' : 'my').' <a href="'.APPLICATION_URL.'profile/?member='.$user->findUserID().'" title="View '.$user->findDisplayName().'\'s profile" target="_blank">profile page</a>.</label>');
 	$fg->addFormPart('</li>');
-		$fg->addFormPart('</ul>');
-	$fg->addFormPart('</fieldset>');
-	$fg->addFormPart('<fieldset>');
 
 	# Get the Contributor class.
 	require_once MODULES.'User'.DS.'Contributor.php';
@@ -78,6 +79,7 @@ $display_privacy_form='<div id="privacy_form" class="form">';
 	# Check if the User is a contributor.
 	if($contributor->getThisContributor($user->findUserID())===TRUE)
 	{
+		$fg->addFormPart('<li>');
 		$hide_contributor='';
 		$show_contributor='';
 		$show_user_contributor='';
@@ -109,13 +111,12 @@ $display_privacy_form='<div id="privacy_form" class="form">';
 		$fg->addFormPart('<label class="label-radio" for="contTrue">display my name as a contributor to everyone</label>');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('</ul>');
+		$fg->addFormPart('</li>');
 	}
 	$fg->addFormPart('</fieldset>');
 
-	$fg->addFormPart('<fieldset>');
+	$fg->addFormPart('<li>');
 	$fg->addElement('submit', array('name'=>'send', 'value'=>'Update'), '', NULL, 'submit-privacy');
-	$fg->addFormPart('</fieldset>');
-	$display_privacy_form.=$fg->display();
-$display_privacy_form.='</div>';
-
-?>
+	$fg->addFormPart('</li>');
+	$display.=$fg->display();
+$display.='</div>';

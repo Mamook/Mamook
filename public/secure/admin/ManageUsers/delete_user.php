@@ -35,6 +35,9 @@ try
 		# Process the delete form if it has been submitted.
 		$form_processor->processDeleteAccount();
 		$current_username=$user->findUsername($id);
+
+		# Get the delete_user form.
+		require TEMPLATES.'forms'.DS.'delete_user.php';
 	}
 	else
 	{

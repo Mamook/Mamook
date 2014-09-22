@@ -1,6 +1,6 @@
 <?php /* templates/forms/change_username.php */
 
-$display_username_form='<div id="change_username_form" class="form">';
+$display='<div id="change_username_form" class="form">';
 # Create and display form
 # Instantiate FormGenerator object
 $fg=new FormGenerator('change_username');
@@ -24,5 +24,5 @@ $fg->addFormPart('<li>');
 $fg->addElement('submit', array('name'=>'send', 'value'=>'Change Username'),'' , NULL, 'submit-profile');
 $fg->addFormPart('</li>');
 $fg->addFormPart('</ul>');
-$display_username_form.=$fg->display();
-$display_username_form.='</div>';
+$display.=$fg->display();
+$display.='</div>';

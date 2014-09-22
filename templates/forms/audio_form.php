@@ -203,17 +203,20 @@ elseif(!isset($_GET['select']))
 		$publishers=$publisher->getAllPublishers();
 		$pub_options[0]='';
 		$pub_options['add']='Add Publisher';
-		foreach($publishers as $row)
+		if(!empty($publishers))
 		{
-			$pub_options[$row->id]=$row->name;
-			if($row->name==$audio_obj->getPublisher())
+			foreach($publishers as $row)
 			{
-				# Set the selected publisher to the default.
-				$pub_options['selected']=$row->name;
-			}
-			elseif($audio_obj->getPublisher()==='add')
-			{
-				$pub_options['selected']='Add Publisher';
+				$pub_options[$row->id]=$row->name;
+				if($row->name==$audio_obj->getPublisher())
+				{
+					# Set the selected publisher to the default.
+					$pub_options['selected']=$row->name;
+				}
+				elseif($audio_obj->getPublisher()==='add')
+				{
+					$pub_options['selected']='Add Publisher';
+				}
 			}
 		}
 

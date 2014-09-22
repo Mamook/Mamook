@@ -47,14 +47,14 @@ define('GOOGLE_REFRESH_TOKEN', '');
 # Development sites.
 if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
 {
-	define('PUBLICKEY', '');
-	define('PRIVATEKEY', '');
+	define('CAPTCHA_PUBLICKEY', '');
+	define('CAPTCHA_PRIVATEKEY', '');
 }
 # Production sites.
 else
 {
-	define('PUBLICKEY', '');
-	define('PRIVATEKEY', '');
+	define('CAPTCHA_PUBLICKEY', '');
+	define('CAPTCHA_PRIVATEKEY', '');
 }
 /* end reCaptcha API keys */
 

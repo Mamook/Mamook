@@ -37,6 +37,8 @@ class AudioFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -164,6 +166,8 @@ class AudioFormProcessor extends FormProcessor
 			$publisher_obj->getThisPublisher($publisher_name, FALSE);
 			# Set the publisher id to a variable.
 			$publisher_id=$publisher_obj->getID();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the audio's title to a variable.
 			$title=$audio_obj->getTitle();
 			# Set the audio's Twitter value to a variable.
@@ -417,7 +421,7 @@ class AudioFormProcessor extends FormProcessor
 							' `contributor`,'.
 							' `new`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 							((!empty($description)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($description))))).',' : ' \'\',').
 							((!empty($new_audio_name)) ? ' '.$db->quote($db->escape($new_audio_name)).',' : '').
 							((!empty($embed_code)) ? ' '.$db->quote($db->escape($embed_code)).',' : '').
@@ -455,7 +459,7 @@ class AudioFormProcessor extends FormProcessor
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
-								' `title` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';

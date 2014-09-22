@@ -15,6 +15,8 @@ try
 	*/
 	require_once '../../../settings.php';
 
+	$display='';
+
 	$login->activateAccount();
 
 	/*

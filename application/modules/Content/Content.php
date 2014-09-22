@@ -61,8 +61,6 @@ class Content
 		# Get the content from the Database.
 		try
 		{
-			$this->getContent();
-
 			$content=$db->get_row("SELECT `site_name`, `slogan`, `address1`, `address2`, `city`, `state`, `country`, `zipcode`, `phone`, `fax`, `email`, `registration` FROM `".DBPREFIX."config` WHERE `archive` IS NOT NULL LIMIT 1");
 			$this->setSiteName($content->site_name);
 			$this->setSlogan($content->slogan);
@@ -76,6 +74,7 @@ class Content
 			$this->setFax($content->fax);
 			$this->setEmail($content->email);
 			$this->setRegistration($content->registration);
+			$this->getContent();
 		}
 		catch(ezDB_Error $e)
 		{
@@ -184,7 +183,8 @@ class Content
 	 *
 	 * Sets the data member $page_title
 	 *
-	 * @param		$page_title
+	 * @param	$page_title
+	 * @param	$form
 	 * @access	public
 	 */
 	public function setPageTitle($page_title, $form=NULL)
@@ -192,6 +192,8 @@ class Content
 		# Check if the passed value is empty.
 		if(!empty($page_title))
 		{
+			# Get the site name.
+			$site_name=$this->getSiteName();
 			if($form===NULL)
 			{
 				# Strip slashes, decode any html entities, strip any tags, and set the data member.
@@ -204,8 +206,8 @@ class Content
 				# Clean it up.
 				$page_title=trim($page_title);
 				# Replace any domain tokens with the current domain name.
-				$page_title=str_ireplace('%{domain_name}', DOMAIN_NAME, $page_title);
 			}
+			$page_title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $page_title);
 		}
 		else
 		{
@@ -229,12 +231,14 @@ class Content
 		# Check if the passed value is empty.
 		if(!empty($sub_title))
 		{
+			# Get the site name.
+			$site_name=$this->getSiteName();
 			# Strip slashes and decode any html entities in UTF-8 charset.
 			$sub_title=html_entity_decode(stripslashes($sub_title), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$sub_title=trim($sub_title);
 			# Replace any domain tokens with the current domain name.
-			$this->sub_title=str_ireplace('%{domain_name}', DOMAIN_NAME, $sub_title);
+			$this->sub_title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $sub_title);
 			# Strip slashes, decode any html entities, strip any tags, and set the data member.
 			//$this->sub_title=strip_tags(html_entity_decode(stripslashes($sub_title), ENT_COMPAT, 'UTF-8'), '<abbr>');
 		}
@@ -282,10 +286,6 @@ class Content
 		$text=((empty($text)) ? '' : html_entity_decode(stripslashes($text), ENT_COMPAT, 'UTF-8'));
 		# Clean it up.
 		$text=trim($text);
-		# Convert new lines to breaks.
-		//$text=nl2br($text);
-		# Replace any domain tokens with the current domain name.
-		//$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
 		# Set the data member.
 		$this->text=$text;
 	} #==== End -- setText
@@ -1103,6 +1103,7 @@ class Content
 		# Set variables
 		$image_name=$this->getImage();
 		$image_title=$this->getImageTitle();
+		$site_name=$this->getSiteName();
 		$text=$this->getText();
 		$use_social=$this->getUseSocial();
 
@@ -1134,7 +1135,7 @@ class Content
 
 		if(!empty($text))
 		{
-			$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
 			$class=((WebUtility::removeIndex(WebUtility::removePageQuery('http://'.FULL_DOMAIN.HERE))==APPLICATION_URL) ? 'splash_content_text' : 'content_text');
 			$content.='<div class="'.$class.'">'.$text.'</div>';
 		}

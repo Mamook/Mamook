@@ -49,6 +49,8 @@ class FileFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -146,6 +148,8 @@ class FileFormProcessor extends FormProcessor
 			$publisher_obj->getThisPublisher($publisher_name, FALSE);
 			# Set the publisher id to a variable.
 			$publisher_id=$publisher_obj->getID();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the file's title to a variable.
 			$title=$file->getTitle();
 			# Set the file's unique status to a variable.
@@ -346,7 +350,7 @@ class FileFormProcessor extends FormProcessor
 							' `language`,'.
 							' `contributor`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 							' '.$db->quote($db->escape($new_name)).','.
 							((!empty($author)) ? ' '.$db->quote($db->escape($author)).',' : '').
 							((!empty($year)) ? ' '.$db->quote($year).',' : '').
@@ -367,7 +371,7 @@ class FileFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'files` SET
-								`title` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).','.
+								`title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
 								((!empty($new_name)) ? ' `file` = '.$db->quote($db->escape($new_name)).',' : '').
 								' `author` = '.$db->quote($db->escape($author)).','.
 								' `year` = '.((empty($year)) ? $db->quote(0000) : $db->quote($year)).','.

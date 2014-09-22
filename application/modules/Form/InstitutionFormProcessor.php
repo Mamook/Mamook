@@ -34,6 +34,8 @@ class InstitutionFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the content object into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -69,6 +71,8 @@ class InstitutionFormProcessor extends FormProcessor
 			$id=$institution->getID();
 			# Set the institution's name to a variable.
 			$name=$institution->getInstitution();
+			# Set the site name to a variable.
+			$site_name=$main_content->getSiteName();
 			# Set the institution's unique status to a variable.
 			$unique=$populator->getUnique();
 
@@ -160,7 +164,7 @@ class InstitutionFormProcessor extends FormProcessor
 						$sql='INSERT INTO `'.DBPREFIX.'institutions` ('.
 							'`institution`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $name))).
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).
 							')';
 						# Check if this is an UPDATE. If there is an ID, it's an UPDATE.
 						if(!empty($id))
@@ -169,7 +173,7 @@ class InstitutionFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'institutions` SET
-								`institution` = '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $name))).
+								`institution` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}

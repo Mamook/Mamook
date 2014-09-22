@@ -47,6 +47,9 @@ try
 
 	$head='Where would you like to be Authorized?';
 
+	# Get the request authorization form.
+	require TEMPLATES.'forms'.DS.'request_auth.php';
+
 	# Set the default style sheet(s) we are using for the site. (must be absolute location)
 	//$doc->setStyle(THEME.'css/secure.css');
 	# Do we need some javascripts? (Use the script file name before the ".js".)

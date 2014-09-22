@@ -33,6 +33,9 @@ try
 	# Process the password form.
 	$form_processor->processPassword();
 
+	# Get the change password form.
+	require TEMPLATES.'forms'.DS.'change_password.php';
+
 	# Set the default style sheet(s) we are using for the site. (must be absolute location)
 	//$doc->setStyle(THEME.'css/secure.css');
 

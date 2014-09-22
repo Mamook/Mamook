@@ -36,6 +36,9 @@ try
 		$form_processor=new FormProcessor();
 		# Process the password form.
 		$form_processor->processPassword($id);
+
+		# Get the change password form.
+		require TEMPLATES.'forms'.DS.'change_password.php';
 	}
 	else
 	{

@@ -1,12 +1,15 @@
 <?php /* application/views/secure/login/index.php */
 
 echo '<section id="main" class="main secure login">',
-	'<div class="main-1"></div>',
-	'<div class="main-2">',
+	'<div class="main-1">',
+		# Get the main content.
 		$display_content,
-		$display_register;
-		require TEMPLATES.'forms'.DS.'login.php';
-echo '</div>',
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
 	'<div class="main-3"></div>',
 '</section>',
 

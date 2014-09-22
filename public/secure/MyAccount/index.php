@@ -1,11 +1,11 @@
-<?php /* public/secure/MyAccount/profile.php */
+<?php /* public/secure/MyAccount/index.php */
 
 ob_start(); # Begin output buffering
 
 try
 {
 	# Define the location of this page.
-	define('HERE_PATH', 'secure/MyAccount/profile.php');
+	define('HERE_PATH', 'secure/MyAccount/index.php');
 	/*
 	** In settings we
 	** define application settings

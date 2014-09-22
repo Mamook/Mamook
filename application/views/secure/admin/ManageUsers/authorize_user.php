@@ -1,11 +1,17 @@
 <?php /* applications/views/secure/admin/ManageUsers/authorize_user.php */
 
 echo '<section id="main" class="main secure auth">',
-	$display_content,
-	'<p>Use the form below to authorize or de-authorize ',$current_username,' to contribute and/or edit content for various aspects or "branches" of ',DOMAIN_NAME,'.</p>';
-	# Get the form mail template.
-	require TEMPLATES.'forms'.DS.'request_auth.php';
-	echo $display_request_auth_form,
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		'<p>Use the form below to authorize or de-authorize ',$current_username,' to contribute and/or edit content for various aspects or "branches" of ',DOMAIN_NAME,'.</p>',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',

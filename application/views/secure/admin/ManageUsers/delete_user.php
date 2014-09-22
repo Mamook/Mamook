@@ -1,9 +1,16 @@
 <?php /* applications/views/secure/admin/ManageUsers/delete_user.php */
 
 echo '<section id="main" class="main secure">',
-	$display_content;
-	require TEMPLATES.'forms'.DS.'delete_user.php';
-	echo $display_delete_form,
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">',
+		# Display other content (forms).
+		$display,
+		$display_quote,
+	'</div>',
+	'<div class="main-3"></div>',
 '</section>',
 
 '<section id="box1" class="box1">',

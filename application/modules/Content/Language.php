@@ -338,11 +338,15 @@ class Language
 	{
 		# Bring the Login object into scope.
 		global $login;
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
 		try
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Count the languages.
 			$content_count=$this->countAllLanguages();
 			# Check if there was returned content.
@@ -465,7 +469,7 @@ class Language
 					$language->setISO($row->ISO);
 					# Set the relevant Language data members to local variables.
 					$language_id=$language->getID();
-					$language_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $language->getLanguage());
+					$language_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $language->getLanguage());
 					$language_iso=$language->getISO();
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;

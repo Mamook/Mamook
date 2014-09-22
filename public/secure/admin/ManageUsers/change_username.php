@@ -40,7 +40,7 @@ try
 		$email_username='Email '.$current_username.' their username';
 
 		# Get the change_username form.
-		require TEMPLATES.'forms/change_username.php';
+		require TEMPLATES.'forms'.DS.'change_username.php';
 	}
 	else
 	{

@@ -298,15 +298,20 @@ class Publisher
 	 */
 	public function setInfo($info)
 	{
+		# Bring the content object into scope.
+		global $main_content;
+
 		# Check if the passed value is empty.
 		if(!empty($info))
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Strip slashes, convert new lines to <br /> and decode any html entities.
 			$info=html_entity_decode(nl2br(stripslashes($info)), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$info=trim($info);
 			# Replace any domain tokens with the current domain name.
-			$info=str_ireplace('%{domain_name}', DOMAIN_NAME, $info);
+			$info=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $info);
 		}
 		else
 		{
@@ -701,11 +706,15 @@ class Publisher
 	{
 		# Bring the Login object into scope.
 		global $login;
+		# Bring the content object into scope.
+		global $main_content;
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
 		try
 		{
+			# The the site name.
+			$site_name=$main_content->getSiteName();
 			# Count the publishers.
 			$content_count=$this->countAllPublishers();
 			# Check if there was returned content.
@@ -827,9 +836,9 @@ class Publisher
 					$publisher->setID($row->id);
 					$publisher->setPublisher($row->name);
 					# Set the relevant Publisher data members to local variables.
-					$publisher_info=str_ireplace('%{domain_name}', DOMAIN_NAME, $publisher->getInfo());
+					$publisher_info=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $publisher->getInfo());
 					$publisher_id=$publisher->getID();
-					$publisher_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $publisher->getPublisher());
+					$publisher_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $publisher->getPublisher());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;

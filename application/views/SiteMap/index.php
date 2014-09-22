@@ -1,9 +1,11 @@
 <?php /* application/views/SiteMap/index.php */
 
 echo '<section id="main" class="main">',
-	'<div class="main-1"></div>',
-	'<div class="main-2">',
-		$display_content;
+	'<div class="main-1">',
+		# Get the main content.
+		$display_content,
+	'</div>',
+	'<div class="main-2">';
 		require ROOT_PATH.DS.'SiteMap'.DS.'gwsitemap.php';
 		echo $display_quote,
 	'</div>',

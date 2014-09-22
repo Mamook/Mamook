@@ -1,6 +1,6 @@
 <?php /* templates/forms/change_password.php */
 
-$display_pasword_form='<div id="change_password_form" class="form">';
+$display='<div id="change_password_form" class="form">';
 # Create and display form
 # Instantiate FormGenerator object
 $fg=new FormGenerator('change_password');
@@ -24,5 +24,5 @@ $fg->addFormPart('<li>');
 $fg->addElement('submit', array('name'=>'send', 'value'=>'Change Password'), '', NULL, 'submit-profile');
 $fg->addFormPart('</li>');
 $fg->addFormPart('</ul>');
-$display_pasword_form.=$fg->display();
-$display_pasword_form.='</div>';
+$display.=$fg->display();
+$display.='</div>';
