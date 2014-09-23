@@ -7,7 +7,7 @@ $body.='<head>';
 $body.='<title>'.$subject.'</title>'."\n";
 $body.='<meta http-equiv="content-type" content="text/html; charset=UTF-8" />';
 $body.='<meta http-equiv="content-language" content="english" />';
-$body.='<meta name="copyright" content="Copyright &copy; '.date('Y').' Center for World Indigenous Studies" />';
+$body.='<meta name="copyright" content="Copyright &copy; '.date('Y').' Jam The Force" />';
 $body.='</head>'."\n";
 $body.='<body style="background:#fff;border:1px solid #ef4123;border-radius:12px;padding-left:8px">';
 $body.='<table style="width:100&#37;;font-size:12px;line-height:18px;font-family:Helvetica,Arial,Verdana,sans-serif;color:#444;">';

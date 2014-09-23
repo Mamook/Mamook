@@ -1,6 +1,6 @@
 ﻿Hello,
 
-You received an email from someone through a form on the cwis.org website:
+You received an email from someone through a form on the jamtheforce.com website:
 
 From: $realname
 Email: $email

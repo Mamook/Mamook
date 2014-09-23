@@ -1,0 +1,127 @@
+Instructions for setting up a new "clean" site:
+
+1. Make sure the following folders are readable and writable (775):
+	bodega/
+	cache/
+	custom_sessions/
+	logs/
+	public/images/
+	public/images/original/
+	public/media/audio/files/
+	public/media/videos/files/
+	tmp/
+
+	Command:
+		chmod 775 bodega/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
+
+2. Make a copy of the configuration files:
+	settings.php.sample						-> settings.php
+	data/API_definitions.php.sample			-> data/API_definitions.php
+	data/database_definitions.php.sample	-> data/database_definitions.php
+	data/email_definitions.php.sample		-> data/email_definitions.php
+	data/formmail.ini.sample				-> data/formmail.ini
+	data/init.php.sample					-> data/init.php
+	data/user_privileges.php.sample			-> data/user_privileges.php
+
+	If you want WordPress integration:
+	data/WordPress_settings.php.sample		-> data/WordPress_settings.php
+
+	Command:
+		cp settings.php.sample settings.php && cp data/API_definitions.php.sample data/API_definitions.php && cp data/database_definitions.php.sample data/database_definitions.php && cp data/email_definitions.php.sample data/email_definitions.php && cp data/formmail.ini.sample data/formmail.ini && cp data/init.php.sample data/init.php && cp data/user_privileges.php.sample data/user_privileges.php
+
+	If you want WordPress integration:
+	Command: cp data/WordPress_settings.php.sample data/WordPress_settings.php
+
+3. Edit root->settings.php:
+	Search for each constant (string in capital letters).
+
+	a. DEVELOPMENT_DOMAIN - Enter the development domain name.
+	b. STAGING_DOMAIN - Enter the staging domain name.
+	c. SECURE_URL - Change to https:// if using HTTPS protocal.
+	c. SECURE_PORT - Enter the secure port number.
+	d. SESSIONS_NAME - Change the Session Name.
+	e. PP_EMAIL - Change your paypal email.
+	f. WP_INSTALLED - Change to TRUE for Wordpress integration.
+	g. MYKEY - Change the encryption key.
+
+4. Edit the following files (mandatory):
+	a. data/database_definitions.php
+	b. data/formmail.ini
+			Change webmaster email address
+	c. data/user_privileges.php
+			Change email addresses
+
+	d. If you want WordPress integration:
+			data/WordPress_settings.php
+				Line 12 - enter the prefix (if any) for the WordPress Database tables.
+				Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
+				Line 33-61 - edit as needed.
+
+5. Edit the following files (optional):
+	a. data/API_definitions.php
+	b. data/email_definitions.php
+
+6. Edit root->
+	a. Line 87 & 92 - enter primary cascading style sheet name and any "always load" style sheets.
+	b. Line 96 & 99 - enter any "always load" javascripts.
+
+7. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('EZSQL_VERSION'))
+	define( 'EZSQL_VERSION', 'WP1.25' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('OBJECT'))
+	define( 'OBJECT', 'OBJECT' );
+	define( 'object', 'OBJECT' ); // Back compat.
+
+	/**
+	 * @since 2.5.0
+	 */
+	if(!defined('OBJECT_K'))
+	define( 'OBJECT_K', 'OBJECT_K' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('ARRAY_A'))
+	define( 'ARRAY_A', 'ARRAY_A' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('ARRAY_N'))
+	define( 'ARRAY_N', 'ARRAY_N' );
+
+8. In path_to_WordPress_installation/wp-load.php, after line 20, add:
+
+	# Define the location of this page. - BigTalk :)
+	if(!defined('HERE_PATH'))
+	define('HERE_PATH', ltrim($_SERVER['PHP_SELF'], '/'));
+
+	/** Define ABSPATH as this file's directory */
+	define( 'ABSPATH', dirname(__FILE__) . '/' );
+
+	# Get Custom settings - BigTalk :)
+	require_once str_replace('public/FWE/', '', str_replace('\\', '/', ABSPATH)).'settings.php';
+
+9. Update and edit application/modules/FormMail/formmail.php as needed.
+
+10. Edit FormMail templates as needed:
+	templates/fm/confirmation_template.php
+	templates/fm/email_template.php
+	templates/fm/email_users_template.php
+	templates/fm/form_email_template.txt
+	templates/fm/form_email_user_template.txt
+
+11. Create a MySQL Database and import dev/sql/import_db.sql
+
+12. Create new favicon.
+
+13. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
+
+14. FFMPEG needs to be installed on the server for Audio & Video.

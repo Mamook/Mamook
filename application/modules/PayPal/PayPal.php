@@ -739,7 +739,7 @@ class PayPal
 			}
 			# The order is VERIFIED.
 			# Is the order Completed?
-			if($this->payment_status !== 'Completed')
+			if($this->payment_status !== 'Completed' && $this->payment_status !== 'Refunded')
 			{
 				# The order is NOT Completed!
 				$this->error.="Payment not completed!\n<br />";
@@ -1165,7 +1165,7 @@ class PayPal
 								# Get the shopping cart data.
 								$this->getShoppingCart().
 
-								"Website User ID: ".$this->id."<br />\n<br />\n".
+								"CWIS User ID: ".$this->id."<br />\n<br />\n".
 
 								"Buyer specific information:<br />\n".
 								"first name: ".$this->fname."<br />\n".
@@ -1396,10 +1396,10 @@ class PayPal
 		$this->payment_date=$_POST['payment_date'];
 		$this->payment_type=$_POST['payment_type'];
 		$this->payment_status=$_POST['payment_status'];
-		$this->tax=$_POST['tax'];
+		$this->tax=((isset($_POST['tax'])) ? $_POST['tax'] : NULL);
 		$this->parent_txn_id=((isset($_POST['parent_txn_id'])) ? $_POST['parent_txn_id'] : NULL);
 		$this->txn_id=$_POST['txn_id'];
-		$this->txn_type=$_POST['txn_type'];
+		$this->txn_type=((isset($_POST['txn_type'])) ? $_POST['txn_type'] : NULL);
 		$this->payment_currency=$_POST['mc_currency'];
 		$this->settle_currency=((isset($_POST['settle_currency'])) ? $_POST['settle_currency'] : NULL);
 		$this->shipping=((isset($_POST['shipping'])) ? $_POST['shipping'] : NULL);
@@ -1433,7 +1433,7 @@ class PayPal
 		$this->address_status=((isset($_POST['address_status'])) ? $_POST['address_status'] : NULL);
 		$this->residence=((isset($_POST['residence_country'])) ? $_POST['residence_country'] : NULL);
 		$this->phone=((isset($_POST['contact_phone'])) ? $_POST['contact_phone'] : NULL);
-		$this->payer_status=$_POST['payer_status'];
+		$this->payer_status=((isset($_POST['payer_status'])) ? $_POST['payer_status'] : NULL);
 		$this->payer_business_name=((isset($_POST['payer_business_name'])) ? $_POST['payer_business_name'] : NULL);
 		$this->payer_id =$_POST['payer_id'];
 
