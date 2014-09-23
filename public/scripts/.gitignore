@@ -1,0 +1,13 @@
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+!bsmSelect
+!jCarouselLite.js
+!JSForms.js
+!media
+!plugins.js
+!products
+!sitemap
+!tiny_mce
+!uniform.js
