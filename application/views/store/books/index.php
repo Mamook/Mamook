@@ -23,4 +23,5 @@ echo '<section id="main" class="main">',
 '</section>',
 
 '<section id="menu2" class="box2">',
+	$books_nav,
 '</section>';

@@ -110,7 +110,7 @@ try
 				}
 				$identifier='.'.$sort_by;
 				# Add the "sort by" to the page's sub title.
-				$main_content->setSubTitle($main_content->getSubTitle().' - '$sort_by);
+				$main_content->setSubTitle($main_content->getSubTitle().' - '.$sort_by);
 				# Create the "AND" portion of the sql statement that requires the category id for "Top Picks".
 				$and_sql='(`category` REGEXP \'-'.$category_id.'-\')';
 				$params='sort_by='.$sort_by;
@@ -166,10 +166,11 @@ try
 		{
 			# Set a message session to be displayed after redirect.
 			$display='Nothing to display in this category.';
-			# Redirect back to the maps page.
-			//$doc->redirect(APPLICATION_URL.HERE);
 		}
 	}
+
+	# Get the books navigation.
+	require TEMPLATES.'books_nav.php';
 
 	# Do we need some more CSS?
 	$doc->setStyle(THEME.'css/store.css');
