@@ -110,7 +110,7 @@ try
 				}
 				$identifier='.'.$sort_by;
 				# Add the "sort by" to the page's sub title.
-				$main_content->setSubTitle($main_content->getSubTitle().' - Spotlight Videos');
+				$main_content->setSubTitle($main_content->getSubTitle().' - '$sort_by);
 				# Create the "AND" portion of the sql statement that requires the category id for "Top Picks".
 				$and_sql='(`category` REGEXP \'-'.$category_id.'-\')';
 				$params='sort_by='.$sort_by;

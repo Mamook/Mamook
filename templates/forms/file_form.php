@@ -364,6 +364,8 @@ if(!isset($_GET['select']))
 		# Concatenate the Back button to the duplicates to be displayed.
 		$display.=$fg->display();
 	}
+	# Set the sub title.
+	$main_content->setSubTitle($sub_title);
 }
 
 $display.=$file->displayFileList('!1-!2-!3-!4-!5', $select);

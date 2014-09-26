@@ -30,6 +30,8 @@ if(isset($_GET['content']))
 				# Set the page's subtitle as a delete page.
 				$sub_title='Page - Delete '.$content_page_title;
 			}
+			# Set the sub title.
+			$main_content->setSubTitle($sub_title);
 		}
 
 		$text=$content->getText(TRUE);

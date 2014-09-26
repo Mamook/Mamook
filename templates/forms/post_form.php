@@ -501,3 +501,5 @@ else
 	# Concatenate the Back button to the duplicates to be displayed.
 	$display.=$fg->display();
 }
+# Set the sub title.
+$main_content->setSubTitle($sub_title);

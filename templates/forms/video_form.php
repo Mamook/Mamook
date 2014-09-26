@@ -80,6 +80,8 @@ elseif(!isset($_GET['select']))
 				# Set the page's subtitle as a delete page.
 				$sub_title='Videos - Delete '.$video_obj->getTitle();
 			}
+			# Set the sub title.
+			$main_content->setSubTitle($sub_title);
 		}
 
 		$display.='<div id="file_form" class="form">';

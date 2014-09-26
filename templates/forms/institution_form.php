@@ -29,6 +29,8 @@ if(empty($duplicates))
 			$sub_title='Delete <span>'.$institution_name.'</span>';
 		}
 	}
+	# Set the sub title.
+	$main_content->setSubTitle($sub_title);
 
 	$display.='<div id="institution_form" class="form">';
 

@@ -36,6 +36,8 @@ if(!isset($_GET['select']))
 				# Set the page's subtitle as a delete page.
 				$sub_title='Images - Delete <span>'.$image_name.'</span>';
 			}
+			# Set the sub title.
+			$main_content->setSubTitle($sub_title);
 		}
 
 		$display.='<div id="image_form" class="form">';
