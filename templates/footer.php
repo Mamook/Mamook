@@ -15,12 +15,12 @@ $zip=((empty($zip)) ? '' : ' <span class="zip">'.$zip.'</span>');
 $phone=$main_content->getPhone();
 $phone=((empty($phone)) ? '' : '<span class="phone">'.$phone.'</span>');
 
-$footer_display='<footer id="info">'.
-				$street.$city.$state.$zip.$phone.
-			'</footer>'.
-		'</div>'. # End wrapper div
-		'<script type="text/javascript">/* <![CDATA[ */'.
-			$doc->addFooterJS().
-		'/* ]]> */</script>'.
-	'</body>'.
+echo '<footer id="info">',
+				$street,$city,$state,$zip,$phone,
+			'</footer>',
+		'</div>', # End wrapper div
+		'<script type="text/javascript">/* <![CDATA[ */',
+			$doc->addFooterJS(),
+		'/* ]]> */</script>',
+	'</body>',
 '</html>';

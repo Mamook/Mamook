@@ -57,7 +57,7 @@ try
 		$and_sql='(`category` REGEXP \'-22-\')';
 
 		# Set "Top Picks" as the page's sub title.
-		$sub_title='Top Picks';
+		$main_content->setSubTitle('Top Picks');
 
 		# Create a new PageNavigator object.
 		$paginator=new PageNavigator(8, 4, CURRENT_PAGE, 'page', $product_obj->countAllRecords('Books-Maps-Nusic-Top Picks', NULL, $and_sql));

@@ -63,7 +63,6 @@ if($main_content->getArchive()===NULL)
 	 ** close html tag
 	 */
 	require TEMPLATES.'footer.php';
-	echo $footer_display;
 }
 else
 {

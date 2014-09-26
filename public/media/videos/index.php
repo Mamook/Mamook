@@ -21,20 +21,14 @@ try
 	require_once MODULES.'Document'.DS.'Slideshow.php';
 
 	# Sub title of the page.
-	$sub_title='Spotlight Videos';
-
-	# Set the meta discription for this page.
-	$meta_desc='The Center for World Indigenous Studies Media Center features videos from around the world. Free to view!';
+	$main_content->setSubTitle('Spotlight Videos');
 
 	# Instantiate a new Media object.
 	$media=new Media();
-
 	# Instantiate the new Video object.
 	$video_obj=$media->getVideoObject();
-
 	# Create playlist menu
 	$playlist_items=$video_obj->createPlaylistMenu();
-
 	# Display videos
 	$display=$video_obj->displayVideoFeed();
 
@@ -43,6 +37,9 @@ try
 	$slideshow->setSelector('.video-feed-list');
 	$slideshow->setVertical('true');
 	$slideshow->setStart(0);
+
+	# Get the videos navigation.
+	require TEMPLATES.'videos_nav.php';
 
 	# Do we need some more CSS?
 	$doc->setStyle(THEME.'css/media.css');

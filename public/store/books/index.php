@@ -34,7 +34,7 @@ try
 	}
 
 	# Set "Books" as the page's sub title.
-	$sub_title='Books';
+	$main_content->setSubTitle('Books');
 
 	# Create a new Product object
 	$product=new Product();
@@ -110,7 +110,7 @@ try
 				}
 				$identifier='.'.$sort_by;
 				# Add the "sort by" to the page's sub title.
-				$sub_title.=' - '.$sort_by;
+				$main_content->setSubTitle($main_content->getSubTitle().' - Spotlight Videos');
 				# Create the "AND" portion of the sql statement that requires the category id for "Top Picks".
 				$and_sql='(`category` REGEXP \'-'.$category_id.'-\')';
 				$params='sort_by='.$sort_by;

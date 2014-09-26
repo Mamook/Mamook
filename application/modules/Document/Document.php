@@ -319,7 +319,9 @@ class Document
 	 *
 	 * Adds the "here" css class if we are already at the page that the link sends us to.
 	 *
-	 * @param 	$link 	(The link to check.)
+	 * @param 	$link					The link to check
+	 * @param	$exact_match
+	 * @param	$add_attribute			Adds 'class="'
 	 * @access	public
 	 */
 	public static function addHereClass($link, $exact_match=FALSE, $add_attribute=TRUE)

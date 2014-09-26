@@ -239,8 +239,6 @@ class Content
 			$sub_title=trim($sub_title);
 			# Replace any domain tokens with the current domain name.
 			$this->sub_title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $sub_title);
-			# Strip slashes, decode any html entities, strip any tags, and set the data member.
-			//$this->sub_title=strip_tags(html_entity_decode(stripslashes($sub_title), ENT_COMPAT, 'UTF-8'), '<abbr>');
 		}
 		else
 		{
@@ -1540,8 +1538,9 @@ class Content
 		global $page_title;
 		# Bring the "page-topic" meta tag variable into scope.
 		global $page_topic;
-		# Bring $sub_title variable into scope.
-		global $sub_title;
+
+		# Get the preset sub title.
+		$sub_title=$this->getSubTitle();
 
 		# Check if there is a WHERE SQL statement.
 		if(empty($where))

@@ -21,7 +21,7 @@ try
 	require_once MODULES.'Document'.DS.'Slideshow.php';
 
 	# Sub title of the page.
-	$sub_title='Spotlight Audio';
+	$main_content->setSubTitle('Spotlight Audio');
 
 	# Set the meta discription for this page.
 	$meta_desc='Audio featured on '.DOMAIN_NAME.'!';
