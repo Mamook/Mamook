@@ -23,6 +23,6 @@ echo '<section id="main" class="main">',
 	'</div>',
 '</section>',
 
-'<section id="menu2" class="box2">';
-	require TEMPLATES.'policy_nav.php';
-echo '</section>';
+'<section id="menu2" class="box2">',
+	$policy_nav,
+'</section>';

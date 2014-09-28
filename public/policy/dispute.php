@@ -57,9 +57,6 @@ try
 	$fp->setFormAction(APPLICATION_URL.WebUtility::removeIndex(HERE).$get_query);
 	$fp->setUpload(TRUE);
 
-	# Get the form mail template.
-	require TEMPLATES.'forms'.DS.'email_form.php';
-
 	if($main_content->getAddress1()!==NULL)
 	{
 		$address.='<h3>The '.$main_content->getSiteName().' mailing address is:</h3>';
@@ -71,6 +68,11 @@ try
 	{
 		$address.='<h3>Our phone number is:</h3><p>USA '.$main_content->getPhone().'</p>';
 	}
+
+	# Get the form mail template.
+	require TEMPLATES.'forms'.DS.'email_form.php';
+	# Get the policy navigation.
+	require TEMPLATES.'policy_nav.php';
 
 	/*
 	** In the page template we

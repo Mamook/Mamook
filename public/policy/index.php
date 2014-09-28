@@ -17,6 +17,9 @@ try
 
 	$display='';
 
+	# Get the policy navigation.
+	require TEMPLATES.'policy_nav.php';
+
 	/*
 	** In the page template we
 	** get the header

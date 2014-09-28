@@ -19,7 +19,7 @@ try
 
 	$login->resendActivation();
 
-	$head='Please enter you email address to recieve your activation email.';
+	$head='Please enter your email address to recieve your activation email.';
 
 	# Get the submit_email form.
 	require TEMPLATES.'forms'.DS.'submit_email.php';
