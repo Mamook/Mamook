@@ -23,5 +23,5 @@ echo '<section id="main" class="main faq">',
 '</section>',
 
 '<section id="menu2" class="box2">',
-	$websupport_menu,
+	$websupport_nav,
 '</section>';
