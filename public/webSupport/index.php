@@ -34,7 +34,6 @@ try
 	{
 		$doc->setError('Thank you for helping make '.DOMAIN_NAME.' better. Your message has been sent to the webmaster. They will look into your case as soon as they can.');
 	}
-
 	if(isset($_GET['mail_error']))
 	{
 		$doc->setError('<h3>There was an error sending you\'re email...</h3>
@@ -48,7 +47,6 @@ try
 
 	# Get the form mail template.
 	require TEMPLATES.'forms'.DS.'email_form.php';
-
 	# Get the web support navigation template.
 	require TEMPLATES.'webSupport_nav.php';
 

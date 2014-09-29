@@ -22,6 +22,6 @@ echo '<section id="main" class="main faq">',
 	'</div>',
 '</section>',
 
-'<section id="menu2" class="box2">';
-require TEMPLATES.'webSupport_nav.php';
-echo '</section>';
+'<section id="menu2" class="box2">',
+	$websupport_menu,
+'</section>';
