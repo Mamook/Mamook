@@ -3,10 +3,10 @@
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);
 
-echo '<nav id="navbar" class="nav1">',
+echo '<nav id="navbar" class="nav nav1">',
 	'<ol>',
 		'<li class="list-nav-1">',
-			'<a href="', APPLICATION_URL ,'" title="About Steve Scalfati">Home</a>',
+			'<a href="',APPLICATION_URL,'" title="Home">Home</a>',
 		'</li>',
 		'<li class="list-nav-1', ((strstr(FULL_URL, 'MyAccount/')!== FALSE) ? '' : ' hover'), Document::addHereClass(SECURE_URL.'MyAccount/', FALSE, FALSE), '">',
 			'<a href="', SECURE_URL ,'MyAccount/" title="My Account">My Account</a>',

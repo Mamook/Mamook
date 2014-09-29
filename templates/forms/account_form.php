@@ -65,7 +65,6 @@ else
 	# Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
 	$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple');
 
-	$display.='<a href="'.APPLICATION_URL.'profile/?member='.$account_id.'" target="_blank" title="View '.$staff_obj->getDisplayName().'\'s Profile" class="view">>>view</a>';
 	$display.='<div id="profile_form" class="form">';
 	# create and display form
 	$display.=$head;
@@ -80,8 +79,8 @@ else
 		$fg->addElement('hidden', array('name'=>'_staff_id', 'value'=>$account_staff_id));
 	}
 	$fg->addFormPart('<fieldset>');
-	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<h4>Name:</h4>');
+	$fg->addFormPart('<ul>');
 	# Check if there is a WordPress installation.
 	if(WP_INSTALLED===TRUE)
 	{
@@ -135,6 +134,7 @@ else
 	$fg->addFormPart('</fieldset>');
 	$fg->addFormPart('<fieldset>');
 	$fg->addFormPart('<h4>Contact Info:</h4>');
+	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="address">Address</label>');
 	$fg->addElement('text', array('name'=>'address', 'value'=>$staff_obj->getAddress(), 'id'=>'address'));
@@ -171,9 +171,11 @@ else
 	$fg->addFormPart('<label class="label" for="website">Website</label>');
 	$fg->addElement('text', array('name'=>'website', 'value'=>$staff_obj->getWebsite(), 'id'=>'website'));
 	$fg->addFormPart('</li>');
+	$fg->addFormPart('</ul>');
 	$fg->addFormPart('</fieldset>');
 	$fg->addFormPart('<fieldset>');
 	$fg->addFormPart('<h4>About Yourself:</h4>');
+	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="cv">Curriculum Vitae (CV)</label>');
 	$fg->addElement('file', array('name'=>'cv', 'id'=>'cv'));
@@ -209,6 +211,7 @@ else
 		$fg->addFormPart('<label class="label" for="affiliation">Affiliation</label>');
 		$fg->addElement('text', array('name'=>'affiliation', 'value'=>$staff_obj->getAffiliation(), 'id'=>'affiliation'));
 		$fg->addFormPart('</li>');
+		$fg->addFormPart('</ul>');
 		$fg->addFormPart('</fieldset>');
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<h4>Position:</h4>');
@@ -252,6 +255,7 @@ else
 			{
 				$position_options[]='No Positions';
 			}
+			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="position">Position</label>');
 			$fg->addElement('select', array('name'=>'position[]', 'multiple'=>'multiple', 'title'=>'Select a Position', 'id'=>'position'), $position_options);
@@ -284,9 +288,11 @@ else
 
 			if(isset($account_positions_decoded))
 			{
+				$fg->addFormPart('</ul>');
 				$fg->addFormPart('</fieldset>');
 				$fg->addFormPart('<fieldset>');
 				$fg->addFormPart('<h4>Position Description:</h4>');
+				$fg->addFormPart('<ul>');
 				foreach($account_positions_decoded as $position_key=>$position_value)
 				{
 					# Get the position data from the `positions` table.
@@ -299,6 +305,7 @@ else
 					$fg->addElement('text', array('name'=>'position_desc['.$position_key.'][description]', 'value'=>htmlspecialchars($position_value['description']), 'id'=>'position_desc'));
 					$fg->addFormPart('</li>');
 				}
+				$fg->addFormPart('</ul>');
 				$fg->addFormPart('</fieldset>');
 				$fg->addFormPart('<fieldset>');
 			}

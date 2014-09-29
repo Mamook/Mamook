@@ -189,12 +189,8 @@ try
 					# Process the email form.
 					$send_to_formmail=$fp->processEmail($default_data);
 
-					$display='';
-
 					# Get the form mail template.
 					require TEMPLATES.'forms'.DS.'email_form.php';
-
-					$display.='<div class="contact">'.$display.'</div>';
 				}
 			}
 			# Set the page title as the person's display name.
@@ -211,6 +207,9 @@ try
 
 	# Set the meta discription for this page.
 	$meta_desc='The profile for '.strip_tags($page_title).' on '.DOMAIN_NAME.'.';
+
+	# Set the page title to the post's title.
+	$main_content->setPageTitle($page_title);
 
 	/*
 	** In the page template we
