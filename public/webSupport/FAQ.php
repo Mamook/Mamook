@@ -15,8 +15,6 @@ try
 	*/
 	require_once '../../settings.php';
 
-	$subnav_menu='';
-
 	# Get the web support navigation template.
 	require TEMPLATES.'webSupport_nav.php';
 
