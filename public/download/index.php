@@ -41,9 +41,9 @@ try
 				$file_id=$file->getID();
 				if($file->getPremium()!==NULL)
 				{
-					if($user_auth->gml_subscription!==NULL)
+					if($user_auth->subscription!==NULL)
 					{
-						if($user_auth->gml_subscription>=date('Y-m-d'))
+						if($user_auth->subscription>=date('Y-m-d'))
 						{
 							$auth=TRUE;
 						}
