@@ -23,7 +23,7 @@ try
 	require_once MODULES.'Search'.DS.'CustomSearch.php';
 	$search=new CustomSearch();
 
-	$head='<h3>Use the form below to search the <a href="',WP_SITEURL,'" title="The FWE, CWIS\'s online blog.">Forth World Eye</a></h3>';
+	$head='<h3>Use the form below to search the <a href="'.WP_SITEURL.'" title="The FWE, CWIS\'s online blog.">Fourth World Eye</a></h3>';
 
 	# Creeate the search form.
 	$display='<div id="search_form">';
