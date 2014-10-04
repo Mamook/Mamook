@@ -84,12 +84,12 @@ $meta_designer=$theme->getDesigner().((!empty($designer_site)) ? ', '.$designer_
 if(!preg_match('/\bsecure\b(?!\/login)/i', $_SERVER['REQUEST_URI'], $matches))
 {
 	# Set the default style sheet(s) we are using for the front-end of the site. (must be absolute location)
-	$doc->setStyle(THEME.'css/normalize.css',THEME.'css/default.css');
+	$doc->setStyle(THEME.'css/default.css');
 }
 else
 {
 	# Set the secure style sheet(s) we are using for the back-end of the site. (must be absolute location)
-	$doc->setStyle(THEME.'css/normalize.css',THEME.'css/secure.css');
+	$doc->setStyle(THEME.'css/secure.css');
 }
 
 # Set the default JavaScripts we are using for the site.

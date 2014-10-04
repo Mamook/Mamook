@@ -49,6 +49,8 @@ $header.='<html xmlns="http://www.w3.org/1999/xhtml"
 			$header.='<link rel="profile" href="'.$microformat_url.'" />';
 		}
 
+		# Add HTML5 reset
+		$header.='<link rel="stylesheet" type="text/css" media="all" href="'.THEME.'css/normalize.css" />';
 		# Add the CSS for the page.
 		$header.=$doc->addStyle();
 		# Include IE Style Sheets if that is the user's browser.
