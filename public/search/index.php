@@ -26,7 +26,7 @@ try
 	$head='<h3>Use the form below to search the <a href="'.WP_SITEURL.'" title="The FWE, CWIS\'s online blog.">Fourth World Eye</a></h3>';
 
 	# Creeate the search form.
-	$display='<div id="search_form">';
+	$display='<div id="search_form" class="form">';
 	$display.=$head;
 	# instantiate form generator object
 	//$search_form=new FormGenerator('general_search', WebUtility::removeIndex(APPLICATION_URL.HERE));

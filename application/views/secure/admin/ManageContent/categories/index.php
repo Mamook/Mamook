@@ -1,9 +1,9 @@
 <?php /* application/views/secure/admin/ManageContent/categories/index.php */
 
-echo '<section id="main" class="main secure">',
+echo '<main id="main" class="main secure">',
 	$display_content,
 	$display,
-'</section>',
+'</main>',
 
 '<section id="box1" class="box1">',
 	'<div id="box1a">',

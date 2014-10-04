@@ -1,6 +1,6 @@
 <?php /* application/views/secure/admin/ManageUsers/index.php */
 
-echo '<section id="main" class="main secure">';
+echo '<main id="main" class="main secure">';
 # Display the content and any errors.
 $main_content->displayContent($image_link);
 # Check if there is GET data and that the passed variable is $_GET['user'].
@@ -56,7 +56,7 @@ else
 	# Display the pagenavigator.
 	$paginator->getNavigator();
 }
-echo '</section>',
+echo '</main>',
 
 '<section id="box1" class="box1">',
 	'<div id="box1a">',

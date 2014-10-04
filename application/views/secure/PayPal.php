@@ -1,8 +1,8 @@
 <?php /* application/views/secure/PayPal.php */
 
-echo '<section id="main" class="main">',
+echo '<main id="main" class="main">',
 	'You are being redirected to the PayPal&trade; website. Please be patient...',
-'</section>',
+'</main>',
 
 '<section id="box1" class="box1">',
 	'<div id="box1a">',

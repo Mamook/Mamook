@@ -1,6 +1,6 @@
 <?php /* application/views/secure/MyAccount/index.php */
 
-echo '<section id="main" class="main secure">',
+echo '<main id="main" class="main secure">',
 	'<div class="main-1">',
 		# Get the main content.
 		$display_content,
@@ -12,7 +12,7 @@ echo '<section id="main" class="main secure">',
 		$display_quote,
 	'</div>',
 	'<div class="main-3"></div>',
-'</section>',
+'</main>',
 
 '<section id="box1" class="box1">';
 	$img=$user_obj->getImg();
