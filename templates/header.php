@@ -4,10 +4,22 @@
 $header='<!DOCTYPE html>'."\n";
 
 # Open the html tag and define the default language.
-$header.='<html xmlns="http://www.w3.org/1999/xhtml"
+$header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 			xmlns:fog="http://www.facebook.com/2008/fbml"
 			xmlns:og="http://ogp.me/ns#"
-			xml:lang="en" lang="en">';
+			xml:lang="en" class="ie7" lang="en"><![endif]-->
+<!--[if IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:fog="http://www.facebook.com/2008/fbml"
+			xmlns:og="http://ogp.me/ns#"
+			xml:lang="en" class="ie8" lang="en"><![endif]-->
+<!--[if IE 9]><html xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:fog="http://www.facebook.com/2008/fbml"
+			xmlns:og="http://ogp.me/ns#"
+			xml:lang="en" class="ie9" lang="en"><![endif]-->
+<!--[if gt IE 9]><!--><html xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:fog="http://www.facebook.com/2008/fbml"
+			xmlns:og="http://ogp.me/ns#"
+			xml:lang="en" lang="en"><!--<![endif]-->';
 	# Open the head tag.
 	$header.='<head>';
 		# The title for each page is filled by a variable set on each page.
@@ -56,6 +68,8 @@ $header.='<html xmlns="http://www.w3.org/1999/xhtml"
 		# Include IE Style Sheets if that is the user's browser.
 		$header.=$doc->addIEStyle('ie8,ie7,ie6,ie5mac');
 
+		# Add HTML5Shiv
+		$header.='<script src="'.THEME.'js/html5shiv.min.js"></script>';
 		# Add the JavaScripts for the page.
 		$header.=$doc->addJavaScript();
 		echo $header;
