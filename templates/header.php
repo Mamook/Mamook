@@ -68,8 +68,8 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		# Include IE Style Sheets if that is the user's browser.
 		$header.=$doc->addIEStyle('ie8,ie7,ie6,ie5mac');
 
-		# Add HTML5Shiv
-		$header.='<script src="'.THEME.'js/html5shiv.min.js"></script>';
+		# Add HTML5Shiv if lower then IE9
+		$header.='<!--[if lt IE 9]><script src="'.THEME.'js/html5shiv.min.js"></script><![endif]-->';
 		# Add the JavaScripts for the page.
 		$header.=$doc->addJavaScript();
 		echo $header;
