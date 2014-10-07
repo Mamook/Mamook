@@ -45,7 +45,6 @@ try
 		$get_query='';
 		$doc->setError("Thank you! We'll be in contact with you soon.");
 	}
-
 	if(isset($_GET['mail_error']))
 	{
 		$get_query='';

@@ -3,7 +3,7 @@
 require TEMPLATES.'forms'.DS.'audio_form_defaults.php';
 $display_delete_form=$form_processor->processAudio($default_data);
 
-# Set the FileFormPopulator object from the FileFormProcessor data member to a variable.
+# Set the AudioFormPopulator object from the AudioFormProcessor data member to a variable.
 $populator=$form_processor->getPopulator();
 # Create a new Audio object from the Media class. Creates a new instance of the Audio class if it doesn't exist.
 $audio_obj=$populator->getAudioObject();

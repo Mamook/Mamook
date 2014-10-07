@@ -21,7 +21,7 @@ try
 	# Get the AudioFormProcessor Class.
 	require_once MODULES.'Form'.DS.'AudioFormProcessor.php';
 	# Get the PageNavigator Class.
-	require_once MODULES.DS.'PageNavigator/PageNavigator.php';
+	require_once MODULES.DS.'PageNavigator'.DS.'PageNavigator.php';
 
 	$login->checkLogin(ALL_BRANCH_USERS);
 
