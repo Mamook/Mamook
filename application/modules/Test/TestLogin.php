@@ -816,7 +816,7 @@ class TestLogin Extends Test
 				}
 				if(isset($_POST["recaptcha_challenge_field"]))
 				{
-					$valid_recaptcha=$validate->reCaptchaCheckAnswer(PRIVATEKEY, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"], '', 'You must correctly enter the squiggly characters in the box to complete your registration. Make sure they are correct. There is a "help" button in the little red box.');
+					$valid_recaptcha=$validate->reCaptchaCheckAnswer(CAPTCHA_PRIVATEKEY, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"], '', 'You must correctly enter the squiggly characters in the box to complete your registration. Make sure they are correct. There is a "help" button in the little red box.');
 					if($valid_recaptcha===FALSE)
 					{
 						$this->setReCaptchaError($validate->getReCaptchaError());

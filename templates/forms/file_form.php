@@ -14,6 +14,7 @@ $display='';
 if(!isset($_GET['select']))
 {
 	$select=FALSE;
+	$sub_title='Files';
 
 	$duplicates=$form_processor->getDuplicates();
 	if(empty($duplicates))

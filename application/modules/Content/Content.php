@@ -38,6 +38,7 @@ class Content
 	protected $zipcode=NULL;
 	protected $phone=NULL;
 	protected $fax=NULL;
+	protected $maintenance;
 	protected $email=NULL;
 	protected $registration=NULL;
 	protected $use_social=NULL;
@@ -61,7 +62,7 @@ class Content
 		# Get the content from the Database.
 		try
 		{
-			$content=$db->get_row("SELECT `site_name`, `slogan`, `address1`, `address2`, `city`, `state`, `country`, `zipcode`, `phone`, `fax`, `email`, `registration` FROM `".DBPREFIX."config` WHERE `archive` IS NOT NULL LIMIT 1");
+			$content=$db->get_row("SELECT `site_name`, `slogan`, `address1`, `address2`, `city`, `state`, `country`, `zipcode`, `phone`, `fax`, `email`, `registration`, `maintenance` FROM `".DBPREFIX."config` WHERE `archive` IS NOT NULL LIMIT 1");
 			$this->setSiteName($content->site_name);
 			$this->setSlogan($content->slogan);
 			$this->setAddress1($content->address1);
@@ -74,6 +75,7 @@ class Content
 			$this->setFax($content->fax);
 			$this->setEmail($content->email);
 			$this->setRegistration($content->registration);
+			$this->setMaintenance($content->maintenance);
 			$this->getContent();
 		}
 		catch(ezDB_Error $e)
@@ -717,6 +719,26 @@ class Content
 	} #==== End -- setRegistration
 
 	/***
+	 * setMaintenance
+	 *
+	 * Sets the maintenance data member
+	 *
+	 * @param	$maintenance
+	 * @access	public
+	 */
+	public function setMaintenance($maintenance)
+	{
+		# Check if the passed value is not NULL.
+		if($maintenance!==NULL)
+		{
+			# Explicitly set the value to 0.
+			$maintenance=0;
+		}
+		# Set the data member to NULL.
+		$this->maintenance=$maintenance;
+	} #==== End -- setMaintenance
+
+	/***
 	 * setUseSocial
 	 *
 	 * Sets the $use_social data member.
@@ -1070,6 +1092,18 @@ class Content
 	{
 		return $this->registration;
 	} #==== End -- getRegistration
+
+	/**
+	 * getMaintenance
+	 *
+	 * Returns the data member $maintenance
+	 *
+	 * @access public
+	 */
+	public function getMaintenance()
+	{
+		return $this->maintenance;
+	} #=== End -- getMaintenance
 
 	/***
 	 * getUseSocial

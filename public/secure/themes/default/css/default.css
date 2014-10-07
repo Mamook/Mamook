@@ -77,7 +77,7 @@ span em {
 	text-align:left
 }
 
-.here a:link, #menu2 .here a:link, .here a:visited, #menu2 .here a:visited {
+.here > a:link, #menu2 .here a:link, .here a:visited, #menu2 .here a:visited {
 	background:transparent url(../images/navbar_here_bg.png) no-repeat bottom left;
 	margin-left:-12px;
 	padding-left:12px;
@@ -173,76 +173,58 @@ span em {
 
 
 /* Navigation Bar */
-#navbar {
+[class|=list-nav].hover{
+    overflow:hidden
+}
+[class|=list-nav] a{
+	display:block;
+	line-height:12px;
+}
+[class|=list-nav]{
+	height:12px;
+}
+.nav1{
 	float:left;
 	clear:left;
-	margin:0 0 20px 0;
+	vertical-align:top;
 	width:261px;
-	height:100%;
-	padding-top:1px;
-	font:normal 11px/11px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
 }
-
-#navbar ol {
-	list-style:none inside;
-	padding-right:20px;
-	padding-left:20px
+.list-nav-1{
+	height:12px;
+	padding: 6px 6px 4px
 }
-
-#navbar li {
-	min-height:19px;
-	margin-top:-1px;
-	border-top:1px solid #d0d0d0;
-	border-bottom:1px solid #d0d0d0;
-	padding:7px 6px 0 6px;
-	text-transform:uppercase
+.list-nav-1.here,
+.list-nav-1:hover{
+	min-height:12px;
+	height:auto;
 }
-
-#navbar li a:link, #navbar li a:visited {
-	color:#404040;
-	text-decoration:none
+.nav-2{
+	margin: 4px -6px -2px;
+	padding: 0 0 0 22px;
 }
-
-#navbar li a:hover, #navbar li a:active {
-	color:#a1a1a1;
-	text-decoration:none
+.list-nav-2.here,
+.list-nav-2:hover{
+	min-height:12px;
+	height:auto;
 }
-
-#navbar .here:link, #navbar .here:visited, #navbar .here:hover, #navbar .here:active {
-	background:transparent url(../images/navbar_here_bg.png) no-repeat bottom left;
-	margin-left:-12px;
-	padding-left:12px;
-	color:#000
+.nav-3{
+	padding-bottom:2px;
 }
-
-#navbar .here:hover {
-	color:#a1a1a1
+.list-nav-3{
+	height:14px;
+	list-style: circle;
+	white-space:nowrap;
+	margin-left: 20px;
 }
 
 
 /* Menu Bars */
-#navbar ul.menu1 {
-	list-style:none inside;
-	margin:7px -6px 0 -6px;
-	padding:2px 0 0 20px
-}
-
-#navbar .menu1 li {
-	min-height:16px;
-	border:0;
-	margin-left:-6px;
-	padding:2px 0 0 20px;
-	font-weight:bold;
-	font-size:10px;
-	line-height:10px
-}
-
-#navbar .menu1 li a:link, #menu2 li a:visited {
+#menu2 li a:visited {
 	color:#505050;
 	text-decoration:none
 }
 
-#navbar .menu1 li a:hover, #menu2 li a:active {
+#menu2 li a:active {
 	color:#a1a1a1;
 	text-decoration:none
 }
