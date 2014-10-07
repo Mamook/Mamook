@@ -35,7 +35,7 @@ if(empty($duplicates))
 	# Set the sub title.
 	$main_content->setSubTitle($sub_title);
 
-	$display.='<div id="publisher_form" class="form">';
+	$display.='<div id="product_form" class="form">';
 
 	# create and display form.
 	$display.=$head;
@@ -217,6 +217,7 @@ if(empty($duplicates))
 	$fg->addFormPart('<label class="label" for="publisher">Publisher</label>');
 	$fg->addElement('select', array('name'=>'publisher', 'id'=>'publisher'), $pub_options);
 	$fg->addFormPart('</li>');
+	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="description">Description</label>');
 	$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$product_obj->getDescription()), '', NULL, 'textarea tinymce');
 	$fg->addFormPart('</li>');
