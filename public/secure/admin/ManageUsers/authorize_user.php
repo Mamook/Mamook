@@ -36,12 +36,6 @@ try
 		# Set the data member to a variable.
 		$id=$user->getID();
 
-		# Check if the User is an admin.
-		if(in_array(1, $user->findUserLevel($id))===TRUE)
-		{
-			$_SESSION['message']='That user is an admin. You cannot change their access levels here.';
-			$doc->redirect(ADMIN_URL.'ManageUsers/');
-		}
 		$current_username=$user->findUsername($id);
 		# Instantiate a new FormProcessor object.
 		$form_processor=new FormProcessor();
@@ -65,7 +59,7 @@ try
 		}
 		$auth=$form_processor->findAuthorization($branch_ids, $id);
 
-		$head='Access levels for '.$current_username.':';
+		$head='<h3>Access levels for '.$current_username.':</h3>';
 
 		# Get the request authorization form.
 		require TEMPLATES.'forms'.DS.'request_auth.php';
@@ -74,11 +68,8 @@ try
 	{
 		$doc->redirect(ADMIN_URL.'ManageUsers/');
 	}
-
 	# Set the default style sheet(s) we are using for the site. (must be absolute location)
-	//$doc->setStyle(THEME.'css/secure.css');
-	# Do we need some javascripts? (Use the script file name before the ".js".)
-	//$doc->setJavaScript('mainMenus');
+	//$doc->setStyle(THEME.'css/secure.css');;
 
 	/*
 	** In the page template we

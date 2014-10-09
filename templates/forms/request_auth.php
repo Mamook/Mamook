@@ -2,14 +2,14 @@
 
 $display='<div id="request_auth_form" class="form">';
 # Check if the user is an admin.
-if($login->isAdmin()===TRUE)
+if((!isset($_GET['user'])) && $login->isAdmin()===TRUE || in_array(1, $user->findUserLevel($id))===TRUE)
 {
 	$display.='<h3>You are an admin on this site. You are authorized to do anything.</h3>';
 }
 else
 {
 	# Create and display form.
-	$display.='<h3>'.$head.'</h3>';
+	$display.=$head;
 	# Instantiate FormGenerator object.
 	$fg=new FormGenerator('request_auth');
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
