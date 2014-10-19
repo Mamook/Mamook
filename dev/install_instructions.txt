@@ -1,6 +1,24 @@
 Instructions for setting up a new "clean" site:
 
-1. Make sure the following folders are readable and writable (775):
+1. Create your RSA key, and email the public key (your_username.pub) to Michael Delle (dravenlon@gmail.com):
+	Command:
+		ssh-keygen -t rsa -C “your_username”
+
+	You may need to add it to your SSH agent using ssh-add:
+		Command:
+			ssh-add ~/.ssh/your_username (or wherever your key is located)
+
+2. Create local repository (client_website is replaced with the clients name, this is just an example):
+	Client repositories must be made by a lead developer.
+
+	Commands:
+		mkdir client_website.com
+		cd client_website.com
+		git remote add Client_Website gitolite@jamtheforce.com:client_website
+		git remote add Framework gitolite@jamtheforce.com:jamtheforce
+		git pull Client_Website master
+
+3. Make sure the following folders are readable and writable (775):
 	bodega/
 	cache/
 	custom_sessions/
@@ -14,13 +32,13 @@ Instructions for setting up a new "clean" site:
 	Command:
 		chmod 775 bodega/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
 
-2. Make a copy of the configuration files:
-	settings.php.sample						-> settings.php
+4. Make a copy of the configuration files:
+	settings.php.sample				-> settings.php
 	data/API_definitions.php.sample			-> data/API_definitions.php
-	data/database_definitions.php.sample	-> data/database_definitions.php
+	data/database_definitions.php.sample		-> data/database_definitions.php
 	data/email_definitions.php.sample		-> data/email_definitions.php
-	data/formmail.ini.sample				-> data/formmail.ini
-	data/init.php.sample					-> data/init.php
+	data/formmail.ini.sample			-> data/formmail.ini
+	data/init.php.sample				-> data/init.php
 	data/user_privileges.php.sample			-> data/user_privileges.php
 
 	If you want WordPress integration:
@@ -32,7 +50,7 @@ Instructions for setting up a new "clean" site:
 	If you want WordPress integration:
 	Command: cp data/WordPress_settings.php.sample data/WordPress_settings.php
 
-3. Edit root->settings.php:
+5. Edit root->settings.php:
 	Search for each constant (string in capital letters).
 
 	a. DEVELOPMENT_DOMAIN - Enter the development domain name.
@@ -44,7 +62,7 @@ Instructions for setting up a new "clean" site:
 	f. WP_INSTALLED - Change to TRUE for Wordpress integration.
 	g. MYKEY - Change the encryption key.
 
-4. Edit the following files (mandatory):
+6. Edit the following files (mandatory):
 	a. data/database_definitions.php
 	b. data/formmail.ini
 			Change webmaster email address
@@ -57,15 +75,15 @@ Instructions for setting up a new "clean" site:
 				Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
 				Line 33-61 - edit as needed.
 
-5. Edit the following files (optional):
+7. Edit the following files (optional):
 	a. data/API_definitions.php
 	b. data/email_definitions.php
 
-6. Edit root->
+8. Edit root->
 	a. Line 87 & 92 - enter primary cascading style sheet name and any "always load" style sheets.
 	b. Line 96 & 99 - enter any "always load" javascripts.
 
-7. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
+9. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
 	/**
 	 * @since 0.71
 	 */
@@ -97,7 +115,7 @@ Instructions for setting up a new "clean" site:
 	if(!defined('ARRAY_N'))
 	define( 'ARRAY_N', 'ARRAY_N' );
 
-8. In path_to_WordPress_installation/wp-load.php, after line 20, add:
+10. In path_to_WordPress_installation/wp-load.php, after line 20, add:
 
 	# Define the location of this page. - BigTalk :)
 	if(!defined('HERE_PATH'))
@@ -109,19 +127,19 @@ Instructions for setting up a new "clean" site:
 	# Get Custom settings - BigTalk :)
 	require_once str_replace('public/FWE/', '', str_replace('\\', '/', ABSPATH)).'settings.php';
 
-9. Update and edit application/modules/FormMail/formmail.php as needed.
+11. Update and edit application/modules/FormMail/formmail.php as needed.
 
-10. Edit FormMail templates as needed:
+12. Edit FormMail templates as needed:
 	templates/fm/confirmation_template.php
 	templates/fm/email_template.php
 	templates/fm/email_users_template.php
 	templates/fm/form_email_template.txt
 	templates/fm/form_email_user_template.txt
 
-11. Create a MySQL Database and import dev/sql/import_db.sql
+13. Create a MySQL Database and import dev/sql/import_db.sql
 
-12. Create new favicon.
+14. Create new favicon.
 
-13. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
+15. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
 
-14. FFMPEG needs to be installed on the server for Audio & Video.
+16. FFMPEG needs to be installed on the server for Audio & Video.
