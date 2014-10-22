@@ -1,5 +1,11 @@
 Instructions for setting up a new "clean" site:
 
+Must have the following installed:
+PHP 5.3+ (with Curl & GD Library)
+MySQL
+FFMPEG
+
+
 1. Create your RSA key, and email the public key (your_username.pub) to Michael Delle (dravenlon@gmail.com):
 	Command:
 		ssh-keygen -t rsa -C “your_username”
@@ -30,7 +36,7 @@ Instructions for setting up a new "clean" site:
 	tmp/
 
 	Command:
-		chmod 775 bodega/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
+		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
 
 4. Make a copy of the configuration files:
 	settings.php.sample				-> settings.php

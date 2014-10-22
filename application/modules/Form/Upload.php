@@ -321,6 +321,11 @@ class Upload
 					throw $e;
 				}
 			}
+			else
+			{
+				# Fill the error variable.
+				$this->setErrors('That file type is not accepted. Acceptable file types are: '.implode(", ", $allowed_ext).'.');
+			}
 		}
 		return $uploaded;
 	} #==== End -- uploadFile

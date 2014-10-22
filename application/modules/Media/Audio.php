@@ -2201,12 +2201,12 @@ class Audio
 
 				# Relative path to thumbnail.
 				$image_path=IMAGES_PATH.$image_obj->getImage();
-				if(!isset($image_path) || !file_exists($image_path))
-				{
-					# Set the thumbnail to a variable.
-					$this->setThumbnailUrl(IMAGES.'audio-default-thumbnail.jpg');
-					$alt_text='The default image for audio on '.DOMAIN_NAME;
-				}
+			}
+			if(!isset($image_path) || !file_exists($image_path))
+			{
+				# Set the thumbnail to a variable.
+				$this->setThumbnailUrl(IMAGES.'audio-default-thumbnail.jpg');
+				$alt_text='The default image for audio on '.DOMAIN_NAME;
 			}
 		}
 
