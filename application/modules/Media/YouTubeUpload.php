@@ -104,8 +104,15 @@ if(!empty($video_data['FileName']))
 	# Create a video status with privacy status. Valid statuses are "public", "private" and "unlisted".
 	$google_video_status=new Google_Service_YouTube_VideoStatus();
 
-	# Set video privacy. If Availability is 1 then it's a public video. Else it's private.
-	$google_video_status->privacyStatus=(($video_data['Availability']==1) ? "public" : "private");
+	# If "This site has the legal rights to display" (1).
+	if($video_data['Availability']==1) $privacy_setting='public';
+	# If "This site does not yet have the lega rights to display" (0),
+	#	"Internal Document Only" (2),
+	#	"Can not distribute" (3).
+	else $privacy_setting='unlisted';
+
+	# Set video privacy.
+	$google_video_status->privacyStatus=$privacy_setting;
 
 	if(isset($video_data['InsertID']))
 	{
