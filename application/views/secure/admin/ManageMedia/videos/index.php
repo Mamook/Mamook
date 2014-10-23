@@ -23,5 +23,4 @@ echo '<main id="main" class="main secure">',
 '</section>',
 
 '<section id="menu2" class="box2">',
-	$video_nav,
 '</section>';
