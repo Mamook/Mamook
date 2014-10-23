@@ -2101,19 +2101,13 @@ class Audio
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
 
-				# Set the current categories to a variable.
-				$image_categories=$image_obj->getCategories();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-
-				# Relative path to thumbnail.
-				$image_path=IMAGES_PATH.$image_obj->getImage();
 			}
 
 			# Set the markup to a variable
 			$display.='<tr>'.
-				'<td><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="lightbox">'.(!file_exists($image_path) ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster" />').'</a></td>'.
+				'<td><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="lightbox">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a></td>'.
 				'<td>'.$this->getTitle().'</td>'.
 				'<td><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a></td>'.
 				'</tr>';
@@ -2193,20 +2187,8 @@ class Audio
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
 
-				# Set the current categories to a variable.
-				$image_categories=$image_obj->getCategories();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-
-				# Relative path to thumbnail.
-				$image_path=IMAGES_PATH.$image_obj->getImage();
-			}
-			if(!isset($image_path) || !file_exists($image_path))
-			{
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl(IMAGES.'audio-default-thumbnail.jpg');
-				$alt_text='The default image for audio on '.DOMAIN_NAME;
 			}
 		}
 
@@ -2214,7 +2196,7 @@ class Audio
 		$this->setDescription($db->sanitize($large_audio[0]->description, 5));
 
 		$display='<div class="audio-lg"><a href="#openAudio" ref="openAudio">'.
-				'<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$alt_text.'"/>'.
+				($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_large"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').
 				'<span class="play-static"></span></a>'.
 				'<div id="media-text">'.
 					'<h3 class="h-audio"><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a></h3>'.
@@ -2228,7 +2210,7 @@ class Audio
 						'<div class="pp_content" style="min-height:248px;width:500px">'.
 							'<div class="pp_fade" style="display:block">'.
 								'<div id="pp_full_res">'.
-									'<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$alt_text.'"/>'.
+									($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_large"></div>' : '<center><img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" /></center>').
 									'<audio class="player" id="player" preload="auto" controls>'.
 										'<source src="'.$this->getAudioUrl().'" type="audio/mpeg">'.
 										'Your browser does not support the audio element.'.
@@ -2307,20 +2289,14 @@ class Audio
 					# Set the Image object to a variable.
 					$image_obj=$this->getImageObj();
 
-					# Set the current categories to a variable.
-					$image_categories=$image_obj->getCategories();
-
 					# Set the the thumbnail to a variable.
 					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-
-					# Relative path to thumbnail.
-					$image_path=IMAGES_PATH.$image_obj->getImage();
 				}
 			}
 
 			# Set the markup to a variable
 			$display.='<li>'.
-				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.(!isset($image_path) || !file_exists($image_path) ? '<div class="audio_default_thumbnail_small"></div>' : '<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" />').'</a>'.
+				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_small"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a>'.
 				'</li>';
 		}
 
