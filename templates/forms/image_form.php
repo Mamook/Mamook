@@ -105,7 +105,6 @@ if(!isset($_GET['select']))
 		$fg->addElement('file', array('name'=>'image', 'id'=>'image'));
 		if(!empty($image_name))
 		{
-			$sub_folder=$image->getSubFolder();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
 			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');

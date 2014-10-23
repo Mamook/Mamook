@@ -315,22 +315,28 @@ elseif(!isset($_GET['select']))
 		# Check if there is GET data and it is for the audio.
 		if(!isset($_GET['audio']))
 		{
-			$fg->addFormPart('<li>');
-			# Get whether or not the post should be posted to Facebook from the data member and set it to a variable.
-			$facebook=$populator->getFacebook();
-			# Make the Facebook value digestible to the form.
-			$facebook=(($facebook===NULL) ? '' : 'post');
-			$fg->addFormPart('<label class="label" for="facebook">Post on <span class="facebook" title="Facebook">Facebook</span></label>');
-			$fg->addElement('checkbox', array('name'=>'facebook', 'value'=>'post', 'id'=>'facebook', 'checked'=>$facebook, 'title'=>'Post on Facebook'));
-			$fg->addFormPart('</li>');
-			$fg->addFormPart('<li>');
-			# Get whether or not the post should be posted to Twitter from the data member and set it to a variable.
-			$twitter=$populator->getTwitter();
-			# Make the Twitter value digestible to the form.
-			$twitter=(($twitter===NULL) ? '' : 'tweet');
-			$fg->addFormPart('<label class="label" for="twitter">Tweet on <span class="twitter" title="Twitter">Twitter</span></label>');
-			$fg->addElement('checkbox', array('name'=>'twitter', 'value'=>'tweet', 'id'=>'twitter', 'checked'=>$twitter, 'title'=>'Tweet on Twitter'));
-			$fg->addFormPart('</li>');
+			if(FB_APP_ID!="" && FB_APP_SECRET!='' && FB_ID!='' && FB_SESSION!='' && FB_TOKEN!='' && FB_URL!='')
+			{
+				$fg->addFormPart('<li>');
+				# Get whether or not the post should be posted to Facebook from the data member and set it to a variable.
+				$facebook=$populator->getFacebook();
+				# Make the Facebook value digestible to the form.
+				$facebook=(($facebook===NULL) ? '' : 'post');
+				$fg->addFormPart('<label class="label" for="facebook">Post on <span class="facebook" title="Facebook">Facebook</span></label>');
+				$fg->addElement('checkbox', array('name'=>'facebook', 'value'=>'post', 'id'=>'facebook', 'checked'=>$facebook, 'title'=>'Post on Facebook'));
+				$fg->addFormPart('</li>');
+			}
+			if(TWITTER_USERNAME!="" && TWITTER_PASSWORD!='' && TWITTER_CONSUMER_KEY!='' && TWITTER_CONSUMER_SECRET!='' && TWITTER_CALLBACK!='' && TWITTER_TOKEN!='' && TWITTER_TOKEN_SECRET!='' && TWITTER_URL!='')
+			{
+				$fg->addFormPart('<li>');
+				# Get whether or not the post should be posted to Twitter from the data member and set it to a variable.
+				$twitter=$populator->getTwitter();
+				# Make the Twitter value digestible to the form.
+				$twitter=(($twitter===NULL) ? '' : 'tweet');
+				$fg->addFormPart('<label class="label" for="twitter">Tweet on <span class="twitter" title="Twitter">Twitter</span></label>');
+				$fg->addElement('checkbox', array('name'=>'twitter', 'value'=>'tweet', 'id'=>'twitter', 'checked'=>$twitter, 'title'=>'Tweet on Twitter'));
+				$fg->addFormPart('</li>');
+			}
 		}
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');

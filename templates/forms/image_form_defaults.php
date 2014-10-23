@@ -26,15 +26,15 @@ $image_width='120';
 if(isset($_GET['image']))
 {
 	# Instantiate a new instance of the Image class.
-	$image=new Image();
+	$image_obj=new Image();
 	# Set the passed image ID to the Image data member, effectively "cleaning" it.
-	$image->setID($_GET['image']);
+	$image_obj->setID($_GET['image']);
 	# Get the image from the `images` table.
-	if($image->getThisImage($image->getID())===TRUE)
+	if($image_obj->getThisImage($image_obj->getID())===TRUE)
 	{
 		# Get the image's categories and set them to a local variable as a dash (-) separated string of the category id's.
 		# Set the categories to a local variable.
-		$categories_array=$image->getCategories();
+		$categories_array=$image_obj->getCategories();
 
 		# Check if there are any categories.
 		if(!empty($categories_array))
@@ -49,23 +49,32 @@ if(isset($_GET['image']))
 			}
 		}
 		# Reset the defaults.
-		$image_id=$image->getID();
+		$image_id=$image_obj->getID();
 		$image_categories=$image_categories;
-		$image_contributor=$image->getContID();
-		$image_description=$image->getDescription();
-		$image_file_name=$image->getImage();
+		$image_contributor=$image_obj->getContID();
+		$image_description=$image_obj->getDescription();
+		$image_file_name=$image_obj->getImage();
+
+		# Get the FileHandler class.
+		require_once MODULES.'FileHandler'.DS.'FileHandler.php';
+		# Instantiate the new FileHandler object.
+		$file_handler=new FileHandler();
+		# Get the image info.
+		$file_handler->getImageInfo(IMAGES_PATH.DS.$image_file_name);
+		$image_obj->setHeight($file_handler->getHeight());
+		$image_obj->setWidth($file_handler->getWidth());
 
 		# Get the sub folder, set the width and height.
-		$image->findSubFolder($categories_array, $image_file_name);
+		//$image_obj->findSubFolder($categories_array, $image_file_name);
 
-		$image_height=$image->getHeight();
-		$image_hide=$image->getHide(); # 0=Hide image | NULL=Don't Hide image
+		$image_height=$image_obj->getHeight();
+		$image_hide=$image_obj->getHide(); # 0=Hide image | NULL=Don't Hide image
 		$image_last_edit=date('Y-m-d');
-		$image_location=$image->getLocation();
+		$image_location=$image_obj->getLocation();
 		$image_recent_contributor=$contributor->getContID();
-		$image_title=$image->getTitle();
+		$image_title=$image_obj->getTitle();
 		$image_unique=1;
-		$image_width=$image->getWidth();
+		$image_width=$image_obj->getWidth();
 	}
 }
 

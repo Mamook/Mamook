@@ -524,6 +524,9 @@ class AudioFormProcessor extends FormProcessor
 									}
 								}
 
+								# Change the Playlists index to a string with IDs instead of an array. These IDs are inserted into the `image` table for the thumbnail.
+								$_SESSION['form']['audio']['Playlists']=$playlist_ids;
+
 								# Instantiate the new CommandLine object.
 								$cl=new CommandLine();
 								# Set the video form session to a new session for use in the command line.

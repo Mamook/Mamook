@@ -124,8 +124,8 @@ if(!empty($audio_data['FileName']))
 					' `contributor`'.
 					') VALUES ('.
 					$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $audio_data['Title']))).', '.
-					$db->quote($db->escape($thumbnail_no_ext.'.jpg')).',
-					\'-37-\', '.
+					$db->quote($db->escape($thumbnail_no_ext.'.jpg')).', '.
+					$db->quote($db->escape($audio_data['Playlists'])).', '.
 					$db->quote($audio_data['ContID']).
 					')';
 				# Run the SQL query.
