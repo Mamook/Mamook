@@ -34,8 +34,6 @@ try
 
 	require TEMPLATES.'forms'.DS.'audio_form.php';
 
-	require TEMPLATES.'ManageAudio_nav.php';
-
 	# Do we need some more CSS?
 	$doc->setStyle(THEME.'css/media.css');
 

@@ -36,9 +36,8 @@ try
 	{
 		$form_processor=new VideoFormProcessor();
 
+		# Get the video form template.
 		require TEMPLATES.'forms'.DS.'video_form.php';
-
-		require TEMPLATES.'ManageVideo_nav.php';
 	}
 	else
 	{
