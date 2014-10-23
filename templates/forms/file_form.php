@@ -78,7 +78,7 @@ if(!isset($_GET['select']))
 		# Instantiate a new Category object.
 		$category=new Category();
 		# get the categories from the `categories` table.
-		$category->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `product` IS NULL');
+		$category->getCategories(NULL, '`id`, `category`', 'category', 'ASC');
 		# Set the categories to a variable.
 		$categories=$category->getAllCategories();
 		# Create the "Add Category" option.

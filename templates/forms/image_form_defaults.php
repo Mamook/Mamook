@@ -9,7 +9,7 @@ $contributor->addContributor();
 
 # Create defaults.
 $image_id=NULL;
-$image_categories=NULL;
+$image_categories=array(6); # Set the default to "General" (6)
 $image_contributor=$contributor->getContID();
 $image_description=NULL;
 $image_file_name='';

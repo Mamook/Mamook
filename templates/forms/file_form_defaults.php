@@ -10,21 +10,21 @@ $contributor->addContributor();
 # Create defaults.
 $file_id=NULL;
 $file_author=NULL;
-$file_availability=1; // Set the default to "This site has the legal right to display" (1)
-$file_categories=array(6); // Set the default to "General" (6)
+$file_availability=1; # Set the default to "This site has the legal right to display" (1)
+$file_categories=array(6); # Set the default to "General" (6)
 $file_contributor=$contributor->getContID();
-$file_date=date('Y-m-d'); // Set the default to todays date.
+$file_date=date('Y-m-d'); # Set the default to todays date.
 $file_file_name=NULL;
-$file_institution=9; // Set the default to "Other" (9)
-$file_language=3; // Set the default to "English" (3)
+$file_institution=9; # Set the default to "Other" (9)
+$file_language=3; # Set the default to "English" (3)
 $file_last_edit=NULL;
 $file_location=NULL;
-$file_premium='premium'; // Set the default to "premium" (0)
+$file_premium='premium'; # Set the default to "premium" (0)
 $file_publisher=NULL;
 $file_recent_contributor=NULL;
 $file_title=NULL;
-$file_unique=0; // Set the default to "Not Unique" (0)
-$file_year='unknown'; // Set the default year that the file was originally published to "unknown".
+$file_unique=0; # Set the default to "Not Unique" (0)
+$file_year='unknown'; # Set the default year that the file was originally published to "unknown".
 
 # Check if there is GET data called "file".
 if(isset($_GET['file']))

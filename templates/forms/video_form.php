@@ -212,7 +212,7 @@ elseif(!isset($_GET['select']))
 		# Instantiate a new Category object.
 		$playlist=new Category();
 		# get the categories from the `categories` table.
-		$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `product` IS NULL AND `api` IS NOT NULL');
+		$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
 		# Set the playlists to a variable.
 		$playlists=$playlist->getAllCategories();
 		# If there are playlist results.

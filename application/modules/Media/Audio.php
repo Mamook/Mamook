@@ -1538,7 +1538,7 @@ class Audio
 			# Instantiate a new Category object.
 			$playlist=new Category();
 			# get the categories from the `categories` table.
-			$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `product` IS NULL AND `api` IS NOT NULL AND `private` IS NULL');
+			$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
 			# Set the playlists to a variable.
 			$playlists=$playlist->getAllCategories();
 

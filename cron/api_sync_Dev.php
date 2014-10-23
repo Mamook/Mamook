@@ -46,7 +46,7 @@ require_once MODULES.'Content'.DS.'Category.php';
 # Instantiate a new Category object.
 $playlist_obj=new Category();
 # get the categories from the `categories` table.
-$playlist_obj->getCategories(NULL, '`id`, `api`', 'id', 'ASC', ' WHERE `product` IS NULL AND `api` IS NOT NULL');
+$playlist_obj->getCategories(NULL, '`id`, `api`', 'id', 'ASC', ' WHERE `api` IS NOT NULL');
 # Set the playlists to a variable.
 $all_playlists=$playlist_obj->getAllCategories();
 

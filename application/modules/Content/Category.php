@@ -13,7 +13,6 @@ class Category
 	private $all_categories=NULL;
 	private $id=NULL;
 	private $category=NULL;
-	private $product=NULL;
 	private $where_sql=NULL;
 
 	/*** End data members ***/
@@ -117,26 +116,6 @@ class Category
 	} #==== End -- setCategory
 
 	/**
-	 * setProduct
-	 *
-	 * Sets the data member $product.
-	 *
-	 * @param		$product (NULL=Not Product 0=Product)
-	 * @access	protected
-	 */
-	protected function setProduct($product)
-	{
-		# Check if it is NULL.
-		if($product!==NULL)
-		{
-			# Explicitly set the value to 0.
-			$product=0;
-		}
-		# Set the data member to NULL.
-		$this->product=NULL;
-	} #==== End -- setProduct
-
-	/**
 	 * setWhereSQL
 	 *
 	 * Sets the data member $where_sql.
@@ -202,18 +181,6 @@ class Category
 	} #==== End -- getCategory
 
 	/**
-	 * getProduct
-	 *
-	 * Returns the data member $product.
-	 *
-	 * @access	public
-	 */
-	public function getProduct()
-	{
-		return $this->product;
-	} #==== End -- getProduct
-
-	/**
 	 * getWhereSQL
 	 *
 	 * Returns the data member $where_sql.
@@ -236,7 +203,8 @@ class Category
 	 *
 	 * Explodes a dash sepparated list of categories and formats them for the WHERE portion of an sql query.
 	 *
-	 * @param		$categories 	(The names and/or id's of the category(ies) to be retrieved - may be multiple categories - separate with a dash, ie. '50-70-Archive-110'. Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110')
+	 * @param	$categories				The names and/or id's of the category(ies) to be retrieved - may be multiple categories - separate with a dash, ie. '50-70-Archive-110'.
+	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110')
 	 * @access	protected
 	 */
 	public function createWhereSQL($categories=NULL, $field_name='category')
@@ -405,7 +373,7 @@ class Category
 				$value=$this->getCategory();
 			}
 			# Get the category info from the Database.
-			$category=$db->get_row('SELECT `id`, `category`, `product` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$category=$db->get_row('SELECT `id`, `category` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($category!==NULL)
 			{
@@ -413,8 +381,6 @@ class Category
 				$this->setID($category->id);
 				# Set the category name to the data member.
 				$this->setCategory($category->category);
-				# Set the product status of the category to the data member.
-				$this->setProduct($category->product);
 				return TRUE;
 			}
 			# Return FALSE because the category wasn't in the table.
