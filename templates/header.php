@@ -35,11 +35,11 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		# Set keywords for the page. If the $meta_keywords variable is not set on the page, we have none.
 		$header.=((!isset($meta_keywords) || empty($meta_keywords)) ? '' : '<meta name="keywords" content="'.$meta_keywords.'" />');
 		# Define the author of the page. If the $meta_author variable is not set on the page, use this default.
-		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon R&yuml;ser, JonRyser.com &amp; Michael Delle' : $meta_author).'" />';
+		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon Rÿser, JonRyser.com & Michael Delle' : $meta_author).'" />';
 		# Define the designer of the page. If the $meta_designer variable is not set on the page, use this default.
-		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon R&yuml;ser, JonRyser.com' : $meta_designer).'" />';
+		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon Rÿser, JonRyser.com' : $meta_designer).'" />';
 		# Define the copyright of the page.
-		$header.='<meta name="copyright" content="Copyright &copy; 1994-'.date('Y').' '.$main_content->getSiteName().'" />';
+		$header.='<meta name="copyright" content="Copyright © '.date('Y').' '.$main_content->getSiteName().'" />';
 		# Define the page-topic of the page. Use the page title.
 		$header.='<meta name="page-topic" content="'.((isset($page_topic)&&!empty($page_topic)) ? $page_topic : strip_tags($main_content->getPageTitle())).'" />';
 		# Facebook meta data.
@@ -61,8 +61,6 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 			$header.='<link rel="profile" href="'.$microformat_url.'" />';
 		}
 
-		# Add HTML5 reset
-		$header.='<link rel="stylesheet" type="text/css" media="all" href="'.THEME.'css/normalize.css" />';
 		# Add the CSS for the page.
 		$header.=$doc->addStyle();
 		# Include IE Style Sheets if that is the user's browser.

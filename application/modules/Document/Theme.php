@@ -169,8 +169,8 @@ class Theme
 		$theme_path=THEME_PATH;
 		$theme_url=THEME;
 
-		# Display masthead.
-		$display='<h1 class="h-mast"><a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.$site_name.$slogan.'</a></h1><span class="accessaid"><a href="#main">Skip to content</a></span>';
+		# Display masthead. (Go to www.addthis.com/dashboard to customize the AddThis tools.)
+		$display='<h1 class="h-mast"><a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.$site_name.$slogan.'</a></h1><a class="accessaid" href="#main" title="Skip Navigation">Skip to content</a><div class="addthis_horizontal_follow_toolbox"></div>';
 
 		return $display;
 	} #==== End -- displayMasthead

@@ -1,0 +1,31 @@
+
+--------------------------------
+Mon Sep 29 08:13:04 PDT 2014
+
+class java.lang.Throwable(Load from XML failed: startupPanel)
+java.lang.Throwable: Load from XML failed: startupPanel
+	at com.att.q.util.QErrorWriter.write(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel$1.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918)
+	at java.lang.Thread.run(Thread.java:680)
+
+--------------------------------
+Mon Sep 29 08:13:04 PDT 2014
+
+class java.io.FileNotFoundException(/Users/jonryser/Application Data/SBC/Q Team Link Messenger/Contacts/startupPanel.xml (No such file or directory))
+java.io.FileNotFoundException: /Users/jonryser/Application Data/SBC/Q Team Link Messenger/Contacts/startupPanel.xml (No such file or directory)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:120)
+	at com.att.q.util.file.FileFactory$DefaultFileProvider.getReader(Unknown Source)
+	at com.att.q.util.file.FileFactory.getReader(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel.parse(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel.restoreImpl(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel.restore(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel.init(Unknown Source)
+	at com.att.q.tree.PersistingQTreeModel.<init>(Unknown Source)
+	at com.att.q.panel.contacts.AutoStartPanel.bringUpPanels(Unknown Source)
+	at com.att.q.panel.contacts.QMainTreePanel$13.run(Unknown Source)
+	at com.att.q.common.util.task.RetroScheduledExecutor$2.run(Unknown Source)
+	at java.util.TimerThread.mainLoop(Timer.java:512)
+	at java.util.TimerThread.run(Timer.java:462)

@@ -52,6 +52,7 @@ span em {
 }
 
 .accessaid {
+	display:inline-block;
 	height:0;
 	overflow:hidden
 }
@@ -77,7 +78,10 @@ span em {
 	text-align:left
 }
 
-.here > a:link, #menu2 .here a:link, .here a:visited, #menu2 .here a:visited {
+.here > a:link,
+.box2 .here a:link,
+.here a:visited,
+.box2 .here a:visited {
 	background:transparent url(../images/navbar_here_bg.png) no-repeat bottom left;
 	margin-left:-12px;
 	padding-left:12px;
@@ -85,7 +89,12 @@ span em {
 	text-decoration:none
 }
 
-.here a:hover, #menu2 .here a:hover, .here a:active, #menu2 .here a:active {
+.here a:hover,
+.box2 .here a:hover,
+.here a:active,
+.box2 .here a:active,
+.masthead .h-mast a:hover,
+.masthead .h-mast a:active {
 	color:#a1a1a1;
 	text-decoration:none
 }
@@ -102,7 +111,7 @@ span em {
 
 
 /* Masthead */
-#masthead {
+.masthead {
 	float:left;
 	clear:left;
 	width:999px;
@@ -111,13 +120,13 @@ span em {
 	margin-bottom:21px
 }
 
-#masthead img {
+.masthead img {
 	position:relative;
 	top:9px;
 	left:12px
 }
 
-#masthead h1 {
+.masthead .h-mast a {
 	display:inline;
 	position:relative;
 	top:0px;
@@ -128,7 +137,7 @@ span em {
 
 
 /* SubNavbar */
-#subnavbar {
+.subnav {
 	position:absolute;
 	top:20px;
 	right:14px;
@@ -136,81 +145,91 @@ span em {
 	text-align:right
 }
 
-#subnavbar ol {
+.subnav ol,
+.nav1 ol,
+.nav1 ul{
 	list-style:none
 }
 
-#subnavbar li {
+.subnav li {
 	display:inline;
 	margin-left:12px
 }
 
-#subnavbar li a:link, #subnavbar li a:visited {
+.subnav li a:link,
+.subnav li a:visited {
 	font-weight:bold;
 	color:#000
 }
 
-#subnavbar li a:hover, #subnavbar li a:active, #subnavbar .here {
+.subnav li a:hover,
+.subnavli a:active,
+.subnav .here {
 	border-bottom:2px solid #f50;
 	font-weight:bold;
 	color:#000
 }
 
-#subnavbar #sublink4:hover, #subnavbar #sublist4 .here {
+.subnav #sublink4:hover,
+.subnav #sublist4 .here {
 	border:0
 }
 
-#subnavbar .donate, #main #payment_types .submit {
+.subnav .donate,
+.main #payment_types .submit {
 	background:url(../images/buttons/Donate.png) no-repeat top left;
 	width:102px;
 	height:35px;
 	vertical-align:middle
 }
 
-#subnavbar .donate:hover, #subnavbar #sublist4 .here .donate, #main #payment_types .submit:hover {
+.subnav .donate:hover,
+.subnav #sublist4 .here .donate,
+.main #payment_types .submit:hover {
 	background-position:bottom left
 }
 
 
 /* Navigation Bar */
-[class|=list-nav].hover{
+[class|=list-nav].hover {
     overflow:hidden
 }
-[class|=list-nav] a{
+[class|=list-nav] a {
 	display:block;
 	line-height:12px;
 }
-[class|=list-nav]{
+[class|=list-nav] {
 	height:12px;
 }
-.nav1{
+.nav1 {
 	float:left;
 	clear:left;
 	vertical-align:top;
-	width:261px;
+	width:241px;
+	margin-left:20px;
 }
-.list-nav-1{
+.list-nav-1 {
 	height:12px;
 	padding: 6px 6px 4px
 }
 .list-nav-1.here,
-.list-nav-1:hover{
+.list-nav-1:hover {
 	min-height:12px;
 	height:auto;
 }
-.nav-2{
+.nav-2 {
 	margin: 4px -6px -2px;
 	padding: 0 0 0 22px;
 }
 .list-nav-2.here,
-.list-nav-2:hover{
+.list-nav-2:hover {
 	min-height:12px;
 	height:auto;
 }
-.nav-3{
+.nav-3 {
 	padding-bottom:2px;
 }
-.list-nav-3{
+.list-nav-3 {
 	height:14px;
 	list-style: circle;
 	white-space:nowrap;
@@ -219,17 +238,18 @@ span em {
 
 
 /* Menu Bars */
-#menu2 li a:visited {
+.box2 li a:visited {
 	color:#505050;
 	text-decoration:none
 }
 
-#menu2 li a:active {
+.box2 li a:active {
 	color:#a1a1a1;
 	text-decoration:none
 }
 
-#menu2, #media {
+.box2,
+#media {
 	float:right;
 	clear:right;
 	width:234px;
@@ -239,16 +259,16 @@ span em {
 	font:bold 12px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
 }
 
-#menu2 {
+.box2 {
 	width:232px
 }
 
-#menu2 ul {
+.box2 ul {
 	list-style:none inside;
 	padding:0 20px
 }
 
-#menu2 li {
+.box2 li {
 	min-height:10px;
 	padding:4px 0;
 	color:#404040;
@@ -256,39 +276,41 @@ span em {
 	text-transform:uppercase
 }
 
-#menu2 ul.children li {
+.box2 ul.children li {
 	list-style:circle;
 	margin:0;
 	padding:2px 0 4px  0;
 	text-transform:none
 }
 
-#menu2 li a:link, #menu2 li a:visited {
+.box2 li a:link,
+.box2 li a:visited {
 	color:#404040;
 	text-decoration:none
 }
 
-#menu2 li a:hover, #menu2 li a:active {
+.box2 li a:hover,
+.box2 li a:active {
 	color:#a1a1a1;
 	text-decoration:none
 }
 
-#menu2 .rss img {
+.box2 .rss img {
 	vertical-align:middle
 }
 
-#menu2a {
+.box2-a {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	min-height:20px
 }
 
-#menu2b {
+.box2-b {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	min-height:20px;
 	padding:0 12px 0 0
 }
 
-#menu2c {
+.box2-c {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	min-height:20px
 }
@@ -298,23 +320,28 @@ span em {
 	font-size:11px
 }
 
-#media h3, #media .header3 a:link, #media .header3 a:visited {
+#media h3,
+#media .header3 a:link,
+#media .header3 a:visited {
 	color:#f00;
 	font:bold 21px/21px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin:5px 0 0 0;
 	text-transform:uppercase
 }
 
-#media .header3 a:hover, #media .header3 a:active {
+#media .header3 a:hover,
+#media .header3 a:active {
 	color:#c60
 }
 
-#media #recent_video a:link, #media #recent_video a:visited {
+#media #recent_video a:link,
+#media #recent_video a:visited {
 	color:#f00;
 	text-decoration:none
 }
 
-#media #recent_video a:hover, #media #recent_video a:active {
+#media #recent_video a:hover,
+#media #recent_video a:active {
 	color:#fc0
 }
 
@@ -348,7 +375,7 @@ span em {
 
 
 /* Main Content */
-#main {
+.main {
 	float:left;
 	clear:none;
 	width:476px;
@@ -357,7 +384,7 @@ span em {
 	padding-right:20px
 }
 
-#main #announcement {
+.main #announcement {
 	float:right;
 	clear:right;
 	width:222px;
@@ -366,133 +393,135 @@ span em {
 	color:#404040
 }
 
-#main #announcement img {
+.main #announcement img {
 	max-width:472px;
 	margin:20px 0 10px -4px
 }
 
-#main #announcement h3 {
+.main #announcement h3 {
 	margin:0;
 	font:bold 17px/19px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform:uppercase
 }
 
-#main #announcement .post .image {
+.main #announcement .post .image {
 	margin:20px 0 10px 0
 }
 
-#main #announcement .post .post-date, #main #wordpress .post .post-date {
+#announcement .post .post-date,
+#wordpress .post .post-date {
 	margin:0;
 	font:normal 14px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
 }
 
-#main #announcement .post .post-title {
+#announcement .post .post-title {
 	margin:0;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif
 }
 
-#main #announcement .post .entry {
+#announcement .post .entry {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040
 }
 
-#main a:link {
+.main a:link {
 	color:#f60;
 	text-decoration:none
 }
 
-#main a:visited {
+.main a:visited {
 	color:#f00;
 	text-decoration:none
 }
 
-#main a:hover, #main a:active {
+.main a:hover,
+.main a:active {
 	color:#c60;
 	text-decoration:none
 }
 
-#main h3 {
+.main h3 {
 	color:#404040
 }
 
-#main ul {
+.main ul {
 	list-style:none inside;
 	padding:0 0
 }
 
-#main ul li ul {
+.main ul li ul {
 	list-style:square inside;
 	padding:0 0
 }
 
-#main p {
+.main p {
 	margin-bottom:8px;
 }
 
-#main li {
+.main li {
 	padding:2px 0
 }
 
-#main li ul li {
+.main li ul li {
 	margin-left:8px;
 	padding:2px 0
 }
 
-#main #comments {
+.main #comments {
 	margin:42px 0 0 0;
 	border-top:1px ridge #d0d0d0;
 }
 
-#main #comments h4 {
+.main #comments h4 {
 	margin:30px 0 17px 0;
 	font:bold 16px/16px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000;
 }
 
-#main #comments ol {
+.main #comments ol {
 	list-style:none inside;
 	margin:0;
 }
 
-#main #comments ol li {
+.main #comments ol li {
 	margin:0 0 25px 0;
 }
 
-#main #comments div.avatar {
+.main #comments div.avatar {
 	float:left;
 	margin:2px 8px 0 0;
 }
 
-#main #comments code {
+.main #comments code {
 	display:block;
 	background-color:#d6d6d6;
 	padding:4px 8px;
 	color:#000
 }
 
-#main #comments .post-author {
+.main #comments .post-author {
 	color:#000;
 	font:bold 13px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#main #comments .post-date {
+.main #comments .post-date {
 	color:#000;
 	font:normal 11px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#main #comments .comment_text {
+.main #comments .comment_text {
 	margin:6px 0 0 0;
 	color:#000;
 	font:normal 11px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#main #comments div.reply-button {
+.main #comments div.reply-button {
 	margin-top:6px;
 	color:#000;
 	font:normal 12px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#main .content_sub_title {
+.main .content_sub_title {
 	margin:-2px 0 26px 0;
 	border-top:1px solid #d0d0d0;
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -500,114 +529,125 @@ span em {
 	text-transform:uppercase
 }
 
-#main .content_text, #main .subcontent {
+.main .content_text, .main .subcontent {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	line-height:16px
 }
 
-#main .content_text address {
+.main .content_text address {
 	margin:0;
 	text-decoration:none
 }
 
-#main .content_text h3, #main .post h3 {
+.main .content_text h3, .main .post h3 {
 	margin:20px 0 10px 0;
 	font-size:18px;
 	line-height:20px;
 	color:#000
 }
 
-#main .content_text h4, #main .post h4, #main .content_text h5, #main .post h5, #main .content_text h6, #main .post h6 {
+.main .content_text h4,
+.main .post h4,
+.main .content_text h5,
+.main .post h5,
+.main .content_text h6,
+.main .post h6 {
 	font-size:13px;
 	line-height:15px;
 	color:#404040
 }
 
-#main .content_text img.alignleft {
+.main .content_text img.alignleft {
 	float:left;
 	margin:0 1em 1em 0
 }
 
-#main .content_text .list {
+.main .content_text .list {
 	margin:0 20px;
 }
 
-#main .content_text ul {
+.main .content_text ul {
 	list-style: square outside;
 	padding: 6px 0 6px 20px;
 }
 
-#main .content_text ol {
+.main .content_text ol {
 	margin-left:40px
 }
 
-#main .content_text p {
+.main .content_text p {
 	margin-bottom:1em;
 }
 
-#main .content_title {
+.main .content_title {
 	margin:10px 0;
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040;
 	text-transform:uppercase
 }
 
-#main .content_title a:link, #main .content_title a:visited {
+.main .content_title a:link,
+.main .content_title a:visited {
 	color:#404040
 }
 
-#main img.aligncenter {
+.main img.aligncenter {
 	margin:0 auto 1em 6em
 }
 
-#main #payment_types {
+.main #payment_types {
 	width:100%;
 	height:70px;
 	margin:3em auto 1em auto;
 	border-bottom:2px ridge #d0d0d0
 }
 
-#main #payment_types img {
+.main #payment_types img {
 	width:50px;
 	height:31px;
 	margin:0 auto;
 	vertical-align:middle
 }
 
-#main #payment_types li {
+.main #payment_types li {
 	float:left;
 	width:60px;
 	margin-left:8px;
 	padding:0
 }
 
-#main #payment_types form {
+.main #payment_types form {
 	display:inline
 }
 
-#main #payment_types #paypal {
+.main #payment_types #paypal {
 	width:102px;
 	clear:right
 }
 
-#main #payment_types #text {
+.main #payment_types #text {
 	width:145px
 }
 
-#main .post {
+.main .post {
 	list-style:none inside
 }
 
-#main .post .delete img, #main .post .edit img, #main .post .more img {
+.main .post .delete img,
+.main .post .edit img,
+.main .post .more img {
 	width:46px;
 	height:23px
 }
 
-#main .post .delete:hover, #main .post .download:hover, #main .post .edit:hover, #main .post .more-button:hover {
+.main .post .delete:hover,
+.main .post .download:hover,
+.main .post .edit:hover,
+.main .post .more-button:hover {
 	background-position:bottom left
 }
 
-#main .post .delete {
+.main .post .delete {
 	float:left;
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/Delete_small.png) no-repeat top left;
@@ -615,28 +655,28 @@ span em {
 	height:23px
 }
 
-#main .post .download {
+.main .post .download {
 	float:right;
 	margin-top:8px;
 	background:url(../images/buttons/Download.png) no-repeat top left
 }
 
-#main .post .download img {
+.main .post .download img {
 	width:70px;
 	height:35px
 }
 
-#main .post .edit {
+.main .post .edit {
 	float:left;
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/Edit_small.png) no-repeat top left
 }
 
-#main .post .emphasize {
+.main .post .emphasize {
 	background:gold;
 }
 
-#main .post .entry {
+.main .post .entry {
 	float:left;
 	clear:left;
 	padding:4px 0;
@@ -644,7 +684,7 @@ span em {
 	color:#404040
 }
 
-#main .post .entry-trans {
+.main .post .entry-trans {
 	clear:both;
 	background:#ebebeb;
 	border:1px solid #505050;
@@ -654,122 +694,128 @@ span em {
 	color:#404040
 }
 
-#main .post .entry-trans .label {
+.main .post .entry-trans .label {
 	display:block;
 	padding:0
 }
 
-#main .post .image {
+.main .post .image {
 	float:right;
 	margin:0 0 15px 0
 }
 
-#main .post .image img {
+.main .post .image img {
 	max-width:200px;
 	max-height:200px
 }
 
-#main .post .label, #main #profile .label {
+.main .post .label,
+.main #profile .label {
 	margin:0;
 	padding-left:4px;
 	font:bold 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000
 }
 
-#main .post li {
+.main .post li {
 	margin-top:-1px;
 	border-top:1px solid #d0d0d0;
 	border-bottom:1px solid #d0d0d0;
 	padding:10px 0
 }
 
-#main .post .more-button {
+.main .post .more-button {
 	float:left;
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/More_small.png) no-repeat top left
 }
 
-#main .post .post-author {
+.main .post .post-author {
 	float:left;
 	clear:left
 }
 
-#main .post .post-date {
+.main .post .post-date {
 	display:block;
 	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#505050
 }
 
-#main .post .post-publisher {
+.main .post .post-publisher {
 	float:left;
 	clear:left
 }
 
-#main .post .post-title {
+.main .post .post-title {
 	float:left;
 	clear:left;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
 	margin:3px 0
 }
 
-#main #profile .profile-image {
+.main #profile .profile-image {
 	float:left;
 	margin:0 6px 1px 0;
 }
 
-#main #profile .profile-bio {
+.main #profile .profile-bio {
 	display:block;
 	clear:both;
 	padding:5px 0
 }
 
-#main #profile .profile-bio .label {
+.main #profile .profile-bio .label {
 	display:block;
 	padding:0
 }
 
-#main #profile .profile-country, #main #profile .profile-organization, #main #profile .profile-position, #main #profile .profile-focus, #main #profile .profile-website, #main #profile .profile-affiliation {
+.main #profile .profile-country,
+.main #profile .profile-organization,
+.main #profile .profile-position,
+.main #profile .profile-focus,
+.main #profile .profile-website,
+.main #profile .profile-affiliation {
 	display:block
 }
 
-#main .splash_content_text {
+.main .splash_content_text {
 	border-bottom:3px solid #d0d0d0;
 	padding:10px 0;
 	font:normal 22px/22px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#808080
 }
 
-#main .splash_content_text span {
+.main .splash_content_text span {
 	color:#4c4c4c
 }
 
-#main .splash_content_text em {
+.main .splash_content_text em {
 	font-style:normal;
 	color:#404040
 }
 
-#main #staff h3 {
+.main #staff h3 {
 	margin:5px 0
 }
 
-#main #title_box {
+.main #title_box {
 	background:#f6f1ea;
 	width:468px;
 	height:103px;
 	margin:0 0 20px 0
 }
 
-#main #title_box #logo {
+.main #title_box #logo {
 	float:left;
 	width:193px;
 	margin:10px 0 0 20px
 }
 
-#main #title_box #logo img {
+.main #title_box #logo img {
 	float:left
 }
 
-#main #title_box #logo h2 {
+.main #title_box #logo h2 {
 	float:right;
 	margin:10px 0 0 0;
 	font:bold 22px/24px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
@@ -777,7 +823,7 @@ span em {
 	text-transform:uppercase
 }
 
-#main #title_box .advert {
+.main #title_box .advert {
 	float:right;
 	width:184px;
 	height:90px;
@@ -786,33 +832,33 @@ span em {
 	color:#949494
 }
 
-#main #wordpress {
+.main #wordpress {
 	float:left;
 	clear:left;
 	width:226px;
 	margin:20px 0 0 0
 }
 
-#main #wordpress h3 {
+.main #wordpress h3 {
 	margin:10px 0 0 6px;
 	font:bold 16px/18px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform:uppercase
 }
 
-#main #wordpress li {
+.main #wordpress li {
 	margin-top:0;
 	border-top:0;
 	border-bottom:3px solid #d0d0d0;
 	padding:3px
 }
 
-#main #wordpress .post {
+.main #wordpress .post {
 	margin:6px 0 0 0;
 	padding:0;
 	font:normal 12px/16px Helvetica, Arial, Verdana, sans-serif
 }
 
-#main #wordpress .post .post-title {
+.main #wordpress .post .post-title {
 	display:block;
 	float:none
 }
@@ -833,8 +879,8 @@ span em {
 	height:144px
 }
 
-#box1 {
-	float:left;
+.box1 {
+	float:right;
 	clear:right;
 	width:234px;
 	height:100%;
@@ -843,118 +889,132 @@ span em {
 	color:#404040
 }
 
-a.more:link, a.more:active, #box1 a:link, #box1 a:active {
+a.more:link,
+a.more:active,
+.box1 a:link,
+.box1 a:active {
 	color:#f00
 }
 
-a.more:hover, a.more:visited, #box1 a:hover, #box1 a:visited {
+a.more:hover,
+a.more:visited,
+.box1 a:hover,
+.box1 a:visited {
 	color:#c60
 }
 
-#box1 .user_image {
+.box1 .user_image {
 	position:relative;
 	left:-40px;
 	margin-top:20px
 }
 
-#box1 .user_cv {
+.box1 .user_cv {
 	margin:28px 100px 0 0;
 	text-align:right;
 	color:#404040
 }
 
-#box1 a:link, #box1 a:visited {
+.box1 a:link,
+.box1 a:visited {
 	color:#f00
 }
 
-#box1 a:hover, #box1 a:active {
+.box1 a:hover,
+.box1 a:active {
 	color:#c60
 }
 
-#box1 .user_cv a:link, #box1 .user_cv a:visited  {
+.box1 .user_cv a:link,
+.box1 .user_cv a:visited  {
 	color:#f00
 }
 
-#box1 .user_cv a:hover, #box1 .user_cv a:active  {
+.box1 .user_cv a:hover,
+.box1 .user_cv a:active  {
 	color:#c60
 }
 
-#box1a {
+.box1-a {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	height:62px;
 	padding:10px 12px 0 12px
 }
 
-#box1a .file-info {
+.box1-a .file-info {
 	margin:20px 0 0 0;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040
 }
 
-#box1a .file-info h4 , #box1a .text_translation h4 {
+.box1-a .file-info h4 , .box1-a .text_translation h4 {
 	font-weight:bold;
 	color:#000
 }
 
-#box1a .file-info li {
+.box1-a .file-info li {
 	padding:5px 0 5px 0
 }
 
-#box1a .file-info .label {
+.box1-a .file-info .label {
 	font-weight:bold
 }
 
-#box1a .file-info ul {
+.box1-a .file-info ul {
 	list-style:none inside;
 	padding:0 0
 }
 
-#box1a h2 {
+.box1-a h2 {
 	margin:10px 0 0 0;
 	font:bold 24px/21px "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
-#box1b {
+.box1-b {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	height:162px
 }
 
-#box1b .post {
+.box1-b .post {
 	list-style:none inside;
 	margin:-20px 0 0 0
 }
 
-#box1b .post li, #box1c .post li {
+.box1-b .post li,
+.box1-c .post li {
 	padding:0 10px 0 12px;
 	text-align:left;
 	line-height:14px;
 }
 
-#box1b .post .post-date, #box1c .post .post-date {
+.box1-b .post .post-date,
+.box1-c .post .post-date {
 	display:block;
 	font:normal 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#box1b .post .post-title, #box1c .post .post-title {
+.box1-b .post .post-title,
+.box1-c .post .post-title {
 	display:block;
 	font:bold 14px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#box1b .post .entry, #box1c .post .entry {
+.box1-b .post .entry,
+.box1-c .post .entry {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 }
 
-#box1c {
+.box1-c {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	height:92px
 }
 
-#box1c .post {
+.box1-c .post {
 	list-style:none inside;
 	margin:-20px 0 0 0
 }
 
-#box2 {
+.box2 {
 	position:absolute;
 	top:590px;
 	left:8px;
@@ -963,16 +1023,17 @@ a.more:hover, a.more:visited, #box1 a:hover, #box1 a:visited {
 	height:144px
 }
 
-#box2 ul, #box3 ul {
+.box2 ul,
+.box3 ul {
 	width:175px;
 	list-style:none inside
 }
 
-#box2 li {
+.box2 li {
 	color:#919191
 }
 
-#box3 {
+.box3 {
 	position:absolute;
 	top:590px;
 	left:8px;
@@ -983,12 +1044,13 @@ a.more:hover, a.more:visited, #box1 a:hover, #box1 a:visited {
 
 
 /* Forms */
-form {
+.form {
 	width:476px;
 	margin-top:1em
 }
 
-form .checkbox, form .radio  {
+.form .checkbox,
+.form .radio  {
 	float:left;
 	background-color:transparent;
 	margin:4px 3px 0 3px;
@@ -999,7 +1061,14 @@ form .checkbox, form .radio  {
 	color:#000
 }
 
-form .dropMenu, form .file, form .password, form .select, form .text, form .textarea, form .textfield, form .year {
+.form .dropMenu,
+.form .file,
+.form .password,
+.form .select,
+.form .text,
+.form .textarea,
+.form .textfield,
+.form .year {
 	background-color:transparent;
 	width:240px;
 	margin:2px 0 2px 4px;
@@ -1010,13 +1079,13 @@ form .dropMenu, form .file, form .password, form .select, form .text, form .text
 	color:#000
 }
 
-form .date select {
+.form .date select {
 	float:none;
 	width:auto;
 	margin:0 10px 0 0
 }
 
-form label {
+.form label {
 	float:left;
 	width:155px;
 	margin-right:5px;
@@ -1027,7 +1096,8 @@ form label {
 	color:#262626
 }
 
-form .box_label, form .radio_label {
+.form .box_label,
+.form .radio_label {
 	float:left;
 	width:250px;
 	margin-left:5px;
@@ -1047,7 +1117,9 @@ form li {
 	color:#000
 }
 
-#wrapper form ol, #wrapper form ul, #wrapper #email_form ul {
+#wrapper form ol,
+#wrapper form ul,
+#wrapper #email_form ul {
 	list-style:none inside;
 	padding:0 20px
 }
@@ -1064,18 +1136,18 @@ form li {
 	margin:4px 275px 0 0
 }
 
-#box2 form {
+.box2 form {
 	width:219px
 }
 
-#box2 form h3 {
+.box2 form h3 {
 	margin-bottom:8px;
 	padding:8px 0;
 	font-size:18px;
 	text-transform:uppercase
 }
 
-#box2 label {
+.box2 label {
 	width:148px;
 	margin:5px 0 0 12px;
 	text-align:left;
@@ -1083,7 +1155,7 @@ form li {
 	color:#404040
 }
 
-#box2 .submit {
+.box2 .submit {
 	float:right;
 	background:url(../images/buttons/Go.png) no-repeat top left;
 	width:24px;
@@ -1091,7 +1163,7 @@ form li {
 	margin:-29px 0 0 0
 }
 
-#box2 .text {
+.box2 .text {
 	background-color:#d6d6d6;
 	width:152px;
 	height:17px;
@@ -1099,7 +1171,7 @@ form li {
 	border:1px solid #a1a1a1
 }
 
-#box3 label {
+.box3 label {
 	width:148px;
 	margin:1px 0 0 12px;
 	text-align:left;
@@ -1107,7 +1179,7 @@ form li {
 	color:#404040
 }
 
-#box3 .submit {
+.box3 .submit {
 	float:right;
 	background:url(../images/buttons/Go.png) no-repeat top left;
 	width:24px;
@@ -1148,18 +1220,23 @@ form li {
 	margin-bottom:20px
 }
 
-#change_password_form .checkbox, #change_username_form .checkbox {
+#change_password_form .checkbox,
+#change_username_form .checkbox {
 	margin:4px 4px 0 142px
 }
 
-#change_password_form .submit, #change_username_form .submit, #privacy_form .submit, #profile_form .submit {
+#change_password_form .submit,
+#change_username_form .submit,
+#privacy_form .submit,
+#profile_form .submit {
 	float:right;
 	background:url(../images/buttons/Update.png) no-repeat top left;
 	width:70px;
 	height:35px
 }
 
-#commentform #comment, #comments .textarea {
+#commentform #comment,
+#comments .textarea {
 	width:462px;
 	height:115px
 }
@@ -1172,7 +1249,8 @@ form li {
 	color:#404040;
 }
 
-#commentform label, #comments label {
+#commentform label,
+#comments label {
 	text-align:left
 }
 
@@ -1208,7 +1286,8 @@ form li {
 	margin:0 0 0 8px
 }
 
-#email_form label, #submit_email_form label {
+#email_form label,
+#submit_email_form label {
 	width:76px
 }
 
@@ -1220,7 +1299,9 @@ form li {
 	margin:8px 0 0 88px
 }
 
-#email_form .textarea, #post_form .textarea, #profile_form .textarea {
+#email_form .textarea,
+#post_form .textarea,
+#profile_form .textarea {
 	height:115px
 }
 
@@ -1230,7 +1311,10 @@ form li {
 	border-top:1px solid #d0d0d0
 }
 
-#login div.button, #register div.button, #register div.button #submit_email_form, #login div.button #lost_password {
+#login div.button,
+#register div.button,
+#register div.button #submit_email_form,
+#login div.button #lost_password {
 	float:right;
 	clear:right;
 	width:88px;
@@ -1238,7 +1322,8 @@ form li {
 	font:bold 11px/12px Helvetica, Arial, sans-serif;
 }
 
-#login h3, #register h3 {
+#login h3,
+#register h3 {
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040
 }
@@ -1266,7 +1351,8 @@ form li {
 	float:left
 }
 
-#login .text, #login .password {
+#login .text,
+#login .password {
 	width:170px;
 	margin:3px 0 0 4px
 }
@@ -1280,7 +1366,7 @@ form li {
 	margin:0 4px
 }
 
-#menu2 .postform {
+.box2 .postform {
 	width:100px;
 	text-transform:none
 }
@@ -1351,7 +1437,8 @@ form li {
 	width:350px
 }
 
-#register .password, #register .text {
+#register .password,
+#register .text {
 	width:140px
 }
 
@@ -1399,7 +1486,10 @@ form li {
 	text-transform:uppercase
 }
 
-.pagenavigator a:link, .pagenavigator a:visited, .pagenavigator a:hover, .pagenavigator a:active {
+.pagenavigator a:link,
+.pagenavigator a:visited,
+.pagenavigator a:hover,
+.pagenavigator a:active {
 	padding:0 4px
 }
 
@@ -1411,7 +1501,8 @@ form li {
 	color:#c60
 }
 
-.pagenavigator a:hover, .pagenavigator a:active {
+.pagenavigator a:hover,
+.pagenavigator a:active {
 	color:#fc0
 }
 
@@ -1446,12 +1537,14 @@ form li {
 	display:inline
 }
 
-#info a:link, #info a:visited {
+#info a:link,
+#info a:visited {
 	color:#4d4d4f;
 	text-decoration:none
 }
 
-#info a:hover, #info a:active {
+#info a:hover,
+#info a:active {
 	color:#000;
 	border-bottom:2px solid #f00
 }
@@ -1478,17 +1571,19 @@ form li {
 	color:#333
 }
 
-#main .error_box p {
+.main .error_box p {
 	margin:0
 }
 
-#main .error_box2 h3, #modalContainer h3 {
+.main .error_box2 h3,
+#modalContainer h3 {
 	font-size:1.4em;
 	line-height:1.6em;
 	color:#c3382f
 }
 
-#main .error_box2 ul, #modalContainer ul {
+.main .error_box2 ul,
+#modalContainer ul {
 	list-style:circle inside
 }
 
@@ -1498,17 +1593,22 @@ form li {
 	height:11px
 }
 
-#main .error_box2 a:link, .error_box2 a:link {
+.main .error_box2 a:link,
+.error_box2 a:link {
 	text-decoration:none;
 	color:#930
 }
 
-#main .error_box2 a:visited, .error_box2 a:visited {
+.main .error_box2 a:visited,
+.error_box2 a:visited {
 	text-decoration:none;
 	color:#300
 }
 
-#main .error_box2 a:hover, #main .error_box2 a:active, .error_box2 a:hover, .error_box2 a:active {
+.main .error_box2 a:hover,
+.main .error_box2 a:active,
+.error_box2 a:hover,
+.error_box2 a:active {
 	text-decoration:none;
 	color:#0096e3
 }
@@ -1546,13 +1646,15 @@ form li {
 	line-height:25px
 }
 
-#alertCloseBtn a:link, #alertCloseBtn a:visited {
+#alertCloseBtn a:link,
+#alertCloseBtn a:visited {
 	text-decoration:none;
 	font-weight:bold;
 	color:#fff
 }
 
-#alertCloseBtn a:hover, .error_box2 a:active {
+#alertCloseBtn a:hover,
+.error_box2 a:active {
 	text-decoration:none;
 	color:#000
 }

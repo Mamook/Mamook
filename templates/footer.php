@@ -15,7 +15,7 @@ $zip=((empty($zip)) ? '' : ' <span class="zip">'.$zip.'</span>');
 $phone=$main_content->getPhone();
 $phone=((empty($phone)) ? '' : '<span class="phone">'.$phone.'</span>');
 
-echo '<footer id="info">',
+echo '<footer id="info" class="footer" role="contentinfo">',
 				$street,$city,$state,$zip,$phone,
 			'</footer>',
 		'</div>', # End wrapper div

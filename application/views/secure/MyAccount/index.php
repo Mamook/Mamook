@@ -1,6 +1,6 @@
 <?php /* application/views/secure/MyAccount/index.php */
 
-echo '<main id="main" class="main secure">',
+echo '<main id="main" class="main secure" role="main">',
 	'<div class="main-1">',
 		# Get the main content.
 		$display_content,

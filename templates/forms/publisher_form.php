@@ -32,7 +32,7 @@ if(empty($duplicates))
 	# Set the sub title.
 	$main_content->setSubTitle($sub_title);
 
-	$display.='<div id="publisher_form class="form"">';
+	$display.='<div id="publisher_form class="form">';
 
 	# create and display form.
 	$display.=$head;

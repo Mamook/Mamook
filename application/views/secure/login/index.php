@@ -1,6 +1,6 @@
 <?php /* application/views/secure/login/index.php */
 
-echo '<main id="main" class="main secure login">',
+echo '<main id="main" class="main secure login" role="main">',
 	'<div class="main-1">',
 		# Get the main content.
 		$display_content,
@@ -14,13 +14,13 @@ echo '<main id="main" class="main secure login">',
 '</main>',
 
 '<section id="box1" class="box1">',
-	'<div id="box1a">',
+	'<div id="box1a" class="box1-a">',
 	'</div>',
-	'<div id="box1b">',
+	'<div id="box1b" class="box1-b">',
 	'</div>',
-	'<div id="box1c">',
+	'<div id="box1c" class="box1-c">',
 	'</div>',
 '</section>',
 
-'<section id="menu2" class="box2">',
+'<section id="box2" class="box2">',
 '</section>';

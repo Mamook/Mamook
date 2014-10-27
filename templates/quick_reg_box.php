@@ -11,7 +11,7 @@ if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))
 		if($login->isLoggedIn()===TRUE)
 		{
 			$action='http://store.'.DOMAIN_NAME.'/subscriptions/';
-			$box3_class='box3 ssl';
+			$box3_class+=' ssl';
 		}
 		# Instantiate a new formGenerator object.
 		$quick_reg=new formGenerator('register', $action, 'POST', '_top', FALSE, $box3_class, 'box3');

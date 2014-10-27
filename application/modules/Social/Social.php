@@ -199,12 +199,18 @@ class Social
 				case 'Twitter':
 					$url=TWITTER_URL;
 			}
-			$display.='<li class="soc-content '.strtolower($network).Document::addAlternatingClass($i, 'other').'">
-				<h3>'.$network.' Post</h3><div>'.$facebook::getFB_PostImage($social_data[$i]['social_data']).'<span class="post-date">'.$social_data[$i]['time'].'</span> - <a href="'.$social_data[$i]['user_url'].'" class="post-author" target="_blank">'.$social_data[$i]['poster'].'</a> posted on <a href="'.$url.'" target="_blank">'.$network.'</a>'.
-				((!empty($social_data[$i]['msg'])) ? '<span class="entry">'.$social_data[$i]['msg'].'</span>' : '').
-				((!empty($social_data[$i]['link'])) ? '<a href="'.$social_data[$i]['link'].'" class="post-link" title="'.((!empty($social_data[$i]['link_name'])) ? $social_data[$i]['link_name'] : $social_data[$i]['link']).'" target="_blank">'.((!empty($social_data[$i]['link_name'])) ? $social_data[$i]['link_name'] : $social_data[$i]['link']).'</a>' : '').
-				'</div>
-			</li>';
+			$display.='<li class="soc-content '.strtolower($network).Document::addAlternatingClass($i, 'other').'">';
+			$display.='<article>';
+			$display.='<h1 class="h1">'.$network.' Post</h1>';
+			$display.='<div>'.$facebook::getFB_PostImage($social_data[$i]['social_data']);
+			$display.='<span class="post-date">'.$social_data[$i]['time'].'</span>';
+			$display.='- ';
+			$display.='<a href="'.$social_data[$i]['user_url'].'" class="post-author" target="_blank">'.$social_data[$i]['poster'].'</a> posted on <a href="'.$url.'" target="_blank">'.$network.'</a>';
+			$display.=((!empty($social_data[$i]['msg'])) ? '<span class="entry">'.$social_data[$i]['msg'].'</span>' : '');
+			$display.=((!empty($social_data[$i]['link'])) ? '<a href="'.$social_data[$i]['link'].'" class="post-link" title="'.((!empty($social_data[$i]['link_name'])) ? $social_data[$i]['link_name'] : $social_data[$i]['link']).'" target="_blank">'.((!empty($social_data[$i]['link_name'])) ? $social_data[$i]['link_name'] : $social_data[$i]['link']).'</a>' : '');
+			$display.='</div>';
+			$display.='</article>';
+			$display.='</li>';
 			# Unset the social network variable.
 			unset($network);
 		}

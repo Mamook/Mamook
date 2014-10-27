@@ -11,7 +11,7 @@ if(isset($_GET['product'])) $text_var='product';
 if(isset($_GET['publisher'])) $text_var='publisher';
 if(isset($_GET['video'])) $text_var='video';
 
-$display='<div id="delete_form">';
+$display='<div id="delete_form" class="form">';
 if(!isset($text_var))
 {
 	$_SESSION['message']='You can\'t delete this item';
