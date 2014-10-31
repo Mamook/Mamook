@@ -1,67 +1,67 @@
 <?php /* application/views/secure/admin/ManageUsers/index.php */
 
 echo '<main id="main" class="main secure" role="main">';
-# Display the content and any errors.
-$main_content->displayContent($image_link);
-# Check if there is GET data and that the passed variable is $_GET['user'].
-if(isset($_GET['user'])&&($login->checkAccess(ADMIN_USERS)===TRUE))
-{
+	# Display the content and any errors.
+	$display_content,
 	# Display the profile form.
-	echo $display;
-}
-else
-{
-	echo '<table width="100%">',
-		'<tr>',
-			'<th>',
-				'<a href="'.ADMIN_URL.'ManageUsers/?orderby=ID&dir='.$order_direction.'" title="Sort by ID">ID</a>',
-			'</th>',
-			'<th>',
-				'<a href="'.ADMIN_URL.'ManageUsers/?orderby=Username&dir='.$order_direction.'" title="Sort by Username">Username</a>',
-			'</th>',
-			'<th>',
-				'<a href="'.ADMIN_URL.'ManageUsers/?orderby=FirstName&dir='.$order_direction.'" title="Sort by First Name">First Name</a>',
-			'</th>',
-			'<th>',
-				'<a href="'.ADMIN_URL.'ManageUsers/?orderby=LastName&dir='.$order_direction.'" title="Sort by Last Name">Last Name</a>',
-			'</th>',
-			/*
-			'<th>',
-				'User Level',
-			'</th>',
-			*/
-		'</tr>';
-		foreach($records as $row):
-			echo '<tr>',
-				'<td>',
-					$row->ID,
-				'</td>',
-				'<td>',
-					'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->username.'</a>',
-				'</td>',
-				'<td>',
-					'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->fname.'</a>',
-				'</td>',
-				'<td>',
-					'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->lname.'</a>',
-				'</td>',
+	$display;
+	if(!isset($_GET['user'])&&(!isset($_POST['search']))&&($login->checkAccess(ADMIN_USERS)===TRUE))
+	{
+		echo '<table width="100%">',
+			'<tr>',
+				'<th>',
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=ID&dir='.$order_direction.'" title="Sort by ID">ID</a>',
+				'</th>',
+				'<th>',
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=Username&dir='.$order_direction.'" title="Sort by Username">Username</a>',
+				'</th>',
+				'<th>',
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=FirstName&dir='.$order_direction.'" title="Sort by First Name">First Name</a>',
+				'</th>',
+				'<th>',
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=LastName&dir='.$order_direction.'" title="Sort by Last Name">Last Name</a>',
+				'</th>',
 				/*
-				'<td>',
-					$row->level,
-				'</td>',
+				'<th>',
+					'User Level',
+				'</th>',
 				*/
 			'</tr>';
-		endforeach;
-	echo '</table>',
-	# Display the pagenavigator.
-	$paginator->getNavigator();
-}
+			foreach($records as $row):
+				echo '<tr>',
+					'<td>',
+						$row->ID,
+					'</td>',
+					'<td>',
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->username.'</a>',
+					'</td>',
+					'<td>',
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->fname.'</a>',
+					'</td>',
+					'<td>',
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->lname.'</a>',
+					'</td>',
+					/*
+					'<td>',
+						$row->level,
+					'</td>',
+					*/
+				'</tr>';
+			endforeach;
+		echo '</table>',
+		# Display the pagenavigator.
+		$paginator->getNavigator();
+	}
+	else
+	{
+		echo $search_results;
+	}
 echo '</main>',
 
 '<section id="box1" class="box1">',
-	'<div id="box1a" class="box1-a">',
+	'<div id="box1a">',
 	'</div>',
-	'<div id="box1b" class="box1-b">';
+	'<div id="box1b">';
 # Check if there is GET data and that the passed variable is $_GET['user'].
 if(isset($_GET['user']))
 {
