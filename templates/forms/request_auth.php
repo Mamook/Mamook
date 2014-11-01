@@ -28,7 +28,7 @@ else
 			if($auth[$branch_id]===FALSE)
 			{
 				$fg->addElement('checkbox', array('name'=>$branch_id));
-				$fg->addFormPart('<label class="box_label" for="50"><a href="http://'.$branch->getDomain().'" target="_blank">'.$branch->getBranch().'</a></label>');
+				$fg->addFormPart('<label class="box_label" for="'.$branch_id.'"><a href="http://'.$branch->getDomain().'" target="_blank">'.$branch->getBranch().'</a></label>');
 			}
 			elseif($auth[$branch_id]===TRUE)
 			{
