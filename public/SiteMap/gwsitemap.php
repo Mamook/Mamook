@@ -80,6 +80,7 @@ $ignore=array(
 	'error_log',
 	'test.php',
 	'merge_data.php',
+	'maintenance.php',
 	'.svn',
 	'gwsitemap.php',
 	'phpinfo.php',
