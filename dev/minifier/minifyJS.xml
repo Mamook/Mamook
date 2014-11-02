@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="Compile and minify all JS" default="dist">
+
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="compiler.jar"/>
+
+	<target name="dist" depends="compile_js"></target>
+
+	<target name="concat_js" description="Concatenates all JS files to minified directory">
+		<concat destfile="minified/scripts.big.js">
+			<header>/*! GENERATED FILE! DO NOT MODIFY! !*/${line.separator}${line.separator}</header>
+			<fileset dir="js"/>
+		</concat>
+	</target>
+
+	<target name="compile_js" depends="concat_js" description="Minifies the JS file">
+		<jscomp compilationLevel="simple" debug="false" output="minified/scripts.js">
+			<sources dir="minified">
+				<file name="scripts.big.js"/>
+			</sources>
+		</jscomp>
+	</target>
+
+</project>

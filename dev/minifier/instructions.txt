@@ -1,0 +1,17 @@
+To minify CSS:
+	1. Drop the file (or multiple files if they are to be concatenated together) into the "css" folder.
+	2. Run the minifyCSS.xml file with Ant.
+
+		Command line example: ant -f {PATH_TO_BUILD_XML}/minifyCSS.xml
+
+		This will create two files in the "minified" folder; an unmimified concatenated version of the file(s) in the "css" folder called style.big.css and a minified concatenated version of the file(s) in the "css" folder called style.css. Rename these files as you wish and remove them from the "minified" folder for use in the site.
+	3. Remove the original CSS files from the "css" folder (or they will get built into the next batch of files that gets dropped in there.)
+
+To minify JavaScript:
+	1. Drop the file (or multiple files if they are to be concatenated together) into the "js" folder.
+	2. Run the minifyJS.xml file with Ant.
+
+		Command line example: ant -f {PATH_TO_BUILD_XML}/minifyJS.xml
+
+		This will create two files in the "minified" folder; an unmimified concatenated version of the file(s) in the "js" folder called script.big.js and a minified concatenated version of the file(s) in the "js" folder called script.js. Rename these files as you wish and remove them from the "minified" folder for use in the site.
+	3. Remove the original JavaScript files from the "js" folder (or they will get built into the next batch of files that gets dropped in there.)

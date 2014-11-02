@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project name="Compile and minify all CSS" default="dist">
+
+	<path id="task.classpath">
+		<pathelement location="yuicompressor-2.4.2.jar"/>
+		<pathelement location="yui-compressor-ant-task-0.5.jar"/>
+	</path>
+
+	<target name="init" depends="define-ant-task">
+		<mkdir dir="temp"/>
+	</target>
+
+	<target name="clean" depends="init" description="Removes all build artefacts.">
+		<delete dir="temp"/>
+	</target>
+
+	<target name="dist" depends="clean,build-css,copy-and-minify-css,clean"></target>
+
+	<target name="define-ant-task">
+		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
+			<classpath refid="task.classpath"/>
+		</taskdef>
+	</target>
+
+	<!-- Concatenates all CSS files to the minified directory. -->
+	<concat destfile="minified/style.big.css">
+		<header>/*! GENERATED FILE! DO NOT MODIFY! !*/${line.separator}${line.separator}</header>
+		<fileset dir="css"/>
+	</concat>
+
+	<target name="build-css" depends="init" description="Copies the concatenated CSS file to the temp directory.">
+		<mkdir dir="temp"/>
+		<property name="result.file" location="temp/style.css"/>
+		<concat destfile="${result.file}" force="no">
+			<fileset dir="minified" includes="style.big.css"/>
+		</concat>
+	</target>
+
+	<target name="copy-and-minify-css" depends="define-ant-task" description="Minifies the CSS file and copies it to the minifed directory.">
+		<yui-compressor warn="true" munge="true" cssSuffix=".css" preserveAllSemiColons="false" fromDir="temp" toDir="minified"/>
+		<delete file="temp/style.css"/>
+		<delete dir="temp"/>
+	</target>
+
+</project>
