@@ -1,3 +1,5 @@
+/*! GENERATED FILE! DO NOT MODIFY! !*/
+
 @charset "UTF-8";
 * {
     margin: 0;
@@ -707,7 +709,8 @@ a.okBtn:hover {
     height: auto
 }
 
-.subnav a {
+.subnav a,
+.subnav .here > a {
     border: 1px solid;
     border-radius: 0 0 0 8px;
     margin: 0 4px;
@@ -716,7 +719,8 @@ a.okBtn:hover {
     color: #fff
 }
 
-.subnav a:hover {
+.subnav a:hover,
+.subnav .here > a:hover {
     background: #fff;
     color: #09c;
     text-shadow: none
