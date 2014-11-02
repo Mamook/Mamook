@@ -5,7 +5,7 @@ if($login->isLoggedIn()===TRUE)
 {
 	# Create the logout link.
 	$login_link='<li class="list-nav-1'.Document::addHereClass(REDIRECT_TO_LOGIN.'logout/', FALSE, FALSE).'">';
-	$login_link.='<a href="'.REDIRECT_TO_LOGIN.'logout/"'.Document::addHereClass(REDIRECT_TO_LOGIN.'logout/').' title="Login">Logout</a>';
+	$login_link.='<a href="'.REDIRECT_TO_LOGIN.'logout/"'.Document::addHereClass(REDIRECT_TO_LOGIN.'logout/').' title="Logout">Logout</a>';
 	$login_link.='</li>';
 	# Create the link to the user's admin pages.
 	if($login->checkAccess(ALL_ADMIN_MAN)===TRUE)
