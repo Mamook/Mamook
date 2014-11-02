@@ -12,6 +12,9 @@ define('AMAZON_SECRET_KEY','');
 # Bit.ly Variables
 define('BITLY_USERNAME','');
 define('BITLY_KEY', '');
+define('BITLY_ACCESS_TOKEN', '');
+define('BITLY_CLIENT_ID', '');
+define('BITLY_CLIENT_SECRET', '');
 
 # Facebook Variables
 define('FB_APP_ID', '');
@@ -42,6 +45,13 @@ if(defined('DOMAIN_NAME'))
 define('GOOGLE_CLIENT_ID', '');
 define('GOOGLE_CLIENT_SECRET', '');
 define('GOOGLE_REFRESH_TOKEN', '');
+
+# Google APPS
+define('GOOGLE_APPS_CALENDAR', 'calendar.jamtheforce.com');
+define('GOOGLE_APPS_DRIVE', 'docs.jamtheforce.com');
+define('GOOGLE_APPS_MAIL', 'mail.jamtheforce.com');
+define('GOOGLE_APPS_SITES', 'sites.jamtheforce.com');
+define('GOOGLE_APPS_TALK', 'google.com/talk');
 
 /* reCaptcha API keys (see reCaptcha.net) */
 # Development sites.

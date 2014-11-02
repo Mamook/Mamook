@@ -105,13 +105,16 @@ echo '<nav id="navbar" class="nav nav1">',
 	if($login->checkAccess(GAPPS_USERS)===TRUE)
 	{
 		echo '<li class="list-nav-1">',
-			'<a href="http://docs.'.DOMAIN_NAME.'" title="Go to your Google Drive" target="_blank">Documents</a>',
+			'<a href="http://'.GOOGLE_APPS_DRIVE.'" title="Go to your Google Drive" target="_blank">Documents</a>',
 		'</li>',
 		'<li class="list-nav-1">',
-			'<a href="http://mail.'.DOMAIN_NAME.'" title="Go to your Web Mail" target="_blank">eMail</a>',
+			'<a href="http://'.GOOGLE_APPS_MAIL.'" title="Go to your Web Mail" target="_blank">eMail</a>',
 		'</li>',
 		'<li class="list-nav-1">',
-			'<a href="http://calendar.'.DOMAIN_NAME.'" title="Go to your Google Calendar" target="_blank">Calendar</a>',
+			'<a href="http://'.GOOGLE_APPS_CALENDAR.'" title="Go to your Google Calendar" target="_blank">Calendar</a>',
+		'</li>',
+		'<li class="list-nav-1">',
+			'<a href="http://'.GOOGLE_APPS_TALK.'" title="Go to your Google Talk/Hangouts" target="_blank">Talk/Hangouts</a>',
 		'</li>';
 	}
 
