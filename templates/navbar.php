@@ -1,6 +1,6 @@
 <?php /* templates/navbar.php */
 echo '<nav id="navbar" class="nav1">',
-	'<ol>',
+	'<ol class="nav-1">',
 		'<li class="list-nav-1',(($doc->removeIndex(FULL_URL)===DOMAIN_NAME.'/') ? '' : ' hover'),Document::addHereClass(APPLICATION_URL, TRUE, FALSE),'">',
 			'<a href="',APPLICATION_URL, '" title="Home">home</a>',
 		'</li>',
