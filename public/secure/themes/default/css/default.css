@@ -6,67 +6,67 @@
 * {
 	border:0;
 	margin:0;
-	padding:0
+	padding:0;
 }
 
 html {
-	height:100%
+	height:100%;
 }
 
 body {
 	height:100%;
 	background-color:#000;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#000
+	color:#000;
 }
 
 fieldset {
 	margin:0;
-	border:0
+	border:0;
 }
 
 label {
-	color:#404040
+	color:#404040;
 }
 
 a {
-	text-decoration:none
+	text-decoration:none;
 }
 
 abbr {
-	border:0
+	border:0;
 }
 
 address {
 	display:inline;
-	text-decoration:none
+	text-decoration:none;
 }
 
 img {
-	border:0
+	border:0;
 }
 
 span em {
 	font-style:normal;
-	color:#f05133
+	color:#f05133;
 }
 
 .accessaid {
 	display:inline-block;
 	height:0;
-	overflow:hidden
+	overflow:hidden;
 }
 
 .empty {
 	clear:both;
-	height:0
+	height:0;
 }
 
 #distance {
 	float:left;
 	width:1px;
 	height:50%;
-	margin-bottom:-50%; /*Half of wrapper's height*/
+	margin-bottom:-50%; /*Half of wrapper's height*/;
 }
 
 #wrapper {
@@ -75,7 +75,7 @@ span em {
 	background:transparent url(../images/wrapper_bg.gif) repeat left top;
 	width:999px;
 	clear:left;
-	text-align:left
+	text-align:left;
 }
 
 .here > a:link,
@@ -86,7 +86,7 @@ span em {
 	margin-left:-12px;
 	padding-left:12px;
 	color:#000;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .here a:hover,
@@ -94,19 +94,20 @@ span em {
 .here a:active,
 .box2 .here a:active,
 .masthead .h-mast a:hover,
-.masthead .h-mast a:active {
+.masthead .h-mast a:active,
+.list-nav-2 a:hover {
 	color:#a1a1a1;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .hidden {
 	display:none;
 	height:0;
-	overflow:hidden
+	overflow:hidden;
 }
 
 .required {
-	color:red
+	color:red;
 }
 
 
@@ -117,13 +118,13 @@ span em {
 	width:999px;
 	height:70px;
 	background:transparent url(../images/masthead_bg.png) no-repeat bottom left;
-	margin-bottom:21px
+	margin-bottom:21px;
 }
 
 .masthead img {
 	position:relative;
 	top:9px;
-	left:12px
+	left:12px;
 }
 
 .masthead .h-mast a {
@@ -132,7 +133,7 @@ span em {
 	top:0px;
 	left:12px;
 	font:normal 16px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-	color:#4a2300
+	color:#4a2300;
 }
 
 
@@ -142,24 +143,24 @@ span em {
 	top:20px;
 	right:14px;
 	font:normal 11px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-	text-align:right
+	text-align:right;
 }
 
 .subnav ol,
 .nav1 ol,
-.nav1 ul{
-	list-style:none
+.nav1 ul {
+	list-style:none;
 }
 
 .subnav li {
 	display:inline;
-	margin-left:12px
+	margin-left:12px;
 }
 
 .subnav li a:link,
 .subnav li a:visited {
 	font-weight:bold;
-	color:#000
+	color:#000;
 }
 
 .subnav li a:hover,
@@ -167,12 +168,12 @@ span em {
 .subnav .here {
 	border-bottom:2px solid #f50;
 	font-weight:bold;
-	color:#000
+	color:#000;
 }
 
 .subnav #sublink4:hover,
 .subnav #sublist4 .here {
-	border:0
+	border:0;
 }
 
 .subnav .donate,
@@ -180,19 +181,19 @@ span em {
 	background:url(../images/buttons/Donate.png) no-repeat top left;
 	width:102px;
 	height:35px;
-	vertical-align:middle
+	vertical-align:middle;
 }
 
 .subnav .donate:hover,
 .subnav #sublist4 .here .donate,
 .main #payment_types .submit:hover {
-	background-position:bottom left
+	background-position:bottom left;
 }
 
 
 /* Navigation Bar */
 [class|=list-nav].hover {
-    overflow:hidden
+	overflow:hidden;
 }
 [class|=list-nav] a {
 	display:block;
@@ -207,19 +208,26 @@ span em {
 	vertical-align:top;
 	width:241px;
 	margin-left:20px;
+	text-transform:lowercase;
 }
 .list-nav-1 {
 	height:12px;
-	padding: 6px 6px 4px
+	padding:6px 6px 4px;
 }
 .list-nav-1.here,
 .list-nav-1:hover {
 	min-height:12px;
 	height:auto;
 }
+.list-nav-1 a{
+	color:#000;
+}
+.list-nav-1 > a:hover{
+	color:red;
+}
 .nav-2 {
-	margin: 4px -6px -2px;
-	padding: 0 0 0 22px;
+	margin:4px -6px -2px;
+	padding:0 0 0 22px;
 }
 .list-nav-2.here,
 .list-nav-2:hover {
@@ -231,21 +239,21 @@ span em {
 }
 .list-nav-3 {
 	height:14px;
-	list-style: circle;
+	list-style:circle;
 	white-space:nowrap;
-	margin-left: 20px;
+	margin-left:20px;
 }
 
 
 /* Menu Bars */
 .box2 li a:visited {
 	color:#505050;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .box2 li a:active {
 	color:#a1a1a1;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .box2,
@@ -256,16 +264,16 @@ span em {
 	min-height:368px;
 	height:100%;
 	margin:22px 8px 22px 0;
-	font:bold 12px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
+	font:bold 12px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 }
 
 .box2 {
-	width:232px
+	width:232px;
 }
 
 .box2 ul {
 	list-style:none inside;
-	padding:0 20px
+	padding:0 20px;
 }
 
 .box2 li {
@@ -273,51 +281,51 @@ span em {
 	padding:4px 0;
 	color:#404040;
 	text-align:left;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .box2 ul.children li {
 	list-style:circle;
 	margin:0;
 	padding:2px 0 4px  0;
-	text-transform:none
+	text-transform:none;
 }
 
 .box2 li a:link,
 .box2 li a:visited {
 	color:#404040;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .box2 li a:hover,
 .box2 li a:active {
 	color:#a1a1a1;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .box2 .rss img {
-	vertical-align:middle
+	vertical-align:middle;
 }
 
 .box2-a {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
-	min-height:20px
+	min-height:20px;
 }
 
 .box2-b {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	min-height:20px;
-	padding:0 12px 0 0
+	padding:0 12px 0 0;
 }
 
 .box2-c {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
-	min-height:20px
+	min-height:20px;
 }
 
 #media {
 	font-weight:normal;
-	font-size:11px
+	font-size:11px;
 }
 
 #media h3,
@@ -326,51 +334,51 @@ span em {
 	color:#f00;
 	font:bold 21px/21px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin:5px 0 0 0;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 #media .header3 a:hover,
 #media .header3 a:active {
-	color:#c60
+	color:#c60;
 }
 
 #media #recent_video a:link,
 #media #recent_video a:visited {
 	color:#f00;
-	text-decoration:none
+	text-decoration:none;
 }
 
 #media #recent_video a:hover,
 #media #recent_video a:active {
-	color:#fc0
+	color:#fc0;
 }
 
 #media1 {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	min-height:20px;
-	padding:10px 12px 0 12px
+	padding:10px 12px 0 12px;
 }
 
 #media2 {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	min-height:20px;
-	padding:11px 12px 0 12px
+	padding:11px 12px 0 12px;
 }
 
 #media3 {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	min-height:20px;
-	padding:0 12px 10px 12px
+	padding:0 12px 10px 12px;
 }
 
 #menu3 {
 	position:absolute;
 	bottom:4px;
-	right:17px
+	right:17px;
 }
 
 #menu3 li {
-	margin-left:10px
+	margin-left:10px;
 }
 
 
@@ -381,7 +389,7 @@ span em {
 	width:476px;
 	min-height:800px;
 	margin-bottom:1em;
-	padding-right:20px
+	padding-right:20px;
 }
 
 .main #announcement {
@@ -390,68 +398,68 @@ span em {
 	width:222px;
 	background:transparent url(../images/announcement_bg.png) no-repeat center bottom;
 	padding-left:4px;
-	color:#404040
+	color:#404040;
 }
 
 .main #announcement img {
 	max-width:472px;
-	margin:20px 0 10px -4px
+	margin:20px 0 10px -4px;
 }
 
 .main #announcement h3 {
 	margin:0;
 	font:bold 17px/19px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .main #announcement .post .image {
-	margin:20px 0 10px 0
+	margin:20px 0 10px 0;
 }
 
 #announcement .post .post-date,
 #wordpress .post .post-date {
 	margin:0;
-	font:normal 14px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif
+	font:normal 14px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 }
 
 #announcement .post .post-title {
 	margin:0;
-	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif
+	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
 }
 
 #announcement .post .entry {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .main a:link {
 	color:#f60;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .main a:visited {
 	color:#f00;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .main a:hover,
 .main a:active {
 	color:#c60;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .main h3 {
-	color:#404040
+	color:#404040;
 }
 
 .main ul {
 	list-style:none inside;
-	padding:0 0
+	padding:0 0;
 }
 
 .main ul li ul {
 	list-style:square inside;
-	padding:0 0
+	padding:0 0;
 }
 
 .main p {
@@ -459,12 +467,12 @@ span em {
 }
 
 .main li {
-	padding:2px 0
+	padding:2px 0;
 }
 
 .main li ul li {
 	margin-left:8px;
-	padding:2px 0
+	padding:2px 0;
 }
 
 .main #comments {
@@ -496,7 +504,7 @@ span em {
 	display:block;
 	background-color:#d6d6d6;
 	padding:4px 8px;
-	color:#000
+	color:#000;
 }
 
 .main #comments .post-author {
@@ -526,24 +534,24 @@ span em {
 	border-top:1px solid #d0d0d0;
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#4c4c4c;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .main .content_text, .main .subcontent {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	line-height:16px
+	line-height:16px;
 }
 
 .main .content_text address {
 	margin:0;
-	text-decoration:none
+	text-decoration:none;
 }
 
 .main .content_text h3, .main .post h3 {
 	margin:20px 0 10px 0;
 	font-size:18px;
 	line-height:20px;
-	color:#000
+	color:#000;
 }
 
 .main .content_text h4,
@@ -554,12 +562,12 @@ span em {
 .main .post h6 {
 	font-size:13px;
 	line-height:15px;
-	color:#404040
+	color:#404040;
 }
 
 .main .content_text img.alignleft {
 	float:left;
-	margin:0 1em 1em 0
+	margin:0 1em 1em 0;
 }
 
 .main .content_text .list {
@@ -567,12 +575,12 @@ span em {
 }
 
 .main .content_text ul {
-	list-style: square outside;
-	padding: 6px 0 6px 20px;
+	list-style:square outside;
+	padding:6px 0 6px 20px;
 }
 
 .main .content_text ol {
-	margin-left:40px
+	margin-left:40px;
 }
 
 .main .content_text p {
@@ -583,68 +591,68 @@ span em {
 	margin:10px 0;
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .main .content_title a:link,
 .main .content_title a:visited {
-	color:#404040
+	color:#404040;
 }
 
 .main img.aligncenter {
-	margin:0 auto 1em 6em
+	margin:0 auto 1em 6em;
 }
 
 .main #payment_types {
 	width:100%;
 	height:70px;
 	margin:3em auto 1em auto;
-	border-bottom:2px ridge #d0d0d0
+	border-bottom:2px ridge #d0d0d0;
 }
 
 .main #payment_types img {
 	width:50px;
 	height:31px;
 	margin:0 auto;
-	vertical-align:middle
+	vertical-align:middle;
 }
 
 .main #payment_types li {
 	float:left;
 	width:60px;
 	margin-left:8px;
-	padding:0
+	padding:0;
 }
 
 .main #payment_types form {
-	display:inline
+	display:inline;
 }
 
 .main #payment_types #paypal {
 	width:102px;
-	clear:right
+	clear:right;
 }
 
 .main #payment_types #text {
-	width:145px
+	width:145px;
 }
 
 .main .post {
-	list-style:none inside
+	list-style:none inside;
 }
 
 .main .post .delete img,
 .main .post .edit img,
 .main .post .more img {
 	width:46px;
-	height:23px
+	height:23px;
 }
 
 .main .post .delete:hover,
 .main .post .download:hover,
 .main .post .edit:hover,
 .main .post .more-button:hover {
-	background-position:bottom left
+	background-position:bottom left;
 }
 
 .main .post .delete {
@@ -652,24 +660,24 @@ span em {
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/Delete_small.png) no-repeat top left;
 	width:46px;
-	height:23px
+	height:23px;
 }
 
 .main .post .download {
 	float:right;
 	margin-top:8px;
-	background:url(../images/buttons/Download.png) no-repeat top left
+	background:url(../images/buttons/Download.png) no-repeat top left;
 }
 
 .main .post .download img {
 	width:70px;
-	height:35px
+	height:35px;
 }
 
 .main .post .edit {
 	float:left;
 	margin:8px 8px 0 0;
-	background:url(../images/buttons/Edit_small.png) no-repeat top left
+	background:url(../images/buttons/Edit_small.png) no-repeat top left;
 }
 
 .main .post .emphasize {
@@ -681,7 +689,7 @@ span em {
 	clear:left;
 	padding:4px 0;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .main .post .entry-trans {
@@ -691,22 +699,22 @@ span em {
 	margin:0 0 0 0;
 	padding:3px;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .main .post .entry-trans .label {
 	display:block;
-	padding:0
+	padding:0;
 }
 
 .main .post .image {
 	float:right;
-	margin:0 0 15px 0
+	margin:0 0 15px 0;
 }
 
 .main .post .image img {
 	max-width:200px;
-	max-height:200px
+	max-height:200px;
 }
 
 .main .post .label,
@@ -714,43 +722,43 @@ span em {
 	margin:0;
 	padding-left:4px;
 	font:bold 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color:#000
+	color:#000;
 }
 
 .main .post li {
 	margin-top:-1px;
 	border-top:1px solid #d0d0d0;
 	border-bottom:1px solid #d0d0d0;
-	padding:10px 0
+	padding:10px 0;
 }
 
 .main .post .more-button {
 	float:left;
 	margin:8px 8px 0 0;
-	background:url(../images/buttons/More_small.png) no-repeat top left
+	background:url(../images/buttons/More_small.png) no-repeat top left;
 }
 
 .main .post .post-author {
 	float:left;
-	clear:left
+	clear:left;
 }
 
 .main .post .post-date {
 	display:block;
 	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#505050
+	color:#505050;
 }
 
 .main .post .post-publisher {
 	float:left;
-	clear:left
+	clear:left;
 }
 
 .main .post .post-title {
 	float:left;
 	clear:left;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
-	margin:3px 0
+	margin:3px 0;
 }
 
 .main #profile .profile-image {
@@ -761,12 +769,12 @@ span em {
 .main #profile .profile-bio {
 	display:block;
 	clear:both;
-	padding:5px 0
+	padding:5px 0;
 }
 
 .main #profile .profile-bio .label {
 	display:block;
-	padding:0
+	padding:0;
 }
 
 .main #profile .profile-country,
@@ -775,44 +783,44 @@ span em {
 .main #profile .profile-focus,
 .main #profile .profile-website,
 .main #profile .profile-affiliation {
-	display:block
+	display:block;
 }
 
 .main .splash_content_text {
 	border-bottom:3px solid #d0d0d0;
 	padding:10px 0;
 	font:normal 22px/22px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-	color:#808080
+	color:#808080;
 }
 
 .main .splash_content_text span {
-	color:#4c4c4c
+	color:#4c4c4c;
 }
 
 .main .splash_content_text em {
 	font-style:normal;
-	color:#404040
+	color:#404040;
 }
 
 .main #staff h3 {
-	margin:5px 0
+	margin:5px 0;
 }
 
 .main #title_box {
 	background:#f6f1ea;
 	width:468px;
 	height:103px;
-	margin:0 0 20px 0
+	margin:0 0 20px 0;
 }
 
 .main #title_box #logo {
 	float:left;
 	width:193px;
-	margin:10px 0 0 20px
+	margin:10px 0 0 20px;
 }
 
 .main #title_box #logo img {
-	float:left
+	float:left;
 }
 
 .main #title_box #logo h2 {
@@ -820,7 +828,7 @@ span em {
 	margin:10px 0 0 0;
 	font:bold 22px/24px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#f05133;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .main #title_box .advert {
@@ -829,38 +837,38 @@ span em {
 	height:90px;
 	padding:18px 20px 10px 0;
 	font:bold 18px/20px "Myriad Pro", Helvetica, Arial, Verdana, sans-serif;
-	color:#949494
+	color:#949494;
 }
 
 .main #wordpress {
 	float:left;
 	clear:left;
 	width:226px;
-	margin:20px 0 0 0
+	margin:20px 0 0 0;
 }
 
 .main #wordpress h3 {
 	margin:10px 0 0 6px;
 	font:bold 16px/18px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .main #wordpress li {
 	margin-top:0;
 	border-top:0;
 	border-bottom:3px solid #d0d0d0;
-	padding:3px
+	padding:3px;
 }
 
 .main #wordpress .post {
 	margin:6px 0 0 0;
 	padding:0;
-	font:normal 12px/16px Helvetica, Arial, Verdana, sans-serif
+	font:normal 12px/16px Helvetica, Arial, Verdana, sans-serif;
 }
 
 .main #wordpress .post .post-title {
 	display:block;
-	float:none
+	float:none;
 }
 
 
@@ -871,12 +879,12 @@ span em {
 	left:21px;
 	background:transparent;
 	width:219px;
-	height:144px
+	height:144px;
 }
 
 #ad01 img {
 	width:219px;
-	height:144px
+	height:144px;
 }
 
 .box1 {
@@ -886,98 +894,98 @@ span em {
 	height:100%;
 	margin:0 8px 0 0;
 	font-size:14px;
-	color:#404040
+	color:#404040;
 }
 
 a.more:link,
 a.more:active,
 .box1 a:link,
 .box1 a:active {
-	color:#f00
+	color:#f00;
 }
 
 a.more:hover,
 a.more:visited,
 .box1 a:hover,
 .box1 a:visited {
-	color:#c60
+	color:#c60;
 }
 
 .box1 .user_image {
 	position:relative;
 	left:-40px;
-	margin-top:20px
+	margin-top:20px;
 }
 
 .box1 .user_cv {
 	margin:28px 100px 0 0;
 	text-align:right;
-	color:#404040
+	color:#404040;
 }
 
 .box1 a:link,
 .box1 a:visited {
-	color:#f00
+	color:#f00;
 }
 
 .box1 a:hover,
 .box1 a:active {
-	color:#c60
+	color:#c60;
 }
 
 .box1 .user_cv a:link,
 .box1 .user_cv a:visited  {
-	color:#f00
+	color:#f00;
 }
 
 .box1 .user_cv a:hover,
 .box1 .user_cv a:active  {
-	color:#c60
+	color:#c60;
 }
 
 .box1-a {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	height:62px;
-	padding:10px 12px 0 12px
+	padding:10px 12px 0 12px;
 }
 
 .box1-a .file-info {
 	margin:20px 0 0 0;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .box1-a .file-info h4 , .box1-a .text_translation h4 {
 	font-weight:bold;
-	color:#000
+	color:#000;
 }
 
 .box1-a .file-info li {
-	padding:5px 0 5px 0
+	padding:5px 0 5px 0;
 }
 
 .box1-a .file-info .label {
-	font-weight:bold
+	font-weight:bold;
 }
 
 .box1-a .file-info ul {
 	list-style:none inside;
-	padding:0 0
+	padding:0 0;
 }
 
 .box1-a h2 {
 	margin:10px 0 0 0;
-	font:bold 24px/21px "Helvetica Neue", Helvetica, Arial, sans-serif
+	font:bold 24px/21px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .box1-b {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
-	height:162px
+	height:162px;
 }
 
 .box1-b .post {
 	list-style:none inside;
-	margin:-20px 0 0 0
+	margin:-20px 0 0 0;
 }
 
 .box1-b .post li,
@@ -1006,12 +1014,12 @@ a.more:visited,
 
 .box1-c {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
-	height:92px
+	height:92px;
 }
 
 .box1-c .post {
 	list-style:none inside;
-	margin:-20px 0 0 0
+	margin:-20px 0 0 0;
 }
 
 .box2 {
@@ -1020,17 +1028,17 @@ a.more:visited,
 	left:8px;
 	background:transparent url(../images/box2_bg.png) no-repeat;
 	width:220px;
-	height:144px
+	height:144px;
 }
 
 .box2 ul,
 .box3 ul {
 	width:175px;
-	list-style:none inside
+	list-style:none inside;
 }
 
 .box2 li {
-	color:#919191
+	color:#919191;
 }
 
 .box3 {
@@ -1039,14 +1047,14 @@ a.more:visited,
 	left:8px;
 	background:transparent url(../images/box3_bg.png) no-repeat;
 	width:220px;
-	height:44px
+	height:44px;
 }
 
 
 /* Forms */
 .form {
 	width:476px;
-	margin-top:1em
+	margin-top:1em;
 }
 
 .form .checkbox,
@@ -1058,7 +1066,7 @@ a.more:visited,
 	padding:2px 2px 0 2px;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
 	font-size:1em;
-	color:#000
+	color:#000;
 }
 
 .form .dropMenu,
@@ -1076,13 +1084,13 @@ a.more:visited,
 	padding:2px 2px 0 2px;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
 	font-size:1em;
-	color:#000
+	color:#000;
 }
 
 .form .date select {
 	float:none;
 	width:auto;
-	margin:0 10px 0 0
+	margin:0 10px 0 0;
 }
 
 .form label {
@@ -1093,7 +1101,7 @@ a.more:visited,
 	text-align:right;
 	vertical-align:top;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#262626
+	color:#262626;
 }
 
 .form .box_label,
@@ -1101,31 +1109,31 @@ a.more:visited,
 	float:left;
 	width:250px;
 	margin-left:5px;
-	text-align:left
+	text-align:left;
 }
 
 form li {
 	float:left;
 	clear:left;
 	width:100%;
-	padding-bottom:1em
+	padding-bottom:1em;
 }
 
 #wrapper form h3 {
 	margin-bottom:8px;
 	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
-	color:#000
+	color:#000;
 }
 
 #wrapper form ol,
 #wrapper form ul,
 #wrapper #email_form ul {
 	list-style:none inside;
-	padding:0 20px
+	padding:0 20px;
 }
 
 #wrapper form .submit:hover {
-	background-position:bottom left
+	background-position:bottom left;
 }
 
 .back_button .submit {
@@ -1133,18 +1141,18 @@ form li {
 	background:url(../images/buttons/Back_small.png) no-repeat top left;
 	width:46px;
 	height:23px;
-	margin:4px 275px 0 0
+	margin:4px 275px 0 0;
 }
 
 .box2 form {
-	width:219px
+	width:219px;
 }
 
 .box2 form h3 {
 	margin-bottom:8px;
 	padding:8px 0;
 	font-size:18px;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .box2 label {
@@ -1152,7 +1160,7 @@ form li {
 	margin:5px 0 0 12px;
 	text-align:left;
 	font:bold 12px/10px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .box2 .submit {
@@ -1160,7 +1168,7 @@ form li {
 	background:url(../images/buttons/Go.png) no-repeat top left;
 	width:24px;
 	height:24px;
-	margin:-29px 0 0 0
+	margin:-29px 0 0 0;
 }
 
 .box2 .text {
@@ -1168,7 +1176,7 @@ form li {
 	width:152px;
 	height:17px;
 	margin:-5px 3px 0 0px;
-	border:1px solid #a1a1a1
+	border:1px solid #a1a1a1;
 }
 
 .box3 label {
@@ -1176,7 +1184,7 @@ form li {
 	margin:1px 0 0 12px;
 	text-align:left;
 	font:bold 12px/10px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 .box3 .submit {
@@ -1184,17 +1192,17 @@ form li {
 	background:url(../images/buttons/Go.png) no-repeat top left;
 	width:24px;
 	height:24px;
-	margin:-29px 0 0 0
+	margin:-29px 0 0 0;
 }
 
 #categories {
-	width:220px
+	width:220px;
 }
 
 #categories .select {
 	width:125px;
 	margin:-4px 0 2px 4px;
-	text-transform:none
+	text-transform:none;
 }
 
 #categories .submit {
@@ -1203,13 +1211,13 @@ form li {
 	background:url(../images/buttons/View.png) no-repeat top left;
 	width:47px;
 	height:24px;
-	margin:4px 20px 0 0
+	margin:4px 20px 0 0;
 }
 
 #post_form .radio_list1 {
 	list-style:none inside;
 	float:left;
-	margin:-25px 0 0 152px
+	margin:-25px 0 0 152px;
 }
 
 #request_auth_form .submit {
@@ -1217,12 +1225,12 @@ form li {
 	background:url(../images/buttons/Send.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin-bottom:20px
+	margin-bottom:20px;
 }
 
 #change_password_form .checkbox,
 #change_username_form .checkbox {
-	margin:4px 4px 0 142px
+	margin:4px 4px 0 142px;
 }
 
 #change_password_form .submit,
@@ -1232,13 +1240,13 @@ form li {
 	float:right;
 	background:url(../images/buttons/Update.png) no-repeat top left;
 	width:70px;
-	height:35px
+	height:35px;
 }
 
 #commentform #comment,
 #comments .textarea {
 	width:462px;
-	height:115px
+	height:115px;
 }
 
 #comments h3 {
@@ -1251,44 +1259,44 @@ form li {
 
 #commentform label,
 #comments label {
-	text-align:left
+	text-align:left;
 }
 
 #comments li {
 	margin-left:-1.5em;
-	text-align:left
+	text-align:left;
 }
 
 #comments #cancel-comment-reply {
-	margin-bottom:10px
+	margin-bottom:10px;
 }
 
 #comments .submit {
 	margin-left:0.5em;
 	background:url(../images/buttons/Post.png) no-repeat top left;
 	width:70px;
-	height:35px
+	height:35px;
 }
 
 #delete_form .checkbox {
-	margin:4px 4px 0 0
+	margin:4px 4px 0 0;
 }
 
 #delete_form .submit {
 	float:right;
 	background:url(../images/buttons/Delete.png) no-repeat top left;
 	width:70px;
-	height:35px
+	height:35px;
 }
 
 #delete_form .no {
 	background:url(../images/buttons/No.png) no-repeat top left;
-	margin:0 0 0 8px
+	margin:0 0 0 8px;
 }
 
 #email_form label,
 #submit_email_form label {
-	width:76px
+	width:76px;
 }
 
 #email_form .submit {
@@ -1296,19 +1304,19 @@ form li {
 	background:url(../images/buttons/Send.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin:8px 0 0 88px
+	margin:8px 0 0 88px;
 }
 
 #email_form .textarea,
 #post_form .textarea,
 #profile_form .textarea {
-	height:115px
+	height:115px;
 }
 
 #login {
 	margin-top:35px;
 	padding-top:17px;
-	border-top:1px solid #d0d0d0
+	border-top:1px solid #d0d0d0;
 }
 
 #login div.button,
@@ -1325,17 +1333,17 @@ form li {
 #login h3,
 #register h3 {
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color:#404040
+	color:#404040;
 }
 
 #login label {
-	width:55px
+	width:55px;
 }
 
 #login li {
 	float:left;
 	clear:left;
-	width:100%
+	width:100%;
 }
 
 #login .submit {
@@ -1344,47 +1352,47 @@ form li {
 	clear:right;
 	width:70px;
 	height:35px;
-	margin:0 9px 4px 0
+	margin:0 9px 4px 0;
 }
 
 #login ul {
-	float:left
+	float:left;
 }
 
 #login .text,
 #login .password {
 	width:170px;
-	margin:3px 0 0 4px
+	margin:3px 0 0 4px;
 }
 
 #login li.remember {
 	margin:4px 0 0 62px;
-	padding:4px
+	padding:4px;
 }
 
 #login li.remember .checkbox {
-	margin:0 4px
+	margin:0 4px;
 }
 
 .box2 .postform {
 	width:100px;
-	text-transform:none
+	text-transform:none;
 }
 
 #paypal_button .submit {
 	background:url(../images/buttons/PayNow.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin:0
+	margin:0;
 }
 
 #post_form .date {
-	margin:0 0 0 121px
+	margin:0 0 0 121px;
 }
 
 #post_form .date label {
 	float:none;
-	margin:0 10px 2px 0
+	margin:0 10px 2px 0;
 }
 
 #post_form #file {
@@ -1393,53 +1401,53 @@ form li {
 	padding:2px 2px 0 2px;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
 	font-size:1em;
-	color:#000
+	color:#000;
 }
 
 #post_form .project {
 	float:left;
 	list-style:none;
-	margin:-28px 0 0 152px
+	margin:-28px 0 0 152px;
 }
 
 #post_form .submit {
 	float:right;
 	background:url(../images/buttons/Post.png) no-repeat top left;
 	width:70px;
-	height:35px
+	height:35px;
 }
 
 #privacy_form .radio_list1 {
 	list-style:none inside;
-	margin:0 0 0 13px
+	margin:0 0 0 13px;
 }
 
 #privacy_form .radio_list1 .radio_label {
-	padding:3px 0 5px 0
+	padding:3px 0 5px 0;
 }
 
 .reCaptcha {
 	width:350px;
-	margin:0 auto
+	margin:0 auto;
 }
 
 .reCaptcha iframe {
 	height:300px;
-	width:350px
+	width:350px;
 }
 
 .reCaptcha label {
-	float:none
+	float:none;
 }
 
 .reCaptcha textarea {
 	height:50px;
-	width:350px
+	width:350px;
 }
 
 #register .password,
 #register .text {
-	width:140px
+	width:140px;
 }
 
 #register .submit {
@@ -1448,11 +1456,11 @@ form li {
 	clear:right;
 	width:70px;
 	height:35px;
-	margin:0 9px 4px 0
+	margin:0 9px 4px 0;
 }
 
 #search_form label {
-	width:85px
+	width:85px;
 }
 
 #search_form .submit {
@@ -1460,7 +1468,7 @@ form li {
 	background:url(../images/buttons/Search.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin:0 0 0 94px
+	margin:0 0 0 94px;
 }
 
 #submit_email_form .submit {
@@ -1468,14 +1476,14 @@ form li {
 	background:url(../images/buttons/Send.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin:0 0 0 85px
+	margin:0 0 0 85px;
 }
 
 #subscribe .submit {
 	background:url(../images/buttons/Subscribe.png) no-repeat top left;
 	width:70px;
 	height:35px;
-	margin:5px 0
+	margin:5px 0;
 }
 
 
@@ -1483,38 +1491,38 @@ form li {
 .pagenavigator {
 	display:inline;
 	line-height:45px;
-	text-transform:uppercase
+	text-transform:uppercase;
 }
 
 .pagenavigator a:link,
 .pagenavigator a:visited,
 .pagenavigator a:hover,
 .pagenavigator a:active {
-	padding:0 4px
+	padding:0 4px;
 }
 
 .pagenavigator a:link {
-	color:#f00
+	color:#f00;
 }
 
 .pagenavigator a:visited {
-	color:#c60
+	color:#c60;
 }
 
 .pagenavigator a:hover,
 .pagenavigator a:active {
-	color:#fc0
+	color:#fc0;
 }
 
 .pagenavigator .inactive {
 	padding:0 4px;
-	color:#404040
+	color:#404040;
 }
 
 .total_pagesdisplay {
 	display:inline;
 	margin:0 0 25px 25px;
-	font-style:italic
+	font-style:italic;
 }
 
 
@@ -1525,28 +1533,28 @@ form li {
 	height:31px;
 	margin:0 0 0 9px;
 	border-top:2px ridge #d0d0d0;
-	font:normal 11px/11px Helvetica, Arial, Verdana, sans-serif
+	font:normal 11px/11px Helvetica, Arial, Verdana, sans-serif;
 }
 
 #info ul {
 	margin:16px 0 0 5px;
-	list-style:none
+	list-style:none;
 }
 
 #info li {
-	display:inline
+	display:inline;
 }
 
 #info a:link,
 #info a:visited {
 	color:#4d4d4f;
-	text-decoration:none
+	text-decoration:none;
 }
 
 #info a:hover,
 #info a:active {
 	color:#000;
-	border-bottom:2px solid #f00
+	border-bottom:2px solid #f00;
 }
 
 
@@ -1554,13 +1562,13 @@ form li {
 
 .error_box {
 	margin:1em auto;
-	z-index:100
+	z-index:100;
 }
 
 .error_box1 {
 	background:transparent url(../images/error_box_top.png);
 	width:473px;
-	height:12px
+	height:12px;
 }
 
 .error_box2 {
@@ -1568,41 +1576,41 @@ form li {
 	width:457px;
 	font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
 	padding:0 8px;
-	color:#333
+	color:#333;
 }
 
 .main .error_box p {
-	margin:0
+	margin:0;
 }
 
 .main .error_box2 h3,
 #modalContainer h3 {
 	font-size:1.4em;
 	line-height:1.6em;
-	color:#c3382f
+	color:#c3382f;
 }
 
 .main .error_box2 ul,
 #modalContainer ul {
-	list-style:circle inside
+	list-style:circle inside;
 }
 
 .error_box3 {
 	background:transparent url(../images/error_box_bottom.png);
 	width:473px;
-	height:11px
+	height:11px;
 }
 
 .main .error_box2 a:link,
 .error_box2 a:link {
 	text-decoration:none;
-	color:#930
+	color:#930;
 }
 
 .main .error_box2 a:visited,
 .error_box2 a:visited {
 	text-decoration:none;
-	color:#300
+	color:#300;
 }
 
 .main .error_box2 a:hover,
@@ -1610,7 +1618,7 @@ form li {
 .error_box2 a:hover,
 .error_box2 a:active {
 	text-decoration:none;
-	color:#0096e3
+	color:#0096e3;
 }
 
 #modalContainer {
@@ -1620,19 +1628,19 @@ form li {
 	height:100%;
 	top:0;
 	left:0;
-	z-index:10000
+	z-index:10000;
 }
 
 #modalContainer #alertBox {
 	background:transparent;
 	width:473px;
-	margin:90px auto
+	margin:90px auto;
 }
 
 #modalContainer h1 {
 	font-size:1.4em;
 	line-height:1.4em;
-	color:#c3382f
+	color:#c3382f;
 }
 
 #modalContainer #alertCloseBtn {
@@ -1643,18 +1651,18 @@ form li {
 	width:25px;
 	height:25px;
 	text-align:center;
-	line-height:25px
+	line-height:25px;
 }
 
 #alertCloseBtn a:link,
 #alertCloseBtn a:visited {
 	text-decoration:none;
 	font-weight:bold;
-	color:#fff
+	color:#fff;
 }
 
 #alertCloseBtn a:hover,
 .error_box2 a:active {
 	text-decoration:none;
-	color:#000
+	color:#000;
 }
