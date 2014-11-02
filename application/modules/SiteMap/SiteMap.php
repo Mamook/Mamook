@@ -131,7 +131,10 @@ class SiteMap
 
 	public function getTitle($file)
 	{
-		global $db;
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Content object to a local variable.
+		$main_content=Content::getInstance();
 		global $htmltypes;
 
 		$title="";
@@ -143,6 +146,10 @@ class SiteMap
 		if($row!==NULL)
 		{
 			$title=(($row->page_title) ? $row->page_title : $p['basename']);
+			if($title=='%{site_name}')
+			{
+				$title=$main_content->getSiteName();
+			}
 			return htmlentities(trim(strip_tags($title)));
 		}
 		else { return $p['basename']; }

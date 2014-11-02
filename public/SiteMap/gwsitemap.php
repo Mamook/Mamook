@@ -26,24 +26,24 @@ in a directory other than the site's root.
  */
 
 # A root relative path to the top level directory you want indexed.
-$startin="/";
+$startin='/';
 
 # A root relative path to the location where you place the images.
 # Do NOT include a trailing slash. Correct usage would be similar to:
-# $imgpath="/images/sitemap";
+# $imgpath='/images/sitemap';
 #
 # If you leave it set to an empty string, the program will assume the
 # images are located in the same directory as the script.
-$imgpath=SCRIPTS."sitemap/images";
+$imgpath=SCRIPTS.'sitemap/images';
 
 # The $types array contains the file extensions of files you want to
 # show in the site map.
 $types=array(
-	".php",
-	".html",
-	".htm",
-	".shtm",
-	".sthml"
+	'.php',
+	'.html',
+	'.htm',
+	'.shtm',
+	'.sthml'
 );
 
 # The $htmltypes is an array containing the file types of HTML files,
@@ -52,88 +52,88 @@ $types=array(
 # that are NOT in this array will simply use the file name and not
 # attempt to get the title.
 $htmltypes=array(
-	".php",
-	".html",
-	".htm",
-	".shtm",
-	".sthml",
+	'.php',
+	'.html',
+	'.htm',
+	'.shtm',
+	'.sthml',
 );
 
 # Files and/or directories to ignore. Anything in this array will not
 # be included in the site map.
 $ignore=array(
-	".htaccess",
-	".htpasswd",
-	"cgi-bin",
-	"images",
-	"index.htm",
-	"index.html",
-	"index.php",
-	"robots.txt",
-	"themes",
-	"templates",
-	"scripts",
-	"error",
-	"download",
-	"secure",
-	"error.log",
-	"error_log",
-	"test.php",
-	"merge_data.php",
-	".svn",
-	"gwsitemap.php",
-	"phpinfo.php",
-	"profile",
-	"slideshow.php",
-	"headcontent.php",
-	"formmail.php",
-	"error.php",
-	"w3c"
+	'.htaccess',
+	'.htpasswd',
+	'cgi-bin',
+	'images',
+	'index.htm',
+	'index.html',
+	'index.php',
+	'robots.txt',
+	'themes',
+	'templates',
+	'scripts',
+	'error',
+	'download',
+	'secure',
+	'error.log',
+	'error_log',
+	'test.php',
+	'merge_data.php',
+	'.svn',
+	'gwsitemap.php',
+	'phpinfo.php',
+	'profile',
+	'slideshow.php',
+	'headcontent.php',
+	'formmail.php',
+	'error.php',
+	'w3c'
 );
 
 $id=0;
-$display="<div id=\"sitemap\"><ul id=\"list$id\">\n";
+$display='<div id="sitemap"><ul id="list'.$id.'">';
 $id++;
-$divs="";
-if(substr($startin, strlen($startin)-1, 1)=="/")
-	$startin=trim($startin, "/");
+$divs='';
+if(substr($startin, strlen($startin)-1, 1)=='/')
+	$startin=trim($startin, '/');
 $index='';
 foreach($types as $type)
 {
-	if(file_exists(ROOT_PATH."$startin/index$type"))
+	if(file_exists(ROOT_PATH.$startin.'/index'.$type))
 	{
-		$index=ROOT_PATH."$startin"."/index$type";
+		$index=ROOT_PATH.$startin.'/index'.$type;
 		break;
 	}
 }
 
-$types=join($types, "|");
-$types="($types)";
+$types=join($types, '|');
+$types='('.$types.')';
 
 if(!is_array($htmltypes))
 	$htmltypes=array();
 if(count($htmltypes)==0)
 	$htmltypes=$types;
 if(!$imgpath)
-	$imgpath=".";
+	$imgpath='.';
 
 $display .= '<li class="sitemap">';
-$display .= '  <img src="'.$imgpath.'/server.gif" align="texttop" alt="" />';
-$display .= '  <strong><a href="'.$startin.'/">'.$site_map->getTitle($index).'</a></strong>'."\n";
-$display .= $site_map->showList(ROOT_PATH."$startin");
-$display .= '</li></ul></div>'."\n";
+$display .= '<img src="'.$imgpath.'/server.gif" align="texttop" alt=""/>';
+$display .= '<strong><a href="'.$startin.'/">'.$site_map->getTitle($index).'</a></strong>';
+$display .= $site_map->showList(ROOT_PATH.$startin);
+$display .= '</li></ul></div>';
 
 if(is_array($divs))
 {
 	$divs="'".join($divs,"','")."'";
-	$display .= "<script type=\"text/javascript\">\n";
-	$display .= "//<![CDATA[\n";
-	$display .= "d=Array($divs);\n";
-	$display .= "for (i=0;i<d.length;i++){\n";
-	$display .= "\ttoggle('list'+d[i],'img'+d[i]);\n";
-	$display .= "}\n";
-	$display .= "//]]>\n";
-	$display .= "</script>\n";
+	$display .= '<script type="text/javascript">';
+	$display .= '//<![CDATA[';
+	$display .= 'd=Array('.$divs.');';
+	$display .= 'for(i=0;i<d.length;i++){';
+	$display .= '\ttoggle("list"+d[i],"img"+d[i]);';
+	$display .= '}';
+	$display .= '//]]>';
+	$display .= '</script>';
 }
 
 echo $display;
