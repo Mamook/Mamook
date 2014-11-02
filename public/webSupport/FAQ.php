@@ -15,6 +15,8 @@ try
 	*/
 	require_once '../../settings.php';
 
+	$display='';
+
 	# Get the web support navigation template.
 	require TEMPLATES.'webSupport_nav.php';
 
