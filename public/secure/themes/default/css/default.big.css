@@ -1,5 +1,3 @@
-/*! GENERATED FILE! DO NOT MODIFY! !*/
-
 @charset "UTF-8";
 
 /**********************************/
@@ -10,67 +8,54 @@
 	margin:0;
 	padding:0;
 }
-
 html {
 	height:100%;
 }
-
 body {
 	height:100%;
 	background-color:#000;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#000;
 }
-
 fieldset {
 	margin:0;
 	border:0;
 }
-
 label {
 	color:#404040;
 }
-
 a {
 	text-decoration:none;
 }
-
 abbr {
 	border:0;
 }
-
 address {
 	display:inline;
 	text-decoration:none;
 }
-
 img {
 	border:0;
 }
-
 span em {
 	font-style:normal;
 	color:#f05133;
 }
-
 .accessaid {
 	display:inline-block;
 	height:0;
 	overflow:hidden;
 }
-
 .empty {
 	clear:both;
 	height:0;
 }
-
 #distance {
 	float:left;
 	width:1px;
 	height:50%;
 	margin-bottom:-50%; /*Half of wrapper's height*/;
 }
-
 #wrapper {
 	margin:0 auto;
 	position:relative; /*Puts container in front of distance*/
@@ -79,7 +64,6 @@ span em {
 	clear:left;
 	text-align:left;
 }
-
 .here > a:link,
 .box2 .here a:link,
 .here a:visited,
@@ -90,7 +74,6 @@ span em {
 	color:#000;
 	text-decoration:none;
 }
-
 .here a:hover,
 .box2 .here a:hover,
 .here a:active,
@@ -101,13 +84,11 @@ span em {
 	color:#a1a1a1;
 	text-decoration:none;
 }
-
 .hidden {
 	display:none;
 	height:0;
 	overflow:hidden;
 }
-
 .required {
 	color:red;
 }
@@ -122,20 +103,26 @@ span em {
 	background:transparent url(../images/masthead_bg.png) no-repeat bottom left;
 	margin-bottom:21px;
 }
-
 .masthead img {
 	position:relative;
 	top:9px;
 	left:12px;
 }
-
-.masthead .h-mast a {
+.masthead .h-mast{
 	display:inline;
 	position:relative;
-	top:0px;
-	left:12px;
+	top:12px;
+	left:22px;
 	font:normal 16px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+}
+.masthead .h-mast a{
 	color:#4a2300;
+}
+.slogan{
+	display:block;
+	font-size:14px;
+  text-indent:16px;
+  font-style:italic;
 }
 
 
@@ -144,50 +131,43 @@ span em {
 	position:absolute;
 	top:20px;
 	right:14px;
-	font:normal 11px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+	font:normal 11px/1 "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	text-align:right;
 }
-
-.subnav ol,
-.nav1 ol,
-.nav1 ul {
+[class|=nav] {
 	list-style:none;
 }
-
-.subnav li {
+.subnav [class|=list-nav] {
 	display:inline;
 	margin-left:12px;
+	padding:0;
 }
-
-.subnav li a:link,
-.subnav li a:visited {
+.subnav [class|=list-nav] a:link,
+.subnav [class|=list-nav] a:visited {
+	border-bottom:2px solid #fff;
 	font-weight:bold;
 	color:#000;
 }
-
-.subnav li a:hover,
-.subnavli a:active,
+.subnav [class|=list-nav] a:hover,
+.subnav [class|=list-nav] a:active,
 .subnav .here {
-	border-bottom:2px solid #f50;
+	border-bottom-color:#f50;
 	font-weight:bold;
 	color:#000;
 }
-
-.subnav #sublink4:hover,
-.subnav #sublist4 .here {
+.subnav [class|=list-nav].donate a:hover,
+.subnav [class|=list-nav].donate a.here {
 	border:0;
 }
-
-.subnav .donate,
+.subnav [class|=list-nav].donate,
 .main #payment_types .submit {
 	background:url(../images/buttons/Donate.png) no-repeat top left;
 	width:102px;
 	height:35px;
 	vertical-align:middle;
 }
-
-.subnav .donate:hover,
-.subnav #sublist4 .here .donate,
+.subnav [class|=list-nav].donate a:hover,
+.subnav [class|=list-nav].donate.here a,
 .main #payment_types .submit:hover {
 	background-position:bottom left;
 }
@@ -208,12 +188,15 @@ span em {
 	float:left;
 	clear:left;
 	vertical-align:top;
-	width:241px;
-	margin-left:20px;
+	width:220px;
+	border:1px solid #000;
+	border-left:0;
+	border-radius:0 14px 14px 0;
+	margin:0 20px 0 8px;
+	padding-left:12px;
 	text-transform:lowercase;
 }
 .list-nav-1 {
-	height:12px;
 	padding:6px 6px 4px;
 }
 .list-nav-1.here,
@@ -252,7 +235,6 @@ span em {
 	color:#505050;
 	text-decoration:none;
 }
-
 .box2 li a:active {
 	color:#a1a1a1;
 	text-decoration:none;
@@ -268,16 +250,13 @@ span em {
 	margin:22px 8px 22px 0;
 	font:bold 12px/12px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 }
-
 .box2 {
 	width:232px;
 }
-
 .box2 ul {
 	list-style:none inside;
 	padding:0 20px;
 }
-
 .box2 li {
 	min-height:10px;
 	padding:4px 0;
@@ -285,51 +264,42 @@ span em {
 	text-align:left;
 	text-transform:uppercase;
 }
-
 .box2 ul.children li {
 	list-style:circle;
 	margin:0;
 	padding:2px 0 4px  0;
 	text-transform:none;
 }
-
 .box2 li a:link,
 .box2 li a:visited {
 	color:#404040;
 	text-decoration:none;
 }
-
 .box2 li a:hover,
 .box2 li a:active {
 	color:#a1a1a1;
 	text-decoration:none;
 }
-
 .box2 .rss img {
 	vertical-align:middle;
 }
-
 .box2-a {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	min-height:20px;
 }
-
 .box2-b {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	min-height:20px;
 	padding:0 12px 0 0;
 }
-
 .box2-c {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	min-height:20px;
 }
-
 #media {
 	font-weight:normal;
 	font-size:11px;
 }
-
 #media h3,
 #media .header3 a:link,
 #media .header3 a:visited {
@@ -338,47 +308,39 @@ span em {
 	margin:5px 0 0 0;
 	text-transform:uppercase;
 }
-
 #media .header3 a:hover,
 #media .header3 a:active {
 	color:#c60;
 }
-
 #media #recent_video a:link,
 #media #recent_video a:visited {
 	color:#f00;
 	text-decoration:none;
 }
-
 #media #recent_video a:hover,
 #media #recent_video a:active {
 	color:#fc0;
 }
-
 #media1 {
 	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	min-height:20px;
 	padding:10px 12px 0 12px;
 }
-
 #media2 {
 	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	min-height:20px;
 	padding:11px 12px 0 12px;
 }
-
 #media3 {
 	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	min-height:20px;
 	padding:0 12px 10px 12px;
 }
-
 #menu3 {
 	position:absolute;
 	bottom:4px;
 	right:17px;
 }
-
 #menu3 li {
 	margin-left:10px;
 }
@@ -393,7 +355,6 @@ span em {
 	margin-bottom:1em;
 	padding-right:20px;
 }
-
 .main #announcement {
 	float:right;
 	clear:right;
@@ -402,135 +363,109 @@ span em {
 	padding-left:4px;
 	color:#404040;
 }
-
 .main #announcement img {
 	max-width:472px;
 	margin:20px 0 10px -4px;
 }
-
 .main #announcement h3 {
 	margin:0;
 	font:bold 17px/19px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform:uppercase;
 }
-
 .main #announcement .post .image {
 	margin:20px 0 10px 0;
 }
-
 #announcement .post .post-date,
 #wordpress .post .post-date {
 	margin:0;
 	font:normal 14px/16px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 }
-
 #announcement .post .post-title {
 	margin:0;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
 }
-
 #announcement .post .entry {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .main a:link {
 	color:#f60;
 	text-decoration:none;
 }
-
 .main a:visited {
 	color:#f00;
 	text-decoration:none;
 }
-
 .main a:hover,
 .main a:active {
 	color:#c60;
 	text-decoration:none;
 }
-
 .main h3 {
 	color:#404040;
 }
-
 .main ul {
 	list-style:none inside;
 	padding:0 0;
 }
-
 .main ul li ul {
 	list-style:square inside;
 	padding:0 0;
 }
-
 .main p {
 	margin-bottom:8px;
 }
-
 .main li {
 	padding:2px 0;
 }
-
 .main li ul li {
 	margin-left:8px;
 	padding:2px 0;
 }
-
 .main #comments {
 	margin:42px 0 0 0;
 	border-top:1px ridge #d0d0d0;
 }
-
 .main #comments h4 {
 	margin:30px 0 17px 0;
 	font:bold 16px/16px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000;
 }
-
 .main #comments ol {
 	list-style:none inside;
 	margin:0;
 }
-
 .main #comments ol li {
 	margin:0 0 25px 0;
 }
-
 .main #comments div.avatar {
 	float:left;
 	margin:2px 8px 0 0;
 }
-
 .main #comments code {
 	display:block;
 	background-color:#d6d6d6;
 	padding:4px 8px;
 	color:#000;
 }
-
 .main #comments .post-author {
 	color:#000;
 	font:bold 13px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .main #comments .post-date {
 	color:#000;
 	font:normal 11px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .main #comments .comment_text {
 	margin:6px 0 0 0;
 	color:#000;
 	font:normal 11px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .main #comments div.reply-button {
 	margin-top:6px;
 	color:#000;
 	font:normal 12px/13px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .main .content_sub_title {
 	margin:-2px 0 26px 0;
 	border-top:1px solid #d0d0d0;
@@ -538,24 +473,20 @@ span em {
 	color:#4c4c4c;
 	text-transform:uppercase;
 }
-
 .main .content_text, .main .subcontent {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	line-height:16px;
 }
-
 .main .content_text address {
 	margin:0;
 	text-decoration:none;
 }
-
 .main .content_text h3, .main .post h3 {
 	margin:20px 0 10px 0;
 	font-size:18px;
 	line-height:20px;
 	color:#000;
 }
-
 .main .content_text h4,
 .main .post h4,
 .main .content_text h5,
@@ -566,97 +497,79 @@ span em {
 	line-height:15px;
 	color:#404040;
 }
-
 .main .content_text img.alignleft {
 	float:left;
 	margin:0 1em 1em 0;
 }
-
 .main .content_text .list {
 	margin:0 20px;
 }
-
 .main .content_text ul {
 	list-style:square outside;
 	padding:6px 0 6px 20px;
 }
-
 .main .content_text ol {
 	margin-left:40px;
 }
-
 .main .content_text p {
 	margin-bottom:1em;
 }
-
 .main .content_title {
 	margin:10px 0;
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040;
 	text-transform:uppercase;
 }
-
 .main .content_title a:link,
 .main .content_title a:visited {
 	color:#404040;
 }
-
 .main img.aligncenter {
 	margin:0 auto 1em 6em;
 }
-
 .main #payment_types {
 	width:100%;
 	height:70px;
 	margin:3em auto 1em auto;
 	border-bottom:2px ridge #d0d0d0;
 }
-
 .main #payment_types img {
 	width:50px;
 	height:31px;
 	margin:0 auto;
 	vertical-align:middle;
 }
-
 .main #payment_types li {
 	float:left;
 	width:60px;
 	margin-left:8px;
 	padding:0;
 }
-
 .main #payment_types form {
 	display:inline;
 }
-
 .main #payment_types #paypal {
 	width:102px;
 	clear:right;
 }
-
 .main #payment_types #text {
 	width:145px;
 }
-
 .main .post {
 	list-style:none inside;
 }
-
 .main .post .delete img,
 .main .post .edit img,
 .main .post .more img {
 	width:46px;
 	height:23px;
 }
-
 .main .post .delete:hover,
 .main .post .download:hover,
 .main .post .edit:hover,
 .main .post .more-button:hover {
 	background-position:bottom left;
 }
-
 .main .post .delete {
 	float:left;
 	margin:8px 8px 0 0;
@@ -664,28 +577,23 @@ span em {
 	width:46px;
 	height:23px;
 }
-
 .main .post .download {
 	float:right;
 	margin-top:8px;
 	background:url(../images/buttons/Download.png) no-repeat top left;
 }
-
 .main .post .download img {
 	width:70px;
 	height:35px;
 }
-
 .main .post .edit {
 	float:left;
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/Edit_small.png) no-repeat top left;
 }
-
 .main .post .emphasize {
 	background:gold;
 }
-
 .main .post .entry {
 	float:left;
 	clear:left;
@@ -693,7 +601,6 @@ span em {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .main .post .entry-trans {
 	clear:both;
 	background:#ebebeb;
@@ -703,22 +610,18 @@ span em {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .main .post .entry-trans .label {
 	display:block;
 	padding:0;
 }
-
 .main .post .image {
 	float:right;
 	margin:0 0 15px 0;
 }
-
 .main .post .image img {
 	max-width:200px;
 	max-height:200px;
 }
-
 .main .post .label,
 .main #profile .label {
 	margin:0;
@@ -726,59 +629,49 @@ span em {
 	font:bold 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000;
 }
-
 .main .post li {
 	margin-top:-1px;
 	border-top:1px solid #d0d0d0;
 	border-bottom:1px solid #d0d0d0;
 	padding:10px 0;
 }
-
 .main .post .more-button {
 	float:left;
 	margin:8px 8px 0 0;
 	background:url(../images/buttons/More_small.png) no-repeat top left;
 }
-
 .main .post .post-author {
 	float:left;
 	clear:left;
 }
-
 .main .post .post-date {
 	display:block;
 	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#505050;
 }
-
 .main .post .post-publisher {
 	float:left;
 	clear:left;
 }
-
 .main .post .post-title {
 	float:left;
 	clear:left;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
 	margin:3px 0;
 }
-
 .main #profile .profile-image {
 	float:left;
 	margin:0 6px 1px 0;
 }
-
 .main #profile .profile-bio {
 	display:block;
 	clear:both;
 	padding:5px 0;
 }
-
 .main #profile .profile-bio .label {
 	display:block;
 	padding:0;
 }
-
 .main #profile .profile-country,
 .main #profile .profile-organization,
 .main #profile .profile-position,
@@ -787,44 +680,36 @@ span em {
 .main #profile .profile-affiliation {
 	display:block;
 }
-
 .main .splash_content_text {
 	border-bottom:3px solid #d0d0d0;
 	padding:10px 0;
 	font:normal 22px/22px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#808080;
 }
-
 .main .splash_content_text span {
 	color:#4c4c4c;
 }
-
 .main .splash_content_text em {
 	font-style:normal;
 	color:#404040;
 }
-
 .main #staff h3 {
 	margin:5px 0;
 }
-
 .main #title_box {
 	background:#f6f1ea;
 	width:468px;
 	height:103px;
 	margin:0 0 20px 0;
 }
-
 .main #title_box #logo {
 	float:left;
 	width:193px;
 	margin:10px 0 0 20px;
 }
-
 .main #title_box #logo img {
 	float:left;
 }
-
 .main #title_box #logo h2 {
 	float:right;
 	margin:10px 0 0 0;
@@ -832,7 +717,6 @@ span em {
 	color:#f05133;
 	text-transform:uppercase;
 }
-
 .main #title_box .advert {
 	float:right;
 	width:184px;
@@ -841,33 +725,28 @@ span em {
 	font:bold 18px/20px "Myriad Pro", Helvetica, Arial, Verdana, sans-serif;
 	color:#949494;
 }
-
 .main #wordpress {
 	float:left;
 	clear:left;
 	width:226px;
 	margin:20px 0 0 0;
 }
-
 .main #wordpress h3 {
 	margin:10px 0 0 6px;
 	font:bold 16px/18px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform:uppercase;
 }
-
 .main #wordpress li {
 	margin-top:0;
 	border-top:0;
 	border-bottom:3px solid #d0d0d0;
 	padding:3px;
 }
-
 .main #wordpress .post {
 	margin:6px 0 0 0;
 	padding:0;
 	font:normal 12px/16px Helvetica, Arial, Verdana, sans-serif;
 }
-
 .main #wordpress .post .post-title {
 	display:block;
 	float:none;
@@ -883,166 +762,140 @@ span em {
 	width:219px;
 	height:144px;
 }
-
 #ad01 img {
 	width:219px;
 	height:144px;
 }
-
 .box1 {
 	float:right;
 	clear:right;
-	width:234px;
+	width:233px;
 	height:100%;
+	border:1px solid #000;
+	border-right:0;
+	border-radius:14px 0 0 14px;
 	margin:0 8px 0 0;
 	font-size:14px;
 	color:#404040;
 }
-
 a.more:link,
 a.more:active,
 .box1 a:link,
 .box1 a:active {
 	color:#f00;
 }
-
 a.more:hover,
 a.more:visited,
 .box1 a:hover,
 .box1 a:visited {
 	color:#c60;
 }
-
 .box1 .user_image {
 	position:relative;
 	left:-40px;
 	margin-top:20px;
 }
-
 .box1 .user_cv {
 	margin:28px 100px 0 0;
 	text-align:right;
 	color:#404040;
 }
-
 .box1 a:link,
 .box1 a:visited {
 	color:#f00;
 }
-
 .box1 a:hover,
 .box1 a:active {
 	color:#c60;
 }
-
 .box1 .user_cv a:link,
 .box1 .user_cv a:visited  {
 	color:#f00;
 }
-
 .box1 .user_cv a:hover,
 .box1 .user_cv a:active  {
 	color:#c60;
 }
-
 .box1-a {
-	background:transparent url(../images/box1a_bg.png) no-repeat left top;
 	height:62px;
 	padding:10px 12px 0 12px;
 }
-
 .box1-a .file-info {
 	margin:20px 0 0 0;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .box1-a .file-info h4 , .box1-a .text_translation h4 {
 	font-weight:bold;
 	color:#000;
 }
-
 .box1-a .file-info li {
 	padding:5px 0 5px 0;
 }
-
 .box1-a .file-info .label {
 	font-weight:bold;
 }
-
 .box1-a .file-info ul {
 	list-style:none inside;
 	padding:0 0;
 }
-
 .box1-a h2 {
 	margin:10px 0 0 0;
 	font:bold 24px/21px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .box1-b {
-	background:transparent url(../images/box1b_bg.png) repeat  left top;
 	height:162px;
 }
-
 .box1-b .post {
 	list-style:none inside;
 	margin:-20px 0 0 0;
 }
-
 .box1-b .post li,
 .box1-c .post li {
 	padding:0 10px 0 12px;
 	text-align:left;
 	line-height:14px;
 }
-
 .box1-b .post .post-date,
 .box1-c .post .post-date {
 	display:block;
 	font:normal 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .box1-b .post .post-title,
 .box1-c .post .post-title {
 	display:block;
 	font:bold 14px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 .box1-b .post .entry,
 .box1-c .post .entry {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 }
-
 .box1-c {
-	background:transparent url(../images/box1a_bg.png) no-repeat left bottom;
 	height:92px;
 }
-
 .box1-c .post {
 	list-style:none inside;
 	margin:-20px 0 0 0;
 }
-
 .box2 {
 	position:absolute;
 	top:590px;
 	left:8px;
-	background:transparent url(../images/box2_bg.png) no-repeat;
 	width:220px;
 	height:144px;
+	min-height:144px;
+	border:1px solid #000;
+	border-left:0;
+	border-radius:0 14px 14px 0;
 }
-
 .box2 ul,
 .box3 ul {
 	width:175px;
 	list-style:none inside;
 }
-
 .box2 li {
 	color:#919191;
 }
-
 .box3 {
 	position:absolute;
 	top:590px;
@@ -1058,7 +911,6 @@ a.more:visited,
 	width:476px;
 	margin-top:1em;
 }
-
 .form .checkbox,
 .form .radio  {
 	float:left;
@@ -1070,7 +922,6 @@ a.more:visited,
 	font-size:1em;
 	color:#000;
 }
-
 .form .dropMenu,
 .form .file,
 .form .password,
@@ -1088,13 +939,11 @@ a.more:visited,
 	font-size:1em;
 	color:#000;
 }
-
 .form .date select {
 	float:none;
 	width:auto;
 	margin:0 10px 0 0;
 }
-
 .form label {
 	float:left;
 	width:155px;
@@ -1105,7 +954,6 @@ a.more:visited,
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#262626;
 }
-
 .form .box_label,
 .form .radio_label {
 	float:left;
@@ -1113,31 +961,26 @@ a.more:visited,
 	margin-left:5px;
 	text-align:left;
 }
-
 form li {
 	float:left;
 	clear:left;
 	width:100%;
 	padding-bottom:1em;
 }
-
 #wrapper form h3 {
 	margin-bottom:8px;
 	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#000;
 }
-
 #wrapper form ol,
 #wrapper form ul,
 #wrapper #email_form ul {
 	list-style:none inside;
 	padding:0 20px;
 }
-
 #wrapper form .submit:hover {
 	background-position:bottom left;
 }
-
 .back_button .submit {
 	float:right;
 	background:url(../images/buttons/Back_small.png) no-repeat top left;
@@ -1145,18 +988,15 @@ form li {
 	height:23px;
 	margin:4px 275px 0 0;
 }
-
 .box2 form {
 	width:219px;
 }
-
 .box2 form h3 {
 	margin-bottom:8px;
 	padding:8px 0;
 	font-size:18px;
 	text-transform:uppercase;
 }
-
 .box2 label {
 	width:148px;
 	margin:5px 0 0 12px;
@@ -1164,7 +1004,6 @@ form li {
 	font:bold 12px/10px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .box2 .submit {
 	float:right;
 	background:url(../images/buttons/Go.png) no-repeat top left;
@@ -1172,7 +1011,6 @@ form li {
 	height:24px;
 	margin:-29px 0 0 0;
 }
-
 .box2 .text {
 	background-color:#d6d6d6;
 	width:152px;
@@ -1180,7 +1018,6 @@ form li {
 	margin:-5px 3px 0 0px;
 	border:1px solid #a1a1a1;
 }
-
 .box3 label {
 	width:148px;
 	margin:1px 0 0 12px;
@@ -1188,7 +1025,6 @@ form li {
 	font:bold 12px/10px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#404040;
 }
-
 .box3 .submit {
 	float:right;
 	background:url(../images/buttons/Go.png) no-repeat top left;
@@ -1196,17 +1032,14 @@ form li {
 	height:24px;
 	margin:-29px 0 0 0;
 }
-
 #categories {
 	width:220px;
 }
-
 #categories .select {
 	width:125px;
 	margin:-4px 0 2px 4px;
 	text-transform:none;
 }
-
 #categories .submit {
 	display:block;
 	float:right;
@@ -1215,13 +1048,11 @@ form li {
 	height:24px;
 	margin:4px 20px 0 0;
 }
-
 #post_form .radio_list1 {
 	list-style:none inside;
 	float:left;
 	margin:-25px 0 0 152px;
 }
-
 #request_auth_form .submit {
 	float:right;
 	background:url(../images/buttons/Send.png) no-repeat top left;
@@ -1229,12 +1060,10 @@ form li {
 	height:35px;
 	margin-bottom:20px;
 }
-
 #change_password_form .checkbox,
 #change_username_form .checkbox {
 	margin:4px 4px 0 142px;
 }
-
 #change_password_form .submit,
 #change_username_form .submit,
 #privacy_form .submit,
@@ -1244,13 +1073,11 @@ form li {
 	width:70px;
 	height:35px;
 }
-
 #commentform #comment,
 #comments .textarea {
 	width:462px;
 	height:115px;
 }
-
 #comments h3 {
 	margin:30px 0 16px 0;
 	padding-top:18px;
@@ -1258,49 +1085,40 @@ form li {
 	font:bold 18px/0px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040;
 }
-
 #commentform label,
 #comments label {
 	text-align:left;
 }
-
 #comments li {
 	margin-left:-1.5em;
 	text-align:left;
 }
-
 #comments #cancel-comment-reply {
 	margin-bottom:10px;
 }
-
 #comments .submit {
 	margin-left:0.5em;
 	background:url(../images/buttons/Post.png) no-repeat top left;
 	width:70px;
 	height:35px;
 }
-
 #delete_form .checkbox {
 	margin:4px 4px 0 0;
 }
-
 #delete_form .submit {
 	float:right;
 	background:url(../images/buttons/Delete.png) no-repeat top left;
 	width:70px;
 	height:35px;
 }
-
 #delete_form .no {
 	background:url(../images/buttons/No.png) no-repeat top left;
 	margin:0 0 0 8px;
 }
-
 #email_form label,
 #submit_email_form label {
 	width:76px;
 }
-
 #email_form .submit {
 	float:left;
 	background:url(../images/buttons/Send.png) no-repeat top left;
@@ -1308,19 +1126,16 @@ form li {
 	height:35px;
 	margin:8px 0 0 88px;
 }
-
 #email_form .textarea,
 #post_form .textarea,
 #profile_form .textarea {
 	height:115px;
 }
-
 #login {
 	margin-top:35px;
 	padding-top:17px;
 	border-top:1px solid #d0d0d0;
 }
-
 #login div.button,
 #register div.button,
 #register div.button #submit_email_form,
@@ -1331,23 +1146,19 @@ form li {
 	text-align:center;
 	font:bold 11px/12px Helvetica, Arial, sans-serif;
 }
-
 #login h3,
 #register h3 {
 	font:bold 18px/22px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#404040;
 }
-
 #login label {
 	width:55px;
 }
-
 #login li {
 	float:left;
 	clear:left;
 	width:100%;
 }
-
 #login .submit {
 	background:url(../images/buttons/Login.png) no-repeat top left;
 	float:right;
@@ -1356,47 +1167,38 @@ form li {
 	height:35px;
 	margin:0 9px 4px 0;
 }
-
 #login ul {
 	float:left;
 }
-
 #login .text,
 #login .password {
 	width:170px;
 	margin:3px 0 0 4px;
 }
-
 #login li.remember {
 	margin:4px 0 0 62px;
 	padding:4px;
 }
-
 #login li.remember .checkbox {
 	margin:0 4px;
 }
-
 .box2 .postform {
 	width:100px;
 	text-transform:none;
 }
-
 #paypal_button .submit {
 	background:url(../images/buttons/PayNow.png) no-repeat top left;
 	width:70px;
 	height:35px;
 	margin:0;
 }
-
 #post_form .date {
 	margin:0 0 0 121px;
 }
-
 #post_form .date label {
 	float:none;
 	margin:0 10px 2px 0;
 }
-
 #post_form #file {
 	width:240px;
 	margin:2px 0 2px 160px;
@@ -1405,53 +1207,43 @@ form li {
 	font-size:1em;
 	color:#000;
 }
-
 #post_form .project {
 	float:left;
 	list-style:none;
 	margin:-28px 0 0 152px;
 }
-
 #post_form .submit {
 	float:right;
 	background:url(../images/buttons/Post.png) no-repeat top left;
 	width:70px;
 	height:35px;
 }
-
 #privacy_form .radio_list1 {
 	list-style:none inside;
 	margin:0 0 0 13px;
 }
-
 #privacy_form .radio_list1 .radio_label {
 	padding:3px 0 5px 0;
 }
-
 .reCaptcha {
 	width:350px;
 	margin:0 auto;
 }
-
 .reCaptcha iframe {
 	height:300px;
 	width:350px;
 }
-
 .reCaptcha label {
 	float:none;
 }
-
 .reCaptcha textarea {
 	height:50px;
 	width:350px;
 }
-
 #register .password,
 #register .text {
 	width:140px;
 }
-
 #register .submit {
 	background:url(../images/buttons/Register.png) no-repeat top left;
 	float:right;
@@ -1460,11 +1252,9 @@ form li {
 	height:35px;
 	margin:0 9px 4px 0;
 }
-
 #search_form label {
 	width:85px;
 }
-
 #search_form .submit {
 	float:left;
 	background:url(../images/buttons/Search.png) no-repeat top left;
@@ -1472,7 +1262,6 @@ form li {
 	height:35px;
 	margin:0 0 0 94px;
 }
-
 #submit_email_form .submit {
 	float:left;
 	background:url(../images/buttons/Send.png) no-repeat top left;
@@ -1480,7 +1269,6 @@ form li {
 	height:35px;
 	margin:0 0 0 85px;
 }
-
 #subscribe .submit {
 	background:url(../images/buttons/Subscribe.png) no-repeat top left;
 	width:70px;
@@ -1495,32 +1283,26 @@ form li {
 	line-height:45px;
 	text-transform:uppercase;
 }
-
 .pagenavigator a:link,
 .pagenavigator a:visited,
 .pagenavigator a:hover,
 .pagenavigator a:active {
 	padding:0 4px;
 }
-
 .pagenavigator a:link {
 	color:#f00;
 }
-
 .pagenavigator a:visited {
 	color:#c60;
 }
-
 .pagenavigator a:hover,
 .pagenavigator a:active {
 	color:#fc0;
 }
-
 .pagenavigator .inactive {
 	padding:0 4px;
 	color:#404040;
 }
-
 .total_pagesdisplay {
 	display:inline;
 	margin:0 0 25px 25px;
@@ -1537,22 +1319,18 @@ form li {
 	border-top:2px ridge #d0d0d0;
 	font:normal 11px/11px Helvetica, Arial, Verdana, sans-serif;
 }
-
 #info ul {
 	margin:16px 0 0 5px;
 	list-style:none;
 }
-
 #info li {
 	display:inline;
 }
-
 #info a:link,
 #info a:visited {
 	color:#4d4d4f;
 	text-decoration:none;
 }
-
 #info a:hover,
 #info a:active {
 	color:#000;
@@ -1566,13 +1344,11 @@ form li {
 	margin:1em auto;
 	z-index:100;
 }
-
 .error_box1 {
 	background:transparent url(../images/error_box_top.png);
 	width:473px;
 	height:12px;
 }
-
 .error_box2 {
 	background:transparent url(../images/error_box_bg.png);
 	width:457px;
@@ -1580,41 +1356,34 @@ form li {
 	padding:0 8px;
 	color:#333;
 }
-
 .main .error_box p {
 	margin:0;
 }
-
 .main .error_box2 h3,
 #modalContainer h3 {
 	font-size:1.4em;
 	line-height:1.6em;
 	color:#c3382f;
 }
-
 .main .error_box2 ul,
 #modalContainer ul {
 	list-style:circle inside;
 }
-
 .error_box3 {
 	background:transparent url(../images/error_box_bottom.png);
 	width:473px;
 	height:11px;
 }
-
 .main .error_box2 a:link,
 .error_box2 a:link {
 	text-decoration:none;
 	color:#930;
 }
-
 .main .error_box2 a:visited,
 .error_box2 a:visited {
 	text-decoration:none;
 	color:#300;
 }
-
 .main .error_box2 a:hover,
 .main .error_box2 a:active,
 .error_box2 a:hover,
@@ -1622,7 +1391,6 @@ form li {
 	text-decoration:none;
 	color:#0096e3;
 }
-
 #modalContainer {
 	background:transparent url(../images/semitransparent.dot.png) repeat left top ;
 	position:fixed;
@@ -1632,19 +1400,16 @@ form li {
 	left:0;
 	z-index:10000;
 }
-
 #modalContainer #alertBox {
 	background:transparent;
 	width:473px;
 	margin:90px auto;
 }
-
 #modalContainer h1 {
 	font-size:1.4em;
 	line-height:1.4em;
 	color:#c3382f;
 }
-
 #modalContainer #alertCloseBtn {
 	position:relative;
 	top:20px;
@@ -1655,14 +1420,12 @@ form li {
 	text-align:center;
 	line-height:25px;
 }
-
 #alertCloseBtn a:link,
 #alertCloseBtn a:visited {
 	text-decoration:none;
 	font-weight:bold;
 	color:#fff;
 }
-
 #alertCloseBtn a:hover,
 .error_box2 a:active {
 	text-decoration:none;
