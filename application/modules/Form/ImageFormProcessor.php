@@ -167,7 +167,7 @@ class ImageFormProcessor extends FormProcessor
 							if($media_image===TRUE)
 							{
 								# Upload original thumbnail.
-								$document_upload=$upload->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $new_name, '7340032', TRUE, '320', '180', '75', FALSE, '800', '800', '100', FALSE);
+								$document_upload=$upload->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $new_name, 7340032, TRUE, $width, $height, 75, FALSE, 800, 800, 100, FALSE);
 							}
 							else
 							{

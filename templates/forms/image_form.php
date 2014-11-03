@@ -115,8 +115,8 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="image_width"><span class="required">*</span> Dimensions</label>');
-		$fg->addElement('text', array('name'=>'image_width', 'id'=>'image_width', 'value'=>$image->getWidth())).$fg->addFormPart('px ');
-		$fg->addElement('text', array('name'=>'image_height', 'id'=>'image_height', 'value'=>$image->getHeight())).$fg->addFormPart('px');
+		$fg->addElement('text', array('name'=>'width', 'id'=>'image_width', 'value'=>$image->getWidth())).$fg->addFormPart('px ');
+		$fg->addElement('text', array('name'=>'height', 'id'=>'image_height', 'value'=>$image->getHeight())).$fg->addFormPart('px');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
