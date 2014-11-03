@@ -685,6 +685,7 @@ span em {
 	padding:10px 0;
 	font:normal 22px/22px "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 	color:#808080;
+	white-space:pre-wrap;
 }
 .main .splash_content_text span {
 	color:#4c4c4c;
