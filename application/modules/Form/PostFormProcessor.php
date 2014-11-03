@@ -290,9 +290,9 @@ class PostFormProcessor extends FormProcessor
 								' '.$db->quote($institution_id).','.
 								((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : ' NULL,').
 								' '.$db->quote($text_language_id).','.
-								((!empty($text)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($text))))).',' : ' \'\',').
+								((!empty($text)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text))))).',' : ' \'\',').
 								' '.$db->quote($trans_language_id).','.
-								((!empty($text_trans)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($text_trans))))).',' : ' \'\',').
+								((!empty($text_trans)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text_trans))))).',' : ' \'\',').
 								(($hide!==NULL) ? ' '.$db->quote(0).',' : ' NULL,').
 								(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : ' NULL,').
 								' '.$db->quote($contributor_id).','.
@@ -316,9 +316,9 @@ class PostFormProcessor extends FormProcessor
 								' `institution` = '.$db->quote($institution_id).','.
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : ' NULL,').
 								' `text_language` = '.$db->quote($text_language_id).','.
-								' `text` = '.((!empty($text)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($text))))).',' : ' \'\',').
+								' `text` = '.((!empty($text)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text))))).',' : ' \'\',').
 								' `trans_language` = '.$db->quote($trans_language_id).','.
-								' `text_trans` = '.((!empty($text_trans)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($text_trans))))).',' : ' \'\',').
+								' `text_trans` = '.((!empty($text_trans)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text_trans))))).',' : ' \'\',').
 								' `hide` = '.(($hide!==NULL) ? ' '.$db->quote(0).',' : ' NULL,').
 								' `image` = '.(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : ' NULL,').
 								' `contributor` = '.$db->quote($contributor_id).','.

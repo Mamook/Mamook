@@ -119,11 +119,11 @@ class ContentFormProcessor extends FormProcessor
 						$message_action='updated';
 						# Reset the sql variable with the UPDATE sql.
 						$sql='UPDATE `'.DBPREFIX.'content` SET
-							`page_title` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($page_title))))).','.
-							' `sub_title` = '.((empty($sub_title)) ? 'NULL' : $db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($sub_title)))))).','.
+							`page_title` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($page_title))))).','.
+							' `sub_title` = '.((empty($sub_title)) ? 'NULL' : $db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($sub_title)))))).','.
 							' `hide_title` = '.(($hide_title===NULL) ? 'NULL' : 0).','.
-							' `content` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($text))))).','.
-							' `quote` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($quote))))).','.
+							' `content` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text))))).','.
+							' `quote` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($quote))))).','.
 							' `topic` = '.$db->quote($topic).','.
 							' `image` = '.((empty($image)) ? 'NULL' : $db->quote($db->escape($image))).','.
 							' `image_title` = '.((empty($image_title)) ? 'NULL' : $db->quote($db->escape($image_title))).','.
