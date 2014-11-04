@@ -57,14 +57,14 @@ try
 		# Loop through the announcement subcontent array.
 		foreach($announcement_subcontent as $display_subcontent)
 		{
-			$display='<div class="post">'."\n";
+			$display.='<article class="announcement post">';
 			$display.=$display_subcontent['date'];
-			$display.=$display_subcontent['title'];
+			$display.='<h1 class="header1">'.$display_subcontent['title'].'</h1>';
 			$display.=$display_subcontent['text'];
 			$display.=$display_subcontent['text_trans'];
 			$display.=$display_subcontent['more'];
 			$display.=$display_subcontent['download'];
-			$display.='</div>'."\n";
+			$display.='</article>';
 		}
 	}
 

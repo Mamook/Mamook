@@ -22,6 +22,8 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 			xml:lang="en" lang="en"><!--<![endif]-->';
 	# Open the head tag.
 	$header.='<head>';
+		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
+		$header.='<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
 		# The title for each page is filled by a variable set on each page.
 		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
 		# Use a custom favicon.
