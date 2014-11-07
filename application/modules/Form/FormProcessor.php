@@ -258,8 +258,8 @@ class FormProcessor
 	 *
 	 * Returns an array of the Authorizations of a User.
 	 *
-	 * @param		array		$branches (an array of branches to check)
-	 * @param		integer	$id  			(The User's ID)
+	 * @param	array $branches			An array of branches to check.
+	 * @param	integer $id				The User's ID
 	 * @access	public
 	 * @return	string
 	 */
@@ -292,9 +292,9 @@ class FormProcessor
 		foreach($branch_ids as $branch_num)
 		{
 			# Retrieve the data for this branch from the `branches` table.
-			$branch->getThisBranch($branch_num);
+			//$branch->getThisBranch($branch_num);
 			# Change the branch name to all caps and replace spaces(' ') with underscores('_').
-			$name=strtoupper(str_replace(' ', '_', $branch->getBranch()));
+			//$name=strtoupper(str_replace(' ', '_', $branch->getBranch()));
 			# Change the value of the branch number to the branch "admin" number (always ends with '1'.)
 			$branch_levels[$branch_num.'_admin']=substr_replace($branch_num, 1, -1, 1);
 			# Change the value of the branch number to the branch "user" number (always ends with '2'.)
@@ -325,6 +325,7 @@ class FormProcessor
 				$auth[$branch_num]=FALSE;
 			}
 		}
+		//print_r($branch_levels);exit;
 		return $auth;
 	} #==== End -- findAuthorization
 
@@ -337,24 +338,24 @@ class FormProcessor
 	 */
 	public function processAuthorize()
 	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
+		# Bring the User object into scope.
+		global $user;
+		# Bring the content object into scope.
+		global $main_content;
+
 		try
 		{
+			$username=$user->getUsername();
+			$id=$user->getID();
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST))
 			{
-				# Set the Database instance to a variable.
-				$db=DB::get_instance();
-				# Set the Document instance to a variable.
-				$doc=Document::getInstance();
-				# Bring the User object into scope.
-				global $user;
-
-				$username=$user->getUsername();
-				$id=$user->getID();
-
 				# Create an empty array to hold messages to display to the User.
 				$message=array();
-
 				# Get the Branch class.
 				require_once MODULES.'Content'.DS.'Branch.php';
 				# Instantiate a new Branch object.
@@ -376,15 +377,63 @@ class FormProcessor
 					$branch_id=$row->id;
 					$branch_name=$row->branch;
 
+/*
 					# Check that the POST data is set for this branch and that it holds acceptable values.
 					if(isset($_POST[$branch_id]) &&
 						(($_POST[$branch_id]=='0') OR
 						($_POST[$branch_id]=='2') OR
 						($_POST[$branch_id]=='3') OR
 						($_POST[$branch_id]=='4')))
-					{ $good=TRUE; }
-					else { continue; }
+					{
+						$good=TRUE;
+					}
+					else {
+						continue;
+					}
+*/
 
+					# Check if there was POST data sent for this branch, if the checkbox is checked (on).
+					if(isset($_POST[$branch_id]) && $_POST[$branch_id]=='on')
+					{
+						# Create empty array.
+						$branch_ids=array();
+						# Loops through array.
+						foreach($_POST as $key=>$value)
+						{
+							# If the array key is an integer.
+							if(is_int($key))
+							{
+								# Replace the 0 in the branch ID (50, 60, 70) with a 2 (52, 62, 72).
+								$branch_user=substr_replace($key, 2, -1, 1);
+								# Assign the new ID to the value of the array.
+								$branch_ids[$key]=$branch_user;
+							}
+						}
+						# Combine the branch IDs.
+						$new_branch_level=implode($branch_ids, '-').'-';
+
+						# Check if the new_branch_level is in the $levels string.
+						if(strpos($levels, $new_branch_level)===FALSE)
+						{
+							$levels.=$new_branch_level;
+						}
+					}
+					else
+					{
+						# Create variables holding each level of access for the current branch.
+						$branch_admin=substr_replace($row->id, 1, -1, 1).'-';
+						$branch_user=substr_replace($row->id, 2, -1, 1).'-';
+						$branch_unauthorized=substr_replace($row->id, 3, -1, 1).'-';
+						$branch_candidate=substr_replace($row->id, 4, -1, 1).'-';
+
+						# Replace the branch ID with an empty value to remove their branch permission.
+						$levels=str_replace($branch_admin, '', $levels);
+						$levels=str_replace($branch_user, '', $levels);
+						$levels=str_replace($branch_unauthorized, '', $levels);
+						$levels=str_replace($branch_candidate, '', $levels);
+					}
+
+/*
 						# Check if there is a WordPress installation.
 						if(WP_INSTALLED===TRUE && $branch_id==90)
 						{
@@ -415,9 +464,13 @@ class FormProcessor
 						{
 							# Check if the new_branch_level is in the $levels string.
 							if(strpos($levels, $new_branch_level)===FALSE)
+							{
 								$levels.=$new_branch_level;
+							}
 						}
+*/
 				}
+
 				# Update the database with the new levels.
 				$user->updateUser(array('ID'=>$id), array('level'=>$levels));
 
@@ -431,8 +484,6 @@ class FormProcessor
 					$wp_user->updateWP_UserAccessLevel($username, $update_WordPress);
 				}
 
-				# Get the site's name.
-				$site_name=$main_content->getSiteName();
 				# Get the user's display name.
 				$display_name=$user->findDisplayName($id);
 				# Create the branch admin email constant and set it to the $to variable.
@@ -441,31 +492,19 @@ class FormProcessor
 				$subject=DOMAIN_NAME.': Your authorizations have been updated.';
 
 				# Create the body of the message.
-				$body='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-				$body.='<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">';
-				$body.='<head>';
-				$body.='<title>'.$subject.'</title>'."\n";
-				$body.='<meta http-equiv="content-type" content="text/html; charset=UTF-8" />';
-				$body.='<meta http-equiv="content-language" content="english" />';
-				$body.='<meta name="copyright" content="Copyright &copy; '.date('Y').' Center for World Indigenous Studies" />';
-				$body.='</head>'."\n";
-				$body.='<body style="background:#fff;border:1px solid #ef4123;border-radius:12px;padding-left:8px">';
-				$body.='<table style="width:100&#37;;font-size:12px;line-height:18px;font-family:Helvetica,Arial,Verdana,sans-serif;color:#444;">';
-				$body.='<tr>';
-				$body.='<td>';
-				$body.='<p>Hello'.$display_name.',</p>'."\n\n\n";
-				$body.='<p>The authorization settings on your account have been updated. You may log in to your account at <a href="'.SECURE_URL.'MyAccount/">'.SECURE_URL.'MyAccount/</a> to view your account settings.</p>'."\n\n\n";
-				$body.='Thank you,<br />'."\n";
-				$body.=$site_name."\n\n\n\n";
-				$body.='<p style="font-size:8px;line-height:12px;">Please do not reply to this email. This email was sent automatically from '.DOMAIN_NAME.' to inform you about changes in your account. If you have any questions, please contact '.$site_name.' at <a href="'.APPLICATION_URL.'contact/" title="Contact '.$site_name.'">'.APPLICATION_URL.'contact/</a>.</p>'."\n\n\n\n";
-				$body.='</td>';
-				$body.='</tr>';
-				$body.='</table>';
-				$body.='</body>';
-				$body.='</html>';
-				$doc->sendEmail($subject, $to, $body);
+				$body='Hello '.$display_name.','."<br />\n<br />\n";
+				$body.='The authorization settings on your account have been updated. You may log in to your account at <a href="'.SECURE_URL.'MyAccount/">'.SECURE_URL.'MyAccount/</a> to view your account settings.'."<br />\n<br />\n";
+				$body.='Thank you';
+				### DEBUG ###
+				if(DEBUG_APP===TRUE)
+				{
+					$doc->sendEmail($subject, ADMIN_EMAIL, $body);
+				}
+				else
+				{
+					$doc->sendEmail($subject, $to, $body);
+				}
 				$message='You have successfully edited the access levels for '.$username.'. An email has been sent to '.$username.' alerting them to the change in their account.';
-
 				$doc->setError($message);
 			}
 		}
@@ -480,7 +519,8 @@ class FormProcessor
 	 *
 	 * Emails the appropriate admin/manager of a request for authorization on an aspect of the site.
 	 *
-	 * @param		array:	$branches_emails	(An array where the key is the POST Data field ['branch number'] to check and the value is the email address to send the request to. The Value may be an array as well.)
+	 * @param	array $branches_emails	An array where the key is the POST data field ['branch number'] to check and the value is the email address to send the request to.
+	 *										The Value may be an array as well.
 	 * @access	public
 	 */
 	public function processAuthRequest()

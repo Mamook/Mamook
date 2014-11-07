@@ -723,7 +723,7 @@ class Document
 	private function closeTags($html)
 	{
 		# Strip any mangled tags off the end
-    $html=preg_replace('#]*$#', ' ', $html);
+		$html=preg_replace('#]*$#', ' ', $html);
 		# Put all opened tags into an array.
 		preg_match_all('#<([a-z]+)(?<!br)( [^/]*)?(?!/)>#iU', $html, $result);
 		$openedtags=$result[1];
@@ -758,4 +758,4 @@ class Document
 
 	/*** End public methods ***/
 
-} // End Document class.
+} # End Document class.
