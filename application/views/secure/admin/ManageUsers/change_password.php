@@ -6,7 +6,7 @@ echo '<main id="main" class="main secure username" role="main">',
 		$display_content,
 	'</div>',
 	'<div class="main-2">',
-		'<h3>Use the form below to  change the password for ',$current_username,'</h3>',
+		'<h3>Use the form below to change the password for ',$current_username,'</h3>',
 		# Display other content (forms).
 		$display,
 		$display_quote,
