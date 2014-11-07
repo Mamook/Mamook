@@ -24,8 +24,7 @@ define('FB_SESSION', '');
 define('FB_TOKEN', '');
 define('FB_URL', '');
 
-
-/* Google AJAX Search API Key */
+# Google AJAX Search API Key
 if(defined('DOMAIN_NAME'))
 {
 	# Development sites.
@@ -39,7 +38,7 @@ if(defined('DOMAIN_NAME'))
 		define('GOOGLEAPIKEY', '');
 	}
 }
-/* end Google AJAX Search API Key */
+# end Google AJAX Search API Key
 
 # Google API variables
 define('GOOGLE_CLIENT_ID', '');
@@ -53,7 +52,7 @@ define('GOOGLE_APPS_MAIL', 'mail.jamtheforce.com');
 define('GOOGLE_APPS_SITES', 'sites.jamtheforce.com');
 define('GOOGLE_APPS_TALK', 'google.com/talk');
 
-/* reCaptcha API keys (see reCaptcha.net) */
+# reCaptcha API keys (see reCaptcha.net)
 # Development sites.
 if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
 {
@@ -66,7 +65,7 @@ else
 	define('CAPTCHA_PUBLICKEY', '');
 	define('CAPTCHA_PRIVATEKEY', '');
 }
-/* end reCaptcha API keys */
+# end reCaptcha API keys
 
 # Soundcloud Variables
 define('SOUNDCLOUD_AUTH_URL', 'https://soundcloud.com/connect');
@@ -97,7 +96,7 @@ define('VIMEO_URL', '');
 # Websnapr Variables
 define('WEBSNAPR_DEV_KEY', '');
 
-/* YouTube Variables */
+# YouTube Variables
 # Development sites.
 if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
 {
@@ -116,4 +115,4 @@ define('YOUTUBE_USERNAME','');
 define('YOUTUBE_CHANNELID','');
 define('YOUTUBE_USERID', '');
 define('YOUTUBE_URL', '');
-/* end YouTube Variables */
+# end YouTube Variables
