@@ -1,6 +1,6 @@
 <?php /* application/views/secure/admin/ManageUsers/index.php */
 
-echo '<main id="main" class="main secure" role="main">';
+echo '<main id="main" class="main secure" role="main">',
 	# Display the content and any errors.
 	$display_content,
 	# Display the profile form.
