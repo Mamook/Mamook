@@ -8,11 +8,11 @@
 	margin:0;
 	padding:0;
 }
-html {
+html,
+body{
 	height:100%;
 }
 body {
-	height:100%;
 	background-color:#000;
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#000;
@@ -90,7 +90,7 @@ img {
 	top:9px;
 	left:12px;
 }
-.masthead .h-mast{
+.h-mast{
 	position:relative;
 	top:12px;
 	left:22px;
@@ -101,7 +101,7 @@ img {
   text-indent:-999999px;
   text-align:center;
 }
-.masthead .h-mast a{
+.h-mast a{
 	color:#4a2300;
 }
 .slogan{
@@ -626,11 +626,11 @@ a.more:visited,
 	color:#c60;
 }
 .box1 .user_cv a:link,
-.box1 .user_cv a:visited  {
+.box1 .user_cv a:visited {
 	color:#f00;
 }
 .box1 .user_cv a:hover,
-.box1 .user_cv a:active  {
+.box1 .user_cv a:active {
 	color:#c60;
 }
 .box1-a {
@@ -714,7 +714,7 @@ a.more:visited,
 	margin-top:1em;
 }
 .form .checkbox,
-.form .radio  {
+.form .radio {
 	float:left;
 	background-color:transparent;
 	margin:4px 3px 0 3px;

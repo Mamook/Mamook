@@ -8,8 +8,8 @@ class Slideshow
 	private $after_end='function(){}';
 	private $auto='null';
 	private $before_start='function(){}';
-	private $button_next='.arrow-next';
-	private $button_previous='.arrow-prev';
+	private $button_next='arrow-next';
+	private $button_previous='arrow-prev';
 	private $circular='false';
 	private $scroll=2;
 	private $selector='.slideshow';
@@ -594,8 +594,9 @@ class Slideshow
 					$display.='</li>';
 				}
 				$display.='</ul>';
-				$display.='<div class="arrow-prev"></div>';
-				$display.='<div class="arrow-next"></div>';
+				var_dump($this->getButtonPrevious());exit;
+				$display.='<div class="'.$this->getButtonPrevious().'"></div>';
+				$display.='<div class="'.$this->getButtonNext().'"></div>';
 				$display.='</div>';
 			}
 			return $display;

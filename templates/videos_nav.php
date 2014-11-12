@@ -1,4 +1,5 @@
 <?php /* templates/videos_nav.php */
+
 $videos_nav='<ul class="nav-1">'.
 	'<li class="list-nav-1'.Document::addHereClass(VIDEOS_URL, TRUE, FALSE).'">'.
 		'<a href="'.VIDEOS_URL.'"'.Document::addHereClass(VIDEOS_URL, TRUE).' title="Spotlight Videos">Spotlight Videos</a>'.

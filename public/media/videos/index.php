@@ -34,6 +34,8 @@ try
 
 	# Instantiate a new Slideshow object.
 	$slideshow=Slideshow::getInstance();
+	//$slideshow->setButtonNext('NextVideo');
+	//$slideshow->setButtonPrevious('PreviousVideo');
 	$slideshow->setSelector('.video-feed-list');
 	$slideshow->setVertical('true');
 	$slideshow->setStart(0);
