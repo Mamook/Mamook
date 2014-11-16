@@ -404,6 +404,7 @@ img {
 	font-weight:700;
 	color:#fff;
 	text-transform:uppercase;
+	cursor:pointer;
 }
 .post .edit {
 	width:46px;
@@ -726,6 +727,7 @@ img {
 .action,
 .filename {
 	position:absolute;
+	cursor:pointer;
 }
 .action,
 .filename {
