@@ -21,16 +21,18 @@
 .price .label {
 	margin-right:4px;
 }
-.info .label,
-.desc .label {
+.info .label {
 	display:inline-block;
-	width:42px;
+	width:62px;
 	margin-right:4px;
 	text-align:right;
 }
+.desc {
+	margin-left:4px;
+}
 .desc .label {
-	width:62px;
-	margin-top:4px;
+	display:block;
+	margin:-4px 0 2px -4px;
 }
 .product .buy,
 .detailed .price {

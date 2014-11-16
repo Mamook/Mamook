@@ -218,7 +218,13 @@ class ProductFormPopulator extends FormPopulator
 				# Check if publisher POST data was sent.
 				if(isset($_POST['publisher']))
 				{
-					# Set the publisher to the Product data member.
+
+					if($_POST['publisher']=='add')
+					{
+						# Set the publisher option to the Populator data member.
+						$this->setPublisherOption($_POST['publisher']);
+					}
+					# Set the publisher Type to the Product data array.
 					$data['Publisher']=$_POST['publisher'];
 				}
 
