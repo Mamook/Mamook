@@ -32,14 +32,14 @@
 	width:62px;
 	margin-top:4px;
 }
-.detailed .buy,
+.product .buy,
 .detailed .price {
 	display:block;
 	margin:0 8px 4px 0;
 	line-height:23px;
 }
-.detailed .buy,
-.detailed .buy:visited {
+.product .buy,
+.product .buy:visited {
 	float:left;
 	height:23px;
 	background:#fa0; /* for non-css3 browsers */
@@ -54,7 +54,7 @@
 	color:#fff;
 	text-transform:uppercase;
 }
-.detailed .buy:hover {
+.product .buy:hover {
 	background:red;
 }
 
