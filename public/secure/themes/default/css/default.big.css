@@ -374,6 +374,7 @@ img {
 .post {
 	list-style:none inside;
 }
+.action,
 .post .edit,
 .post .edit:visited,
 .post .delete,
@@ -421,6 +422,7 @@ img {
 	float:none;
 	margin:0 0 8px 0;
 }
+.hover .action,
 .post .delete:hover,
 .post .download:hover,
 .post .edit:hover,
@@ -680,40 +682,84 @@ img {
 	width:476px;
 	margin-top:1em;
 }
-.form .checkbox,
-.form .radio {
-	float:left;
-	background-color:transparent;
-	margin:4px 3px 0 3px;
-	border:1px solid #d9cdc0;
-	padding:2px 2px 0 2px;
-	font-family:Helvetica, Arial, Verdana, sans-serif;
-	font-size:1em;
-	color:#000;
-}
-.form .dropMenu,
-.form .file,
-.form .password,
-.form .select,
-.form .text,
-.form .textarea,
-.form .textfield,
-.form .year {
-	background-color:transparent;
+.checkbox,
+.dropMenu,
+.file,
+.password,
+.radio,
+.select,
+.text,
+.textarea,
+.textfield,
+.uploader,
+.year {
+	background:#fff; /* for non-css3 browsers */
+	background:-webkit-linear-gradient(#fff, #fff8f2); /* For Safari 5.1 to 6.0 */
+	background:-moz-linear-gradient(#fff, #fff8f2); /* for firefox 3.6+ */
+	background:linear-gradient(#fff, #fff8f2); /* Standard syntax */
 	width:240px;
 	margin:2px 0 2px 4px;
-	border:1px solid #d9cdc0;
+	border:1px solid #000;
+	border-radius:4px;
 	padding:2px 2px 0 2px;
 	font-family:Helvetica, Arial, Verdana, sans-serif;
 	font-size:1em;
 	color:#000;
 }
-.form .date select {
+.text,
+.password,
+.uploader {
+	height:16px;
+}
+.checkbox,
+.radio {
+	float:left;
+	margin:4px 3px 0 3px;
+}
+.uploader {
+	display:inline-block;
+	vertical-align:middle;
+	position:relative;
+	padding:0 4px 0 0;
+}
+.file,
+.action,
+.filename {
+	position:absolute;
+}
+.action,
+.filename {
+	display:inline-block;
+}
+.action {
+	top:0;
+	right:0;
+	height:16px;
+	border-radius:4px;
+	margin:0;
+	line-height:16px;
+}
+.file {
+	height:16px;
+	width:244px;
+	margin:0;
+	padding:0;
+	z-index:2;
+}
+.filename {
+	right:0;
+	height:14px;
+	width:211px;
+	padding-top:2px;
+	overflow:hidden;
+	z-index:1;
+}
+.date select {
 	float:none;
 	width:auto;
 	margin:0 10px 0 0;
 }
-.form .label {
+.label {
 	float:left;
 	width:104px;
 	margin-right:5px;
@@ -723,8 +769,8 @@ img {
 	font:normal 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#262626;
 }
-.form .box_label,
-.form .radio_label {
+.box_label,
+.radio_label {
 	float:left;
 	width:250px;
 	margin-left:5px;
@@ -974,10 +1020,11 @@ img {
 .pp_contract {
 	display:none;
 	position:absolute;
-	top:10px;
-	right:30px;
+	bottom:10px;
+	right:6px;
 	width:20px;
 	height:20px;
+	border-radius:4px;
 	text-indent:-10000px;
 	cursor:pointer;
 	z-index:20000;
