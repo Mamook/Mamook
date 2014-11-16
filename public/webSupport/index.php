@@ -26,7 +26,7 @@ try
 	$display='';
 	$good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?success';
 	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail_error';
-	$head='<h1>If you are having trouble with the website, please use the form below and send us an email!</h1>';
+	$head='<p>If you are having trouble with the website, please use the form below and send us an email!</p>';
 	$recipients='webmaster';
 
 	if(isset($_GET['success']))

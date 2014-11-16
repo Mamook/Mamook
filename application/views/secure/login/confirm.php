@@ -1,6 +1,6 @@
 <?php /* application/views/secure/login/confirm.php */
 
-echo '<main id="main" class="main" role="main">',
+echo '<main id="main" class="main secure" role="main">',
 	'<div class="main-1">',
 		# Get the main content.
 		$display_content,

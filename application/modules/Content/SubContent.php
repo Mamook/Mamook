@@ -2629,7 +2629,7 @@ class SubContent
 							if(!empty($link))
 							{
 								# Set the link to a variable.
-								$more_content='<a href="'.$link.'" class="more">'.$this->getMore().'</a>';
+								$more_content='<a href="'.$link.'" class="more" target="_blank">'.$this->getMore().'</a>';
 								# Check if there should be a button.
 								if($buttons===TRUE)
 								{

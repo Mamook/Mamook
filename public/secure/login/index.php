@@ -38,14 +38,14 @@ try
 	if($main_content->getRegistration()===NULL)
 	{
 		# Instantiate form generator object
-		$register=new FormGenerator('register', REDIRECT_TO_LOGIN.'register/', 'POST', '_top', FALSE, 'button-register');
+		$register=new FormGenerator('register', REDIRECT_TO_LOGIN.'register/', 'POST', '_top', FALSE, 'form');
 		$register->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 		if($login->getPostLogin() !== NULL)
 		{
 			$register->addElement('hidden', array('name'=>'_post_login', 'value'=>$login->getPostLogin()));
 		}
-		$register->addElement('submit', array('name'=>'register', 'value'=>'Register'), '', NULL, 'submit-login');
-		$display='<div id="register">'.
+		$register->addElement('submit', array('name'=>'register', 'value'=>'Register'), '', NULL, 'submit-register');
+		$display='<div id="register" class="register">'.
 			'<h3>Register</h3>'.
 			'<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>'.
 			$register->display().

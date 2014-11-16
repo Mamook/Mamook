@@ -79,17 +79,14 @@ audio {
 	border-radius:6px 6px 0 0;
 	margin-bottom:2px;
 }
-.arrow-prev:hover {
-}
 .arrow-next {
 	background-image:url(../images/buttons/Next.png);
 	border-radius:0 0 6px 6px;
-	margin-top:2px;
-}
-.arrow-next:hover {
+	margin-top:1px;
 }
 [class|=arrow].disabled {
 	background:0;
+	cursor:default;
 }
 #comments {
 	clear:both;
