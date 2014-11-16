@@ -759,7 +759,7 @@ img {
 	width:auto;
 	margin:0 10px 0 0;
 }
-.label {
+.form .label {
 	float:left;
 	width:104px;
 	margin-right:5px;
