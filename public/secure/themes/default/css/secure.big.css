@@ -1,4 +1,8 @@
 @charset "UTF-8";
+
+/**********************************/
+/***        CSS3 Document       ***/
+/**********************************/
 * {
 	margin:0;
 	padding:0;
@@ -83,7 +87,9 @@ a:hover,
 	text-align:left;
 }
 
-#masthead {
+
+/* Masthead */
+.masthead {
 	background:#05698a;
 	background:-moz-linear-gradient(top, rgba(5, 105, 138, 1) 0%, rgba(0, 153, 204, 1) 26%, rgba(41, 163, 204, 1) 40%);
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(5, 105, 138, 1)), color-stop(26%, rgba(0, 153, 204, 1)), color-stop(40%, rgba(41, 163, 204, 1)));
@@ -92,13 +98,11 @@ a:hover,
 	background:linear-gradient(to bottom, rgba(5, 105, 138, 1) 0%, rgba(0, 153, 204, 1) 26%, rgba(41, 163, 204, 1) 40%);
 	height:48px;
 }
-
 .h-mast {
 	padding-top:11px;
 	padding-left:100px;
 	font-size:24px;
 }
-
 .h-mast a {
 	display:inline-block;
 	font-weight:100;
@@ -109,11 +113,21 @@ a:hover,
 	-o-transform:scale(1.6, 1);
 	color:#fff;
 }
-
 .slogan {
 	display:none;
 }
 
+
+/* SubNavbar */
+
+
+/* Navigation Bar */
+
+
+/* Menu Bars */
+
+
+/* Main Content */
 .main {
 	display:inline-block;
 	background:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.78) 22%, rgba(206, 229, 240, 0.56) 44%, rgba(160, 201, 232, 0.24) 76%, rgba(255, 255, 255, 0) 100%);
@@ -124,7 +138,7 @@ a:hover,
 	width:577px;
 	min-height:574px;
 	border-radius:30px;
-	margin:7px 0 0 15px;
+	margin:7px 0 20px 15px;
 	padding:24px 14px;
 }
 
@@ -593,74 +607,43 @@ select {
 	display:inline-block;
 }
 
-#alertDiv {
-	position:absolute;
-	top:20%;
-	left:auto;
-	right:auto;
-	margin:0 auto;
-}
 
-.error_box,
-#alertDiv {
-	border:4px solid rgba(148, 147, 147, .6);
-	width:557px;
-	margin:1em auto;
+
+.alertBox {
+	position:absolute;
+	width:537px;
+	background-color:rgba(150, 149, 149, .8);
+	border:4px solid rgba(100, 100, 100, .15);
+	margin:0 auto;
+	padding:10px;
 	color:#fff;
 	z-index:100;
 }
-
-#alertDiv .title {
-	display:none;
+.noscript .alertBox {
+	position:relative;
+	margin:6px 0;
 }
-
-.error_box h3,
-#alertDiv h3 {
+.alertBox .title,
+.alertBox h3 {
 	display:block;
 	background-color:transparent;
 	width:auto;
 	padding:0 0 6px;
 	font:700 16px/1 Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+	color:red;
 }
-
-.error_box .message,
-#alertDiv .message {
-	background-color:rgba(150, 149, 149, .8);
+.alertBox .message {
 	font:700 14px/1 Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
-	padding:10px;
 }
-
-.error_box > h3:first-child {
+.alertBox > h3:first-child {
 	text-transform:none;
 }
-
-.error_box ul,
-#alertDiv ul {
+.alertBox ul {
 	list-style:disc inside;
 }
-
-#alertDiv li {
+.alertBox li {
 	padding:2px 0;
 }
-
-.error_box a {
-	color:#930;
-}
-
-.error_box a:visited {
-	color:#300;
-}
-
-.error_box a:hover {
-	color:#0096e3;
-}
-
-#modalContainer h1 {
-	font-size:1.4em;
-	line-height:1.4em;
-	color:#c3382f;
-}
-
 a.okBtn,
 a.okBtn:visited {
 	float:none;
@@ -676,16 +659,9 @@ a.okBtn:visited {
 	color:#909090;
 	cursor:pointer;
 }
-
 a.okBtn:hover {
 	background-image:url(../images/x_close_hover.png);
 }
-
-.error_box a:active {
-	color:#000;
-}
-
-#modalDiv,
 .overlay {
 	position:fixed;
 	top:0;
@@ -696,6 +672,7 @@ a.okBtn:hover {
 	min-height:100%;
 	z-index:99;
 }
+
 
 [class|=nav] {
 	list-style:none;
@@ -1084,4 +1061,42 @@ a.pp_close {
 .pp_overlay.overlay {
 	display:none;
 	z-index:9500;
+}
+
+
+/* Footer */
+.footer {
+	clear:both;
+	position:absolute;
+	bottom:0;
+	height:15px;
+	width:1010px;
+	background:linear-gradient(to top, rgba(5, 105, 138, 1) 0%, rgba(0, 153, 204, 1) 26%, rgba(41, 163, 204, 1) 40%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+	padding:8px 4px;
+	font:normal 11px/11px Helvetica, Arial, Verdana, sans-serif;
+}
+.footer .info {
+	list-style:none;
+}
+.footer [class|=list-info],
+.footer [class|=list-nav] {
+	display:inline-block;
+}
+.footer [class|=list-info],
+.footer [class|=list-nav] {
+	padding:0 6px;
+}
+.footer .list-info-nav {
+	float:right;
+	padding:0;
+}
+.footer,
+.footer [class|=list-nav] a,
+.footer [class|=list-nav] a:visited {
+	color:#fff;
+	text-decoration:none;
+}
+.footer [class|=list-nav] a:hover,
+.footer [class|=list-nav] a:active {
+	text-shadow:0 0 5px #05698a;
 }
