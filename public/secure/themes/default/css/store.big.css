@@ -29,13 +29,30 @@
 	width:62px;
 	margin-top:4px;
 }
-.detailed .buy {
-	float:left;
-}
 .detailed .buy,
 .detailed .price {
 	display:block;
 	margin:0 4px 4px 0;
+	line-height:23px;
+}
+.detailed .buy,
+.detailed .buy:visited {
+	float:left;
+	height:23px;
+	background:#fa0; /* for non-css3 browsers */
+	background:-webkit-linear-gradient(left, red, #ffb600); /* For Safari 5.1 to 6.0 */
+	background:-moz-linear-gradient(right, red, #ffb600); /* for firefox 3.6+ */
+	background:linear-gradient(to right, red, #ffb600); /* Standard syntax */
+	border-radius:4px;
+	padding:0 4px;
+	text-align:center;
+	font-size:10px;
+	font-weight:700;
+	color:#fff;
+	text-transform:uppercase;
+}
+.detailed .buy:hover {
+	background:red;
 }
 
 .divider {
@@ -131,15 +148,12 @@
 	width:474px;
 	border-top:1px solid #a0a0a1;
 	padding:20px 0 10px 0;
-	font:normal 12px/12px Helvetica,
-Arial,
-Verdana,
-sans-serif;
+	font:normal 12px/1 Helvetica, Arial, Verdana, sans-serif;
 }
 .map_product .title,
 .product_detailed .title {
 	padding:0;
-	font:bold 14px/14px "Trebuchet MS", Helvetica, Arial, sans-serif;
+	font:bold 14px/1 "Trebuchet MS", Helvetica, Arial, sans-serif;
 	color:#663700;
 	margin:0 0 4px 0;
 }
