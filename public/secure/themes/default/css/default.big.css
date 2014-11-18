@@ -27,6 +27,15 @@ label {
 	color:#404040;
 }
 a {
+	color:#f60;
+	text-decoration:none;
+}
+a:visited {
+	color:#f00;
+}
+a:hover,
+a:active {
+	color:#c60;
 	text-decoration:none;
 }
 abbr {
@@ -279,17 +288,8 @@ img {
 	border:2px solid #5f5f5f;
 	border-radius:8px;
 }
-.main a {
-	color:#f60;
-	text-decoration:none;
-}
-.main a:visited {
-	color:#f00;
-}
-.main a:hover,
-.main a:active {
-	color:#c60;
-	text-decoration:none;
+.image-link .image:hover {
+	border-color:#fff;
 }
 .main h3 {
 	color:#404040;
