@@ -39,7 +39,7 @@ try
 	# Get the User's display name and set it to a variable.
 	$display_name=$user_obj->getDisplayName();
 	# Set the page title.
-	$page_title=$display_name.'\'s Profile';
+	$main_content->setPageTitle($display_name.'\'s Profile');
 
 	# Get the profile form template.
 	require TEMPLATES.'forms'.DS.'account_form.php';

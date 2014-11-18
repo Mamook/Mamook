@@ -50,6 +50,10 @@ try
 		}
 		# Set the product's title as the page title.
 		$page_title=$displayed_product['title'];
+		if(!empty($page_title))
+		{
+			$main_content->setPageTitle($page_title);
+		}
 	}
 	else
 	{

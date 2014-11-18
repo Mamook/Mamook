@@ -80,7 +80,11 @@ try
 					$display.='</div>';
 				}
 				# Set the product's title as the page title.
-				$main_content->setPageTitle($displayed_product['title']);
+				$page_title=$displayed_product['title'];
+				if(!empty($page_title))
+				{
+					$main_content->setPageTitle($page_title);
+				}
 				# Remove the page's sub title.
 				$main_content->setSubTitle(NULL);
 				$params='product='.$_GET['product'];
