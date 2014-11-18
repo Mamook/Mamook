@@ -144,6 +144,7 @@ try
 			$display.='<div class="empty"></div>';
 			$display.=$member['bio'];
 			$display.='</div>';
+			var_dump($member['website']);exit;
 			# Check if the person accepts emails from other users.
 			if($member['questions']===0)
 			{
@@ -195,7 +196,11 @@ try
 			}
 			# Set the page title as the person's display name.
 			$page_title=$member['name'];
-			# Set the cv to the display variable..
+			if(!empty($page_title))
+			{
+				$main_content->setPageTitle($page_title);
+			}
+			# Set the cv to the display variable.
 			$cv_display=((isset($member['cv'])) ? $member['cv'] : '');
 		}
 		else

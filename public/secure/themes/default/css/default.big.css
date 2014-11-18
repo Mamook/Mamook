@@ -328,7 +328,7 @@ img {
 	margin:0;
 	text-decoration:none;
 }
-.content_text h3, .main .post h3 {
+.content_text h3 {
 	margin:20px 0 10px 0;
 	font-size:18px;
 	line-height:20px;
@@ -466,11 +466,23 @@ img {
 	max-height:196px;
 }
 .post .label,
-#profile .label {
+.profile .label {
 	margin:0;
 	padding-left:4px;
 	font:bold 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000;
+}
+.post-author {
+	display:inline-block;
+	border:1px solid #5e5e5e;
+	border-radius:6px;
+	margin-top:4px;
+	padding:1px 2px;
+	opacity:.8;
+}
+.post-author .label {
+	padding:0;
+	font-weight:400;
 }
 .post li {
 	margin-top:-1px;
@@ -478,22 +490,17 @@ img {
 	border-bottom:1px solid #d0d0d0;
 	padding:10px 0;
 }
-.post-author {
+.profile .post-author,
+.post-publisher {
 	float:left;
 	clear:left;
 }
 .post-date {
 	display:block;
-	font:bold 12px/14px Helvetica, Arial, Verdana, sans-serif;
+	font:400 12px/14px Helvetica, Arial, Verdana, sans-serif;
 	color:#505050;
 }
-.post-publisher {
-	float:left;
-	clear:left;
-}
 .post-title {
-	float:left;
-	clear:left;
 	font:bold 14px/16px Helvetica, Arial, Verdana, sans-serif;
 	margin:3px 0;
 }
@@ -509,6 +516,7 @@ img {
 }
 .profile-bio .label {
 	display:block;
+	margin:0 0 2px 4px;
 	padding:0;
 }
 .profile-country,
@@ -519,6 +527,7 @@ img {
 .profile-affiliation {
 	display:block;
 }
+
 .splash_content_text {
 	border-bottom:3px solid #d0d0d0;
 	padding:10px 0;
