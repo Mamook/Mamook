@@ -1,12 +1,1 @@
-//<![CDATA[
-function checkFields(el) {
-    var sel = $(el).val();
-    $("#amazon").toggle(sel == "amazon");
-    $("#external").toggle(sel == "external");
-    $("#internal").toggle(sel == "internal");
-}
-$(function () {
-    checkFields($(".product_type_radio:checked"));
-    $(".product_type_radio").on("click", function () { checkFields(this); });
-});
-//]]>
+function checkFields(a){a=$(a).val();$("#amazon").toggle("amazon"==a);$("#external").toggle("external"==a);$("#internal").toggle("internal"==a)}$(function(){checkFields($(".product_type_radio:checked"));$(".product_type_radio").on("click",function(){checkFields(this)})});

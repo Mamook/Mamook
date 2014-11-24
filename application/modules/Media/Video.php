@@ -2216,7 +2216,6 @@ class Video
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
-
 		if(!empty($large_video))
 		{
 			# Get the video ID and assign it to a variable.
@@ -2306,7 +2305,7 @@ class Video
 
 		# Small Videos
 		$display='<div class="video-feed-wrapper">'.
-			'<div class="arrow-prev"></div>'.
+			'<button class="arrow-prev">Previous Video</button>'.
 			'<div class="video-feed-list">'.
 			'<ul class="video-feed">';
 
@@ -2362,7 +2361,7 @@ class Video
 
 		$display.='</ul>'.
 			'</div>'.
-			'<div class="arrow-next"></div>'.
+			'<button class="arrow-next">Next Video</button>'.
 			'</div>';
 
 		return $display;

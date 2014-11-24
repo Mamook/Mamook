@@ -27,6 +27,10 @@ try
 	$display=$subcontent->displayBranchSubContent($branch);
 	# Set the page title to the post's title.
 	$page_title=$subcontent->getPostTitleDisplay();
+	if(!empty($page_title))
+	{
+		$main_content->setPageTitle($page_title);
+	}
 
 	# Get the announcement navigation list.
 	require TEMPLATES.'announcement_nav.php';

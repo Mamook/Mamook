@@ -3,10 +3,15 @@
 # Except this file
 !.gitignore
 !bsmSelect
+!clearInput.big.js
+!customAlert.big.js
 !jCarouselLite.js
+!jQuery.big.js
+!JSForms.big.js
 !JSForms.js
 !media
 !plugins.js
+!prettyPhoto.big.js
 !products
 !sitemap
 !tiny_mce

@@ -27,7 +27,7 @@ try
 	$get_query=GET_QUERY;
 	$good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?success';
 	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail_error';
-	$head='<h1>Use the form below to send me an email</h1>';
+	$head='<p>Use the form below to send an email</p>';
 	$meta_desc='Contact form';
 
 	### DEBUGGING ###

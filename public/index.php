@@ -51,7 +51,7 @@ try
 	# Get the Announcement SubContent.
 	$subcontent->getSubContent('Announcement', 1, '*', 'date', 'DESC', $and_sql);
 	# Set the Announcement subcontent to a variable.
-	$announcement_subcontent=$subcontent->displaySubContent(120, MAN_USERS, FALSE, 3, FALSE, 0);
+	$announcement_subcontent=$subcontent->displaySubContent(120, MAN_USERS, TRUE, 3, FALSE, 0);
 	if(!empty($announcement_subcontent))
 	{
 		# Loop through the announcement subcontent array.

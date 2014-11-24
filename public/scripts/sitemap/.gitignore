@@ -2,7 +2,6 @@
 *
 # Except this file
 !.gitignore
-!audio.big.js
-!audio.js
-!video.big.js
-!video.js
+!images
+!sitemap.big.js
+!sitemap.js

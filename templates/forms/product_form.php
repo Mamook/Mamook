@@ -124,10 +124,6 @@ if(empty($duplicates))
 				# Set the selected publisher to the default.
 				$pub_options['selected']=$row->name;
 			}
-			elseif($populator->getPublisherOption()==='add')
-			{
-				$pub_options['selected']='Add Publisher';
-			}
 		}
 	}
 	else

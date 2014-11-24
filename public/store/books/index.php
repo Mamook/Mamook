@@ -70,6 +70,7 @@ try
 					$display.=$displayed_product['price'];
 					$display.=$displayed_product['image'];
 					$display.='<div class="info">';
+					$display.='<span class="title"><span class="label">Title:</span>'.strip_tags(html_entity_decode(stripslashes($displayed_product['title']), ENT_COMPAT, 'UTF-8'), '<abbr>').'</span>';
 					$display.=$displayed_product['author'];
 					$display.=$displayed_product['publisher'];
 					$display.='</div>';
@@ -80,6 +81,12 @@ try
 				}
 				# Set the product's title as the page title.
 				$page_title=$displayed_product['title'];
+				if(!empty($page_title))
+				{
+					$main_content->setPageTitle($page_title);
+				}
+				# Remove the page's sub title.
+				$main_content->setSubTitle(NULL);
 				$params='product='.$_GET['product'];
 			}
 			else

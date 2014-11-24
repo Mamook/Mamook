@@ -4,11 +4,11 @@
  * based on Alternate Select Multiple (asmSelect) 1.0.4a beta (http://www.ryancramer.com/projects/asmselect/)
  *
  * Copyright (c) 2009 by Ryan Cramer - http://www.ryancramer.com
- * Copyright (c) 2010 by Victor Berchet - http://www.github.com/vicb
+ * Copyright (c) 2010-2013 by Victor Berchet - http://www.github.com/vicb
  *
  * Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
  *
- * bsmSelect version: v1.4.3 - 2011-05-05
+ * bsmSelect version: v1.4.7 - 2013-12-19
  */
 
 (function($) {
@@ -39,7 +39,7 @@
 
       if (o.addItemTarget === 'original') {
         $('option', this.$original).each(function(i, o) {
-          if ($(o).data('bsm-order') === null) { $(o).data('bsm-order', i); }
+          if ($(o).data('bsm-order') === undefined) { $(o).data('bsm-order', i); }
         });
       }
 
@@ -69,7 +69,7 @@
       if (!this.$list.parent().length) { this.$original.before(this.$list); }
 
       if (this.$original.attr('id')) {
-        $('label[for=' + this.$original.attr('id') + ']').attr('for', this.$select.attr('id'));
+        $("label[for='" + this.$original.attr('id') + "']").attr('for', this.$select.attr('id'));
       }
 
       // set up remove event (may be a link, or the list item itself)
@@ -86,11 +86,12 @@
      * Check to make sure it's not an IE screwup, and add it to the list
      */
     selectChangeEvent: function() {
-      if ($.browser.msie && $.browser.version < 7 && !this.ieClick) { return; }
+      if ($.browser && $.browser.msie && $.browser.version < 7 && !this.ieClick) { return; }
       var bsmOpt = $('option:selected:eq(0)', this.$select);
       if (bsmOpt.data('orig-option')) {
-        this.addListItem(bsmOpt);
-        this.triggerOriginalChange(bsmOpt.data('orig-option'), 'add');
+        if (this.triggerOriginalChange(bsmOpt.data('orig-option'), 'add') == false) {
+          this.addListItem(bsmOpt);
+        }
       }
       this.ieClick = false;
     },
@@ -115,7 +116,7 @@
         this.buildSelect();
         // opera has an issue where it needs a force redraw, otherwise
         // the items won't appear until something else forces a redraw
-        if ($.browser.opera) { this.$list.hide().show(); }
+        if ($.browser && $.browser.opera) { this.$list.hide().show(); }
       }
     },
 
@@ -198,7 +199,7 @@
         .removeAttr('selected')
         .attr('disabled', 'disabled')
         .toggle(!this.options.hideWhenAdded);
-      if ($.browser.msie && $.browser.version < 8) { this.$select.hide().show(); } // this forces IE to update display
+      if ($.browser && $.browser.msie && $.browser.version < 8) { this.$select.hide().show(); } // this forces IE to update display
     },
 
     /**
@@ -210,7 +211,7 @@
       $bsmOpt.removeClass(this.options.optionDisabledClass)
         .removeAttr('disabled')
         .toggle(!this.options.hideWhenAdded);
-      if ($.browser.msie && $.browser.version < 8) { this.$select.hide().show(); } // this forces IE to update display
+      if ($.browser && $.browser.msie && $.browser.version < 8) { this.$select.hide().show(); } // this forces IE to update display
     },
 
     /**
@@ -243,7 +244,7 @@
           break;
         case 'original':
           var order = $origOpt.data('bsm-order'), inserted = false;
-          $('.' + o.listItemClass, this.$list).each(function() {
+          this.$list.children().each(function() {
             if (order < $(this).data('bsm-option').data('orig-option').data('bsm-order')) {
               $item.hide().insertBefore(this);
               inserted = true;
@@ -268,15 +269,16 @@
     /**
      * Remove an item from the list of selection
      *
-     * @param {jQuey} $item A list item
+     * @param {jQuery} $item A list item
      */
     dropListItem: function($item) {
       var $bsmOpt = $item.data('bsm-option'), o = this.options;
-      $bsmOpt.removeData('item').data('orig-option').removeAttr('selected');
-      (this.buildingSelect ? $.bsmSelect.effects.remove : o.hideEffect)($item);
-      this.enableSelectOption($bsmOpt);
-      o.highlightEffect(this.$select, $item, o.highlightRemovedLabel, o);
-      this.triggerOriginalChange($bsmOpt.data('orig-option'), 'drop');
+      if (this.triggerOriginalChange($bsmOpt.data('orig-option'), 'drop') == false) {
+        $bsmOpt.removeData('item').data('orig-option').removeAttr('selected');
+        (this.buildingSelect ? $.bsmSelect.effects.remove : o.hideEffect)($item);
+        this.enableSelectOption($bsmOpt);
+        o.highlightEffect(this.$select, $item, o.highlightRemovedLabel, o);
+      }
     },
 
     /**
@@ -285,15 +287,19 @@
      *
      * @param {jQuery} $origOpt The option from the original select
      * @param {String} type     Event type
+     *
+     * @return Whether the event default is prevented
      */
     triggerOriginalChange: function($origOpt, type) {
+      var event = $.Event('change');
       this.ignoreOriginalChangeEvent = true;
-      this.$original.trigger('change', [{
+      this.$original.trigger(event, [{
         option: $origOpt,
         value: $origOpt.val(),
         item: $origOpt.data('bsm-option').data('item'),
         type: type
       }]);
+      return event.isDefaultPrevented();
     }
   };
 

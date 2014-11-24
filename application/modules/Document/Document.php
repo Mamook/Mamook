@@ -200,7 +200,7 @@ class Document
 		{
 			$error_box.='<noscript>';
 			$error_box.='<div class="empty"></div>';
-			$error_box.='<div class="error_box">';
+			$error_box.='<div class="alertBox">';
 			$error_box.='<h3>'.$alert_title.'</h3>';
 			if(!empty($error))
 			{
@@ -208,7 +208,7 @@ class Document
 				//$error='<p>'.$error.'</p>';
 				# Concatenate the error message to the error box.
 				$error_box.=$error;
-				# Concatenate the error message to the errorvariable for Javascript error display..
+				# Concatenate the error message to the errorvariable for Javascript error display.
 				$js_errors.=$error;
 				# clear the error
 				unset($error);
@@ -219,7 +219,7 @@ class Document
 				$message='<p>'.$_SESSION['message'].'</p>';
 				# Concatenate the error message to the error box.
 				$error_box.=$message;
-				# Concatenate the error message to the errorvariable for Javascript error display..
+				# Concatenate the error message to the errorvariable for Javascript error display.
 				$js_errors.=$message;
 				# Clear the message
 				unset($_SESSION['message']);
