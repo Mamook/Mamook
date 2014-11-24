@@ -20,8 +20,8 @@ FFMPEG
 	Commands:
 		mkdir client_website.com
 		cd client_website.com
+		git init
 		git remote add Client_Website gitolite@jamtheforce.com:client_website
-		git remote add Framework gitolite@jamtheforce.com:jamtheforce
 		git pull Client_Website master
 
 3. Make sure the following folders are readable and writable (775):
