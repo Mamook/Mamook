@@ -1,8 +1,5 @@
 <?php /* templates/page.php */
 
-$display_content=$main_content->displayContent($image_link);
-$display_quote=$main_content->displayQuote();
-
 # Check if the site is in Maintenance mode. If it is, redirect to maintenance page.
 if(($main_content->getMaintenance()!==NULL) && (strstr(FULL_URL, 'maintenance')===FALSE))
 {

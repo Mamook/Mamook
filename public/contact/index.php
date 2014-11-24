@@ -22,6 +22,15 @@ try
 	# Get the email form default values.
 	require TEMPLATES.'forms'.DS.'email_form_defaults.php';
 
+	# Create display variables.
+	$display_main1='';
+	$display_main2='';
+	$display_main3='';
+	$display_box1a='';
+	$display_box1b='';
+	$display_box1c='';
+	$display_box2='';
+
 	$address='';
 	$display='';
 	$get_query=GET_QUERY;
@@ -60,16 +69,61 @@ try
 	# Get the email form.
 	require TEMPLATES.'forms'.DS.'email_form.php';
 
-	if($main_content->getAddress1()!==NULL)
+	# Check if there is an address to display.
+	if(
+			$main_content->getAddress1()!==NULL OR
+			$main_content->getAddress2()!==NULL OR
+			$main_content->getCity()!==NULL OR
+			$main_content->getState()!==NULL OR
+			$main_content->getZipcode()!==NULL OR
+			$main_content->getCountry()!==NULL OR
+			$main_content->getPhone()!==NULL OR
+			$main_content->getFax()!==NULL OR
+			$main_content->getEmail()!==NULL
+		)
 	{
-		$address.='<p>'.$main_content->getAddress1().'<br />';
-		$address.=(($main_content->getAddress2()!==NULL) ? $main_content->getAddress2().'<br />' : '');
-		$address.=$main_content->getCity().', '.$main_content->getState().' '.$main_content->getZipcode().'</p>';
+		# Set the microformat url for the <link profile> tag in the header.
+		$microformat_url='http://microformats.org/profile/hcard';
+		# Create the address block.
+		$address.='<address class="vcard">';
+		# Check if there is a postal address.
+		if(
+				$main_content->getAddress1()!==NULL OR
+				$main_content->getAddress2()!==NULL OR
+				$main_content->getCity()!==NULL OR
+				$main_content->getState()!==NULL OR
+				$main_content->getZipcode()!==NULL
+			)
+		{
+			$address.='<div class="adr">';
+			$address.=(($main_content->getAddress1()!==NULL) ? '<div class="street-address">'.$main_content->getAddress1().'</div>' : '');
+			$address.=(($main_content->getAddress2()!==NULL) ? '<div class="extended-address">'.$main_content->getAddress2().'</div>' : '');
+			$address.=(($main_content->getCity()!==NULL) ? '<span class="locality">'.$main_content->getCity().'</span>' : '');
+			$address.=(($main_content->getState()!==NULL) ? '<span class="region">'.$main_content->getState().'</span>' : '');
+			$address.=(($main_content->getZipcode()!==NULL) ? '<span class="postal-code">'.$main_content->getZipcode().'</span>' : '');
+			$address.=(($main_content->getCountry()!==NULL) ? '<div class="country-name">'.$main_content->getCountry().'</div>' : '');
+			# Close the postal address block.
+			$address.='</div>';
+		}
+		$address.=(($main_content->getPhone()!==NULL) ? '<div class="tel">Tel: <a href="tel:'.$main_content->getPhone().'" class="value" title="Call via phone">'.$main_content->getPhone().'</a></div>' : '');
+		$address.=(($main_content->getFax()!==NULL) ? '<div class="tel"><span class="type">Fax</span>: <span class="value">'.$main_content->getFax().'</span></div>' : '');
+		$address.=(($main_content->getEmail()!==NULL) ? '<div class="email">Email: <a href="mailto:'.$main_content->getEmail().'" class="value" title="send an email">'.$main_content->getEmail().'</a></div>' : '');
+		# Close the address block.
+		$address.='</address>';
 	}
-	if($main_content->getPhone()!==NULL)
-	{
-		$address.='<h3>Our phone number is:</h3><p>USA '.$main_content->getPhone().'</p>';
-	}
+
+	# Get the page title and subtitle to display in main-1.
+	$display_main1=$main_content->displayTitles();
+
+	# Get the main content to display in main-2. The "image_link" variable is defined in data/init.php.
+	$display_main2=$main_content->displayContent($image_link);
+	# Add the form display to main-2.
+	$display_main2.=$display;
+	# Add the address to main-2.
+	$display_main2.=$address;
+
+	# Get the quote text to display in main-3.
+	$display_main3=$main_content->displayQuote();
 
 	/*
 	 ** In the page template we

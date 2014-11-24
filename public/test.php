@@ -1,11 +1,11 @@
-<?php /* public/secure/MyAccount/delete.php */
+<?php /* public/test.php */
 
 ob_start(); # Begin output buffering
 
 try
 {
 	# Define the location of this page.
-	define('HERE_PATH', 'secure/MyAccount/delete.php');
+	define('HERE_PATH', 'test.php');
 	/*
 	** In settings we
 	** define application settings
@@ -13,14 +13,7 @@ try
 	** start a new session
 	** connect to the Database
 	*/
-	require_once '../../../settings.php';
-	# Get the FormGenerator Class.
-	require_once MODULES.'Form'.DS.'FormGenerator.php';
-	# Get the FormProcessor Class.
-	require_once MODULES.'Form'.DS.'FormProcessor.php';
-
-	# Check if the User is logged in.
-	$login->checkLogin(ALL_USERS);
+	require_once '../settings.php';
 
 	# Create display variables.
 	$display_main1='';
@@ -33,16 +26,30 @@ try
 
 	$display='';
 
-	# Instantiate a new User object.
-	$user=new User();
+	# Get the TestLogin Class.
+// 	require_once MODULES.'Test'.DS.'TestLogin.php';
+// 	require_once MODULES.'Media'.DS.'Media.php';
 
-	# Instantiate a new FormProcessor object.
-	$form_processor=new FormProcessor();
-	# Process the delete form if it has been submitted.
-	$form_processor->processDeleteAccount();
+	require_once MODULES.'Encryption'.DS.'Encryption.php';
+	# Instantiate a new Encryption object.
+	$encrypt=new Encryption(MYKEY);
+// 	$encrypted_password=$encrypt->enCodeIt('IamHugh');
+	$decrypted_password=$encrypt->deCodeIt('Enter Encrypted Password Here');
+	$display=$decrypted_password;
 
-	# Get the delete_user form.
-	require TEMPLATES.'forms'.DS.'delete_user.php';
+	//$random=$login->randomString('alnum', 32);
+// 	$display='That didn\'t really work now, did it?';
+// 	$media=new Media();
+// 	$yt->setClientID(GOOGLE_CLIENT_ID);
+// 	$yt->setClientSecret(GOOGLE_CLIENT_SECRET);
+// 	$yt->setAccessToken(GOOGLE_ACCESS_TOKEN);
+// 	$yt->setRefreshToken(GOOGLE_REFRESH_TOKEN);
+// 	$yt->setNextURL(APPLICATION_URL.HERE);
+// 	if($yt->pullFeed('uploads')===TRUE)
+// 	{
+// 		$display='';
+// 	}
+// 	var_dump($yt->getFeed());exit;
 
 	# Get the page title and subtitle to display in main-1.
 	$display_main1=$main_content->displayTitles();

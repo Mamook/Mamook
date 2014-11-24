@@ -27,7 +27,11 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		# The title for each page is filled by a variable set on each page.
 		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
 		# Use a custom favicon.
-		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico" />';
+		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico"/>';
+		# Add a pingback link tag.
+		$header.=((isset($pingback_url) && !empty($pingback_url)) ? '<link rel="pingback" href="'.$pingback_url.'"/>' : '');
+		# Add a profile link tag.
+		$header.=((isset($microformat_url) && !empty($microformat_url)) ? '<link rel="profile" href="'.$microformat_url.'" />' : '');
 		# Define the character set.
 		$header.='<meta http-equiv="content-type" content="text/html; charset='.((isset($charset)) ? $charset : 'utf-8').'" />';
 		# Define the default language. If the $meta_language variable is not set on the page, it defaults to "english".
@@ -53,15 +57,6 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'" />';
 		$header.='<meta property="og:locale" content="EN_US" />';
 		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'" />';
-
-		if(isset($pingback_url) && !empty($pingback_url))
-		{
-			$header.='<link rel="pingback" href="'.$pingback_url.'" />';
-		}
-		if(isset($microformat_url) && !empty($microformat_url))
-		{
-			$header.='<link rel="profile" href="'.$microformat_url.'" />';
-		}
 
 		# Add the CSS for the page.
 		$header.=$doc->addStyle();

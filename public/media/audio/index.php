@@ -20,8 +20,14 @@ try
 	# Get the Slideshow Class.
 	require_once MODULES.'Document'.DS.'Slideshow.php';
 
-	# Sub title of the page.
-	$main_content->setSubTitle('Spotlight Audio');
+	# Create display variables.
+	$display_main1='';
+	$display_main2='';
+	$display_main3='';
+	$display_box1a='';
+	$display_box1b='';
+	$display_box1c='';
+	$display_box2='';
 
 	# Set the meta discription for this page.
 	$meta_desc='Audio featured on '.DOMAIN_NAME.'!';
@@ -32,23 +38,28 @@ try
 	# Instantiate the new Audio object.
 	$audio_obj=$media->getAudioObject();
 
-	# Display audio
-	$display=$audio_obj->displayAudioFeed();
-
-	if($display=='<h3>There is no audio to display.</h3>')
-	{
-		$display='<div class="main-1"></div>'.
-			'<div class="main-2">'.
-				'There is no audio to display.'.
-			'</div>'.
-			'<div class="main-3"></div>';
-	}
+	# Get the audio feed and set it to a variable for display.
+	$audio_feed=$audio_obj->displayAudioFeed();
 
 	# Instantiate a new Slideshow object.
 	$slideshow=Slideshow::getInstance();
 	$slideshow->setSelector('.audio-feed-list');
 	$slideshow->setVertical('true');
 	$slideshow->setStart(0);
+
+	# Sub title of the page.
+	$main_content->setSubTitle('Spotlight Audio');
+
+	# Get the page title and subtitle to display in main-1.
+	$display_main1=$main_content->displayTitles();
+
+	# Get the main content to display in main-2. The "image_link" variable is defined in data/init.php.
+	$display_main2=$main_content->displayContent($image_link);
+	# Add the audio feed to main-2.
+	$display_main2.=$audio_feed;
+
+	# Get the quote text to display in main-3.
+	$display_main3=$main_content->displayQuote();
 
 	# Do we need some more CSS?
 	$doc->setStyle(THEME.'css/media.css');

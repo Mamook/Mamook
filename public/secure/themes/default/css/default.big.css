@@ -255,6 +255,9 @@ img {
 	padding-left:12px;
 	text-transform:lowercase;
 }
+.box2.no_content {
+	display:none;
+}
 .playlist {
 	height:12px;
 	padding:6px 6px 4px;
@@ -599,6 +602,9 @@ img {
 	margin:91px 0 0 0;
 	font-size:14px;
 	color:#404040;
+}
+.box1.no_content {
+	display:none;
 }
 .box1 .user_image {
 	position:relative;

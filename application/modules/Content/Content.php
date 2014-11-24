@@ -1123,119 +1123,6 @@ class Content
 
 	/*** public methods ***/
 
-	/***
-	 * displayContent
-	 *
-	 * Display content.
-	 *
-	 * @access	public
-	 */
-	public function displayContent($image_link='lightbox')
-	{
-		# Set variables
-		$image_name=$this->getImage();
-		$image_title=$this->getImageTitle();
-		$site_name=$this->getSiteName();
-		$text=$this->getText();
-		$use_social=$this->getUseSocial();
-
-		# Create an empty variable to hold the html content.
-		$content='';
-
-		if($use_social!==NULL)
-		{
-			# Get Social Button Class.
-			require_once MODULES.'Social'.DS.'Social.php';
-			$social_obj=new Social();
-			# Display the social buttons.
-			$content.=$social_obj->displaySocial();
-		}
-
-		# Check if there is an image to display.
-		if(!empty($image_name))
-		{
-			# Get the Image class.
-			require_once MODULES.'Media'.DS.'Image.php';
-			# Instantiate a new Image object.
-			$image=new Image();
-			# Display the image using the image title if available, otherwise, use the page title.
-			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_link);
-		}
-
-		# Display the content title
-		$content.=$this->displayTitles();
-
-		if(!empty($text))
-		{
-			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
-			$class=((WebUtility::removeIndex(WebUtility::removePageQuery('http://'.FULL_DOMAIN.HERE))==APPLICATION_URL) ? 'splash_content_text' : 'content_text');
-			$content.='<div class="'.$class.'">'.$text.'</div>';
-		}
-		return $content;
-	} #==== End -- displayContent
-
-	/***
-	 * displayQuote
-	 *
-	 * Returns the optional page quote for display.
-	 *
-	 * @access	public
-	 */
-	public function displayQuote()
-	{
-		# Set the quote to a local variable.
-		$quote=$this->getQuote();
-		# Build the quote into a paragraph for display. If there is no quote, return an empty string.
-		return ((!empty($quote)) ? '<p class="quote">'.$quote.'</p>' : '');
-	} #==== End -- displayQuote
-
-	/***
-	 * displayTitles
-	 *
-	 * Display page title and sub title.
-	 *
-	 * @access	public
-	 */
-	public function displayTitles()
-	{
-		# Set the Document instance to a variable.
-		$doc=Document::getInstance();
-
-		# Set variables
-		$hide_title=(($this->getHideTitle()===NULL) ? '' : ' hidden');
-		$page_title=$this->getPageTitle();
-		$sub_title=$this->getSubTitle();
-
-		# Display the content title
-		$content='<h1 class="content_title'.$hide_title.'">'.$page_title.'</h1>';
-
-		if(!empty($sub_title))
-		{
-			$content.='<h2 class="'.(($hide_title!='') ? 'content_title' : 'content_sub_title').'">'.$sub_title.'</h2>';
-		}
-
-		# Add the error box if we have an error or message to display.
-		$content.=$doc->addErrorBox();
-
-		return $content;
-	} #==== End -- displayTitles
-
-	/**
-	 * getInstance
-	 *
-	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
-	 */
-	public static function getInstance()
-	{
-		if(!self::$content)
-		{
-			self::$content=new Content();
-		}
-		return self::$content;
-	} #==== End -- getInstance
-
 	/**
 	 * countAllContent
 	 *
@@ -1265,6 +1152,44 @@ class Content
 			throw $e;
 		}
 	} #==== End -- countAllContent
+
+	/***
+	 * displayContent
+	 *
+	 * Display content.
+	 *
+	 * @access	public
+	 */
+	public function displayContent($image_link='lightbox')
+	{
+		# Set variables
+		$image_name=$this->getImage();
+		$image_title=$this->getImageTitle();
+		$site_name=$this->getSiteName();
+		$text=$this->getText();
+
+		# Create an empty variable to hold the html content.
+		$content='';
+
+		# Check if there is an image to display.
+		if(!empty($image_name))
+		{
+			# Get the Image class.
+			require_once MODULES.'Media'.DS.'Image.php';
+			# Instantiate a new Image object.
+			$image=new Image();
+			# Display the image using the image title if available, otherwise, use the page title.
+			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_link);
+		}
+
+		if(!empty($text))
+		{
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
+			$class=((WebUtility::removeIndex(WebUtility::removePageQuery('http://'.FULL_DOMAIN.HERE))==APPLICATION_URL) ? 'splash_content_text' : 'content_text');
+			$content.='<div class="'.$class.'">'.$text.'</div>';
+		}
+		return $content;
+	} #==== End -- displayContent
 
 	/**
 	 * displayContentList
@@ -1423,6 +1348,95 @@ class Content
 		}
 	} #==== End -- displayContentList
 
+	/***
+	 * displayQuote
+	 *
+	 * Returns the optional page quote for display.
+	 *
+	 * @access	public
+	 */
+	public function displayQuote()
+	{
+		# Set the quote to a local variable.
+		$quote=$this->getQuote();
+		# Build the quote into a paragraph for display. If there is no quote, return an empty string.
+		return ((!empty($quote)) ? '<p class="quote">'.$quote.'</p>' : '');
+	} #==== End -- displayQuote
+
+	/***
+	 * displaySocial
+	 *
+	 * Display social network button content.
+	 *
+	 * @access	public
+	 */
+	public function displaySocial()
+	{
+		# Set variables
+		$use_social=$this->getUseSocial();
+
+		# Create an empty variable to hold the html content.
+		$content='';
+
+		if($use_social!==NULL)
+		{
+			# Get Social Button Class.
+			require_once MODULES.'Social'.DS.'Social.php';
+			$social_obj=new Social();
+			# Display the social buttons.
+			$content.=$social_obj->displaySocial();
+		}
+
+		return $content;
+	} #==== End -- displaySocial
+
+	/***
+	 * displayTitles
+	 *
+	 * Display page title and sub title.
+	 *
+	 * @access	public
+	 */
+	public function displayTitles()
+	{
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
+
+		# Set variables
+		$hide_title=(($this->getHideTitle()===NULL) ? '' : ' hidden');
+		$page_title=$this->getPageTitle();
+		$sub_title=$this->getSubTitle();
+
+		# Display the content title
+		$content='<h1 class="content_title'.$hide_title.'">'.$page_title.'</h1>';
+
+		if(!empty($sub_title))
+		{
+			$content.='<h2 class="'.(($hide_title!='') ? 'content_title' : 'content_sub_title').'">'.$sub_title.'</h2>';
+		}
+
+		# Add the error box if we have an error or message to display.
+		$content.=$doc->addErrorBox();
+
+		return $content;
+	} #==== End -- displayTitles
+
+	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access	public
+	 */
+	public static function getInstance()
+	{
+		if(!self::$content)
+		{
+			self::$content=new Content();
+		}
+		return self::$content;
+	} #==== End -- getInstance
+
 	/**
 	 * getContentPages
 	 *
@@ -1558,6 +1572,31 @@ class Content
 	/*** protected methods ***/
 
 	/***
+	 * checkDomain
+	 *
+	 * Check if URL is a sub-domain
+	 *
+	 * @access	protected
+	 *
+	 */
+	protected function checkDomain()
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
+		# Find the sub-domain and set it.
+		if(SUB_DOMAIN=="www" || SUB_DOMAIN=="")
+		{
+			$sub_domain_sql="`sub_domain` IS NULL";
+		}
+		else
+		{
+			$sub_domain_sql="`sub_domain` = ".$db->quote($db->escape(SUB_DOMAIN));
+		}
+		return $sub_domain_sql;
+	} #==== End -- checkDomain
+
+	/***
 	 * getContent
 	 *
 	 * Get content from the content table
@@ -1627,31 +1666,6 @@ class Content
 			throw $e;
 		}
 	} #==== End -- getContent
-
-	/***
-	 * checkDomain
-	 *
-	 * Check if URL is a sub-domain
-	 *
-	 * @access	protected
-	 *
-	 */
-	protected function checkDomain()
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		# Find the sub-domain and set it.
-		if(SUB_DOMAIN=="www" || SUB_DOMAIN=="")
-		{
-			$sub_domain_sql="`sub_domain` IS NULL";
-		}
-		else
-		{
-			$sub_domain_sql="`sub_domain` = ".$db->quote($db->escape(SUB_DOMAIN));
-		}
-		return $sub_domain_sql;
-	} #==== End -- checkDomain
 
 	/*** End protected methods ***/
 

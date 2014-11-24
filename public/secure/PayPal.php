@@ -17,9 +17,6 @@ try
 	# Get the PayPal Class.
 	require_once MODULES.'PayPal'.DS.'PayPal.php';
 
-	# Find out where to redirect the user if they shouldn't be here.
-	//$login->capturePostLogin();
-
 	if($login->isLoggedIn()!==TRUE)
 	{
 		$_SESSION['message']='Please <a href="'.REDIRECT_TO_LOGIN.'">login</a> to the site first. If you don\'t already have an account, please <a href="'.REDIRECT_TO_LOGIN.'register/">create an account</a>. Registering with '.DOMAIN_NAME.' is free and easy. Registered users have access to downloads and special content.';

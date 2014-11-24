@@ -15,6 +15,20 @@ try
 	*/
 	require_once '../../settings.php';
 
+	# Create display variables.
+	$display_main1='';
+	$display_main2='';
+	$display_main3='';
+	$display_box1a='';
+	$display_box1b='';
+	$display_box1c='';
+	$display_box2='';
+
+	$display='';
+
+	# Create a variable to hold the display of the cv.
+	$cv_display='';
+
 	# Instantiate a new User object.
 	$user=new User();
 
@@ -84,9 +98,6 @@ try
 		$doc->redirect(DEFAULT_REDIRECT);
 	}
 
-	# Create a variable to hold the display of the cv.
-	$cv_display='';
-
 	# Check to make sure the GET data isn't "publisher".
 	if(!isset($_GET['publisher']))
 	{
@@ -144,7 +155,6 @@ try
 			$display.='<div class="empty"></div>';
 			$display.=$member['bio'];
 			$display.='</div>';
-			var_dump($member['website']);exit;
 			# Check if the person accepts emails from other users.
 			if($member['questions']===0)
 			{
@@ -215,6 +225,24 @@ try
 
 	# Set the page title to the post's title.
 	$main_content->setPageTitle($page_title);
+
+	# Get the page title and subtitle to display in main-1.
+	$display_main1=$main_content->displayTitles();
+
+	# Get the main content to display in main-2. The "image_link" variable is defined in data/init.php.
+	$display_main2=$main_content->displayContent($image_link);
+	# Add any display content to main-2.
+	$display_main2.=$display;
+
+	# Get the quote text to display in main-3.
+	$display_main3=$main_content->displayQuote();
+
+	# Only display the CV file to managing users (otherwise it may be a breach of privacy.)
+	if($login->checkAccess(MAN_USERS)===TRUE)
+	{
+		# Display the cv info in box1a.
+		$display_box1a=$cv_display;
+	}
 
 	/*
 	** In the page template we

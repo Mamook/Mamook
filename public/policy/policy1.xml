@@ -7,23 +7,22 @@
 
 <POLICY
     name="policy1.xml"
-    discuri="http://test.cwis.org/policy/"
-    opturi="http://test.cwis.org/policy/OptOut.php"
+    discuri="http://framework.dev/policy/"
+    opturi="http://framework.dev/policy/OptOut.php"
     xml:lang="en">
     <!-- Description of the entity making this policy statement. -->
     <ENTITY>
     <DATA-GROUP>
-<DATA ref="#business.contact-info.telecom.telephone.number">1(360)450-5183</DATA>
-<DATA ref="#business.contact-info.online.email">privacy@cwis.org</DATA>
-<DATA ref="#business.contact-info.online.uri">http://cwis.org/</DATA>
-<DATA ref="#business.contact-info.postal.organization">Center for World Indigenous Studies</DATA>
-<DATA ref="#business.contact-info.postal.street">PMB 214
-1001 Cooper Point Rd SW #140</DATA>
-<DATA ref="#business.contact-info.postal.city">Olympia</DATA>
-<DATA ref="#business.contact-info.postal.stateprov">WA</DATA>
-<DATA ref="#business.contact-info.postal.postalcode">98502-1107</DATA>
-<DATA ref="#business.contact-info.postal.country">USA</DATA>
-<DATA ref="#business.name">Center for World Indigenous Studies</DATA>
+<DATA ref="#business.contact-info.telecom.telephone.number">1(555)555-5555</DATA>
+<DATA ref="#business.contact-info.online.email">privacy@framework.dev</DATA>
+<DATA ref="#business.contact-info.online.uri">http://framework.dev/</DATA>
+<DATA ref="#business.contact-info.postal.organization">Custom Website Framework</DATA>
+<DATA ref="#business.contact-info.postal.street">3 Abbey Road</DATA>
+<DATA ref="#business.contact-info.postal.city">St John's Wood</DATA>
+<DATA ref="#business.contact-info.postal.stateprov">London</DATA>
+<DATA ref="#business.contact-info.postal.postalcode">NW8 9AY</DATA>
+<DATA ref="#business.contact-info.postal.country">UK</DATA>
+<DATA ref="#business.name">Custom Website Framework</DATA>
     </DATA-GROUP>
     </ENTITY>
 
@@ -33,7 +32,7 @@
 
     <!-- Disputes -->
     <DISPUTES-GROUP>
-        <DISPUTES resolution-type="service" service="http://test.cwis.org/policy/dispute.php" short-description="Policy Dispute">
+        <DISPUTES resolution-type="service" service="http://framework.dev/policy/dispute.php" short-description="Policy Dispute">
             <LONG-DESCRIPTION>Please see this page if you have questions or concerns regarding our privacy policy. You may use this page to contact us regarding our policy as well.</LONG-DESCRIPTION>
             <REMEDIES><correct/></REMEDIES>
         </DISPUTES>

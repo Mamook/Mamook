@@ -29,6 +29,15 @@ try
 	# Create a new User object.
 	$user_obj=new User();
 
+	# Create display variables.
+	$display_main1='';
+	$display_main2='';
+	$display_main3='';
+	$display_box1a='';
+	$display_box1b='';
+	$display_box1c='';
+	$display_box2='';
+
 	$display='';
 	$head='';
 	# Create an empty variable for passed params.
@@ -128,6 +137,94 @@ try
 
 	$form_processor=new AccountFormProcessor();
 	require TEMPLATES.'forms'.DS.'account_form.php';
+
+	if(!isset($_GET['user']) && (!isset($_POST['search'])) && ($login->checkAccess(ADMIN_USERS)===TRUE))
+	{
+		$display.='<table width="100%">'.
+			'<tr>'.
+				'<th>'.
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=ID&dir='.$order_direction.'" title="Sort by ID">ID</a>'.
+				'</th>'.
+				'<th>'.
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=Username&dir='.$order_direction.'" title="Sort by Username">Username</a>'.
+				'</th>'.
+				'<th>'.
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=FirstName&dir='.$order_direction.'" title="Sort by First Name">First Name</a>'.
+				'</th>'.
+				'<th>'.
+					'<a href="'.ADMIN_URL.'ManageUsers/?orderby=LastName&dir='.$order_direction.'" title="Sort by Last Name">Last Name</a>'.
+				'</th>'.
+				/*
+				'<th>'.
+					'User Level'.
+				'</th>'.
+				*/
+			'</tr>';
+			foreach($records as $row)
+			{
+				$display.='<tr>'.
+					'<td>'.
+						$row->ID.
+					'</td>'.
+					'<td>'.
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->username.'</a>'.
+					'</td>'.
+					'<td>'.
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->fname.'</a>'.
+					'</td>'.
+					'<td>'.
+						'<a href="'.ADMIN_URL.'ManageUsers/?user='.$row->ID.'">'.$row->lname.'</a>'.
+					'</td>'.
+					/*
+					'<td>'.
+						$row->level.
+					'</td>'.
+					*/
+				'</tr>';
+			}
+		$display.='</table>';
+		# Display the pagenavigator.
+		$display.=$paginator->getNavigator();
+	}
+	else
+	{
+		//$display.=$search_results;
+	}
+
+	# Check if there is GET data and that the passed variable is $_GET['user'].
+	if(isset($_GET['user']))
+	{
+		$img=$staff_obj->getImg();
+		$display_name=$staff_obj->getDisplayName();
+		$cv=$staff_obj->getCV();
+		if(!empty($img))
+		{
+			$img_title=$staff_obj->getImgTitle();
+			$user_image='<div class="profile-image">';
+			$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+			$user_image.='</div>';
+			$display_box1b.=$user_image;
+		}
+		if(!empty($cv))
+		{
+			$user_cv='<div class="profile-cv">';
+			$user_cv.='<span class="label">'.$display_name.'\'s current CV is:</span>';
+			$user_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download '.$display_name.'\'s CV">'.$cv.'</a>';
+			$user_cv.='</div>';
+			$display_box1b.=$user_cv;
+		}
+	}
+
+	# Get the page title and subtitle to display in main-1.
+	$display_main1=$main_content->displayTitles();
+
+	# Get the main content to display in main-2. The "image_link" variable is defined in data/init.php.
+	$display_main2=$main_content->displayContent($image_link);
+	# Add any display content to main-2.
+	$display_main2.=$display;
+
+	# Get the quote text to display in main-3.
+	$display_main3=$main_content->displayQuote();
 
 	# Set the default style sheet(s) we are using for the site. (must be absolute location)
 	//$doc->setStyle(THEME.'css/secure.css');

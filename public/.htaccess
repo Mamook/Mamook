@@ -199,7 +199,7 @@ AuthName "Not Yet"
 AuthType Basic
 #AuthUserFile /home/jamtheforce/staging/jamtheforce.com/public/.htpasswd
 #AuthUserFile /DevSpot/WebDev/JamTheForce/jamtheforce.com/public/.htpasswd
-#AuthUserFile /DevSpot/WebDev/framework/public/.htpasswd
-AuthUserFile /WebDev/JamTheForce/jamtheforce.com/public/.htpasswd
+AuthUserFile /DevSpot/WebDev/framework/public/.htpasswd
+#AuthUserFile /WebDev/JamTheForce/jamtheforce.com/public/.htpasswd
 AuthGroupFile /dev/null
 require valid-user

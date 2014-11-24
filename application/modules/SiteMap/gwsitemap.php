@@ -93,7 +93,7 @@ $ignore=array(
 );
 
 $id=0;
-$display='<div id="sitemap"><ul id="list'.$id.'">';
+$sitemap_display='<div id="sitemap"><ul id="list'.$id.'">';
 $id++;
 $divs='';
 if(substr($startin, strlen($startin)-1, 1)=='/')
@@ -118,23 +118,23 @@ if(count($htmltypes)==0)
 if(!$imgpath)
 	$imgpath='.';
 
-$display .= '<li class="sitemap">';
-$display .= '<img src="'.$imgpath.'/server.gif" align="texttop" alt=""/>';
-$display .= '<strong><a href="'.$startin.'/">'.$site_map->getTitle($index).'</a></strong>';
-$display .= $site_map->showList(ROOT_PATH.$startin);
-$display .= '</li></ul></div>';
+$sitemap_display .= '<li class="sitemap">';
+$sitemap_display .= '<img src="'.$imgpath.'/server.gif" align="texttop" alt=""/>';
+$sitemap_display .= '<strong><a href="'.$startin.'/">'.$site_map->getTitle($index).'</a></strong>';
+$sitemap_display .= $site_map->showList(ROOT_PATH.$startin);
+$sitemap_display .= '</li></ul></div>';
 
 if(is_array($divs))
 {
 	$divs="'".join($divs,"','")."'";
-	$display .= '<script type="text/javascript">';
-	$display .= '//<![CDATA[';
-	$display .= 'd=Array('.$divs.');';
-	$display .= 'for(i=0;i<d.length;i++){';
-	$display .= '\ttoggle("list"+d[i],"img"+d[i]);';
-	$display .= '}';
-	$display .= '//]]>';
-	$display .= '</script>';
+	$sitemap_display .= '<script type="text/javascript">';
+	$sitemap_display .= '//<![CDATA[';
+	$sitemap_display .= 'd=Array('.$divs.');';
+	$sitemap_display .= 'for(i=0;i<d.length;i++){';
+	$sitemap_display .= '\ttoggle("list"+d[i],"img"+d[i]);';
+	$sitemap_display .= '}';
+	$sitemap_display .= '//]]>';
+	$sitemap_display .= '</script>';
 }
 
-echo $display;
+return $sitemap_display;
