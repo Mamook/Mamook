@@ -1,0 +1,19 @@
+ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+	display:block;
+}
+li.sitemap {
+	margin:3px 0 3px 30px;
+}
+li img {
+	padding-right:5px;
+}
+#content {
+	margin:20px 0 50px 200px;
+	max-width:474px;
+}
+h1 {
+	margin-right:15%;
+}

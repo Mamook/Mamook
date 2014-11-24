@@ -145,7 +145,7 @@ img {
 	margin-left:12px;
 	padding:0;
 }
-.subnav [class|=list-nav] a:link,
+.subnav [class|=list-nav] a,
 .subnav [class|=list-nav] a:visited {
 	border-bottom:2px solid #fff;
 	font-weight:bold;
@@ -173,6 +173,22 @@ img {
 .subnav [class|=list-nav].donate.here a,
 .main #payment_types .submit:hover {
 	background-position:bottom left;
+}
+.addthis_toolbox {
+	position:absolute;
+	top:74px;
+	right:235px;
+	height:20px;
+	width:148px;
+	background:#fff;
+	border:2px solid #5f5f5f;
+	border-top:0;
+	border-radius:0 0 6px 6px;
+	padding:5px 4px;
+}
+[class|=list-nav] .addthis_toolbox a,
+[class|=list-nav] .addthis_toolbox a:visited {
+	border:0;
 }
 
 
@@ -367,7 +383,7 @@ img {
 	color:#404040;
 	text-transform:uppercase;
 }
-.content_title a:link,
+.content_title a,
 .content_title a:visited {
 	color:#404040;
 }
@@ -616,7 +632,7 @@ img {
 	text-align:right;
 	color:#404040;
 }
-.box1 a:link,
+.box1 a,
 .box1 a:visited {
 	color:#f00;
 }
@@ -624,7 +640,7 @@ img {
 .box1 a:active {
 	color:#c60;
 }
-.box1 .user_cv a:link,
+.box1 .user_cv a,
 .box1 .user_cv a:visited {
 	color:#f00;
 }
@@ -841,13 +857,13 @@ img {
 	line-height:45px;
 	text-transform:uppercase;
 }
-.pagenavigator a:link,
+.pagenavigator a,
 .pagenavigator a:visited,
 .pagenavigator a:hover,
 .pagenavigator a:active {
 	padding:0 4px;
 }
-.pagenavigator a:link {
+.pagenavigator a {
 	color:#f00;
 }
 .pagenavigator a:visited {
