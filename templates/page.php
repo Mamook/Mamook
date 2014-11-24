@@ -43,6 +43,9 @@ else
 			require TEMPLATES.'navbar.php';
 		}
 
+		# The Breadcrumb
+		//require TEMPLATES.'breadcrumb.php';
+
 		# Main view
 		require VIEWS.Document::findDomainFolder().HERE;
 
