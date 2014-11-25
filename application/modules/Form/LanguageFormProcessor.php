@@ -177,7 +177,7 @@ class LanguageFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'languages` SET '.
-								'`language` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $language_name))).
+								'`language` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $language_name))).
 								'`ISO` = '.((!empty($iso)) ? $db->quote($db->escape($iso)) : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';

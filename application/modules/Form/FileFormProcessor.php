@@ -350,7 +350,7 @@ class FileFormProcessor extends FormProcessor
 							' `language`,'.
 							' `contributor`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 							' '.$db->quote($db->escape($new_name)).','.
 							((!empty($author)) ? ' '.$db->quote($db->escape($author)).',' : '').
 							((!empty($year)) ? ' '.$db->quote($year).',' : '').
@@ -371,7 +371,7 @@ class FileFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'files` SET
-								`title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								`title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								((!empty($new_name)) ? ' `file` = '.$db->quote($db->escape($new_name)).',' : '').
 								' `author` = '.$db->quote($db->escape($author)).','.
 								' `year` = '.((empty($year)) ? $db->quote(0000) : $db->quote($year)).','.

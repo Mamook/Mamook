@@ -421,7 +421,7 @@ class AudioFormProcessor extends FormProcessor
 							' `contributor`,'.
 							' `new`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 							((!empty($description)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($description))))).',' : ' \'\',').
 							((!empty($new_audio_name)) ? ' '.$db->quote($db->escape($new_audio_name)).',' : '').
 							((!empty($embed_code)) ? ' '.$db->quote($db->escape($embed_code)).',' : '').
@@ -459,7 +459,7 @@ class AudioFormProcessor extends FormProcessor
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
-								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';

@@ -415,7 +415,7 @@ class VideoFormProcessor extends FormProcessor
 									'`category`, '.
 									' `contributor`'.
 									') VALUES ('.
-									$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).', '.
+									$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).', '.
 									$db->quote($db->escape($clean_filename.'.jpg')).',
 									\'-36-\', '.
 									$db->quote($contributor_id).
@@ -448,7 +448,7 @@ class VideoFormProcessor extends FormProcessor
 							' `language`,'.
 							' `contributor`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 							((!empty($description)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($description))))).',' : ' \'\',').
 							((!empty($new_video_name)) ? ' '.$db->quote($db->escape($new_video_name)).',' : '').
 							((!empty($embed_code)) ? ' '.$db->quote($db->escape($embed_code)).',' : '').
@@ -485,7 +485,7 @@ class VideoFormProcessor extends FormProcessor
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
-								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';

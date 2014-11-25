@@ -183,8 +183,8 @@ class PublisherFormProcessor extends FormProcessor
 							' `contributor`,'.
 							'`date`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).', '.
-							((!empty($info)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $info))).', ' : '').
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
+							((!empty($info)) ? ' '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $info))).', ' : '').
 							$db->quote($contributor_id).', '.
 							$db->quote($date).
 							')';
@@ -195,11 +195,11 @@ class PublisherFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'publishers` SET
-								`name` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).','.
+								`name` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).','.
 								' `contributor` = '.$db->quote($contributor_id).','.
 								' `recent_contributor` = '.$db->quote($recent_cont_id).','.
 								' `last_edit` = '.$db->quote($last_edit).','.
-								((!empty($info)) ? ' `info` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $info))) : '').
+								((!empty($info)) ? ' `info` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $info))) : '').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}

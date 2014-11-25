@@ -503,7 +503,7 @@ class AccountFormProcessor extends FormProcessor
 						(($hide===NULL) ? ' `hide`, ' : '').
 						' `contributor`'.
 						') VALUES ('.
-						$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).', '.
+						$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).', '.
 						$db->quote($db->escape($new_name)).', '.
 						((!empty($location)) ? ' '.$db->quote($db->escape($location)).', ' : '').
 						((!empty($category_ids)) ? ' '.$db->quote($category_ids).', ' : '').

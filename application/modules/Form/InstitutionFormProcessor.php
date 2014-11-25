@@ -164,7 +164,7 @@ class InstitutionFormProcessor extends FormProcessor
 						$sql='INSERT INTO `'.DBPREFIX.'institutions` ('.
 							'`institution`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).
 							')';
 						# Check if this is an UPDATE. If there is an ID, it's an UPDATE.
 						if(!empty($id))
@@ -173,7 +173,7 @@ class InstitutionFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'institutions` SET
-								`institution` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $name))).
+								`institution` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}

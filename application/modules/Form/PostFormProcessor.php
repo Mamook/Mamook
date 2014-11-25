@@ -279,7 +279,7 @@ class PostFormProcessor extends FormProcessor
 								' `recent_contributor`,'.
 								' `last_edit`'.
 								') VALUES ('.
-								$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								((!empty($link)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $link))).',' : ' NULL,').
 								((!empty($file_id)) ? ' '.$db->quote($file_id).',' : ' NULL,').
 								' '.$db->quote($availability).','.
@@ -305,7 +305,7 @@ class PostFormProcessor extends FormProcessor
 							# Reset the value for the message action.
 							$message_action='updated';
 							$sql='UPDATE `'.DBPREFIX.'subcontent` SET'.
-								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								' `link` = '.((!empty($link)) ? ' '.$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $link))).',' : ' NULL,').
 								' `file` = '.((!empty($file_id)) ? ' '.$db->quote($file_id).',' : ' NULL,').
 								' `availability` = '.$db->quote($availability).','.

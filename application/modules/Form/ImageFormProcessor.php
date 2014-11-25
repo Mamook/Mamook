@@ -302,7 +302,7 @@ class ImageFormProcessor extends FormProcessor
 							(($hide===NULL) ? ' `hide`, ' : '').
 							' `contributor`'.
 							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).', '.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).', '.
 							$db->quote($db->escape($new_name)).', '.
 							((!empty($location)) ? ' '.$db->quote($db->escape($location)).', ' : '').
 							((!empty($category_ids)) ? ' '.$db->quote($category_ids).', ' : '').
@@ -318,7 +318,7 @@ class ImageFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'images` SET
-								`title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME, $site_name), array('%{domain_name}', '%{site_name}'), $title))).','.
+								`title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
 								((!empty($new_name)) ? ' `image` = '.$db->quote($db->escape($new_name)).',' : '').
 								' `location` = '.((empty($location)) ? $db->quote('') : $db->quote($db->escape($location))).','.
 								' `category` = '.$db->quote($db->escape($category_ids)).','.
