@@ -47,13 +47,13 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		# Define the copyright of the page.
 		$header.='<meta name="copyright" content="Copyright © '.date('Y').' '.$main_content->getSiteName().'" />';
 		# Define the page-topic of the page. Use the page title.
-		$header.='<meta name="page-topic" content="'.((isset($page_topic)&&!empty($page_topic)) ? $page_topic : strip_tags($main_content->getPageTitle())).'" />';
+		$header.='<meta name="page-topic" content="'.((isset($page_topic) && !empty($page_topic)) ? $page_topic : strip_tags($main_content->getPageTitle())).'" />';
 		# Facebook meta data.
 		$header.='<meta property="fog:app_id" content="'.FB_APP_ID.'" />';
 		$header.='<meta property="og:url" content="'.WebUtility::removeIndex(COMPLETE_URL).'" />';
 		$header.='<meta property="og:type" content="website" />';
 		$header.='<meta property="og:title" content="'.strip_tags($main_content->getPageTitle()).'" />';
-		$header.='<meta property="og:image" content="'.((isset($og_image)&&!empty($og_image)) ? $og_image : IMAGES.'logo.jpg').'" />';
+		$header.='<meta property="og:image" content="'.((isset($og_image) && !empty($og_image)) ? $og_image : IMAGES.'logo.jpg').'" />';
 		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'" />';
 		$header.='<meta property="og:locale" content="EN_US" />';
 		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'" />';
@@ -88,5 +88,5 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 	$header2='</head>';
 	$header2.='<body>';
 		$header2.='<div id="distance"></div>';
-		$header2.='<div id="wrapper" class="noscript">';
+		$header2.='<div id="wrapper" class="noscript'.((isset($page_class) && !empty($page_class)) ? ' '.$page_class : '').'">';
 		echo $header2;

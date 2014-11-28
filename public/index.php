@@ -29,6 +29,8 @@ try
 
 	$display='';
 
+	$page_class='spash';
+
 	# Set a default variable for the "AND" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
 	$and_sql=' AND `availability` = 1 AND `visibility` IS NULL';
 	# Check if the User is logged in.

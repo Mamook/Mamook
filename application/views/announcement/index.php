@@ -1,6 +1,6 @@
 <?php /* application/views/announcement/index.php */
 
-echo '<main id="main" class="main',((empty($display_main1)&&empty($display_main2)&&empty($display_main3)) ? ' no_content' : ''),'" role="main">',
+echo '<main id="main" class="main',((empty($display_main1) && empty($display_main2) && empty($display_main3)) ? ' no_content' : ''),'" role="main">',
 	'<div class="main-1',((empty($display_main1)) ? ' no_content' : ''),'">',
 		$display_main1,
 	'</div>',
@@ -12,7 +12,7 @@ echo '<main id="main" class="main',((empty($display_main1)&&empty($display_main2
 	'</div>',
 '</main>',
 
-'<section id="box1" class="box1',((empty($display_box1a)&&empty($display_box1b)&&empty($display_box1c)) ? ' no_content' : ''),'">',
+'<section id="box1" class="box1',((empty($display_box1a) && empty($display_box1b) && empty($display_box1c)) ? ' no_content' : ''),'">',
 	'<div id="box1a" class="box1-a',((empty($display_box1a)) ? ' no_content' : ''),'">',
 		$display_box1a,
 	'</div>',
