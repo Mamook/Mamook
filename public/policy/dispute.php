@@ -36,7 +36,8 @@ try
 	$get_query=GET_QUERY;
 	$good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?success=yes';
 	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?error=true';
-	$head='You may use the form below to send us an email.';
+	$head='<p class="h-form">You may use the form below to send us an email.</p>';
+	$page_class='policypage-dispute';
 
 	### DEBUGGING ###
 	if(DEBUG_APP===TRUE)

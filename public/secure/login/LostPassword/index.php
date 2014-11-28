@@ -29,7 +29,8 @@ try
 	$display_box2='';
 
 	$display='';
-	$head='Please enter you email address to retrieve your account information.';
+	$head='<p class="h-form">Please enter you email address to retrieve your account information.</p>';
+	$page_class='loginpage-lostPassword';
 
 	# Get the submit_email form.
 	require TEMPLATES.'forms'.DS.'submit_email.php';

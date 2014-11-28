@@ -32,6 +32,7 @@ try
 
 	$display='';
 	$head='';
+	$page_class='loginpage';
 
 	# Check if cookiews are enabled in the user's browser. This creates the variable $error. And tells Javascript to check for cookies if that is enabled.
 	$no_cookie_msg='You do not have cookies enabled in your browser. To login to this site and for many of the features to work correctly, you must have cookies enabled.<br />For more information on this site\'s use of cookies, please see our <a href="'.APPLICATION_URL.'policy/#_Use_of_cookies">policy page</a>.';

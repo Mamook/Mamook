@@ -25,6 +25,7 @@ try
 	$display_box2='';
 
 	$display='';
+	$page_class='loginpage-confirm';
 
 	$login->activateAccount();
 

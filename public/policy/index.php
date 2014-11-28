@@ -25,6 +25,7 @@ try
 	$display_box2='';
 
 	$display='';
+	$page_class='policypage';
 
 	# Get the page title and subtitle to display in main-1.
 	$display_main1=$main_content->displayTitles();

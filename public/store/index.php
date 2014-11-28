@@ -30,6 +30,7 @@ try
 
 	# Create an empty variable to hold the XHTML.
 	$display='';
+	$page_class='store';
 
 	# Create a new Product object
 	$product_obj=new Product();

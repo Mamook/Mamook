@@ -30,7 +30,8 @@ try
 	$display_box2='';
 
 	# Set the meta discription for this page.
-	$meta_desc='Audio featured on '.DOMAIN_NAME.'!';
+	$meta_desc='Audio featured on '.DOMAIN_NAME;
+	$page_class='audiopage';
 
 	# Instantiate a new Media object.
 	$media=new Media();

@@ -28,6 +28,7 @@ try
 
 	# Create a variable to hold the display of the cv.
 	$cv_display='';
+	$page_class='profilepage';
 
 	# Instantiate a new User object.
 	$user=new User();
@@ -35,6 +36,7 @@ try
 	# Check if the GET data was "contributor".
 	if(isset($_GET['contributor']) && ($validator->isInt(trim($_GET['contributor']))===TRUE))
 	{
+		$page_class='profilepage-contributor';
 		# Set the contributor's id to a variable.
 		$id=(int)$_GET['contributor'];
 		# Set `contributor` as the table to search for this person.
@@ -43,6 +45,7 @@ try
 	# Check if the GET data was "member".
 	elseif(isset($_GET['member']) && ($validator->isInt(trim($_GET['member']))===TRUE))
 	{
+		$page_class='profilepage-member';
 		# Set the User's ID to a variable.
 		$id=$_GET['member'];
 		# Set `user` as the table to search for this person.
@@ -51,6 +54,7 @@ try
 	# Check if the GET data was "person".
 	elseif(isset($_GET['person']) && ($validator->isInt(trim($_GET['person']))===TRUE))
 	{
+		$page_class='profilepage-person';
 		# Set the person's id to a variable.
 		$id=(int)$_GET['person'];
 		# Set `staff` as the table to search for this person.
@@ -59,6 +63,7 @@ try
 	# Check if the GET data was "publisher".
 	elseif(isset($_GET['publisher']))
 	{
+		$page_class='profilepage-publisher';
 		# Set the GET data to the $value variable.
 		$value=trim($_GET['publisher']);
 		# Set the $id variable to FALSE as default.

@@ -29,7 +29,7 @@ try
 
 	$display='';
 
-	$page_class='spash';
+	$page_class='homepage';
 
 	# Set a default variable for the "AND" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
 	$and_sql=' AND `availability` = 1 AND `visibility` IS NULL';

@@ -2,7 +2,7 @@
 
 $display='<div id="submit_email_form" class="form">';
 	# Create and display form.
-	$display.='<h2>'.$head.'</h2>';
+	$display.=$head;
 	# Instantiate the FormGenerator object.
 	$fg=new FormGenerator('submit_email');
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));

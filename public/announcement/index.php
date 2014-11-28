@@ -26,6 +26,7 @@ try
 	$display_box1c='';
 	$display_box2='';
 
+	$page_class='announcementpage';
 	$branch='Announcement';
 	$branch_nav='';
 	$display='';

@@ -28,6 +28,7 @@ try
 
 	$display='Logging out. Please be patient...';
 	$alert_title='';
+	$page_class='loginpage-logout';
 
 	# Get the page title and subtitle to display in main-1.
 	$display_main1=$main_content->displayTitles();

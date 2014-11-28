@@ -35,6 +35,7 @@ try
 	$identifier='';
 	$params='';
 	$detailed=FALSE;
+	$page_class='store-books';
 
 	# Check if the transaction was cancelled.
 	if(isset($_GET['cancel']) && ($_GET['cancel']=='yes'))
@@ -135,6 +136,7 @@ try
 	# Check if this is a detailed product page.
 	if($detailed===FALSE)
 	{
+		$page_class='store-books-details';
 		# Set the total number of returned products to a variable.
 		$total_products=$product->countAllRecords('Books', NULL, $and_sql);
 		# Check if there were products returned.

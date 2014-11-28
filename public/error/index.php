@@ -37,7 +37,8 @@ try
 	$get_query=GET_QUERY;
 	$good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?success';
 	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail_error';
-	$head='<h3>Please use the form below to send the Webmaster an email.</h3>';
+	$head='<p class="h-form">Please use the form below to send the Webmaster an email.</p>';
+	$page_class='errorpage';
 	$recipients='webmaster';
 
 	if(isset($_GET['success']))

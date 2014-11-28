@@ -29,6 +29,10 @@ try
 	$display_box1c='';
 	$display_box2='';
 
+	# Set the meta discription for this page.
+	$meta_desc='Video featured on '.DOMAIN_NAME;
+	$page_class='videopage';
+
 	# Instantiate a new Media object.
 	$media=new Media();
 	# Instantiate the new Video object.

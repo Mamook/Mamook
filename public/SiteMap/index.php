@@ -28,6 +28,7 @@ try
 	$display_box2='';
 
 	$display='';
+	$page_class='sitemap';
 
 	# Create a new SubContent object
 	$site_map=new SiteMap();

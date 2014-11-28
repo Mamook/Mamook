@@ -31,9 +31,11 @@ try
 	$display_box1c='';
 	$display_box2='';
 
+	$page_class='searchpage';
+
 	$search=new Search();
 
-	$head='<h3>Use the form below to search the site.</h3>';
+	$head='<p class="h-form">Use the form below to search the site.</p>';
 
 	# Creeate the search form.
 	$display='<div id="search_form" class="form">';

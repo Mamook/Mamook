@@ -26,6 +26,8 @@ try
 
 	$display='';
 
+	$page_class='maintenancepage';
+
 	# Get the page title and subtitle to display in main-1.
 	$display_main1=$main_content->displayTitles();
 

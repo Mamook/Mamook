@@ -25,6 +25,7 @@ try
 	$display_box2='';
 
 	$display='';
+	$page_class='test';
 
 	# Get the TestLogin Class.
 // 	require_once MODULES.'Test'.DS.'TestLogin.php';

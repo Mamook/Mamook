@@ -27,6 +27,7 @@ try
 	$display_box2='';
 
 	$display='';
+	$page_class='social';
 
 	# Create a new SubContent object.
 	$social=new Social();

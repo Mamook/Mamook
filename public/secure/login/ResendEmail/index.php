@@ -29,7 +29,8 @@ try
 	$display_box2='';
 
 	$display='';
-	$head='Please enter your email address to recieve your activation email.';
+	$head='<p class="h-form">Please enter your email address to recieve your activation email.</p>';
+	$page_class='loginpage-resendEmail';
 
 	# Get the submit_email form.
 	require TEMPLATES.'forms'.DS.'submit_email.php';
