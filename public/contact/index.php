@@ -85,6 +85,9 @@ try
 	{
 		# Set the microformat url for the <link profile> tag in the header.
 		$microformat_url='http://microformats.org/profile/hcard';
+		$address.='<div class="address">';
+		# Create a header for the address.
+		$address.='<h3 class="h-3">Address &amp; contact details</h3>';
 		# Create the address block.
 		$address.='<address class="vcard">';
 		# Check if there is a postal address.
