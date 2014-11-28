@@ -114,6 +114,8 @@ try
 		$address.=(($main_content->getEmail()!==NULL) ? '<div class="email">Email: <a href="mailto:'.$main_content->getEmail().'" class="value" title="send an email">'.$main_content->getEmail().'</a></div>' : '');
 		# Close the address block.
 		$address.='</address>';
+		# Close the address container block.
+		$address.='</div>';
 	}
 
 	# Get the page title and subtitle to display in main-1.
