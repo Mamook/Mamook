@@ -58,7 +58,7 @@ try
 	if(isset($_GET['mail_error']))
 	{
 		$get_query='';
-		$doc->setError('<h3>There was an error sending your email...</h3>
+		$doc->setError('<h3 class="h-3">There was an error sending your email...</h3>
 		Please make sure you entered your name and a valid email address. If it still isn\'t working, rest assured that the webmaster has received an email and will work out the issue as soon as possible. You may try again later. Thanks.');
 	}
 
