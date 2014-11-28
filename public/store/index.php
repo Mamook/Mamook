@@ -74,7 +74,7 @@ try
 		$main_content->setSubTitle('Top Picks');
 
 		# Create a new PageNavigator object.
-		$paginator=new PageNavigator(8, 4, CURRENT_PAGE, 'page', $product_obj->countAllRecords('Books-Maps-Nusic-Top Picks', NULL, $and_sql));
+		$paginator=new PageNavigator(8, 4, CURRENT_PAGE, 'page', $product_obj->countAllRecords('Books-Maps-Music-Top Picks', NULL, $and_sql));
 		$paginator->setStrFirst('');
 		$paginator->setStrLast('');
 		$paginator->setStrNext('Next Page');
