@@ -59,7 +59,7 @@ try
 		}
 		$register->addElement('submit', array('name'=>'register', 'value'=>'Register'), '', NULL, 'submit-register');
 		$display='<div id="register" class="register">'.
-			'<h3>Register</h3>'.
+			'<h3 class="h-3">Register</h3>'.
 			'<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>'.
 			$register->display().
 			'<a href="'.REDIRECT_TO_LOGIN.'ResendEmail/" class="helper" title="Resend my activation email">Resend my activation email</a>'.
