@@ -10,8 +10,7 @@
  *
  * bsmSelect version: v1.4.7 - 2013-12-19
  */
-
-(function($) {
+(function($){
 
   function BsmSelect(target, options)
   {

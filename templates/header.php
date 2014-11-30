@@ -1,25 +1,10 @@
 <?php /* templates/header.php */
 
 # Define the DOCTYPE. This site is using html5
-$header='<!DOCTYPE html>'."\n";
+$header='<!DOCTYPE html>';
 
 # Open the html tag and define the default language.
-$header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
-			xmlns:fog="http://www.facebook.com/2008/fbml"
-			xmlns:og="http://ogp.me/ns#"
-			xml:lang="en" class="ie7" lang="en"><![endif]-->
-<!--[if IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
-			xmlns:fog="http://www.facebook.com/2008/fbml"
-			xmlns:og="http://ogp.me/ns#"
-			xml:lang="en" class="ie8" lang="en"><![endif]-->
-<!--[if IE 9]><html xmlns="http://www.w3.org/1999/xhtml"
-			xmlns:fog="http://www.facebook.com/2008/fbml"
-			xmlns:og="http://ogp.me/ns#"
-			xml:lang="en" class="ie9" lang="en"><![endif]-->
-<!--[if gt IE 9]><!--><html xmlns="http://www.w3.org/1999/xhtml"
-			xmlns:fog="http://www.facebook.com/2008/fbml"
-			xmlns:og="http://ogp.me/ns#"
-			xml:lang="en" lang="en"><!--<![endif]-->';
+$header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/fbml fb: http://ogp.me/ns/fb#" lang="en">';
 	# Open the head tag.
 	$header.='<head>';
 		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
@@ -27,36 +12,36 @@ $header.='<!--[if lt IE 8]><html xmlns="http://www.w3.org/1999/xhtml"
 		# The title for each page is filled by a variable set on each page.
 		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
 		# Use a custom favicon.
-		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico"/>';
+		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico">';
 		# Add a pingback link tag.
-		$header.=((isset($pingback_url) && !empty($pingback_url)) ? '<link rel="pingback" href="'.$pingback_url.'"/>' : '');
+		$header.=((isset($pingback_url) && !empty($pingback_url)) ? '<link rel="pingback" href="'.$pingback_url.'">' : '');
 		# Add a profile link tag.
-		$header.=((isset($microformat_url) && !empty($microformat_url)) ? '<link rel="profile" href="'.$microformat_url.'" />' : '');
+		$header.=((isset($microformat_url) && !empty($microformat_url)) ? '<link rel="profile" href="'.$microformat_url.'">' : '');
 		# Define the character set.
-		$header.='<meta http-equiv="content-type" content="text/html; charset='.((isset($charset)) ? $charset : 'utf-8').'" />';
+		$header.='<meta charset="'.((isset($charset)) ? $charset : 'utf-8').'">';
 		# Define the default language. If the $meta_language variable is not set on the page, it defaults to "english".
-		$header.='<meta http-equiv="content-language" content="'.((!isset($meta_language) || empty($meta_language)) ? 'english' : $meta_language).'" />';
+		$header.='<meta http-equiv="content-language" content="'.((!isset($meta_language) || empty($meta_language)) ? 'english' : $meta_language).'">';
 		# Give a description of the page. If the $meta_desc variable is not set on the page, use this default.
-		$header.='<meta name="description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'" />';
+		$header.='<meta name="description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'">';
 		# Set keywords for the page. If the $meta_keywords variable is not set on the page, we have none.
-		$header.=((!isset($meta_keywords) || empty($meta_keywords)) ? '' : '<meta name="keywords" content="'.$meta_keywords.'" />');
+		$header.=((!isset($meta_keywords) || empty($meta_keywords)) ? '' : '<meta name="keywords" content="'.$meta_keywords.'">');
 		# Define the author of the page. If the $meta_author variable is not set on the page, use this default.
-		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon Rÿser, JonRyser.com & Michael Delle' : $meta_author).'" />';
+		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon Rÿser, JonRyser.com & Michael Delle' : $meta_author).'">';
 		# Define the designer of the page. If the $meta_designer variable is not set on the page, use this default.
-		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon Rÿser, JonRyser.com' : $meta_designer).'" />';
+		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon Rÿser, JonRyser.com' : $meta_designer).'">';
 		# Define the copyright of the page.
-		$header.='<meta name="copyright" content="Copyright © '.date('Y').' '.$main_content->getSiteName().'" />';
+		$header.='<meta name="copyright" content="Copyright © '.date('Y').' '.$main_content->getSiteName().'">';
 		# Define the page-topic of the page. Use the page title.
-		$header.='<meta name="page-topic" content="'.((isset($page_topic) && !empty($page_topic)) ? $page_topic : strip_tags($main_content->getPageTitle())).'" />';
+		$header.='<meta name="page-topic" content="'.((isset($page_topic) && !empty($page_topic)) ? $page_topic : strip_tags($main_content->getPageTitle())).'">';
 		# Facebook meta data.
-		$header.='<meta property="fog:app_id" content="'.FB_APP_ID.'" />';
-		$header.='<meta property="og:url" content="'.WebUtility::removeIndex(COMPLETE_URL).'" />';
-		$header.='<meta property="og:type" content="website" />';
-		$header.='<meta property="og:title" content="'.strip_tags($main_content->getPageTitle()).'" />';
-		$header.='<meta property="og:image" content="'.((isset($og_image) && !empty($og_image)) ? $og_image : IMAGES.'logo.jpg').'" />';
-		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'" />';
-		$header.='<meta property="og:locale" content="EN_US" />';
-		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'" />';
+		$header.='<meta property="fog:app_id" content="'.FB_APP_ID.'">';
+		$header.='<meta property="og:url" content="'.WebUtility::removeIndex(COMPLETE_URL).'">';
+		$header.='<meta property="og:type" content="website">';
+		$header.='<meta property="og:title" content="'.strip_tags($main_content->getPageTitle()).'">';
+		$header.='<meta property="og:image" content="'.((isset($og_image) && !empty($og_image)) ? $og_image : THEME.'Images/Facebook.png').'" />';
+		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'">';
+		$header.='<meta property="og:locale" content="EN_US">';
+		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'">';
 
 		# Add the CSS for the page.
 		$header.=$doc->addStyle();

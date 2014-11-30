@@ -1,7 +1,9 @@
 /*
  * clearInput
  *
- *
+ * @copyright (c) 2011 Jon Ryser	http://JonRyser.com
+ * @author		Jon Ryser		http://JonRyser.com
+ * @version		1.0.0
  */
 function clearInput(selector, attribute){
 	var element = $(selector);
@@ -17,3 +19,5 @@ function clearInput(selector, attribute){
 			});
 		});
 };
+
+

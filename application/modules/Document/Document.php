@@ -59,17 +59,20 @@ class Document
 	/**
 	 * setJavaScripts
 	 *
-	 * Sets the data member $java_scripts.
+	 * Sets the data member $java_scripts. The script name must be in the format of -'FolderPath/FileName' or 'FileName'. If there is more than one, they may be comma separated ('FileName1,FolderPath2/FileName2, FileName3') or an Array (array(0=>'FileName1', 1=>'FolderPath2/FileName2', 3->' FileName3')). If there is whitespace at the beginning or end of the fileneame, it will be trimmed off.
 	 *
-	 * @param		$script_name (Must be the name of the script. May be an array of java scripts.)
+	 * @param		$scripts (Must be in the format of -'FolderPath/FileName' or 'FileName')
 	 * @access	public
 	 */
-	public function setJavaScripts($script_name)
+	public function setJavaScripts($scripts)
 	{
-		$script_name=explode(',', $script_name);
-		foreach($script_name as $script)
+		if(!is_array($scripts))
 		{
-			$this->java_scripts[]=trim($script);
+			$scripts=explode(',', $scripts);
+		}
+		foreach($scripts as $script_name)
+		{
+			$this->java_scripts[]=trim($script_name);
 		}
 	} #==== End -- setJavaScripts
 
@@ -241,24 +244,9 @@ class Document
 	 */
 	public function addFooterJS()
 	{
-		# Set the Content object to a local variable.
-		$main_content=Content::getInstance();
 		try
 		{
-			$scripts=$this->getFooterJS();
-			$display='';
-			$js='';
-			if(!empty($scripts))
-			{
-				foreach($scripts as $script)
-				{
-					require_once JAVASCRIPTS.$script.'.php';
-					$display.=$js;
-					# Reset the $js variable.
-					$js='';
-				}
-			}
-			return $display;
+			return $this->addJavaScript($this->getFooterJS());
 		}
 		catch(Exception $e)
 		{
@@ -368,27 +356,60 @@ class Document
 	/**
 	 * addJavaScript
 	 *
-	 * Puts the correct javascripts into the header for the page we're viewing.
+	 * Loops through the array of JavaScript names set in the java_scripts data member and includes the php file. The required php file will live in the path associated with the JAVASCRIPTS constant in a folder with the current JavaScript name. The php file itself will also have the passed JavaScript name. Each php file will set a String value to the temporary variable $js. The values of $js will be concatenated together and returned as $display.
+	 * Any errors thrown in the course of the loop will be caight and rethrown. Any errors thrown in the course of the getJavaScripts method will be caught and rethrown.
 	 *
 	 * @access	public
+	 * @see			#setJavaScripts()
+	 * @see			#getJavaScripts()
 	 */
-	public function addJavaScript()
+	public function addJavaScript($scripts=NULL)
 	{
 		try
 		{
-			$scripts=$this->getJavaScripts();
+			if($scripts===NULL)
+			{
+				# Get the String of all passed php files. (will be in the format of - 'FolderPath/FileName' or 'FileName')
+				$scripts=$this->getJavaScripts();
+			}
 			$display='';
 			$js='';
 			if(!empty($scripts))
 			{
-				foreach($scripts as $script)
+				foreach($scripts as $script_name)
 				{
-					require_once JAVASCRIPTS.$script.'.php';
+					# Create a variable to hold the name uf the sub-folder in the scripts folder.
+					$sub_folder='';
+					# Get the position of the last occurrence of the current directory separator in the current JavaScript name.
+					$last_ds=strrchr($script_name, DS);
+					# Check if the JavaScript name contains an instance of the value of the DS constant (a String).
+					if($last_ds!==FALSE)
+					{
+						# Set the sub folder path the the sub_folder variable. (This will leave the directory separator off the end.)
+						$sub_folder=substr($script_name, 0, $last_ds);
+						# Check if the directory separator is empty (FALSE, NULL, 0, '', or ' ').
+						if(!empty($sub_folder))
+						{
+							# Append the directory separator to the end of the path.
+							$sub_folder.=DS;
+							# Reset the script_name variable replacing the subfolder path with an empty String.
+							$script_name=strtr($script_name, array($sub_folder=>''));
+						}
+						else
+						{
+							# Reset the sub_folder to an empty String to normailize the empty value.
+							$sub_folder='';
+						}
+					}
+					# Require the passed php file.
+					require JAVASCRIPTS.$sub_folder.$script_name.'.php';
+					# Add the returned value of $js to the display variable (will be returned as the conclusion of the method).
 					$display.=$js;
-					# Reset the $js variable.
+					# Reset the $js variable to an empty String to go through the foreach loop again.
 					$js='';
 				}
 			}
+			# Return the accumulated values from the passed php files.
 			return $display;
 		}
 		catch(Exception $e)
@@ -412,7 +433,7 @@ class Document
 			$styles=$this->getStyle();
 			foreach($styles as $css)
 			{
-				$links.='<link rel="stylesheet" type="text/css" media="all" href="'.$css.'" />'."\n";
+				$links.='<link rel="stylesheet" type="text/css" media="all" href="'.$css.'">';
 			}
 			return $links;
 		}

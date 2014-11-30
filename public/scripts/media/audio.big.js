@@ -15,9 +15,9 @@ $(document).ready(function(){
 	$('.overlay').click(hideModal);
 
 	function checkFields(selector){
-		var value=$(selector).val();
-		$('#embed').toggle(value=='embed');
-		$('#file').toggle(value=='file');
+		var value = $(selector).val();
+		$('#embed').toggle(value == 'embed');
+		$('#file').toggle(value == 'file');
 	};
 	function hideModal(event){
 		if(event.keyCode == 27)
