@@ -28,7 +28,7 @@ mb_internal_encoding('UTF-8');
 	define('MONTH_DD_YEAR_12TIME_TZ', date('F d, Y - g:i:s a (T)'));
 
 # Make sure the utility methods are available (get the WebUtility Class).
-require_once MODULES.'Utility'.DS.'WebUtility.php';
+require_once WEBUTILITY_CLASS;
 
 # If WordPress is installed, get the appropriate settings.
 if(WP_INSTALLED===TRUE)
@@ -37,7 +37,7 @@ if(WP_INSTALLED===TRUE)
 }
 
 # Get the Document Class.
-require_once MODULES.'Document'.DS.'Document.php';
+require_once Utility::locateFile(MODULES.'Document'.DS.'Document.php');
 # Create a new Document object.
 $doc=Document::getInstance();
 
@@ -45,7 +45,7 @@ $doc=Document::getInstance();
 error_reporting(0);
 
 # Get the ExceptionHandler Class.
-require_once MODULES.'ExceptionHandler'.DS.'ExceptionHandler.php';
+require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'ExceptionHandler.php');
 # No custom error handling if we are already on the error page.
 if(strpos(APPLICATION_URL.HERE, ERROR_PAGE)===FALSE)
 {
@@ -60,13 +60,13 @@ if(HERE!==HERE_PATH)
 }
 
 # Get the DB Class needed to operate with MySQL.
-require_once MODULES.'Database'.DS.'ezdb.class.php';
+require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
 DB::init();
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
 # Get the Theme Class.
-require_once MODULES.'Document'.DS.'Theme.php';
+require_once Utility::locateFile(MODULES.'Document'.DS.'Theme.php');
 # Create a new Theme object.
 $theme=new Theme();
 
@@ -99,7 +99,7 @@ $doc->setJavaScripts('plugins');
 $doc->setFooterJS('scripts');
 
 # Get the Session Class
-require_once MODULES.'Session'.DS.'Session.php';
+require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
 # Check if there is a session id set the the $sesh_id variable.
 $sesh_id=((isset($sesh_id)) ? $sesh_id : NULL);
 # Create a new session object, thus starting a new session.
@@ -111,11 +111,11 @@ $session->setPostLogin();
 $image_link='lightbox';
 
 # Get the Login Class.
-require_once MODULES.'User'.DS.'Login.php';
+require_once Utility::locateFile(MODULES.'User'.DS.'Login.php');
 # Instantiate the Login Class.
 $login=new Login();
 
 # Get the Content Class.
-require_once MODULES.'Content'.DS.'Content.php';
+require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
 # Create a new Content object.
 $main_content=Content::getInstance();

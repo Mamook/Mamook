@@ -14,19 +14,9 @@ try
 	** connect to the Database
 	*/
 	require_once '../../settings.php';
-	# Get the PayPal Class.
-	require_once MODULES.'PayPal'.DS.'PayPal.php';
 
-	# Instantiate a new Paypal object.
-	$paypal=new PayPal();
-
-	# Process!
-	$paypal->processPayPal(TRUE, NULL, array(ACCOUNTING_EMAIL, ADMIN_EMAIL));
-
-	if($_SERVER['REQUEST_METHOD']!='POST')
-	{
-		$doc->redirect(DEFAULT_REDIRECT);
-	}
+	# Get the Controller.
+	require_once Utility::locateFile(CONTROLLERS.'secure'.DS.'pp_process.php');
 }
 catch(Exception $e)
 {

@@ -20,17 +20,43 @@ if(!defined('BASE_PATH'))
 # Define the path to the folder containing the application files. (ends with a slash)
 define('APPLICATION_FOLDER', BASE_PATH.'application'.DS);
 
+# Define the path to the framework folder containing the application files. (ends with a slash)
+define('FW_APPLICATION_FOLDER', BASE_PATH.'framework'.DS.'application'.DS);
+
+# Define the path to the controllers folder. (ends with a slash)
+define('CONTROLLERS', APPLICATION_FOLDER.'controllers'.DS);
+
+# Define the path to the framework controllers folder. (ends with a slash)
+define('FW_CONTROLLERS', FW_APPLICATION_FOLDER.'controllers'.DS);
+
 # Define the path to the modules folder. (ends with a slash)
 define('MODULES', APPLICATION_FOLDER.'modules'.DS);
 
+# Define the path to the framework modules folder. (ends with a slash)
+define('FW_MODULES', FW_APPLICATION_FOLDER.'modules'.DS);
+
 # Add MODULES and modules/Social/ (for GoogleClient) to the php include path.
-set_include_path(MODULES.PATH_SEPARATOR.MODULES.'Social'.DS);
+set_include_path(MODULES.PATH_SEPARATOR.DS.MODULES.'Social'.DS.FW_MODULES.PATH_SEPARATOR.FW_MODULES.'Social');
+
+# Define the path to the UTILITY module. If there is a custum UTILITY module, comment the next line and uncomment the one after.
+define('UTILITY_CLASS', FW_MODULES.'Utility'.DS.'Utility.php');
+//define('UTILITY_CLASS', MODULES.'Utility'.DS.'Utility.php');
+
+# Define the path to the WebUtility module. If there is a custum UTILITY module, comment the next line and uncomment the one after.
+define('WEBUTILITY_CLASS', FW_MODULES.'Utility'.DS.'WebUtility.php');
+//define('WEBUTILITY_CLASS', MODULES.'Utility'.DS.'WebUtility.php');
 
 # Define the path to the views folder. (ends with a slash)
 define('VIEWS', APPLICATION_FOLDER.'views'.DS);
 
+# Define the path to the framework views folder. (ends with a slash)
+define('FW_VIEWS', FW_APPLICATION_FOLDER.'views'.DS);
+
 # Define where the js/ directory is (ie. /home/user/domain/application/js/) (ends with a slash)
 define('JAVASCRIPTS', APPLICATION_FOLDER.'js'.DS);
+
+# Define where the framework js/ directory is (ie. /home/user/domain/application/js/) (ends with a slash)
+define('FW_JAVASCRIPTS', FW_APPLICATION_FOLDER.'js'.DS);
 
 # Define the path to the bodega. (ends with a slash)
 define('BODEGA', BASE_PATH.'bodega'.DS);
@@ -43,6 +69,9 @@ define('IMAGES_PATH', BASE_PATH.'public'.DS.'images'.DS);
 
 # Define where the Templates directory is (ie. /hsphere/home/user/domain.com/templatesFolder/) (ends with a slash)
 define('TEMPLATES', BASE_PATH.'templates'.DS);
+
+# Define where the Framework Templates directory is (ie. /hsphere/home/user/domain.com/templatesFolder/) (ends with a slash)
+define('FW_TEMPLATES', BASE_PATH.'framework'.DS.'templates'.DS);
 
 # Define where the Temp directory is (ie. /hsphere/home/user/domain.com/tmpFolder/) (ends with a slash)
 define('TEMP', BASE_PATH.'tmp'.DS);
