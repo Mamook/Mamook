@@ -117,6 +117,9 @@ define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
  * System variables needed by the application
  *
  */
+# Make sure the utility methods are available (get the Utility Class).
+require_once UTILITY_CLASS;
+
 # Get the database definitions.
 require DATA_FILES.'database_definitions.php';
 
@@ -148,7 +151,7 @@ define('SECURE_HERE', substr(HERE, 7));
 define('SECURE_PORT', '443');
 
 # Get the Validator Class.
-require_once MODULES.'Validator'.DS.'Validator.php';
+require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
 # Instantiate a general Validating object.
 $validator=Validator::getInstance();
 
