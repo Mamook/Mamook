@@ -7,7 +7,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 {
 	define('__PHP_SHA256_NANO_', true);
 
-	/**
+	/*
 	 * Amazon
 	 *
 	 * The Amazon Class is used access and maintain the Amazon specific data in the `product` table in the database and interface with the Amazon.com API. For more information on accessing Amazon.com, see http://aws.amazon.com/
@@ -34,7 +34,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** magic methods ***/
 
-		/**
+		/*
 		 * __construct
 		 *
 		 * @access	public
@@ -52,7 +52,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** mutator methods ***/
 
-		/***
+		/*
 		 * setAccessKey
 		 *
 		 * Sets the data member $access_key
@@ -65,7 +65,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->access_key=$access_key;
 		} #==== End -- setAccessKey
 
-		/***
+		/*
 		 * setAssTag
 		 *
 		 * Sets the data member $ass_tag
@@ -78,7 +78,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->ass_tag=$ass_tag;
 		} #==== End -- setAssTag
 
-		/**
+		/*
 		 * setDetailedPageURL
 		 *
 		 * Sets the data member $detailed_page_url.
@@ -103,7 +103,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setDetailedPageURL
 
-		/**
+		/*
 		 * setEditorialReview
 		 *
 		 * Sets the data member $editorial_review.
@@ -128,7 +128,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setEditorialReview
 
-		/**
+		/*
 		 * setImageHeight
 		 *
 		 * Sets the data member $image_height.
@@ -153,7 +153,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageHeight
 
-		/**
+		/*
 		 * setImageWidth
 		 *
 		 * Sets the data member $image_width.
@@ -178,7 +178,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageWidth
 
-		/**
+		/*
 		 * setImageURL
 		 *
 		 * Sets the data member $image_url.
@@ -203,7 +203,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageURL
 
-		/**
+		/*
 		 * setImageOriginalURL
 		 *
 		 * Sets the data member $image_original_url.
@@ -228,7 +228,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageOriginalURL
 
-		/***
+		/*
 		 * setParsedXML
 		 *
 		 * Sets the data member $parsed_xml
@@ -241,7 +241,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->parsed_xml=$parsed_xml;
 		} #==== End -- setParsedXML
 
-		/***
+		/*
 		 * setSecretKey
 		 *
 		 * Sets the data member $secret_key
@@ -260,7 +260,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** accessor methods ***/
 
-		/**
+		/*
 		 * getAccessKey
 		 *
 		 * Returns the data member $access_key.
@@ -272,7 +272,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->access_key;
 		} #==== End -- getAccessKey
 
-		/**
+		/*
 		 * getAssTag
 		 *
 		 * Returns the data member $ass_tag.
@@ -284,7 +284,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->ass_tag;
 		} #==== End -- getAssTag
 
-		/**
+		/*
 		 * getDetailedPageURL
 		 *
 		 * Returns the data member $detailed_page_url.
@@ -296,7 +296,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->detailed_page_url;
 		} #==== End -- getDetailedPageURL
 
-		/**
+		/*
 		 * getEditorialReview
 		 *
 		 * Returns the data member $editorial_review.
@@ -308,7 +308,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->editorial_review;
 		} #==== End -- getEditorialReview
 
-		/**
+		/*
 		 * getImageHeight
 		 *
 		 * Returns the data member $image_height.
@@ -320,7 +320,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->image_height;
 		} #==== End -- getImageHeight
 
-		/**
+		/*
 		 * getImageWidth
 		 *
 		 * Returns the data member $image_width.
@@ -332,7 +332,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->image_width;
 		} #==== End -- getImageWidth
 
-		/**
+		/*
 		 * getImageURL
 		 *
 		 * Returns the data member $image_url.
@@ -344,7 +344,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->image_url;
 		} #==== End -- getImageURL
 
-		/**
+		/*
 		 * getImageOriginalURL
 		 *
 		 * Returns the data member $image_original_url.
@@ -356,7 +356,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->image_original_url;
 		} #==== End -- getImageOriginalURL
 
-		/**
+		/*
 		 * getParsedXML
 		 *
 		 * Returns the data member $parsed_xml.
@@ -368,7 +368,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $this->parsed_xml;
 		} #==== End -- getParsedXML
 
-		/**
+		/*
 		 * getSecretKey
 		 *
 		 * Returns the data member $secret_key.
@@ -386,7 +386,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** public methods ***/
 
-		/**
+		/*
 		 * displayAmazonProduct
 		 *
 		 * Creates Amazon product XHTML elements and sets them to an array for display.
@@ -394,13 +394,31 @@ if(!defined('__PHP_SHA256_NANO_'))
 		 * @param	array $asins		An array of product ASIN's.
 		 * @param	$page
 		 * @param	$identifier
-		 * @param	$image_size
-		 * @param	$max_char			The maximum number of characters to display.
-		 * @param	$access_level		The access levels needed for a logged in User to modify the products - must be a space sepparated string of numbers.
-		 * @param	$labels 			TRUE if other buttons should be displayed, ie "download", "more", FLASE if not.
+		 * @param $option				An Array of various options for displaying Products. The available options are:
+		 *												"image_size" => What size of image should be called from Amazon for Amazon products. the default is
+		 *																				"MediumImage". The possible values are:
+		 *																				"LargeImage"
+		 *																				"MediumImage"
+		 *																				"SmallImage"
+		 *																				"SwatchImage"
+		 *																				"ThumbnailImage"
+		 *																				"TinyImage"
+		 *												"max_char" => The maximum number of characters to display in product descriptions. The default is NULL
+		 *																			(unlimited).
+		 *												"access_level" => The access levels needed for a logged in User to modify the products - must be a
+		 *																					space sepparated string of numbers. The default is ADMIN_USERS.
+		 *												"labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is
+		 *																		TRUE.
+		 *												"title_class" => The class for the title container. Default is "title".
+		 *												"title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to. If
+		 *																				the title should link to the details page, simply pass the value "default". Default is
+		 *																				"default".
+		 *												"title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag. If it WILL be,
+		 *																							pass the text to be used in the "title" attribute for the link. To use the product
+		 *																							title, "{PRODUCT_TITLE}", simply pass the value "default". The default is "default".
 		 * @access	public
 		 */
-		public function displayAmazonProduct($asins, $page, $identifier, $image_size, $max_char=NULL, $access_level=ADMIN_USERS, $labels=TRUE)
+		public function displayAmazonProduct($asins, $page, $identifier, $options=array())
 		{
 			# Bring the Login object into scope.
 			global $login;
@@ -414,27 +432,124 @@ if(!defined('__PHP_SHA256_NANO_'))
 				# Check if there is Amazon product to display.
 				if(!empty($parsed_xml->Items->Item))
 				{
+					# General options defaults.
+					$access_level=((array_key_exists('access_level', $options)) ? $options['access_level'] : ADMIN_USERS);
+					$labels=((array_key_exists('labels', $options)) ? $options['labels'] : TRUE);
+					$label_class=((array_key_exists('label_class', $options)) ? $options['label_class'] : 'label');
+					$max_char=((array_key_exists('max_char', $options)) ? $options['max_char'] : NULL);
+
+					# Set the User's ability to edit this product to FALSE as default.
+					$edit=FALSE;
+					# Set the User's ability to delete this product to FALSE as default.
+					$delete=FALSE;
+					# Check if the logged in User has the privileges to modify this product.
+					if($login->checkAccess($access_level)===TRUE)
+					{
+						# Set the User's ability to modify this product. Default is TRUE.
+						$edit=((array_key_exists('edit', $options)) ? $options['edit'] : TRUE);
+						$edit_class=((array_key_exists('edit_class', $options)) ? $options['edit_class'] : 'edit');
+						$edit_link_title=((array_key_exists('edit_link_title', $options)) ? $options['edit_link_title'] : 'Edit this product');
+						$edit_value=((array_key_exists('edit_value', $options)) ? $options['edit_value'] : 'Edit');
+						$delete=((array_key_exists('delete', $options)) ? $options['delete'] : TRUE);
+						$delete_class=((array_key_exists('delete_class', $options)) ? $options['delete_class'] : 'delete');
+						$delete_link_title=((array_key_exists('delete_link_title', $options)) ? $options['delete_link_title'] : 'Delete this product');
+						$delete_value=((array_key_exists('delete_value', $options)) ? $options['delete_value'] : 'Delete');
+					}
+
+					# Author options defaults.
+					$author_class=((array_key_exists('author_class', $options)) ? $options['author_class'] : 'author');
+					$author_label=((array_key_exists('author_label', $options)) ? $options['author_label'] : (($labels===TRUE) ? 'Author:' : ''));
+					$author_label_class=((array_key_exists('author_label_class', $options)) ? $options['author_label_class'] : $label_class);
+					$author_link=((array_key_exists('author_link', $options)) ? $options['author_link'] : NULL);
+					$author_link_title=((array_key_exists('author_link_title', $options)) ? $options['author_link_title'] : 'default');
+
+					# Buy button options defaults.
+					$buy_amazon_button_class=((array_key_exists('buy_amazon_button_class', $options)) ? $options['buy_amazon_button_class'] : 'button-amazon');
+					$buy_amazon_button_name=((array_key_exists('buy_amazon_button_name', $options)) ? $options['buy_amazon_button_name'] : 'add_cart');
+					$buy_amazon_label=((array_key_exists('buy_amazon_label', $options)) ? $options['buy_amazon_label'] : (($labels===TRUE) ? 'Buy now from' : ''));
+					$buy_amazon_label_class=((array_key_exists('buy_amazon_label_class', $options)) ? $options['buy_amazon_label_class'] : $label_class);
+					$buy_amazon_submit_class=((array_key_exists('buy_amazon_submit_class', $options)) ? $options['buy_amazon_submit_class'] : 'submit-amazon');
+					$buy_amazon_submit_image=((array_key_exists('buy_amazon_submit_image', $options)) ? $options['buy_amazon_submit_image'] : NULL);
+					$buy_amazon_submit_name=((array_key_exists('buy_amazon_submit_name', $options)) ? $options['buy_amazon_submit_name'] : 'add');
+					$buy_amazon_submit_type=((array_key_exists('buy_amazon_submit_type', $options)) ? $options['buy_amazon_submit_type'] : 'submit');
+					$buy_amazon_submit_value=((array_key_exists('buy_amazon_submit_value', $options)) ? $options['buy_amazon_submit_value'] : 'Buy from Amazon');
+					$buy_class=((array_key_exists('buy_class', $options)) ? $options['buy_class'] : 'buy');
+					$buy_link_title=((array_key_exists('buy_paypal_value', $options)) ? $options['buy_paypal_value'] : 'default');
+					$buy_link_value=((array_key_exists('buy_link_value', $options)) ? $options['buy_link_value'] : 'Buy Now');
+					$buy_paypal_button_class=((array_key_exists('buy_paypal_button_class', $options)) ? $options['buy_paypal_button_class'] : 'button-amazon');
+					$buy_paypal_button_name=((array_key_exists('buy_paypal_button_name', $options)) ? $options['buy_paypal_button_name'] : 'add_cart');
+					$buy_paypal_submit_class=((array_key_exists('buy_paypal_submit_class', $options)) ? $options['buy_paypal_submit_class'] : 'submit-paypal');
+					$buy_paypal_submit_image=((array_key_exists('buy_paypal_image', $options)) ? $options['buy_paypal_image'] : NULL);
+					$buy_paypal_submit_name=((array_key_exists('buy_paypal_name', $options)) ? $options['buy_paypal_name'] : 'submit');
+					$buy_paypal_submit_type=((array_key_exists('buy_paypal_type', $options)) ? $options['buy_paypal_type'] : 'submit');
+					$buy_paypal_submit_value=((array_key_exists('buy_paypal_value', $options)) ? $options['buy_paypal_value'] : $buy_link_value);
+
+					# Content options defaults.
+					$content_class=((array_key_exists('content_class', $options)) ? $options['content_class'] : 'content cont');
+					$content_description_as_one=((array_key_exists('content_description_as_one', $options)) ? $options['content_description_as_one'] : FALSE);
+					$content_label=((array_key_exists('content_label', $options)) ? $options['content_label'] : '');
+					$content_label_class=((array_key_exists('content_label_class', $options)) ? $options['content_label_class'] : $label_class);
+					$content_max_char=((array_key_exists('content_max_char', $options)) ? $options['content_max_char'] : $max_char);
+					$content_more_class=((array_key_exists('content_more_class', $options)) ? $options['content_more_class'] : 'more');
+
+					# Description options defaults.
+					$description_class=((array_key_exists('description_class', $options)) ? $options['description_class'] : 'content desc');
+					$description_label=((array_key_exists('description_label', $options)) ? $options['description_label'] : (($labels===TRUE) ? 'Description:' : ''));
+					$description_label_class=((array_key_exists('description_label_class', $options)) ? $options['description_label_class'] : $label_class);
+					$description_max_char=((array_key_exists('description_max_char', $options)) ? $options['description_max_char'] : $max_char);
+					$description_more_class=((array_key_exists('description_more_class', $options)) ? $options['description_more_class'] : 'more');
+
+					# File options defaults.
+					$file_download_class=((array_key_exists('file_download_class', $options)) ? $options['file_download_class'] : 'download');
+					$file_download_link_title=((array_key_exists('file_download_link_title', $options)) ? $options['file_download_link_title'] : 'Download Now!');
+					$file_download_link_value=((array_key_exists('file_download_link_value', $options)) ? $options['file_download_link_value'] : 'Download');
+					$file_name_class=((array_key_exists('file_name_class', $options)) ? $options['file_name_class'] : 'file-name');
+					$file_name_label=((array_key_exists('file_name_label', $options)) ? $options['file_name_label'] : (($labels===TRUE) ? 'Name:' : ''));
+					$file_name_label_class=((array_key_exists('file_name_label_class', $options)) ? $options['file_name_label_class'] : $label_class);
+					$file_name_link=((array_key_exists('file_name_link', $options)) ? $options['file_name_link'] : TRUE);
+					$file_name_link_title=((array_key_exists('file_name_link_title', $options)) ? $options['file_name_link_title'] : 'default');
+					$file_title_class=((array_key_exists('file_title_class', $options)) ? $options['file_title_class'] : 'file-title');
+					$file_title_label=((array_key_exists('file_title_label', $options)) ? $options['file_title_label'] : (($labels===TRUE) ? 'Title:' : ''));
+					$file_title_label_class=((array_key_exists('file_title_label_class', $options)) ? $options['file_title_label_class'] : $label_class);
+					$file_title_link=((array_key_exists('file_title_link', $options)) ? $options['file_title_link'] : FALSE);
+					$file_title_link_title=((array_key_exists('file_title_link_title', $options)) ? $options['file_title_link_title'] : 'default');
+
+					# Image options defaults.
+					$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : 'lightbox');
+					$image_size=((array_key_exists('image_size', $options)) ? $options['image_size'] : 'MediumImage');
+
+					# Publisher options defaults.
+					$publisher_class=((array_key_exists('publisher_class', $options)) ? $options['publisher_class'] : 'publisher');
+					$publisher_label=((array_key_exists('publisher_label', $options)) ? $options['publisher_label'] : (($labels===TRUE) ? 'Publisher:' : ''));
+					$publisher_label_class=((array_key_exists('publisher_label_class', $options)) ? $options['publisher_label_class'] : $label_class);
+					$publisher_link=((array_key_exists('publisher_link', $options)) ? $options['publisher_link'] : 'default');
+					$publisher_link_title=((array_key_exists('publisher_link_title', $options)) ? $options['publisher_link_title'] : 'default');
+
+					# Price options defaults.
+					$price_class=((array_key_exists('price_class', $options)) ? $options['price_class'] : 'price');
+					$price_label=((array_key_exists('price_label', $options)) ? $options['price_label'] : (($labels===TRUE) ? 'Price:' : ''));
+					$price_label_class=((array_key_exists('price_label_class', $options)) ? $options['price_label_class'] : $label_class);
+					$price_link=((array_key_exists('price_link', $options)) ? $options['price_link'] : 'default');
+					$price_link_title=((array_key_exists('price_link_title', $options)) ? $options['price_link_title'] : 'default');
+
+					# Title options defaults.
+					$title_class=((array_key_exists('title_class', $options)) ? $options['title_class'] : 'title');
+					$title_label=((array_key_exists('title_label', $options)) ? $options['title_label'] : '');
+					$title_label_class=((array_key_exists('title_label_class', $options)) ? $options['title_label_class'] : $label_class);
+					$title_link=((array_key_exists('title_link', $options)) ? $options['title_link'] : 'default');
+					$title_link_title=((array_key_exists('title_link_title', $options)) ? $options['title_link_title'] : 'default');
+
 					# Create an empty array to hold Amazon ASIN's after that record has been added to the $display_product variable.
 					$used_asins=array();
 					# Create new array to hold all display product.
 					$display_product=array();
+
 					# Loop throught the products.
 					foreach($parsed_xml->Items->Item as $key=>$product)
 					{
 						# Check if this is an item.
 						if($key=='Item')
 						{
-							# Set the User's ability to edit this product to FALSE as default.
-							$edit=FALSE;
-							# Set the User's ability to delete this product to FALSE as default.
-							$delete=FALSE;
-							# Check if the logged in User has the privileges to modify this product.
-							if($login->checkAccess($access_level)===TRUE)
-							{
-								# Set the User's ability to modify this product to TRUE.
-								$edit=TRUE;
-								$delete=TRUE;
-							}
 							# Create a variable to hold whether or not a "more" link should be displayed. Default is FALSE.
 							$more=FALSE;
 							# Set all relevant Data members.
@@ -470,6 +585,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 								$publisher=$this->getPublisher();
 								# Create variable for the product's title.
 								$title=$this->getTitle();
+
 								# Check if a maximum number of characters to be displayed has been passed.
 								if($max_char!==NULL)
 								{
@@ -482,42 +598,37 @@ if(!defined('__PHP_SHA256_NANO_'))
 											# Use limitStringLength from the Document class to truncate the editorial review.
 											$editorial_review=WebUtility::truncate($editorial_review, $max_char, '...%1s', TRUE);
 											# Add a "more" link to the editorial review.
-											$editorial_review=sprintf($editorial_review, '<a class="more" href="'.$detailed_page_url.'" title="more on: '.$title.'" target="_blank">'.$this->getMore().'</a>'."\n");
+											$editorial_review=sprintf($editorial_review, '<a class="more" href="'.$detailed_page_url.'" title="more on: '.$title.'" target="_blank">'.$this->getMore().'</a>');
 											# Set the $more value to TRUE.
 											$more=TRUE;
 										}
 									}
 								}
 
-								# Check if the author is available to display.
-								if(!empty($author))
-								{
-									# Set the author display XHTML to a variable.
-									$author_content='<span class="author">';
-									# Check if labels should be displayed.
-									if($labels===TRUE)
-									{
-										# Add the label to the author display XHTML.
-										$author_content.='<span class="label">Author:</span>';
-									}
-									$author_content.=$author;
-									$author_content.='</span>';
-									# Set the author content to the array.
-									$display_product[$asin]['author']=$author_content;
-								}
+								# Set the author content to the array.
+								$display_product[$asin]['author']=$this->createAuthorMarkup($author, array(
+									'author_class'=>$author_class,
+									'author_label'=>$author_label,
+									'author_label_class'=>$author_label_class,
+									'author_link'=>$author_link,
+									'title_attribute'=>$author_link_title
+								));
 
 								# Get the FormGenerator class.
 								require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 								# Instantiate a new FormGenerator object and creat the add to cart form/button.
-								$fg=new FormGenerator('add_cart', 'http://www.amazon.com/gp/aws/cart/add.html', 'GET', '_blank', FALSE, 'button-amazon');
+								$fg=new FormGenerator($buy_amazon_button_name, 'http://www.amazon.com/gp/aws/cart/add.html', 'GET', '_blank', FALSE, $buy_amazon_button_class);
 								$fg->addElement('hidden', array('name'=>'AWSAccessKeyId', 'value'=>$this->getAccessKey()));
 								$fg->addElement('hidden', array('name'=>'AssociateTag', 'value'=>$this->getAssTag()));
 								$fg->addElement('hidden', array('name'=>'ASIN.1','value'=>$asin));
 								$fg->addElement('hidden', array('name'=>'Quantity.1', 'value'=>'1'));
-								$fg->addFormPart('<span class="label">Buy now from</span>');
-								$fg->addElement('submit', array('name'=>'add', 'value'=>'Buy from Amazon'), '', NULL, 'submit-amazon');
+								if(!empty($buy_amazon_label))
+								{
+									$fg->addFormPart('<span class="'.$buy_amazon_label_class.'">'.$buy_amazon_label.'</span>');
+								}
+								$fg->addElement($buy_amazon_submit_type, array('name'=>$buy_amazon_submit_name, 'value'=>$buy_amazon_submit_value), '', $buy_amazon_submit_image, $buy_amazon_submit_class);
 								# Create a variable to hold the product image display XHTML.
-								$buy_content=$fg->display()."\n";
+								$buy_content=$fg->display();
 								# Set the image content to the array.
 								$display_product[$asin]['buy']=$buy_content;
 
@@ -541,62 +652,58 @@ if(!defined('__PHP_SHA256_NANO_'))
 									$display_product[$asin]['editorial_review']=$review_content;
 								}
 
-								# Create a variable to hold the product image display XHTML.
-								$image_content='<a href="'.$image_original_url.'" rel="lightbox" title="'.$title.'" class="image-link" target="_blank"><img src="'.$image_url.'" class="image" alt="'.$title.'" /></a>'."\n";
 								# Set the image content to the array.
-								$display_product[$asin]['image']=$image_content;
+								$display_product[$asin]['image']=$this->createImageMarkup($image_url, array(
+									'image_link'=>$image_link,
+									'image_original_url'=>$image_original_url,
+									'product_title'=>$title
+								));
 
-								# Check if the price is available to display.
-								if(!empty($price))
-								{
-									# Set the price display XHTML to a variable.
-									$price_content='<span class="price'.(isset($_GET['product']) ? '-amazon' : '').'">';
-									# Check if labels should be displayed.
-									if($labels===TRUE)
-									{
-										# Add the label to the review display XHTML.
-										$price_content.='<span class="label">Price:</span>';
-									}
-									$price_content.='<a href="'.$detailed_page_url.'" target="_blank">'.$price.' '.$currency.'</a>';
-									$price_content.='</span>';
-									# Set the price content to the array.
-									$display_product[$asin]['price']=$price_content;
-								}
+								# Set the price content to the array.
+								$display_product[$asin]['price']=$this->createPriceMarkup($price, array(
+									'currency'=>$currency,
+									'detailed_page_url'=>$detailed_page_url,
+									'price_class'=>$price_class,
+									'price_label'=>$price_label,
+									'price_label_class'=>$price_label_class,
+									'price_link'=>$price_link,
+									'product_title'=>$title,
+									'title_attribute'=>$price_link_title
+								), FALSE);
 
-								# Check if the publisher is available to display.
-								if(!empty($publisher))
-								{
-									# Set the publisher display XHTML to a variable.
-									$publisher_content='<span class="publisher">';
-									# Check if labels should be displayed.
-									if($labels===TRUE)
-									{
-										# Add the label to the publisher display XHTML.
-										$publisher_content.='<span class="label">Publisher:</span>';
-									}
-									$publisher_content.=$publisher;
-									$publisher_content.='</span>';
-									# Set the publisher content to the array.
-									$display_product[$asin]['publisher']=$publisher_content;
-								}
+								# Set the publisher content to the array.
+								$display_product[$asin]['publisher']=$this->createPublisherMarkup($publisher, array(
+									'publisher_class'=>$publisher_class,
+									'publisher_label'=>$publisher_label,
+									'publisher_label_class'=>$publisher_label_class,
+									'publisher_link'=>NULL,
+									'title_attribute'=>$publisher_link_title
+								));
 
-								$title_content=$title;
 								# Set the title content to the array.
-								$display_product[$asin]['title']=$title_content;
+								$display_product[$asin]['title']=$this->createTitleMarkup($title, array(
+									'detailed_page_url'=>$detailed_page_url,
+									'title_class'=>$title_class,
+									'title_label'=>$title_label,
+									'title_label_class'=>$title_label_class,
+									'title_link'=>$title_link,
+									'title_attribute'=>$title_link_title
+								));
 
 								# Check if there should be an edit button displayed.
 								if($edit===TRUE)
 								{
 									# Set the edit button to a variable.
-									$edit_content='<a href="'.ADMIN_URL.'product/edit/?amazon='.$asin.'" class="edit" title="Edit this">Edit</a>'."\n";
+									$edit_content='<a href="'.ADMIN_URL.'product/?amazon='.$asin.'" class="'.$edit_class.'" title="'.$edit_link_title.'">'.$edit_value.'</a>';
 									# Set the edit content to the array.
 									$display_product[$asin]['edit']=$edit_content;
 								}
+
 								# Check f there should be a delete button displayed.
 								if($delete===TRUE)
 								{
 									# Set the delete button to a variable.
-									$delete_content='<a href="'.ADMIN_URL.'product/edit/?amazon='.$asin.'&delete=yes" class="delete" title="Delete this">Delete</a>'."\n";
+									$delete_content='<a href="'.ADMIN_URL.'product/?amazon='.$asin.'&delete" class="'.$delete_class.'" title="'.$delete_link_title.'">'.$delete_value.'</a>';
 									# Set the delete content to the array.
 									$display_product[$asin]['delete']=$delete_content;
 								}
@@ -613,7 +720,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- displayAmazonProduct
 
-		/**
+		/*
 		 * getAmazonProduct
 		 *
 		 * Generates a link to the Amazon shopping cart.
@@ -629,7 +736,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->setParsedXML(simplexml_load_string($response));
 		} #==== End -- getAmazonProduct
 
-		/**
+		/*
 		 * makeCartLink
 		 *
 		 * Generates a link to the Amazon shopping cart.
@@ -659,6 +766,51 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** protected methods ***/
 
+		/*
+		 * createImageMarkup
+		 *
+		 * Creates and returns HTML markup for the "image" of a product.
+		 *
+		 * @param		$image					The image URL of the product. A String.
+		 * @param		$image_options	The markup options. An array.
+		 * @access	protected
+		 */
+		protected function createImageMarkup($image, $image_options)
+		{
+			# Check if the image is available to display.
+			if(!empty($image))
+			{
+				# Create a variable to hold the product image display HTML.
+				$image_content='<img src="'.$image.'" class="image" alt="'.$image_options['product_title'].'"/>';
+
+				# Check if there should be a link for the image.
+				if(!empty($image_options['image_link']))
+				{
+					# Check if the image link is lightbox.
+					if($image_options['image_link']=='lightbox')
+					{
+						$image_options['image_link']='<a href="'.$image_options['image_original_url'].'" rel="lightbox" title="'.$image_options['product_title'].'" class="image-link" target="_blank">%{insert_content}</a>';
+					}
+					else
+					{
+						$image_options['image_link']=$image_options['image_link'].'%{insert_content}</a>';
+					}
+				}
+				else
+				{
+					# Explicitly set the image link to an empty variable.
+					$image_options['image_link']='%{insert_content}';
+				}
+
+				# Put the image inside its container.
+				$image_content=str_replace('%{insert_content}', $image_content, $image_options['image_link']);
+
+				# Return the markup.
+				return $image_content;
+			}
+			return NULL;
+		} #==== End -- createImageMarkup
+
 /*** THIS MAY NEED SOME FIXING ***/
 		protected function createCartRequest($CartId)
 		{
@@ -676,7 +828,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 		} #==== End -- CartAdd
 /*** THIS NEEDS IMPLEMENTATION ***/
 
-		/**
+		/*
 		 * createRequest
 		 *
 		 * Creates the request link for Amazon API
@@ -701,7 +853,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $url;
 		} #==== End -- createRequest
 
-		/**
+		/*
 		 * sendRequest
 		 *
 		 * Sends a request to the Amazon API
@@ -743,7 +895,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $request;
 		} #==== End -- sendRequest
 
-		/**
+		/*
 		 * createCache
 		 *
 		 * Makes the cache directory and file, creates and sends the request to Amazon, sets the response to the cache, and returns the response.
@@ -798,7 +950,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $response;
 		} #==== End -- createCache
 
-		/**
+		/*
 		 * charPad
 		 *
 		 * Do the SHA-256 Padding routine (make input a multiple of 512 bits)
@@ -834,7 +986,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** bitwise and custom methods as defined in FIPS180-2 Standard ***/
 
-		/**
+		/*
 		 * addMod2N
 		 *
 		 * Z = (X + Y) mod 2^32
@@ -873,7 +1025,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return (int)$r;
 		} #==== End -- addMod2N
 
-		/**
+		/*
 		 * SHR
 		 *
 		 * Logical bitwise right shift (PHP default is arithmetic shift)
@@ -943,7 +1095,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** custom methods to provide PHP support ***/
 
-		/**
+		/*
 		 * intSplit
 		 *
 		 * Split a byte-string into integer array values.
@@ -1013,7 +1165,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $result;
 		} #==== End -- strSplit
 
-		/**
+		/*
 		 * sha256
 		 *
 		 * Note:
@@ -1159,7 +1311,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** End custom methods to provide PHP support ***/
 
-		/**
+		/*
 		 * setDataMembers
 		 *
 		 * Sets all the data returned from the parsed xml to the appropriate Data members.

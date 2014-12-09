@@ -4,7 +4,7 @@
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 
-/**
+/*
  * Product
  *
  * The Product class is used to access and manipulate data in the `product` table.
@@ -46,15 +46,9 @@ class Product
 
 
 
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
-
-
-
 	/*** mutator methods ***/
 
-	/**
+	/*
 	 * setAllProducts
 	 *
 	 * Sets the data member $all_products.
@@ -67,7 +61,7 @@ class Product
 		$this->all_products=$all_products;
 	} #==== End -- setAllProducts
 
-	/***
+	/*
 	 * setASIN
 	 *
 	 * Sets the data member $asin
@@ -92,7 +86,7 @@ class Product
 		}
 	} #==== End -- setASIN
 
-	/***
+	/*
 	 * setCollectedASINs
 	 *
 	 * Sets the data member $collected_asins
@@ -121,7 +115,7 @@ class Product
 		}
 	} #==== End -- setCollectedASINs
 
-	/**
+	/*
 	 * setAuthor
 	 *
 	 * Sets the data member $author.
@@ -148,7 +142,7 @@ class Product
 		}
 	} #==== End -- setAuthor
 
-	/***
+	/*
 	 * setButtonID
 	 *
 	 * Sets the data member $button_id
@@ -173,7 +167,7 @@ class Product
 		}
 	} #==== End -- setButtonID
 
-	/**
+	/*
 	 * setCategories
 	 *
 	 * Sets the data member $categories.
@@ -231,7 +225,7 @@ class Product
 		}
 	} #==== End -- setCategories
 
-	/**
+	/*
 	 * setContent
 	 *
 	 * Sets the data member $content.
@@ -260,7 +254,7 @@ class Product
 		}
 	} #==== End -- setContent
 
-	/**
+	/*
 	 * setCurrency
 	 *
 	 * Sets the data member $currency.
@@ -285,7 +279,7 @@ class Product
 		}
 	} #==== End -- setCurrency
 
-	/**
+	/*
 	 * setDescription
 	 *
 	 * Sets the data member $description.
@@ -314,7 +308,7 @@ class Product
 		}
 	} #==== End -- setDescription
 
-	/**
+	/*
 	 * setExplodedCategories
 	 *
 	 * Sets the data member $exploded_categories.
@@ -327,7 +321,7 @@ class Product
 		$this->exploded_categories=$exploded_categories;
 	} #==== End -- setExplodedCategories
 
-	/**
+	/*
 	 * setAllFiles
 	 *
 	 * Sets the data member $all_files.
@@ -341,7 +335,7 @@ class Product
 		$this->all_files=$files;
 	} #==== End -- setAllFiles
 
-	/**
+	/*
 	 * setFile
 	 *
 	 * Sets the data member $file.
@@ -354,7 +348,7 @@ class Product
 		$this->file=$object;
 	} #==== End -- setFile
 
-	/**
+	/*
 	 * setFileID
 	 *
 	 * Sets the data member $file_id.
@@ -388,7 +382,7 @@ class Product
 		}
 	} #==== End -- setFileID
 
-	/**
+	/*
 	 * setFileInfoDisplay
 	 *
 	 * Sets the data member $file_info_display.
@@ -413,7 +407,7 @@ class Product
 		}
 	} #==== End -- setFileInfoDisplay
 
-	/**
+	/*
 	 * setID
 	 *
 	 * Sets the data member $id.
@@ -447,7 +441,7 @@ class Product
 		}
 	} #==== End -- setID
 
-	/**
+	/*
 	 * setAllImages
 	 *
 	 * Sets the data member $images.
@@ -461,7 +455,7 @@ class Product
 		$this->all_images=$images;
 	} #==== End -- setAllImages
 
-	/**
+	/*
 	 * setImage
 	 *
 	 * Sets the data member $image.
@@ -475,7 +469,7 @@ class Product
 		$this->image=$object;
 	} #==== End -- setImage
 
-	/**
+	/*
 	 * setImageID
 	 *
 	 * Sets the data member $image_id.
@@ -509,7 +503,7 @@ class Product
 		}
 	} #==== End -- setImageID
 
-	/**
+	/*
 	 * setLink
 	 *
 	 * Sets the data member $link.
@@ -536,7 +530,7 @@ class Product
 		}
 	} #==== End -- setLink
 
-	/**
+	/*
 	 * setMore
 	 *
 	 * Sets the data member $more.
@@ -561,7 +555,7 @@ class Product
 		}
 	} #==== End -- setMore
 
-	/**
+	/*
 	 * setPrice
 	 *
 	 * Sets the data member $price.
@@ -586,7 +580,7 @@ class Product
 		}
 	} #==== End -- setPrice
 
-	/**
+	/*
 	 * setProductType
 	 *
 	 * Sets the data member $product_type.
@@ -600,7 +594,7 @@ class Product
 		$this->product_type=$product_type;
 	} #==== End -- setProductType
 
-	/**
+	/*
 	 * setAllPublishers
 	 *
 	 * Sets the data member $all_publishers.
@@ -613,7 +607,7 @@ class Product
 		$this->all_publishers=$publishers;
 	} #==== End -- setAllPublishers
 
-	/**
+	/*
 	 * setPublisher
 	 *
 	 * Sets the data member $publisher.
@@ -644,7 +638,7 @@ class Product
 		}
 	} #==== End -- setPublisher
 
-	/**
+	/*
 	 * setPublisherID
 	 *
 	 * Sets the data member $publisher_id.
@@ -678,7 +672,7 @@ class Product
 		}
 	} #==== End -- setPublisherID
 
-	/**
+	/*
 	 * setPurchaseLink
 	 *
 	 * Sets the data member $purchase_link.
@@ -705,7 +699,7 @@ class Product
 		}
 	} #==== End -- setPurchaseLink
 
-	/**
+	/*
 	 * setSortBy
 	 *
 	 * Sets the data member $sort_by.
@@ -739,7 +733,7 @@ class Product
 		}
 	} #==== End -- setSortBy
 
-	/**
+	/*
 	 * setTitle
 	 *
 	 * Sets the data member $title.
@@ -772,7 +766,7 @@ class Product
 
 	/*** accessor methods ***/
 
-	/**
+	/*
 	 * getAllProducts
 	 *
 	 * Returns the data member $all_products.
@@ -784,7 +778,7 @@ class Product
 		return $this->all_products;
 	} #==== End -- getAllProducts
 
-	/**
+	/*
 	 * getASIN
 	 *
 	 * Returns the data member $asin.
@@ -796,7 +790,7 @@ class Product
 		return $this->asin;
 	} #==== End -- getASIN
 
-	/**
+	/*
 	 * getCollectedASINs
 	 *
 	 * Returns the data member $collected_asins.
@@ -808,7 +802,7 @@ class Product
 		return $this->collected_asins;
 	} #==== End -- getCollectedASINs
 
-	/**
+	/*
 	 * getAuthor
 	 *
 	 * Returns the data member $author.
@@ -820,7 +814,7 @@ class Product
 		return $this->author;
 	} #==== End -- getAuthor
 
-	/**
+	/*
 	 * getButtonID
 	 *
 	 * Returns the data member $button_id.
@@ -832,7 +826,7 @@ class Product
 		return $this->button_id;
 	} #==== End -- getButtonID
 
-	/**
+	/*
 	 * getCategories
 	 *
 	 * Returns the data member $categories.
@@ -844,7 +838,7 @@ class Product
 		return $this->categories;
 	} #==== End -- getCategories
 
-	/**
+	/*
 	 * getCategory
 	 *
 	 * Returns the data member $category.
@@ -856,7 +850,7 @@ class Product
 		return $this->category;
 	} #==== End -- getCategory
 
-	/**
+	/*
 	 * getCategoryID
 	 *
 	 * Returns the data member $category_id.
@@ -868,7 +862,7 @@ class Product
 		return $this->category_id;
 	} #==== End -- getCategoryID
 
-	/**
+	/*
 	 * getContent
 	 *
 	 * Returns the data member $content.
@@ -880,7 +874,7 @@ class Product
 		return $this->content;
 	} #==== End -- getContent
 
-	/**
+	/*
 	 * getCurrency
 	 *
 	 * Returns the data member $currency.
@@ -892,7 +886,7 @@ class Product
 		return $this->currency;
 	} #==== End -- getCurrency
 
-	/**
+	/*
 	 * getDescription
 	 *
 	 * Returns the data member $description.
@@ -904,7 +898,7 @@ class Product
 		return $this->description;
 	} #==== End -- getDescription
 
-	/**
+	/*
 	 * getExplodedCategories
 	 *
 	 * Returns the data member $exploded_categories.
@@ -916,7 +910,7 @@ class Product
 		return $this->exploded_categories;
 	} #==== End -- getExplodedCategories
 
-	/**
+	/*
 	 * getAllFiles
 	 *
 	 * Returns the data member $all_files.
@@ -928,7 +922,7 @@ class Product
 		return $this->all_files;
 	} #==== End -- getAllFiles
 
-	/**
+	/*
 	 * getFile
 	 *
 	 * Returns the data member $file.
@@ -940,7 +934,7 @@ class Product
 		return $this->file;
 	} #==== End -- getFile
 
-	/**
+	/*
 	 * getFileID
 	 *
 	 * Returns the data member $file_id.
@@ -952,7 +946,7 @@ class Product
 		return $this->file_id;
 	} #==== End -- getFileID
 
-	/**
+	/*
 	 * getFileInfoDisplay
 	 *
 	 * Returns the data member $file_info_display.
@@ -964,7 +958,7 @@ class Product
 		return $this->file_info_display;
 	} #==== End -- getFileInfoDisplay
 
-	/**
+	/*
 	 * getID
 	 *
 	 * Returns the data member $id.
@@ -976,7 +970,7 @@ class Product
 		return $this->id;
 	} #==== End -- getID
 
-	/**
+	/*
 	 * getAllImages
 	 *
 	 * Returns the data member $all_images.
@@ -988,7 +982,7 @@ class Product
 		return $this->all_images;
 	} #==== End -- getAllImages
 
-	/**
+	/*
 	 * getImage
 	 *
 	 * Returns the data member $image.
@@ -1000,7 +994,7 @@ class Product
 		return $this->image;
 	} #==== End -- getImage
 
-	/**
+	/*
 	 * getImageID
 	 *
 	 * Returns the data member $image_id.
@@ -1012,7 +1006,7 @@ class Product
 		return $this->image_id;
 	} #==== End -- getImageID
 
-	/**
+	/*
 	 * getLink
 	 *
 	 * Returns the data member $link.
@@ -1024,7 +1018,7 @@ class Product
 		return $this->link;
 	} #==== End -- getLink
 
-	/**
+	/*
 	 * getMore
 	 *
 	 * Returns the data member $more.
@@ -1036,7 +1030,7 @@ class Product
 		return $this->more;
 	} #==== End -- getMore
 
-	/**
+	/*
 	 * getPrice
 	 *
 	 * Returns the data member $price.
@@ -1048,7 +1042,7 @@ class Product
 		return $this->price;
 	} #==== End -- getPrice
 
-	/**
+	/*
 	 * getProductType
 	 *
 	 * Returns the data member $product_type.
@@ -1060,7 +1054,7 @@ class Product
 		return $this->product_type;
 	} #==== End -- getProductType
 
-	/**
+	/*
 	 * getAllPublishers
 	 *
 	 * Returns the data member $all_publishers.
@@ -1072,7 +1066,7 @@ class Product
 		return $this->all_publishers;
 	} #==== End -- getAllPublishers
 
-	/**
+	/*
 	 * getPublisher
 	 *
 	 * Returns the data member $publisher.
@@ -1084,7 +1078,7 @@ class Product
 		return $this->publisher;
 	} #==== End -- getPublisher
 
-	/**
+	/*
 	 * getPublisherID
 	 *
 	 * Returns the data member $publisher_id.
@@ -1096,7 +1090,7 @@ class Product
 		return $this->publisher_id;
 	} #==== End -- getPublisherID
 
-	/**
+	/*
 	 * getPurchaseLink
 	 *
 	 * Returns the data member $purchase_link.
@@ -1108,7 +1102,7 @@ class Product
 		return $this->purchase_link;
 	} #==== End -- getPurchaseLink
 
-	/**
+	/*
 	 * getSortBy
 	 *
 	 * Returns the data member $sort_by.
@@ -1120,7 +1114,7 @@ class Product
 		return $this->sort_by;
 	} #==== End -- getSortBy
 
-	/**
+	/*
 	 * getTitle
 	 *
 	 * Returns the data member $title.
@@ -1138,7 +1132,7 @@ class Product
 
 	/*** public methods ***/
 
-	/**
+	/*
 	 * countAllRecords
 	 *
 	 * Returns the number of products in the database that are marked available.
@@ -1184,7 +1178,7 @@ class Product
 		}
 	} #==== End -- countAllRecords
 
-	/**
+	/*
 	 * deleteProduct
 	 *
 	 * Removes an product from the `product` table.
@@ -1274,20 +1268,37 @@ class Product
 		}
 	} #==== End -- deleteProduct
 
-	/**
+	/*
 	 * displayProduct
 	 *
-	 * Creates product XHTML elements and sets them to an array for display.
+	 * Creates product HTML elements and sets them to an array for display.
 	 *
 	 * @param	$page
 	 * @param	$identifier
-	 * @param	$image_size
-	 * @param	$max_char				The maximum number of characters to display.
-	 * @param	$access_level			The access levels needed for a logged in User to modify the products - must be a space sepparated string of numbers.
-	 * @param	$labels					TRUE if other buttons should be displayed, ie "download", "more", FLASE if not.
+	 * @param $option				An Array of various options for displaying Products. The available options are:
+	 *												"image_size" => What size of image should be called from Amazon for Amazon products. the default is
+	 *																				"MediumImage". The possible values are:
+	 *																				"LargeImage"
+	 *																				"MediumImage"
+	 *																				"SmallImage"
+	 *																				"SwatchImage"
+	 *																				"ThumbnailImage"
+	 *																				"TinyImage"
+	 *												"max_char" => The maximum number of characters to display in product descriptions. The default is NULL
+	 *																			(unlimited).
+	 *												"access_level" => The access levels needed for a logged in User to modify the products - must be a
+	 *																					space sepparated string of numbers. The default is ADMIN_USERS.
+	 *												"labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is TRUE.
+	 *												"title_class" => The class for the title container. Default is "title".
+	 *												"title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to. If
+	 *																				the title should link to the details page, simply pass the value "default". Default is
+	 *																				"default".
+	 *												"title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag. If it WILL be,
+	 *																							pass the text to be used in the "title" attribute for the link. To use the product
+	 *																							title, "{PRODUCT_TITLE}", simply pass the value "default". The default is "default".
 	 * @access	public
 	 */
-	public function displayProduct($page, $identifier, $image_size, $max_char=NULL, $access_level=ADMIN_USERS, $labels=TRUE)
+	public function displayProduct($page, $identifier, $options=array())
 	{
 		# Bring the Login object into scope.
 		global $login;
@@ -1299,10 +1310,118 @@ class Product
 			# Check if there is product to display.
 			if(!empty($products))
 			{
+				# General options defaults.
+				$access_level=((array_key_exists('access_level', $options)) ? $options['access_level'] : ADMIN_USERS);
+				$labels=((array_key_exists('labels', $options)) ? $options['labels'] : TRUE);
+				$label_class=((array_key_exists('label_class', $options)) ? $options['label_class'] : 'label');
+				$max_char=((array_key_exists('max_char', $options)) ? $options['max_char'] : NULL);
+
+				# Set the User's ability to edit this product to FALSE as default.
+				$edit=FALSE;
+				# Set the User's ability to delete this product to FALSE as default.
+				$delete=FALSE;
+				# Check if the logged in User has the privileges to modify this product.
+				if($login->checkAccess($access_level)===TRUE)
+				{
+					# Set the User's ability to modify this product. Default is TRUE.
+					$edit=((array_key_exists('edit', $options)) ? $options['edit'] : TRUE);
+					$edit_class=((array_key_exists('edit_class', $options)) ? $options['edit_class'] : 'edit');
+					$edit_link_title=((array_key_exists('edit_link_title', $options)) ? $options['edit_link_title'] : 'Edit this product');
+					$edit_value=((array_key_exists('edit_value', $options)) ? $options['edit_value'] : 'Edit');
+					$delete=((array_key_exists('delete', $options)) ? $options['delete'] : TRUE);
+					$delete_class=((array_key_exists('delete_class', $options)) ? $options['delete_class'] : 'delete');
+					$delete_link_title=((array_key_exists('delete_link_title', $options)) ? $options['delete_link_title'] : 'Delete this product');
+					$delete_value=((array_key_exists('delete_value', $options)) ? $options['delete_value'] : 'Delete');
+				}
+
+				# Author options defaults.
+				$author_class=((array_key_exists('author_class', $options)) ? $options['author_class'] : 'author');
+				$author_label=((array_key_exists('author_label', $options)) ? $options['author_label'] : (($labels===TRUE) ? 'Author:' : ''));
+				$author_label_class=((array_key_exists('author_label_class', $options)) ? $options['author_label_class'] : $label_class);
+				$author_link=((array_key_exists('author_link', $options)) ? $options['author_link'] : NULL);
+				$author_link_title=((array_key_exists('author_link_title', $options)) ? $options['author_link_title'] : 'default');
+
+				# Buy button options defaults.
+				$buy_amazon_button_class=((array_key_exists('buy_amazon_button_class', $options)) ? $options['buy_amazon_button_class'] : 'button-amazon');
+				$buy_amazon_button_name=((array_key_exists('buy_amazon_button_name', $options)) ? $options['buy_amazon_button_name'] : 'add_cart');
+				$buy_amazon_label=((array_key_exists('buy_amazon_label', $options)) ? $options['buy_amazon_label'] : (($labels===TRUE) ? 'Buy now from' : ''));
+				$buy_amazon_label_class=((array_key_exists('buy_amazon_label_class', $options)) ? $options['buy_amazon_label_class'] : $label_class);
+				$buy_amazon_submit_class=((array_key_exists('buy_amazon_submit_class', $options)) ? $options['buy_amazon_submit_class'] : 'submit-amazon');
+				$buy_amazon_submit_image=((array_key_exists('buy_amazon_submit_image', $options)) ? $options['buy_amazon_submit_image'] : NULL);
+				$buy_amazon_submit_name=((array_key_exists('buy_amazon_submit_name', $options)) ? $options['buy_amazon_submit_name'] : 'add');
+				$buy_amazon_submit_type=((array_key_exists('buy_amazon_submit_type', $options)) ? $options['buy_amazon_submit_type'] : 'submit');
+				$buy_amazon_submit_value=((array_key_exists('buy_amazon_submit_value', $options)) ? $options['buy_amazon_submit_value'] : 'Buy from Amazon');
+				$buy_class=((array_key_exists('buy_class', $options)) ? $options['buy_class'] : 'buy');
+				$buy_link_title=((array_key_exists('buy_paypal_value', $options)) ? $options['buy_paypal_value'] : 'default');
+				$buy_link_value=((array_key_exists('buy_link_value', $options)) ? $options['buy_link_value'] : 'Buy Now');
+				$buy_paypal_button_class=((array_key_exists('buy_paypal_button_class', $options)) ? $options['buy_paypal_button_class'] : 'button-amazon');
+				$buy_paypal_button_name=((array_key_exists('buy_paypal_button_name', $options)) ? $options['buy_paypal_button_name'] : 'add_cart');
+				$buy_paypal_submit_class=((array_key_exists('buy_paypal_submit_class', $options)) ? $options['buy_paypal_submit_class'] : 'submit-paypal');
+				$buy_paypal_submit_image=((array_key_exists('buy_paypal_submit_image', $options)) ? $options['buy_paypal_submit_image'] : NULL);
+				$buy_paypal_submit_name=((array_key_exists('buy_paypal_submit_name', $options)) ? $options['buy_paypal_submit_name'] : 'submit');
+				$buy_paypal_submit_type=((array_key_exists('buy_paypal_submit_type', $options)) ? $options['buy_paypal_submit_type'] : 'submit');
+				$buy_paypal_submit_value=((array_key_exists('buy_paypal_submit_value', $options)) ? $options['buy_paypal_submit_value'] : $buy_link_value);
+
+				# Content options defaults.
+				$content_class=((array_key_exists('content_class', $options)) ? $options['content_class'] : 'content cont');
+				$content_description_as_one=((array_key_exists('content_description_as_one', $options)) ? $options['content_description_as_one'] : FALSE);
+				$content_label=((array_key_exists('content_label', $options)) ? $options['content_label'] : '');
+				$content_label_class=((array_key_exists('content_label_class', $options)) ? $options['content_label_class'] : $label_class);
+				$content_max_char=((array_key_exists('content_max_char', $options)) ? $options['content_max_char'] : $max_char);
+				$content_more_class=((array_key_exists('content_more_class', $options)) ? $options['content_more_class'] : 'more');
+
+				# Description options defaults.
+				$description_class=((array_key_exists('description_class', $options)) ? $options['description_class'] : 'content desc');
+				$description_label=((array_key_exists('description_label', $options)) ? $options['description_label'] : (($labels===TRUE) ? 'Description:' : ''));
+				$description_label_class=((array_key_exists('description_label_class', $options)) ? $options['description_label_class'] : $label_class);
+				$description_max_char=((array_key_exists('description_max_char', $options)) ? $options['description_max_char'] : $max_char);
+				$description_more_class=((array_key_exists('description_more_class', $options)) ? $options['description_more_class'] : 'more');
+
+				# File options defaults.
+				$file_download_class=((array_key_exists('file_download_class', $options)) ? $options['file_download_class'] : 'download');
+				$file_download_link_title=((array_key_exists('file_download_link_title', $options)) ? $options['file_download_link_title'] : 'Download Now!');
+				$file_download_link_value=((array_key_exists('file_download_link_value', $options)) ? $options['file_download_link_value'] : 'Download');
+				$file_name_class=((array_key_exists('file_name_class', $options)) ? $options['file_name_class'] : 'file-name');
+				$file_name_label=((array_key_exists('file_name_label', $options)) ? $options['file_name_label'] : (($labels===TRUE) ? 'Name:' : ''));
+				$file_name_label_class=((array_key_exists('file_name_label_class', $options)) ? $options['file_name_label_class'] : $label_class);
+				$file_name_link=((array_key_exists('file_name_link', $options)) ? $options['file_name_link'] : TRUE);
+				$file_name_link_title=((array_key_exists('file_name_link_title', $options)) ? $options['file_name_link_title'] : 'default');
+				$file_title_class=((array_key_exists('file_title_class', $options)) ? $options['file_title_class'] : 'file-title');
+				$file_title_label=((array_key_exists('file_title_label', $options)) ? $options['file_title_label'] : (($labels===TRUE) ? 'Title:' : ''));
+				$file_title_label_class=((array_key_exists('file_title_label_class', $options)) ? $options['file_title_label_class'] : $label_class);
+				$file_title_link=((array_key_exists('file_title_link', $options)) ? $options['file_title_link'] : FALSE);
+				$file_title_link_title=((array_key_exists('file_title_link_title', $options)) ? $options['file_title_link_title'] : 'default');
+
+				# Image options defaults.
+				$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : 'lightbox');
+				$image_size=((array_key_exists('image_size', $options)) ? $options['image_size'] : 'MediumImage');
+
+				# Publisher options defaults.
+				$publisher_class=((array_key_exists('publisher_class', $options)) ? $options['publisher_class'] : 'publisher');
+				$publisher_label=((array_key_exists('publisher_label', $options)) ? $options['publisher_label'] : (($labels===TRUE) ? 'Publisher:' : ''));
+				$publisher_label_class=((array_key_exists('publisher_label_class', $options)) ? $options['publisher_label_class'] : $label_class);
+				$publisher_link=((array_key_exists('publisher_link', $options)) ? $options['publisher_link'] : 'default');
+				$publisher_link_title=((array_key_exists('publisher_link_title', $options)) ? $options['publisher_link_title'] : 'default');
+
+				# Price options defaults.
+				$price_class=((array_key_exists('price_class', $options)) ? $options['price_class'] : 'price');
+				$price_label=((array_key_exists('price_label', $options)) ? $options['price_label'] : (($labels===TRUE) ? 'Price:' : ''));
+				$price_label_class=((array_key_exists('price_label_class', $options)) ? $options['price_label_class'] : $label_class);
+				$price_link=((array_key_exists('price_link', $options)) ? $options['price_link'] : 'default');
+				$price_link_title=((array_key_exists('price_link_title', $options)) ? $options['price_link_title'] : 'default');
+
+				# Title options defaults.
+				$title_class=((array_key_exists('title_class', $options)) ? $options['title_class'] : 'title');
+				$title_label=((array_key_exists('title_label', $options)) ? $options['title_label'] : '');
+				$title_label_class=((array_key_exists('title_label_class', $options)) ? $options['title_label_class'] : $label_class);
+				$title_link=((array_key_exists('title_link', $options)) ? $options['title_link'] : 'default');
+				$title_link_title=((array_key_exists('title_link_title', $options)) ? $options['title_link_title'] : 'default');
+
 				# Create an empty array to hold product record id's after that record has been added to the $display_product variable.
 				$used_ids=array();
 				# Create new array to hold all display product.
 				$display_product=array();
+
 				# Create an empty array to hold the product ASIN's returned for the records.
 				$asins=array();
 				# Loop through the products to get any Amazon product.
@@ -1319,22 +1438,12 @@ class Product
 				require_once Utility::locateFile(MODULES.'Product'.DS.'Amazon.php');
 				# Instantiate a new Amazon object.
 				$amazon=new Amazon(AMAZON_ACCESS_KEY, AMAZON_ASS_TAG, AMAZON_SECRET_KEY);
-				# Set the Amazon product display XHTML array to a variable.
-				$display_amazon=$amazon->displayAmazonProduct($asins, $page, $identifier, $image_size, $max_char, $access_level, $labels);
+				# Set the Amazon product display HTML array to a variable.
+				$display_amazon=$amazon->displayAmazonProduct($asins, $page, $identifier, $options);
+
 				# Loop through the products.
 				foreach($products as $product)
 				{
-					# Set the User's ability to edit this product to FALSE as default.
-					$edit=FALSE;
-					# Set the User's ability to delete this product to FALSE as default.
-					$delete=FALSE;
-					# Check if the logged in User has the privileges to modify this product.
-					if($login->checkAccess($access_level)===TRUE)
-					{
-						# Set the User's ability to modify this product to TRUE.
-						$edit=TRUE;
-						$delete=TRUE;
-					}
 					# Create a variable to hold whether or not a "more" link should be displayed. Default is FALSE.
 					$more=FALSE;
 					# Set all relevant Data members.
@@ -1361,30 +1470,15 @@ class Product
 						$currency=$this->getCurrency();
 						# Set the product's description to a variable.
 						$description=$this->getDescription();
-						# Create the detailed variable with the default value FALSE.
-						$detailed=FALSE;
+
 						# Create a variable for the detailed page URL.
-						$detailed_page_url=Utility::removeIndex('http://'.FULL_DOMAIN.HERE);
+						$detailed_page_url=Utility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE);
 						# Set any potential GET query to a variable.
 						$get_query=GET_QUERY;
-
 						$get_query=preg_replace('/(\?page\=[\d]{1,})?((\&|\?)sort_by\=[a-z\s\W\d]{1,})?(\?product\=[\d]{1,})?/i', '', $get_query);
-						# Check if there is already a GET query in the current URL.
-						if(empty($get_query))
-						{
-							# Add the product id to the end of the detailed page URL.
-							$detailed_page_url.='?product='.$id;
-						}
-						else
-						{
-							# Add the product id to the end of the detailed page URL.
-							$detailed_page_url.='&product='.$id;
-						}
-						# Check if this is a detailed product page.
-						if($detailed_page_url==Utility::removeIndex('http://'.FULL_URL))
-						{
-							$detailed=TRUE;
-						}
+						# Add the product id to the end of the detailed page URL.
+						$detailed_page_url.=((empty($get_query)) ? '?': '&').'product='.$id;
+
 						# Set the product File object to a variable.
 						$file_obj=$this->getFile();
 						# Set the product Image object to a variable.
@@ -1395,6 +1489,8 @@ class Product
 						$price=$this->getPrice();
 						# Create variable for the Publisher object.
 						$publisher_obj=$this->getPublisher();
+						# Create a variable for the publisher.
+						$publisher=((!empty($publisher_obj)) ? $publisher_obj->getPublisher() : '');
 						# Set the product's purchase link to a variable.
 						$purchase_link=$this->getPurchaseLink();
 						# Set the product's title to a variable.
@@ -1427,35 +1523,26 @@ class Product
 							}
 						}
 
-						# Check if the author is available to display.
-						if(!empty($author))
-						{
-							# Set the author display XHTML to a variable.
-							$author_content='<span class="author">';
-							# Check if labels should be displayed.
-							if($labels===TRUE)
-							{
-								# Add the label to the author display XHTML.
-								$author_content.='<span class="label">Author:</span>';
-							}
-							$author_content.=$author;
-							$author_content.='</span>';
-							# Set the author content to the array.
-							$display_product[$id]['author']=$author_content;
-						}
+						# Set the author content to the array.
+						$display_product[$id]['author']=$this->createAuthorMarkup($author, array(
+							'author_class'=>$author_class,
+							'author_label'=>$author_label,
+							'author_label_class'=>$author_label_class,
+							'author_link'=>$author_link,
+							'title_attribute'=>$author_link_title
+						));
 
 						# Check if the Paypal button ID is set.
 						if($button_id!==NULL)
 						{
 							# Get the PayPal Class.
 							require_once Utility::locateFile(MODULES.'PayPal'.DS.'PayPal.php');
-
 							# Instantiate a new PayPal object.
 							$paypal=new PayPal();
 							# Set the type of Paypal button.
 							$paypal->setCmd('_s-xclick');
 							# Set the return page if the customer cancels the transaction.
-							$paypal->setCancelReturn('http://'.FULL_URL.'?cancel=yes');
+							$paypal->setCancelReturn(PROTOCAL.FULL_URL.'?cancel=yes');
 							# Create an empty variable for the user's ID.
 							$uid='';
 							# Check if the user is logged in.
@@ -1467,33 +1554,28 @@ class Product
 							# Set the user's ID as the "custom" pasthrough PayPal variable.
 							$paypal->setCustom($uid);
 							# Set the return page when the user copmpletes the transaction.
-							$paypal->setReturn('http://'.FULL_URL.'?thankyou=yes');
+							$paypal->setReturn(PROTOCAL.FULL_URL.'?thankyou=yes');
 							# Create the submit button. (only needs to be made once.)
-							$paypal->setSubmit('submit', 'submit', 'Buy Now', NULL, 'submit-paypal');
+							$paypal->setSubmit($buy_paypal_submit_type, $buy_paypal_submit_name, $buy_paypal_submit_value, $buy_paypal_submit_image, $buy_paypal_submit_class);
 							# Button ID from PayPal
 							$paypal->setHostedButtonID($button_id);
-							### DEBUG ###
-							if(DEBUG_APP===TRUE)
-							{
-								# Create the PayPal button and set it to the display varable.
-								$paypal_button=$paypal->makePayPalButton('add_cart', 'POST', '_top', FALSE, FALSE, TRUE, 'button-amazon');
-							}
-							else
-							{
-								# Create the PayPal button and set it to the display varable.
-								$paypal_button=$paypal->makePayPalButton('add_cart', 'POST', '_top', FALSE, FALSE, FALSE, 'button-amazon');
-							}
+							# Create the PayPal button and set it to the display varable.
+							$paypal_button=$paypal->makePayPalButton($buy_paypal_button_name, 'POST', '_top', FALSE, FALSE, DEBUG_APP, $buy_paypal_button_class);
 							$display_product[$id]['buy']=$paypal_button;
 						}
 
 						# Check if the purchase link is available to display.
 						if(!empty($purchase_link))
 						{
-							# Instantiate a new FormGenerator object and creat the add to cart form/button.
-							//$fg=new FormGenerator('add_cart', $purchase_link, 'POST', '_blank');
-							//$fg->addElement('image', array('name'=>'add', 'value'=>'Buy '.$title), '', THEME.'images/transparent.dot.png');
+							# Set the $buy_link_title value to a local variable so it won't get over-written.
+							$title_attribute=$buy_link_title;
+							# Check if the link title attribute should be the default.
+							if($title_attribute=='default')
+							{
+								$title_attribute='Buy '.htmlentities($title, ENT_QUOTES, 'UTF-8', FALSE).' Now!';
+							}
 							# Create a variable to hold the product image display XHTML.
-							$buy_content='<a href="'.$purchase_link.'" class="buy" target="_blank" title="Buy '.$title.' Now!">Buy Now</a>'."\n";
+							$buy_content='<a href="'.$purchase_link.'" class="'.$buy_class.'" target="_blank" title="'.$title_attribute.'">'.$buy_link_value.'</a>';
 							# Set the image content to the array.
 							$display_product[$id]['buy']=$buy_content;
 						}
@@ -1501,10 +1583,17 @@ class Product
 						# Check if the content for the product is available to display.
 						if(!empty($content))
 						{
-							# Set the content display XHTML to a variable.
-							$product_content='<span class="content cont">';
-							$product_content.=$content;
-							$product_content.='</span>';
+							# Open the span tag.
+							$product_content='<span class="'.$description_class.'">%s</span>';
+							# Set the $content_label value to a local variable so it won't get over-written.
+							$content_label_markup=$content_label;
+							# Check if there should be a lable for the content.
+							if($content_label_markup!=='')
+							{
+								$content_label_markup='<span class="'.$content_label_class.'">'.$content_label_markup.'</span>';
+							}
+							# Put the content inside its container.
+							$product_content=sprintf($product_content, $content_label_markup.$content);
 							# Set the content content to the array.
 							$display_product[$id]['content']=$product_content;
 						}
@@ -1513,15 +1602,17 @@ class Product
 						if(!empty($description))
 						{
 							# Set the description display XHTML to a variable.
-							$description_content='<span class="content desc">';
+							$description_content='<span class="'.$description_class.'">%s</span>';
+							# Set the $description_label value to a local variable so it won't get over-written.
+							$description_label_markup=$description_label;
 							# Check if labels should be displayed.
-							if($labels===TRUE)
+							if($description_label_markup!=='')
 							{
-								# Add the label to the description display XHTML.
-								$description_content.='<span class="label">Description:</span>';
+								# Add the label to the description display HTML.
+								$description_label_markup='<span class="'.$description_label_class.'">'.$description_label_markup.'</span>';
 							}
-							$description_content.=$description;
-							$description_content.='</span>';
+							# Put the description inside its container.
+							$description_content=sprintf($description_label_markup.$description);
 							# Set the description content to the array.
 							$display_product[$id]['description']=$description_content;
 						}
@@ -1538,6 +1629,7 @@ class Product
 							$file_id=$file_obj->getID();
 							$file_name=$file_obj->getFile();
 							$file_title=$file_obj->getTitle();
+
 							# Check if the User is an admin user.
 							if($login->checkAccess(ADMIN_USERS)===TRUE)
 							{
@@ -1554,145 +1646,135 @@ class Product
 									$file_availability=1;
 								}
 							}
+
 							# Check if the file's availability is 1(Yes, display).
 							if($file_availability==1)
 							{
 								# Set the download button to a variable.
-								$download_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&t=product" class="download" title="Download Now!">Download</a>'."\n";
+								$download_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&t=product" class="'.$file_download_class .'" title="'.$file_download_link_title.'">'.$file_download_link_value.'</a>';
 								# Set the delete content to the array.
 								$display_content[$id]['file']['download']=$download_content;
 
-								# Set the product file's name to the array.
-								$file_name_content='<span class="file-name">';
-								# Check if labels should be displayed.
-								if($labels===TRUE)
+								# Check if the file name should be wrapped in an anchor tag with the value of $file_name_link as the href.
+								if(!empty($file_name_link))
 								{
-									$file_name_content.='<span class="label">Name:</span>';
+									# Set the $file_name_link_title value to a local variable so it won't get over-written.
+									$title_attribute=$file_name_link_title;
+									# Check if the link title attribute should be the default.
+									if($title_attribute=='default')
+									{
+										$title_attribute='Download '.htmlentities($file_title, ENT_QUOTES, 'UTF-8', FALSE);
+									}
+									# Open the anchor tag.
+									$file_name_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&t=product" class="'.$file_name_class.'" title="'.$title_attribute.'">%s</a>';
 								}
-								$file_name_content.='<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&t=product" title="'.$file_title.'">'.$file_name.'</a>';
-								$file_name_content.='</span>'."\n";
+								else
+								{
+									# Open the span tag.
+									$file_name_content='<span class="'.$file_name_class.'">%s</span>';
+								}
+								# Set the $file_name_label value to a local variable so it won't get over-written.
+								$file_name_label_markup=$file_name_label;
+								# Check if there should be a label for the file name.
+								if($file_name_label_markup!=='')
+								{
+									$file_name_label_markup='<span class="'.$file_name_label_class.'">'.$file_name_label_markup.'</span>';
+								}
+								# Put the file name inside its container.
+								$file_name_content=$file_name_label_markup.$file_name;
 								# Set the delete content to the array.
 								$display_content[$id]['file']['name']=$file_name_content;
 								# Set the file info content to the array.
 								$display_content[$id]['file']['all']=$file_name_content;
 
-								# Set the product file's title to the array.
-								$file_title_content='<span class="file-title">';
-								# Check if labels should be displayed.
-								if($labels===TRUE)
+								# Check if the file title should be wrapped in an anchor tag with the value of $file_title_link as the href.
+								if(!empty($file_title_link))
 								{
-									$file_title_content.='<span class="label">Title:</span>';
+									# Set the $file_title_link_title value to a local variable so it won't get over-written.
+									$title_attribute=$file_title_link_title;
+									# Check if the link title attribute should be the default.
+									if($title_attribute=='default')
+									{
+										$title_attribute='Download '.$file_title;
+									}
+									# Open the anchor tag.
+									$file_title_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&t=product" class="'.$file_title_class.'" title="'.$title_attribute.'">%s</a>';
 								}
-								$file_title_content.=$file_title;
-								$file_title_content.='</span>'."\n";
+								else
+								{
+									# Open the span tag.
+									$file_title_content='<span class="'.$file_title_class.'">%s</span>';
+								}
+								# Set the $file_title_label value to a local variable so it won't get over-written.
+								$file_title_label_markup=$file_title_label;
+								# Check if there should be a label for the file title.
+								if($file_title_label_markup!=='')
+								{
+									$file_title_label_markup='<span class="'.$file_title_label_class.'">'.$file_title_label_markup.'</span>';
+								}
+								# Put the file title inside its container.
+								$file_title_content=$file_title_label_markup.$file_title;
 								# Set the delete content to the array.
 								$display_content[$id]['file']['title']=$file_title_content;
 								# Set the file info content to the array.
-								$display_content[$id]['file']['all'].=$file_title_content;
+								$display_content[$id]['file']['all']=$file_title_content;
 							}
 						}
 
-						# Check if there is an image to display.
-						if(!empty($image_obj))
-						{
-							# Create a variable to hold the product image display XHTML.
-							$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
-							# Set the image content to the array.
-							$display_product[$id]['image']=$image_content;
-						}
+						# Set the image content to the array.
+						$display_product[$id]['image']=$this->createImageMarkup($image_obj, array(
+							'image_link'=>$image_link
+						));
 
-						# Check if the price is available to display.
-						if(!empty($price))
-						{
-							$price=$price.' '.$currency;
-							if($currency=='USD')
-							{
-								$price='$'.$price;
-							}
-							if($currency=='CAD')
-							{
-								$price='$'.$price;
-							}
-							if($currency=='GBP')
-							{
-								$price='&pound;'.$price;
-							}
-							if($currency=='EUR')
-							{
-								$price='&euro;'.$price;
-							}
-							if($currency=='JPY')
-							{
-								$price='&yen;'.$price;
-							}
-							# Set the price display XHTML to a variable.
-							$price_content='<span class="price">';
-							# Check if labels should be displayed.
-							if($labels===TRUE)
-							{
-								# Add the label to the review display XHTML.
-								$price_content.='<span class="label">Price:</span>';
-							}
-							# Add a link to the detailed product page if this is not currently that page.
-							if($detailed===FALSE)
-							{
-								$price_content.='<a href="'.$detailed_page_url.'" target="_blank" title="Find out more">'.$price.'</a>';
-							}
-							else
-							{
-								$price_content.=$price;
-							}
-							$price_content.='</span>';
-							# Set the price content to the array.
-							$display_product[$id]['price']=$price_content;
-						}
+						# Set the price content to the array.
+						$display_product[$id]['price']=$this->createPriceMarkup($price, array(
+							'currency'=>$currency,
+							'detailed_page_url'=>$detailed_page_url,
+							'price_class'=>$price_class,
+							'price_label'=>$price_label,
+							'price_label_class'=>$price_label_class,
+							'price_link'=>$price_link,
+							'product_title'=>$title,
+							'title_attribute'=>$price_link_title
+						));
 
-						# Check if the publisher is available to display.
-						if(!empty($publisher_obj))
-						{
-							# Set the publisher display XHTML to a variable.
-							$publisher_content='<span class="publisher">';
-							# Check if labels should be displayed.
-							if($labels===TRUE)
-							{
-								# Add the label to the publisher display XHTML.
-								$publisher_content.='<span class="label">Publisher:</span>';
-							}
-							$publisher_content.='<a href="'.APPLICATION_URL.'profile/?publisher='.$publisher_obj->getPublisher().'" target="_blank" title="'.$publisher_obj->getPublisher().'">'.$publisher_obj->getPublisher().'</a>';
-							$publisher_content.='</span>';
-							# Set the publisher content to the array.
-							$display_product[$id]['publisher']=$publisher_content;
-						}
+						# Set the publisher content to the array.
+						$display_product[$id]['publisher']=$this->createPublisherMarkup($publisher, array(
+							'publisher_class'=>$publisher_class,
+							'publisher_label'=>$publisher_label,
+							'publisher_label_class'=>$publisher_label_class,
+							'publisher_link'=>$publisher_link,
+							'title_attribute'=>$publisher_link_title
+						));
 
-						# Check if there is a title to display.
-						if(!empty($title))
-						{
-							if(!empty($asin))
-							{
-								$title=$display_amazon[$asin]['title'];
-							}
-							# Set the title to a variable.
-							$title_content='<a href="'.$detailed_page_url.'" class="title" title="'.str_replace('"', '&quot;', $title).'">'.$title.'</a>';
-							# Set the title content to the array.
-							$display_product[$id]['title']=$title_content;
-						}
+						# Set the title content to the array.
+						$display_product[$id]['title']=$this->createTitleMarkup($title, array(
+							'detailed_page_url'=>$detailed_page_url,
+							'title_class'=>$title_class,
+							'title_label'=>$title_label,
+							'title_label_class'=>$title_label_class,
+							'title_link'=>$title_link,
+							'title_attribute'=>$title_link_title
+						));
 
 						# Check if there should be an edit button displayed.
 						if($edit===TRUE)
 						{
 							# Set the edit button to a variable.
-							$edit_content='<a href="'.ADMIN_URL.'product/edit/?product='.$id.'" class="edit" title="Edit">Edit</a>'."\n";
+							$edit_content='<a href="'.ADMIN_URL.'product/?product='.$id.'" class="'.$edit_class.'" title="'.$edit_link_title.'">'.$edit_value.'</a>';
 							# Set the edit content to the array.
 							$display_product[$id]['edit']=$edit_content;
 						}
+
 						# Check f there should be a delete button displayed.
 						if($delete===TRUE)
 						{
 							# Set the delete button to a variable.
-							$delete_content='<a href="'.ADMIN_URL.'product/edit/?product='.$id.'&delete=yes" class="delete" title="Delete">Delete</a>'."\n";
+							$delete_content='<a href="'.ADMIN_URL.'product/?product='.$id.'&delete" class="'.$delete_class.'" title="'.$delete_link_title.'">'.$delete_value.'</a>';
 							# Set the delete content to the array.
 							$display_product[$id]['delete']=$delete_content;
 						}
+
 						# Check if the ASIN is empty.
 						if(!empty($asin))
 						{
@@ -1713,15 +1795,11 @@ class Product
 								# Set the editorial review content to the array.
 								$display_product[$id]['editorial_review']=$display_amazon[$asin]['editorial_review'];
 							}
-							# Set the image content to the array.
-							$display_product[$id]['image']=$display_amazon[$asin]['image'];
-							# Check if there is an Amazon image.
-							if((preg_match('/no\.image\.available\.gif/', $display_amazon[$asin]['image'])>0)&&!empty($image_obj))
+							# Check if there is an image available in the system already.
+							if(empty($display_product[$id]['image'])&&!empty($display_amazon[$asin]['image']))
 							{
-								# Create a variable to hold the product image display XHTML.
-								$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
 								# Set the image content to the array.
-								$display_product[$id]['image']=$image_content;
+								$display_product[$id]['image']=$display_amazon[$asin]['image'];
 							}
 							# Check if the price is available to display.
 							if(!empty($display_amazon[$asin]['price']))
@@ -1730,19 +1808,25 @@ class Product
 								$display_product[$id]['price']=$display_amazon[$asin]['price'];
 							}
 							# Check if the publisher is available to display.
-							if(!empty($display_amazon[$asin]['publisher']))
+							if(empty($display_product[$id]['publisher'])&&!empty($display_amazon[$asin]['publisher']))
 							{
 								# Set the publisher content to the array.
 								$display_product[$id]['publisher']=$display_amazon[$asin]['publisher'];
 							}
+							# Check if the title is available to display.
+							if(!empty($display_amazon[$asin]['title']))
+							{
+								# Set the title content to the array.
+								$display_product[$id]['title']=$display_amazon[$asin]['title'];
+							}
 							# Check if the edit button is available to display.
-							if(!empty($display_amazon[$asin]['edit']))
+							if(empty($display_product[$id]['edit'])&&!empty($display_amazon[$asin]['edit']))
 							{
 								# Set the edit button content to the array.
 								$display_product[$id]['edit']=$display_amazon[$asin]['edit'];
 							}
 							# Check if the delete button is available to display.
-							if(!empty($display_amazon[$asin]['delete']))
+							if(empty($display_product[$id]['delete'])&&!empty($display_amazon[$asin]['delete']))
 							{
 								# Set the delete button content to the array.
 								$display_product[$id]['delete']=$display_amazon[$asin]['delete'];
@@ -1760,7 +1844,7 @@ class Product
 		}
 	} #==== End -- displayProduct
 
-	/**
+	/*
 	 * displayProductList
 	 *
 	 * Returns a list (table) of products.
@@ -2022,7 +2106,7 @@ class Product
 		}
 	} #==== End -- displayProductList
 
-	/**
+	/*
 	 * getFiles
 	 *
 	 * Retrieves records from the `files` table. A wrapper method for getFiles from the File class.
@@ -2063,7 +2147,7 @@ class Product
 		}
 	} #==== End -- getFiles
 
-	/**
+	/*
 	 * getThisFile
 	 *
 	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member. A wrapper method for getThisFile from the File class.
@@ -2093,7 +2177,7 @@ class Product
 		}
 	} #==== End -- getThisFile
 
-	/**
+	/*
 	 * getImages
 	 *
 	 * Retrieves records from the `images` table. A wrapper method for getImages from the Image class.
@@ -2134,7 +2218,7 @@ class Product
 		}
 	} #==== End -- getImages
 
-	/**
+	/*
 	 * getThisImage
 	 *
 	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.
@@ -2165,7 +2249,7 @@ class Product
 		}
 	} #==== End -- getThisImage
 
-	/**
+	/*
 	 * getProducts
 	 *
 	 * Retrieves Products records from the database.
@@ -2219,7 +2303,7 @@ class Product
 		}
 	} #==== End -- getProducts
 
-	/**
+	/*
 	 * getThisProduct
 	 *
 	 * Retrieves product info from the `products` table in the database for the passed id or product name and sets it to the data member.
@@ -2307,7 +2391,7 @@ class Product
 		}
 	} #==== End -- getThisProduct
 
-	/**
+	/*
 	 * getPublishers
 	 *
 	 * Retrieves records from the `publishers` table.
@@ -2349,7 +2433,7 @@ class Product
 		}
 	} #==== End -- getPublishers
 
-	/**
+	/*
 	 * getThisPublisher
 	 *
 	 * Retrieves publisher info from the `publishers` table in the Database for the passed id or publisher name and sets it to the data member.
@@ -2386,7 +2470,248 @@ class Product
 
 	/*** protected methods ***/
 
-	/**
+	/*
+	 * createAuthorMarkup
+	 *
+	 * Creates and returns HTML markup for the "author" of a product.
+	 *
+	 * @param		$author					The author of the product. A String.
+	 * @access	protected
+	 */
+	protected function createAuthorMarkup($author, $author_options)
+	{
+		# Check if the author is available to display.
+		if(!empty($author))
+		{
+			# Check if the author should be wrapped in an anchor tag with the value of author_link as the href.
+			if($author_options['author_link']!==NULL)
+			{
+				# Check if the link title attribute should be the default.
+				if($author_options['title_attribute']=='default')
+				{
+					$author_options['title_attribute']='More on '.htmlentities($author, ENT_QUOTES, 'UTF-8', FALSE);
+				}
+				# Open the anchor tag.
+				$author_content='<a href="'.$author_options['author_link'].'" class="'.$author_options['author_class'].'" title="'.$author_options['title_attribute'].'">%{insert_content}</a>';
+			}
+			else
+			{
+				# Open the span tag.
+				$author_content='<span class="'.$author_options['author_class'].'">%{insert_content}</span>';
+			}
+			# Check if the label should be displayed.
+			if($author_options['author_label']!=='')
+			{
+				# Reset the label display HTML.
+				$author_options['author_label']='<span class="'.$author_options['author_label_class'].'">'.$author_options['author_label'].'</span>';
+			}
+			# Put the author inside its container.
+			$author_content=str_replace('%{insert_content}', $author_options['author_label'].$author, $author_content);
+			# Return the markup.
+			return $author_content;
+		}
+		return NULL;
+	} #==== End -- createAuthorMarkup
+
+	/*
+	 * createImageMarkup
+	 *
+	 * Creates and returns HTML markup for the "image" of a product.
+	 *
+	 * @param		$image					The image URL of the product. A String.
+	 * @param		$image_options	The markup options. An array.
+	 * @access	protected
+	 */
+	protected function createImageMarkup($image_obj, $image_options)
+	{
+		# Check if the image is available to display.
+		if(!empty($image_obj))
+		{
+			# Create a variable to hold the product image display HTML.
+			$image_content=$image_obj->displayImage(TRUE, NULL, NULL, $image_options['image_link']);
+			# Return the markup.
+			return $image_content;
+		}
+		return NULL;
+	} #==== End -- createImageMarkup
+
+	/*
+	 * createPriceMarkup
+	 *
+	 * Creates and returns HTML markup for the "price" of a product.
+	 *
+	 * @param		$price					The price of the product. A String.
+	 * @param		$price_options	The markup options. An array.
+	 * @access	protected
+	 */
+	protected function createPriceMarkup($price, $price_options, $add_currency_symbol=TRUE)
+	{
+		# Check if the price is available to display.
+		if(!empty($price))
+		{
+			# Append the type of currency to the end of the price.
+			$price=$price.' '.$price_options['currency'];
+
+			# Run a switch through the various currencies to get the correct symbol. See this site for more http://www.currencysymbols.in/
+			switch($price_options['currency'])
+			{
+				case 'AUD':
+				case 'CAD':
+				case 'MXN':
+				case 'USD':
+					$currency_symbol='$';
+					break;
+				case 'GBP':
+					$currency_symbol='&pound;';
+					break;
+				case 'EUR':
+					$currency_symbol='&euro;';
+					break;
+				case 'JPY':
+					$currency_symbol='&yen;';
+					break;
+				default:
+					$currency_symbol='';
+					break;
+			}
+
+			# Prepend the currency symbol to the price.
+			$price=(($add_currency_symbol===TRUE) ? $currency_symbol : '').$price;
+
+			# Check if the price should be wrapped in an anchor tag.
+			if($price_options['price_link']!==NULL)
+			{
+				# Check if the price link should be the default detail page.
+				if($price_options['price_link']=='default')
+				{
+					$price_options['price_link']=urldecode($price_options['detailed_page_url']);
+				}
+				# Check if the title attribute for the link should be the default title.
+				if($price_options['title_attribute']=='default')
+				{
+					$price_options['title_attribute']='More about '.htmlentities($price_options['product_title'], ENT_QUOTES, 'UTF-8', FALSE);
+				}
+				# Open the anchor tag using the value from price_link as the href.
+				$price_content='<a href="'.$price_options['price_link'].'" class="'.$price_options['price_class'].'" title="'.$price_options['title_attribute'].'">%{insert_content}</a>';
+			}
+			else
+			{
+				# Open the span tag.
+				$price_content='<span class="'.$price_options['price_class'].'">%{insert_content}</span>';
+			}
+			# Check if the label should be displayed.
+			if($price_options['price_label']!=='')
+			{
+				# Set the label display HTML.
+				$price_options['price_label']='<span class="'.$price_options['price_label_class'].'">'.$price_options['price_label'].'</span>';
+			}
+			# Put the price inside its container.
+			$price_content=str_replace('%{insert_content}', $price_options['price_label'].$price, $price_content);
+			# Return the markup.
+			return $price_content;
+		}
+		return NULL;
+	} #==== End -- createPriceMarkup
+
+	/*
+	 * createPublisherMarkup
+	 *
+	 * Creates and returns HTML markup for the "publisher" of a product.
+	 *
+	 * @param		$publisher					The publisher of the product. A String.
+	 * @param		$publisher_options	The markup options. An array.
+	 * @access	protected
+	 */
+	protected function createPublisherMarkup($publisher, $publisher_options)
+	{
+		# Check if the publisher is available to display.
+		if(!empty($publisher))
+		{
+			# Check if the publisher should be wrapped in an anchor tag.
+			if($publisher_options['publisher_link']!==NULL)
+			{
+				# Check if the publisher link should be the default detail page.
+				if($publisher_options['publisher_link']=='default')
+				{
+					$publisher_options['publisher_link']=APPLICATION_URL.'profile/?publisher='.$publisher;
+				}
+				# Check if the title attribute for the link should be the default title.
+				if($publisher_options['title_attribute']=='default')
+				{
+					$publisher_options['title_attribute']='More about '.htmlentities($publisher, ENT_QUOTES, 'UTF-8', FALSE);
+				}
+				# Open the anchor tag using the value from publisher_link as the href.
+				$publisher_content='<a href="'.$publisher_options['publisher_link'].'" class="'.$publisher_options['publisher_class'].'" title="'.$publisher_options['title_attribute'].'">%{insert_content}</a>';
+			}
+			else
+			{
+				# Open the span tag.
+				$publisher_content='<span class="'.$publisher_options['publisher_class'].'">%{insert_content}</span>';
+			}
+			# Check if the label should be displayed.
+			if($publisher_options['publisher_label']!=='')
+			{
+				# Set the title display HTML.
+				$publisher_options['publisher_label']='<span class="'.$publisher_options['publisher_label_class'].'">'.$publisher_options['publisher_label'].'</span>';
+			}
+			# Put the publisher inside its container.
+			$publisher_content=str_replace('%{insert_content}', $publisher_options['publisher_label'].$publisher, $publisher_content);
+			# Return the markup.
+			return $publisher_content;
+		}
+		return NULL;
+	} #==== End -- createPublisherMarkup
+
+	/*
+	 * createTitleMarkup
+	 *
+	 * Creates and returns HTML markup for the "title" of a product.
+	 *
+	 * @param		$title					The title of the product. A String.
+	 * @param		$title_options	The markup options. An array.
+	 * @access	protected
+	 */
+	protected function createTitleMarkup($title, $title_options)
+	{
+		# Check if the title is available to display.
+		if(!empty($title))
+		{
+			# Check if the title should be wrapped in an anchor tag.
+			if($title_options['title_link']!==NULL)
+			{
+				# Check if the title link should be the default detail page.
+				if($title_options['title_link']=='default')
+				{
+					$title_options['title_link']=$title_options['detailed_page_url'];
+				}
+				# Check if the title attribute for the link should be the default title.
+				if($title_options['title_attribute']=='default')
+				{
+					$title_options['title_attribute']=htmlentities($title, ENT_QUOTES, 'UTF-8', FALSE);
+				}
+				# Open the anchor tag using the value from title_link as the href.
+				$title_content='<a href="'.$title_options['title_link'].'" class="'.$title_options['title_class'].'" title="'.$title_options['title_attribute'].'">%{insert_content}</a>';
+			}
+			else
+			{
+				# Open the span tag.
+				$title_content='<span class="'.$title_options['title_class'].'">%{insert_content}</span>';
+			}
+			# Check if the label should be displayed.
+			if($title_options['title_label']!=='')
+			{
+				# Set the title display HTML.
+				$title_options['title_label']='<span class="'.$title_options['title_label_class'].'">'.$title_options['title_label'].'</span>';
+			}
+			# Put the title inside its container.
+			$title_content=str_replace('%{insert_content}', $title_options['title_label'].$title, $title_content);
+			# Return the markup.
+			return $title_content;
+		}
+		return NULL;
+	} #==== End -- createTitleMarkup
+
+	/*
 	 * setDataMembers
 	 *
 	 * Sets all the data returned in a row from the `subcontent` table to the appropriate Data members.

@@ -51,7 +51,7 @@ if(strtoupper($_SERVER['REQUEST_METHOD'])==='GET')
 		# Get the Product content.
 		$product->getProducts('Books', 1, '*', 'title', 'ASC', '`id` = '.$db->quote($_GET['product']));
 		# Display the Product content.
-		$displayed_products=$product->displayProduct('product', $product->getTitle(), 'MediumImage');
+		$displayed_products=$product->displayProduct('product', $product->getTitle(), array('image_size'=>'MediumImage'));
 		# Check if there is a product to display.
 		if(!empty($displayed_products))
 		{
@@ -139,7 +139,7 @@ if($detailed===FALSE)
 		$product->getProducts('Books', $paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', 'title', 'ASC', $and_sql);
 
 		# Display the Product content.
-		$displayed_products=$product->displayProduct($paginator->getFirstParamName(), ltrim(rtrim(WebUtility::removeIndex(HERE), '/'), 'store/').$identifier, 'MediumImage', 50);
+		$displayed_products=$product->displayProduct($paginator->getFirstParamName(), ltrim(rtrim(WebUtility::removeIndex(HERE), '/'), 'store/').$identifier, array('image_size'=>'MediumImage', 'max_char'=>50));
 		foreach($displayed_products as $displayed_product)
 		{
 			# Add the XHTML to the display variable.

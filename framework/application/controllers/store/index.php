@@ -27,7 +27,7 @@ if(isset($_GET['product']))
 	# Get the Product content.
 	$product_obj->getProducts('Books-Maps-Music', 1, '*', 'title', 'ASC', ' `id` = '.$db->quote($_GET['product']));
 	# Display the Product content.
-	$displayed_products=$product_obj->displayProduct('product', $product_obj->getTitle(), 'MediumImage');
+	$displayed_products=$product_obj->displayProduct('product', $product_obj->getTitle(), array('image_size'=>'MediumImage'));
 	foreach($displayed_products as $displayed_product)
 	{
 		# Add the XHTML to the display variable.
@@ -70,7 +70,7 @@ else
 	$product_obj->getProducts('Books-Maps-Music-Top Picks', $paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', 'title', 'ASC', $and_sql);
 
 	# Display the Product content.
-	$displayed_products=$product_obj->displayProduct($paginator->getFirstParamName(), rtrim(WebUtility::removeIndex(HERE), '/').'.TopPicks', 'MediumImage', 50);
+	$displayed_products=$product_obj->displayProduct($paginator->getFirstParamName(), rtrim(WebUtility::removeIndex(HERE), '/').'.TopPicks', array('image_size'=>'MediumImage', 'max_char'=>50));
 	if(!empty($displayed_products))
 	{
 		foreach($displayed_products as $displayed_product)

@@ -33,7 +33,7 @@ class Image
 
 	/*** mutator methods ***/
 
-	/**
+	/*
 	 * setAllImages
 	 *
 	 * Sets the data member $images.
@@ -58,7 +58,7 @@ class Image
 		}
 	} #==== End -- setAllImages
 
-	/**
+	/*
 	 * setImage
 	 *
 	 * Sets the data member $image.
@@ -83,7 +83,7 @@ class Image
 		}
 	} #==== End -- setImage
 
-	/**
+	/*
 	 * setID
 	 *
 	 * Sets the data member $id.
@@ -118,7 +118,7 @@ class Image
 		}
 	} #==== End -- setID
 
-	/**
+	/*
 	 * setCategories
 	 *
 	 * Sets the data member $categories.
@@ -176,7 +176,7 @@ class Image
 		}
 	} #==== End -- setCategories
 
-	/**
+	/*
 	 * setCatObject
 	 *
 	 * Sets the data member $cat_object.
@@ -199,7 +199,7 @@ class Image
 		}
 	} #==== End -- setCatObject
 
-	/**
+	/*
 	 * setContributor
 	 *
 	 * Sets the data member $contributor.
@@ -222,7 +222,7 @@ class Image
 		}
 	} #==== End -- setContributor
 
-	/**
+	/*
 	 * setRecentContributor
 	 *
 	 * Sets the data member $recent_contributor.
@@ -245,7 +245,7 @@ class Image
 		}
 	} #==== End -- setRecentContributor
 
-	/**
+	/*
 	 * setContID
 	 *
 	 * Sets the data member $cont_id.
@@ -291,7 +291,7 @@ class Image
 		$this->cont_id=$id;
 	} #==== End -- setContID
 
-	/**
+	/*
 	 * setRecentContID
 	 *
 	 * Sets the data member $recent_cont_id.
@@ -337,7 +337,7 @@ class Image
 		$this->recent_cont_id=$id;
 	} #==== End -- setRecentContID
 
-	/**
+	/*
 	 * setDescription
 	 *
 	 * Sets the data member $description.
@@ -364,7 +364,7 @@ class Image
 		}
 	} #==== End -- setDescription
 
-	/**
+	/*
 	 * setHeight
 	 *
 	 * Sets the data member $height.
@@ -402,7 +402,7 @@ class Image
 		$this->height=$height;
 	} #==== End -- setHeight
 
-	/**
+	/*
 	 * setHide
 	 *
 	 * Sets the data member $hide.
@@ -425,7 +425,7 @@ class Image
 		}
 	} #==== End -- setHide
 
-	/**
+	/*
 	 * setLastEdit
 	 *
 	 * Sets the data member $last_edit.
@@ -450,7 +450,7 @@ class Image
 		}
 	} #==== End -- setLastEdit
 
-	/**
+	/*
 	 * setLocation
 	 *
 	 * Sets the data member $location.
@@ -479,7 +479,7 @@ class Image
 		}
 	} #==== End -- setLocation
 
-	/**
+	/*
 	 * setTitle
 	 *
 	 * Sets the data member $title.
@@ -508,7 +508,7 @@ class Image
 		}
 	} #==== End -- setTitle
 
-	/**
+	/*
 	 * setWidth
 	 *
 	 * Sets the data member $width.
@@ -552,7 +552,7 @@ class Image
 
 	/*** accessor methods ***/
 
-	/**
+	/*
 	 * getAllImages
 	 *
 	 * Returns the data member $all_images.
@@ -564,7 +564,7 @@ class Image
 		return $this->all_images;
 	} #==== End -- getAllImages
 
-	/**
+	/*
 	 * getImage
 	 *
 	 * Returns the data member $image.
@@ -576,7 +576,7 @@ class Image
 		return $this->image;
 	} #==== End -- getImage
 
-	/**
+	/*
 	 * getID
 	 *
 	 * Returns the data member $id.
@@ -588,7 +588,7 @@ class Image
 		return $this->id;
 	} #==== End -- getID
 
-	/**
+	/*
 	 * getCategories
 	 *
 	 * Returns the data member $categories.
@@ -600,7 +600,7 @@ class Image
 		return $this->categories;
 	} #==== End -- getCategories
 
-	/**
+	/*
 	 * getCatObject
 	 *
 	 * Returns the data member $cat_object.
@@ -612,7 +612,7 @@ class Image
 		return $this->cat_object;
 	} #==== End -- getCatObject
 
-	/**
+	/*
 	 * getContributor
 	 *
 	 * Returns the data member $contributor.
@@ -624,7 +624,7 @@ class Image
 		return $this->contributor;
 	} #==== End -- getContID
 
-	/**
+	/*
 	 * getContID
 	 *
 	 * Returns the data member $cont_id.
@@ -636,7 +636,7 @@ class Image
 		return $this->cont_id;
 	} #==== End -- getContID
 
-	/**
+	/*
 	 * getRecentContID
 	 *
 	 * Returns the data member $recent_cont_id.
@@ -648,7 +648,7 @@ class Image
 		return $this->recent_cont_id;
 	} #==== End -- getRecentContID
 
-	/**
+	/*
 	 * getDescription
 	 *
 	 * Returns the data member $description.
@@ -660,7 +660,7 @@ class Image
 		return $this->description;
 	} #==== End -- getDescription
 
-	/**
+	/*
 	 * getHeight
 	 *
 	 * Returns the data member $height.
@@ -672,7 +672,7 @@ class Image
 		return $this->height;
 	} #==== End -- getHeight
 
-	/**
+	/*
 	 * getHide
 	 *
 	 * Returns the data member $hide.
@@ -684,7 +684,7 @@ class Image
 		return $this->hide;
 	} #==== End -- getHide
 
-	/**
+	/*
 	 * getLastEdit
 	 *
 	 * Returns the data member $last_edit.
@@ -696,7 +696,7 @@ class Image
 		return $this->last_edit;
 	} #==== End -- getLastEdit
 
-	/**
+	/*
 	 * getLocation
 	 *
 	 * Returns the data member $location.
@@ -708,7 +708,7 @@ class Image
 		return $this->location;
 	} #==== End -- getLocation
 
-	/**
+	/*
 	 * getTitle
 	 *
 	 * Returns the data member $title.
@@ -720,7 +720,7 @@ class Image
 		return $this->title;
 	} #==== End -- getTitle
 
-	/**
+	/*
 	 * getWidth
 	 *
 	 * Returns the data member $width.
@@ -738,7 +738,7 @@ class Image
 
 	/*** public methods ***/
 
-	/**
+	/*
 	 * countAllImages
 	 *
 	 * Returns the number of images in the database.
@@ -793,7 +793,7 @@ class Image
 		}
 	} #==== End -- countAllImages
 
-	/**
+	/*
 	 * deleteImage
 	 *
 	 * Removes an image from the `images` table and the actual image from the system.
@@ -900,15 +900,15 @@ class Image
 		}
 	} #==== End -- deleteImage
 
-	/**
+	/*
 	 * displayImage
 	 *
 	 * Displays the image associated with the SubContent record.
 	 *
-	 * @param	$return					TRUE to return the string, FALSE to echo it.
-	 * @param	$image_name				The name of the image to display.
-	 * @param	$image_title			The title of the image to display.
-	 * @param	$image_link
+	 * @param		$return					TRUE to return the string, FALSE to echo it.
+	 * @param		$image_name			The name of the image to display.
+	 * @param		$image_title		The title of the image to display.
+	 * @param		$image_link
 	 * @return	String
 	 * @access	public
 	 */
@@ -940,20 +940,20 @@ class Image
 					# Check if the image link is lightbox.
 					if($image_link=='lightbox')
 					{
-						$image_link='<a href="'.IMAGES.'original/'.$image_name.'" rel="lightbox" title="'.$this->getTitle().'" class="image-link" target="_blank">%s</a>';
+						$image_link='<a href="'.IMAGES.'original/'.$image_name.'" rel="lightbox" title="'.$this->getTitle().'" class="image-link" target="_blank">%{insert_content}</a>';
 					}
 					else
 					{
-						$image_link=$image_link.'%s</a>';
+						$image_link=$image_link.'%{insert_content}</a>';
 					}
 				}
 				else
 				{
 					# Explicitly set the image link to an empty variable.
-					$image_link='%s';
+					$image_link='%{insert_content}';
 				}
 				# Set the image markup to the display variable.
-				$display_image.=sprintf($image_link, '<img src="'.IMAGES.$image_name.'" class="image" alt="'.$this->getTitle().'" />');
+				$display_image.=str_replace('%{insert_content}', '<img src="'.IMAGES.$image_name.'" class="image" alt="'.$this->getTitle().'"/>', $image_link);
 			}
 			if($return===FALSE)
 			{
@@ -967,7 +967,7 @@ class Image
 		}
 	} #==== End -- displayImage
 
-	/**
+	/*
 	 * displayImageList
 	 *
 	 * Returns a selectable list of images.
@@ -1213,7 +1213,7 @@ class Image
 		}
 	} #==== End -- displayImageList
 
-	/**
+	/*
 	 * getImages
 	 *
 	 * Retrieves records from the `images` table.
@@ -1254,7 +1254,7 @@ class Image
 		}
 	} #==== End -- getImages
 
-	/**
+	/*
 	 * getThisImage
 	 *
 	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.
