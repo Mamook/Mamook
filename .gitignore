@@ -1,2 +1,3 @@
 # Ignore these file(s)
+.DS_Store
 settings.php

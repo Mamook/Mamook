@@ -190,7 +190,7 @@ class Search
 	/**
 	 * processSearch
 	 *
-	 * Checks if the search form has been submitted and processes it, returning the results of the search.
+	 * Processes search, returning the results of the search.
 	 *
 	 * @param	$index					The term we're searching for.
 	 * @param	$filter					Fields and or terms we would like exluded.
@@ -198,21 +198,17 @@ class Search
 	 */
 	public function processSearch($index='searchterms', $filter=NULL)
 	{
-		# Check if the search form has been submitted.
-		if(array_key_exists('_submit_check', $_POST))
+		$tables=$this->getTables();
+		$fields=$this->getFields();
+		$id=$this->getID_Names();
+		$terms=$_POST[$index];
+		$search_results=array();
+		foreach($tables as $table)
 		{
-			$tables=$this->getTables();
-			$fields=$this->getFields();
-			$id=$this->getID_Names();
-			$terms=$_POST[$index];
-			$search_results=array();
-			foreach($tables as $table)
-			{
-				$results[$table]=$this->performSearch($terms, $table, $fields[$table], $id[$table], $filter=NULL);
-				$search_results=array_merge($search_results, $results);
-			}
-			$this->setAllResults($search_results);
+			$results[$table]=$this->performSearch($terms, $table, $fields[$table], $id[$table], $filter=NULL);
+			$search_results=array_merge($search_results, $results);
 		}
+		$this->setAllResults($search_results);
 	} #==== End -- processSearch
 
 	/**
@@ -220,8 +216,8 @@ class Search
 	 *
 	 * Displays the results of the search.
 	 *
-	 * @param		$terms (The term we're searching for.)
-	 * @param		$filter (Fields and or terms we would like exluded.)
+	 * @param	$terms					The term we're searching for.
+	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
 	public function displayResults($fields, $display_field)
@@ -229,41 +225,37 @@ class Search
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		# Check if the search form has been submitted.
-		if(array_key_exists('_submit_check', $_POST))
+		$tables=$this->getTables();
+		$id=$this->getID_Names();
+		$all_results=$this->getAllResults();
+		$display_results='Your search returned ';
+		$display_list='<ul>';
+		$result_count=0;
+		if($all_results!==NULL)
 		{
-			$tables=$this->getTables();
-			$id=$this->getID_Names();
-			$all_results=$this->getAllResults();
-			$display_results='Your search returned ';
-			$display_list='<ul>';
-			$result_count=0;
-			if($all_results!==NULL)
+			foreach($tables as $table)
 			{
-				foreach($tables as $table)
+				$result_count=$result_count+count($all_results[$table]);
+				foreach($all_results[$table] as $result_id)
 				{
-					$result_count=$result_count+count($all_results[$table]);
-					foreach($all_results[$table] as $result_id)
+					$num_select_fields=count($fields[$table]);
+					$select_fields=implode('`, `', $fields[$table]);
+					$results[$table]=$db->get_row('SELECT `'.$select_fields.'` FROM `'.$table.'` WHERE `'.$id[$table].'` = '.$db->quote($db->escape($result_id->$id[$table])));
+					$display_list.='<li>';
+					for($i=0; $i<$num_select_fields; $i++)
 					{
-						$num_select_fields=count($fields[$table]);
-						$select_fields=implode('`, `', $fields[$table]);
-						$results[$table]=$db->get_row('SELECT `'.$select_fields.'` FROM `'.$table.'` WHERE `'.$id[$table].'` = '.$db->quote($db->escape($result_id->$id[$table])));
-						$display_list.='<li>';
-						for($i=0; $i<$num_select_fields; $i++)
-						{
-							$display_search_results[$result_id->$id[$table]]=array($fields[$table][$i]=>$results[$table]->$fields[$table][$i]);
-							$display_list.=$results[$table]->$fields[$table][$i];
-						}
-						$display_list.='</li>';
+						$display_search_results[$result_id->$id[$table]]=array($fields[$table][$i]=>$results[$table]->$fields[$table][$i]);
+						$display_list.=$results[$table]->$fields[$table][$i];
 					}
+					$display_list.='</li>';
 				}
 			}
-			$display_search_results['result_count']=$result_count;
-			$display_results.=$result_count.' results:';
-			$display_results.=$display_list;
-			$display_results.='</ul>';
-			return $display_search_results;
 		}
+		$display_search_results['result_count']=$result_count;
+		$display_results.=$result_count.' results:';
+		$display_results.=$display_list;
+		$display_results.='</ul>';
+		return $display_search_results;
 	} #==== End -- displayResults
 
 	/**
@@ -304,7 +296,7 @@ class Search
 	* Splits the string ($terms) and puts each searchable term into an array.
 	* Returns an array of search terms based on the string ($terms).
 	*
-	* @param	$terms (The string splitting)
+	* @param	$terms					The string splitting
 	* @access	protected
 	*/
 	protected function splitTerms($terms)
@@ -968,7 +960,7 @@ class Search
 	* Replaces any whitespace or comma in the string ($term) with a holder token.
 	* Returns the transformed string.
 	*
-	* @param	$string (The string we're escaping)
+	* @param	$string					The string we're escaping
 	* @access	protected
 	*/
 	protected static function change2Token($term)
@@ -985,8 +977,8 @@ class Search
 	 *
 	 * Emphasize the search terms in the returned results search.
 	 *
-	 * @param		$terms (The terms to search for.)
-	 * @param		$content (The returned content in which to emphasize terms.)
+	 * @param	$terms					The terms to search for.
+	 * @param	$content				The returned content in which to emphasize terms.
 	 * @access	protected
 	 */
 	protected function emphasizeTerms($terms, $content)
@@ -1020,7 +1012,7 @@ class Search
 	* Escapes the string ($string) in-case some of the characters in the search term contain a MySQL regular expression meta-character.
 	* Returns the escaped string.
 	*
-	* @param	$string (The string we're escaping)
+	* @param	$string					The string we're escaping
 	* @access	protected
 	*/
 	protected function escapeMetaChars($string)
@@ -1035,7 +1027,7 @@ class Search
 	* Turns an array of search terms ($terms) into a list of regular expressions suitable for MYSQL.
 	* Returns an array of regular expressions suitable for MYSQL.
 	*
-	* @param	$terms (The array of search terms)
+	* @param	$terms					The array of search terms
 	* @access	protected
 	*/
 	protected function convertTerms2RegEx($terms)
@@ -1061,7 +1053,7 @@ class Search
 	*
 	* Converts any special characters to html entities.
 	*
-	* @param	$terms (The array of search terms)
+	* @param	$terms					The array of search terms
 	* @access	protected
 	*/
 	protected function convertChars2Entities($terms)
@@ -1075,11 +1067,11 @@ class Search
 	*
 	* Builds and returns the "where" portion of the search query.
 	*
-	* @param	$terms (The term we're searching for.)
-	* @param	$table (The table we're searching in.)
-	* @param	$fields (The fields we're searching in.)
-	* @param	$id (The name of the id field in the table we are searching.)
-	* @param	$filter (Fields and or terms we would like exluded.)
+	* @param	$terms					The term we're searching for.
+	* @param	$table					The table we're searching in.
+	* @param	$fields					The fields we're searching in.
+	* @param	$id						The name of the id field in the table we are searching.
+	* @param	$filter					Fields and or terms we would like exluded.
 	* @access	protected
 	*/
 	protected function prepareWhere($terms, $fields, $filter=NULL)
