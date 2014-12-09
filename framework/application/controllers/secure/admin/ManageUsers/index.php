@@ -4,6 +4,8 @@
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'AccountFormProcessor.php');
+# Get the SearchFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'SearchFormProcessor.php');
 # Get the PageNavigator Class.
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 
@@ -119,12 +121,38 @@ if(isset($_GET['user']))
 		# Set the page title.
 		$page_title=$display_name.'\'s Profile';
 	}
+	$form_processor=new AccountFormProcessor();
+	require_once Utility::locateFile(TEMPLATES.'forms'.DS.'account_form.php');
+
+	$img=$staff_obj->getImg();
+	$display_name=$staff_obj->getDisplayName();
+	$cv=$staff_obj->getCV();
+	if(!empty($img))
+	{
+		$img_title=$staff_obj->getImgTitle();
+		$user_image='<div class="profile-image">';
+		$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+		$user_image.='</div>';
+		$display_box1b.=$user_image;
+	}
+	if(!empty($cv))
+	{
+		$user_cv='<div class="profile-cv">';
+		$user_cv.='<span class="label">'.$display_name.'\'s current CV is:</span>';
+		$user_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download '.$display_name.'\'s CV">'.$cv.'</a>';
+		$user_cv.='</div>';
+		$display_box1b.=$user_cv;
+	}
+}
+else
+{
+	# Instantiate a new SearchFormProcessor object.
+	$search_form_processor=new SearchFormProcessor();
+	# Get the search form.
+	require_once Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
 }
 
-$form_processor=new AccountFormProcessor();
-require Utility::locateFile(TEMPLATES.'forms'.DS.'account_form.php');
-
-if(!isset($_GET['user']) && (!isset($_POST['search'])) && ($login->checkAccess(ADMIN_USERS)===TRUE))
+if(!isset($_GET['user'])&&(empty($_POST['searchterms']))&&($login->checkAccess(ADMIN_USERS)===TRUE))
 {
 	$display.='<table width="100%">'.
 		'<tr>'.
@@ -172,33 +200,9 @@ if(!isset($_GET['user']) && (!isset($_POST['search'])) && ($login->checkAccess(A
 	# Display the pagenavigator.
 	$display.=$paginator->getNavigator();
 }
-else
+elseif(!isset($_GET['user']))
 {
-	//$display.=$search_results;
-}
-
-# Check if there is GET data and that the passed variable is $_GET['user'].
-if(isset($_GET['user']))
-{
-	$img=$staff_obj->getImg();
-	$display_name=$staff_obj->getDisplayName();
-	$cv=$staff_obj->getCV();
-	if(!empty($img))
-	{
-		$img_title=$staff_obj->getImgTitle();
-		$user_image='<div class="profile-image">';
-		$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
-		$user_image.='</div>';
-		$display_box1b.=$user_image;
-	}
-	if(!empty($cv))
-	{
-		$user_cv='<div class="profile-cv">';
-		$user_cv.='<span class="label">'.$display_name.'\'s current CV is:</span>';
-		$user_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download '.$display_name.'\'s CV">'.$cv.'</a>';
-		$user_cv.='</div>';
-		$display_box1b.=$user_cv;
-	}
+	$display.=$search_results;
 }
 
 # Get the page title and subtitle to display in main-1.

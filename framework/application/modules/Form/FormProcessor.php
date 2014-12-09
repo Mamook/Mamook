@@ -794,6 +794,7 @@ class FormProcessor
 	 * @param		$filter (Fields and or terms we would like exluded.)
 	 * @access	public
 	 */
+	/*
 	public function processSearch($index='searchterms', $filter=NULL, $tables=NULL, $fields=NULL, $id_names='id')
 	{
 		# Check if the search form has been submitted.
@@ -816,6 +817,7 @@ class FormProcessor
 			$search->setAllResults($search_results);
 		}
 	} #==== End -- processSearch
+	*/
 
 	/**
 	 * processUsername

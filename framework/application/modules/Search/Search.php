@@ -10,6 +10,8 @@ class Search
 {
 	/*** data members ***/
 
+	//private static $search_obj;
+	private $search_terms=NULL;
 	protected $tables;
 	protected $fields;
 	protected $id_names;
@@ -42,6 +44,20 @@ class Search
 
 
 	/*** mutator methods ***/
+
+	/**
+	 * setSearchTerms
+	 *
+	 * Sets the data member $search_terms.
+	 *
+	 * @param	$search_terms
+	 * @access	public
+	 */
+	public function setSearchTerms($search_terms)
+	{
+		# Set the variable.
+		$this->search_terms=$search_terms;
+	} #=== End -- setSearchTerms
 
 	/**
 	 * setTables
@@ -106,6 +122,18 @@ class Search
 	/*** accessor methods ***/
 
 	/**
+	 * getSearchTerms
+	 *
+	 * Returns the data member $search_terms.
+	 *
+	 * @access	public
+	 */
+	public function getSearchTerms()
+	{
+		return $this->search_terms;
+	} #==== End -- getSearchTerms
+
+	/**
 	 * getTables
 	 *
 	 * Returns the data member $tables.
@@ -164,8 +192,8 @@ class Search
 	 *
 	 * Checks if the search form has been submitted and processes it, returning the results of the search.
 	 *
-	 * @param		$terms (The term we're searching for.)
-	 * @param		$filter (Fields and or terms we would like exluded.)
+	 * @param	$index					The term we're searching for.
+	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
 	public function processSearch($index='searchterms', $filter=NULL)
@@ -257,7 +285,7 @@ class Search
 
 		$where=$this->prepareWhere($terms, $fields, $filter);
 
-		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
+		//$sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
 		$sql='SELECT '.$id.' FROM `'.$table.'` WHERE '.$where;
 		$search_results=(array)$db->get_results($sql);
 		return $search_results;
