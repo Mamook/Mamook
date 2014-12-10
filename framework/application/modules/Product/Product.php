@@ -1584,7 +1584,7 @@ class Product
 						if(!empty($content))
 						{
 							# Open the span tag.
-							$product_content='<span class="'.$description_class.'">%s</span>';
+							$product_content='<span class="'.$content_class.'">%{insert_content}</span>';
 							# Set the $content_label value to a local variable so it won't get over-written.
 							$content_label_markup=$content_label;
 							# Check if there should be a lable for the content.
@@ -1593,7 +1593,7 @@ class Product
 								$content_label_markup='<span class="'.$content_label_class.'">'.$content_label_markup.'</span>';
 							}
 							# Put the content inside its container.
-							$product_content=sprintf($product_content, $content_label_markup.$content);
+							$product_content=str_replace('%{insert_content}', $content_label_markup.$content, $product_content);
 							# Set the content content to the array.
 							$display_product[$id]['content']=$product_content;
 						}
@@ -1602,7 +1602,7 @@ class Product
 						if(!empty($description))
 						{
 							# Set the description display XHTML to a variable.
-							$description_content='<span class="'.$description_class.'">%s</span>';
+							$description_content='<span class="'.$description_class.'">%{insert_content}</span>';
 							# Set the $description_label value to a local variable so it won't get over-written.
 							$description_label_markup=$description_label;
 							# Check if labels should be displayed.
@@ -1612,7 +1612,7 @@ class Product
 								$description_label_markup='<span class="'.$description_label_class.'">'.$description_label_markup.'</span>';
 							}
 							# Put the description inside its container.
-							$description_content=sprintf($description_label_markup.$description);
+							$description_content=str_replace('%{insert_content}', $description_label_markup.$description, $description_content);
 							# Set the description content to the array.
 							$display_product[$id]['description']=$description_content;
 						}
@@ -1960,7 +1960,7 @@ class Product
 				if(isset($asins))
 				{
 					# Set the Amazon product display XHTML array to a variable.
-					$display_amazon=$amazon_obj->displayAmazonProduct($asins, $paginator->getFirstParamName(), 'manage-products', 'MediumImage', 50);
+					$display_amazon=$amazon_obj->displayAmazonProduct($asins, $paginator->getFirstParamName(), 'manage-products', array('image_size'=>'MediumImage', 'max_char'=>50));
 				}
 
 				# Start a table for the products and set the markup to a variable.
