@@ -1,49 +1,53 @@
 <?php /* Thanks goes to Cal Henderson at iamcal.com for the great php search script example (http://www.iamcal.com/publish/articles/php/search/). */
 
 /**
-* Search
-*
-* The Search Class is used to search through a field in a MYSQL database for matching (or similar) text.
-*
-*/
+ * Search
+ *
+ * The Search Class is used to search through a field in a MYSQL database for matching (or similar) text.
+ *
+ */
 class Search
 {
 	/*** data members ***/
 
-	//private static $search_obj;
+	private $all_results=NULL;
+	private $fields=NULL;
 	private $search_terms=NULL;
-	protected $tables;
-	protected $fields;
-	protected $id_names;
-	protected $all_results=NULL;
+	private $search_type=NULL;
+	private $tables=NULL;
 
 	/*** End data members ***/
 
 
-
-	/*** magic methods ***/
+	/*** mutator methods ***/
 
 	/**
-	* __construct
-	*
-	* @param	$table (An array of the tables we're searching in.)
-	* @param	$fields (An array of the fields we're searching in.)
-	* @param	$id (An array of the names of the id fields in the tables we are searching.)
-	* @access	public
-	*/
-	public function __construct($tables=NULL, $fields=NULL, $id_names='id')
+	 * setAllResults
+	 *
+	 * Sets the data member $all_results.
+	 *
+	 * @param	$all_results			The results or the search.
+	 * @access	public
+	 */
+	public function setAllResults($all_results)
 	{
-		$this->setTable($tables);
-		$this->setFields($fields);
-		$this->setID_Names($id_names);
-		return;
-	}
+		# Set the variable.
+		$this->all_results=$all_results;
+	} #==== End -- setAllResults
 
-	/*** End magic methods ***/
-
-
-
-	/*** mutator methods ***/
+	/**
+	 * setFields
+	 *
+	 * Sets the data member $fields.
+	 *
+	 * @param	$fields					An array of the fields to search.
+	 * @access	public
+	 */
+	public function setFields($fields)
+	{
+		# Set the variable.
+		$this->fields=$fields;
+	} #==== End -- setFields
 
 	/**
 	 * setSearchTerms
@@ -60,60 +64,32 @@ class Search
 	} #=== End -- setSearchTerms
 
 	/**
+	 * setSearchType
+	 *
+	 * Sets the data member $search_type.
+	 *
+	 * @param	$search_type				An array of the type of search.
+	 * @access	public
+	 */
+	public function setSearchType($search_type)
+	{
+		# Set the variable.
+		$this->search_type=$search_type;
+	} #==== End -- setSearchType
+
+	/**
 	 * setTables
 	 *
 	 * Sets the data member $tables.
 	 *
-	 * @param		$tables (An array of the tables to search.)
+	 * @param	$tables					An array of the tables to search.
 	 * @access	public
 	 */
-	public function setTable($tables)
+	public function setTables($tables)
 	{
 		# Set the variable.
 		$this->tables=$tables;
 	} #==== End -- setTables
-
-	/**
-	 * setFields
-	 *
-	 * Sets the data member $fields.
-	 *
-	 * @param		$fields (An array of the fields to search.)
-	 * @access	public
-	 */
-	public function setFields($fields)
-	{
-		# Set the variable.
-		$this->fields=$fields;
-	} #==== End -- setFields
-
-	/**
-	 * setID_Names
-	 *
-	 * Sets the data member $id_names.
-	 *
-	 * @param		$id_names (The name of the id fields in the tables to search.)
-	 * @access	public
-	 */
-	public function setID_Names($id_names)
-	{
-		# Set the variable.
-		$this->id_names=$id_names;
-	} #==== End -- setID_Names
-
-	/**
-	 * setAllResults
-	 *
-	 * Sets the data member $all_results.
-	 *
-	 * @param		$all_results (The results or the search.)
-	 * @access	public
-	 */
-	public function setAllResults($all_results)
-	{
-		# Set the variable.
-		$this->all_results=$all_results;
-	} #==== End -- setAllResults
 
 	/*** End mutator methods ***/
 
@@ -122,28 +98,16 @@ class Search
 	/*** accessor methods ***/
 
 	/**
-	 * getSearchTerms
+	 * getAllResults
 	 *
-	 * Returns the data member $search_terms.
+	 * Returns the data member $all_results.
 	 *
 	 * @access	public
 	 */
-	public function getSearchTerms()
+	public function getAllResults()
 	{
-		return $this->search_terms;
-	} #==== End -- getSearchTerms
-
-	/**
-	 * getTables
-	 *
-	 * Returns the data member $tables.
-	 *
-	 * @access	protected
-	 */
-	protected function getTables()
-	{
-		return $this->tables;
-	} #==== End -- getTables
+		return $this->all_results;
+	} #==== End -- getAllResults
 
 	/**
 	 * getFields
@@ -158,28 +122,40 @@ class Search
 	} #==== End -- getFields
 
 	/**
-	 * getID_Names
+	 * getSearchTerms
 	 *
-	 * Returns the data member $id_names.
-	 *
-	 * @access	protected
-	 */
-	protected function getID_Names()
-	{
-		return $this->id_names;
-	} #==== End -- getID_Names
-
-	/**
-	 * getAllResults
-	 *
-	 * Returns the data member $all_results.
+	 * Returns the data member $search_terms.
 	 *
 	 * @access	public
 	 */
-	public function getAllResults()
+	public function getSearchTerms()
 	{
-		return $this->all_results;
-	} #==== End -- getAllResults
+		return $this->search_terms;
+	} #==== End -- getSearchTerms
+
+	/**
+	 * getSearchType
+	 *
+	 * Returns the data member $search_type.
+	 *
+	 * @access	public
+	 */
+	public function getSearchType()
+	{
+		return $this->search_type;
+	} #==== End -- getSearchType
+
+	/**
+	 * getTables
+	 *
+	 * Returns the data member $tables.
+	 *
+	 * @access	protected
+	 */
+	public function getTables()
+	{
+		return $this->tables;
+	} #==== End -- getTables
 
 	/*** End accessor methods ***/
 
@@ -192,23 +168,30 @@ class Search
 	 *
 	 * Processes search, returning the results of the search.
 	 *
-	 * @param	$index					The term we're searching for.
 	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
-	public function processSearch($index='searchterms', $filter=NULL)
+	public function processSearch($filter=NULL)
 	{
-		$tables=$this->getTables();
-		$fields=$this->getFields();
-		$id=$this->getID_Names();
-		$terms=$_POST[$index];
-		$search_results=array();
-		foreach($tables as $table)
+		# Get the search type.
+		$search_type=$this->getSearchType();
+
+		# Loop through search types.
+		foreach($search_type as $type)
 		{
-			$results[$table]=$this->performSearch($terms, $table, $fields[$table], $id[$table], $filter=NULL);
-			$search_results=array_merge($search_results, $results);
+			switch($type)
+			{
+				case "users":
+					# Set the fields to the data member.
+					$this->setFields(array('ID','display','username','title','fname','lname','email'));
+					# Set the tables to the data member.
+					$this->setTables('users');
+					# Perform search.
+					$this->searchUsers($filter);
+					break;
+				default;
+			}
 		}
-		$this->setAllResults($search_results);
 	} #==== End -- processSearch
 
 	/**
@@ -220,6 +203,7 @@ class Search
 	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
+	/*
 	public function displayResults($fields, $display_field)
 	{
 		# Set the Database instance to a variable.
@@ -257,31 +241,60 @@ class Search
 		$display_results.='</ul>';
 		return $display_search_results;
 	} #==== End -- displayResults
+	*/
 
 	/**
-	* performSearch
-	*
-	* Returns the results of the search
-	*
-	* @param	$terms					The term we're searching for.
-	* @param	$table					The table we're searching in.
-	* @param	$fields					The fields we're searching in.
-	* @param	$id						The name of the id field in the table we are searching.
-	* @param	$filter					Fields and or terms we would like exluded.
-	* @access	public
-	*/
-	public function performSearch($terms, $table, $fields, $id='id', $filter=NULL)
+	 * performSearch
+	 *
+	 * Returns the results of the search
+	 *
+	 * @param	$search_terms			The term we're searching for.
+	 * @param	$table					The table we're searching in.
+	 * @param	$fields					The fields we're searching in.
+	 * @param	$id						The name of the id field in the table we are searching.
+	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @access	public
+	 */
+	public function performSearch($search_terms, $table, $fields, $filter=NULL)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		$where=$this->prepareWhere($terms, $fields, $filter);
+		# Create comma separated field string.
+		$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
+		# Create where string.
+		$where=$this->prepareWhere($search_terms, $fields, $filter);
+		print_r($where);exit;
 
-		//$sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
-		$sql='SELECT '.$id.' FROM `'.$table.'` WHERE '.$where;
-		$search_results=(array)$db->get_results($sql);
+		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
+		$sql='SELECT '.$select_fields.' FROM `'.$table.'` WHERE '.$where;
+		$search_results=$db->get_results($sql);
+
 		return $search_results;
 	} #==== End -- performSearch
+
+	/**
+	 * searchUsers
+	 *
+	 * Searches the users table.
+	 *
+	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @access	public
+	 */
+	public function searchUsers($filter=NULL)
+	{
+		# Set tables to search to a variable.
+		$tables=$this->getTables();
+		# Set fields to search to a variable.
+		$fields=$this->getFields();
+		# Set search terms to a variable.
+		$search_terms=$this->getSearchTerms();
+
+		# Perform search.
+		$search_results=$this->performSearch($search_terms, $tables, $fields, $filter=NULL);
+		# Set results to the data member.
+		$this->setAllResults($search_results);
+	} #==== End -- processSearch
 
 	/*** End public methods ***/
 
@@ -291,14 +304,14 @@ class Search
 
 /*** NEEDS MORE WORK (add more characters ie tilde n, accented e, a, o, etc) ***/
 	/**
-	* splitTerms
-	*
-	* Splits the string ($terms) and puts each searchable term into an array.
-	* Returns an array of search terms based on the string ($terms).
-	*
-	* @param	$terms					The string splitting
-	* @access	protected
-	*/
+	 * splitTerms
+	 *
+	 * Splits the string ($terms) and puts each searchable term into an array.
+	 * Returns an array of search terms based on the string ($terms).
+	 *
+	 * @param	$terms					The string splitting
+	 * @access	protected
+	 */
 	protected function splitTerms($terms)
 	{
 		# Explicitly make $terms an array.
@@ -314,9 +327,9 @@ class Search
 		# Define excluded words.
 		$exclude=' the if it to a I but no so of are and';
 
-		# Creat a variable to hold the reg ex pattern that finds all pair of double quotes (").
+		# Create a variable to hold the reg ex pattern that finds all pair of double quotes (").
 		$pattern='/\"(.*?)\"/e';
-		# Creat a variable to hold the method call that replaces any whitespaces or commas with a holder token.
+		# Create a variable to hold the method call that replaces any whitespaces or commas with a holder token.
 		$replacement="Search::change2Token('\$1')";
 		# Find all pair of double quotes (") and pass their contents to the change2Token() method for processing.
 		$terms=preg_replace($pattern, $replacement, $terms);
@@ -955,20 +968,21 @@ class Search
 /*** ***/
 
 	/**
-	* change2Token
-	*
-	* Replaces any whitespace or comma in the string ($term) with a holder token.
-	* Returns the transformed string.
-	*
-	* @param	$string					The string we're escaping
-	* @access	protected
-	*/
+	 * change2Token
+	 *
+	 * Replaces any whitespace or comma in the string ($term) with a holder token.
+	 * Returns the transformed string.
+	 *
+	 * @param	$string					The string we're escaping
+	 * @access	protected
+	 */
 	protected static function change2Token($term)
 	{
 		# Replace any whitespace ( ) with a holder token.
 		$term=preg_replace("/(\s)/e", "'{WHITESPACE-'.ord('\$1').'}'", $term);
 		# Replace any comma (,) with a holder token.
 		$term=preg_replace("/,/", "{COMMA}", $term);
+
 		return $term;
 	} #==== End -- change2Token
 
@@ -1007,14 +1021,14 @@ class Search
 	} #==== End -- emphasizeTerms
 
 	/**
-	* searchEscapeMetaChars
-	*
-	* Escapes the string ($string) in-case some of the characters in the search term contain a MySQL regular expression meta-character.
-	* Returns the escaped string.
-	*
-	* @param	$string					The string we're escaping
-	* @access	protected
-	*/
+	 * searchEscapeMetaChars
+	 *
+	 * Escapes the string ($string) in-case some of the characters in the search term contain a MySQL regular expression meta-character.
+	 * Returns the escaped string.
+	 *
+	 * @param	$string					The string we're escaping
+	 * @access	protected
+	 */
 	protected function escapeMetaChars($string)
 	{
 		# Insert a slash before each meta-character that MySQL uses.
@@ -1022,14 +1036,14 @@ class Search
 	} #==== End -- searchEscapeMetaChars
 
 	/**
-	* convertTerms2RegEx
-	*
-	* Turns an array of search terms ($terms) into a list of regular expressions suitable for MYSQL.
-	* Returns an array of regular expressions suitable for MYSQL.
-	*
-	* @param	$terms					The array of search terms
-	* @access	protected
-	*/
+	 * convertTerms2RegEx
+	 *
+	 * Turns an array of search terms ($terms) into a list of regular expressions suitable for MYSQL.
+	 * Returns an array of regular expressions suitable for MYSQL.
+	 *
+	 * @param	$terms					The array of search terms
+	 * @access	protected
+	 */
 	protected function convertTerms2RegEx($terms)
 	{
 		# Make certain that the passed variable is an array.
@@ -1049,13 +1063,13 @@ class Search
 
 /*** NEEDS FUNCTIONALITY ***/
 	/**
-	* convertChars2Entities
-	*
-	* Converts any special characters to html entities.
-	*
-	* @param	$terms					The array of search terms
-	* @access	protected
-	*/
+	 * convertChars2Entities
+	 *
+	 * Converts any special characters to html entities.
+	 *
+	 * @param	$terms					The array of search terms
+	 * @access	protected
+	 */
 	protected function convertChars2Entities($terms)
 	{
 		return $terms;
@@ -1063,17 +1077,15 @@ class Search
 /*** ***/
 
 	/**
-	* prepareWhere
-	*
-	* Builds and returns the "where" portion of the search query.
-	*
-	* @param	$terms					The term we're searching for.
-	* @param	$table					The table we're searching in.
-	* @param	$fields					The fields we're searching in.
-	* @param	$id						The name of the id field in the table we are searching.
-	* @param	$filter					Fields and or terms we would like exluded.
-	* @access	protected
-	*/
+	 * prepareWhere
+	 *
+	 * Builds and returns the "where" portion of the search query.
+	 *
+	 * @param	$terms					The term we're searching for.
+	 * @param	$fields					The fields we're searching in.
+	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @access	protected
+	 */
 	protected function prepareWhere($terms, $fields, $filter=NULL)
 	{
 		# Set the Database instance to a variable.
@@ -1089,7 +1101,8 @@ class Search
 		}
 
 		$parts=array();
-		/*foreach($terms_db as $term_db)
+		/*
+		foreach($terms_db as $term_db)
 		{
 			# $parts[]="`Username` RLIKE '$term_db'";
 			foreach($fields as $field)
@@ -1097,9 +1110,12 @@ class Search
 				$parts[]='`'.$field.'` RLIKE '.$db->quote($term_db);
 			}
 		}
-		$parts=implode(' OR ', $parts);*/
+		$parts=implode(' OR ', $parts);
+		*/
+
 		$terms_db=implode('|', $terms_db);
-			# $parts[]="`Username` RLIKE '$term_db'";
+
+		# $parts[]="`Username` RLIKE '$term_db'";
 		foreach($fields as $field)
 		{
 			$parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);

@@ -64,6 +64,8 @@ class SearchFormProcessor extends FormProcessor
 			$search_results=NULL;
 			# Set the search terms to a variable.
 			$search_terms=$search_obj->getSearchTerms();
+			# Set the tables to a variable.
+			$tables=$search_obj->getTables();
 
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['search'])))
@@ -89,13 +91,18 @@ class SearchFormProcessor extends FormProcessor
 				# The post is considered "unique" and may be added to the database.
 				else
 				{
-					if($search_terms!==NULL)
+					$search_obj->processSearch();
+					$results=$search_obj->getAllResults();
+					if(!empty($results))
 					{
-						$search_results='results';
+						$search_results=$results;
 					}
 					else
 					{
-						$search_results='no results';
+						# Set a nice message for the user in a session.
+						$_SESSION['message']='No results';
+						# Redirect the user to the page they were on.
+						//$this->redirectNoDelete('video');
 					}
 				}
 			}
@@ -142,7 +149,8 @@ class SearchFormProcessor extends FormProcessor
 			$_SESSION['form']['search']=
 				array(
 					'FormURL'=>$form_url,
-					'SearchTerms'=>$search_obj->getSearchTerms()
+					'SearchTerms'=>$search_obj->getSearchTerms(),
+					'SearchType'=>$search_obj->getSearchType()
 				);
 		}
 		catch(Exception $e)

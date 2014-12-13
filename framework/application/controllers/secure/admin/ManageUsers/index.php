@@ -148,12 +148,20 @@ else
 {
 	# Instantiate a new SearchFormProcessor object.
 	$search_form_processor=new SearchFormProcessor();
+	# Set table to search.
+	$search_type=array('users');
 	# Get the search form.
 	require_once Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
 }
 
-if(!isset($_GET['user'])&&(empty($_POST['searchterms']))&&($login->checkAccess(ADMIN_USERS)===TRUE))
+if(!isset($_GET['user']))
 {
+	# Check if this is a search.
+	if(isset($search_results))
+	{
+		# Set $records to the search results to use in the foreach.
+		$records=$search_results;
+	}
 	$display.='<table width="100%">'.
 		'<tr>'.
 			'<th>'.
@@ -199,10 +207,6 @@ if(!isset($_GET['user'])&&(empty($_POST['searchterms']))&&($login->checkAccess(A
 	$display.='</table>';
 	# Display the pagenavigator.
 	$display.=$paginator->getNavigator();
-}
-elseif(!isset($_GET['user']))
-{
-	$display.=$search_results;
 }
 
 # Get the page title and subtitle to display in main-1.

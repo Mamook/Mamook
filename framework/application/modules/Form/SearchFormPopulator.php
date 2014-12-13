@@ -135,9 +135,12 @@ class SearchFormPopulator extends FormPopulator
 				# Check if title POST data was sent.
 				if(isset($_POST['searchterms']))
 				{
-					# Set the title to the File data member.
+					# Set the search terms to the searchterms data member.
 					$data['SearchTerms']=$_POST['searchterms'];
 				}
+
+				# Set the tables to the tables data member.
+				$data['SearchType']=$_POST['_type'];
 
 				# Reset the data array to the data member.
 				$this->setData($data);

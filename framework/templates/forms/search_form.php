@@ -8,13 +8,23 @@ $populator=$search_form_processor->getPopulator();
 # Set the Search object created in SearchFormPopulator to a variable.
 $search_obj=$populator->getSearchObject();
 
+# Set the search type to a variable.
+$search_type=$search_obj->getSearchType();
+
 # Creeate the search form.
 $display.='<div id="search_form" class="form">';
 $display.=$head;
 # instantiate form generator object
 $fg=new FormGenerator('search', $search_form_processor->getFormAction(), 'POST', '_top', TRUE);
-$fg->addFormPart('<fieldset>');
+# Loops through the tables to search in.
+foreach($search_type as $type)
+{
+	# Create hidden field for the search type.
+	# NOTE: This will be a multiple selection dropdown box.
+	$fg->addElement('hidden', array('name'=>'_type[]', 'value'=>$type));
+}
 $fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
+$fg->addFormPart('<fieldset>');
 $fg->addFormPart('<ul>');
 $fg->addFormPart('<li>');
 $fg->addFormPart('<label class="label" for="searchterms">Search Terms</label>');

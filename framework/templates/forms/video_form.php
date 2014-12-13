@@ -218,8 +218,6 @@ elseif(!isset($_GET['select']))
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
-			# Create the "Add Playlist" option.
-			//$playlist_options['add']='Add Playlist';
 			# Set the current playlists to a variable.
 			$video_playlists=array_flip((array)$video_obj->getPlaylists());
 			foreach($playlists as $row)
@@ -350,13 +348,10 @@ elseif(!isset($_GET['select']))
 			{
 				# Get the image information from the database, and set them to data members.
 				$video_obj->getThisImage($video_obj->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$video_obj->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$video_obj->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-
 				$fg->addFormPart('<ul>');
 				$fg->addFormPart('<li class="file-current">');
 				if($video_obj->getAPI()!==NULL)
@@ -374,7 +369,7 @@ elseif(!isset($_GET['select']))
 				}
 				else
 				{
-					# DRAVEN: This video is not in a public directory.
+					# NOTE: This video is not in a public directory.
 					//$fg->addFormPart('<a href="'.APPLICATION_URL.'videos/files/'.$file_name.'" title="Current Video" rel="lightbox"><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 					$fg->addFormPart('<span>'.$file_name.' - "'.$video_obj->getTitle().'"</span>');
 				}
