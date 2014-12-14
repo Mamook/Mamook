@@ -150,6 +150,8 @@ else
 	$search_form_processor=new SearchFormProcessor();
 	# Set table to search.
 	$search_type=array('users');
+	# Set the search label.
+	$search_label='Search Users';
 	# Get the search form.
 	require_once Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
 }

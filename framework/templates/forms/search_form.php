@@ -27,7 +27,7 @@ $fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 $fg->addFormPart('<fieldset>');
 $fg->addFormPart('<ul>');
 $fg->addFormPart('<li>');
-$fg->addFormPart('<label class="label" for="searchterms">Search Terms</label>');
+$fg->addFormPart('<label class="label" for="searchterms">'.(!isset($search_label) ? 'Search Terms' : $search_label).'</label>');
 $fg->addElement('text', array('name'=>'searchterms', 'id'=>'searchterms', 'value'=>$search_obj->getSearchTerms()));
 $fg->addElement('submit', array('name'=>'search', 'value'=>'Search'), NULL, NULL, 'submit-search');
 $fg->addFormPart('</li>');
