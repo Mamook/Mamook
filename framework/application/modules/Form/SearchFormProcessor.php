@@ -76,7 +76,7 @@ class SearchFormProcessor extends FormProcessor
 				# Instantiate FormValidator object
 				$fv=new FormValidator();
 				# Check if the title field was empty (or less than 2 characters or more than 1024 characters long).
-				$empty_title=$fv->validateEmpty('searchterms', 'Please enter a search term.', 2, 255);
+				$empty_title=$fv->validateEmpty('searchterms', 'Please enter a search term.', 1, 255);
 
 				# Check for errors to display so that the script won't go further.
 				if($fv->checkErrors()===TRUE)
