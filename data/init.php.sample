@@ -83,13 +83,44 @@ $meta_designer=$theme->getDesigner().((!empty($designer_site)) ? ', '.$designer_
 
 if(!preg_match('/\bsecure\b(?!\/login)/i', $_SERVER['REQUEST_URI'], $matches))
 {
-	# Set the default style sheet(s) we are using for the front-end of the site. (must be absolute location)
-	$doc->setStyle(THEME.'css/default.css');
+// 	# Create an Array with properties for the default stylesheet.
+// 	$default_JSON=array(
+// 		"device"=>"all"
+// 	);
+// 	# Convert the Array to JSON.
+// 	$default_JSON=json_encode($default_JSON);
+// 	# Create an Array with properties for the default stylesheet at a 784px width breakpoint.
+// 	$default_784_JSON=array(
+// 		"device"=>"screen",
+// 		"property"=>"max-width",
+// 		"value"=>"784px",
+// 		"tag"=>"784"
+// 	);
+// 	# Convert the Array to JSON.
+// 	$default_784_JSON=json_encode($default_784_JSON);
+// 	# Create an Array with properties for the default stylesheet at a 1014px width breakpoint.
+// 	$default_1014_JSON=array(
+// 		"device"=>"screen",
+// 		"property"=>"max-width",
+// 		"value"=>"1014px",
+// 		"tag"=>"1014"
+// 	);
+// 	# Convert the Array to JSON.
+// 	$default_1014_JSON=json_encode($default_1014_JSON);
+// 	# Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder). Concatenate any stysheet property JSON to the path. Comma separate any additional stylesheets. Or include them as an Array.
+// 	$doc->setStyle(array(
+// 		'default'.$default_JSON.$default_784_JSON.$default_1014_JSON,
+// 		THEME.'css/other.css'
+// 	));
+// 	$doc->setStyle('default.css'.$default_JSON.$default_784_JSON.$default_1014_JSON.','.THEME.'css/other.css');
+
+	# Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder. This will append the ".css" fileextension.)
+	$doc->setStyle('default');
 }
 else
 {
-	# Set the secure style sheet(s) we are using for the back-end of the site. (must be absolute location)
-	$doc->setStyle(THEME.'css/secure.css');
+	# Set the secure style sheet(s) we are using for the back-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder).
+	$doc->setStyle('secure');
 }
 
 # Set the default JavaScripts we are using for the site.
