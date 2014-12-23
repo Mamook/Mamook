@@ -99,6 +99,14 @@ class Document
 			# Loop through the Array of stylesheets.
 			foreach($style_sheet as $style)
 			{
+				# Get the position of the last backslash.
+				$pos=strrpos($style, '/');
+				# Check if there was NO backslash. (If not, it's not a path, just a filename.)
+				if($pos===FALSE)
+				{
+					# Prepend the path to the current Theme's CSS folder to the stylesheet filename.
+					$style=THEME.'css/'.$style;
+				}
 				# Add each stylesheet to the "style" data member Array.
 				$this->style[]=$style;
 			}
@@ -447,6 +455,14 @@ class Document
 			{
 				# Get the Style sheet.
 				$stylesheet_returned=preg_match('/^[^{]+/i', $css, $stylesheet);
+				$stylesheet=$stylesheet[0];
+				# Check if the stylesheet ends with a ".css".
+				$has_extension=preg_match('/\.css$/i', $stylesheet);
+				if($has_extension===0)
+				{
+					# Append the extension.
+					$stylesheet.='.css';
+				}
 				# Get the stylesheet properties.
 				$number_returned=preg_match_all('/({[^}]*})/i', $css, $value_array, PREG_SET_ORDER);
 
@@ -469,7 +485,7 @@ class Document
 						# Build the value of the media attribute for the link tag.
 						$media=$device.((empty($property)) ? '' : ' and ('.$property.':'.$value.')');
 						# Build the name of the stylesheet. If there is no tag, use the passed name without appending anything.
-						$media_css=str_ireplace('.css', ((empty($tag)) ? '' : '.').$tag.'.css', $stylesheet[0]);
+						$media_css=str_ireplace('.css', ((empty($tag)) ? '' : '.').$tag.'.css', $stylesheet);
 						# Create the link tag and concatenate it to the links variable.
 						$links.='<link rel="stylesheet" type="text/css" media="'.$media.'" href="'.$media_css.'">';
 					}
@@ -477,7 +493,7 @@ class Document
 				else
 				{
 					# Build the link tag with no specific target or properties and concatenate it to the links variable.
-					$links.='<link rel="stylesheet" type="text/css" href="'.$stylesheet[0].'">';
+					$links.='<link rel="stylesheet" type="text/css" href="'.$stylesheet.'">';
 				}
 			}
 			# Return the built link tag(s).
@@ -492,7 +508,7 @@ class Document
 	/**
 	 * addIEStyle
 	 *
-	 * Inserts proper Internet Explorer label into CSS filename (ie turns '../../style.css' to '../../'.$ie_version.'.style.css').
+	 * Inserts proper Internet Explorer label into CSS filename (ie turns 'path/style.css' to 'path/'.$ie_version.'.style.css').
 	 *
 	 * @param 	string		$ie_version		(The versions of Internet Explorer(comma separated values). Acceptable values are:
 	 *																	"ie", "ie11", "ie10", "ie9", "ie8", "ie7", "ie6", "ie5mac"
@@ -518,6 +534,13 @@ class Document
 				# Get the Style sheet.
 				$stylesheet_returned=preg_match('/^[^{]+/i', $css, $stylesheet);
 				$stylesheet=$stylesheet[0];
+				# Check if the stylesheet ends with a ".css".
+				$has_extension=preg_match('/\.css$/i', $stylesheet);
+				if($has_extension===0)
+				{
+					# Append the extension.
+					$stylesheet.='.css';
+				}
 				# Get the stylesheet properties.
 				$number_returned=preg_match_all('/({[^}]*})/i', $css, $value_array, PREG_SET_ORDER);
 
@@ -526,21 +549,12 @@ class Document
 				# Loop through the ie versions array.
 				foreach($ie_versions as $ie_version)
 				{
-					# Check if there was a backslash. (If not, it's not a path, just a filename.)
-					if($pos!==FALSE)
-					{
-						# Extract the filename.
-						$filename=substr($stylesheet, $pos+1);
-						# Extract the filepath.
-						$filepath=substr($stylesheet, 0, $pos+1);
-						# Rebuild the stylesheet name with the ie version prepended to the filename.
-						$stylesheet_name=$filepath.$ie_version.'.'.$filename;
-					}
-					else
-					{
-						# Prepend the ie version to the passed filename.
-						$stylesheet_name=$ie_version.'.'.$stylesheet;
-					}
+					# Extract the filename.
+					$filename=substr($stylesheet, $pos+1);
+					# Extract the filepath.
+					$filepath=substr($stylesheet, 0, $pos+1);
+					# Rebuild the stylesheet name with the ie version prepended to the filename.
+					$stylesheet_name=$filepath.$ie_version.'.'.$filename;
 
 					# Check if the ie version is the VERY OLD IE5 for Mac.
 					if($ie_version == 'ie5mac')
