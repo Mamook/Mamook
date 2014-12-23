@@ -79,18 +79,27 @@ class Document
 	/**
 	 * setStyle
 	 *
-	 * Sets the data member $style. Returns FALSE on failure.
+	 * Sets the data member $style. Returns FALSE on failure. Accepts comma separated stylesheet paths. If specific stylesheets for a responsive design are to be included, a JSON String may be appended to the stylesheet pathname. The properties in the JSON may be: "device", "property", "value", and "tag". The "device" value being the device the specific CSS is targeting (ie "screen"). The "property" value being the property to measure against (ie "max-width"). The "value" value being the property value to measure against (ie "1000em"). The "tag" value being a string that is appended to the end of the stylesheet name to make it locatable and unique (ie if "path/stylesheet.css" is the passed stylesheet name, a "tag" value of "screen1000" would indicate "path/stylesheet.screen1000.css".)
 	 *
-	 * @param	string $style_sheet		Must be a url to a style sheet. May be comma seperated style sheets.
+	 * @example
+	 *
+	 * @param		string $style_sheet		Must be a url to a style sheet. May be comma seperated style sheets or an array of stylesheets.
 	 * @access	public
 	 */
 	public function setStyle($style_sheet)
 	{
 		if(!empty($style_sheet))
 		{
-			$style_sheet=explode(',', $style_sheet);
+			# Check if the passed value is NOT an Array.
+			if(!is_array($style_sheet))
+			{
+				# Split the passed string on commas returning an array of stylesheets. Do NOT split on commas  inside of JSON.
+				$style_sheet=preg_split('/,(?![^{}]*+\\})/i', $style_sheet);
+			}
+			# Loop through the Array of stylesheets.
 			foreach($style_sheet as $style)
 			{
+				# Add each stylesheet to the "style" data member Array.
 				$this->style[]=$style;
 			}
 		}
@@ -421,20 +430,57 @@ class Document
 	/**
 	 * addStyle
 	 *
-	 * Puts the correct stylesheets into the header for the page we're viewing.
+	 * Puts the correct stylesheets into the header for the page beigh viewed.
 	 *
 	 * @access	public
 	 */
 	public function addStyle()
 	{
+		# Create an empty variable to hold the link tags.
 		$links='';
 		try
 		{
+			# Get the passed styles. They will be in an Array.
 			$styles=$this->getStyle();
+			# Loop through the styles.
 			foreach($styles as $css)
 			{
-				$links.='<link rel="stylesheet" type="text/css" media="all" href="'.$css.'">';
+				# Get the Style sheet.
+				$stylesheet_returned=preg_match('/^[^{]+/i', $css, $stylesheet);
+				# Get the stylesheet properties.
+				$number_returned=preg_match_all('/({[^}]*})/i', $css, $value_array, PREG_SET_ORDER);
+
+				# Check if there were stylesheet properties.
+				if($number_returned>0)
+				{
+					# Loop through the properties.
+					for($key=0;$key<$number_returned;$key++)
+					{
+						# The properties are in JSON. Decode them to convert them to objects.
+						$current_properties=json_decode($value_array[$key][0]);
+						# Set the device the CSS should be targeting. The default is "all".
+						$device=((empty($current_properties->device)) ? 'all' : $current_properties->device);
+						# Set the property to be measuring against.
+						$property=((empty($current_properties->property)) ? '' : $current_properties->property);
+						# Set the tag that is appended to the end of the css filename to make it locatable and unique.
+						$tag=((empty($current_properties->tag)) ? '' : $current_properties->tag);
+						# Set the value of the property to be measurting against.
+						$value=((empty($current_properties->value)) ? '' : $current_properties->value);
+						# Build the value of the media attribute for the link tag.
+						$media=$device.((empty($property)) ? '' : ' and ('.$property.':'.$value.')');
+						# Build the name of the stylesheet. If there is no tag, use the passed name without appending anything.
+						$media_css=str_ireplace('.css', ((empty($tag)) ? '' : '.').$tag.'.css', $stylesheet[0]);
+						# Create the link tag and concatenate it to the links variable.
+						$links.='<link rel="stylesheet" type="text/css" media="'.$media.'" href="'.$media_css.'">';
+					}
+				}
+				else
+				{
+					# Build the link tag with no specific target or properties and concatenate it to the links variable.
+					$links.='<link rel="stylesheet" type="text/css" href="'.$stylesheet[0].'">';
+				}
 			}
+			# Return the built link tag(s).
 			return $links;
 		}
 		catch(Exception $e)
@@ -448,63 +494,110 @@ class Document
 	 *
 	 * Inserts proper Internet Explorer label into CSS filename (ie turns '../../style.css' to '../../'.$ie_version.'.style.css').
 	 *
-	 * @param 	string	$ie_version (The versions of Internet Explorer(comma separated values)
+	 * @param 	string		$ie_version		(The versions of Internet Explorer(comma separated values). Acceptable values are:
+	 *																	"ie", "ie11", "ie10", "ie9", "ie8", "ie7", "ie6", "ie5mac"
 	 * @access	public
 	 */
 	public function addIEStyle($ie_versions)
 	{
 		try
 		{
-			# Remove any white space after commas.
-			$ie_versions=preg_replace('/,\s{1}/', ',', $ie_versions);
+			# Remove any white space from the passed string (allows developers to be lazy).
+			$ie_versions=preg_replace('/\s/', '', $ie_versions);
 			# Explode ie versions into an array.
 			$ie_versions=explode(',', $ie_versions);
+			# Create an empty array to hold
+			$ie_style=array('ie'=>'', 'ie11'=>'', 'ie10'=>'', 'ie9'=>'', 'ie8'=>'', 'ie7'=>'', 'ie6'=>'', 'ie5mac'=>'');
 			# Get the set styles.
 			$styles=$this->getStyle();
 			# Create an empty variable to hold the link markup display.
 			$display_ie_style='';
-			# Create an empty array to hold
-			$ie_style=array('ie'=>'', 'ie10'=>'', 'ie9'=>'', 'ie8'=>'','ie7'=>'','ie6'=>'','ie5mac'=>'');
 			# loop through the stylesheets.
 			foreach($styles as $css)
 			{
+				# Get the Style sheet.
+				$stylesheet_returned=preg_match('/^[^{]+/i', $css, $stylesheet);
+				$stylesheet=$stylesheet[0];
+				# Get the stylesheet properties.
+				$number_returned=preg_match_all('/({[^}]*})/i', $css, $value_array, PREG_SET_ORDER);
+
 				# Get the position of the last backslash.
-				$pos=strrpos($css, '/');
+				$pos=strrpos($stylesheet, '/');
 				# Loop through the ie versions array.
 				foreach($ie_versions as $ie_version)
 				{
 					# Check if there was a backslash. (If not, it's not a path, just a filename.)
-					if($pos !== FALSE)
+					if($pos!==FALSE)
 					{
-
-						$filename=substr($css, $pos + 1);
-						$filepath=substr($css, 0, $pos + 1);
-						$stylesheet=$filepath.$ie_version.'.'.$filename;
-					}
-					else { $stylesheet=$ie_version.'.'.$css; }
-					if($ie_version == 'ie5mac')
-					{
-						$ie_style[$ie_version].='@import("'.$stylesheet.'");'."\n";
+						# Extract the filename.
+						$filename=substr($stylesheet, $pos+1);
+						# Extract the filepath.
+						$filepath=substr($stylesheet, 0, $pos+1);
+						# Rebuild the stylesheet name with the ie version prepended to the filename.
+						$stylesheet_name=$filepath.$ie_version.'.'.$filename;
 					}
 					else
 					{
-						$ie_style[$ie_version].='<link rel="stylesheet" type="text/css" media="all" href="'.$stylesheet.'" />'."\n";
+						# Prepend the ie version to the passed filename.
+						$stylesheet_name=$ie_version.'.'.$stylesheet;
+					}
+
+					# Check if the ie version is the VERY OLD IE5 for Mac.
+					if($ie_version == 'ie5mac')
+					{
+						# Create the appropriate tag to pull in the stylesheet ONLY if the browser is IE5 for Mac.
+						$ie_style[$ie_version].='@import("'.$stylesheet_name.'");';
+					}
+					else
+					{
+						# Check if there were stylesheet properties.
+						if($number_returned>0)
+						{
+							# Loop through the properties.
+							for($key=0;$key<$number_returned;$key++)
+							{
+								# The properties are in JSON. Decode them to convert them to objects.
+								$current_properties=json_decode($value_array[$key][0]);
+								# Set the device the CSS should be targeting. The default is "all".
+								$device=((empty($current_properties->device)) ? 'all' : $current_properties->device);
+								# Set the property to be measuring against.
+								$property=((empty($current_properties->property)) ? '' : $current_properties->property);
+								# Set the tag that is appended to the end of the css filename to make it locatable and unique.
+								$tag=((empty($current_properties->tag)) ? '' : $current_properties->tag);
+								# Set the value of the property to be measurting against.
+								$value=((empty($current_properties->value)) ? '' : $current_properties->value);
+								# Build the value of the media attribute for the link tag.
+								$media=$device.((empty($property)) ? '' : ' and ('.$property.':'.$value.')');
+								# Build the name of the stylesheet. If there is no tag, use the passed name without appending anything.
+								$media_css=str_ireplace('.css', ((empty($tag)) ? '' : '.').$tag.'.css', $stylesheet_name);
+								# Create the link tag and concatenate it to the links variable.
+								$ie_style[$ie_version].='<link rel="stylesheet" type="text/css" media="'.$media.'" href="'.$media_css.'">';
+							}
+						}
+						else
+						{
+							# Build the link tag with no specific target or properties and concatenate it to the links variable.
+							$ie_style[$ie_version].='<link rel="stylesheet" type="text/css" href="'.$stylesheet_name.'">';
+						}
 					}
 				}
 			}
-			$display_ie_style.=((!empty($ie_style['ie'])) ? '<!--[if IE]>'.$ie_style['ie'].'<![endif]-->'."\n" : '');
-			$display_ie_style.=((!empty($ie_style['ie10'])) ? '<!--[if IE 10]>'.$ie_style['ie10'].'<![endif]-->'."\n" : '');
-			$display_ie_style.=((!empty($ie_style['ie9'])) ? '<!--[if IE 9]>'.$ie_style['ie9'].'<![endif]-->'."\n" : '');
-			$display_ie_style.=((!empty($ie_style['ie8'])) ? '<!--[if IE 8]>'.$ie_style['ie8'].'<![endif]-->'."\n" : '');
-			$display_ie_style.=((!empty($ie_style['ie7'])) ? '<!--[if IE 7]>'.$ie_style['ie7'].'<![endif]-->'."\n" : '');
-			$display_ie_style.=((!empty($ie_style['ie6'])) ? '<!--[if IE 6]>'.$ie_style['ie6'].'<![endif]-->'."\n" : '');
+			# Build the IE conditionals.
+			$display_ie_style.=((!empty($ie_style['ie'])) ? '<!--[if IE]>'.$ie_style['ie'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie11'])) ? '<!--[if IE 11]>'.$ie_style['ie11'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie10'])) ? '<!--[if IE 10]>'.$ie_style['ie10'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie9'])) ? '<!--[if IE 9]>'.$ie_style['ie9'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie8'])) ? '<!--[if IE 8]>'.$ie_style['ie8'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie7'])) ? '<!--[if IE 7]>'.$ie_style['ie7'].'<![endif]-->' : '');
+			$display_ie_style.=((!empty($ie_style['ie6'])) ? '<!--[if IE 6]>'.$ie_style['ie6'].'<![endif]-->' : '');
 			$display_ie_style.=((!empty($ie_style['ie5mac'])) ?
 					'<style type="text/css">'."\n".
 						'/*\*//*/'."\n".
-							$ie_style['ie5mac'].
+							$ie_style['ie5mac']."\n".
 						'/**/'."\n".
-					'</style>'."\n"
+					'</style>'
 				: '');
+			# Return the built markup.
 			return $display_ie_style;
 		}
 		catch(Exception $e)
