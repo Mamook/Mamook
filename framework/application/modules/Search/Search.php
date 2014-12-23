@@ -264,10 +264,11 @@ class Search
 		$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
 		# Create where string.
 		$where=$this->prepareWhere($search_terms, $fields, $filter);
-		print_r($where);exit;
+		//print_r($where);exit;
 
 		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
 		$sql='SELECT '.$select_fields.' FROM `'.$table.'` WHERE '.$where;
+		//print_r($sql);exit;
 		$search_results=$db->get_results($sql);
 
 		return $search_results;
@@ -524,7 +525,7 @@ class Search
 			$search[]='/('.$umlaut_o_search.')/';
 			$umlaut_u_search='ü|u(^(&u(uml|UML)))';
 			$search[]='/('.$umlaut_u_search.')/';
-			$umlaut_y_search='(^(&y(uml|UML))])|ÿ|y';
+			$umlaut_y_search='ÿ|y(^(&y(uml|UML)))';
 			$search[]='/('.$umlaut_y_search.')/';
 			$umlaut_A_search='Ä|A(^(&A(uml|UML)))';
 			$search[]='/('.$umlaut_A_search.')/';
@@ -589,7 +590,6 @@ class Search
 			$replace[]=$latin_small_letter_sharp_s_replace;
 
 			$alt_term=preg_replace($search, $replace, $term);
-
 			if(!in_array($alt_term, $alt_terms))
 			{
 				$alt_terms[]=$alt_term;
@@ -814,7 +814,6 @@ class Search
 			$replace=array();
 
 			# Ninth, again
-
 			$alt_term=preg_replace('/('.chr(34).')/', '&#x22;', $term);
 			if(!in_array($alt_term, $alt_terms))
 			{
@@ -828,7 +827,7 @@ class Search
 			$search[]=$umlaut_o_search;
 			$umlaut_u_search='/u&(^(&u(uml|UML)))/';
 			$search[]=$umlaut_u_search;
-			$umlaut_y_search='/(y[^(&y(uml|UML))])/';
+			$umlaut_y_search='/y&(^(&y(uml|UML)))/';
 			$search[]=$umlaut_y_search;
 			$umlaut_A_search='/A&(^(&A(uml|UML)))/';
 			$search[]=$umlaut_A_search;
@@ -1092,6 +1091,7 @@ class Search
 		$db=DB::get_instance();
 
 		$terms=$this->splitTerms($terms);
+		//print_r($terms);exit;
 		$terms_db=$this->convertTerms2RegEx($terms);
 		$result=array();
 		if(!empty($filter))
