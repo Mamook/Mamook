@@ -2,6 +2,7 @@
 *
 # Except this file
 !.gitignore
-!sql
 !install_instructions.txt
+!JavaScript
 !minifier
+!sql
