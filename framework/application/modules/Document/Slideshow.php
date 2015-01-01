@@ -594,7 +594,6 @@ class Slideshow
 					$display.='</li>';
 				}
 				$display.='</ul>';
-				var_dump($this->getButtonPrevious());exit;
 				$display.='<div class="'.$this->getButtonPrevious().'"></div>';
 				$display.='<div class="'.$this->getButtonNext().'"></div>';
 				$display.='</div>';
