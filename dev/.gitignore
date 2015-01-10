@@ -2,7 +2,8 @@
 *
 # Except this file
 !.gitignore
+!FaceBookAuth.txt
 !install_instructions.txt
-!JavaScript
-!minifier
-!sql
+!JavaScript/*
+!minifier/*
+!sql/*

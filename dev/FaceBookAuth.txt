@@ -1,0 +1,5 @@
+https://www.facebook.com/dialog/oauth?client_id={CLIENT_ID}&redirect_uri=http://{REDIRECT_TO_SEE_ACCESSTOKEN_IN_URL}&scope=manage_pages,publish_stream&response_type=token
+
+https://www.facebook.com/marmaladejams?#access_token={RETURNED_ACCESS_TOKEN}&expires_in=5818
+
+https://graph.facebook.com/oauth/access_token?client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&grant_type=fb_exchange_token&fb_exchange_token={ACCESS_TOKEN}
