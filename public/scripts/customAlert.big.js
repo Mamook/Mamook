@@ -6,47 +6,52 @@
  * @copyright (c) 2011 Arron Bailiss <arron@arronbailiss.com>
  */
 (function($){
-	$.fn.customAlert=function(b){
-		var c = {
+	$.fn.customAlert=function(additionalOptions){
+		var options = {
 			alertOk:		'OK',
 			draggable:	!1
 		};
-		b && $.extend(c, b);
-		document.getElementById && (window.defaultAlert = window.alert, window.alert = function(b, d){
-			if(!(0<$('.overlay').length || void 0===b||void 0===d))
+		additionalOptions && $.extend(options, additionalOptions);
+		document.getElementById && (window.defaultAlert = window.alert, window.alert = function(title, message){
+			if(!(void 0===b || void 0===d))
 			{
-				var overlay = $('<div>').addClass('overlay')
-					.show();
-				var title = $('<div>').addClass('title')
-					.html(b);
-				var message = $('<div>').addClass('message')
-					.html(d);
-				var okButton = $('<a>').addClass('okBtn')
-					.text(c.alertOk)
-					.attr('href', '#');
-				var alertBox = $('<div>').addClass('alertBox')
-					.append(title)
-					.append(message)
+				var header = $('<h1>').addClass('title')
+					.html(title);
+				var content = $('<span>').addClass('message')
+					.html(message);
+				var okButton = $('<button>').addClass('okBtn')
+					.attr({
+						'aria-label':	'Close ' + title + ' Modal',
+						role:					'button',
+						type:					'button',
+						value:				options.alertOk
+					});
+				var alertBox = $('<section>').addClass('alertBox')
+					.prepend(header)
+					.append(content)
 					.append(okButton);
+				var overlay = $('.overlay');
+				if(overlay.length == 0)
+					overlay = $('<div>').addClass('overlay');
 				$('body').append(alertBox)
-					.append(overlay);
+					.append(overlay.show());
 				alertBox.css({
 					top:	($(window).height()/2-alertBox.outerHeight(true)/2) + 'px',
 					left:	($(window).width()/2-alertBox.outerWidth(true)/2) + 'px'
 				});
-				c.draggable && alertBox.draggable && (alertBox.draggable({
-						handle:		'.title',
+				options.draggable && alertBox.draggable && (alertBox.draggable({
+						handle:		'.alertBox .title',
 						opacity:	0.4
 					}),
-					$('.alertBox .title').css('cursor', 'move')
+					header.css({cursor:'move'})
 				);
-				$('.alertBox .okBtn, .overlay').click(function(b){
-					b.preventDefault();
+				$('.alertBox .okBtn, .overlay').click(function(event){
+					event.preventDefault();
 					$('.alertBox, .overlay').remove();
 				});
-				$(window).keydown(function(b){
-					'13' == b.keyCode && ($('.alertBox .okBtn').click(),
-					$(this).unbind('keydown'))
+				$(window).keydown(function(event){
+					('13' == event.keyCode || '32' == event.keyCode) && ($('.alertBox .okBtn').click(),
+					$(this).off('keydown'))
 				});
 			}
 		});
