@@ -2,6 +2,9 @@
 *
 # Except this file
 !.gitignore
+!fwPopUp
 !fwPopUp/*
+!jQueryPlugin
 !jQueryPlugin/*
+!library
 !library/*
