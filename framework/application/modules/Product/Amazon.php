@@ -515,7 +515,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 					$file_title_link_title=((array_key_exists('file_title_link_title', $options)) ? $options['file_title_link_title'] : 'default');
 
 					# Image options defaults.
-					$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : 'lightbox');
+					$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : FW_POPUP_HANDLE);
 					$image_size=((array_key_exists('image_size', $options)) ? $options['image_size'] : 'MediumImage');
 
 					# Publisher options defaults.
@@ -786,10 +786,10 @@ if(!defined('__PHP_SHA256_NANO_'))
 				# Check if there should be a link for the image.
 				if(!empty($image_options['image_link']))
 				{
-					# Check if the image link is lightbox.
-					if($image_options['image_link']=='lightbox')
+					# Check if the image link is the fwPopUp handle.
+					if($image_options['image_link']==FW_POPUP_HANDLE)
 					{
-						$image_options['image_link']='<a href="'.$image_options['image_original_url'].'" rel="lightbox" title="'.$image_options['product_title'].'" class="image-link" target="_blank">%{insert_content}</a>';
+						$image_options['image_link']='<a href="'.$image_options['image_original_url'].'" rel="'.FW_POPUP_HANDLE.'" title="'.$image_options['product_title'].'" class="image-link" target="_blank">%{insert_content}</a>';
 					}
 					else
 					{

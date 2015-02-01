@@ -233,7 +233,7 @@ if(empty($duplicates))
 		$image_name=$image_obj->getImage();
 		$fg->addFormPart('<ul>');
 		$fg->addFormPart('<li class="file-current">');
-		$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+		$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 		$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('</ul>');

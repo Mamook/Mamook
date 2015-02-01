@@ -385,11 +385,11 @@ elseif(!isset($_GET['select']))
 					# Create audio URL.
 					$audio_obj->setAudioUrl($yt->getSoundcloudUrl().$audio_obj->getAudioId());
 
-					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="lightbox"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				else
 				{
-					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="lightbox"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
 				$fg->addFormPart('</li>');
@@ -421,7 +421,7 @@ elseif(!isset($_GET['select']))
 			$image_name=$image_obj->getImage();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');

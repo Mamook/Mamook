@@ -365,12 +365,12 @@ elseif(!isset($_GET['select']))
 					# Create video URL.
 					$video_obj->setVideoUrl($yt->getYoutubeUrl().$video_obj->getVideoId());
 
-					$fg->addFormPart('<a href="'.$video_obj->getVideoUrl().'" title="Current Video" rel="lightbox"><img src="'.$video_obj->getThumbnailUrl().'" alt="'.$video_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.$video_obj->getVideoUrl().'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><img src="'.$video_obj->getThumbnailUrl().'" alt="'.$video_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 				}
 				else
 				{
 					# NOTE: This video is not in a public directory.
-					//$fg->addFormPart('<a href="'.APPLICATION_URL.'videos/files/'.$file_name.'" title="Current Video" rel="lightbox"><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
+					//$fg->addFormPart('<a href="'.APPLICATION_URL.'videos/files/'.$file_name.'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 					$fg->addFormPart('<span>'.$file_name.' - "'.$video_obj->getTitle().'"</span>');
 				}
 				$fg->addElement('hidden', array('name'=>'_video', 'value'=>$file_name));
@@ -403,7 +403,7 @@ elseif(!isset($_GET['select']))
 			$image_name=$image_obj->getImage();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');

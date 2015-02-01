@@ -43,7 +43,7 @@ $img=$user_obj->getImg();
 $cv=$user_obj->getCV();
 if(!empty($img))
 {
-	$display_box1b.='<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="lightbox" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+	$display_box1b.='<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
 }
 if(!empty($cv))
 {

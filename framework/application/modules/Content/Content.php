@@ -1160,7 +1160,7 @@ class Content
 	 *
 	 * @access	public
 	 */
-	public function displayContent($image_link='lightbox')
+	public function displayContent($image_link=FW_POPUP_HANDLE)
 	{
 		# Set variables
 		$image_name=$this->getImage();

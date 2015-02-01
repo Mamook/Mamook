@@ -97,7 +97,7 @@ if(isset($_GET['content']))
 			$image_title=$content->getImageTitle();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$content->getImageTitle().'" /><span>'.$image_name.((empty($image_title)) ? '' : ' - "'.$content->getImageTitle().'"').'</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$content->getImageTitle().'" /><span>'.$image_name.((empty($image_title)) ? '' : ' - "'.$content->getImageTitle().'"').'</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image', 'value'=>$image_name));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');

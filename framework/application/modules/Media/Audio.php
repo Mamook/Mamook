@@ -2107,7 +2107,7 @@ class Audio
 
 			# Set the markup to a variable
 			$display.='<tr>'.
-				'<td><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="lightbox">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a></td>'.
+				'<td><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a></td>'.
 				'<td>'.$this->getTitle().'</td>'.
 				'<td><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a></td>'.
 				'</tr>';

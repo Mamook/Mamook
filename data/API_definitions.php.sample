@@ -1,16 +1,19 @@
 <?php  /* data/API_definitions.php */
 
+#fwPopUp Variables
+define('FW_POPUP_HANDLE', 'fwpopup');
+
 # AddThis Variables
-define('ADDTHIS_ID','');
+define('ADDTHIS_ID', '');
 define('ADDTHIS_APP_ID', '');
 
 # Amazon Variables
-define('AMAZON_ACCESS_KEY','');
-define('AMAZON_ASS_TAG','');
-define('AMAZON_SECRET_KEY','');
+define('AMAZON_ACCESS_KEY', '');
+define('AMAZON_ASS_TAG', '');
+define('AMAZON_SECRET_KEY', '');
 
 # Bit.ly Variables
-define('BITLY_USERNAME','');
+define('BITLY_USERNAME', '');
 define('BITLY_KEY', '');
 define('BITLY_ACCESS_TOKEN', '');
 define('BITLY_CLIENT_ID', '');
@@ -69,7 +72,7 @@ else
 
 # Soundcloud Variables
 define('SOUNDCLOUD_AUTH_URL', 'https://soundcloud.com/connect');
-define('SOUNDCLOUD_CLIENT_ID','');
+define('SOUNDCLOUD_CLIENT_ID', '');
 define('SOUNDCLOUD_CLIENT_SECRET', '');
 define('SOUNDCLOUD_TOKEN', '');
 define('SOUNDCLOUD_TOKEN_URL', 'https://api.soundcloud.com/oauth2/token');
@@ -79,7 +82,7 @@ define('SOUNDCLOUD_PERMALINK', '');
 define('SOUNDCLOUD_URL', '');
 
 # Twitter Variables
-define('TWITTER_USERNAME','');
+define('TWITTER_USERNAME', '');
 define('TWITTER_PASSWORD', '');
 define('TWITTER_CONSUMER_KEY', '');
 define('TWITTER_CONSUMER_SECRET', '');
@@ -89,8 +92,8 @@ define('TWITTER_TOKEN_SECRET', '');
 define('TWITTER_URL', '');
 
 # Vimeo Variables
-define('VIMEO_CONSUMER_KEY','');
-define('VIMEO_SECRET_KEY','');
+define('VIMEO_CONSUMER_KEY', '');
+define('VIMEO_SECRET_KEY', '');
 define('VIMEO_URL', '');
 
 # Websnapr Variables
@@ -107,12 +110,12 @@ else
 {
 	define('YOUTUBE_SESSION_TOKEN', NULL);
 }
-define('YOUTUBE_CLIENT_ID','');
-define('YOUTUBE_CLIENT_SECRET','');
-define('YOUTUBE_DEV_KEY','');
+define('YOUTUBE_CLIENT_ID', '');
+define('YOUTUBE_CLIENT_SECRET', '');
+define('YOUTUBE_DEV_KEY', '');
 define('YOUTUBE_REFRESH_TOKEN', '');
-define('YOUTUBE_USERNAME','');
-define('YOUTUBE_CHANNELID','');
+define('YOUTUBE_USERNAME', '');
+define('YOUTUBE_CHANNELID', '');
 define('YOUTUBE_USERID', '');
 define('YOUTUBE_URL', '');
 # end YouTube Variables

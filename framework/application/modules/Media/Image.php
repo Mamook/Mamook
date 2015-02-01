@@ -912,7 +912,7 @@ class Image
 	 * @return	String
 	 * @access	public
 	 */
-	public function displayImage($return=FALSE, $image_name=NULL, $image_title=NULL, $image_link='lightbox')
+	public function displayImage($return=FALSE, $image_name=NULL, $image_title=NULL, $image_link=FW_POPUP_HANDLE)
 	{
 		try
 		{
@@ -937,10 +937,10 @@ class Image
 				# Check if there should be a link for the image.
 				if(!empty($image_link))
 				{
-					# Check if the image link is lightbox.
-					if($image_link=='lightbox')
+					# Check if the image link is the fwPupUp handle.
+					if($image_link==FW_POPUP_HANDLE)
 					{
-						$image_link='<a href="'.IMAGES.'original/'.$image_name.'" rel="lightbox" title="'.$this->getTitle().'" class="image-link" target="_blank">%{insert_content}</a>';
+						$image_link='<a href="'.IMAGES.'original/'.$image_name.'" rel="'.FW_POPUP_HANDLE.'" title="'.$this->getTitle().'" class="image-link" target="_blank">%{insert_content}</a>';
 					}
 					else
 					{
@@ -1139,7 +1139,7 @@ class Image
 					$edit_content=NULL;
 					$delete_content=NULL;
 					# Set the image markup to the $general_data variable.
-					$general_data='<td><a href="'.IMAGES.'original/'.$image_name.'" title="'.$image_title.'" rel="lightbox"><img src="'.IMAGES.$image_name.'" alt="'.$image_name.'" /></a></td>';
+					$general_data='<td><a href="'.IMAGES.'original/'.$image_name.'" title="'.$image_title.'" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_name.'" /></a></td>';
 					# Add the title markup to the $general_data variable.
 					$general_data.='<td>'.(($select==='select') ? '<label for="image'.$image_id.'">' : '' ).'"'.$image_title.'"'.((!empty($image_desc)) ? ' <span class="entry">'.$image_desc.'</span>' : '').(($select==='select') ? '</label>' : '' ).'</td>';
 					# Check if there should be an edit button displayed.

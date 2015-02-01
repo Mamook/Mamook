@@ -139,7 +139,7 @@ $session=Session::getInstance(NULL, NULL, NULL, $sesh_id);
 $session->setPostLogin();
 
 # Set the link for the page image to the default of "lightbox". This will cause the image to open in a popup.
-$image_link='lightbox';
+$image_link=FW_POPUP_HANDLE;
 
 # Get the Login Class.
 require_once Utility::locateFile(MODULES.'User'.DS.'Login.php');

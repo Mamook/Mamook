@@ -2193,7 +2193,7 @@ class Video
 
 			# Set the markup to a variable
 			$display.='<tr>'.
-				'<td><a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="lightbox"><img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster" /></a></td>'.
+				'<td><a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'"><img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster" /></a></td>'.
 				'<td>'.$this->getTitle().'</td>'.
 				'<td><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a></td>'.
 				'</tr>';
@@ -2281,7 +2281,7 @@ class Video
 
 			# Set the markup to a variable
 			$display='<div class="video-lg">'.
-				'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"'.($this->getAvailability()==1 ? ' rel="lightbox"' : ' target="_blank"').'><img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" /><span class="play-static"></span></a>'.
+				'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'><img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" /><span class="play-static"></span></a>'.
 				'<h3 class="h-video"><a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on YouTube" target="_blank">'.$this->getTitle().'</a></h3>'.
 				'<p>'.$this->getDescription().'</p>'.
 				'</div>';

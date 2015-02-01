@@ -1393,7 +1393,7 @@ class Product
 				$file_title_link_title=((array_key_exists('file_title_link_title', $options)) ? $options['file_title_link_title'] : 'default');
 
 				# Image options defaults.
-				$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : 'lightbox');
+				$image_link=((array_key_exists('image_link', $options)) ? $options['image_link'] : FW_POPUP_HANDLE);
 				$image_size=((array_key_exists('image_size', $options)) ? $options['image_size'] : 'MediumImage');
 
 				# Publisher options defaults.

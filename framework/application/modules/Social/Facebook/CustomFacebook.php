@@ -401,7 +401,7 @@ class CustomFacebook
 				$image_url=substr($image_url, $url_pos+4);
 			}
 
-			return '<a href="'.$image_url.'" title="'.((isset($social_data->link_name)) ? $social_data->link_name : ((isset($social_data->name)) ? $social_data->name : $social_data->link)).'" target="_blank" rel="lightbox"><img src="'.$image_url.'" alt="'.((isset($social_data->name)) ? $social_data->name : $social_data->link).'" /></a>';
+			return '<a href="'.$image_url.'" title="'.((isset($social_data->link_name)) ? $social_data->link_name : ((isset($social_data->name)) ? $social_data->name : $social_data->link)).'" target="_blank" rel="'.FW_POPUP_HANDLE.'"><img src="'.$image_url.'" alt="'.((isset($social_data->name)) ? $social_data->name : $social_data->link).'" /></a>';
 		}
 		return NULL;
 	} #==== End -- getFB_PostImage
