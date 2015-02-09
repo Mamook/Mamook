@@ -635,7 +635,7 @@ class Email
 		try
 		{
 			# Get the Utility Class.
-			require_once Utility_CLASS;
+			require_once UTILITY_CLASS;
 			# Get the PHPMailer class.
 			require_once Utility::locateFile(MODULES.'Email'.DS.'phpMailer'.DS.'class.phpmailer.php');
 			# Instantiate a new PHPMailer object.
@@ -885,7 +885,7 @@ class Email
 		try
 		{
 			# Get the Utility Class.
-			require_once Utility_CLASS;
+			require_once UTILITY_CLASS;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Validator instance to a variable.
