@@ -29,26 +29,28 @@ if(!empty($page_title))
 	$main_content->setPageTitle($page_title);
 }
 
+# Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
+$display_main1.=$main_content->displayImage($image_link);
 # Get the page title and subtitle to display in main-1.
-$display_main1=$main_content->displayTitles();
+$display_main1.=$main_content->displayTitles();
 
-# Get the main content to display in main-2. The "image_link" variable is defined in data/init.php.
-$display_main2=$main_content->displayContent($image_link);
+# Get the main content to display in main-2.
+$display_main2.=$main_content->displayContent();
 # Add the subcontent to main-2.
 $display_main2.=$display_subcontent;
 # Add any display content to main-2.
 $display_main2.=$display;
 
 # Get the quote text to display in main-3.
-$display_main3=$main_content->displayQuote();
+$display_main3.=$main_content->displayQuote();
 
 # Display the file info in box1a.
-$display_box1a=$display_file;
+$display_box1a.=$display_file;
 
 # Get the announcement navigation list.
 require Utility::locateFile(TEMPLATES.'announcement_nav.php');
 # Set the "branch_nav" variable from the announcement_nav template to the display_box2 variable for display in the view.
-$display_box2=$branch_nav;
+$display_box2.=$branch_nav;
 
 /*
  ** In the page template we
