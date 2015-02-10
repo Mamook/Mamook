@@ -20,7 +20,7 @@ class FormElement
 		# Convert $type to lowercase.
 		$type=strtolower($type);
 		# check for <input> elements
-		if(preg_match('/^(text|radio|checkbox|password|hidden|submit|reset|button|file)$/',$type))
+		if(preg_match('/^(text|email|radio|checkbox|password|hidden|submit|reset|button|file)$/',$type))
 		{
 			if($class===NULL)
 			{
