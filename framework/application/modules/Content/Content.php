@@ -1160,27 +1160,14 @@ class Content
 	 *
 	 * @access	public
 	 */
-	public function displayContent($image_link=FW_POPUP_HANDLE)
+	public function displayContent()
 	{
 		# Set variables
-		$image_name=$this->getImage();
-		$image_title=$this->getImageTitle();
 		$site_name=$this->getSiteName();
 		$text=$this->getText();
 
 		# Create an empty variable to hold the html content.
 		$content='';
-
-		# Check if there is an image to display.
-		if(!empty($image_name))
-		{
-			# Get the Image class.
-			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
-			# Instantiate a new Image object.
-			$image=new Image();
-			# Display the image using the image title if available, otherwise, use the page title.
-			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_link);
-		}
 
 		if(!empty($text))
 		{
@@ -1347,6 +1334,36 @@ class Content
 			throw $e;
 		}
 	} #==== End -- displayContentList
+
+	/**
+	 * displayImage
+	 *
+	 * Markup the main page image.  and return it as a Sting
+	 *
+	 * @access	public
+	 */
+	public function displayImage($image_link=FW_POPUP_HANDLE)
+	{
+		# Set variables
+		$image_name=$this->getImage();
+		$image_title=$this->getImageTitle();
+
+		# Create an empty variable to hold the html content.
+		$content='';
+
+		# Check if there is an image to display.
+		if(!empty($image_name))
+		{
+			# Get the Image class.
+			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
+			# Instantiate a new Image object.
+			$image=new Image();
+			# Display the image using the image title if available, otherwise, use the page title.
+			$content.=$image->displayImage(TRUE, $image_name, ((empty($image_title)) ? strip_tags($this->getPageTitle()) : $image_title), $image_link);
+		}
+
+		return $content;
+	} #==== End -- displayImage
 
 	/***
 	 * displayQuote
