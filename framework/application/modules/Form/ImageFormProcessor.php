@@ -244,7 +244,7 @@ class ImageFormProcessor extends FormProcessor
 							$filter='`id` != '.$db->quote($id);
 						}
 						# Search for duplicate records.
-						$search->setAllResults($search->performSearch($terms, 'images', $fields, 'id', $filter));
+						$search->performSearch($terms, 'images', $fields, $filter);
 						# Set any search results to a variable.
 						$duplicates=$search->getAllResults();
 						# Create an empty array for the duplicate display.
