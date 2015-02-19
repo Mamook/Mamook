@@ -264,14 +264,14 @@ class Search
 		$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
 		# Create where string.
 		$where=$this->prepareWhere($search_terms, $fields, $filter);
-		//print_r($where);exit;
 
 		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
 		$sql='SELECT '.$select_fields.' FROM `'.$table.'` WHERE '.$where;
 		//print_r($sql);exit;
 		$search_results=$db->get_results($sql);
-
-		return $search_results;
+		//print_r($search_results);exit;
+		# Set results to the data member.
+		$this->setAllResults($search_results);
 	} #==== End -- performSearch
 
 	/**
@@ -290,11 +290,8 @@ class Search
 		$fields=$this->getFields();
 		# Set search terms to a variable.
 		$search_terms=$this->getSearchTerms();
-
 		# Perform search.
-		$search_results=$this->performSearch($search_terms, $tables, $fields, $filter=NULL);
-		# Set results to the data member.
-		$this->setAllResults($search_results);
+		$this->performSearch($search_terms, $tables, $fields, $filter=NULL);
 	} #==== End -- processSearch
 
 	/*** End public methods ***/
@@ -949,6 +946,51 @@ class Search
 			{
 				$alt_terms[]=$alt_term;
 			}
+
+			# Reset the search and replace arrays.
+			$search=array();
+			$replace=array();
+
+			# Thirteenth, again
+			$a_search='/a/';
+			$search[]=$a_search;
+			$o_search='/o/';
+			$search[]=$o_search;
+			$u_search='/u/';
+			$search[]=$u_search;
+			$y_search='/y/';
+			$search[]=$y_search;
+			$A_search='/A/';
+			$search[]=$A_search;
+			$O_search='/O/';
+			$search[]=$O_search;
+			$U_search='/U/';
+			$search[]=$U_search;
+			$Y_search='/Y/';
+			$search[]=$Y_search;
+
+			$a_replace='ä';
+			$replace[]=$a_replace;
+			$o_replace="ö";
+			$replace[]=$o_replace;
+			$u_replace="ü";
+			$replace[]=$u_replace;
+			$y_replace="ÿ";
+			$replace[]=$y_replace;
+			$A_replace="Ä";
+			$replace[]=$A_replace;
+			$O_replace="Ö";
+			$replace[]=$O_replace;
+			$U_replace="Ü";
+			$replace[]=$U_replace;
+			$Y_replace="Ÿ";
+			$replace[]=$Y_replace;
+
+			$alt_term=preg_replace($search, $replace, $term);
+			if(!in_array($alt_term, $alt_terms))
+			{
+				$alt_terms[]=$alt_term;
+			}
 		}
 		# Loop through the alternate terms.
 		foreach($alt_terms as $alt_term)
@@ -1091,7 +1133,14 @@ class Search
 		$db=DB::get_instance();
 
 		$terms=$this->splitTerms($terms);
+		//$terms=iconv('UTF-8', 'ASCII//TRANSLIT', $terms);
+/*
+		$terms=strtr(utf8_decode($terms),
+            utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
+            'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy');
+*/
 		//print_r($terms);exit;
+
 		$terms_db=$this->convertTerms2RegEx($terms);
 		$result=array();
 		if(!empty($filter))
