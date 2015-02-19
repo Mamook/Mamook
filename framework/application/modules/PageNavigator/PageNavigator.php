@@ -44,10 +44,10 @@ class PageNavigator
 	private $div_wrapper_name='pagenavigator';
 
 	# text for navigation
-	private $str_first='|&lt;';
+	private $str_first='First';
 	private $str_next='Next';
 	private $str_previous='Prev';
-	private $str_last='&gt;|';
+	private $str_last='Last';
 
 	# for error reporting
 	private $error_string;
@@ -426,7 +426,7 @@ class PageNavigator
 		if($this->calculateNumberPages()>1)
 		{
 			# wrap in div tag
-			$strnavigator="<div class=\"$this->div_wrapper_name\">\n";
+			$strnavigator='<div class="'.$this->div_wrapper_name.'">';
 			# Check if the curent page is the very first page.
 			if($this->getCurrentPage()==0)
 			{
@@ -448,7 +448,7 @@ class PageNavigator
 				{
 					$strnavigator.='<span class="'.$this->getInactiveSpanName().'">';
 					$strnavigator.=$x+1;
-					$strnavigator.="</span>\n";
+					$strnavigator.='</span>';
 				}
 				else
 				{
@@ -474,7 +474,7 @@ class PageNavigator
 				$strnavigator.=$this->createLink($this->getTotalPages()-1, $this->getStrLast(), 'Last Page', 'page-last');
 			}
 			$strnavigator.=$this->getPageNumberDisplay();
-			$strnavigator.="</div>\n";
+			$strnavigator.='</div>';
 			return $strnavigator;
 		}
 		else { return FALSE; }
@@ -538,16 +538,16 @@ class PageNavigator
 		}
 		# Remove the index.
 		$url=WebUtility::removeIndex($url);
-		$strtemp='<a href="'.$url.'"'.(($title!==NULL)?' title="'.$title.'"':'').(($class!==NULL)?' class="'.$class.'"':'').'>'.$strdisplay.'</a>';
+		$strtemp='<a href="'.$url.'"'.(($title!==NULL) ? ' title="'.$title.'"' : '').(($class!==NULL) ? ' class="'.$class.'"' : '').'>'.$strdisplay.'</a>';
 		return $strtemp;
 	} #==== End -- createLink
 
 	private function getPageNumberDisplay()
 	{
-		$str='<div class="'.$this->getPageDisplayDivName().'">'."\n".'Page ';
+		$str='<div class="'.$this->getPageDisplayDivName().'">Page ';
 		$str .= $this->getCurrentPage()+1;
-		$str .= " of ".$this->getTotalPages();
-		$str .= "</div>\n";
+		$str .= ' of '.$this->getTotalPages();
+		$str .= '</div>';
 		return $str;
 	} #==== End -- getPageNumberDisplay
 
