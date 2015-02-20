@@ -230,7 +230,7 @@ class ImageFormProcessor extends FormProcessor
 						# Get the Search class.
 						require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
 						# Make an array of fields to search in the `images` table in the Database.
-						$fields=array('title');
+						$fields=array('id', 'title');
 						# Instantiate a new Search object.
 						$search=new Search();
 						# Make an array of the terms to search for (enclose multiple word strings in double quotes.)
