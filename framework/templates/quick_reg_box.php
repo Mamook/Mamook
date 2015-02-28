@@ -16,14 +16,13 @@ if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))
 		# Instantiate a new formGenerator object.
 		$quick_reg=new formGenerator('register', $action, 'POST', '_top', FALSE, $box3_class, 'box3');
 		$quick_reg->addElement('hidden',array('name'=>'_submit_check','value'=>'1'));
-		$quick_reg->addFormPart('<fieldset>'."\n");
-		$quick_reg->addFormPart('<ul>'."\n");
+		$quick_reg->addFormPart('<fieldset>');
+		$quick_reg->addFormPart('<ul>');
 		if($login->isLoggedIn()!==TRUE)
 		{
-			$quick_reg->addFormPart('<li>'."\n");
-			$quick_reg->addFormPart('<label class="label h" for="emailGo">Register Now!</label>'."\n");
+			$quick_reg->addFormPart('<li>');
+			$quick_reg->addFormPart('<label class="label h" for="emailGo">Register Now!</label>');
 			$quick_reg->addElement('text',array('name'=>'email', 'value'=>'youremail@somewhere.com', 'id'=>'emailGo'));
-			$quick_reg->addFormPart('<span id="pointer">>></span>'."\n");
 			$quick_reg->addFormPart('</li>');
 		}
 		$quick_reg->addFormPart('<li>');
