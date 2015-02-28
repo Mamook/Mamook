@@ -21,12 +21,12 @@ if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))
 		if($login->isLoggedIn()!==TRUE)
 		{
 			$quick_reg->addFormPart('<li>');
-			$quick_reg->addFormPart('<label class="label h" for="emailGo">Register Now!</label>');
+			$quick_reg->addFormPart('<label class="h-1 label" for="emailGo">Register Now!</label>');
 			$quick_reg->addElement('text',array('name'=>'email', 'value'=>'youremail@somewhere.com', 'id'=>'emailGo'));
 			$quick_reg->addFormPart('</li>');
 		}
 		$quick_reg->addFormPart('<li>');
-		$quick_reg->addFormPart('<label class="label" for="go">Member Only Content</label>');
+		$quick_reg->addFormPart('<label class="h-2 label" for="go">Member Only Content</label>');
 		if($login->isLoggedIn()!==TRUE)
 		{
 			$quick_reg->addElement('submit', array('name'=>'go', 'value'=>'Go', 'id'=>'go'), NULL, NULL, 'submit-go');
