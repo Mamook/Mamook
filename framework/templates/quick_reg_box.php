@@ -16,8 +16,10 @@ if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))
 			$action='http://store.'.DOMAIN_NAME.'/subscriptions/';
 			$box3_class.=' in';
 			$display_quick_reg.='<section class="'.$box3_class.'">';
-			$display_quick_reg.='<h1 class="h-1">';
-			$display_quick_reg.='<a href="'.APPLICATION_URL.'store/subscriptions/" id="go" class="'.$go_button_class.'" title="Get Member Only Content">Go</a>';
+				$display_quick_reg.='<h1 class="h-1">';
+				$display_quick_reg.=$common_label;
+				$display_quick_reg.='</h1>';
+				$display_quick_reg.='<a href="'.APPLICATION_URL.'store/subscriptions/" id="go" class="'.$go_button_class.'" title="Get Member Only Content">Go</a>';
 			$display_quick_reg.='</section>';
 		}
 		else
