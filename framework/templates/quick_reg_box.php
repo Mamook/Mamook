@@ -8,39 +8,40 @@ if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))
 	{
 		$action=REDIRECT_TO_LOGIN.'register/';
 		$box3_class='box3';
+		$go_button_class='submit-go';
+		$display_quick_reg='';
+		$common_label='Member Only Content';
 		if($login->isLoggedIn()===TRUE)
 		{
 			$action='http://store.'.DOMAIN_NAME.'/subscriptions/';
-			$box3_class+=' ssl';
-		}
-		# Instantiate a new formGenerator object.
-		$quick_reg=new formGenerator('register', $action, 'POST', '_top', FALSE, $box3_class, 'box3');
-		$quick_reg->addElement('hidden',array('name'=>'_submit_check','value'=>'1'));
-		$quick_reg->addFormPart('<fieldset>');
-		$quick_reg->addFormPart('<ul>');
-		if($login->isLoggedIn()!==TRUE)
-		{
-			$quick_reg->addFormPart('<li>');
-			$quick_reg->addFormPart('<label class="h-1 label" for="emailGo">Register Now!</label>');
-			$quick_reg->addElement('text',array('name'=>'email', 'value'=>'youremail@somewhere.com', 'id'=>'emailGo'));
-			$quick_reg->addFormPart('</li>');
-		}
-		$quick_reg->addFormPart('<li>');
-		$quick_reg->addFormPart('<label class="h-2 label" for="go">Member Only Content</label>');
-		if($login->isLoggedIn()!==TRUE)
-		{
-			$quick_reg->addElement('submit', array('name'=>'go', 'value'=>'Go', 'id'=>'go'), NULL, NULL, 'submit-go');
+			$box3_class.=' in';
+			$display_quick_reg.='<section class="'.$box3_class.'">';
+			$display_quick_reg.='<h1 class="h-1">';
+			$display_quick_reg.='<a href="'.APPLICATION_URL.'store/subscriptions/" id="go" class="'.$go_button_class.'" title="Get Member Only Content">Go</a>';
+			$display_quick_reg.='</section>';
 		}
 		else
 		{
-			$quick_reg->addFormPart('<a href="'.APPLICATION_URL.'store/subscriptions/" id="go" class="submit-go" title="Get Member Only Content">Go</a>');
+			# Instantiate a new formGenerator object.
+			$quick_reg=new formGenerator('register', $action, 'POST', '_top', FALSE, $box3_class, 'box3');
+			$quick_reg->addElement('hidden',array('name'=>'_submit_check','value'=>'1'));
+			$quick_reg->addFormPart('<fieldset>');
+				$quick_reg->addFormPart('<ul>');
+					$quick_reg->addFormPart('<li>');
+						$quick_reg->addFormPart('<label class="h-1 label" for="emailGo">Register Now!</label>');
+						$quick_reg->addElement('email',array('name'=>'email', 'value'=>'youremail@somewhere.com', 'id'=>'emailGo'));
+					$quick_reg->addFormPart('</li>');
+					$quick_reg->addFormPart('<li>');
+						$quick_reg->addFormPart('<label class="h-2 label" for="go">'.$common_label.'</label>');
+						 $quick_reg->addElement('submit', array('name'=>'go', 'value'=>'Go', 'id'=>'go'), NULL, NULL, $go_button_class);
+					$quick_reg->addFormPart('</li>');
+				$quick_reg->addFormPart('</ul>');
+			$quick_reg->addFormPart('</fieldset>');
+			$display_quick_reg.=$quick_reg->display();
+			# Clean up
+			$quick_reg=NULL;
 		}
-		$quick_reg->addFormPart('</li>');
-		$quick_reg->addFormPart('</ul>');
-		$quick_reg->addFormPart('</fieldset>');
-		echo $quick_reg->display();
-		# Clean up
-		$quick_reg=NULL;
+		echo $display_quick_reg;
 	}
 	catch(Exception $e)
 	{
