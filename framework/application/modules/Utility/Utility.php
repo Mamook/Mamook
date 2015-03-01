@@ -312,7 +312,18 @@ class Utility
 		# Check if the is available in the client directory. If not, get it from the Framework folder.
 		if(file_exists($file)===FALSE)
 		{
-			$file=str_replace(BASE_PATH, BASE_PATH.'framework'.DS, $file);
+			$new_file_path=str_replace(BASE_PATH, BASE_PATH.'framework'.DS, $file);
+			# Check if the is available in the framework directory.
+			if(file_exists($new_file_path)===FALSE)
+			{
+				# Check if the file is a view.
+				if(strpos($new_file_path, FW_VIEWS)!==FALSE)
+				{
+					# Get the view template.
+					$new_file_path=Utility::locateFile(TEMPLATES.'view.php');
+				}
+			}
+			$file=$new_file_path;
 		}
 		# Return the file path.
 		return $file;
