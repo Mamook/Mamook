@@ -1166,16 +1166,12 @@ class Content
 		$site_name=$this->getSiteName();
 		$text=$this->getText();
 
-		# Create an empty variable to hold the html content.
-		$content='';
-
 		if(!empty($text))
 		{
 			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
-			$class=((WebUtility::removeIndex(WebUtility::removePageQuery('http://'.FULL_DOMAIN.HERE))==APPLICATION_URL) ? 'splash_content_text' : 'content_text');
-			$content.='<div class="'.$class.'">'.$text.'</div>';
+			$text='<div class="content-text">'.$text.'</div>';
 		}
-		return $content;
+		return $text;
 	} #==== End -- displayContent
 
 	/**
@@ -1325,7 +1321,7 @@ class Content
 			}
 			else
 			{
-				$display='<h3>There are no content pages to display.</h3>';
+				$display='<h3 class="h-3">There are no content pages to display.</h3>';
 			}
 			return $display;
 		}
@@ -1377,7 +1373,7 @@ class Content
 		# Set the quote to a local variable.
 		$quote=$this->getQuote();
 		# Build the quote into a paragraph for display. If there is no quote, return an empty string.
-		return ((!empty($quote)) ? '<p class="quote">'.$quote.'</p>' : '');
+		return ((!empty($quote)) ? '<span class="quote">'.$quote.'</span>' : '');
 	} #==== End -- displayQuote
 
 	/***
@@ -1419,17 +1415,29 @@ class Content
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
 
-		# Set variables
-		$hide_title=(($this->getHideTitle()===NULL) ? '' : ' hidden');
-		$page_title=$this->getPageTitle();
-		$sub_title=$this->getSubTitle();
+		$content='';
 
-		# Display the content title
-		$content='<h1 class="content_title'.$hide_title.'">'.$page_title.'</h1>';
+		# Set variables
+		$page_title=$this->getPageTitle();
+		if($this->getHideTitle()!==NULL)
+		{
+			$page_title=$this->getSubTitle();
+		}
+		else
+		{
+			$sub_title=$this->getSubTitle();
+		}
+
+
+		if(!empty($page_title))
+		{
+			# Display the content title
+			$content.='<h1 class="h-1">'.$page_title.'</h1>';
+		}
 
 		if(!empty($sub_title))
 		{
-			$content.='<h2 class="'.(($hide_title!='') ? 'content_title' : 'content_sub_title').'">'.$sub_title.'</h2>';
+			$content.='<h2 class="h-2">'.$sub_title.'</h2>';
 		}
 
 		# Add the error box if we have an error or message to display.

@@ -48,7 +48,7 @@ class SubContent
 	private $language_id=NULL;
 	private $language_iso=NULL;
 	private $link=NULL;
-	private $more='more&nbsp;>>';
+	private $more='more';
 	private $post_title_display=NULL;
 	private $premium;
 	private $all_publishers=NULL;
@@ -906,7 +906,7 @@ class SubContent
 		else
 		{
 			# Explicitly set the data member to the default.
-			$this->more='more&nbsp;>>';
+			$this->more='more';
 		}
 	} #==== End -- setMore
 
@@ -2144,11 +2144,11 @@ class SubContent
 					# Create a variable for the hidden class.
 					$hidden=$display_subcontent[$post_id]['hidden'];
 					# Display the subcontent.
-					$display='<div class="detailed">'."\n";
-					$display.='<div class="post">'."\n";
+					$display='<div class="detailed">';
+					$display.='<article class="post">';
 					if($hidden!==NULL)
 					{
-						$display.='<p class="hide">This post is hidden.</h3p>';
+						$display.='<p class="hide">This post is hidden.</p>';
 					}
 					$display.=$display_subcontent[$post_id]['image'];
 					$display.=$display_subcontent[$post_id]['date'];
@@ -2156,7 +2156,6 @@ class SubContent
 					$display.=$display_subcontent[$post_id]['recent_contributor'];
 					$display.=$display_subcontent[$post_id]['publisher'];
 					$display.=$display_subcontent[$post_id]['text'];
-					$display.='<div class="empty"></div>';
 					$display.=$display_subcontent[$post_id]['text_trans'];
 					$file_info=$this->getFileInfoDisplay();
 					# Create an empty variable to hold any file details.
@@ -2183,9 +2182,8 @@ class SubContent
 					$display.=$display_subcontent[$post_id]['edit'];
 					$display.=$display_subcontent[$post_id]['delete'];
 					$display.=$display_subcontent[$post_id]['download'];
-					$display.='<div class="empty"></div>';
-					$display.='</div>'."\n";
-					$display.='</div>'."\n";
+					$display.='</article>';
+					$display.='</div>';
 
 					# Set the post's title to the data member for display.
 					$this->setPostTitleDisplay($display_subcontent[$post_id]['title']);
@@ -2224,7 +2222,7 @@ class SubContent
 						$doc->redirect(WebUtility::removeIndex('http://'.FULL_DOMAIN.HERE));
 					}
 				}
-				# Count the retruned subcontent.
+				# Count the returned subcontent.
 				$content_count=$this->countAllSubContent($branch, NULL, $and_sql);
 				if($content_count>0)
 				{
@@ -2232,8 +2230,8 @@ class SubContent
 					require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 					# Create a new PageNavigator object.
 					$paginator=new PageNavigator(7, 4, CURRENT_PAGE, 'page', $content_count, $params);
-					$paginator->setStrFirst('');
-					$paginator->setStrLast('');
+					$paginator->setStrFirst('First Page');
+					$paginator->setStrLast('Last Page');
 					$paginator->setStrNext('Next Page');
 					$paginator->setStrPrevious('Previous Page');
 
@@ -2242,16 +2240,18 @@ class SubContent
 					# Display the SubContent.
 					$display_array=$this->displaySubContent($max_char, constant(strtoupper(str_replace(' ', '_', $branch)).'_USERS'), TRUE, $min_word, $show_hidden);
 					# Start an unordered list of the "subcontent" class and set it to a variable.
-					$display='<ul class="post">'."\n";
+					$display='<ul class="post">';
 					# Loop through the display subcontent array.
 					foreach($display_array as $id=>$display_subcontent)
 					{
 						# Create a variable for the hidden class.
 						$hidden=(($display_subcontent['hidden']===NULL) ? NULL : ' class="hide"');
 						# Add the post content to the display variable.
-						$display.='<li'.$hidden.'>'."\n";
+						$display.='<li'.$hidden.'>';
+						# Open the article tag.
+						$display.='<article>';
 						//$display.=$display_subcontent['image'];
-						$display.='<h3>'.$display_subcontent['title'].'</h3>';
+						$display.='<h1 class="h-1">'.$display_subcontent['title'].'</h1>';
 						$display.=$display_subcontent['date'];
 						if($hidden!==NULL)
 						{
@@ -2259,22 +2259,22 @@ class SubContent
 						}
 						$display.=$display_subcontent['text'];
 						$display.=$display_subcontent['text_trans'];
-						$display.='<div class="empty"></div>';
 						$display.=$display_subcontent['more'];
 						$display.=$display_subcontent['edit'];
 						$display.=$display_subcontent['delete'];
 						$display.=$display_subcontent['download'];
-						$display.='<div class="empty"></div>';
+						# Close the article tag.
+						$display.='</article>';
 						$display.='</li>';
 					}
 					# Close the unordered list.
-					$display.='</ul>'."\n";
+					$display.='</ul>';
 					# Display the pagenavigator.
 					$display.=$paginator->getNavigator();
 				}
 				else
 				{
-					$display='<h3>There are no records to display.</h3>';
+					$display='<h3 class="h-3">There are no records to display.</h3>';
 				}
 			}
 			return $display;
@@ -2510,8 +2510,8 @@ class SubContent
 								{
 									# Create a variable to hold the contributor display XHTML and open a list tag.
 									$display_cont='<div class="post-author">';
-									$display_cont.='<span class="label">Posted by</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$cont_id.'" title="'.$contributor->getContName().'">'.$contributor->getContName().'</a>'."\n";
-									$display_cont.='</div>'."\n";
+									$display_cont.='<span class="label">Posted by</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$cont_id.'" title="'.$contributor->getContName().'">'.$contributor->getContName().'</a>';
+									$display_cont.='</div>';
 									# Check if the contributor should be displayed to all.
 									if($cont_privacy==0)
 									{
@@ -2543,8 +2543,8 @@ class SubContent
 									{
 										# Create a variable to hold the recent contributor display XHTML and open a list tag.
 										$display_recent_cont='<div class="post-editor">';
-										$display_recent_cont.='<span class="label">Edited by</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$recent_cont_id.'" title="'.$contributor->getContName().'">'.$contributor->getContName().'</a> on <span class="edit-date"><span class="edit-month">'.date("F", $last_edit).'</span> <span class="edit-day">'.date("d", $last_edit).'</span>, <span class="edit-year">'.date("Y", $last_edit).'</span>'."\n".'</span>'."\n";
-										$display_recent_cont.='</div>'."\n";
+										$display_recent_cont.='<span class="label">Edited by</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$recent_cont_id.'" title="'.$contributor->getContName().'">'.$contributor->getContName().'</a> on <span class="edit-date"><span class="edit-month">'.date("F", $last_edit).'</span> <span class="edit-day">'.date("d", $last_edit).'</span>, <span class="edit-year">'.date("Y", $last_edit).'</span>'.'</span>';
+										$display_recent_cont.='</div>';
 										# Check if the recent contributor should be displayed to all.
 										if($recent_cont_privacy==0)
 										{
@@ -2571,7 +2571,7 @@ class SubContent
 								# Convert the date to a timestamp.
 								$date=strtotime($date);
 								# Set the date to a variable.
-								$date_content='<span class="post-date"><span class="post-month">'.date("F", $date).'</span> <span class="post-day">'.date("d", $date).'</span>, <span class="post-year">'.date("Y", $date).'</span>'."\n".'</span>'."\n";
+								$date_content='<span class="post-date"><span class="post-month">'.date("F", $date).'</span> <span class="post-day">'.date("d", $date).'</span>, <span class="post-year">'.date("Y", $date).'</span>'.'</span>';
 								# Set the date content to the array.
 								$display_content[$id]['date']=$date_content;
 							}
@@ -2634,7 +2634,7 @@ class SubContent
 								if($buttons===TRUE)
 								{
 									# Replace the link with the button.
-									$more_content='<a href="'.$link.'" class="more-button" target="_blank" title="Read More">More</a>';
+									$more_content='<a href="'.$link.'" class="button-more" target="_blank" title="Read More">More</a>';
 								}
 								# Set the more content to the array.
 								$display_content[$id]['more']=$more_content;
@@ -2644,7 +2644,7 @@ class SubContent
 							if($edit===TRUE)
 							{
 								# Set the edit button to a variable.
-								$edit_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;edit" class="edit" title="Edit this">Edit</a>';
+								$edit_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;edit" class="button-edit" title="Edit this">Edit</a>';
 								# Set the edit content to the array.
 								$display_content[$id]['edit']=$edit_content;
 							}
@@ -2653,7 +2653,7 @@ class SubContent
 							if($delete===TRUE)
 							{
 								# Set the delete button to a variable.
-								$delete_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;delete" class="delete" title="Delete This">Delete</a>';
+								$delete_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;delete" class="button-delete" title="Delete This">Delete</a>';
 								# Set the delete content to the array.
 								$display_content[$id]['delete']=$delete_content;
 							}
@@ -2681,63 +2681,63 @@ class SubContent
 								if($file_availability===1)
 								{
 									# Set the download button to a variable.
-									$download_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($premium===NULL) ? '' : '&amp;t=premium').'" class="download" title="Download '.str_replace('"', '`', $file_title).'">Download</a>'."\n";
+									$download_content='<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($premium===NULL) ? '' : '&amp;t=premium').'" class="button-download" title="Download '.str_replace('"', '`', $file_title).'">Download</a>';
 									# Set the delete content to the array.
 									$display_content[$id]['download']=$download_content;
 
-									$file_content='<div class="file-info">'."\n";
-									$file_header_content='<h4>File Details</h4>'."\n";
+									$file_content='<div class="file-info">';
+									$file_header_content='<h4>File Details</h4>';
 									$file_content.=$file_header_content;
 									# Set the file info content to the array.
 									$display_content[$id]['file']['header']=$file_header_content;
-									$file_content.='<ul>'."\n";
-									$file_content.='<li>'."\n";
+									$file_content.='<ul>';
+									$file_content.='<li>';
 
 									$file_name_content='<span class="file-name">';
 									$file_name_content.='<span class="label">Name:</span> <a href="'.APPLICATION_URL.'download/?f='.$file_name.(($file_premium===NULL) ? '' : '&amp;t=premium').'" title="Download '.$file_name.'">'.$file_name.'</a>';
-									$file_name_content.='</span>'."\n";
+									$file_name_content.='</span>';
 									$file_content.=$file_name_content;
 									# Set the file info content to the array.
 									$display_content[$id]['file']['name']=$file_name_content;
 
-									$file_content.='</li>'."\n";
-									$file_content.='<li>'."\n";
+									$file_content.='</li>';
+									$file_content.='<li>';
 
 									$file_title_content='<span class="file-title">';
-									$file_title_content.='<span class="label">Title:</span> <p>'.$file_title.'</p></span>'."\n";
+									$file_title_content.='<span class="label">Title:</span> <span>'.$file_title.'</span></span>';
 									$file_content.=$file_title_content;
 									# Set the file info content to the array.
 									$display_content[$id]['file']['title']=$file_title_content;
 
-									$file_content.='</li>'."\n";
+									$file_content.='</li>';
 									# Set the array value for the file author to NULL.
 									$display_content[$id]['file']['author']=NULL;
 									if($file_author!==NULL)
 									{
-										$file_content.='<li>'."\n";
+										$file_content.='<li>';
 
 										$file_author_content='<span class="file-author">';
-										$file_author_content.='<span class="label">Author:</span> <p>'.$file_author.'</p></span>'."\n";
+										$file_author_content.='<span class="label">Author:</span> <span>'.$file_author.'</span></span>';
 										$file_content.=$file_author_content;
 										# Set the file info content to the array.
 										$display_content[$id]['file']['author']=$file_author_content;
 
-										$file_content.='</li>'."\n";
+										$file_content.='</li>';
 									}
 									# Set the array value for the file publisher to NULL.
 									$display_content[$id]['file']['publisher']=NULL;
 									if($file_publisher!==NULL)
 									{
-										$file_content.='<li>'."\n";
+										$file_content.='<li>';
 
 										$file_publisher_content='<span class="file-publisher">';
 										$file_publisher_content.='<span class="label">Publisher:</span> <a href="'.APPLICATION_URL.'profile/?publisher='.$file_publisher.'" title="'.$file_publisher.'">'.$file_publisher.'</a>';
-										$file_publisher_content.='</span>'."\n";
+										$file_publisher_content.='</span>';
 										$file_content.=$file_publisher_content;
 										# Set the file info content to the array.
 										$display_content[$id]['file']['publisher']=$file_publisher_content;
 
-										$file_content.='</li>'."\n";
+										$file_content.='</li>';
 									}
 
 									# Set the array value for the file language to NULL.
@@ -2745,42 +2745,42 @@ class SubContent
 									# Check if there is a file language.
 									if(!empty($file_language))
 									{
-										$file_content.='<li>'."\n";
+										$file_content.='<li>';
 										$file_language_content='<span class="file-language">';
-										$file_language_content.='<span class="label">Language:</span> <p>'.$file_language.'</p></span>'."\n";
+										$file_language_content.='<span class="label">Language:</span> <span>'.$file_language.'</span></span>';
 										$file_content.=$file_language_content;
 										# Set the file info content to the array.
 										$display_content[$id]['file']['language']=$file_language_content;
-										$file_content.='</li>'."\n";
+										$file_content.='</li>';
 									}
 
 									# Set the array value for the file publish year to NULL.
 									$display_content[$id]['file']['year']=NULL;
 									if($file_year!==NULL)
 									{
-										$file_content.='<li>'."\n";
+										$file_content.='<li>';
 
 										$file_year_content='<span class="file-year">';
-										$file_year_content.='<span class="label">Publish Year:</span> <p>'.$file_year.'</p></span>'."\n";
+										$file_year_content.='<span class="label">Publish Year:</span> <span>'.$file_year.'</span></span>';
 										$file_content.=$file_year_content;
 										# Set the file info content to the array.
 										$display_content[$id]['file']['year']=$file_year_content;
 
-										$file_content.='</li>'."\n";
+										$file_content.='</li>';
 									}
 									# Set the array value for the file location to NULL.
 									$display_content[$id]['file']['location']=NULL;
 									if($file_location!==NULL)
 									{
-										$file_content.='<li>'."\n";
+										$file_content.='<li>';
 
 										$file_location_content='<span class="file-location">';
-										$file_location_content.='<span class="label">Publish Location:</span> <p>'.$file_location.'</p></span>'."\n";
+										$file_location_content.='<span class="label">Publish Location:</span> <span>'.$file_location.'</span></span>';
 										$file_content.=$file_location_content;
 										# Set the file info content to the array.
 										$display_content[$id]['file']['location']=$file_location_content;
 
-										$file_content.='</li>'."\n";
+										$file_content.='</li>';
 									}
 									# Set the array value for the file contributor to NULL.
 									$display_content[$id]['file']['contributor']=NULL;
@@ -2794,12 +2794,12 @@ class SubContent
 										if($file_cont_privacy!==NULL)
 										{
 											# Create a variable to hold the file contributor display XHTML and open a list tag.
-											$display_file_cont='<li>'."\n";
+											$display_file_cont='<li>';
 
-											$file_contributor_content='<span class="file-contributor"><span class="label">File uploaded by:</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$file_cont_id.'" title="'.$file_contributor->getContName().'">'.$file_contributor->getContName().'</a></span>'."\n";
+											$file_contributor_content='<span class="file-contributor"><span class="label">File uploaded by:</span> <a href="'.APPLICATION_URL.'profile/?contributor='.$file_cont_id.'" title="'.$file_contributor->getContName().'">'.$file_contributor->getContName().'</a></span>';
 											$display_file_cont.=$file_contributor_content;
 
-											$display_file_cont.='</li>'."\n";
+											$display_file_cont.='</li>';
 											# Check if the contributor should be displayed to all.
 											if($file_cont_privacy==0)
 											{
@@ -2823,9 +2823,9 @@ class SubContent
 										}
 									}
 									# Close the unordered list.
-									$file_content.='</ul>'."\n";
+									$file_content.='</ul>';
 									# Close the "file-info" div.
-									$file_content.='</div>'."\n";
+									$file_content.='</div>';
 									# Set the file info content to the array.
 									$display_content[$id]['file']['all']=$file_content;
 								}

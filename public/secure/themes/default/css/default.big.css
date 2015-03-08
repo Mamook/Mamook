@@ -1,3 +1,5 @@
+/*! GENERATED FILE! DO NOT MODIFY! !*/
+
 @charset "UTF-8";
 
 
@@ -398,14 +400,8 @@ img {
 	list-style:none inside;
 }
 .action,
-.post .edit,
-.post .edit:visited,
-.post .delete,
-.post .delete:visited,
-.post .download,
-.post .download:visited,
-.post .more-button,
-.post .more-button:visited,
+[class|=button],
+[class|=button]:visited,
 [class|=submit],
 [class|=submit]:visited,
 .okBtn,
@@ -429,18 +425,18 @@ img {
 	text-transform:uppercase;
 	cursor:pointer;
 }
-.post .edit {
+.button-edit {
 	width:46px;
 	padding:0;
 	font-size:12px;
 }
-.post .download,
+.button-download,
 [class|=submit]{
 	float:right;
 	margin-top:8px;
 }
 .post > .more,
-.post .more-button {
+.post .button-more {
 	float:left;
 	clear:left;
 }
@@ -449,10 +445,7 @@ img {
 	margin:0 0 8px 0;
 }
 .hover .action,
-.post .delete:hover,
-.post .download:hover,
-.post .edit:hover,
-.post .more-button:hover,
+[class|=button]:hover,
 [class|=submit]:hover,
 .okBtn:hover,
 .pp_close:hover {
@@ -513,6 +506,11 @@ img {
 	border-top:1px solid #d0d0d0;
 	border-bottom:1px solid #d0d0d0;
 	padding:10px 0;
+}
+.post li:after {
+	content:' ';
+	clear:both;
+	display:block;
 }
 .profile .post-author,
 .post-publisher {

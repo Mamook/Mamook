@@ -39,7 +39,7 @@ audio {
 .audio-feed-wrapper,
 .video-feed-wrapper {
 	position:absolute;
-	top:174px;
+	top:134px;
 	right:263px;
 	z-index:0;
 }

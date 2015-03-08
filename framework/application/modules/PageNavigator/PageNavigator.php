@@ -544,10 +544,10 @@ class PageNavigator
 
 	private function getPageNumberDisplay()
 	{
-		$str='<div class="'.$this->getPageDisplayDivName().'">Page ';
+		$str='<span class="'.$this->getPageDisplayDivName().'">Page ';
 		$str .= $this->getCurrentPage()+1;
 		$str .= ' of '.$this->getTotalPages();
-		$str .= '</div>';
+		$str .= '</span>';
 		return $str;
 	} #==== End -- getPageNumberDisplay
 
