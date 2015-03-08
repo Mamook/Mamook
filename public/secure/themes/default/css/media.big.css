@@ -25,10 +25,9 @@
 audio {
 	width:500px;
 }
-.audio-lg .poster,
-.video-lg .poster,
-.audio-feed li,
-.video-feed li {
+.audio-lg .image,
+.video-lg .image,
+[class|=feed] li {
 	border:2px solid #5f5f5f;
 	border-radius:8px;
 }
@@ -36,31 +35,26 @@ audio {
 .small_videos {
 	margin:0 0 5px;
 }
-.audio-feed-wrapper,
-.video-feed-wrapper {
+[class|=feed_wrapper] {
 	position:absolute;
 	top:134px;
 	right:263px;
 	z-index:0;
 }
-.audio-feed-list,
-.video-feed-list {
+[class|=feed_list] {
 	height:285px;
 	border-radius:8px;
 }
-.audio-feed li,
-.video-feed li {
+[class|=feed] li {
 	margin-bottom:1px;
 	padding:0;
 }
-.audio-feed img,
-.video-feed img {
+[class|=feed] img {
 	vertical-align:middle;
 	max-width:120px;
 	max-height:90px;
 }
-.audio-feed .title,
-.video-feed .title {
+[class|=feed] .title {
 	line-height:14px;
 }
 [class|=arrow] {
@@ -88,64 +82,34 @@ audio {
 	background:0;
 	cursor:default;
 }
-#comments {
-	clear:both;
-}
 .no_video {
 	display:block;
 	background:url(../images/video_unavailable.jpg) 100% 0;
 	height:248px;
 	width:330px;
 }
-.audio_default_thumbnail_large {
+[class|=thumbnail] {
 	display:block;
-	margin:0 auto;
+	background-size:100%;
+}
+.thumbnail-default {
 	background:url(../images/audio_default_thumbnail.jpg) 0 0;
+}
+.audio-lg .thumbnail-default {
+	margin:0 auto;
 	background-size:70%;
 	height:180px;
 	width:320px;
 }
-.audio_default_thumbnail_small {
-	display:block;
-	background:url(../images/audio_default_thumbnail.jpg) 0 0;
-	background-size:100%;
+.feed-audio .thumbnail-default {
 	height:90px;
 	width:120px;
 }
-.audio_default_thumbnail_manage {
-	display:block;
-	background:url(../images/audio_default_thumbnail.jpg) 0 0;
-	background-size:100%;
+.table-audio .thumbnail-default {
 	height:37px;
 	width:50px;
 }
-.thumbnail_small {
-	display:block;
-	background-size:100%;
+.thumbnail-small {
 	height:90px;
 	width:120px;
-}
-.show_player {
-	opacity:0;
-	display:none;
-	position:absolute;
-	top:-50%;
-	left:229px;
-	width:530px;
-	visibility:visible;
-}
-.show_player:target {
-	opacity:1;
-	display:block;
-	top:271px;
-	visibility:visible;
-}
-.show_player .overlay {
-	background:rgba(68, 68, 68, 0.7);
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	z-index:10;
 }
