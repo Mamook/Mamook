@@ -219,13 +219,12 @@ class Document
 		if(!empty($error) || (isset($_SESSION['message']) && !empty($_SESSION['message'])))
 		{
 			$error_box.='<noscript>';
-			$error_box.='<div class="empty"></div>';
-			$error_box.='<div class="alertBox">';
-			$error_box.='<h3>'.$alert_title.'</h3>';
+			$error_box.='<section class="alertBox">';
+			$error_box.='<h1 class="h-1">'.$alert_title.'</h1>';
 			if(!empty($error))
 			{
 				# Format the message for xhtml display and set it to a variable.
-				//$error='<p>'.$error.'</p>';
+				//$error='<div>'.$error.'</div>';
 				# Concatenate the error message to the error box.
 				$error_box.=$error;
 				# Concatenate the error message to the errorvariable for Javascript error display.
@@ -236,7 +235,7 @@ class Document
 			if(isset($_SESSION['message']))
 			{
 				# Format the message for xhtml display and set it to a variable.
-				$message='<p>'.$_SESSION['message'].'</p>';
+				$message='<div>'.$_SESSION['message'].'</div>';
 				# Concatenate the error message to the error box.
 				$error_box.=$message;
 				# Concatenate the error message to the errorvariable for Javascript error display.
@@ -244,7 +243,7 @@ class Document
 				# Clear the message
 				unset($_SESSION['message']);
 			}
-			$error_box.='</div><div class="empty"></div>';
+			$error_box.='</section>';
 			$error_box.='</noscript>';
 			# Set the error data member for Javascript display.
 			$this->setError($js_errors);
@@ -297,9 +296,9 @@ class Document
 		}
 
 		$js_error_msg='var noCookie=null;';
-		$js_error_msg.='$().customAlert({
-		alertOk: \'OK\',
-		draggable: false});';
+		$js_error_msg.='$().fwAlert({'.
+		'close:\'OK\','.
+		'draggable:true});';
 		$js_error_msg.='var noCookieMsg="";';
 		$js_error_msg.='var pageError="";';
 		$js_error_msg.='if(navigator.cookieEnabled == 0){noCookie=true}';

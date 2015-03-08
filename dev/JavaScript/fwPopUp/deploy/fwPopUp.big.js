@@ -7,13 +7,13 @@
  * Originally written by Stephane Caron (http://www.no-margin-for-errors.com). Re-written by BigTalk Jon Ryser
  *
  * @author		Jon Ryser 	http://JonRyser.com
- * @version		1.0.0
+ * @version		1.0.1
  */
 (function($){
 	var jQuery_fwPopup = $.fwPopup = {
 		// Used for the deep linking to make sure not to call the same function several times.
 		initialized:	false,
-		version:			'1.0.0'
+		version:			'1.0.1'
 	};
 
 	// Create a variable to hold the String that hooks an element to the plugin, making it globally available throughout the plugin.
@@ -28,14 +28,16 @@
 	var settings;
 
 	// fwPopup container specific
-	var pp_contentHeight;
-	var pp_contentWidth
-	var pp_containerHeight
-	var pp_containerWidth;
+	var fwPopupContentHeight;
+	var fwPopupContentWidth;
+	var fwPopupContainerHeight;
+	var fwPopupContainerWidth;
 
-	var $pp_pic_holder;
-	var $ppt;
-	var $pp_overlay;
+	var $fwPopupHolder;
+	var $fwPopupTitle;
+	var $fwPopupGallery;
+	var $fwPopupGalleryList;
+	var $overlay;
 
 	// Window size
 	var windowHeight = WIN.height();
@@ -94,7 +96,7 @@
 				default_width: 500,
 				default_height: 344,
 				counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
-				theme: 'pp_default', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
+				theme: 'default', /* light_rounded / dark_rounded / light_square / dark_square / facebook */
 				horizontal_padding: 20, /* The padding on each side of the picture */
 				hideflash: false, /* Hides all the flash object on a page, set to TRUE if flash appears over fwPopup */
 				wmode: 'opaque', /* Set the flash wmode attribute */
@@ -109,47 +111,47 @@
 				ie6_fallback: true,
 				markup: (function(){
 						var markupArray = [];
-						markupArray.push('<div class="pp_pic_holder">');
-							markupArray.push('<div class="ppt">&nbsp;</div>');
-							markupArray.push('<div class="pp_top">');
-								markupArray.push('<div class="pp_left"></div>');
-								markupArray.push('<div class="pp_middle"></div>');
-								markupArray.push('<div class="pp_right"></div>');
+						markupArray.push('<div class="fwpHolder">');
+							markupArray.push('<div class="fwpTitle"></div>');
+							markupArray.push('<div class="fwpTop">');
+								markupArray.push('<div class="fwpLeft"></div>');
+								markupArray.push('<div class="fwpMiddle"></div>');
+								markupArray.push('<div class="fwpRight"></div>');
 							markupArray.push('</div>');
-							markupArray.push('<div class="pp_content_container">');
-								markupArray.push('<div class="pp_left">');
-									markupArray.push('<div class="pp_right">');
-										markupArray.push('<div class="pp_content">');
-											markupArray.push('<div class="pp_loaderIcon"></div>');
-											markupArray.push('<div class="pp_fade">');
-												markupArray.push('<a href="javascript:void(0)" class="pp_expand" title="Expand the image">Expand</a>');
-												markupArray.push('<div class="pp_hoverContainer">');
-													markupArray.push('<a class="pp_next" href="javascript:void(0)">next</a>');
-													markupArray.push('<a class="pp_previous" href="javascript:void(0)">previous</a>');
+							markupArray.push('<div class="fwpContainer">');
+								markupArray.push('<div class="fwpLeft">');
+									markupArray.push('<div class="fwpRight">');
+										markupArray.push('<div class="fwpContent">');
+											markupArray.push('<div class="fwpLoader"></div>');
+											markupArray.push('<div class="fwpFade">');
+												markupArray.push('<a href="javascript:void(0)" class="button-expand" title="Expand the image">Expand</a>');
+												markupArray.push('<div class="fwpHoverContainer">');
+													markupArray.push('<a class="fwpNext" href="javascript:void(0)">next</a>');
+													markupArray.push('<a class="fwpPrevious" href="javascript:void(0)">previous</a>');
 												markupArray.push('</div>');
-												markupArray.push('<div id="pp_full_res"></div>');
-												markupArray.push('<div class="pp_details">');
-													markupArray.push('<div class="pp_nav">');
-														markupArray.push('<a href="javascript:void(0)" class="pp_arrow_previous">Previous</a>');
+												markupArray.push('<div id="fwpFullRes"></div>');
+												markupArray.push('<div class="fwpDetails">');
+													markupArray.push('<div class="fwpNav">');
+														markupArray.push('<a href="javascript:void(0)" class="fwpArrow-previous">Previous</a>');
 														markupArray.push('<p class="currentTextHolder">0/0</p>');
-														markupArray.push('<a href="javascript:void(0)" class="pp_arrow_next">Next</a>');
+														markupArray.push('<a href="javascript:void(0)" class="fwpArrow-next">Next</a>');
 													markupArray.push('</div>');
-													markupArray.push('<p class="pp_description"></p>');
-													markupArray.push('<div class="pp_social">{pp_social}</div>');
-													markupArray.push('<a class="pp_close" href="javascript:void(0)">Close</a>');
+													markupArray.push('<p class="fwpDescription"></p>');
+													markupArray.push('<div class="fwpSocial">{social_buttons}</div>');
+													markupArray.push('<a class="button-close" href="javascript:void(0)">Close</a>');
 												markupArray.push('</div>');
 											markupArray.push('</div>');
 										markupArray.push('</div>');
 									markupArray.push('</div>');
 								markupArray.push('</div>');
-								markupArray.push('<div class="pp_bottom">');
-									markupArray.push('<div class="pp_left"></div>');
-									markupArray.push('<div class="pp_middle"></div>');
-									markupArray.push('<div class="pp_right"></div>');
+								markupArray.push('<div class="fwpBottom">');
+									markupArray.push('<div class="fwpLeft"></div>');
+									markupArray.push('<div class="fwpMiddle"></div>');
+									markupArray.push('<div class="fwpRight"></div>');
 								markupArray.push('</div>');
 							markupArray.push('</div>');
 						markupArray.push('</div>');
-						markupArray.push('<div class="pp_overlay"></div>');
+						markupArray.push('<div class="overlay"></div>');
 						return markupArray.join('');
 					})(),
 				audio_markup: '{image}<audio controls autoplay class="audioPlayback"><source src="{path}" type="audio/{type}" codec="{codec}"/></audio>',
@@ -157,20 +159,20 @@
 				flash_markup: '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="{width}" height="{height}"><param name="wmode" value="{wmode}" /><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always" /><param name="movie" value="{path}" /><embed src="{path}" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="{width}" height="{height}" wmode="{wmode}"></embed></object>',
 				gallery_markup: (function(){
 					var markupArray = [];
-						markupArray.push('<div class="pp_gallery">');
-							markupArray.push('<a href="javascript:void(0)" class="pp_arrow_previous">Previous</a>');
+						markupArray.push('<div class="fwpGallery">');
+							markupArray.push('<a href="javascript:void(0)" class="fwpArrow-previous">Previous</a>');
 							markupArray.push('<div>');
 								markupArray.push('<ul>');
 									markupArray.push('{gallery}');
 								markupArray.push('</ul>');
 							markupArray.push('</div>');
-							markupArray.push('<a href="javascript:void(0)" class="pp_arrow_next">Next</a>');
+							markupArray.push('<a href="javascript:void(0)" class="fwpArrow-next">Next</a>');
 						markupArray.push('</div>');
 						return markupArray.join('');
 					})(),
 				iframe_markup: '<iframe src ="{path}" width="{width}" height="{height}" frameborder="no"></iframe>',
 				image_markup: '<img id="fullResImage" src="{path}"/>',
-				inline_markup: '<div class="pp_inline">{content}</div>',
+				inline_markup: '<div class="fwpInline">{content}</div>',
 				quicktime_markup: '<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="//www.apple.com/qtactivex/qtplugin.cab" height="{height}" width="{width}"><param name="src" value="{path}"><param name="autoplay" value="{autoplay}"><param name="type" value="video/quicktime"><embed src="{path}" height="{height}" width="{width}" autoplay="{autoplay}" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed></object>',
 				social_tools: '<div class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></div><div class="facebook"><iframe src="//www.facebook.com/plugins/like.php?locale=en_US&href={location_href}&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23" scrolling="no" frameborder="0" style="border:none; overflow:hidden;width:500px;height:23px;" allowTransparency="true"></iframe></div>' /* html or false to disable */
 			},
@@ -190,9 +192,9 @@
 		{
 			$(DOC).off('keydown.fwPopup')
 				.on('keydown.fwPopup', function(event){
-					if($pp_pic_holder)
+					if($fwPopupHolder)
 					{
-						if($pp_pic_holder.is(':visible'))
+						if($fwPopupHolder.is(':visible'))
 						{
 							switch(event.keyCode)
 							{
@@ -231,7 +233,7 @@
 			var hook = settings.hook;
 			var galleryRegExp = /\[(?:.*)\]/;
 
-			if(settings.theme == 'pp_default')
+			if(settings.theme == 'default')
 				settings.horizontal_padding = 16;
 
 			// Check if the image is part of a set.
@@ -312,7 +314,7 @@
 			// Hide the next/previous links if on first or last images.
 			checkPosition($(paths).size());
 
-			$('.pp_loaderIcon').show();
+			$('.fwpLoader').show();
 
 			if(settings.deeplinking)
 				setHashtag();
@@ -321,30 +323,30 @@
 			if(settings.social_tools)
 			{
 				var facebook_like_link = settings.social_tools.replace('{location_href}', encodeURIComponent(location.href));
-				$pp_pic_holder.find('.pp_social')
+				$fwPopupHolder.find('.fwpSocial')
 					.html(facebook_like_link);
 			}
 
 			// Fade the content in
-			if($ppt.is(':hidden'))
-				$ppt.css('opacity', 0).show();
-			$pp_overlay.show()
+			if($fwPopupTitle.is(':hidden'))
+				$fwPopupTitle.css('opacity', 0).show();
+			$overlay.show()
 				.fadeTo(settings.animation_speed, settings.opacity);
 
 			// Display the current position
-			$pp_pic_holder.find('.currentTextHolder')
+			$fwPopupHolder.find('.currentTextHolder')
 				.text((setPosition+1) + settings.counter_separator_label + $(paths).size());
 
 			// Set the description
 			if(typeof descriptions[setPosition] != 'undefined' && descriptions[setPosition] != '')
 			{
-				$pp_pic_holder.find('.pp_description')
+				$fwPopupHolder.find('.fwpDescription')
 					.show()
 					.html(unescape(descriptions[setPosition]));
 			}
 			else
 			{
-				$pp_pic_holder.find('.pp_description')
+				$fwPopupHolder.find('.fwpDescription')
 					.hide();
 			}
 
@@ -366,9 +368,9 @@
 			}
 
 			// Fade the holder
-			$pp_pic_holder.fadeIn(function(){
+			$fwPopupHolder.fadeIn(function(){
 				// Set the title
-				(settings.show_title && titles[setPosition] != '' && typeof titles[setPosition] != 'undefined') ? $ppt.html(unescape(titles[setPosition])) : $ppt.addClass('no_content').html('');
+				(settings.show_title && titles[setPosition] != '' && typeof titles[setPosition] != 'undefined') ? $fwPopupTitle.html(unescape(titles[setPosition])) : $fwPopupTitle.addClass('no_content').html('');
 
 				// Create variables and set the value to 0 so they evaluate to false when checked.
 				var imgPreloader = 0;
@@ -387,7 +389,7 @@
 						skipInjection = true;
 						$.get(paths[setPosition], function(responseHTML){
 							markupToAdd = settings.inline_markup.replace(/{content}/g, responseHTML);
-							$pp_pic_holder.find('#pp_full_res')[0].innerHTML = markupToAdd;
+							$fwPopupHolder.find('#fwpFullRes')[0].innerHTML = markupToAdd;
 							showContent();
 						});
 						break;
@@ -452,7 +454,7 @@
 						if(isSet && paths[setPosition-1])
 							prevImage.src = paths[setPosition-1];
 
-						$pp_pic_holder.find('#pp_full_res')[0].innerHTML = settings.image_markup.replace(/{path}/g, paths[setPosition]);
+						$fwPopupHolder.find('#fwpFullRes')[0].innerHTML = settings.image_markup.replace(/{path}/g, paths[setPosition]);
 
 						imgPreloader.onload = function(){
 							// Fit item to viewport.
@@ -473,7 +475,7 @@
 						var clone = $(paths[setPosition]).clone()
 							.append('<br clear="all">')
 							.css({width:settings.default_width})
-							.wrapInner('<div id="pp_full_res"><div class="pp_inline"></div></div>')
+							.wrapInner('<div id="fwpFullRes"><div class="fwpInline"></div></div>')
 							.appendTo($('body'))
 							.show();
 						// Make sure the dimensions are not resized.
@@ -553,7 +555,7 @@
 
 				if(!imgPreloader && !skipInjection)
 				{
-					$pp_pic_holder.find('#pp_full_res')[0].innerHTML = markupToAdd;
+					$fwPopupHolder.find('#fwpFullRes')[0].innerHTML = markupToAdd;
 					// Show content
 					showContent();
 				}
@@ -596,8 +598,8 @@
 				resize = true;
 			if(settings.allow_expand)
 			{
-				$('.pp_contract').removeClass('pp_contract')
-					.addClass('pp_expand');
+				$('.button-contract').removeClass('button-contract')
+					.addClass('button-expand');
 			}
 
 			hideContent(function(){
@@ -633,7 +635,7 @@
 			var slideSpeed = (direction == 'next' || direction == 'previous') ? settings.animation_speed : 0;
 			var slideTo = currentGalleryPage*(itemsPerPage*itemWidth);
 
-			$pp_gallery.find('ul')
+			$fwPopupGallery.find('ul')
 				.animate({left:-slideTo}, slideSpeed);
 		};
 
@@ -648,10 +650,10 @@
 		jQuery_fwPopup.startSlideshow = function(){
 			if(slideshowIntervalId === null)
 			{
-				$pp_pic_holder.find('.pp_play')
+				$fwPopupHolder.find('.fwp_play')
 					.off('click')
-					.removeClass('pp_play')
-					.addClass('pp_pause')
+					.removeClass('fwp_play')
+					.addClass('fwp_pause')
 					.click(function(){
 						jQuery_fwPopup.stopSlideshow();
 						return false;
@@ -671,10 +673,10 @@
 		 * @public
 		 */
 		jQuery_fwPopup.stopSlideshow = function(){
-			$pp_pic_holder.find('.pp_pause')
+			$fwPopupHolder.find('.fwp_pause')
 				.off('click')
-				.removeClass('pp_pause')
-				.addClass('pp_play')
+				.removeClass('fwp_pause')
+				.addClass('fwp_play')
 				.click(function(){
 					jQuery_fwPopup.startSlideshow();
 					return false;
@@ -692,19 +694,19 @@
 		 * @public
 		 */
 		jQuery_fwPopup.close = function(){
-			if($pp_overlay.is(':animated'))
+			if($overlay.is(':animated'))
 				return;
 
 			jQuery_fwPopup.stopSlideshow();
 
-			$pp_pic_holder.stop()
+			$fwPopupHolder.stop()
 				.find('object,embed')
 				.css({visibility:'hidden'});
 
 			var animationSpeed = settings.animation_speed;
-			$('div.pp_pic_holder,div.ppt,.pp_fade').fadeOut(animationSpeed, function(){ $(this).remove(); });
+			$('div.fwpHolder,div.fwpTitle,.fwpFade').fadeOut(animationSpeed, function(){ $(this).remove(); });
 
-			$pp_overlay.fadeOut(animationSpeed, function(){
+			$overlay.fadeOut(animationSpeed, function(){
 				// Show the flash
 				if(settings.hideflash)
 					$('object,embed,iframe[src*=youtube],iframe[src*=vimeo]').css({visibility:'visible'});
@@ -739,18 +741,18 @@
 			if(settings.social_tools)
 			{
 				facebook_like_link = settings.social_tools.replace('{location_href}', encodeURIComponent(location.href));
-				settings.markup = settings.markup.replace('{pp_social}', settings.social_tools);
+				settings.markup = settings.markup.replace('{social_buttons}', settings.social_tools);
 			}
 			else
-				settings.markup = settings.markup.replace('{pp_social}', '');
+				settings.markup = settings.markup.replace('{social_buttons}', '');
 
 			// Inject the markup
 			$('body').append(settings.markup);
 
 			// Set the global selectors
-			$pp_pic_holder = $('.pp_pic_holder');
-			$ppt = $('.ppt');
-			$pp_overlay = $('div.pp_overlay');
+			$fwPopupHolder = $('.fwpHolder');
+			$fwPopupTitle = $('.fwpTitle');
+			$overlay = $('div.overlay');
 
 			// Inject the inline gallery!
 			if(isSet && settings.overlay_gallery)
@@ -771,40 +773,40 @@
 
 				markupToAdd = settings.gallery_markup.replace(/{gallery}/g, markupToAdd);
 
-				$pp_pic_holder.find('#pp_full_res')
+				$fwPopupHolder.find('#fwpFullRes')
 					.after(markupToAdd);
 
-				$pp_gallery = $('.pp_pic_holder .pp_gallery');
+				$fwPopupGallery = $('.fwpHolder .fwpGallery');
 				// Set the gallery selectors
-				$pp_gallery_li = $pp_gallery.find('li');
+				$fwPopupGalleryList = $fwPopupGallery.find('li');
 
-				$pp_gallery.find('.pp_arrow_next')
+				$fwPopupGallery.find('.fwpArrow-next')
 					.click(function(){
 						jQuery_fwPopup.changeGalleryPage('next');
 						jQuery_fwPopup.stopSlideshow();
 						return false;
 					});
 
-				$pp_gallery.find('.pp_arrow_previous')
+				$fwPopupGallery.find('.fwpArrow-previous')
 					.click(function(){
 						jQuery_fwPopup.changeGalleryPage('previous');
 						jQuery_fwPopup.stopSlideshow();
 						return false;
 					});
 
-				$pp_pic_holder.find('.pp_content')
+				$fwPopupHolder.find('.fwpContent')
 					.hover(
 						function(){
-							$pp_pic_holder.find('.pp_gallery:not(.disabled)')
+							$fwPopupHolder.find('.fwpGallery:not(.disabled)')
 								.fadeIn();
 						},
 						function(){
-							$pp_pic_holder.find('.pp_gallery:not(.disabled)')
+							$fwPopupHolder.find('.fwpGallery:not(.disabled)')
 								.fadeOut();
 						}
 					);
 
-				$pp_gallery_li.each(function(index){
+				$fwPopupGalleryList.each(function(index){
 					$(this).find('a')
 						.click(function(){
 							jQuery_fwPopup.changePage(index);
@@ -818,9 +820,9 @@
 			// Inject the play/pause if it's a slideshow
 			if(settings.slideshow)
 			{
-				$pp_pic_holder.find('.pp_nav')
-					.prepend('<a href="#" class="pp_play">Play</a>');
-				$pp_pic_holder.find('.pp_nav .pp_play')
+				$fwPopupHolder.find('.fwpNav')
+					.prepend('<a href="#" class="fwp_play">Play</a>');
+				$fwPopupHolder.find('.fwpNav .fwp_play')
 					.click(function(){
 						jQuery_fwPopup.startSlideshow();
 						return false;
@@ -828,9 +830,9 @@
 			}
 
 			// Set the proper theme
-			$pp_pic_holder.attr('class', 'pp_pic_holder ' + settings.theme);
+			$fwPopupHolder.attr('class', 'fwpHolder ' + settings.theme);
 
-			$pp_overlay.css({
+			$overlay.css({
 					opacity:	0,
 					height:		$(DOC).height(),
 					width:		WIN.width()
@@ -840,25 +842,25 @@
 						jQuery_fwPopup.close();
 				});
 
-			$('a.pp_close').on('click', function(){
+			$('a.button-close').on('click', function(){
 				jQuery_fwPopup.close();
 				return false;
 			});
 
 			if(settings.allow_expand)
 			{
-				$('a.pp_expand').on('click', function(){
+				$('a.button-expand').on('click', function(){
 					// Expand the image
-					if($(this).hasClass('pp_expand'))
+					if($(this).hasClass('button-expand'))
 					{
-						$(this).removeClass('pp_expand')
-							.addClass('pp_contract');
+						$(this).removeClass('button-expand')
+							.addClass('button-contract');
 						resize = false;
 					}
 					else
 					{
-						$(this).removeClass('pp_contract')
-							.addClass('pp_expand');
+						$(this).removeClass('button-contract')
+							.addClass('button-expand');
 						resize = true;
 					};
 
@@ -870,13 +872,13 @@
 				});
 			}
 
-			$pp_pic_holder.find('.pp_previous, .pp_nav .pp_arrow_previous').on('click', function(){
+			$fwPopupHolder.find('.fwpPrevious, .fwpNav .fwpArrow-previous').on('click', function(){
 				jQuery_fwPopup.changePage('previous');
 				jQuery_fwPopup.stopSlideshow();
 				return false;
 			});
 
-			$pp_pic_holder.find('.pp_next, .pp_nav .pp_arrow_next').on('click', function(){
+			$fwPopupHolder.find('.fwpNext, .fwpNav .fwpArrow-next').on('click', function(){
 				jQuery_fwPopup.changePage('next');
 				jQuery_fwPopup.stopSlideshow();
 				return false;
@@ -911,17 +913,17 @@
 		 * @private
 		 */
 		function centerPopup(){
-			if(resize && $pp_pic_holder)
+			if(resize && $fwPopupHolder)
 			{
 				scrollPosition = getScrollPosition();
-				var popupHeight = $pp_pic_holder.height();
-				var popupWidth = $pp_pic_holder.width();
+				var popupHeight = $fwPopupHolder.height();
+				var popupWidth = $fwPopupHolder.width();
 				var top = calculateTop(popupHeight);
 
 				if(popupHeight>windowHeight)
 					return;
 
-				$pp_pic_holder.css({
+				$fwPopupHolder.css({
 					top:	top,
 					left:	(windowWidth/2)+scrollPosition['scrollLeft']-(popupWidth/2)
 				});
@@ -939,7 +941,7 @@
 		 */
 		function checkPosition(setCount){
 			// Hide the bottom nav if it's not a set.
-			(setCount>1) ? $('.pp_nav').show() : $('.pp_nav').hide();
+			(setCount>1) ? $('.fwpNav').show() : $('.fwpNav').hide();
 		};
 
 
@@ -962,18 +964,18 @@
 			imageWidth = width;
 			imageHeight = height;
 
-			if(((pp_containerWidth>windowWidth) || (pp_containerHeight>windowHeight)) && resize && settings.allow_resize && !percentBased) {
+			if(((fwPopupContainerWidth>windowWidth) || (fwPopupContainerHeight>windowHeight)) && resize && settings.allow_resize && !percentBased) {
 				resized = true;
 				var fitting = false;
 
 				while(!fitting)
 				{
-					if(pp_containerWidth>windowWidth)
+					if(fwPopupContainerWidth>windowWidth)
 					{
 						imageWidth = (windowWidth-200);
 						imageHeight = (height/width)*imageWidth;
 					}
-					else if(pp_containerHeight>windowHeight)
+					else if(fwPopupContainerHeight>windowHeight)
 					{
 						imageHeight = (windowHeight-200);
 						imageWidth = (width/height)*imageHeight;
@@ -981,12 +983,12 @@
 					else
 						fitting = true;
 
-					pp_containerHeight = imageHeight;
-					pp_containerWidth = imageWidth;
+					fwPopupContainerHeight = imageHeight;
+					fwPopupContainerWidth = imageWidth;
 				}
 
-				if((pp_containerWidth>windowWidth) || (pp_containerHeight>windowHeight))
-					fitToViewport(pp_containerWidth, pp_containerHeight)
+				if((fwPopupContainerWidth>windowWidth) || (fwPopupContainerHeight>windowHeight))
+					fitToViewport(fwPopupContainerWidth, fwPopupContainerHeight)
 
 				getDimensions(imageWidth, imageHeight);
 			}
@@ -994,10 +996,10 @@
 			return {
 				width:						Math.floor(imageWidth),
 				height:						Math.floor(imageHeight),
-				containerHeight:	Math.floor(pp_containerHeight),
-				containerWidth:		Math.floor(pp_containerWidth)+(settings.horizontal_padding*2),
-				contentHeight:		Math.floor(pp_contentHeight),
-				contentWidth:			Math.floor(pp_contentWidth),
+				containerHeight:	Math.floor(fwPopupContainerHeight),
+				containerWidth:		Math.floor(fwPopupContainerWidth)+(settings.horizontal_padding*2),
+				contentHeight:		Math.floor(fwPopupContentHeight),
+				contentWidth:			Math.floor(fwPopupContentWidth),
 				resized:					resized
 			};
 		};
@@ -1017,11 +1019,11 @@
 			height = parseFloat(height);
 
 			// Get the details height; to do so, clone it since it's invisible
-			$pp_details = $pp_pic_holder.find('.pp_details');
-			$pp_details.width(width);
-			var detailsHeight = parseFloat($pp_details.css('marginTop'))+parseFloat($pp_details.css('marginBottom'));
+			var $details = $fwPopupHolder.find('.fwpDetails');
+			$details.width(width);
+			var detailsHeight = parseFloat($details.css('marginTop'))+parseFloat($details.css('marginBottom'));
 
-			$pp_details = $pp_details.clone()
+			$details = $details.clone()
 				.addClass(settings.theme)
 				.width(width)
 				.appendTo($('body'))
@@ -1029,31 +1031,31 @@
 					position:	'absolute',
 					top:			-10000
 				});
-			detailsHeight += $pp_details.height();
+			detailsHeight += $details.height();
 			// Min-height for the details.
 			detailsHeight = (detailsHeight<=34) ? 36 : detailsHeight;
 			// Remove the clone.
-			$pp_details.remove();
+			$details.remove();
 
 			// Get the titles height; to do so, clone it since it's invisible
-			$pp_title = $pp_pic_holder.find('.ppt');
-			$pp_title.width(width);
-			var titleHeight = parseFloat($pp_title.css('marginTop'))+parseFloat($pp_title.css('marginBottom'));
-			$pp_title = $pp_title.clone()
+			var $title = $fwPopupHolder.find('.fwpTitle');
+			$title.width(width);
+			var titleHeight = parseFloat($title.css('marginTop'))+parseFloat($title.css('marginBottom'));
+			$title = $title.clone()
 				.appendTo($('body'))
 				.css({
 					position:	'absolute',
 					top:			-10000
 				});
-			titleHeight += $pp_title.height();
+			titleHeight += $title.height();
 			// Remove the clone.
-			$pp_title.remove();
+			$title.remove();
 
 			// Get the container size to resize the holder to the correct dimensions.
-			pp_contentHeight = height+detailsHeight;
-			pp_contentWidth = width;
-			pp_containerHeight = pp_contentHeight+titleHeight+$pp_pic_holder.find('.pp_top').height()+$pp_pic_holder.find('.pp_bottom').height();
-			pp_containerWidth = width;
+			fwPopupContentHeight = height+detailsHeight;
+			fwPopupContentWidth = width;
+			fwPopupContainerHeight = fwPopupContentHeight+titleHeight+$fwPopupHolder.find('.fwpTop').height()+$fwPopupHolder.find('.fwpBottom').height();
+			fwPopupContainerWidth = width;
 		};
 
 
@@ -1105,9 +1107,9 @@
 		 */
 		function hideContent(callback){
 			// Fade out the current picture
-			$pp_pic_holder.find('#pp_full_res object,#pp_full_res embed').css({visibility:'hidden'});
-			$pp_pic_holder.find('.pp_fade').fadeOut(settings.animation_speed, function(){
-				$('.pp_loaderIcon').show();
+			$fwPopupHolder.find('#fwpFullRes object,#fwpFullRes embed').css({visibility:'hidden'});
+			$fwPopupHolder.find('.fwpFade').fadeOut(settings.animation_speed, function(){
+				$('.fwpLoader').show();
 				callback();
 			});
 		};
@@ -1124,7 +1126,7 @@
 			if(isSet && settings.overlay_gallery && getFileType(paths[setPosition])=='image')
 			{
 				// Define the arrow width depending on the theme
-				var navWidth = (settings.theme == 'facebook' || settings.theme == 'pp_default') ? 50 : 30;
+				var navWidth = (settings.theme == 'facebook' || settings.theme == 'default') ? 50 : 30;
 
 				itemsPerPage = Math.floor((popupDimensions['containerWidth']-100-navWidth)/itemWidth);
 				itemsPerPage = (itemsPerPage<paths.length) ? itemsPerPage : paths.length;
@@ -1135,30 +1137,29 @@
 				{
 					// No nav means no width!
 					navWidth = 0;
-					$pp_gallery.find('.pp_arrow_next,.pp_arrow_previous').hide();
+					$fwPopupGallery.find('.fwpArrow-next,.fwpArrow-previous').hide();
 				}
 				else
-					$pp_gallery.find('.pp_arrow_next,.pp_arrow_previous').show();
+					$fwPopupGallery.find('.fwpArrow-next,.fwpArrow-previous').show();
 
 				var galleryWidth = itemsPerPage*itemWidth;
 				var fullGalleryWidth = paths.length*itemWidth;
 				var goToPage = (Math.floor(setPosition/itemsPerPage)<totalPage) ? Math.floor(setPosition/itemsPerPage) : totalPage;
 
 				// Set the proper width to the gallery items
-				$pp_gallery
-					.css('margin-left', -((galleryWidth/2)+(navWidth/2)))
+				$fwPopupGallery.css('margin-left', -((galleryWidth/2)+(navWidth/2)))
 					.find('div:first').width(galleryWidth+5)
 					.find('ul').width(fullGalleryWidth)
 					.find('li.selected').removeClass('selected');
 
 				jQuery_fwPopup.changeGalleryPage(goToPage);
 
-				$pp_gallery_li.filter(':eq(' + setPosition + ')')
+				$fwPopupGalleryList.filter(':eq(' + setPosition + ')')
 					.addClass('selected');
 			}
 			else
 			{
-				$pp_pic_holder.find('.pp_content')
+				$fwPopupHolder.find('.fwpContent')
 					.off('mouseenter mouseleave');
 			}
 		};
@@ -1175,8 +1176,8 @@
 			windowHeight = WIN.height();
 			windowWidth = WIN.width();
 
-			if($pp_overlay)
-				$pp_overlay.height($(DOC).height()).width(windowWidth);
+			if($overlay)
+				$overlay.height($(DOC).height()).width(windowWidth);
 		};
 
 
@@ -1188,23 +1189,23 @@
 		 * @private
 		 */
 		function showContent(){
-			$('.pp_loaderIcon').hide();
+			$('.fwpLoader').hide();
 
 			// Calculate the opened top position of the pic holder
 			var top = calculateTop(popupDimensions['containerHeight']);
 			var animationSpeed = settings.animation_speed;
 
-			$ppt.fadeTo(animationSpeed, 1);
+			$fwPopupTitle.fadeTo(animationSpeed, 1);
 
 			// Resize the content holder
-			$pp_pic_holder.find('.pp_content')
+			$fwPopupHolder.find('.fwpContent')
 				.animate({
 					height:	popupDimensions['contentHeight'],
 					width:	popupDimensions['contentWidth']
 				}, animationSpeed);
 
 			// Resize picture the holder
-			$pp_pic_holder.animate(
+			$fwPopupHolder.animate(
 				{
 					top:		top,
 					left:		((windowWidth/2) - (popupDimensions['containerWidth']/2)<0) ? 0 : (windowWidth/2)-(popupDimensions['containerWidth']/2),
@@ -1212,25 +1213,25 @@
 				},
 				animationSpeed,
 				function(){
-					$pp_pic_holder.find('.pp_hoverContainer,#fullResImage')
+					$fwPopupHolder.find('.fwpHoverContainer,#fullResImage')
 						.height(popupDimensions['height'])
 						.width(popupDimensions['width']);
 					// Fade the new content.
-					$pp_pic_holder.find('.pp_fade')
+					$fwPopupHolder.find('.fwpFade')
 						.fadeIn(animationSpeed);
 					// Show the nav.
 					if(isSet && getFileType(paths[setPosition])=="image")
-						$pp_pic_holder.find('.pp_hoverContainer').show();
+						$fwPopupHolder.find('.fwpHoverContainer').show();
 					else
-						$pp_pic_holder.find('.pp_hoverContainer').hide();
+						$fwPopupHolder.find('.fwpHoverContainer').hide();
 
 					if(settings.allow_expand)
 					{
 						// Fade the resizing link if the image is resized
 						if(popupDimensions['resized'])
-							$('a.pp_expand,a.pp_contract').show();
+							$('a.button-expand,a.button-contract').show();
 						else
-							$('a.pp_expand').hide();
+							$('a.button-expand').hide();
 					}
 
 					if(settings.autoplay_slideshow && (slideshowIntervalId === null) && !isOpen)

@@ -1312,5 +1312,3 @@
 		location.hash = hookWord + '/' + elementIndex + '/';
 	};
 })(jQuery);
-
-

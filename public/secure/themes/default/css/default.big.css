@@ -405,9 +405,7 @@ img {
 [class|=submit],
 [class|=submit]:visited,
 .okBtn,
-.okBtn:visited,
-.pp_close,
-.pp_close:visited {
+.okBtn:visited {
 	float:left;
 	height:23px;
 	background:#fa0; /* for non-css3 browsers */
@@ -446,9 +444,7 @@ img {
 }
 .hover .action,
 [class|=button]:hover,
-[class|=submit]:hover,
-.okBtn:hover,
-.pp_close:hover {
+[class|=submit]:hover {
 	background:red;
 	color:#fff;
 }
@@ -926,27 +922,27 @@ img {
 
 /* Pretty Photo, Alert, and Error */
 .okBtn,
-.pp_loaderIcon,
-.pp_pic_holder,
-.pp_close,
+.fwpLoader,
+.fwpHolder,
+.button-close,
 .alertBox{
 	position:absolute;
 }
-.pp_expand,
-.pp_expand:hover,
-.pp_contract,
-.pp_contract:hover,
-.pp_play,
-.pp_pause,
-.pp_arrow_previous,
-.pp_arrow_next {
+.button-expand,
+.button-expand:hover,
+.button-contract,
+.button-contract:hover,
+.fwpPlay,
+.fwpPause,
+.fwpArrow-previous,
+.fwpArrow-next {
 	background:url(../images/pp-sprite.png) no-repeat;
 	cursor:pointer;
 }
-.pp_play,
-.pp_pause,
-.pp_arrow_previous,
-.pp_arrow_next {
+.fwpPlay,
+.fwpPause,
+.fwpArrow-previous,
+.fwpArrow-next {
 	float:left;
 	display:block;
 	width:14px;
@@ -955,51 +951,51 @@ img {
 	overflow:hidden;
 	text-indent:-10000px;
 }
-.pp_contract:hover {
+.button-contract:hover {
 	background-position:0 -21px;
 }
-.pp_expand {
+.button-expand {
 	background-position:-31px 0;
 }
-.pp_expand:hover {
+.button-expand:hover {
 	background-position:-31px -21px;
 }
-.pp_close,
+.button-close,
 .okBtn {
 	top:-6px;
 	right:-6px;
 	margin:0;
 }
-.pp_description {
+.fwpDescription {
 	color:#fff;
 	display:none;
 	margin:0 85px 10px 0;
 }
-.pp_pause {
+.fwpPause {
 	background-position:-24px -78px;
 }
-.pp_pause:hover {
+.fwpPause:hover {
 	background-position:-24px -96px;
 }
-.pp_play {
+.fwpPlay {
 	background-position:-1px -78px;
 }
-.pp_play:hover {
+.fwpPlay:hover {
 	background-position:-1px -96px;
 }
-.pp_arrow_previous {
+.fwpArrow-previous {
 	background-position:0 -45px;
 }
-.pp_arrow_previous:hover {
+.fwpArrow-previous:hover {
 	background-position:0 -61px;
 }
-.pp_arrow_next {
+.fwpArrow-next {
 	background-position:-22px -45px;
 }
-.pp_arrow_next:hover {
+.fwpArrow-next:hover {
 	background-position:-22px -61px;
 }
-.pp_loaderIcon {
+.fwpLoader {
 	display:block;
 	top:50%;
 	left:50%;
@@ -1008,54 +1004,54 @@ img {
 	height:24px;
 	margin:-12px 0 0 48px;
 }
-.pp_pic_holder a:focus {
+.fwpHolder a:focus {
 	outline:medium none;
 }
-.pp_pic_holder {
+.fwpHolder {
 	display:none;
 	width:100px;
 	z-index:10000;
 }
-.pp_content {
+.fwpContent {
 	width:40px;
 	min-width:200px;
 	height:40px;
 }
-.pp_content_container {
+.fwpContainer {
 	position:relative;
 	width:100%;
 }
-.pp_details {
+.fwpDetails {
 	float:left;
 	min-width:200px;
 	margin:10px 0 2px;
 }
-.pp_nav {
+.fwpNav {
 	margin-top:5px;
 }
-.pp_nav p {
+.fwpNav p {
 	white-space:nowrap;
 	margin:2px 4px;
 }
-.pp_hoverContainer {
+.fwpHoverContainer {
 	position:absolute;
 	top:4px;
 	width:100%;
 	z-index:2000;
 }
-.pp_previous,
-.pp_next {
+.fwpPrevious,
+.fwpNext {
 	background:rgba(68, 68, 68, .7);
 	padding:0 5px;
 }
-.pp_previous {
+.fwpPrevious {
 	border-radius:3px 0 0 3px;
 }
-.pp_next {
+.fwpNext {
 	border-radius:0 3px 3px 0;
 }
-.pp_expand,
-.pp_contract {
+.button-expand,
+.button-contract {
 	display:none;
 	position:absolute;
 	bottom:10px;
@@ -1067,20 +1063,20 @@ img {
 	cursor:pointer;
 	z-index:20000;
 }
-#pp_full_res {
+#fwpFullRes {
 	line-height:1 !important;
 }
-#pp_full_res .pp_inline p {
+#fwpFullRes .fwpInline p {
 	margin:0 0 15px;
 }
-.ppt {
+.fwpTitle {
 	display:none;
 	font-size:17px;
 	z-index:9999;
 	margin:0 0 5px 15px;
 }
-.pp_gallery,
-.pp_content,
+.fwpGallery,
+.fwpContent,
 .alertBox {
 	background:rgba(28, 28, 28, .85);
 	width:auto;
@@ -1088,7 +1084,7 @@ img {
 	border-radius:16px;
 	padding:20px;
 }
-.pp_gallery {
+.fwpGallery {
 	position:absolute;
 	top:0;
 	left:-20px;

@@ -5,7 +5,7 @@
 
 	$js.=
 	'$("#wrapper").removeClass("noscript");$(function(){clearInput("#emailGo","value")});'.
-	'$(function(){$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:"",show_title:!1,markup:\'<div class="pp_pic_holder"><div class="ppt">&nbsp;</div><div class="pp_content_container"><div class="pp_content"><div class="pp_loaderIcon"></div><div class="pp_fade"><a href="#" class="pp_expand" title="Expand the image">Expand</a><div class="pp_hoverContainer"><a class="pp_previous" href="#">previous</a><a class="pp_next" href="#">next</a></div><div id="pp_full_res"></div><div class="pp_details"><p class="pp_description"></p> {pp_social} <a class="pp_close" href="#">Close</a><div class="pp_nav"><a href="#" class="pp_arrow_previous">Previous</a><p class="currentTextHolder">0/0</p><a href="#" class="pp_arrow_next">Next</a></div></div></div></div></div></div><div class="pp_overlay overlay"></div>\',social_tools:null})});'."\n".
+	'$(function(){$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:"",social_tools:null})});'.
 	'$(".addthis_button_google_plusone").attr("g:plusone:annotation","none");';
 
 /*	$bigVersion.=
@@ -19,37 +19,37 @@
 			opacity:									1,
 			theme:										"",
 			show_title:								false,
-			markup:										\'<div class="pp_pic_holder">\' +
-																	\'<div class="ppt">&nbsp;</div>\' +
-																	\'<div class="pp_content_container">\' +
-																		\'<div class="pp_content">\' +
-																			\'<div class="pp_loaderIcon"></div>\' +
-																			\'<div class="pp_fade">\' +
-																				\'<a href="#" class="pp_expand" title="Expand the image">Expand</a>\' +
-																				\'<div class="pp_hoverContainer">\' +
-																					\'<a class="pp_previous" href="#">previous</a>\' +
-																					\'<a class="pp_next" href="#">next</a>\' +
+			markup:										\'<div class="fwpHolder">\' +
+																	\'<div class="fwpTitle">&nbsp;</div>\' +
+																	\'<div class="fwpContainer">\' +
+																		\'<div class="fwpContent">\' +
+																			\'<div class="fwpLoader"></div>\' +
+																			\'<div class="fwp_fade">\' +
+																				\'<a href="#" class="button-expand" title="Expand the image">Expand</a>\' +
+																				\'<div class="fwp_hoverContainer">\' +
+																					\'<a class="fwpPrevious" href="#">previous</a>\' +
+																					\'<a class="fwpNext" href="#">next</a>\' +
 																				\'</div>\' +
-																				\'<div id="pp_full_res"></div>\' +
-																				\'<div class="pp_details">\' +
-																					\'<p class="pp_description"></p>\' +
-																					\'{pp_social}\' +
-																					\'<a class="pp_close" href="#">Close</a>\' +
-																					\'<div class="pp_nav">\' +
-																						\'<a href="#" class="pp_arrow_previous">Previous</a>\' +
+																				\'<div id="fwpFullRes"></div>\' +
+																				\'<div class="fwpDetails">\' +
+																					\'<p class="fwpDescription"></p>\' +
+																					\'{social_buttons}\' +
+																					\'<a class="button-close" href="#">Close</a>\' +
+																					\'<div class="fwpNav">\' +
+																						\'<a href="#" class="fwpArrow-previous">Previous</a>\' +
 																						\'<p class="currentTextHolder">0/0</p>\' +
-																						\'<a href="#" class="pp_arrow_next">Next</a>\' +
+																						\'<a href="#" class="fwpArrow-next">Next</a>\' +
 																					\'</div>\' +
 																				\'</div>\' +
 																			\'</div>\' +
 																		\'</div>\' +
 																	\'</div>\' +
 																\'</div>\' +
-																\'<div class="pp_overlay overlay"></div>\',
+																\'<div class="overlay"></div>\',
 			social_tools:'.
 			(($main_content->getUseSocial()!==NULL) ?
 																'\'<!-- AddThis Button BEGIN -->\' +
-																\'<div class="addthis_default_style pp_social_box">\' +
+																\'<div class="addthis_default_style fwpSocialBox">\' +
 																	\'<a class="addthis_button_preferred_1"></a>\' +
 																	\'<a class="addthis_button_preferred_2"></a>\' +
 																	\'<a class="addthis_button_google_plusone"></a>\' +
@@ -59,7 +59,7 @@
 																\'</div>\' +
 																\'<!-- AddThis Button END -->\',
 			changepicturecallback:		function(){
-																	addthis.toolbox(".pp_social_box")
+																	addthis.toolbox(".fwpSocialBox")
 																}'
 		:
 			'null'

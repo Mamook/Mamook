@@ -1,1 +1,0 @@
-function clearInput(b,c){var a=$(b),d=[];a.addClass("off").focus(function(){d[b]||(d[b]=a.attr(c));a.attr(c)==d[b]&&a.attr(c,"").removeClass("off").addClass("on");a.blur(function(){""==a.attr(c)&&a.removeClass("on").addClass("off").attr(c,d[b])})})};

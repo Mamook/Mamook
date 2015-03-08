@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!-- This file is included in specific build files (ie build-deploy.xml)-->
-<project name="fwPopUp :: build script">
+<project name="fwPopup :: build script">
 
 	<path id="yuiCompressorPaths">
 		<pathelement location="../../minifier/yuicompressor-2.4.2.jar"/>
 		<pathelement location="../../minifier/yui-compressor-ant-task-0.5.jar"/>
 	</path>
 
-	<target name="init" depends="build,copy-and-minify-libs,clean,compile_js"/>
+	<target name="init" depends="createTemp,compile_js,clean"/>
 
 	<target name="define-yui-compressor">
 		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
@@ -21,115 +21,29 @@
 
 	<target name="clean" depends="createTemp" description="Removes the temp folder and leftover files.">
 		<delete dir="temp"/>
-	<!-- Remove the leftover files this script created. -->
-		<delete file="js/jQuery_plugins.js"/>
-		<delete file="js/plugins.js"/>
-		<delete file="js/library_modules.js"/>
 	</target>
 
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="../../minifier/compiler.jar"/>
 
 
-<!-- CSS -->
-	<target name="build" depends="createTemp" description="Builds CSS files to the passed build folder and puts a copy in the temp folder for minification.">
-		<property name="general.css" location="temp/fwPopUp.css"/>
-		<property name="IE.css" location="temp/fwPopUp_IE.css"/>
-		<property name="IE8.css" location="temp/fwPopUp_IE8.css"/>
-
-<!--
-		<concat destfile="${buildLocation}/fwPopUp.big.css">
-			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
-			<fileset dir="css">
-				<!~~ <file name="fwPopUp.css"/> ~~>
-			</fileset>
-		</concat>
-		<concat destfile="${general.css}" force="no">
-			<fileset dir="${buildLocation}" includes="fwPopUp.big.css"/>
-		</concat>
-
-		<concat destfile="${buildLocation}/fwPopUp_IE.big.css">
-			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
-			<filelist dir="css">
-				<!~~ <file name="fwPopUp.css"/>
-				<file name="fwPopUp_IE.css"/> ~~>
-			</filelist>
-		</concat>
-		<concat destfile="${IE.css}" force="no">
-			<fileset dir="${buildLocation}" includes="fwPopUp_IE.big.css"/>
-		</concat>
-
-		<concat destfile="${buildLocation}/fwPopUp_IE8.big.css">
-			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
-			<filelist dir="css">
-				<!~~ <file name="fwPopUp.css"/>
-				<file name="fwPopUp_IE8.css"/> ~~>
-			</filelist>
-		</concat>
-		<concat destfile="${IE8.css}" force="no">
-			<fileset dir="${buildLocation}" includes="fwPopUp_IE8.big.css"/>
-		</concat>
- -->
-	</target>
-
-	<target name="copy-and-minify-libs" depends="createTemp" description="Minifies all CSS files">
-<!-- 		<yui-compressor warn="false" munge="true" cssSuffix=".css" preserveAllSemiColons="false" fromDir="temp" toDir="${buildLocation}"/> -->
-	</target>
-
-
 <!-- JavaScript -->
 	<target name="concat_js">
-	<!-- Concatenate all jQuery plugins together. -->
-		<concat destfile="js/jQuery_plugins.js">
-			<header>${line.separator}</header>
-			<filelist dir="../../jQueryPlugin">
-			</filelist>
-			<footer>${line.separator}${line.separator}${line.separator}${line.separator}</footer>
-		</concat>
-
-	<!-- Concatenate all plugins together. -->
-		<concat destfile="js/plugins.js">
-			<header>/////////////${line.separator}// PLUGINS //${line.separator}/////////////${line.separator}</header>
-			<filelist dir="js">
-				<file name="jQuery_plugins.js"/>
-			</filelist>
-			<fileset dir="js/plugins">
-			</fileset>
-			<footer>/////////////////${line.separator}// END PLUGINS //${line.separator}/////////////////${line.separator}${line.separator}${line.separator}</footer>
-		</concat>
-
-	<!-- Concatenate all Framework JavaScript library MODULES together. -->
-		<concat destfile="js/library_modules.js">
-			<header>///////////////////////${line.separator}// Framework JS library //${line.separator}///////////////////////${line.separator}${line.separator}${line.separator}</header>
-			<filelist dir="../../library">
-			</filelist>
-			<footer>///////////////////////////${line.separator}// END RICH MEDIA SHARED //${line.separator}///////////////////////////${line.separator}${line.separator}${line.separator}</footer>
-		</concat>
-
 	<!-- Concatenate the header, modules, and plugins together. -->
-		<concat destfile="${buildLocation}/fwPopUp.big.js">
+		<concat destfile="${buildLocation}/fwPopup.big.js">
 			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
 			<filelist dir="js">
-				<file name="controller.js"/>
+				<file name="fwPopup.js"/>
 			</filelist>
-			<filelist dir="js">
-				<file name="shared_modules.js"/>
-			</filelist>
-			<filelist dir="js/module">
-				<file name="DATA.js"/>
-			</filelist>
-			<filelist dir="js">
-				<file name="plugins.js"/>
-			</filelist>
-			<footer>${line.separator}${line.separator}${line.separator}////////////////////////////////${line.separator}// END MAIN NAMESPACE (class) //${line.separator}////////////////////////////////</footer>
+			<footer>${line.separator}${line.separator}${line.separator}/////////////////${line.separator}// END fwPopup //${line.separator}/////////////////</footer>
 		</concat>
 	</target>
 
 
 	<!-- Minify. -->
 	<target name="compile_js" depends="concat_js">
-		<jscomp compilationLevel="simple" debug="false" output="${buildLocation}/fwPopUp.js">
+		<jscomp compilationLevel="simple" debug="false" output="${buildLocation}/fwPopup.js">
 			<sources dir="${buildLocation}">
-				<file name="fwPopUp.big.js"/>
+				<file name="fwPopup.big.js"/>
 			</sources>
 		</jscomp>
 	</target>
