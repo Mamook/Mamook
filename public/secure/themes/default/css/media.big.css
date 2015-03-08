@@ -101,15 +101,12 @@ audio {
 	height:180px;
 	width:320px;
 }
-.feed-audio .thumbnail-default {
+.feed-audio .thumbnail-default,
+.thumbnail-small {
 	height:90px;
 	width:120px;
 }
 .table-audio .thumbnail-default {
 	height:37px;
 	width:50px;
-}
-.thumbnail-small {
-	height:90px;
-	width:120px;
 }
