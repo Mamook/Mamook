@@ -1548,10 +1548,10 @@ class Video
 					$playlist_id=$playlists_data->id;
 					$url=VIDEOS_URL.'?playlist='.$playlist_id;
 					$playlist_items.='<li class="list-nav-1'.$doc->addHereClass($url, TRUE, FALSE).'">'.
-							'<a href="'.$url.'" title="'.$title.' video playlist">'.
-								$title.
-							'</a>'.
-						'</li>';
+						'<a href="'.$url.'" title="'.$title.' video playlist">'.
+							$title.
+						'</a>'.
+					'</li>';
 				}
 			}
 			return $playlist_items;
@@ -1763,7 +1763,7 @@ class Video
 					# No videos in the playlist. Return error image.
 					if(empty($all_videos))
 					{
-						return $display='<div id="no_video"></div>';
+						return $display='<div class="no_video"></div>';
 					}
 					else
 					{
@@ -1840,7 +1840,7 @@ class Video
 				# If the video doesn't exist ($no_video=TRUE)
 				if($no_video)
 				{
-					return $display='<div id="no_video"></div>';
+					return $display='<div class="no_video"></div>';
 				}
 
 				if(APPLICATION_URL.Utility::removeIndex(HERE)==VIDEOS_URL)
@@ -1869,7 +1869,7 @@ class Video
 			}
 			else
 			{
-				$display='<h3>There are no videos to display.</h3>';
+				$display='<h3 class="h-3">There are no videos to display.</h3>';
 			}
 			return $display;
 		}
@@ -2133,7 +2133,16 @@ class Video
 		# Set the YouTube instance to a variable.
 		$yt=$this->getYouTubeObject();
 
-		$display='<table class="table-image"><th><a href="'.ADMIN_URL.'ManageMedia/videos/?by_video_name=DESC" title="Order by video name">View</a></th><th><a href="'.ADMIN_URL.'ManageMedia/videos/?by_title=DESC" title="Order by title">Title</a></th><th>Options</th>';
+		$display='<table class="table-image">'.
+			'<th>'.
+				'<a href="'.ADMIN_URL.'ManageMedia/videos/?by_video_name=DESC" title="Order by video name">View</a>'.
+			'</th>'.
+			'<th>'.
+				'<a href="'.ADMIN_URL.'ManageMedia/videos/?by_title=DESC" title="Order by title">Title</a>'.
+			'</th>'.
+			'<th>'.
+				'Options'.
+			'</th>';
 
 		foreach($video_search as $videos)
 		{
@@ -2193,10 +2202,18 @@ class Video
 
 			# Set the markup to a variable
 			$display.='<tr>'.
-				'<td><a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'"><img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster" /></a></td>'.
-				'<td>'.$this->getTitle().'</td>'.
-				'<td><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a></td>'.
-				'</tr>';
+				'<td>'.
+					'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
+						'<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster"/>'.
+					'</a>'.
+				'</td>'.
+				'<td>'.
+					$this->getTitle().
+				'</td>'.
+				'<td>'.
+					'<a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a>'.
+				'</td>'.
+			'</tr>';
 		}
 
 		$display.='</table>';
@@ -2281,10 +2298,15 @@ class Video
 
 			# Set the markup to a variable
 			$display='<div class="video-lg">'.
-				'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'><img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" /><span class="play-static"></span></a>'.
-				'<h3 class="h-video"><a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on YouTube" target="_blank">'.$this->getTitle().'</a></h3>'.
+				'<a class="image-link" href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
+					'<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'"/>'.
+					'<span class="play-static"></span>'.
+				'</a>'.
+				'<h3 class="h-3">'.
+					'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on YouTube" target="_blank">'.$this->getTitle().'</a>'.
+				'</h3>'.
 				'<p>'.$this->getDescription().'</p>'.
-				'</div>';
+			'</div>';
 
 			return $display;
 		}
@@ -2304,10 +2326,10 @@ class Video
 		$db=DB::get_instance();
 
 		# Small Videos
-		$display='<div class="video-feed-wrapper">'.
+		$display='<div class="feed_wrapper-video">'.
 			'<button class="arrow-prev">Previous Video</button>'.
-			'<div class="video-feed-list">'.
-			'<ul class="video-feed">';
+		'<div class="feed_list-video">'.
+		'<ul class="feed-video">';
 
 		foreach($small_videos as $videos)
 		{
@@ -2355,14 +2377,16 @@ class Video
 
 			# Set the markup to a variable
 			$display.='<li>'.
-				'<a href="'.VIDEOS_URL.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"><img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" class="thumbnail_small" /></a>'.
-				'</li>';
+				'<a href="'.VIDEOS_URL.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
+					'<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" class="thumbnail-small"/>'.
+				'</a>'.
+			'</li>';
 		}
 
 		$display.='</ul>'.
 			'</div>'.
 			'<button class="arrow-next">Next Video</button>'.
-			'</div>';
+		'</div>';
 
 		return $display;
 	} #==== End -- markupSmallVideos

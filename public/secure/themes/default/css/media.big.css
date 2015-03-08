@@ -17,8 +17,8 @@
 .video-lg .poster {
 	max-width:330px;
 }
-.audio-lg a,
-.video-lg a {
+[class|=audio] a,
+[class|=video] a {
 	display:inline-block;
 	position:relative;
 }
@@ -91,7 +91,7 @@ audio {
 #comments {
 	clear:both;
 }
-#no_video {
+.no_video {
 	display:block;
 	background:url(../images/video_unavailable.jpg) 100% 0;
 	height:248px;

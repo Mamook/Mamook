@@ -29,7 +29,7 @@ $video_feed=$video_obj->displayVideoFeed();
 
 # Instantiate a new Slideshow object.
 $slideshow=Slideshow::getInstance();
-$slideshow->setSelector('.video-feed-list');
+$slideshow->setSelector('.feed_list-video');
 $slideshow->setVertical('true');
 $slideshow->setStart(0);
 
@@ -55,7 +55,7 @@ require Utility::locateFile(TEMPLATES.'videos_nav.php');
 $display_box2.=$videos_nav;
 
 # Do we need some more CSS?
-$doc->setStyle(THEME.'css/media.css');
+$doc->setStyle('media');
 # Do we need some JavaScripts? (Use the script file name before the ".js".)
 $doc->setJavaScripts('jCarouselLite');
 # Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)

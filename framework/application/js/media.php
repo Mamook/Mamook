@@ -1,8 +1,8 @@
 <?php /* application/js/media.php */
 
 $js='$(".arrow-prev").addClass("disabled");'.
-	'var c=$(".video-feed > li").size(),'.
-	'd=$(".audio-feed > li").size();'.
+	'var c=$(".feed-video > li").size(),'.
+	'd=$(".feed-audio > li").size();'.
 	'if(c<4 && d<7)'.
 		'$(".arrow-next").addClass("disabled");';
 

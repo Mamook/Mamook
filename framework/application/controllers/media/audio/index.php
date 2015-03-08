@@ -29,7 +29,7 @@ $audio_feed=$audio_obj->displayAudioFeed();
 
 # Instantiate a new Slideshow object.
 $slideshow=Slideshow::getInstance();
-$slideshow->setSelector('.audio-feed-list');
+$slideshow->setSelector('.feed_list-audio');
 $slideshow->setVertical('true');
 $slideshow->setStart(0);
 
@@ -50,7 +50,7 @@ $display_main2.=$audio_feed;
 $display_main3.=$main_content->displayQuote();
 
 # Do we need some more CSS?
-$doc->setStyle(THEME.'css/media.css');
+$doc->setStyle('media');
 # Do we need some JavaScripts? (Use the script file name before the ".js".)
 $doc->setJavaScripts('jCarouselLite,audio');
 # Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)

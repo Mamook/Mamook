@@ -1542,7 +1542,7 @@ class Audio
 			# Set the playlists to a variable.
 			$playlists=$playlist->getAllCategories();
 
-			$playlist_items='<li>No playlists</li>';
+			$playlist_items='<li class="list-nav-1">No playlists</li>';
 			if(!empty($playlists))
 			{
 				$playlist_items='';
@@ -1551,8 +1551,8 @@ class Audio
 					$title=$playlists_data->category;
 					$playlist_id=$playlists_data->id;
 					$url=APPLICATION_URL.AUDIO_PATH.'?playlist='.$playlist_id;
-					$playlist_items.='<li'.$doc->addHereClass($url).'>'.
-							'<a href="'.$url.'"'.$doc->addHereClass($url).' title="'.$title.' audio playlist">'.
+					$playlist_items.='<li class="list-nav-1'.$doc->addHereClass($url, TRUE, FALSE).'">'.
+							'<a href="'.$url.'" title="'.$title.' audio playlist">'.
 								$title.
 							'</a>'.
 						'</li>';
@@ -2046,7 +2046,16 @@ class Audio
 		# Set the Soundcloud instance to a variable.
 		//$soundcloud_obj=$this->getSoundcloudObject();
 
-		$display='<table class="table-image"><th><a href="'.ADMIN_URL.'ManageMedia/audio/?by_audio_name=DESC" title="Order by audio name">View</a></th><th><a href="'.ADMIN_URL.'ManageMedia/audio/?by_title=DESC" title="Order by title">Title</a></th><th>Options</th>';
+		$display='<table class="table-audio">'.
+		'<th>'.
+			'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_audio_name=DESC" title="Order by audio name">View</a>'.
+		'</th>'.
+		'<th>'.
+			'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_title=DESC" title="Order by title">Title</a>'.
+		'</th>'.
+		'<th>'.
+			'Options'.
+		'</th>';
 
 		foreach($audio_search as $audio)
 		{
@@ -2107,10 +2116,18 @@ class Audio
 
 			# Set the markup to a variable
 			$display.='<tr>'.
-				'<td><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a></td>'.
-				'<td>'.$this->getTitle().'</td>'.
-				'<td><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a></td>'.
-				'</tr>';
+				'<td>'.
+					'<a class="image-link" href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
+						($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>').
+					'</a>'.
+				'</td>'.
+				'<td>'.
+					$this->getTitle().
+				'</td>'.
+				'<td>'.
+					'<a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="button-edit" title="Edit this audio entry">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&amp;delete" class="button-delete" title="Delete this audio entry">Delete</a>'.
+				'</td>'.
+			'</tr>';
 		}
 
 		$display.='</table>';
@@ -2195,37 +2212,24 @@ class Audio
 		# Set the description
 		$this->setDescription($db->sanitize($large_audio[0]->description, 5));
 
-		$display='<div class="audio-lg"><a href="#openAudio" ref="openAudio">'.
-				($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_large"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').
-				'<span class="play-static"></span></a>'.
-				'<div id="media-text">'.
-					'<h3 class="h-audio"><a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a></h3>'.
-					'<p>'.$this->getDescription().'</p>'.
-				'</div>'.
-			'</div>'.
-			'<div id="openAudio" class="show_player">'.
-				'<div class="pp_pic_holder" style="display:block">'.
-					'<div class="ppt" style="opacity:1;display:block;width:500px;height:20px"></div>'.
-					'<div class="pp_content_container">'.
-						'<div class="pp_content" style="min-height:248px;width:500px">'.
-							'<div class="pp_fade" style="display:block">'.
-								'<div id="pp_full_res">'.
-									($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_large"></div>' : '<center><img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" /></center>').
-									'<audio class="player" id="player" preload="auto" controls>'.
-										'<source src="'.$this->getAudioUrl().'" type="audio/mpeg">'.
-										'Your browser does not support the audio element.'.
-									'</audio>'.
-								'</div>'.
-								'<div class="pp_details" style="width:500px">'.
-									'<p class="pp_description" style="display:block">'.$this->getTitle().'</p>'.
-									'<a class="pp_close" href="#" ref="closeAudio">Close</a>'.
-								'</div>'.
-							'</div>'.
-						'</div>'.
-					'</div>'.
-				'</div>'.
-				'<div class="overlay"></div>'.
-			'</div>';
+		# Check if there ISN'T a thumbnail for this audio file.
+		if($this->getImageID()===NULL)
+		{
+
+		}
+		# Set the thumbnail image to a local variable. If there is no thumbnail, use the default.
+		$thumbnail=$this->getThumbnailUrl();
+
+		$display='<div class="audio-lg">'.
+			'<a class="image-link" href="'.$this->getAudioUrl().'" ref="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
+				($this->getImageID()===NULL ? '<span class="thumbnail-default"></span>' : '<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>').
+				'<span class="play-static"></span>'.
+			'</a>'.
+			'<h3 class="h-3">'.
+				'<a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
+			'</h3>'.
+			'<p>'.$this->getDescription().'</p>'.
+		'</div>';
 
 		return $display;
 	} #==== End -- markupLargeAudio
@@ -2244,10 +2248,10 @@ class Audio
 		$db=DB::get_instance();
 
 		# Small Audio
-		$display='<div class="audio-feed-wrapper">'.
+		$display='<div class="feed_wrapper-audio">'.
 			'<div class="arrow-prev"></div>'.
-			'<div class="audio-feed-list">'.
-			'<ul class="audio-feed">';
+			'<div class="feed_list-audio">'.
+			'<ul class="feed-audio">';
 
 		foreach($small_audio as $audio)
 		{
@@ -2296,24 +2300,18 @@ class Audio
 
 			# Set the markup to a variable
 			$display.='<li>'.
-				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_small"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a>'.
+				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.($this->getImageID()===NULL ? '<span class="thumbnail-default"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a>'.
 				'</li>';
 		}
 
 		$display.='</ul>'.
 			'</div>'.
 			'<div class="arrow-next"></div>'.
-			'</div>';
+		'</div>';
 
 		return $display;
 	} #==== End -- markupSmallAudio
 
 	/*** End public methods ***/
-
-
-
-	/*** protected methods ***/
-
-	/*** End protected methods ***/
 
 } # end Audio class
