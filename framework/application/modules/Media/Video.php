@@ -1538,7 +1538,7 @@ class Video
 			# Set the playlists to a variable.
 			$playlists=$playlist->getAllCategories();
 
-			$playlist_items='<li class="playlist">No playlists</li>';
+			$playlist_items='<li class="list-nav-1">No playlists</li>';
 			if(!empty($playlists))
 			{
 				$playlist_items='';
@@ -1547,8 +1547,8 @@ class Video
 					$title=$playlists_data->category;
 					$playlist_id=$playlists_data->id;
 					$url=VIDEOS_URL.'?playlist='.$playlist_id;
-					$playlist_items.='<li class="playlist"'.$doc->addHereClass($url, FALSE, FALSE).'>'.
-							'<a href="'.$url.'"'.$doc->addHereClass($url).' title="'.$title.' video playlist">'.
+					$playlist_items.='<li class="list-nav-1'.$doc->addHereClass($url, TRUE, FALSE).'">'.
+							'<a href="'.$url.'" title="'.$title.' video playlist">'.
 								$title.
 							'</a>'.
 						'</li>';
