@@ -23,7 +23,7 @@ if(array_key_exists('_submit_check', $_POST))
 	$email=((isset($_POST['email']) && ($_POST['email']!='youremail@somewhere.com')) ? $_POST['email'] : '');
 }
 $email_conf='';
-$head='<p class="h-form">Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>';
+$head='<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>';
 $page_class='loginpage-register';
 
 # Process the login if it has been submitted.
