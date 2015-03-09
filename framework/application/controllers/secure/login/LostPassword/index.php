@@ -15,7 +15,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-$head='<p class="h-form">Please enter you email address to retrieve your account information.</p>';
+$head='<p>Please enter you email address to retrieve your account information.</p>';
 $page_class='loginpage-lostPassword';
 
 # Get the submit_email form.

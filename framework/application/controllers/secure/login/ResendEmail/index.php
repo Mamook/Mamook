@@ -15,7 +15,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-$head='<p class="h-form">Please enter your email address to recieve your activation email.</p>';
+$head='<p>Please enter your email address to recieve your activation email.</p>';
 $page_class='loginpage-resendEmail';
 
 # Get the submit_email form.
