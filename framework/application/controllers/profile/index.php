@@ -41,9 +41,68 @@ elseif(isset($_GET['person']) && ($validator->isInt(trim($_GET['person']))===TRU
 {
 	$page_class='profilepage-person';
 	# Set the person's id to a variable.
-	$id=(int)$_GET['person'];
-	# Set `staff` as the table to search for this person.
-	$table='staff';
+	$value=(int)$_GET['person'];
+	# Get the Staff class.
+	require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
+	# Instantiate a new Staff object.
+	$staff_obj=new Staff();
+	# Get the Staff display XHTML and set it to a variable.
+	$staff=$staff_obj->displayStaff($value);
+	# Check if there was a staff to display.
+	if(!empty($staff))
+	{
+		# Set the display xhtml to a variable for display to the user.
+		$display='<div id="profile" class="profile post">';
+		$display.=$staff['affiliation'];
+		$display.=$staff['image'];
+		# Count the number of positions held.
+		$num_position=count($staff['position']);
+		$position_fix='<span class="profile-position">'.
+				'<span class="label">Position'.(($num_position>1) ? 's' : '').':</span>'.
+				'<ul>%s</ul>'.
+				'</span>';
+		# Check if there are positions.
+		if(!empty($staff['position']))
+		{
+			# Get the Position class.
+			require_once Utility::locateFile(MODULES.'Content'.DS.'Position.php');
+			# Instantiate a new Position object.
+			$position_obj=new Position();
+			# Create an empty array.
+			$position_array=array();
+			# Loop through the member's positions.
+			foreach($staff['position'] as $position_key=>$position_value)
+			{
+				# Get the position data from the `positions` table.
+				$position_obj->getThisPosition($position_value['position']);
+				# Set the position.
+				$position=$position_obj->getPosition();
+				# Store the position in the new array.
+				$position_array[$position_key]['position']=$position;
+				# Store the position description in the new array.
+				$position_array[$position_key]['description']=$position_value['description'];
+			}
+			# Create an empty array.
+			$pos_focus=array();
+			# Loop through $position_array we created above.
+			foreach($position_array as $position)
+			{
+				# Store the HTML markup in the new array.
+				$pos_focus[]='<li>'.$position['position'].(!empty($position['description']) ? ' - '.$position['description'] : '').'</li>';
+			}
+			$display.=sprintf($position_fix, implode('', $pos_focus));
+		}
+		$display.=$staff['region'];
+		$display.=$staff['text'];
+		$display.='</div>';
+		# Set the page title to the staff's name.
+		$page_title=$staff['name'];
+	}
+	else
+	{
+		$_SESSION['message']='That staff can not be displayed.';
+		$doc->redirect(DEFAULT_REDIRECT);
+	}
 }
 # Check if the GET data was "publisher".
 elseif(isset($_GET['publisher']))
@@ -65,6 +124,7 @@ elseif(isset($_GET['publisher']))
 	$pub=new Publisher();
 	# Get the Publisher display XHTML and set it to a variable.
 	$publisher=$pub->displayPublisher($value, $id);
+	print_r($publisher);exit;
 	# Check if there was a publisher to display.
 	if(!empty($publisher))
 	{
@@ -89,7 +149,7 @@ else
 }
 
 # Check to make sure the GET data isn't "publisher".
-if(!isset($_GET['publisher']))
+if(!isset($_GET['publisher']) && !isset($_GET['person']))
 {
 	# Get the member display XHTML and set it to a variable.
 	$member=$user->displayProfile($id, $table);
@@ -100,43 +160,6 @@ if(!isset($_GET['publisher']))
 		$display='<div id="profile" class="profile">';
 		$display.=$member['image'];
 		$display.=$member['organization'];
-		# Count the number of positions held.
-		$num_position=count($member['position']);
-		$position_fix='<span class="profile-position">'.
-				'<span class="label">Position'.(($num_position>1) ? 's' : '').':</span>'.
-				'<ul>%s</ul>'.
-				'</span>';
-		# Check if there are positions.
-		if(!empty($member['position']))
-		{
-			# Get the Position class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Position.php');
-			# Instantiate a new Position object.
-			$position_obj=new Position();
-			# Create an empty array.
-			$position_array=array();
-			# Loop through the member's positions.
-			foreach($member['position'] as $position_key=>$position_value)
-			{
-				# Get the position data from the `positions` table.
-				$position_obj->getThisPosition($position_value['position']);
-				# Set the position.
-				$position=$position_obj->getPosition();
-				# Store the position in the new array.
-				$position_array[$position_key]['position']=$position;
-				# Store the position description in the new array.
-				$position_array[$position_key]['description']=$position_value['description'];
-			}
-			# Create an empty array.
-			$pos_focus=array();
-			# Loop through $position_array we created above.
-			foreach($position_array as $position)
-			{
-				# Store the HTML markup in the new array.
-				$pos_focus[]='<li>'.$position['position'].(!empty($position['description']) ? ' - '.$position['description'] : '').'</li>';
-			}
-			$display.=sprintf($position_fix, implode('', $pos_focus));
-		}
 		$display.=$member['website'];
 		$display.=$member['affiliation'];
 		$display.=$member['region'];

@@ -11,9 +11,14 @@ echo '<nav id="navbar" class="nav nav1">',
 		'<li class="list-nav-1', ((strstr(FULL_URL, 'MyAccount/')!== FALSE) ? '' : ' hover'), Document::addHereClass(SECURE_URL.'MyAccount/', FALSE, FALSE), '">',
 			'<a href="', SECURE_URL ,'MyAccount/" title="My Account">My Account</a>',
 			'<ul class="nav-2">',
-				'<li class="list-nav-2', Document::addHereClass(SECURE_URL.'MyAccount/', TRUE, FALSE), '">',
-					'<a href="', SECURE_URL, 'MyAccount/" title="Update Profile">Update Profile</a>',
+				'<li class="list-nav-2',Document::addHereClass(SECURE_URL.'MyAccount/', TRUE, FALSE),'">',
+					'<a href="',SECURE_URL,'MyAccount/" title="Update Profile">Update Profile</a>',
 				'</li>',
+				# Check if logged in user is in the `staff` table.
+				(($login->isStaff()===TRUE) ?
+				'<li class="list-nav-2'.Document::addHereClass(SECURE_URL.'MyAccount/staff_profile.php', FALSE, FALSE).'">'.
+					'<a href="'.SECURE_URL.'MyAccount/staff_profile.php" title="Update Staff Profile">Update Staff Profile</a>'.
+				'</li>' : ''),
 				'<li class="list-nav-2', Document::addHereClass(SECURE_URL.'MyAccount/change_username.php', FALSE, FALSE), '">',
 					'<a href="', SECURE_URL, 'MyAccount/change_username.php" title="Change Username">Change Username</a>',
 				'</li>',
@@ -47,6 +52,11 @@ echo '<nav id="navbar" class="nav nav1">',
 						'<li class="list-nav-3'.Document::addHereClass(ADMIN_URL.'ManageUsers/?user='.$_GET['user'], TRUE, FALSE).'">'.
 							'<a href="'.ADMIN_URL.'ManageUsers/?user='.$_GET['user'].'" title="Update User">Update User</a>'.
 						'</li>'.
+						# Check if logged in user is in the `staff` table.
+						(($login->isStaff($_GET['user'])===TRUE) ?
+						'<li class="list-nav-2'.Document::addHereClass(SECURE_URL.'ManageUsers/staff_profile.php', FALSE, FALSE).'">'.
+							'<a href="'.SECURE_URL.'ManageUsers/staff_profile.php'.GET_QUERY.'" title="Update Staff Profile">Update Staff Profile</a>'.
+						'</li>' : '').
 						'<li class="list-nav-3'.Document::addHereClass(ADMIN_URL.'ManageUsers/change_username.php', FALSE, FALSE).'">'.
 							'<a href="'.ADMIN_URL.'ManageUsers/change_username.php'.GET_QUERY.'" title="Change Username">Change Username</a>'.
 						'</li>'.
