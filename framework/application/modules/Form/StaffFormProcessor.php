@@ -111,8 +111,6 @@ class StaffFormProcessor extends FormProcessor
 			$title=$staff_obj->getTitle();
 			# Set the staff's user ID to a variable.
 			$user_id=$staff_obj->getUser();
-			# Set the user's username to a variable.
-			$username=$staff_obj->findUsername($user_id);
 
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['staff']) && ($_POST['staff']=='Update')))
@@ -140,9 +138,6 @@ class StaffFormProcessor extends FormProcessor
 				{
 					# Get the Upload class.
 					require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
-
-					# If the username is an email address, replace the "@" character.
-					$safe_username=str_replace('@', '-', $username);
 
 					# Check if an image was uploaded and if there have been no errors so far.
 					if(array_key_exists('image', $_FILES) && ($fv->checkErrors()===FALSE))
@@ -185,7 +180,7 @@ class StaffFormProcessor extends FormProcessor
 							try
 							{
 								# Append ".staff" to the end of the $username for the staff image.
-								$staff_image_name=$safe_username.'.staff';
+								$staff_image_name=$first_name.'.'.$last_name.'.staff';
 								# Upload original thumbnail.
 								$image_upload=$upload_image->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $staff_image_name, $max_size, TRUE, 230, 300, 75, TRUE);
 
