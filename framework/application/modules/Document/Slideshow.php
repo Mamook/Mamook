@@ -589,13 +589,13 @@ class Slideshow
 					# Instantiate a new Image object.
 					$image=new Image();
 					$display.=$image->displayImage(TRUE, $img, $img_title);
-					$display.='<h4 class="h-slide user_name"><a href="'.APPLICATION_URL.'profile/?person='.$id.'" title="'.$name.'">'.$name.'</a></h4>';
+					$display.='<h4 class="h-4"><a href="'.APPLICATION_URL.'profile/?person='.$id.'" title="'.$name.'">'.$name.'</a></h4>';
 					$display.='<p class="user-focus">'.$position_desc.'</p>';
 					$display.='</li>';
 				}
 				$display.='</ul>';
-				$display.='<div class="'.$this->getButtonPrevious().'"></div>';
-				$display.='<div class="'.$this->getButtonNext().'"></div>';
+				$display.='<button class="'.$this->getButtonPrevious().'">Previous</button>';
+				$display.='<button class="'.$this->getButtonNext().'">Next</button>';
 				$display.='</div>';
 			}
 			return $display;
