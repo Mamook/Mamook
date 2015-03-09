@@ -18,6 +18,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
+$head='';
 
 # Instantiate a new User object.
 $user=new User();

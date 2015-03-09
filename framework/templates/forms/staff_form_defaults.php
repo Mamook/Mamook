@@ -5,7 +5,7 @@ $staff_affiliation=NULL;
 $staff_archive=NULL;
 $staff_credentials=NULL;
 $staff_first_name=NULL;
-$staff_id=$staff_id;
+$staff_id=NULL;
 $staff_image_filename='default-avatar.png';
 $staff_image_title=NULL;
 $staff_last_name=NULL;
@@ -17,10 +17,8 @@ $staff_text=NULL;
 $staff_title=NULL;
 $staff_user=NULL;
 
-# Instantiate a new instance of the Staff class.
-$staff_obj=new Staff();
 # Get the user from the `users` table.
-if($staff_obj->getThisStaff($staff_id)===TRUE)
+if($staff_obj->getThisStaff($staff_obj->getID())===TRUE)
 {
 	# Reset the defaults.
 	$staff_affiliation=$staff_obj->getAffiliation();

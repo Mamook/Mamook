@@ -796,10 +796,33 @@ class Staff
 	 *
 	 * Joins the person's title, first, middle, and last names, and credentials to create a full name.
 	 *
+	 * @param	int $value				The staff's ID.
 	 * @access	public
 	 */
-	public function getStaffName()
+	public function getStaffName($value=NULL)
 	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed ID is empty.
+		if($validator->isInt($value)===TRUE)
+		{
+			# Retrieve the staffs names from `staff` table.
+			$row=$db->get_row('SELECT `title`, `fname`, `mname`, `lname`, `credentials` FROM `'.DBPREFIX.'staff` WHERE `id` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			# Check if a record was returned.
+			if($row!==NULL)
+			{
+				# Set the returned values to the data members.
+				$this->setCredentials($row->credentials);
+				$this->setFirstName($row->fname);
+				$this->setLastName($row->lname);
+				$this->setMiddleName($row->mname);
+				$this->setTitle($row->title);
+			}
+		}
+
 		# Set the person's title to a variable.
 		$title=$this->getTitle();
 		# Set the person's first name to a variable.
