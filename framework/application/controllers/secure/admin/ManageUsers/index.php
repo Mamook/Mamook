@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageUsers/index.php */
+<?php /* application/controllers/secure/admin/ManageUsers/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageUsers/staff_profile.php */
+<?php /* application/controllers/secure/admin/ManageUsers/staff_profile.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
@@ -20,18 +20,34 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
+$head='';
+
+# Create a new Staff object.
+$staff_obj=new Staff();
 
 if(isset($_GET['user']))
 {
-	# Create a new Staff object.
-	$staff_obj=new Staff();
+	# Create a new User object.
+	$user_obj=new User();
 	# Set the User ID to the data member; effectively cleaning it.
-	$staff_obj->setID($_GET['user']);
+	$staff_obj->setUser($_GET['user']);
 	# Set the data member to a variable.
-	$id=$staff_obj->getID();
+	$user_id=$staff_obj->getUser();
+	# Get this user's staff ID.
+	$staff_id=$user_obj->findStaffID($user_id);
+	# Set the Staff ID to the data member; effectively cleaning it.
+	$staff_obj->setID($staff_id);
+	# Make sure the User is an admin.
+	if($login->checkAccess(ADMIN_USERS)===TRUE)
+	{
+		# Get the staff's name and set it to a variable.
+		$staff_name=$staff_obj->getStaffName($staff_id);
+		$head='<h3>Please use the form below to update staff: '.$staff_name.'</h3>';
+		# Set the page title.
+		$page_title=$staff_name.'\'s Staff Profile';
+	}
 	# Instantiate a new StaffFormProcessor object.
 	$form_processor=new StaffFormProcessor();
-
 	# Get the staff profile form.
 	require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form.php');
 }
