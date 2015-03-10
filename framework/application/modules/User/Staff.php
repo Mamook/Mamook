@@ -806,40 +806,57 @@ class Staff
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
-		# Check if the passed ID is empty.
-		if($validator->isInt($value)===TRUE)
+		try
 		{
-			# Retrieve the staffs names from `staff` table.
-			$row=$db->get_row('SELECT `title`, `fname`, `mname`, `lname`, `credentials` FROM `'.DBPREFIX.'staff` WHERE `id` = '.$db->quote($db->escape($value)).' LIMIT 1');
-			# Check if a record was returned.
-			if($row!==NULL)
+			# Check if the passed ID is empty.
+			if($validator->isInt($value)===TRUE)
 			{
-				# Set the returned values to the data members.
-				$this->setCredentials($row->credentials);
-				$this->setFirstName($row->fname);
-				$this->setLastName($row->lname);
-				$this->setMiddleName($row->mname);
-				$this->setTitle($row->title);
+				# Retrieve the staffs names from `staff` table.
+				$row=$db->get_row('SELECT `title`, `fname`, `mname`, `lname`, `credentials` FROM `'.DBPREFIX.'staff` WHERE `id` = '.$db->quote($db->escape($value)).' LIMIT 1');
+				# Check if a record was returned.
+				if($row!==NULL)
+				{
+					# Set the returned values to the data members.
+					$this->setCredentials($row->credentials);
+					$this->setFirstName($row->fname);
+					$this->setLastName($row->lname);
+					$this->setMiddleName($row->mname);
+					$this->setTitle($row->title);
+				}
+			}
+
+			# Set the person's title to a variable.
+			$title=$this->getTitle();
+			# Set the person's first name to a variable.
+			$fname=$this->getFirstName();
+			# Set the person's middle name to a variable.
+			$mname=$this->getMiddleName();
+			# Set the person's last name to a variable.
+			$lname=$this->getLastName();
+			# Set the person's credentials to a variable.
+			$credentials=$this->getCredentials();
+			# Set the person's name.
+			$name=(
+				((!empty($fname)) ? $fname : '').
+				((!empty($mname)) ? ((!empty($fname)) ? ' ' : '').$mname : '').
+				((!empty($lname)) ? ((!empty($fname) || !empty($mname)) ? ' ' : '').$lname : '').
+				((!empty($credentials)) ? ((!empty($fname) || !empty($mname) || !empty($lname)) ? ' ' : '').$credentials : '')
+			);
+
+			# If name is empty, then user doesn't exist and throw an error.
+			if(empty($name))
+			{
+				throw new Exception('The staff\'s name was not found!', E_RECOVERABLE_ERROR);
 			}
 		}
-
-		# Set the person's title to a variable.
-		$title=$this->getTitle();
-		# Set the person's first name to a variable.
-		$fname=$this->getFirstName();
-		# Set the person's middle name to a variable.
-		$mname=$this->getMiddleName();
-		# Set the person's last name to a variable.
-		$lname=$this->getLastName();
-		# Set the person's credentials to a variable.
-		$credentials=$this->getCredentials();
-		# Set the person's name.
-		$name=(
-			((!empty($fname)) ? $fname : '').
-			((!empty($mname)) ? ((!empty($fname)) ? ' ' : '').$mname : '').
-			((!empty($lname)) ? ((!empty($fname) || !empty($mname)) ? ' ' : '').$lname : '').
-			((!empty($credentials)) ? ((!empty($fname) || !empty($mname) || !empty($lname)) ? ' ' : '').$credentials : '')
-		);
+		catch(ezDB_Error $ez)
+		{
+			throw new Exception('There was an error finding the staff\'s name: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
 		return $name;
 	} #==== End -- getStaffName
 
