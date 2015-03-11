@@ -20,6 +20,7 @@ class Staff
 	protected $image_title=NULL;
 	protected $lname=NULL;
 	protected $mname=NULL;
+	protected $new_position=NULL;
 	protected $position=NULL;
 	protected $region=NULL;
 	protected $title=NULL;
@@ -289,6 +290,29 @@ class Staff
 	} #==== End -- setMiddleName
 
 	/**
+	 * setNewPosition
+	 *
+	 * Sets the data member $new_position.
+	 *
+	 * @param	$new_position				The person's new position.
+	 * @access	public
+	 */
+	public function setNewPosition($new_position)
+	{
+		# Check if the passed value is empty.
+		if(!empty($new_position))
+		{
+			# Set the data member.
+			$this->new_position=$new_position;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->new_position=NULL;
+		}
+	} #==== End -- setNewPosition
+
+	/**
 	 * setPosition
 	 *
 	 * Sets the data member $position.
@@ -553,6 +577,18 @@ class Staff
 	{
 		return $this->mname;
 	} #==== End -- getMiddleName
+
+	/**
+	 * getNewPosition
+	 *
+	 * Returns the data member $new_position.
+	 *
+	 * @access	public
+	 */
+	public function getNewPosition()
+	{
+		return $this->new_position;
+	} #==== End -- getNewPosition
 
 	/**
 	 * getPosition

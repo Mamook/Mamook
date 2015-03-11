@@ -1,5 +1,8 @@
 <?php /* templates/forms/staff_form.php */
-
+//unset($_SESSION['form']);
+//print_r($_SESSION);
+//print_r($staff_obj);
+//exit;
 require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form_defaults.php');
 $display_delete_form=$form_processor->processStaff($default_data);
 
@@ -16,20 +19,21 @@ if(isset($_GET['add_desc']))
 	$display.='<span class="required">* = required field</span>';
 
 	# Instantiate a new FormGenerator object.
-	$fg=new FormGenerator('account_desc', $form_processor->getFormAction(), 'POST', '_top', TRUE);
+	$fg=new FormGenerator('staff_desc', $form_processor->getFormAction(), 'POST', '_top', TRUE);
 	$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 	$fg->addFormPart('<fieldset>');
 	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<li>');
 	# Get the Position class.
-	require_once MODULES.'Content'.DS.'Position.php';
+	require_once Utility::locateFile(MODULES.'Content'.DS.'Position.php');
 	# Instantiate a new Position object.
 	$position_obj=new Position();
 	# Get all positions.
 	$position_obj->getPositions();
 
-##### FIX THE LINE BELOW #####
-	foreach($_SESSION['form']['account']['NewPosition'] as $position_key=>$position_value)
+# NOTE: FIX THE LINE BELOW
+# Figure out a way to setNewPosition instead.
+	foreach($_SESSION['form']['staff']['NewPosition'] as $position_key=>$position_value)
 	{
 		# Get the position data from the `positions` table.
 		$position_obj->getThisPosition($position_value['position']);
@@ -43,10 +47,10 @@ if(isset($_GET['add_desc']))
 	}
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
-	$fg->addElement('submit', array('name'=>'account_desc', 'value'=>'Update'), '', NULL, 'submit-account');
+	$fg->addElement('submit', array('name'=>'staff_desc', 'value'=>'Update'), '', NULL, 'submit-staff');
 	if(isset($_GET['add_desc']))
 	{
-		$fg->addElement('submit', array('name'=>'account_desc', 'value'=>'Go Back'), '', NULL, 'submit-back');
+		$fg->addElement('submit', array('name'=>'staff_desc', 'value'=>'Go Back'), '', NULL, 'submit-back');
 	}
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
@@ -137,8 +141,7 @@ else
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('</ul>');
 	$fg->addFormPart('</fieldset>');
-	/*
-	if($staff_obj->getStaffID()!==NULL && $staff_obj->getArchive()!==TRUE)
+	if($staff_obj->getID()!==NULL && $staff_obj->getArchive()!==TRUE)
 	{
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<h4>Position:</h4>');
@@ -156,20 +159,20 @@ else
 			if(!empty($positions))
 			{
 				# Decode the `position` field in the `staff` table and return an array.
-				$account_positions_decoded=(!is_array($staff_obj->getPosition()) ? json_decode($staff_obj->getPosition(), TRUE) : $staff_obj->getPosition());
+				$staff_positions_decoded=(!is_array($staff_obj->getPosition()) ? json_decode($staff_obj->getPosition(), TRUE) : $staff_obj->getPosition());
 				# Loop through the positions in the `positions` table.
 				foreach($positions as $row)
 				{
 					# Create an option for each playlist.
 					$position_options[$row->id]=$row->position;
 					# Check if this video currently has a playlist.
-					if(!empty($account_positions_decoded))
+					if(!empty($staff_positions_decoded))
 					{
 						# Loop through the json data.
-						foreach($account_positions_decoded as $account_positions)
+						foreach($staff_positions_decoded as $staff_positions)
 						{
 							# Check if the current playlist is default or has been selected by the user.
-							if(in_array($row->id, $account_positions)===TRUE)
+							if(in_array($row->id, $staff_positions)===TRUE)
 							{
 								# Set the selected playlist to the default.
 								$position_options['multiple_selected'][$row->id]=$row->position;
@@ -188,16 +191,16 @@ else
 			$fg->addElement('select', array('name'=>'position[]', 'multiple'=>'multiple', 'title'=>'Select a Position', 'id'=>'position'), $position_options);
 			$fg->addFormPart('</li>');
 			/*
-			if(isset($account_positions_decoded))
+			if(isset($staff_positions_decoded))
 			{
 				$fg->addFormPart('<li>');
 				$fg->addFormPart('<label class="label">Position Description');
-				//$fg->addFormPart('<a href="'.ADMIN_URL.'ManageUsers/?user='.$account_id.'&amp;edit_desc" class="submit-edit-desc" title="Edit Description">Edit Description</a>');
-				$fg->addElement('submit', array('name'=>'account', 'value'=>'Edit Description'), '', NULL, 'submit-edit-desc');
+				//$fg->addFormPart('<a href="'.ADMIN_URL.'ManageUsers/?user='.$staff_id.'&amp;edit_desc" class="submit-edit-desc" title="Edit Description">Edit Description</a>');
+				$fg->addElement('submit', array('name'=>'staff', 'value'=>'Edit Description'), '', NULL, 'submit-edit-desc');
 				$fg->addFormPart('</label>');
 				$fg->addFormPart('<div class="bsm" id="bsm1">');
 				$fg->addFormPart('<ol id="bsm-listbsm1" class="bsm-list">');
-				foreach($account_positions_decoded as $position_key=>$position_value)
+				foreach($staff_positions_decoded as $position_key=>$position_value)
 				{
 					# Get the position data from the `positions` table.
 					$position_obj->getThisPosition($position_value['position']);
@@ -212,15 +215,14 @@ else
 				$fg->addFormPart('</li>');
 			}
 			*/
-/*
-			if(isset($account_positions_decoded))
+			if(isset($staff_positions_decoded))
 			{
 				$fg->addFormPart('</ul>');
 				$fg->addFormPart('</fieldset>');
 				$fg->addFormPart('<fieldset>');
 				$fg->addFormPart('<h4>Position Description:</h4>');
 				$fg->addFormPart('<ul>');
-				foreach($account_positions_decoded as $position_key=>$position_value)
+				foreach($staff_positions_decoded as $position_key=>$position_value)
 				{
 					# Get the position data from the `positions` table.
 					$position_obj->getThisPosition($position_value['position']);
@@ -239,7 +241,6 @@ else
 
 		}
 	}
-	*/
 	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<li>');
 	$button_value='Update';

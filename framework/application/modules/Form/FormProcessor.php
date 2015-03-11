@@ -1002,9 +1002,9 @@ class FormProcessor
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
 
-			if($populator->getAccountOption()==='add_desc')
+			if($populator->getStaffOption()==='add_desc')
 			{
-				$doc->redirect(ADMIN_URL.'ManageUsers/?user='.$_SESSION['form'][$form_type]['ID'].'&add_desc');
+				$doc->redirect(ADMIN_URL.'ManageUsers/staff_profile.php?user='.$_SESSION['form'][$form_type]['User'].'&add_desc');
 			}
 
 			switch($populator->getFileOption())

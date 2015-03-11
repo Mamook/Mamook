@@ -13,7 +13,6 @@ class FormPopulator
 {
 	/*** data members ***/
 
-	private $account_option=NULL;
 	private $category_option=NULL;
 	private $data=array();
 	private $date=NULL;
@@ -27,6 +26,7 @@ class FormPopulator
 	private $position_option=NULL;
 	private $premium_change=FALSE;
 	private $publisher_option=NULL;
+	private $staff_option=NULL;
 	private $to=NULL;
 	private $twitter=NULL;
 	private $unique=0;
@@ -36,26 +36,6 @@ class FormPopulator
 
 
 	/*** mutator methods ***/
-
-	/***
-	 * setAccountOption
-	 *
-	 * Sets the data member $account_option
-	 *
-	 * @param	$account_option
-	 * @access	protected
-	 */
-	protected function setAccountOption($account_option)
-	{
-		# Check if the passed value is empty or doesn't exactly match one of the image options.
-		if(empty($account_option) OR $account_option!=='add_desc')
-		{
-			# Explicitly set the value to NULL.
-			$account_option=NULL;
-		}
-		# Set the data member.
-		$this->account_option=$account_option;
-	} #==== End -- setAccountOption
 
 	/***
 	 * setCategoryOption
@@ -334,6 +314,26 @@ class FormPopulator
 		$this->publisher_option=$publisher_option;
 	} #==== End -- setPublisherOption
 
+	/***
+	 * setStaffOption
+	 *
+	 * Sets the data member $staff_option
+	 *
+	 * @param	$staff_option
+	 * @access	protected
+	 */
+	protected function setStaffOption($staff_option)
+	{
+		# Check if the passed value is empty or doesn't exactly match one of the image options.
+		if(empty($staff_option) OR $staff_option!=='add_desc')
+		{
+			# Explicitly set the value to NULL.
+			$staff_option=NULL;
+		}
+		# Set the data member.
+		$this->staff_option=$staff_option;
+	} #==== End -- setStaffOption
+
 	/**
 	 * setTo
 	 *
@@ -407,18 +407,6 @@ class FormPopulator
 
 
 	/*** accessor methods ***/
-
-	/**
-	 * getAccountOption
-	 *
-	 * Returns the data member $account_option.
-	 *
-	 * @access	public
-	 */
-	public function getAccountOption()
-	{
-		return $this->account_option;
-	} #==== End -- getAccountOption
 
 	/**
 	 * getCategoryOption
@@ -575,6 +563,18 @@ class FormPopulator
 	{
 		return $this->publisher_option;
 	} #==== End -- getPublisherOption
+
+	/**
+	 * getStaffOption
+	 *
+	 * Returns the data member $staff_option.
+	 *
+	 * @access	public
+	 */
+	public function getStaffOption()
+	{
+		return $this->staff_option;
+	} #==== End -- getStaffOption
 
 	/**
 	 * getTo

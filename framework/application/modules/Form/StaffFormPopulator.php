@@ -79,6 +79,7 @@ class StaffFormPopulator extends FormPopulator
 	 */
 	public function populateStaffForm($data=array())
 	{
+		//print_r($data);exit;
 		try
 		{
 			# Get the Staff class.
@@ -99,6 +100,7 @@ class StaffFormPopulator extends FormPopulator
 
 			# Populate the data members with defaults, passed values, or data saved in SESSION.
 			$this->setDataToDataMembers($this->getStaffObject());
+			//print_r($this->getData());exit;
 		}
 		catch(Exception $e)
 		{
@@ -185,7 +187,7 @@ class StaffFormPopulator extends FormPopulator
 					$data['MiddleName']=$db->sanitize($_POST['mname']);
 				}
 
-/*
+# NOTE: Can't remove all user's staff positions (maybe this shouldn't be allowed anyway).
 				# Check if there was POST data sent.
 				if(isset($_POST['position']))
 				{
@@ -197,6 +199,7 @@ class StaffFormPopulator extends FormPopulator
 					{
 						# Create an empty array.
 						$temp_array=array();
+						# Check if the position description form has been submitted.
 						if(isset($_POST['position_desc']))
 						{
 							# Loop through the position's decriptions.
@@ -206,41 +209,46 @@ class StaffFormPopulator extends FormPopulator
 									'position'=>$position,
 									'description'=>''
 								);
+								//print_r($value);
+								//print_r($position);
+# NOTE: If adding a position with an ID greater then the position the staff is currently in then the line below will match
+#		and does not add the StaffOption which directs you to the add description form.
 								if($value['position']==$position)
 								{
 									$temp_array['description']=$value['description'];
 									unset($_POST['position_desc'][$key]);
 									break;
 								}
-### DRAVEN: This doesn't work. ####
-### Redirects you to the position form when you remove user positions! ###
+# NOTE: This doesn't work.
+# Redirects you to the position form when you remove user positions!
 								else
 								{
 									$new_array[$key]['position']=$position;
 									$new_array[$key]['description']='';
-									$data['AccountOption']='add_desc';
+									$data['StaffOption']='add_desc';
 									break;
 								}
 							}
-
-### DRAVEN: USED HACK TO FIX ABOVE PROBLEM :( ###
-							$position_search=$this->recursive_array_search($position, $_POST['position_desc']);
+print_r($data);exit;
+# NOTE: USED HACK TO FIX ABOVE PROBLEM :(
+							$position_search=$this->recursiveArraySearch($position, $_POST['position_desc']);
 							if($position_search!==FALSE)
 							{
 								# Don't redirect to position form if removing positions from user.
-								$data['AccountOption']='';
+								$data['StaffOption']='';
 								# Needed or else the description is set to NULL for all positions.
 								$temp_array['description']=$_POST['position_desc'][$position_search]['description'];
 							}
 							$position_array[]=$temp_array;
 						}
 					}
-
+//print_r($data);exit;
 					# JSON encode the array.
 					$position=json_encode($position_array, JSON_FORCE_OBJECT);
 
 					if(isset($new_array) && !empty($new_array))
 					{
+						//print_r($new_array);exit;
 						$data['NewPosition']=$new_array;
 					}
 					if(isset($position))
@@ -251,13 +259,13 @@ class StaffFormPopulator extends FormPopulator
 				}
 				elseif(!isset($_POST['position']) && isset($_POST['position_desc']))
 				{
+					//print_r($_POST);
 					# JSON decode the user's current positions.
 					$current_positions=json_decode($data['Position'], TRUE);
-					print_r($current_positions);
-					print_r($_POST['position_desc']);
-					exit;
+					//print_r($current_positions);
+					//print_r($_POST['position_desc']);
+					//exit;
 
-					/*
 					$new_array=array();
 					foreach($current_positions as $key=>$current_position)
 					{
@@ -272,9 +280,9 @@ class StaffFormPopulator extends FormPopulator
 						$new_array2[$new_key]['description']=$new_position['description'];
 					}
 					$new_array3=array_merge($new_array, $new_array2);
-					*/
+					//print_r($new_array3);exit;
+
 /*
-					$new_array=array();
 					$position_array=array();
 					foreach($current_positions as $current_position)
 					{
@@ -286,6 +294,7 @@ class StaffFormPopulator extends FormPopulator
 								'position'=>$current_position['position'],
 								'description'=>''
 							);
+							print_r($temp_array);
 							if($value['position']==$current_position['position'])
 							{
 								$temp_array['description']=$value['description'];
@@ -296,14 +305,14 @@ class StaffFormPopulator extends FormPopulator
 						$position_array[]=$temp_array;
 					}
 					print_r($position_array);exit;
-
+*/
 					# JSON encode the array.
 					$position=json_encode($new_array3, JSON_FORCE_OBJECT);
-					print_r($position);exit;
+					//$position=json_encode($position_array, JSON_FORCE_OBJECT);
+					//print_r($position);exit;
 					# Clean it up and set it to the data array index.
 					$data['Position']=$position;
 				}
-*/
 
 				# Check if there was POST data sent.
 				if(isset($_POST['region']))
@@ -336,20 +345,29 @@ class StaffFormPopulator extends FormPopulator
 		}
 	} #==== End -- setPostDataToDataArray
 
-/*
-	private function recursive_array_search($needle, $haystack)
+	# NOTE: Move to Utilities class.
+	/**
+	 * recursiveArraySearch
+	 *
+	 * Searches multi-dimensional array for $needle.
+	 *
+	 * @param	$needle
+	 * @param	array $haystack
+	 * @access	private
+	 */
+	private function recursiveArraySearch($needle, $haystack)
 	{
 		foreach($haystack as $key=>$value)
 		{
 			$current_key=$key;
-			if($needle===$value OR (is_array($value) && $this->recursive_array_search($needle,$value) !== false))
+			if($needle===$value OR (is_array($value) && $this->recursiveArraySearch($needle, $value)!==FALSE))
 			{
 				return $current_key;
 			}
 		}
-		return false;
-	}
-*/
+		return FALSE;
+	} #==== End -- recursiveArraySearch
+
 	/*** End private methods ***/
 
 } # End StaffFormPopulator class.

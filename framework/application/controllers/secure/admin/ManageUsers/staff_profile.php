@@ -33,8 +33,10 @@ if(isset($_GET['user']))
 	$staff_obj->setUser($_GET['user']);
 	# Set the data member to a variable.
 	$user_id=$staff_obj->getUser();
-	# Get this user's staff ID.
+	# Get this user's staff ID from the `users` table.
 	$staff_id=$user_obj->findStaffID($user_id);
+	# Get this user's username.
+	$current_username=$user_obj->findUsername($user_id);
 	# Set the Staff ID to the data member; effectively cleaning it.
 	$staff_obj->setID($staff_id);
 	# Make sure the User is an admin.

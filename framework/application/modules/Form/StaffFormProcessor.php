@@ -46,7 +46,7 @@ class StaffFormProcessor extends FormProcessor
 			require_once Utility::locateFile(MODULES.'Form'.DS.'StaffFormPopulator.php');
 
 			# Remove any un-needed CMS session data.
-			# This needs to happen before populatStaffForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
+			# This needs to happen before populateStaffForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
 			//$this->loseSessionData('staff_desc');
 
 			# Reset the form if the "reset" button was submitted.
@@ -68,7 +68,7 @@ class StaffFormProcessor extends FormProcessor
 			$this->processStaffBack();
 */
 			//$this->processStaffSelect();
-			//$this->processStaffFocus();
+			$this->processStaffFocus();
 
 			# Get the Staff object from the StaffFormPopulator object and set it to a variable for use in this method.
 			$staff_obj=$populator->getStaffObject();
@@ -98,13 +98,11 @@ class StaffFormProcessor extends FormProcessor
 			# Set the staff's middle name to a variable.
 			$middle_name=$staff_obj->getMiddleName();
 			# Set the staff's new positions to a variable.
-			//$new_position=$staff_obj->getNewPosition();
+			$new_position=$staff_obj->getNewPosition();
 			# Set the staff's position to a variable.
-			//$position=$staff_obj->getPosition();
+			$position=$staff_obj->getPosition();
 			# Set the staff's region to a variable.
 			$region=$staff_obj->getRegion();
-			# Set the site name to a vaiable.
-			//$site_name=$main_content->getSiteName();
 			# Set the staff's bio to a variable.
 			$text=$staff_obj->getText();
 			# Set the staff's title to a variable.
@@ -520,12 +518,12 @@ class StaffFormProcessor extends FormProcessor
 									}
 								}
 								# Get rid of any CMS form sessions.
-								unset($_SESSION['form']['audio']);
+								unset($_SESSION['form']['staff']);
 								# Delete the audio from the database and set the returned value to a variable.
-								$deleted=$audio_obj->deleteAudio($id, FALSE);
+								$deleted=$audio_obj->deleteStaff($id, FALSE);
 								if($deleted===TRUE)
 								{
-									$this->redirectAudio($audio_name, 'deleted');
+									$this->redirectStaff($audio_name, 'deleted');
 								}
 								else
 								{
@@ -583,7 +581,6 @@ class StaffFormProcessor extends FormProcessor
 	 * @access	private
 	 * @return	string
 	 */
-	/*
 	private function processStaffFocus()
 	{
 		try
@@ -615,6 +612,7 @@ class StaffFormProcessor extends FormProcessor
 
 				# Set a nice message for the user in a session.
 				$_SESSION['message']='The position desciptions were successfully added!';
+				//unset($_SESSION['form']['staff_desc']);
 				# Redirect the user to the page they were on with no POST or GET data.
 				$doc->redirect(rtrim(COMPLETE_URL, '&add_desc'));
 			}
@@ -625,7 +623,6 @@ class StaffFormProcessor extends FormProcessor
 			throw $e;
 		}
 	} #==== End -- processStaffFocus
-	*/
 
 	/**
 	 * redirectStaff
@@ -658,7 +655,6 @@ class StaffFormProcessor extends FormProcessor
 				$origin_form='staff';
 				# Set the default session staff index name.
 				$staff_index='ID';
-				/*
 				if(isset($_SESSION['form']['staff_desc']))
 				{
 					# Set the form's name as "staff_desc".
@@ -668,14 +664,13 @@ class StaffFormProcessor extends FormProcessor
 					# Set the content session staff name.
 					$staff_value=$staff_name;
 				}
-				*/
 				# Set the post session staff id.
 				$_SESSION['form'][$origin_form][$staff_index]=$staff_id;
 				# Redirect the staff to the original post page.
 				$doc->redirect($_SESSION['form'][$origin_form]['FormURL'][0]);
 			}
-			$remove=NULL;
 			/*
+			$remove=NULL;
 			if(isset($_GET['delete']) && $action=='deleted')
 			{
 				$remove='staff';
@@ -713,8 +708,6 @@ class StaffFormProcessor extends FormProcessor
 			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
 			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
 
-			//if(isset($_SESSION['form']['staff_desc']))
-
 			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
 			$_SESSION['form']['staff']=
 				array(
@@ -728,8 +721,8 @@ class StaffFormProcessor extends FormProcessor
 					'ImageTitle'=>$staff_obj->getImageTitle(),
 					'LastName'=>$staff_obj->getLastName(),
 					'MiddleName'=>$staff_obj->getMiddleName(),
-					//'NewPosition'=>$staff_obj->getNewPosition(),
-					//'Position'=>$staff_obj->getPosition(),
+					'NewPosition'=>$staff_obj->getNewPosition(),
+					'Position'=>$staff_obj->getPosition(),
 					'Region'=>$staff_obj->getRegion(),
 					'Text'=>$staff_obj->getText(),
 					'Title'=>$staff_obj->getTitle(),
@@ -749,7 +742,6 @@ class StaffFormProcessor extends FormProcessor
 	 *
 	 * @access	private
 	 */
-	/*
 	private function setSessionFocus()
 	{
 		try
@@ -789,13 +781,13 @@ class StaffFormProcessor extends FormProcessor
 					'FormURL'=>$form_url,
 					'Position'=>$position_encoded
 				);
+			$_SESSION['form']['staff']['Position']=$position_encoded;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
 	} #==== End -- setSessionFocus
-	*/
 
 	/*** End private methods ***/
 
