@@ -544,11 +544,11 @@ class Slideshow
 					# Set the staff id to a variable.
 					$id=$row->id;
 					# Get this person from the `staff` table.
-					$staff->getThisPerson($id, 'id');
+					$staff->displayStaff($id);
 					# Set the Staff data members to variables
 					$affiliation=$staff->getAffiliation();
-					$img=$staff->getStaffImage();
-					$img_title=$staff->getStaffImageTitle();
+					$img=$staff->getImage();
+					$img_title=$staff->getImageTitle();
 					$name=$staff->getStaffName();
 					# Decode json string in `position` field.
 					$position_decoded=json_decode($staff->getPosition(), TRUE);
@@ -570,19 +570,10 @@ class Slideshow
 							break;
 						}
 					}
-					$region=$staff->getStaffRegion();
+					$region=$staff->getRegion();
 					$text=$staff->getText();
 					$title=$staff->getTitle();
 					$user_id=$staff->getUser();
-					# Check if this person has a user ID.
-					if(!empty($user_id))
-					{
-						# Reset the image, bio, and region info from the `users` table.
-						$img=$staff->getImg();
-						$img_title=$staff->getImgTitle();
-						$region=$staff->getRegion();
-						$text=$staff->getBio();
-					}
 					$display.='<li class="slide">';
 					# Get the Image class.
 					require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
