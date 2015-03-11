@@ -4,11 +4,15 @@
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'AccountFormProcessor.php');
+# Get the Staff class.
+require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 
 $login->checkLogin(ALL_USERS);
 
 # Instantiate a new User object.
 $user_obj=new User();
+# Instantiate a new Staff object. Being used in secure_navbar.php.
+$staff_obj=new Staff();
 
 # Create display variables.
 $display_main1='';
@@ -62,7 +66,7 @@ $display_main1.=$main_content->displayTitles();
 # Get the main content to display in main-2.
 $display_main2.=$main_content->displayContent();
 # Add content to main-2.
-$display_main2.='<a href="'.APPLICATION_URL.'profile/?member='.$account_id.'" target="_blank" title="View '.$staff_obj->getDisplayName().'\'s Profile" class="view">>>view</a>';
+$display_main2.='<a href="'.APPLICATION_URL.'profile/?member='.$account_id.'" target="_blank" title="View '.$user_obj->getDisplayName().'\'s Profile" class="view">>>view</a>';
 # Add any display content to main-2.
 $display_main2.=$display;
 

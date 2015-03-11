@@ -12,25 +12,25 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
 
 
 /**
- * AccountFormProcessor
+ * StaffFormProcessor
  *
- * The AccountFormProcessor Class is used to create and process account add, edit, or delete forms.
+ * The StaffFormProcessor Class is used to create and process staff add, edit, or delete forms.
  *
  */
-class AccountFormProcessor extends FormProcessor
+class StaffFormProcessor extends FormProcessor
 {
 	/*** public methods ***/
 
 	/**
-	 * processAccount
+	 * processStaff
 	 *
-	 * Processes a submitted account.
+	 * Processes a submitted staff form.
 	 *
 	 * @param	$data					An array of values to populate the form with.
 	 * @access	public
 	 * @return	string
 	 */
-	public function processAccount($data, $max_size=7340032)
+	public function processStaff($data, $max_size=7340032)
 	{
 		try
 		{
@@ -42,259 +42,103 @@ class AccountFormProcessor extends FormProcessor
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
-			# Get the AccountFormPopulator Class.
-			require_once Utility::locateFile(MODULES.'Form'.DS.'AccountFormPopulator.php');
+			# Get the StaffFormPopulator Class.
+			require_once Utility::locateFile(MODULES.'Form'.DS.'StaffFormPopulator.php');
+
+			# Remove any un-needed CMS session data.
+			# This needs to happen before populatStaffForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
+			//$this->loseSessionData('staff_desc');
 
 			# Reset the form if the "reset" button was submitted.
-			$this->processReset('account', 'account');
+			$this->processReset('staff', 'staff');
 
-			# Instantiate a new instance of AccountFormPopulator.
-			$populator=new AccountFormPopulator();
-			# Populate the form and set the Account data members for this post.
-			$populator->populateAccountForm($data);
+			# Instantiate a new instance of StaffFormPopulator.
+			$populator=new StaffFormPopulator();
+			# Populate the form and set the Staff data members for this post.
+			$populator->populateStaffForm($data);
 			# Set the Populator object to the data member.
 			$this->setPopulator($populator);
 
 /*
-			$display_delete_form=$this->processAccountDelete();
+			$display_delete_form=$this->processStaffDelete();
 			if($display_delete_form!==FALSE)
 			{
 				return $display_delete_form;
 			}
+			$this->processStaffBack();
 */
-			//$this->processAccountSelect();
+			//$this->processStaffSelect();
+			//$this->processStaffFocus();
 
-			# Get the User object from the AccountFormPopulator object and set it to a variable for use in this method.
-			$user_obj=$populator->getUserObject();
+			# Get the Staff object from the StaffFormPopulator object and set it to a variable for use in this method.
+			$staff_obj=$populator->getStaffObject();
 
-			# Set a variable to FALSE indicating that a CV file has not been uploaded.
-			$uploaded_cv=FALSE;
-			# Set a variable to FALSE indicating that the old CV file has not been moved.
-			$moved_cv=FALSE;
 			# Set a variable to FALSE indicating that an image file has not been uploaded.
 			$uploaded_image=FALSE;
 			# Create an empty variable to hold the new name of an uplaoded file.
 			$new_image_name=NULL;
 			# Set a variable to FALSE indicating that the old image file has not been moved.
 			$moved_image=FALSE;
-			# Set the user's id to a variable.
-			$id=$user_obj->getID();
-			# Set the user's address to a variable.
-			$address=$user_obj->getAddress();
-			# Set the user's address2 to a variable.
-			$address2=$user_obj->getAddress2();
-			# Set the user's bio to a variable.
-			$bio=$user_obj->getBio();
-			# Set the user's city to a variable.
-			$city=$user_obj->getCity();
-			# Set the user's country to a variable.
-			$country=$user_obj->getCountry();
-			# Set the user's CV to a variable.
-			$cv=$user_obj->getCV();
-			# Set the user's display name to a variable.
-			$display_name=$user_obj->getDisplayName();
-			# Set the user's email to a variable.
-			$email=$user_obj->getEmail();
-			# Set the user's first name to a variable.
-			$first_name=$user_obj->getFirstName();
-			# Set the user's associated image id to a variable.
-			$image_filename=$user_obj->getImg();
-			# Set the user's associated image title to a variable.
-			$image_title=$user_obj->getImgTitle();
-			# Set the user's interests to a variable.
-			$interests=$user_obj->getInterests();
-			# Set the user's last name to a variable.
-			$last_name=$user_obj->getLastName();
-			# Check if there is a WordPress installation.
-			if(WP_INSTALLED===TRUE)
-			{
-				# Set the user's nickname to a variable.
-				$nickname=$user_obj->getNickname();
-			}
-			# Set the user's phone to a variable.
-			$phone=$user_obj->getPhone();
+			# Set the staff's affiliation to a variable.
+			$affiliation=$staff_obj->getAffiliation();
+			# Set the staff's archive to a variable.
+			$archive=$staff_obj->getArchive();
+			# Set the staff's credentials to a variable.
+			$credentials=$staff_obj->getCredentials();
+			# Set the staff's first name to a variable.
+			$first_name=$staff_obj->getFirstName();
+			# Set the staff's id to a variable.
+			$id=$staff_obj->getID();
+			# Set the staff's associated image id to a variable.
+			$image_filename=$staff_obj->getImage();
+			# Set the staff's associated image title to a variable.
+			$image_title=$staff_obj->getImageTitle();
+			# Set the staff's last name to a variable.
+			$last_name=$staff_obj->getLastName();
+			# Set the staff's middle name to a variable.
+			$middle_name=$staff_obj->getMiddleName();
+			# Set the staff's new positions to a variable.
+			//$new_position=$staff_obj->getNewPosition();
+			# Set the staff's position to a variable.
+			//$position=$staff_obj->getPosition();
+			# Set the staff's region to a variable.
+			$region=$staff_obj->getRegion();
 			# Set the site name to a vaiable.
-			$site_name=$main_content->getSiteName();
-			# Set the user's state to a variable.
-			$state=$user_obj->getState();
-			# Set the user's title to a variable.
-			$title=$user_obj->getTitle();
-			# Set the user's username to a variable.
-			$username=$user_obj->getUsername();
-			# Set the user's website to a variable.
-			$website=$user_obj->getWebsite();
-			# Set the user's zipcode to a variable.
-			$zipcode=$user_obj->getZipcode();
+			//$site_name=$main_content->getSiteName();
+			# Set the staff's bio to a variable.
+			$text=$staff_obj->getText();
+			# Set the staff's title to a variable.
+			$title=$staff_obj->getTitle();
+			# Set the staff's user ID to a variable.
+			$user_id=$staff_obj->getUser();
 
 			# Check if the form has been submitted.
-			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['account']) && ($_POST['account']=='Add User' OR $_POST['account']=='Update')))
+			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['staff']) && ($_POST['staff']=='Update')))
 			{
 				# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
 				$this->setSession();
 
-				# Redirect the user to the appropriate page if their post data indicates that another form is needed to add content.
-				$this->contentRedirect('account');
+				# Redirect the staff to the appropriate page if their post data indicates that another form is needed to add content.
+				$this->contentRedirect('staff');
 
 				# Instantiate FormValidator object
 				$fv=new FormValidator();
-				# Check if there is a WordPress installation.
-				if(WP_INSTALLED===TRUE)
-				{
-					# Validate if the nickname field was empty.
-					$empty_nickname=$fv->validateEmpty('nickname', 'Please enter a Nickname that is at least 6 characters long.', 6, 64);
-				}
 
-				# Validate if the display name is empty.
-				$empty_display=$fv->validateEmpty('display', 'Please enter a Display Name that is at least 2 characters long that will be the name that is display when you comment or post on the site.', 2, 250);
-				# Check if the display name was not empty.
-				if($empty_display===FALSE)
+				# Check if there is a record in the `staff` table associated with this staff.
+				if($staff_obj->getID()!==NULL)
 				{
-					# Set whether or not the display name is unique to a variable.
-					$unique_display=$user_obj->checkUnique('display', $display_name, ' AND `ID` != '.$db->quote($id));
-					# Check if the display name is not unique.
-					if($unique_display===FALSE)
-					{
-						# Set the error for display to the user.
-						$fv->setErrors('The display name "'.$display_name.'" is already being used by somebody in the system, please choose a different name to display when you comment or post on the site.');
-					}
-				}
-
-				# Set whether or not the email field is empty.
-				$empty_email=$fv->validateEmpty('email', 'Please enter your email address.', 4, 100);
-				# Check if the email field was not empty.
-				if($empty_email===FALSE)
-				{
-					# Set whether or not the email is valid to a variable.
-					$real_email=$fv->validateEmail('email', 'Please enter a valid email address.', TRUE);
-					# Check if the email is valid.
-					if($real_email===TRUE)
-					{
-						# Set whether or not the email is unique to a variable.
-						$unique_email=$user_obj->checkUnique('email', $email, ' AND `ID` != '.$db->quote($id));
-						# Check if the email is not unique.
-						if($unique_email===FALSE)
-						{
-							# Set the error for display to the user.
-							$fv->setErrors('An account using the email address "'.$email.'" already exists in the system, please use another.');
-						}
-					}
-					else
-					{
-						# Unset the email in POST data.
-						unset($_POST['email']);
-					}
-				}
-
-				# Check if the was POST data sent. If so, check if it was the default value "http://" or if it was empty.
-				if(isset($website) && ($website!='http://') && !empty($website))
-				{
-					# Set whether or not the website is a valid URL.
-					$valid_url=$fv->validateURL('website', 'Please enter a valid URI in the Website field.');
-					# Check if the URL is not valid.
-					if($valid_url===FALSE)
-					{
-						# Unset the website in POST data.
-						unset($_POST['website']);
-					}
+					# Validate if the first name is empty.
+					$empty_fname=$fv->validateEmpty('fname', 'Please enter a First Name that is at least 2 characters long.', 2, 64);
+					# Validate if the last name is empty.
+					$empty_lname=$fv->validateEmpty('lname', 'Please enter a Last Name that is at least 2 characters long.', 2, 64);
 				}
 
 				# Check if the was POST data sent.
-				if(isset($_FILES['cv']) || isset($_FILES['image']))
+				if(isset($_FILES['image']))
 				{
 					# Get the Upload class.
 					require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
 
-					# If the username is an email address, replace the "@" character.
-					$safe_username=str_replace('@', '-', $username);
-
-					# Check if an CV was uploaded and if there have been no errors so far.
-					if(array_key_exists('cv', $_FILES) && ($fv->checkErrors()===FALSE))
-					{
-						# Create a variable to hold the name of the previous cv file.
-						$old_cv=$cv;
-
-						# Instantiate an Upload object.
-						$upload_cv=new Upload($_FILES['cv']);
-
-						# Create safe CV name based on the username.
-						$clean_cv_filename='CV'.$safe_username.'.'.YEAR_MM_DD;
-
-						# Check if the uploaded CV size is not NULL.
-						if($upload_cv->getSize()!==NULL)
-						{
-							# Check if there was a previous CV file.
-							if($old_cv!==NULL)
-							{
-								# Copy the previous file over to the tmp folder (We'll move it back if anything goes wrong.)
-								if(rename(BODEGA.'cv'.DS.$old_cv, BASE_PATH.'tmp'.DS.$old_cv)===FALSE)
-								{
-									# Create a message and send them to the "starting" point.
-									throw new Exception('There was an error moving the CV file, '.$old_cv.' to the temp folder for deletion.', E_RECOVERABLE_ERROR);
-								}
-								else
-								{
-									# Set the $moved_cv variable to TRUE so we know there is a previous file in the temp folder in case anything goes wrong.
-									$moved_cv=TRUE;
-								}
-							}
-
-							try
-							{
-								# Upload the document.
-								$cv_upload=$upload_cv->uploadDoc(BODEGA.'cv'.DS, array('doc', 'docx', 'txt', 'rtf', 'ppt', 'pptx', 'pdf', 'odt'), $clean_cv_filename);
-
-								# Reset the CV file name (ie: cv_file_name.mp4).
-								$new_cv_name=$upload_cv->getName();
-							}
-							catch(Exception $e)
-							{
-								# Check if a previous file was moved to the temp folder.
-								if($moved_cv===TRUE)
-								{
-									# Copy the previous file back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_cv, BODEGA.'cv'.DS.$old_cv)===FALSE)
-									{
-										# Create a message and send them to the "starting" point.
-										throw new Exception('There was an error moving the CV file, '.$old_cv.' back to the bodega from the temp folder.', E_RECOVERABLE_ERROR);
-									}
-								}
-								throw $e;
-							}
-
-							# Check for errors.
-							if($upload_cv->checkErrors()===TRUE)
-							{
-								# Remove uploaded CV file.
-								$upload_cv->deleteFile(BODEGA.'cv'.DS.$new_cv_name);
-								# Get any errors.
-								$cv_errors=$upload_cv->getErrors();
-								# Loop through the errors.
-								foreach($cv_errors as $cv_error)
-								{
-									# Set each error to our current error array.
-									$fv->setErrors($cv_error);
-								}
-								# Check if a previous file was moved to the temp folder.
-								if($moved_cv===TRUE)
-								{
-									# Copy the file back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_cv, BODEGA.'cv'.DS.$old_cv)===FALSE)
-									{
-										# Create a message and send them to the "starting" point.
-										throw new Exception('There was an error moving the CV file, '.$old_cv.' back to the bodega from the temp folder.', E_RECOVERABLE_ERROR);
-									}
-									# Reset the $moved_cv variable to FALSE.
-									$moved_cv=FALSE;
-								}
-							}
-							# Check if the upload was successful.
-							elseif($cv_upload===TRUE)
-							{
-								# Set the variable that remembers that a CV file has been uploaded to TRUE (in case we need to remove the file).
-								$uploaded_cv=TRUE;
-							}
-						}
-					}
 					# Check if an image was uploaded and if there have been no errors so far.
 					if(array_key_exists('image', $_FILES) && ($fv->checkErrors()===FALSE))
 					{
@@ -314,7 +158,7 @@ class AccountFormProcessor extends FormProcessor
 						# Check if the uploaded image size is not NULL.
 						if($upload_image->getSize()!==NULL)
 						{
-							# Check if there was a previous user image.
+							# Check if there was a previous staff image.
 							if($old_img!==NULL)
 							{
 								# Copy the original image over to the tmp folder (We'll move it back if anything goes wrong.)
@@ -323,7 +167,7 @@ class AccountFormProcessor extends FormProcessor
 									# Create a message and send them to the "starting" point.
 									throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the temp folder for deletion.', E_RECOVERABLE_ERROR);
 								}
-								# Copy the user image over to the tmp folder (We'll move it back if anything goes wrong.)
+								# Copy the staff image over to the tmp folder (We'll move it back if anything goes wrong.)
 								if(rename(IMAGES_PATH.$old_img, BASE_PATH.'tmp'.DS.$old_img)===FALSE)
 								{
 									# Create a message and send them to the "starting" point.
@@ -335,8 +179,10 @@ class AccountFormProcessor extends FormProcessor
 
 							try
 							{
+								# Append ".staff" to the end of the $username for the staff image.
+								$staff_image_name=$first_name.'.'.$last_name.'.staff';
 								# Upload original thumbnail.
-								$image_upload=$upload_image->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $safe_username, $max_size, TRUE, 230, 300, 75, TRUE);
+								$image_upload=$upload_image->uploadImage(IMAGES_PATH.'original'.DS, IMAGES_PATH, $staff_image_name, $max_size, TRUE, 230, 300, 75, TRUE);
 
 								# Reset the image's new name.
 								$new_image_name=$upload_image->getName();
@@ -352,7 +198,7 @@ class AccountFormProcessor extends FormProcessor
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 									}
-									# Copy the user image back to it's destination directory.
+									# Copy the staff image back to it's destination directory.
 									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
@@ -385,7 +231,7 @@ class AccountFormProcessor extends FormProcessor
 										# Create a message and send them to the "starting" point.
 										throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 									}
-									# Copy the user image back to it's destination directory.
+									# Copy the staff image back to it's destination directory.
 									if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 									{
 										# Create a message and send them to the "starting" point.
@@ -415,22 +261,6 @@ class AccountFormProcessor extends FormProcessor
 					# Set the error message to the Document object datamember so that it me be displayed on the page.
 					$doc->setError($error);
 
-					# Check if there was an uploaded CV file.
-					if($uploaded_cv===TRUE)
-					{
-						# Remove uploaded CV file.
-						$upload_cv->deleteFile(BODEGA.'cv'.DS.$new_cv_name);
-					}
-					# Check if a previous cv file was moved to the temp folder.
-					if($moved_cv===TRUE)
-					{
-						# Copy the file back to it's destination directory.
-						if(rename(BASE_PATH.'tmp'.DS.$old_cv, BODEGA.'cv'.DS.$old_cv)===FALSE)
-						{
-							# Create a message and send them to the "starting" point.
-							throw new Exception('There was an error moving the CV file, '.$old_cv.' back to the bodega from the temp folder.', E_RECOVERABLE_ERROR);
-						}
-					}
 					# Check if there was an uploaded image file.
 					if($uploaded_image===TRUE)
 					{
@@ -447,7 +277,7 @@ class AccountFormProcessor extends FormProcessor
 							# Create a message and send them to the "starting" point.
 							throw new Exception('There was an error moving '.$username.'\'s original image, '.$old_img.' to the original folder from the temp folder.', E_RECOVERABLE_ERROR);
 						}
-						# Copy the user image back to it's destination directory.
+						# Copy the staff image back to it's destination directory.
 						if(rename(BASE_PATH.'tmp'.DS.$old_img, IMAGES_PATH.$old_img)===FALSE)
 						{
 							# Create a message and send them to the "starting" point.
@@ -457,32 +287,6 @@ class AccountFormProcessor extends FormProcessor
 				}
 				else
 				{
-					# Add user.
-/*
-					# Create the default value for the message action.
-					$message_action='added';
-					# Create the default sql as an INSERT and set it to a variable.
-					$sql='INSERT INTO `'.DBPREFIX.'users` ('.
-						'`title`, '.
-						'`image`, '.
-						((!empty($location)) ? ' `location`, ' : '').
-						((!empty($category_ids)) ? ' `category`, ' : '').
-						((!empty($description)) ? ' `description`, ' : '').
-						'`last_edit`, '.
-						(($hide===NULL) ? ' `hide`, ' : '').
-						' `contributor`'.
-						') VALUES ('.
-						$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).', '.
-						$db->quote($db->escape($new_name)).', '.
-						((!empty($location)) ? ' '.$db->quote($db->escape($location)).', ' : '').
-						((!empty($category_ids)) ? ' '.$db->quote($category_ids).', ' : '').
-						((!empty($description)) ? ' '.$db->quote($db->escape($description)).', ' : '').
-						$db->quote($db->escape($last_edit)).','.
-						((!empty($hide)) ? '0,' : '').
-						' '.$db->quote($contributor_id).
-						')';
-*/
-
 					# Check if this is an UPDATE.
 					if(!empty($id))
 					{
@@ -494,68 +298,31 @@ class AccountFormProcessor extends FormProcessor
 							$where=array('ID'=>$id);
 							# Create $field_value array.
 							$field_value=array(
-								'address'=>$address,
-								'address2'=>$address2,
-								'bio'=>$bio,
-								'city'=>$city,
-								'country'=>$country,
-								'cv'=>(!empty($new_cv_name) ? $new_cv_name : $cv),
-								'display'=>$display_name,
-								'email'=>$email,
+								'affiliation'=>$affiliation,
+								'archive'=>$archive,
+								'credentials'=>$credentials,
 								'fname'=>$first_name,
-								'img'=>(!empty($new_image_name) ? $new_image_name : $image_filename),
-								'img_title'=>$image_title,
-								'interests'=>$interests,
+								'image'=>(!empty($new_image_name) ? $new_image_name : $image_filename),
+								'image_title'=>$image_title,
 								'lname'=>$last_name,
-								'phone'=>$phone,
+								'mname'=>$middle_name,
 								'region'=>$region,
-								'title'=>$title,
-								'state'=>$state,
-								'website'=>$website,
-								'zipcode'=>$zipcode
+								'text'=>$text,
+								'title'=>$title
 								);
-							# Update the User's data in the `users` table.
-							$update_user=$user_obj->updateUser($where, $field_value);
+							# Update the person's data in the `staff` table.
+							$update_person=$staff_obj->updateStaff($where, $field_value);
 
-							# Check if there is a WordPress installation.
-							if(WP_INSTALLED===TRUE)
-							{
-								# get the WordPressUser class.
-								require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
-								# Instantiate a new WordPressUser object.
-								$wp_user=new WordPressUser();
-								# Get the WordPress User's ID and set ti to a variable.
-								$wp_id=$wp_user->getWP_UserID($username);
-								# Update nickname.
-								$update_nickname=$wp_user->updateWP_Nickname($wp_id, $nickname);
-								# Update display name.
-								$update_display=$wp_user->updateWP_DisplayName($wp_id, $display_name);
-							}
 							# Check if the query was successful.
-							if((isset($cv_upload) && $cv_upload>0) || (isset($image_upload) && $image_upload>0) || $update_user>0 || (isset($update_person) && $update_person>0) || (isset($update_nickname) && ($update_nickname>0 || $update_display>0)))
+							if((isset($image_upload) && $image_upload>0) || (isset($update_person) && $update_person>0))
 							{
-								# Unset the CMS session data.
-								unset($_SESSION['form']['account']);
-								$name=(empty($display_name) ? $username : $display_name);
-								$this->redirectAccount($name, $message_action);
+								# Unset the session data.
+								unset($_SESSION['form']['staff']);
+								# Redirect the staff to the page they were on.
+								$this->redirectStaff($message_action);
 							}
 							else
 							{
-								# Check if there was an uploaded CV file.
-								if($uploaded_cv===TRUE)
-								{
-									# Remove uploaded CV file.
-									$upload_cv->deleteFile(BODEGA.'cv'.DS.$new_cv_name);
-								}
-								if($moved_cv===TRUE)
-								{
-									# Copy the file back to it's destination directory.
-									if(rename(BASE_PATH.'tmp'.DS.$old_cv, BODEGA.'cv'.DS.$old_cv)===FALSE)
-									{
-										# Create a message and send them to the "starting" point.
-										throw new Exception('There was an error moving the CV file, '.$old_cv.' back to the bodega from the temp folder.', E_RECOVERABLE_ERROR);
-									}
-								}
 								# Check if there was an uploaded image file.
 								if($uploaded_image===TRUE)
 								{
@@ -581,10 +348,10 @@ class AccountFormProcessor extends FormProcessor
 								if(!empty($id))
 								{
 									# Unset the CMS session data.
-									unset($_SESSION['form']['account']);
-									# Set a nice message for the user in a session.
-									$_SESSION['message']="The account's record was unchanged.";
-									# Redirect the user to the page they were on.
+									unset($_SESSION['form']['staff']);
+									# Set a nice message for the staff in a session.
+									$_SESSION['message']="The staff's record was unchanged.";
+									# Redirect the staff to the page they were on.
 									$this->redirectNoDelete();
 								}
 							}
@@ -592,21 +359,6 @@ class AccountFormProcessor extends FormProcessor
 						# There was an exception error. Delete files, unset session and return error message.
 						catch(Exception $e)
 						{
-							# Check if there was an uploaded CV file.
-							if($uploaded_cv===TRUE)
-							{
-								# Remove uploaded CV file.
-								$upload_cv->deleteFile(BODEGA.'cv'.DS.$new_cv_name);
-							}
-							if($moved_cv===TRUE)
-							{
-								# Copy the file back to it's destination directory.
-								if(rename(BASE_PATH.'tmp'.DS.$old_cv, BODEGA.'cv'.DS.$old_cv)===FALSE)
-								{
-									# Create a message and send them to the "starting" point.
-									throw new Exception('There was an error moving the CV file, '.$old_cv.' back to the bodega from the temp folder.', E_RECOVERABLE_ERROR);
-								}
-							}
 							# Check if there was an uploaded image file.
 							if($uploaded_image===TRUE)
 							{
@@ -640,7 +392,7 @@ class AccountFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAccount
+	} #==== End -- processStaff
 
 	/*** End public methods ***/
 
@@ -649,14 +401,40 @@ class AccountFormProcessor extends FormProcessor
 	/*** private methods ***/
 
 	/**
-	 * processAccountDelete
+	 * processStaffBack
 	 *
-	 * Removes an user from the `users` table along with their CV file and profile image from the system. A wrapper method for the deleteUser method in the User class.
+	 * Processes a submitted form indicating that the Staff should be sent back to the form that sent from.
+	 *
+	 * @access	private
+	 */
+	private function processStaffBack()
+	{
+		try
+		{
+			# Create an array of possible indexes. These are forms that can send the user to get staff info.
+			$indexes=array(
+				'staff'
+			);
+			# Set the resource value.
+			$resource='staff_desc';
+			$this->processBack($resource, $indexes);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- processStaffBack
+
+	/**
+	 * processStaffDelete
+	 *
+	 * Removes an staff from the `staff` table along with their profile image from the system.
+	 * A wrapper method for the deleteStaff method in the Staff class.
 	 *
 	 * @access	private
 	 */
 /*
-	private function processAccountDelete()
+	private function processStaffDelete()
 	{
 		try
 		{
@@ -679,7 +457,7 @@ class AccountFormProcessor extends FormProcessor
 				if($validator->isInt($_GET['user'])===TRUE)
 				{
 					# Check if the form has been submitted.
-					if(array_key_exists('_submit_check', $_POST) && isset($_POST['do']) && (isset($_POST['delete_account']) && ($_POST['delete_account']==='delete')))
+					if(array_key_exists('_submit_check', $_POST) && isset($_POST['do']) && (isset($_POST['delete_staff']) && ($_POST['delete_staff']==='delete')))
 					{
 						# Get the Subcontent class. With this class, the Audio object can be accessed as well as the SubContent.
 						require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');
@@ -794,19 +572,70 @@ class AccountFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAccountDelete
+	} #==== End -- processStaffDelete
 */
 
 	/**
-	 * redirectAccount
+	 * processStaffFocus
+	 *
+	 * Processes a submitted staff form for position descriptions.
+	 *
+	 * @access	private
+	 * @return	string
+	 */
+	/*
+	private function processStaffFocus()
+	{
+		try
+		{
+			# Bring the alert-title variable into scope.
+			global $alert_title;
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Set the Document instance to a variable.
+			$doc=Document::getInstance();
+			# Get the StaffFormPopulator Class.
+			require_once Utility::locateFile(MODULES.'Form'.DS.'StaffFormPopulator.php');
+
+			# Reset the form if the "reset" button was submitted.
+			$this->processReset('staff_desc', 'staff_desc');
+
+			# Instantiate a new instance of StaffFormPopulator.
+			$populator=$this->getPopulator();
+			# Set the Populator object to the data member.
+			$this->setPopulator($populator);
+
+			$this->processStaffBack();
+
+			# Check if the form has been submitted.
+			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['staff_desc']) && ($_POST['staff_desc']=='Update')))
+			{
+				# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
+				$this->setSessionFocus();
+
+				# Set a nice message for the user in a session.
+				$_SESSION['message']='The position desciptions were successfully added!';
+				# Redirect the user to the page they were on with no POST or GET data.
+				$doc->redirect(rtrim(COMPLETE_URL, '&add_desc'));
+			}
+			return FALSE;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- processStaffFocus
+	*/
+
+	/**
+	 * redirectStaff
 	 *
 	 * Redirect the user to the appropriate page.
 	 *
-	 * @param	string $account_name
-	 * @param	string $action
+	 * @param	string $message_action
 	 * @access	private
 	 */
-	private function redirectAccount($account_name, $action)
+	private function redirectStaff($message_action)
 	{
 		try
 		{
@@ -814,41 +643,52 @@ class AccountFormProcessor extends FormProcessor
 			$doc=Document::getInstance();
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
-			# Get the User object and set it to a local variable.
-			$user_obj=$populator->getUserObject();
-			# Get the data for the new account.
-			$user_obj->findUserData($account_name);
-			# Get the new account's id.
-			$account_id=$user_obj->getID();
-			# Remove the account session.
-			unset($_SESSION['form']['account']);
-			# Set a nice message for the user in a session.
-			$_SESSION['message']='The account "'.$account_name.'" was successfully '.$action.'!';
+			# Get the Staff object and set it to a local variable.
+			$staff_obj=$populator->getStaffObject();
+			# Remove the staff session.
+			unset($_SESSION['form']['staff']);
+			# Create the staff name variable using their first and last name.
+			$staff_name=$staff_obj->getFirstName().' '.$staff_obj->getLastName();
+			# Set a nice message for the staff in a session.
+			$_SESSION['message']='The staff "'.$staff_name.'" was successfully '.$message_action.'!';
 			# Check if there is a post or content session.
-			if(isset($_SESSION['form']['account']))
+			if(isset($_SESSION['form']['staff']) || isset($_SESSION['form']['staff_desc']))
 			{
 				# Set the default origin form's name.
-				$origin_form='account';
-				# Set the default session account index name.
-				$account_index='ID';
-				# Set the post session account id.
-				$_SESSION['form'][$origin_form][$account_index]=$account_id;
-				# Redirect the user to the original post page.
+				$origin_form='staff';
+				# Set the default session staff index name.
+				$staff_index='ID';
+				/*
+				if(isset($_SESSION['form']['staff_desc']))
+				{
+					# Set the form's name as "staff_desc".
+					$origin_form='staff_desc';
+					# Set the post session staff index name.
+					$staff_index='Staff';
+					# Set the content session staff name.
+					$staff_value=$staff_name;
+				}
+				*/
+				# Set the post session staff id.
+				$_SESSION['form'][$origin_form][$staff_index]=$staff_id;
+				# Redirect the staff to the original post page.
 				$doc->redirect($_SESSION['form'][$origin_form]['FormURL'][0]);
 			}
 			$remove=NULL;
+			/*
 			if(isset($_GET['delete']) && $action=='deleted')
 			{
-				$remove='account';
+				$remove='staff';
 			}
-			# Redirect the user to the page they were on.
+			# Redirect the staff to the page they were on.
 			$this->redirectNoDelete($remove);
+			*/
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- redirectAccount
+	} #==== End -- redirectStaff
 
 	/**
 	 * setSession
@@ -863,8 +703,8 @@ class AccountFormProcessor extends FormProcessor
 		{
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
-			# Get the User object and set it to a local variable.
-			$user_obj=$populator->getUserObject();
+			# Get the Staff object and set it to a local variable.
+			$staff_obj=$populator->getStaffObject();
 
 			# Set the form URL's to a variable.
 			$form_url=$populator->getFormURL();
@@ -873,32 +713,27 @@ class AccountFormProcessor extends FormProcessor
 			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
 			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
 
+			//if(isset($_SESSION['form']['staff_desc']))
+
 			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
-			$_SESSION['form']['account']=
+			$_SESSION['form']['staff']=
 				array(
-					'Address'=>$user_obj->getAddress(),
-					'Address2'=>$user_obj->getAddress2(),
-					'Bio'=>$user_obj->getBio(),
-					'City'=>$user_obj->getCity(),
-					'Country'=>$user_obj->getCountry(),
-					'CV'=>$user_obj->getCV(),
-					'DisplayName'=>$user_obj->getDisplayName(),
-					'Email'=>$user_obj->getEmail(),
-					'FirstName'=>$user_obj->getFirstName(),
+					'Affiliation'=>$staff_obj->getAffiliation(),
+					'Archive'=>$staff_obj->getArchive(),
+					'Credentials'=>$staff_obj->getCredentials(),
+					'FirstName'=>$staff_obj->getFirstName(),
 					'FormURL'=>$form_url,
-					'ID'=>$user_obj->getID(),
-					'Img'=>$user_obj->getImg(),
-					'ImgTitle'=>$user_obj->getImgTitle(),
-					'Interests'=>$user_obj->getInterests(),
-					'LastName'=>$user_obj->getLastName(),
-					'Nickname'=>$user_obj->getNickname(),
-					'Phone'=>$user_obj->getPhone(),
-					'Region'=>$user_obj->getRegion(),
-					'State'=>$user_obj->getState(),
-					'Title'=>$user_obj->getTitle(),
-					'Username'=>$user_obj->getUsername(),
-					'Website'=>$user_obj->getWebsite(),
-					'Zipcode'=>$user_obj->getZipcode()
+					'ID'=>$staff_obj->getID(),
+					'Image'=>$staff_obj->getImage(),
+					'ImageTitle'=>$staff_obj->getImageTitle(),
+					'LastName'=>$staff_obj->getLastName(),
+					'MiddleName'=>$staff_obj->getMiddleName(),
+					//'NewPosition'=>$staff_obj->getNewPosition(),
+					//'Position'=>$staff_obj->getPosition(),
+					'Region'=>$staff_obj->getRegion(),
+					'Text'=>$staff_obj->getText(),
+					'Title'=>$staff_obj->getTitle(),
+					'User'=>$staff_obj->getUser()
 				);
 		}
 		catch(Exception $e)
@@ -907,6 +742,61 @@ class AccountFormProcessor extends FormProcessor
 		}
 	} #==== End -- setSession
 
+	/**
+	 * setSessionFocus
+	 *
+	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
+	 *
+	 * @access	private
+	 */
+	/*
+	private function setSessionFocus()
+	{
+		try
+		{
+			# Get the Populator object and set it to a local variable.
+			$populator=$this->getPopulator();
+			# Get the Staff object and set it to a local variable.
+			$staff_obj=$populator->getStaffObject();
+
+			# Set the form URL's to a variable.
+			$form_url=$populator->getFormURL();
+			# Set the current URL to a variable.
+			$current_url=rtrim(FormPopulator::getCurrentURL(), '&add_desc');
+			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
+			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
+
+			$position_json_decoded=json_decode($staff_obj->getPosition(), TRUE);
+
+			foreach($position_json_decoded as $position_key=>$position)
+			{
+				# Loop through the position's.
+				foreach($_POST['position_desc'] as $key=>$value)
+				{
+					if($value['position']==$position['position'])
+					{
+						$position_json_decoded[$position_key]['description']=$value['description'];
+					}
+				}
+			}
+
+			# JSON encode the array.
+			$position_encoded=json_encode($position_json_decoded, JSON_FORCE_OBJECT);
+
+			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
+			$_SESSION['form']['staff_desc']=
+				array(
+					'FormURL'=>$form_url,
+					'Position'=>$position_encoded
+				);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- setSessionFocus
+	*/
+
 	/*** End private methods ***/
 
-} # End AccountFormProcessor class.
+} # End StaffFormProcessor class.

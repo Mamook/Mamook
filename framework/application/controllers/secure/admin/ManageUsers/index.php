@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageUsers/index.php */
+<?php /* application/controllers/secure/admin/ManageUsers/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
@@ -124,12 +124,12 @@ if(isset($_GET['user']))
 	$form_processor=new AccountFormProcessor();
 	require_once Utility::locateFile(TEMPLATES.'forms'.DS.'account_form.php');
 
-	$img=$staff_obj->getImg();
-	$display_name=$staff_obj->getDisplayName();
-	$cv=$staff_obj->getCV();
+	$img=$user_obj->getImg();
+	$display_name=$user_obj->getDisplayName();
+	$cv=$user_obj->getCV();
 	if(!empty($img))
 	{
-		$img_title=$staff_obj->getImgTitle();
+		$img_title=$user_obj->getImgTitle();
 		$user_image='<div class="profile-image">';
 		$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
 		$user_image.='</div>';

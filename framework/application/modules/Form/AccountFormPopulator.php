@@ -17,7 +17,7 @@ class AccountFormPopulator extends FormPopulator
 {
 	/*** data members ***/
 
-	private $staff_object=NULL;
+	private $user_object=NULL;
 
 	/*** End data members ***/
 
@@ -26,14 +26,14 @@ class AccountFormPopulator extends FormPopulator
 	/*** mutator methods ***/
 
 	/**
-	 * setStaffObject
+	 * setUserObject
 	 *
-	 * Sets the data member $staff_object.
+	 * Sets the data member $user_object.
 	 *
 	 * @param	$object
 	 * @access	protected
 	 */
-	protected function setStaffObject($object)
+	protected function setUserObject($object)
 	{
 		# Check if the passed value is empty and an object.
 		if(empty($object) OR !is_object($object))
@@ -42,8 +42,8 @@ class AccountFormPopulator extends FormPopulator
 			$object=NULL;
 		}
 		# Set the data member.
-		$this->staff_object=$object;
-	} #==== End -- setStaffObject
+		$this->user_object=$object;
+	} #==== End -- setUserObject
 
 	/*** End mutator methods ***/
 
@@ -52,16 +52,16 @@ class AccountFormPopulator extends FormPopulator
 	/*** accessor methods ***/
 
 	/**
-	 * getStaffObject
+	 * getUserObject
 	 *
-	 * Returns the data member $staff_object.
+	 * Returns the data member $user_object.
 	 *
 	 * @access	public
 	 */
-	public function getStaffObject()
+	public function getUserObject()
 	{
-		return $this->staff_object;
-	} #==== End -- getStaffObject
+		return $this->user_object;
+	} #==== End -- getUserObject
 
 	/*** End accessor methods ***/
 
@@ -81,12 +81,10 @@ class AccountFormPopulator extends FormPopulator
 	{
 		try
 		{
-			# Get the Staff class. The Staff class extends the User class so everything is User will also be available.
-			require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 			# Instantiate a new User object.
-			$staff_obj=new Staff();
+			$user_obj=new User();
 			# Set the Staff object to the staff_object data member for use outside of this method.
-			$this->setStaffObject($staff_obj);
+			$this->setUserObject($user_obj);
 
 			# Set the passed data array to the data member.
 			$this->setData($data);
@@ -98,7 +96,7 @@ class AccountFormPopulator extends FormPopulator
 			$this->setPostDataToDataArray();
 
 			# Populate the data members with defaults, passed values, or data saved in SESSION.
-			$this->setDataToDataMembers($this->getStaffObject());
+			$this->setDataToDataMembers($this->getUserObject());
 		}
 		catch(Exception $e)
 		{
@@ -127,7 +125,7 @@ class AccountFormPopulator extends FormPopulator
 		try
 		{
 			# Check if the form has been submitted.
-			if(array_key_exists('_submit_check', $_POST) && ((isset($_POST['account']) && ($_POST['account']=='Add User' OR $_POST['account']=='Update') || (isset($_POST['account_desc']) && $_POST['account_desc']=='Update'))))
+			if(array_key_exists('_submit_check', $_POST) && ((isset($_POST['account']) && ($_POST['account']=='Add User' OR $_POST['account']=='Update'))))
 			{
 				# Set the data array to a local variable.
 				$data=$this->getData();
@@ -144,13 +142,6 @@ class AccountFormPopulator extends FormPopulator
 				{
 					# Clean it up and set it to the data array index.
 					$data['Address2']=$db->sanitize($_POST['address2']);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['affiliation']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['Affiliation']=$db->sanitize($_POST['affiliation']);
 				}
 
 				# Check if there was POST data sent.
@@ -172,13 +163,6 @@ class AccountFormPopulator extends FormPopulator
 				{
 					# Clean it up and set it to the data array index.
 					$data['Country']=$db->sanitize($_POST['country']);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['credentials']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['Credentials']=$db->sanitize($_POST['credentials']);
 				}
 
 				# Check if there was POST data sent.
@@ -230,13 +214,6 @@ class AccountFormPopulator extends FormPopulator
 					$data['LastName']=$db->sanitize($_POST['lname']);
 				}
 
-				# Check if there was POST data sent.
-				if(isset($_POST['mname']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['StaffMiddleName']=$db->sanitize($_POST['mname']);
-				}
-
 				# Check if there is a WordPress installation.
 				if(WP_INSTALLED===TRUE)
 				{
@@ -253,138 +230,6 @@ class AccountFormPopulator extends FormPopulator
 				{
 					# Clean it up and set it to the data array index.
 					$data['Phone']=$db->sanitize($_POST['phone']);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['position']))
-				{
-					# Create an empty array.
-					$position_array=array();
-					$new_array=array();
-					# Loop through the user's positions.
-					foreach($_POST['position'] as $position)
-					{
-						# Create an empty array.
-						$temp_array=array();
-						if(isset($_POST['position_desc']))
-						{
-							# Loop through the position's decriptions.
-							foreach($_POST['position_desc'] as $key=>$value)
-							{
-								$temp_array=array(
-									'position'=>$position,
-									'description'=>''
-								);
-								if($value['position']==$position)
-								{
-									$temp_array['description']=$value['description'];
-									unset($_POST['position_desc'][$key]);
-									break;
-								}
-### DRAVEN: This doesn't work. ####
-### Redirects you to the position form when you remove user positions! ###
-								else
-								{
-									$new_array[$key]['position']=$position;
-									$new_array[$key]['description']='';
-									$data['AccountOption']='add_desc';
-									break;
-								}
-							}
-
-### DRAVEN: USED HACK TO FIX ABOVE PROBLEM :( ###
-							$position_search=$this->recursive_array_search($position, $_POST['position_desc']);
-							if($position_search!==FALSE)
-							{
-								# Don't redirect to position form if removing positions from user.
-								$data['AccountOption']='';
-								# Needed or else the description is set to NULL for all positions.
-								$temp_array['description']=$_POST['position_desc'][$position_search]['description'];
-							}
-							$position_array[]=$temp_array;
-						}
-					}
-
-					# JSON encode the array.
-					$position=json_encode($position_array, JSON_FORCE_OBJECT);
-
-					if(isset($new_array) && !empty($new_array))
-					{
-						$data['NewPosition']=$new_array;
-					}
-					if(isset($position))
-					{
-						# Clean it up and set it to the data array index.
-						$data['Position']=$position;
-					}
-				}
-				elseif(!isset($_POST['position']) && isset($_POST['position_desc']))
-				{
-					# JSON decode the user's current positions.
-					$current_positions=json_decode($data['Position'], TRUE);
-					print_r($current_positions);
-					print_r($_POST['position_desc']);
-					exit;
-
-					/*
-					$new_array=array();
-					foreach($current_positions as $key=>$current_position)
-					{
-						$new_array[$key]['position']=$current_position['position'];
-						$new_array[$key]['description']=$current_position['description'];
-					}
-
-					$new_array2=array();
-					foreach($_POST['position_desc'] as $new_key=>$new_position)
-					{
-						$new_array2[$new_key]['position']=$new_position['position'];
-						$new_array2[$new_key]['description']=$new_position['description'];
-					}
-					$new_array3=array_merge($new_array, $new_array2);
-					*/
-
-					$new_array=array();
-					$position_array=array();
-					foreach($current_positions as $current_position)
-					{
-						$temp_array=array();
-						# Loop through the position's decriptions.
-						foreach($_POST['position_desc'] as $key=>$value)
-						{
-							$temp_array=array(
-								'position'=>$current_position['position'],
-								'description'=>''
-							);
-							if($value['position']==$current_position['position'])
-							{
-								$temp_array['description']=$value['description'];
-								unset($_POST['position_desc'][$key]);
-								break;
-							}
-						}
-						$position_array[]=$temp_array;
-					}
-					print_r($position_array);exit;
-
-					# JSON encode the array.
-					$position=json_encode($new_array3, JSON_FORCE_OBJECT);
-					print_r($position);exit;
-					# Clean it up and set it to the data array index.
-					$data['Position']=$position;
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['region']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['Region']=$db->sanitize($_POST['region']);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['_staff_id']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['StaffID']=$db->sanitize($_POST['_staff_id']);
 				}
 
 				# Check if there was POST data sent.
@@ -423,19 +268,6 @@ class AccountFormPopulator extends FormPopulator
 			throw $e;
 		}
 	} #==== End -- setPostDataToDataArray
-
-	private function recursive_array_search($needle, $haystack)
-	{
-		foreach($haystack as $key=>$value)
-		{
-			$current_key=$key;
-			if($needle===$value OR (is_array($value) && $this->recursive_array_search($needle,$value) !== false))
-			{
-				return $current_key;
-			}
-		}
-		return false;
-	}
 
 	/*** End private methods ***/
 

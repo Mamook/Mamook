@@ -126,7 +126,7 @@ class User
 		}
 		# Set it to the data member.
 		$this->staff=$object;
-	} #==== End -- setStaffID
+	} #==== End -- setStaff
 
 	/**
 	 * setStaffID
@@ -1885,14 +1885,6 @@ class User
 					$region=$display_contributor['region'];
 					# Set the user data member to a variable.
 					$user=$$table->getUser();
-					# Check if there is a User associated with this contributor.
-					if(!empty($user))
-					{
-						# Change the value of $table to 'user' to use the variable to access data within the User class.
-						$table='user';
-						# Get the staff id for the User.
-						$id=$user;
-					}
 				}
 				else
 				{
@@ -1909,45 +1901,41 @@ class User
 				$$table->findUserData($username);
 				# Get the User's display name.
 				$display_name=$$table->getDisplayName();
-				# Attempt to retrieve a Staff object for accessing data about this user in the staff table.
-				$staff=$$table->getStaff();
-				# Check if there is a Staff object available.
-				if(!empty($staff))
+
+				# Check if $country is set or is empty.
+				if(!isset($country) || empty($country))
 				{
-					# Change the value of $table to 'staff' to use the variable to access data within the Staff class.
-					$table='staff';
-					# Get the staff id for the User.
-					$id=$$table->getStaffID();
+					# Get the User's country and set it to a variable.
+					$country=$$table->getCountry();
+					# Check if the User's country is available.
+					if(!empty($country))
+					{
+						# Set the person's country to a variable.
+						$profile_country='<div class="profile-country">';
+						$profile_country.='<span class="label">Country:</span>';
+						$profile_country.='<span>'.$country.'</span>';
+						$profile_country.='</div>';
+						# Set the country XHTML to the display content array.
+						$display_content['country']=$profile_country;
+					}
 				}
-			}
-			# Check if the passed id is from the `staff` table.
-			if($table=='staff')
-			{
-				# Check if $staff is already set.
-				if(!isset($$table))
+				else
 				{
-					# Get the Staff class.
-					require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
-					# Instantiate a new Staff object.
-					$$table=new Staff();
+					# Set the country XHTML to the display content array.
+					$display_content['country']=$country;
 				}
-				# Retrieve the person's information.
-				$display_person=$$table->displayPerson($id);
-				# Check if the person was retrieved.
-				if(!empty($display_person))
+				# Get the User's CV(curriculum vitae) file and set it to a variable.
+				$cv=$$table->getCV();
+				# Check if the person's CV is available.
+				if(!empty($cv))
 				{
-					# Get the person's display name.
-					$display_name=$$table->getStaffName();
-					# Set the staff XHTML elements to variable.
-					$affiliation=$display_person['affiliation'];
-					# Set the archive status to the display content array.
-					$display_content['archive']=$display_person['archive'];
-					$bio=$display_person['text'];
-					$image=$display_person['image'];
-					$image_title=$display_person['image_title'];
-					$name=$display_person['name'];
-					$positions=$display_person['position'];
-					$region=$display_person['region'];
+					# Set the person's CV to a variable.
+					$profile_cv='<div class="profile-cv">';
+					$profile_cv.='<span class="label">'.$display_name.'\'s Curriculum Vitae (<abbr title="Curriculum Vitae">CV</abbr>) is available for download:</span>';
+					$profile_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="'.$display_name.'\'s CV File">'.$cv.'</a>';
+					$profile_cv.='</div>';
+					# Set the CV XHTML to the display content array.
+					$display_content['cv']=$profile_cv;
 				}
 			}
 			# Check if we have someone to display.
@@ -1995,41 +1983,6 @@ class User
 					$bio=nl2br($bio);
 					# Set the biographical information XHTML to the display content array.
 					$display_content['bio']=$bio;
-				}
-				# Check if $country is set or is empty.
-				if(!isset($country) || empty($country))
-				{
-					# Get the User's country and set it to a variable.
-					$country=$$table->getCountry();
-					# Check if the User's country is available.
-					if(!empty($country))
-					{
-						# Set the person's country to a variable.
-						$profile_country='<div class="profile-country">';
-						$profile_country.='<span class="label">Country:</span>';
-						$profile_country.='<span>'.$country.'</span>';
-						$profile_country.='</div>';
-						# Set the country XHTML to the display content array.
-						$display_content['country']=$profile_country;
-					}
-				}
-				else
-				{
-					# Set the country XHTML to the display content array.
-					$display_content['country']=$country;
-				}
-				# Get the User's CV(curriculum vitae) file and set it to a variable.
-				$cv=$$table->getCV();
-				# Check if the person's CV is available.
-				if(!empty($cv))
-				{
-					# Set the person's CV to a variable.
-					$profile_cv='<div class="profile-cv">';
-					$profile_cv.='<span class="label">'.$display_name.'\'s Curriculum Vitae (<abbr title="Curriculum Vitae">CV</abbr>) is available for download:</span>';
-					$profile_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="'.$display_name.'\'s CV File">'.$cv.'</a>';
-					$profile_cv.='</div>';
-					# Set the CV XHTML to the display content array.
-					$display_content['cv']=$profile_cv;
 				}
 				# Get the User's email and set it to a variable.
 				$email=$$table->getEmail();
@@ -2655,15 +2608,70 @@ class User
 	} #==== End -- findRegistered
 
 	/**
+	 * findStaffID
+	 *
+	 * Retrieves the staff ID from the `user` table.
+	 *
+	 * @param	$value					The user's ID.
+	 *										If NULL, then the method gets the logged in user's ID.
+	 * @access	public
+	 */
+	public function findStaffID($value=NULL)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		try
+		{
+			# Check if the passed value is empty.
+			if(empty($value))
+			{
+				# Find the user ID for the logged in user.
+				$id=$this->findUserID();
+			}
+			else
+			{
+				# Check if the passed value is an integer.
+				if($validator->isInt($value)===TRUE)
+				{
+					# Set the value to the ID data member effectively "cleaning" it.
+					$this->setID($value);
+					# Set the data member to a variable.
+					$id=$this->getID();
+				}
+			}
+			# Get the User DI from the Database.
+			$row=$db->get_row('SELECT `staff_id` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($db->escape($id)).' LIMIT 1');
+			# Check if a row was returned.
+			if($row!==NULL)
+			{
+				# Set the user's staff ID to the data member.
+				$this->setStaffID($row->staff_id);
+				return $this->getStaffID();
+			}
+		}
+		catch(ezDB_Error $e)
+		{
+			throw new Exception('There was an error retrieveing the user\'s staff ID: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- findStaffID
+
+	/**
 	 * findUserData
 	 *
 	 * Retrieves the data of a given user.
 	 *
-	 * @param		string $value (The user's username or id.)
+	 * @param	string $value			The user's username or id.
 	 * @access	public
 	 * @return	string
 	 */
-	public function findUserData($value=NULL, $get_staff=TRUE)
+	public function findUserData($value=NULL)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -2701,102 +2709,49 @@ class User
 			# Check if the ID was found.
 			if(!empty($id))
 			{
-				# Check if the `staff` table should be checked.
-				if($get_staff===TRUE)
-				{
-					# Get the Staff class.
-					require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
-					# Instantiate a new Staff object.
-					$staff=new Staff();
-					# Check if this user is in the `staff` table in the Database.
-					if($staff->getThisPerson($id)!==FALSE)
-					{
-						# Set the Staff object to the data member for use outside of this method.
-						$this->setStaff($staff);
-						# Set the staff id to the data member.
-						$this->setStaffID($staff->getStaffID());
-						# Set the User data retrieved via getThisPerson to the User data members.
-						$this->setID($staff->getID());
-						$this->setAffiliation($staff->getAffiliation());
-						$this->setArchive($staff->getArchive());
-						$this->setCredentials($staff->getCredentials());
-						$this->setPosition($staff->getPosition());
-						$this->setDisplayName($staff->getDisplayName());
-						$this->setUsername($staff->getUsername());
-						$this->setUserLevel($staff->getUserLevel());
-						$this->setTitle($staff->getTitle());
-						$this->setFirstName($staff->getFirstName());
-						$this->setLastName($staff->getLastName());
-						$this->setEmail($staff->getEmail());
-						$this->setRegion($staff->getRegion());
-						$this->setAddress($staff->getAddress());
-						$this->setAddress2($staff->getAddress2());
-						$this->setCity($staff->getCity());
-						$this->setState($staff->getState());
-						$this->setCountry($staff->getCountry());
-						$this->setZipcode($staff->getZipcode());
-						$this->setPhone($staff->getPhone());
-						$this->setImg($staff->getImg());
-						$this->setImgTitle($staff->getImgTitle());
-						$this->setPassword($staff->getPassword());
-						$this->setInterests($staff->getInterests());
-						$this->setBio($staff->getBio());
-						$this->setCV($staff->getCV());
-						$this->setOrganization($staff->getOrganization());
-						$this->setWebsite($staff->getWebsite());
-						$this->setNewsletter($staff->getNewsletter());
-						$this->setNotify($staff->getNotify());
-						$this->setQuestions($staff->getQuestions());
-						$this->setActive($staff->getActive());
-						$this->setProduct($staff->getProduct());
-						$this->setRegistered($staff->getRegistered());
-						$this->setLastLogin($staff->getLastLogin());
-						$this->setIP($staff->getIP());
-						return TRUE;
-					}
-				}
 				# Retrieve the User data from the `users` table.
-				$row=$db->get_row('SELECT `ID`, `display`, `username`, `level`, `title`, `fname`, `lname`, `email`, `region`, `address`, `address2`, `city`, `state`, `country`, `zipcode`, `phone`, `img`, `img_title`, `password`, `interests`, `bio`, `cv`, `organization`, `website`, `newsletter`, `notify`, `questions`, `active`, `product`, `registered`, `lastlogin` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+				$row=$db->get_row('SELECT `ID`, `staff_id`, `display`, `username`, `level`, `title`, `fname`, `lname`, `email`, `region`, `address`, `address2`, `city`, `state`, `country`, `zipcode`, `phone`, `img`, `img_title`, `password`, `interests`, `bio`, `cv`, `organization`, `website`, `newsletter`, `notify`, `questions`, `active`, `product`, `registered`, `lastlogin` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
 				# Check if there was a row returned.
 				if($row!==NULL)
 				{
 					# Set the returned data to it's related data member.
-					$this->setID($row->ID);
-					$this->setDisplayName($row->display);
-					$this->setUsername($row->username);
-					$this->setUserLevel($row->level);
-					$this->setTitle($row->title);
-					$this->setFirstName($row->fname);
-					$this->setLastName($row->lname);
-					$this->setEmail($row->email);
-					$this->setRegion($row->region);
+					$this->setActive($row->active);
 					$this->setAddress($row->address);
 					$this->setAddress2($row->address2);
-					$this->setCity($row->city);
-					$this->setState($row->state);
-					$this->setCountry($row->country);
-					$this->setZipcode($row->zipcode);
-					$this->setPhone($row->phone);
-					$this->setImg($row->img);
-					$this->setImgTitle($row->img_title);
-					$this->setPassword($row->password);
-					# Replace any domain name tokens with the current domain name.
-					$interests=str_ireplace('%{domain_name}', DOMAIN_NAME, $row->interests);
-					$this->setInterests($interests);
 					# Replace any domain name tokens with the current domain name.
 					$bio=str_ireplace('%{domain_name}', DOMAIN_NAME, $row->bio);
 					$this->setBio($bio);
+					$this->setCity($row->city);
+					$this->setCountry($row->country);
 					$this->setCV($row->cv);
-					$this->setOrganization($row->organization);
-					$this->setWebsite($row->website);
+					$this->setDisplayName($row->display);
+					$this->setEmail($row->email);
+					$this->setFirstName($row->fname);
+					$this->setID($row->ID);
+					# Replace any domain name tokens with the current domain name.
+					$interests=str_ireplace('%{domain_name}', DOMAIN_NAME, $row->interests);
+					$this->setInterests($interests);
+					$this->setImg($row->img);
+					$this->setImgTitle($row->img_title);
+					$this->setIP($this->findIP());
+					$this->setLastLogin($row->lastlogin);
+					$this->setLastName($row->lname);
 					$this->setNewsletter($row->newsletter);
 					$this->setNotify($row->notify);
-					$this->setQuestions($row->questions);
-					$this->setActive($row->active);
+					$this->setOrganization($row->organization);
+					$this->setPassword($row->password);
+					$this->setPhone($row->phone);
 					$this->setProduct($row->product);
+					$this->setQuestions($row->questions);
+					$this->setRegion($row->region);
 					$this->setRegistered($row->registered);
-					$this->setLastLogin($row->lastlogin);
-					$this->setIP($this->findIP());
+					$this->setStaffID($row->staff_id);
+					$this->setState($row->state);
+					$this->setTitle($row->title);
+					$this->setUserLevel($row->level);
+					$this->setUsername($row->username);
+					$this->setWebsite($row->website);
+					$this->setZipcode($row->zipcode);
 					return TRUE;
 				}
 			}
@@ -2850,7 +2805,7 @@ class User
 				# Check if there was an ID set to the data member.
 				if(empty($id))
 				{
-					/* Check if the ID is stored in a cookie or a session. */
+					# Check if the ID is stored in a cookie or a session.
 					# Check if the ID is set in a cookie.
 					if(isset($_COOKIE['cookie_id']))
 					{
@@ -2938,7 +2893,7 @@ class User
 	 *
 	 * Retrieves the User's username based on the passed variable. Throws an error on failure.
 	 *
-	 * @param	$field (The users Email or id.)
+	 * @param	$field					The users Email or id.
 	 * @access	public
 	 */
 	public function findUsername($field=NULL)
@@ -3164,11 +3119,58 @@ class User
 	} #==== End -- getUsers
 
 	/**
+	 * isStaff
+	 *
+	 * Will try to determine if the logged in user is staff or not.
+	 * A wrapper method for the isStaff method from the Staff class.
+	 *
+	 * @param	int $value				The user's ID.
+	 *										If NULL, then the method gets the logged in user's ID.
+	 * @access	public
+	 * @return	boolean
+	 */
+	public function isStaff($value=NULL)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Get the Staff class.
+		require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
+		# Set the Staff instance to a variable.
+		$staff_obj=new Staff();
+
+		# Check if the passed value is empty.
+		if(empty($value))
+		{
+			# Find the user ID for the logged in user.
+			$id=$this->findUserID();
+		}
+		else
+		{
+			# Check if the passed value is an integer.
+			if($validator->isInt($value)===TRUE)
+			{
+				# Set the value to the ID data member effectively "cleaning" it.
+				$this->setID($value);
+				# Set the data member to a variable.
+				$id=$this->getID();
+			}
+		}
+		# Check if logged in user is in the `staff` table.
+		if($staff_obj->isStaff($id)===TRUE)
+		{
+			return TRUE;
+		}
+		return FALSE;
+	} #==== End -- isStaff
+
+	/**
 	 * processAuthRequest
 	 *
 	 * Emails the appropriate admin/manager of a request for authorization on an aspect of the site.
 	 *
-	 * @param		array $fields (An array where the key is the POST Data field to check and the value is the email address to send the request to. The Value may be an array as well.)
+	 * @param	array $fields			An array where the key is the POST Data field to check and the value is the email address to send the request to.
+	 *										The Value may be an array as well.
 	 * @access	public
 	 */
 	public function processAuthRequest($fields)
