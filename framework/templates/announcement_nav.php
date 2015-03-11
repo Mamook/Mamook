@@ -8,7 +8,7 @@ if($years!==NULL)
 {
 	foreach($years as $year)
 	{
-		$year_list='<li class="list-nav-1'.Document::addHereClass(APPLICATION_URL.'announcement/?year='.$year->year, FALSE, FALSE).'">
+		$year_list.='<li class="list-nav-1'.Document::addHereClass(APPLICATION_URL.'announcement/?year='.$year->year, FALSE, FALSE).'">
 			<a href="'.APPLICATION_URL.'announcement/?year='.$year->year.'" title="Announcements from '.$year->year.'">'.$year->year.'</a>
 		</li>';
 	}
