@@ -279,6 +279,100 @@ class CommandLine
 	/*** private methods ***/
 
 	/**
+	 * getFFMPEG_Executable
+	 *
+	 * Determine the location of the ffmpeg executable.
+	 *
+	 * @access	private
+	 * @return	The executable location on success, otherwise FALSE.
+	 */
+	public function getFFMPEG_Executable()
+	{
+		# Set the default executable path as FALSE.
+		$ffmpeg_executable_path=FALSE;
+
+		try
+		{
+			# Explode the PATH into an array of individual paths.
+			$paths=explode(PS, getenv('PATH'));
+			# Loop through the paths.
+			foreach($paths as $path)
+			{
+				# Set the default executable to a local variable.
+				$ffmpeg_executable_path=$path.DS.'ffmpeg';
+				# Check if this is a windows server.
+				if($this->isWindows()===TRUE)
+				{
+					$ffmpeg_executable_path+='.exe';
+					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
+					if(strstr($path, 'ffmpeg.exe'))
+					{
+						$ffmpeg_executable_path=$path;
+						break;
+					}
+				}
+				# Check if the path to the executable in the local variable actually exists.
+				if(file_exists($ffmpeg_executable_path) && is_file($ffmpeg_executable_path))
+				{
+					 break;
+				}
+			}
+			return $ffmpeg_executable_path;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getFFMPEG_Executable
+
+	/**
+	 * getNode_Executable
+	 *
+	 * Determine the location of the node executable.
+	 *
+	 * @access	private
+	 * @return	The executable location on success, otherwise FALSE.
+	 */
+	public function getNode_Executable()
+	{
+		# Set the default executable path as FALSE.
+		$node_executable_path=FALSE;
+
+		try
+		{
+			# Explode the PATH into an array of individual paths.
+			$paths=explode(PS, getenv('PATH'));
+			# Loop through the paths.
+			foreach($paths as $path)
+			{
+				# Set the default executable to a local variable.
+				$node_executable_path=$path.DS.'node';
+				# Check if this is a windows server.
+				if($this->isWindows()===TRUE)
+				{
+					$node_executable_path+='.exe';
+					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
+					if(strstr($path, 'node.exe'))
+					{
+						$node_executable_path=$path;
+						break;
+					}
+				}
+				# Check if the path to the executable in the local variable actually exists.
+				if(file_exists($node_executable_path) && is_file($node_executable_path))
+				{
+					 break;
+				}
+			}
+			return $node_executable_path;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getNode_Executable
+
+	/**
 	 * getPHP_Executable
 	 *
 	 * Determine the location of the PHP executable.
@@ -381,53 +475,6 @@ class CommandLine
 			throw $e;
 		}
 	} #==== End -- getPYTHON_Executable
-
-	/**
-	 * getFFMPEG_Executable
-	 *
-	 * Determine the location of the ffmpeg executable.
-	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
-	 */
-	public function getFFMPEG_Executable()
-	{
-		# Set the default executable path as FALSE.
-		$ffmpeg_executable_path=FALSE;
-
-		try
-		{
-			# Explode the PATH into an array of individual paths.
-			$paths=explode(PS, getenv('PATH'));
-			# Loop through the paths.
-			foreach($paths as $path)
-			{
-				# Set the default executable to a local variable.
-				$ffmpeg_executable_path=$path.DS.'ffmpeg';
-				# Check if this is a windows server.
-				if($this->isWindows()===TRUE)
-				{
-					$ffmpeg_executable_path+='.exe';
-					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
-					if(strstr($path, 'ffmpeg.exe'))
-					{
-						$ffmpeg_executable_path=$path;
-						break;
-					}
-				}
-				# Check if the path to the executable in the local variable actually exists.
-				if(file_exists($ffmpeg_executable_path) && is_file($ffmpeg_executable_path))
-				{
-					 break;
-				}
-			}
-			return $ffmpeg_executable_path;
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- getFFMPEG_Executable
 
 	/**
 	 * isWindows

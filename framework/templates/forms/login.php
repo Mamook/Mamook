@@ -1,6 +1,6 @@
 <?php /* templates/forms/login.php */
 
-$display.='<div id="login" class="login form">';
+$display.='<div id="login" class="form login">';
 # Create and display form.
 $display.=$head;
 # Instantiate FormGenerator object.
