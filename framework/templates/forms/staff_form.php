@@ -1,8 +1,5 @@
 <?php /* templates/forms/staff_form.php */
-//unset($_SESSION['form']);
-//print_r($_SESSION);
-//print_r($staff_obj);
-//exit;
+
 require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form_defaults.php');
 $display_delete_form=$form_processor->processStaff($default_data);
 
@@ -31,8 +28,6 @@ if(isset($_GET['add_desc']))
 	# Get all positions.
 	$position_obj->getPositions();
 
-# NOTE: FIX THE LINE BELOW
-# Figure out a way to setNewPosition instead.
 	foreach($_SESSION['form']['staff']['NewPosition'] as $position_key=>$position_value)
 	{
 		# Get the position data from the `positions` table.
@@ -160,6 +155,7 @@ else
 			{
 				# Decode the `position` field in the `staff` table and return an array.
 				$staff_positions_decoded=(!is_array($staff_obj->getPosition()) ? json_decode($staff_obj->getPosition(), TRUE) : $staff_obj->getPosition());
+				//print_r($staff_positions_decoded);exit;
 				# Loop through the positions in the `positions` table.
 				foreach($positions as $row)
 				{
@@ -190,31 +186,6 @@ else
 			$fg->addFormPart('<label class="label" for="position">Position</label>');
 			$fg->addElement('select', array('name'=>'position[]', 'multiple'=>'multiple', 'title'=>'Select a Position', 'id'=>'position'), $position_options);
 			$fg->addFormPart('</li>');
-			/*
-			if(isset($staff_positions_decoded))
-			{
-				$fg->addFormPart('<li>');
-				$fg->addFormPart('<label class="label">Position Description');
-				//$fg->addFormPart('<a href="'.ADMIN_URL.'ManageUsers/?user='.$staff_id.'&amp;edit_desc" class="submit-edit-desc" title="Edit Description">Edit Description</a>');
-				$fg->addElement('submit', array('name'=>'staff', 'value'=>'Edit Description'), '', NULL, 'submit-edit-desc');
-				$fg->addFormPart('</label>');
-				$fg->addFormPart('<div class="bsm" id="bsm1">');
-				$fg->addFormPart('<ol id="bsm-listbsm1" class="bsm-list">');
-				foreach($staff_positions_decoded as $position_key=>$position_value)
-				{
-					# Get the position data from the `positions` table.
-					$position_obj->getThisPosition($position_value['position']);
-					# Set the position.
-					$position=$position_obj->getPosition();
-					$fg->addFormPart('<li class="bsm-item">');
-					$fg->addFormPart('<span class="bsm-label">'.$position.': '.$position_value['description'].'</span>');
-					$fg->addFormPart('</li>');
-				}
-				$fg->addFormPart('</ol>');
-				$fg->addFormPart('</div>');
-				$fg->addFormPart('</li>');
-			}
-			*/
 			if(isset($staff_positions_decoded))
 			{
 				$fg->addFormPart('</ul>');
@@ -224,15 +195,21 @@ else
 				$fg->addFormPart('<ul>');
 				foreach($staff_positions_decoded as $position_key=>$position_value)
 				{
-					# Get the position data from the `positions` table.
-					$position_obj->getThisPosition($position_value['position']);
-					# Set the position.
-					$position=$position_obj->getPosition();
-					$fg->addFormPart('<li>');
-					$fg->addFormPart('<label class="label" for="position_desc">'.$position.'</label>');
-					$fg->addElement('hidden', array('name'=>'position_desc['.$position_key.'][position]', 'value'=>$position_value['position']));
-					$fg->addElement('text', array('name'=>'position_desc['.$position_key.'][description]', 'value'=>htmlspecialchars($position_value['description']), 'id'=>'position_desc'));
-					$fg->addFormPart('</li>');
+					# Check if the description is set.
+					$position_desc=(isset($position_value['description']) ? htmlspecialchars($position_value['description']) : '');
+					# If there is no descritpion, don't show the description field.
+					//if(!empty($position_desc))
+					//{
+						# Get the position data from the `positions` table.
+						$position_obj->getThisPosition($position_value['position']);
+						# Set the position.
+						$position=$position_obj->getPosition();
+						$fg->addFormPart('<li>');
+						$fg->addFormPart('<label class="label" for="position_desc">'.$position.'</label>');
+						$fg->addElement('hidden', array('name'=>'position_desc['.$position_key.'][position]', 'value'=>$position_value['position']));
+						$fg->addElement('text', array('name'=>'position_desc['.$position_key.'][description]', 'value'=>$position_desc, 'id'=>'position_desc'));
+						$fg->addFormPart('</li>');
+					//}
 				}
 				$fg->addFormPart('</ul>');
 				$fg->addFormPart('</fieldset>');
