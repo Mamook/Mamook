@@ -1352,9 +1352,9 @@ class Product
 				$buy_amazon_submit_type=((array_key_exists('buy_amazon_submit_type', $options)) ? $options['buy_amazon_submit_type'] : 'submit');
 				$buy_amazon_submit_value=((array_key_exists('buy_amazon_submit_value', $options)) ? $options['buy_amazon_submit_value'] : 'Buy from Amazon');
 				$buy_class=((array_key_exists('buy_class', $options)) ? $options['buy_class'] : 'buy');
-				$buy_link_title=((array_key_exists('buy_paypal_value', $options)) ? $options['buy_paypal_value'] : 'default');
+				$buy_link_title=((array_key_exists('buy_link_title', $options)) ? $options['buy_link_title'] : 'default');
 				$buy_link_value=((array_key_exists('buy_link_value', $options)) ? $options['buy_link_value'] : 'Buy Now');
-				$buy_paypal_button_class=((array_key_exists('buy_paypal_button_class', $options)) ? $options['buy_paypal_button_class'] : 'button-amazon');
+				$buy_paypal_button_class=((array_key_exists('buy_paypal_button_class', $options)) ? $options['buy_paypal_button_class'] : 'button-paypal');
 				$buy_paypal_button_name=((array_key_exists('buy_paypal_button_name', $options)) ? $options['buy_paypal_button_name'] : 'add_cart');
 				$buy_paypal_submit_class=((array_key_exists('buy_paypal_submit_class', $options)) ? $options['buy_paypal_submit_class'] : 'submit-paypal');
 				$buy_paypal_submit_image=((array_key_exists('buy_paypal_submit_image', $options)) ? $options['buy_paypal_submit_image'] : NULL);
