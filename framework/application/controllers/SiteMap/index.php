@@ -13,7 +13,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-$page_class='sitemap';
+$page_class='sitemappage';
 
 # Create a new SubContent object
 $site_map=new SiteMap();
