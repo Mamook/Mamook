@@ -1,4 +1,4 @@
-<?php /* templates/forms/change_password.php */
+<?php /* /framework/templates/forms/change_password.php */
 
 $display='<div id="change_password_form" class="form">';
 # Create and display form
