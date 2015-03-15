@@ -304,6 +304,7 @@ class StaffFormProcessor extends FormProcessor
 								'image_title'=>$image_title,
 								'lname'=>$last_name,
 								'mname'=>$middle_name,
+								'position'=>$position,
 								'region'=>$region,
 								'text'=>$text,
 								'title'=>$title
@@ -316,6 +317,7 @@ class StaffFormProcessor extends FormProcessor
 							{
 								# Unset the session data.
 								unset($_SESSION['form']['staff']);
+								unset($_SESSION['form']['staff_desc']);
 								# Redirect the staff to the page they were on.
 								$this->redirectStaff($message_action);
 							}
@@ -347,6 +349,7 @@ class StaffFormProcessor extends FormProcessor
 								{
 									# Unset the CMS session data.
 									unset($_SESSION['form']['staff']);
+									unset($_SESSION['form']['staff_desc']);
 									# Set a nice message for the staff in a session.
 									$_SESSION['message']="The staff's record was unchanged.";
 									# Redirect the staff to the page they were on.
@@ -597,11 +600,6 @@ class StaffFormProcessor extends FormProcessor
 			# Reset the form if the "reset" button was submitted.
 			$this->processReset('staff_desc', 'staff_desc');
 
-			# Instantiate a new instance of StaffFormPopulator.
-			$populator=$this->getPopulator();
-			# Set the Populator object to the data member.
-			$this->setPopulator($populator);
-
 			$this->processStaffBack();
 
 			# Check if the form has been submitted.
@@ -612,7 +610,6 @@ class StaffFormProcessor extends FormProcessor
 
 				# Set a nice message for the user in a session.
 				$_SESSION['message']='The position desciptions were successfully added!';
-				//unset($_SESSION['form']['staff_desc']);
 				# Redirect the user to the page they were on with no POST or GET data.
 				$doc->redirect(rtrim(COMPLETE_URL, '&add_desc'));
 			}

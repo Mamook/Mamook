@@ -79,7 +79,6 @@ class StaffFormPopulator extends FormPopulator
 	 */
 	public function populateStaffForm($data=array())
 	{
-		//print_r($data);exit;
 		try
 		{
 			# Get the Staff class.
@@ -100,7 +99,6 @@ class StaffFormPopulator extends FormPopulator
 
 			# Populate the data members with defaults, passed values, or data saved in SESSION.
 			$this->setDataToDataMembers($this->getStaffObject());
-			//print_r($this->getData());exit;
 		}
 		catch(Exception $e)
 		{
@@ -187,68 +185,55 @@ class StaffFormPopulator extends FormPopulator
 					$data['MiddleName']=$db->sanitize($_POST['mname']);
 				}
 
-# NOTE: Can't remove all user's staff positions (maybe this shouldn't be allowed anyway).
 				# Check if there was POST data sent.
 				if(isset($_POST['position']))
 				{
 					# Create an empty array.
 					$position_array=array();
 					$new_array=array();
-					# Loop through the user's positions.
-					foreach($_POST['position'] as $position)
+					$temp_array=array();
+					# Loop through the positions in $_POST['position'].
+					foreach($_POST['position_desc'] as $position_desc)
 					{
-						# Create an empty array.
-						$temp_array=array();
-						# Check if the position description form has been submitted.
-						if(isset($_POST['position_desc']))
+						# Check if there is descriptions for the position's that have been submitted.
+						if(isset($_POST['position_desc']) && !isset($_SESSION['form']['staff_desc']))
 						{
 							# Loop through the position's decriptions.
-							foreach($_POST['position_desc'] as $key=>$value)
+							foreach($_POST['position'] as $key=>$value)
 							{
-								$temp_array=array(
-									'position'=>$position,
-									'description'=>''
-								);
-								//print_r($value);
-								//print_r($position);
-# NOTE: If adding a position with an ID greater then the position the staff is currently in then the line below will match
-#		and does not add the StaffOption which directs you to the add description form.
-								if($value['position']==$position)
+								$temp_array[$key]['position']=$value;
+
+								# If the position matches the descriptions position.
+								if($position_desc['position']==$value)
 								{
-									$temp_array['description']=$value['description'];
+									$temp_array[$key]['description']=$position_desc['description'];
 									unset($_POST['position_desc'][$key]);
-									break;
 								}
-# NOTE: This doesn't work.
-# Redirects you to the position form when you remove user positions!
 								else
 								{
-									$new_array[$key]['position']=$position;
+									$new_array[$key]['position']=$value;
 									$new_array[$key]['description']='';
+								}
+
+								# There is no description set for this position so redirect to the add description form.
+								if(empty($temp_array[$key]['description']))
+								{
 									$data['StaffOption']='add_desc';
-									break;
 								}
 							}
-print_r($data);exit;
-# NOTE: USED HACK TO FIX ABOVE PROBLEM :(
-							$position_search=$this->recursiveArraySearch($position, $_POST['position_desc']);
-							if($position_search!==FALSE)
-							{
-								# Don't redirect to position form if removing positions from user.
-								$data['StaffOption']='';
-								# Needed or else the description is set to NULL for all positions.
-								$temp_array['description']=$_POST['position_desc'][$position_search]['description'];
-							}
-							$position_array[]=$temp_array;
 						}
 					}
-//print_r($data);exit;
+
 					# JSON encode the array.
-					$position=json_encode($position_array, JSON_FORCE_OBJECT);
+					$position=json_encode($temp_array, JSON_FORCE_OBJECT);
+					# If the position description form was submitted, assign the new json encoded position to a variable.
+					if(isset($_SESSION['form']['staff_desc']))
+					{
+						$position=$_SESSION['form']['staff_desc']['Position'];
+					}
 
 					if(isset($new_array) && !empty($new_array))
 					{
-						//print_r($new_array);exit;
 						$data['NewPosition']=$new_array;
 					}
 					if(isset($position))
@@ -259,12 +244,8 @@ print_r($data);exit;
 				}
 				elseif(!isset($_POST['position']) && isset($_POST['position_desc']))
 				{
-					//print_r($_POST);
 					# JSON decode the user's current positions.
 					$current_positions=json_decode($data['Position'], TRUE);
-					//print_r($current_positions);
-					//print_r($_POST['position_desc']);
-					//exit;
 
 					$new_array=array();
 					foreach($current_positions as $key=>$current_position)
@@ -280,36 +261,9 @@ print_r($data);exit;
 						$new_array2[$new_key]['description']=$new_position['description'];
 					}
 					$new_array3=array_merge($new_array, $new_array2);
-					//print_r($new_array3);exit;
 
-/*
-					$position_array=array();
-					foreach($current_positions as $current_position)
-					{
-						$temp_array=array();
-						# Loop through the position's decriptions.
-						foreach($_POST['position_desc'] as $key=>$value)
-						{
-							$temp_array=array(
-								'position'=>$current_position['position'],
-								'description'=>''
-							);
-							print_r($temp_array);
-							if($value['position']==$current_position['position'])
-							{
-								$temp_array['description']=$value['description'];
-								unset($_POST['position_desc'][$key]);
-								break;
-							}
-						}
-						$position_array[]=$temp_array;
-					}
-					print_r($position_array);exit;
-*/
 					# JSON encode the array.
 					$position=json_encode($new_array3, JSON_FORCE_OBJECT);
-					//$position=json_encode($position_array, JSON_FORCE_OBJECT);
-					//print_r($position);exit;
 					# Clean it up and set it to the data array index.
 					$data['Position']=$position;
 				}
