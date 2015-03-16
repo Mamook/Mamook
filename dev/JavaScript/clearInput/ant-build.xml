@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!-- This file is included in specific build files (ie build-deploy.xml)-->
+<project name="clearInput :: build script">
+
+	<path id="yuiCompressorPaths">
+		<pathelement location="../../minifier/yuicompressor-2.4.2.jar"/>
+		<pathelement location="../../minifier/yui-compressor-ant-task-0.5.jar"/>
+	</path>
+
+	<target name="init" depends="createTemp,compile_js,clean"/>
+
+	<target name="define-yui-compressor">
+		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
+			<classpath refid="yuiCompressorPaths"/>
+		</taskdef>
+	</target>
+
+	<target name="createTemp" depends="define-yui-compressor">
+		<mkdir dir="temp"/>
+	</target>
+
+	<target name="clean" depends="createTemp" description="Removes the temp folder and leftover files.">
+		<delete dir="temp"/>
+	</target>
+
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="../../minifier/compiler.jar"/>
+
+
+<!-- JavaScript -->
+	<target name="concat_js">
+	<!-- Concatenate the header, modules, and plugins together. -->
+		<concat destfile="${buildLocation}/clearInput.big.js">
+			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
+			<filelist dir="js">
+				<file name="clearInput.js"/>
+			</filelist>
+			<footer>${line.separator}${line.separator}${line.separator}////////////////////${line.separator}// END clearInput //${line.separator}////////////////////</footer>
+		</concat>
+	</target>
+
+
+	<!-- Minify. -->
+	<target name="compile_js" depends="concat_js">
+		<jscomp compilationLevel="simple" debug="false" output="${buildLocation}/clearInput.js">
+			<sources dir="${buildLocation}">
+				<file name="clearInput.big.js"/>
+			</sources>
+		</jscomp>
+	</target>
+</project>

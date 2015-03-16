@@ -247,11 +247,11 @@ w.hook+"^='"+D+"']:eq("+ea+")").trigger("click")},50)}return I.off("click.fwPopu
  *
  * @copyright (c) 2015 Jon Ryser	http://JonRyser.com
  * @author		Jon Ryser		http://JonRyser.com
- * @version		1.0.0
+ * @version		1.0.1
  */
-(function(a){a.fn.fwAlert=function(d){var c=window,e={close:"Close",draggable:!1};d&&a.extend(e,d);document.getElementById&&(c.defaultAlert=c.alert,c.alert=function(f,d){if(!(void 0===f||void 0===d)){var g=a(".overlay"),b=a("<h1>").addClass("h-1").html(f),h=a("<div>").addClass("message").html(d),i=a("<button>").addClass("button-close").attr({"aria-label":"Close "+f+" Modal",role:"button",type:"button"}).html(e.close),b=a("<section>").addClass("alertBox").append(b).append(h).append(i);0<g.length||
-(g=a("<div>").addClass("overlay").appendTo(a("body")));g.show();a("body").append(b);b.css({top:a(c).height()/2-b.outerHeight(!0)/2+"px",left:a(c).width()/2-b.outerWidth(!0)/2+"px"});e.draggable&&b.draggable&&(b.draggable({handle:".alertBox .h-1",opacity:0.4}),a(".alertBox .h-1").css({cursor:"move"}));a(".alertBox .button-close, .overlay").click(function(b){b.preventDefault();a(".alertBox, .overlay").remove()});a(c).keydown(function(b){("13"==b.keyCode||"32"==b.keyCode||"27"==b.keyCode)&&(a(".alertBox .button-close").click(),
-a(this).unbind("keydown"))})}})}})(jQuery);
+(function(a){a.fn.fwAlert=function(e){var d=window,g={close:"Close",draggable:!1};e&&a.extend(g,e);document.getElementById&&(d.defaultAlert=d.alert,d.alert=function(h,e){if(!(void 0===h||void 0===e)){var b=a(".overlay"),c=a("<h1>").addClass("h-1").html(h),i=a("<div>").addClass("message").html(e),f=a("<button>").addClass("button-close").attr({"aria-label":"Close "+h+" Modal",role:"button",type:"button"}).html(g.close),c=a("<section>").addClass("alertBox").append(c).append(i).append(f);0<b.length||
+(b=a("<div>").addClass("overlay").appendTo(a("body")));b.show();a("body").append(c);b=a(d).height()/2-c.outerHeight(!0)/2;console.log("topPosition: ",b);f="auto";0>b&&(b=0,f="90%",i.css({"overflow-y":"scroll",height:"98%"}));c.css({top:b+"px",left:a(d).width()/2-c.outerWidth(!0)/2+"px",height:f});g.draggable&&c.draggable&&(c.draggable({handle:".alertBox .h-1",opacity:0.4}),a(".alertBox .h-1").css({cursor:"move"}));a(".alertBox .button-close, .overlay").click(function(b){b.preventDefault();a(".alertBox, .overlay").remove()});
+a(d).keydown(function(b){("13"==b.keyCode||"32"==b.keyCode||"27"==b.keyCode)&&(a(".alertBox .button-close").click(),a(this).unbind("keydown"))})}})}})(jQuery);
 /*
  * clearInput
  *

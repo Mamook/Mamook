@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- Open the build project and give it a name to display. -->
+<project name="clearInput :: 'deploy' version" default="init">
+	<!-- Display a clear message referencing the current build script. -->
+	<echo message="Building 'clearInput' to the 'deploy' folder."/>
+	<!-- Define the path to the location to build to and set it to the "buildLocaction" variable. -->
+	<property name="buildLocation" location="deploy"/>
+	<!-- Import the core ant build script. -->
+  <import file="./ant-build.xml"/>
+</project>

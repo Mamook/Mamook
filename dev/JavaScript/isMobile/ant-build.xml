@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- This file is included in specific build files (ie build-deploy.xml)-->
+<project name="isMobile :: build script">
+
+	<target name="init" depends="compileJs"/>
+
+	<target name="createTemp">
+		<mkdir dir="temp"/>
+	</target>
+
+	<target name="clean" depends="concatenateJs" description="Removes the temp folder and leftover files.">
+		<delete dir="temp"/>
+	<!-- Remove the leftover files this script created. -->
+		<delete file="js/jQuery_plugins.js"/>
+		<delete file="js/plugins.js"/>
+		<delete file="js/library_modules.js"/>
+	</target>
+
+	<taskdef name="jsCompiler" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="../../minifier/compiler.jar"/>
+
+
+<!-- JavaScript -->
+	<target name="concatenateJs" depends="createTemp">
+	<!-- Concatenate the header, modules, and plugins together. -->
+		<concat destfile="${buildLocation}/isMobile.big.js">
+			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
+			<filelist dir="js">
+				<file name="controller.js"/>
+			</filelist>
+			<footer></footer>
+		</concat>
+	</target>
+
+
+	<!-- Minify. -->
+	<target name="compileJs" depends="clean">
+		<jsCompiler compilationLevel="simple" debug="false" output="${buildLocation}/isMobile.js">
+			<sources dir="${buildLocation}">
+				<file name="isMobile.big.js"/>
+			</sources>
+		</jsCompiler>
+	</target>
+</project>

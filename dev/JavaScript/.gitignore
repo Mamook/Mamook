@@ -2,8 +2,14 @@
 *
 # Except this file
 !.gitignore
+!clearInput
+!clearInput/*
+!fwAlert
+!fwAlert/*
 !fwPopUp
 !fwPopUp/*
+!isMobile
+!isMobile/*
 !jQueryPlugin
 !jQueryPlugin/*
 !library
