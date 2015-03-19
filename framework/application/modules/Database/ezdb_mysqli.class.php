@@ -1,14 +1,14 @@
 <?php
 /**
  * Copyright (c) 2010 Nabeel Shahzad
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 
@@ -24,12 +24,12 @@
  * @copyright Copyright (c) 2008-2010, Nabeel Shahzad
  * @link http://github.com/nshahzad/ezdb
  * @license MIT License
- * 
- * 
+ *
+ *
  * Based on ezSQL by Justin Vincent: http://justinvincent.com/docs/ezsql/ez_sql_help.htm
- * 
+ *
  */
- 
+
 /**
   * MySQLi implementation for ezDB
   * By Nabeel Shahzad
@@ -52,26 +52,26 @@ class ezDB_mysqli extends ezDB_Base
 	public function __construct($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost')
 	{
 		if($dbname == '') return false;
-		
+
 		parent::__construct();
-		
+
 		if($this->connect($dbuser, $dbpassword, $dbhost))
 		{
 			return $this->select($dbname);
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Explicitly close the connection on destruct
 	 */
-	
+
 	public function __destruct()
 	{
 		$this->close();
 	}
-	
+
 	/**
 	 * Connects to database immediately, unless $dbname is blank
 	 *
@@ -85,8 +85,8 @@ class ezDB_mysqli extends ezDB_Base
 	public function quick_connect($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost')
 	{
 		$this->__construct($dbuser, $dbpassword, $dbname, $dbhost);
-	}	
-	
+	}
+
 	/**
 	 * Connect to MySQL, but not to a database
 	 *
@@ -99,12 +99,12 @@ class ezDB_mysqli extends ezDB_Base
 	public function connect($dbuser='', $dbpassword='', $dbhost='localhost')
 	{
 		$this->dbh =  new mysqli($dbhost, $dbuser, $dbpassword);
-		
+
 		if(mysqli_connect_errno() != 0)
 		{
 			if($this->throw_exceptions)
 				throw new ezDB_Error(mysqli_connect_error(), mysqli_connect_errno());
-				
+
 			$this->register_error(mysqli_connect_error(), mysqli_connect_errno());
 			return false;
 		}
@@ -113,10 +113,10 @@ class ezDB_mysqli extends ezDB_Base
 			$this->clear_errors();
 			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Select a MySQL Database
 	 *
@@ -132,22 +132,22 @@ class ezDB_mysqli extends ezDB_Base
 			throw new ezDB_Error('No database name', -1);
 			$this->register_error('No database name specified!');
 		}
-		
+
 		// Must have an active database connection
 		if(!$this->dbh)
 		{
 			if($this->throw_exceptions)
 				throw new ezDB_Error(mysqli_connect_error(), mysqli_connect_errno());
-				
+
 			$this->register_error('Can\'t select database, invalid or inactive connection', -1);
 			return false;
 		}
-		
+
 		if(!$this->dbh->select_db($dbname))
 		{
 			if($this->throw_exceptions)
 				throw new ezDB_Error($this->dbh->error, $this->dbh->errno);
-				
+
 			$this->register_error($this->dbh->error, $this->dbh->errno);
 			return false;
 		}
@@ -156,10 +156,10 @@ class ezDB_mysqli extends ezDB_Base
 			$this->clear_errors();
 			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Close the database connection
 	 */
@@ -167,7 +167,7 @@ class ezDB_mysqli extends ezDB_Base
 	{
 		return @$this->dbh->close();
 	}
-	
+
 	/**
 	 * Format a mySQL string correctly for safe mySQL insert
 	 *  (no matter if magic quotes are on or not)
@@ -180,7 +180,42 @@ class ezDB_mysqli extends ezDB_Base
 	{
 		return $this->dbh->real_escape_string($str);
 	}
-	
+
+	/**
+	 * sanitize - a real sanitizer
+	 *
+	 * @param	string $var				String to sanitize.
+	 * @param	string $level			The level of sanitization to use.
+	 * @return	string
+	 * @access	public
+	 */
+	public function sanitize($var, $level=4)
+	{
+		# First, turn any html entities back to special characters, strip any html or php tags, and trim blank space off the front and back.
+		$str=trim(strip_tags(htmlspecialchars_decode($var, ENT_QUOTES)));
+		switch($level)
+		{
+			case 2:
+				# Type 2 - turns any special characters into html entities including quotes.
+				return htmlentities($str, ENT_QUOTES, 'UTF-8', FALSE);
+			case 3:
+				# Type 3 - turns any special characters into html entities including quotes but doesn't strip tags.
+				$str=trim(htmlspecialchars_decode($var, ENT_QUOTES));
+				return htmlentities($str, ENT_QUOTES, 'UTF-8', FALSE);
+			case 4:
+				# Type 4 - turns any special characters into html entities including quotes then decodes all html entities making sure they are all UTF-8 encoded.
+				$str=htmlentities($str, ENT_QUOTES, 'UTF-8', FALSE);
+				return html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+			case 5:
+				# Type 5 - turns any special characters into html entities including quotes but doesn't strip tags then decodes all html entities making sure they are all UTF-8 encoded.
+				$str=trim(htmlspecialchars_decode($var, ENT_QUOTES));
+				$str=htmlentities($str, ENT_QUOTES, 'UTF-8', FALSE);
+				return html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+			default:
+				return $str;
+		}
+	}
+
 	/**
 	 * Returns the DB specific timestamp function (Oracle: SYSDATE, MySQL: NOW())
 	 *
@@ -191,7 +226,7 @@ class ezDB_mysqli extends ezDB_Base
 	{
 		return 'NOW()';
 	}
-	
+
 	/**
 	 * Run the SQL query, and get the result. Returns false on failure
 	 *  Check $this->error() and $this->errno() functions for any errors
@@ -200,43 +235,43 @@ class ezDB_mysqli extends ezDB_Base
 	 * @param string $query SQL Query
 	 * @return mixed Return values
 	 *
-	 */	
+	 */
 	public function query($query)
 	{
 		// Initialise return
 		$return_val = true;
-		
+
 		// Flush cached values..
 		$this->flush();
-		
+
 		// For reg expressions
 		$query = trim($query);
-		
+
 		// Log how the function was called
 		$this->func_call = "\$db->query(\"$query\")";
-		
+
 		// Keep track of the last query for debug..
 		$this->last_query = $query;
-		
+
 		// Count how many queries there have been
 		$this->num_queries++;
-		
+
 		// Use core file cache function
 		if($cache = $this->get_cache($query))
 		{
 			return $cache;
 		}
-		
+
 		// If there is no existing database connection then try to connect
 		if ( ! $this->dbh )
 		{
 			if($this->throw_exceptions)
 				throw new ezDB_Error($this->dbh->error, $this->dbh->errno);
-				
+
 			$this->register_error('There is no active database connection!');
 			return false;
 		}
-		
+
 		// Perform the query via std mysql_query function..
 		$result = $this->dbh->query($query);
 
@@ -244,27 +279,27 @@ class ezDB_mysqli extends ezDB_Base
 		{
 			if($this->throw_exceptions)
 				throw new ezDB_Error($this->dbh->error, $this->dbh->errno);
-				
+
 			$this->register_error($this->dbh->error, $this->dbh->errno);
 		}
 		else
 		{
 			$this->clear_errors();
 		}
-	
+
 		// Query was an insert, delete, update, replace
 		$is_insert = false;
 		if (preg_match("/^(insert|delete|update|replace)\s+/i",$query))
 		{
 			$this->rows_affected = $this->dbh->affected_rows;
 			$this->num_rows = $this->rows_affected;
-		
+
 			if($this->dbh->insert_id > 0)
 			{
 				$this->insert_id = $this->dbh->insert_id;
 				$is_insert = true;
 			}
-			
+
 			// Return number of rows affected
 			$return_val = $this->rows_affected;
 		}
@@ -274,37 +309,37 @@ class ezDB_mysqli extends ezDB_Base
 			// Take note of column info
 			$num_rows = 0;
 			if($result instanceof MySQLi_Result)
-			{	
+			{
 				$this->col_info = $result->fetch_fields();
-						
+
 				// Store Query Results
 				while($row = $result->fetch_object())
 				{
 					$this->last_result[$num_rows] = $row;
 					$num_rows++;
 				}
-				
+
 				$result->close();
 			}
-			
+
 			// Log number of rows the query returned
 			$this->rows_affected = $num_rows;
 			$this->num_rows = $num_rows;
-			
+
 			// Return number of rows selected
 			$return_val = $this->num_rows;
 		}
-		
+
 		// disk caching of queries
 		$this->store_cache($query,$is_insert);
-		
+
 		// If debug ALL queries
 		$this->trace || $this->debug_all ? $this->debug() : null ;
-		
+
 		return $return_val;
 	}
-	
-	
+
+
 	/* this is mysqli only
 	 * incomplete implementation
 	 *//*
@@ -332,6 +367,6 @@ class ezDB_mysqli extends ezDB_Base
 
 		$stmt->execute();
 
-		
+
 	}*/
 }
