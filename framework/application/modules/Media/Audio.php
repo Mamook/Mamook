@@ -2221,7 +2221,7 @@ class Audio
 		$thumbnail=$this->getThumbnailUrl();
 
 		$display='<div class="audio-lg">'.
-			'<a class="image-link" href="'.$this->getAudioUrl().'" ref="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
+			'<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
 				($this->getImageID()===NULL ? '<span class="thumbnail-default"></span>' : '<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>').
 				'<span class="play-static"></span>'.
 			'</a>'.
