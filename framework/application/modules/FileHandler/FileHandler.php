@@ -784,7 +784,7 @@ class FileHandler
 	public function getGDSupportedImageTypes()
 	{
 		$image_types=array();
-    # Get image types supported on this build.
+		# Get image types supported on this build.
 		if(imagetypes() & IMG_JPG) { $image_types[]='jpg'; $image_types[]='jpeg'; }
 		if(imagetypes() & IMG_GIF) { $image_types[]='gif'; }
 		if(imagetypes() & IMG_PNG) { $image_types[]='png'; }
