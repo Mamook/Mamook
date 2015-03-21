@@ -217,6 +217,16 @@ class ezDB_mysqli extends ezDB_Base
 	}
 
 	/**
+	 * Return the ID generated in the last query.
+	 *
+	 * @return unknown
+	 */
+	public function get_insert_id()
+	{
+		return mysqli_insert_id($this->dbh);
+	}
+
+	/**
 	 * Returns the DB specific timestamp function (Oracle: SYSDATE, MySQL: NOW())
 	 *
 	 * @return string Timestamp function
