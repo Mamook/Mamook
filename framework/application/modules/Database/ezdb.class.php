@@ -86,7 +86,7 @@ class DB
 	 * @param string $type Either mysql, mysqli, oracle. Default is mysql
 	 * @return boolean
 	 */
-	public static function init($type='mysql')
+	public static function init($type='mysqli')
 	{
 		$class_name = strtolower('ezdb_'.$type);
 		include dirname(__FILE__).DIRECTORY_SEPARATOR.$class_name.'.class.php';
