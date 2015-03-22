@@ -2209,7 +2209,7 @@ class Audio
 		{
 			### Get the default thumbnail image. ###
 			# Get the image information from the database, and set them to data members.
-			$this->getThisImage('audio-default-thumbnail.jpg', FALSE);
+			$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
 
 			# Set the Image object to a variable.
 			$image_obj=$this->getImageObj();
@@ -2301,7 +2301,7 @@ class Audio
 			{
 				### Get the default thumbnail image. ###
 				# Get the image information from the database, and set them to data members.
-				$this->getThisImage('audio-default-thumbnail.jpg', FALSE);
+				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
 
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
