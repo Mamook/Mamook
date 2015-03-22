@@ -5,13 +5,13 @@
  * Originally written by Stephane Caron (http://www.no-margin-for-errors.com). Re-written by BigTalk Jon Ryser
  *
  * @author		Jon Ryser 	http://JonRyser.com
- * @version		1.0.1
+ * @version		1.0.2
  */
 (function($){
 	var jQuery_fwPopup = $.fwPopup = {
 		// Used for the deep linking to make sure not to call the same function several times.
 		initialized:	false,
-		version:			'1.0.1'
+		version:			'1.0.2'
 	};
 
 	// Create a variable to hold the String that hooks an element to the plugin, making it globally available throughout the plugin.
@@ -393,19 +393,24 @@
 						break;
 
 					case 'audio':
-						// Fit item to viewport
-						popupDimensions = fitToViewport(mediaData[setPosition].width, mediaData[setPosition].height);
+						var imgPreloader = new Image();
 
-						var audio = new Audio();
-						var image = ((mediaData[setPosition].image) ? '<img src="' + mediaData[setPosition].image + '" alt="Cover for ' + descriptions[setPosition] + '"/>' : '');
-						var tempMarkup = settings.audio_markup.replace(/{type}/g, type.type);
-						tempMarkup = tempMarkup.replace(/{codec}/g, type.codec);
-						tempMarkup = tempMarkup.replace(/{image}/g, image);
-						markupToAdd = tempMarkup.replace(/{path}/g, paths[setPosition]);
-
-						audio.setAttribute('src', paths[setPosition]);
-						// Required for 'older' browsers.
-						audio.load();
+						imgPreloader.onload = function(){
+							var audio = new Audio();
+							var image = ((mediaData[setPosition].image) ? '<img src="' + mediaData[setPosition].image + '" alt="Cover for ' + descriptions[setPosition] + '"/>' : '');
+							var tempMarkup = settings.audio_markup.replace(/{type}/g, type.type);
+							tempMarkup = tempMarkup.replace(/{codec}/g, type.codec);
+							tempMarkup = tempMarkup.replace(/{image}/g, image);
+							$fwPopupHolder.find('#fwpFullRes')[0].innerHTML = tempMarkup.replace(/{path}/g, paths[setPosition]);
+							$('.fwpContainer audio').width(imgPreloader.width);
+							audio.setAttribute('src', paths[setPosition]);
+							// Required for 'older' browsers.
+							audio.load();
+							// Fit item to viewport.
+							popupDimensions = fitToViewport(imgPreloader.width, (imgPreloader.height+30));
+							showContent();
+						};
+						imgPreloader.src = mediaData[setPosition].image;
 						break;
 
 					case 'custom':

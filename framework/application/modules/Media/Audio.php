@@ -2191,38 +2191,42 @@ class Audio
 		{
 			$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->medium->url);
 		}
+		elseif(!empty($large_audio[0]->image))
+		{
+			# Set the image ID.
+			$this->setImageID($large_audio[0]->image);
+
+			# Get the image information from the database, and set them to data members.
+			$this->getThisImage($this->getImageID());
+
+			# Set the Image object to a variable.
+			$image_obj=$this->getImageObj();
+
+			# Set the thumbnail to a variable.
+			$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+		}
 		else
 		{
-			if(!empty($large_audio[0]->image))
-			{
-				# Set the image ID.
-				$this->setImageID($large_audio[0]->image);
+			### Get the default thumbnail image. ###
+			# Get the image information from the database, and set them to data members.
+			$this->getThisImage('audio-default-thumbnail.jpg', FALSE);
 
-				# Get the image information from the database, and set them to data members.
-				$this->getThisImage($this->getImageID());
+			# Set the Image object to a variable.
+			$image_obj=$this->getImageObj();
 
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
+			# Set the thumbnail to a variable.
+			$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 		}
 
 		# Set the description
 		$this->setDescription($db->sanitize($large_audio[0]->description, 5));
 
-		# Check if there ISN'T a thumbnail for this audio file.
-		if($this->getImageID()===NULL)
-		{
-
-		}
 		# Set the thumbnail image to a local variable. If there is no thumbnail, use the default.
 		$thumbnail=$this->getThumbnailUrl();
 
 		$display='<div class="audio-lg">'.
 			'<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
-				($this->getImageID()===NULL ? '<span class="thumbnail-default"></span>' : '<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>').
+				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.
 			'</a>'.
 			'<h3 class="h-3">'.
@@ -2279,28 +2283,38 @@ class Audio
 			{
 				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
 			}
+			elseif(!empty($audio->image))
+			{
+				# Set the image ID.
+				$this->setImageID($audio->image);
+
+				# Get the image information from the database, and set them to data members.
+				$this->getThisImage($this->getImageID());
+
+				# Set the Image object to a variable.
+				$image_obj=$this->getImageObj();
+
+				# Set the the thumbnail to a variable.
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+			}
 			else
 			{
-				$image_path=NULL;
-				if(!empty($audio->image))
-				{
-					# Set the image ID.
-					$this->setImageID($audio->image);
+				### Get the default thumbnail image. ###
+				# Get the image information from the database, and set them to data members.
+				$this->getThisImage('audio-default-thumbnail.jpg', FALSE);
 
-					# Get the image information from the database, and set them to data members.
-					$this->getThisImage($this->getImageID());
+				# Set the Image object to a variable.
+				$image_obj=$this->getImageObj();
 
-					# Set the Image object to a variable.
-					$image_obj=$this->getImageObj();
-
-					# Set the the thumbnail to a variable.
-					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-				}
+				# Set the thumbnail to a variable.
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
 
 			# Set the markup to a variable
 			$display.='<li>'.
-				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.($this->getImageID()===NULL ? '<span class="thumbnail-default"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'" />').'</a>'.
+				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
+					'<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'"/>'.
+				'</a>'.
 				'</li>';
 		}
 

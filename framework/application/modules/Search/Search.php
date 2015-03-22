@@ -326,11 +326,21 @@ class Search
 		$exclude=' the if it to a I but no so of are and';
 
 		# Create a variable to hold the reg ex pattern that finds all pair of double quotes (").
-		$pattern='/\"(.*?)\"/e';
+		$pattern='/\"(.*?)\"/';
 		# Create a variable to hold the method call that replaces any whitespaces or commas with a holder token.
 		$replacement="Search::change2Token('\$1')";
 		# Find all pair of double quotes (") and pass their contents to the change2Token() method for processing.
-		$terms=preg_replace($pattern, $replacement, $terms);
+		$terms=preg_replace_callback(
+			$pattern,
+			function($matches)
+			{
+				foreach($matches as $match)
+				{
+					return Search::change2Token($match);
+        }
+			},
+			$terms
+		);
 		# Take out parentheses
 		$terms=preg_replace('/\)|\(/', '', $terms);
 
@@ -358,7 +368,17 @@ class Search
 		foreach($terms as $term)
 		{
 			# For each searchable term, replace the holding tokens with their original contents (whitespace or comma).
-			$term=preg_replace("/\{WHITESPACE-([\d]+)\}/e", "chr('\$1')", $term);
+			$term=preg_replace_callback(
+				"/\{WHITESPACE-([\d]+)\}/",
+				function($matches)
+				{
+					foreach($matches as $match)
+					{
+						return chr($match);
+					}
+				},
+				$term
+			);
 			$term=preg_replace("/\{COMMA\}/", ",", $term);
 
 			# If the term is not in the excluded list add it to the $out array.
@@ -1019,9 +1039,19 @@ class Search
 	 */
 	protected static function change2Token($term)
 	{
-		# Replace any whitespace ( ) with a holder token.
-		$term=preg_replace("/(\s)/e", "'{WHITESPACE-'.ord('\$1').'}'", $term);
-		# Replace any comma (,) with a holder token.
+		# Replace any whitespace ( ) with a holder token (ie. {WHITESPACE-1}).
+		$term=preg_replace_callback(
+			"/(\s)/",
+			function($matches)
+			{
+				foreach($matches as $match)
+				{
+					return '{WHITESPACE-'.ord($match).'}';
+        }
+			},
+			$term
+		);
+		# Replace any comma (,) with a holder token ({COMMA}).
 		$term=preg_replace("/,/", "{COMMA}", $term);
 
 		return $term;
