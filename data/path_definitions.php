@@ -68,10 +68,10 @@ define('CACHE', BASE_PATH.'cache'.DS);
 define('IMAGES_PATH', BASE_PATH.'public'.DS.'images'.DS);
 
 # Define where the Templates directory is (ie. /hsphere/home/user/domain.com/templatesFolder/) (ends with a slash)
-define('TEMPLATES', BASE_PATH.'templates'.DS);
+define('TEMPLATES', APPLICATION_FOLDER.'templates'.DS);
 
 # Define where the Framework Templates directory is (ie. /hsphere/home/user/domain.com/templatesFolder/) (ends with a slash)
-define('FW_TEMPLATES', BASE_PATH.'framework'.DS.'templates'.DS);
+define('FW_TEMPLATES', FW_APPLICATION_FOLDER.'templates'.DS);
 
 # Define where the Temp directory is (ie. /hsphere/home/user/domain.com/tmpFolder/) (ends with a slash)
 define('TEMP', BASE_PATH.'tmp'.DS);
@@ -79,11 +79,14 @@ define('TEMP', BASE_PATH.'tmp'.DS);
 # Define where the Logs directory is (ie. /hsphere/home/user/domain.com/logsFolder/) (ends with a slash)
 define('LOGS', BASE_PATH.'logs'.DS);
 
+# Define where the public media directory is (ie. mediaFolder/) (ends with a slash)
+define('MEDIA_PATH', BASE_PATH.'public'.DS.'media'.DS);
+
 # Define where the public audio directory is (ie. audioFolder/) (ends with a slash)
-define('AUDIO_PATH', BASE_PATH.'public'.DS.'media'.DS.'audio'.DS);
+define('AUDIO_PATH', MEDIA_PATH.'audio'.DS);
 
 # Define where the public video directory is (ie. videoFolder/) (ends with a slash)
-define('VIDEOS_PATH', BASE_PATH.'public'.DS.'media'.DS.'videos'.DS);
+define('VIDEOS_PATH', MEDIA_PATH.'videos'.DS);
 
 # Define where the secure audio directory is (ie. secure/admin/ManageMedia/audioFolder/) (ends with a slash)
 define('SECURE_AUDIO_PATH', 'secure'.DS.'admin'.DS.'ManageMedia'.DS.'audio'.DS);

@@ -12,7 +12,6 @@ $audio_id=NULL;
 $audio_api=NULL;
 $audio_author=NULL;
 $audio_availability=1; # Set the default to "This site has the legal right to display" (1)
-$audio_category=NULL;
 $audio_contributor=$contributor->getContID();
 $audio_date=date('Y-m-d'); # Set the default to todays date.
 $audio_description=NULL;
@@ -40,11 +39,11 @@ if(isset($_GET['audio']))
 	# Set the passed audio ID to the Audio data member, effectively "cleaning" it.
 	$audio_obj->setID($_GET['audio']);
 	# Get the audio from the `audio` table.
-	if($audio_obj->getThisAudio($audio_obj->getID())===TRUE)
+	if($audio_obj->getThisAudio($audio_obj->getID())!==FALSE)
 	{
 		# Get the audio's playlists and set them to a local variable as a dash (-) separated string of the playlist id's.
 		# Set the categories to a local variable.
-		$playlists_array=$audio_obj->getPlaylists();
+		$playlists_array=$audio_obj->getCategories();
 		# Check if there are any playlists.
 		if(!empty($playlists_array))
 		{
@@ -62,7 +61,6 @@ if(isset($_GET['audio']))
 		$audio_api=$audio_obj->getAPI();
 		$audio_author=$audio_obj->getAuthor();
 		$audio_availability=$audio_obj->getAvailability();
-		$audio_category=$audio_obj->getCategory();
 		$audio_contributor=$audio_obj->getContID();
 		$audio_date=$audio_obj->getDate();
 		$audio_description=$audio_obj->getDescription();
@@ -94,7 +92,6 @@ $default_data=array(
 		'API'=>$audio_api,
 		'Author'=>$audio_author,
 		'Availability'=>$audio_availability,
-		'Category'=>$audio_category,
 		'ContID'=>$audio_contributor,
 		'Date'=>$audio_date,
 		'Description'=>$audio_description,
@@ -105,7 +102,7 @@ $default_data=array(
 		'Institution'=>$audio_institution,
 		'Language'=>$audio_language,
 		'LastEdit'=>$audio_last_edit_date,
-		'Playlists'=>$audio_playlists,
+		'Categories'=>$audio_playlists,
 		'Publisher'=>$audio_publisher,
 		'RecentContID'=>$audio_recent_contributor_id,
 		'Title'=>$audio_title,

@@ -65,7 +65,7 @@ elseif(!isset($_GET['select']))
 	if(empty($duplicates))
 	{
 		# Do we need some javascripts? (Use the script audio name before the ".js".)
-		$doc->setJavaScripts('uniform,bsmSelect,audio');
+		$doc->setJavaScripts('uniform,bsmSelect');
 		# Do we need some JavaScripts in the footer? (Use the script audio name before the ".php".)
 		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
 
@@ -189,7 +189,7 @@ elseif(!isset($_GET['select']))
 		# Get the publish year from the Audio data member.
 		$audio_year=$audio_obj->getYear();
 		# Check if the publish year value is empty.
-		if(empty($audio_year))
+		if(empty($audio_year) OR ($audio_year=='0000'))
 		{
 			# Reset the value to "Unknown".
 			$audio_year='Unknown';
@@ -236,7 +236,7 @@ elseif(!isset($_GET['select']))
 			# Create the "Add Playlist" option.
 			//$playlist_options['add']='Add Playlist';
 			# Set the current playlists to a variable.
-			$audio_playlists=array_flip((array)$audio_obj->getPlaylists());
+			$audio_playlists=array_flip((array)$audio_obj->getCategories());
 			foreach($playlists as $row)
 			{
 				# Create an option for each playlist.
@@ -356,8 +356,8 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('</ul>');
 		$fg->addFormPart('</li>');
 		# Check if there is GET data. If there is, it's a audio edit, and don't show this part of the form.
-		if(!isset($_GET['audio']))
-		{
+		//if(!isset($_GET['audio']))
+		//{
 			$fg->addFormPart('<li id="file">');
 			$fg->addFormPart('<label class="label" for="audio"><span class="required">*</span> Audio</label>');
 			$fg->addElement('file', array('name'=>'audio', 'id'=>'audio'));
@@ -389,14 +389,14 @@ elseif(!isset($_GET['select']))
 				}
 				else
 				{
-					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
 				$fg->addFormPart('</li>');
 				$fg->addFormPart('</ul>');
 			}
 			$fg->addFormPart('</li>');
-		}
+		//}
 		# Check if there is GET data. If there is, it's a audio edit, and don't show this part of the form.
 		if(!isset($_GET['audio']) || $audio_obj->getAudioType()!='file')
 		{
