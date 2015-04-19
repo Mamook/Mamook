@@ -1,7 +1,15 @@
 <?php /* public/secure/login/register/index.php */
 
+if($login->isLoggedIn()===TRUE)
+{
+	$doc->redirect(REDIRECT_AFTER_LOGIN);
+}
+
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
+# Get the RegisterFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'RegisterFormProcessor.php');
+$fp=new RegisterFormProcessor();
 
 # Find out where to redirect the user to after they login.
 $login->capturePostLogin();
@@ -16,18 +24,9 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-$username='';
-$email='';
-if(array_key_exists('_submit_check', $_POST))
-{
-	$email=((isset($_POST['email']) && ($_POST['email']!='youremail@somewhere.com')) ? $_POST['email'] : '');
-}
-$email_conf='';
+
 $head='<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>';
 $page_class='loginpage-register';
-
-# Process the login if it has been submitted.
-$login->processRegistration();
 
 # Check if cookies are enabled in the user's browser. This creates the variable $error.
 $no_cookie_msg='You do not have cookies enabled in your browser. To login to this site and for many of the features to work correctly, you must have cookies enabled.<br />For more information on this site\'s use of cookies, please see our <a href="'.APPLICATION_URL.'policy/#_Use_of_cookies">policy page</a>.';
@@ -42,9 +41,6 @@ if($cookies===FALSE)
 		$alert_title='Alert!';
 	}
 }
-
-# Capture any errors.
-$doc->setError($login->getError());
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'register.php');
 

@@ -17,16 +17,86 @@ class Login Extends User
 {
 	/*** data members ***/
 
+	//protected $email=NULL;
+	protected $email_conf=NULL;
 	protected $error='';
+	//protected $password=NULL;
+	protected $password_conf=NULL;
 	protected $post_login=NULL;
 	protected $recaptcha_error;
 	protected $remember=NULL;
+	//protected $username=NULL;
+	protected $wp_password=NULL;
 
 	/*** End data members ***/
 
 
 
 	/*** mutator methods ***/
+
+	/**
+	 * setEmailConf
+	 *
+	 * Sets the data member $email_conf.
+	 *
+	 * @param	$email_conf			The User's email.
+	 * @access	public
+	 */
+	public function setEmailConf($email_conf)
+	{
+		# Check if the value is empty.
+		if(!empty($email_conf))
+		{
+			# Clean it up and set the data member.
+			$email_conf=trim($email_conf);
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$email_conf=NULL;
+		}
+		# Set the data member.
+		$this->email_conf=$email_conf;
+	} #==== End -- setEmailConf
+
+	/**
+	 * setError
+	 *
+	 *  Sets the data member $error.
+	 *
+	 *  @param	$error (The error string to set.)
+	 *  @access	public
+	 */
+	public function setError($error)
+	{
+		$error=trim($error);
+		$this->error=$error;
+	} #==== End -- setError
+
+	/**
+	 * setPasswordConf
+	 *
+	 * Sets the data member $password_conf.
+	 *
+	 * @param	$password_conf			The User's password.
+	 * @access	public
+	 */
+	public function setPasswordConf($password_conf)
+	{
+		# Check if the value is empty.
+		if(!empty($password_conf))
+		{
+			# Clean it up and set the data member.
+			$password_conf=trim($password_conf);
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$password_conf=NULL;
+		}
+		# Set the data member.
+		$this->password_conf=$password_conf;
+	} #==== End -- setPasswordConf
 
 	/**
 	 * setPostLogin
@@ -48,20 +118,6 @@ class Login Extends User
 			$this->post_login=NULL;
 		}
 	} #==== End -- setPostLogin
-
-	/**
-	 * setError
-	 *
-	 *  Sets the data member $error.
-	 *
-	 *  @param	$error (The error string to set.)
-	 *  @access	public
-	 */
-	public function setError($error)
-	{
-		$error=trim($error);
-		$this->error=$error;
-	} #==== End -- setError
 
 	/**
 	 *  setReCaptchaError
@@ -94,6 +150,31 @@ class Login Extends User
 		$this->remember=$remember;
 	} #==== End -- setRemember
 
+	/**
+	 * setWPPassword
+	 *
+	 * Sets the data member $wp_password.
+	 *
+	 * @param	$wp_password			The User's encoded password.
+	 * @access	public
+	 */
+	public function setWPPassword($wp_password)
+	{
+		# Check if the value is empty.
+		if(!empty($wp_password))
+		{
+			# Clean it up and set the data member.
+			$wp_password=trim($wp_password);
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$wp_password=NULL;
+		}
+		# Set the data member.
+		$this->wp_password=$wp_password;
+	} #==== End -- setWPPassword
+
 	/*** End mutator methods ***/
 
 
@@ -101,16 +182,16 @@ class Login Extends User
 	/*** accessor methods ***/
 
 	/**
-	 *  getPostLogin
+	 * getEmailConf
 	 *
-	 *  Returns the data member $post_login. Throws an error on failure.
+	 * Returns the data member $email_conf.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
-	public function getPostLogin()
+	public function getEmailConf()
 	{
-		return $this->post_login;
-	} #==== End -- getPostLogin
+		return $this->email_conf;
+	} #==== End -- getEmailConf
 
 	/**
 	 *  getError
@@ -127,6 +208,30 @@ class Login Extends User
 		}
 		else { return NULL; }
 	} #==== End -- getError
+
+	/**
+	 * getPasswordConf
+	 *
+	 * Returns the data member $password_conf.
+	 *
+	 * @access	public
+	 */
+	public function getPasswordConf()
+	{
+		return $this->password_conf;
+	} #==== End -- getPasswordConf
+
+	/**
+	 *  getPostLogin
+	 *
+	 *  Returns the data member $post_login. Throws an error on failure.
+	 *
+	 *  @access	public
+	 */
+	public function getPostLogin()
+	{
+		return $this->post_login;
+	} #==== End -- getPostLogin
 
 	/**
 	 *  getReCaptchaError
@@ -151,6 +256,18 @@ class Login Extends User
 	{
 		return $this->remember;
 	} #==== End -- getRemember
+
+	/**
+	 * getWPPassword
+	 *
+	 * Returns the data member $wp_password.
+	 *
+	 * @access	public
+	 */
+	public function getWPPassword()
+	{
+		return $this->wp_password;
+	} #==== End -- getWPPassword
 
 	/*** End accessor methods ***/
 
@@ -654,214 +771,6 @@ class Login Extends User
 	} #==== End -- processLogin
 
 	/**
-	 *  processRegistration
-	 *
-	 *  Checks if the Registration has been submitted and processes it.
-	 *
-	 *  @access	public
-	 */
-	public function processRegistration()
-	{
-		# Set the Document instance to a variable.
-		$doc=Document::getInstance();
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		# bring the form variables into scope.
-		global $username;
-		global $email;
-		global $email_conf;
-
-		if($this->isLoggedIn()===TRUE) { $doc->redirect(REDIRECT_AFTER_LOGIN); }
-
-		# Check if the form has been submitted.
-		if(array_key_exists('_submit_check', $_POST))
-		{
-			if(isset($_POST['_reg']) && ($_POST['_reg']==1))
-			{
-				# If the form has been submitted, we don't need some previous data. Unset the post login session data.
-				unset($_SESSION['_post_login']);
-
-				# Get the FormValidator Class.
-				require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-				# Instantiate a FormValidator object
-				$validate=new FormValidator();
-
-				$empty_username=$validate->validateEmpty('username','Please enter a username that is at least 5 characters long.', 5, 64);
-				$empty_email=$validate->validateEmpty('email','Please enter your email address.', 4, 100);
-				$empty_email_conf=$validate->validateEmpty('email_conf','Please confirm your email address.', 4, 100);
-				$empty_password=$validate->validateEmpty('password','Please enter a password that is at least 6 characters and contains at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>', 6, 64);
-				$empty_password_conf=$validate->validateEmpty('password_conf','Please confirm your password.', 6, 64);
-				if($empty_username===FALSE)
-				{
-					$username=$db->sanitize($_POST['username'], 2);
-					$unique=$this->checkUnique('username', $username);
-					if($unique===FALSE)
-					{
-						$validate->setErrors('The username '.$username.' is already in use, please choose another.');
-					}
-				}
-				if($empty_email===FALSE)
-				{
-					if($_POST['email']=='youremail@somewhere.com')
-					{
-						$validate->setErrors('Please enter your email address.');
-						unset($_POST['email']);
-					}
-					else
-					{
-						$real=$validate->validateEmail('email', 'Please enter a valid email address.', TRUE);
-						if($real===TRUE)
-						{
-							$email=$db->sanitize($_POST['email'], 2);
-							$unique=$this->checkUnique('email', $email);
-							if($unique===FALSE)
-							{
-								$validate->setErrors('An account using the email address "'.$email.'" already exists in the system, please choose another. Or you may use the "<a href="'.REDIRECT_TO_LOGIN.'LostPassword/" title="Lost passowrd">lost password</a>" feature to recover your account information.');
-							}
-							else
-							{
-								if($empty_email_conf===FALSE)
-								{
-									if($_POST['email']!=$_POST['email_conf'])
-									{
-										$validate->setErrors('The email addresses you entered did not match.');
-									}
-								}
-							}
-						}
-						else
-						{
-							unset($_POST['email']);
-						}
-					}
-				}
-				if($empty_password===FALSE)
-				{
-					$alphanumeric=$validate->validateAlphanum('password', 'Your password must be made up of letters and at least 1 number.');
-					if($alphanumeric===TRUE)
-					{
-						if($empty_email_conf===FALSE)
-						{
-							if($_POST['password']!=$_POST['password_conf'])
-							{
-								$validate->setErrors('The passwords you entered did not match.');
-							}
-						}
-					}
-				}
-				if(CAPTCHA_PUBLICKEY!='' && CAPTCHA_PRIVATEKEY!='')
-				{
-					if(isset($_POST["recaptcha_challenge_field"]))
-					{
-						$valid_recaptcha=$validate->reCaptchaCheckAnswer(CAPTCHA_PRIVATEKEY, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"], '', 'You must correctly enter the squiggly characters in the box to complete your registration. Make sure they are correct. There is a "help" button in the little red box.');
-						if($valid_recaptcha===FALSE)
-						{
-							$this->setReCaptchaError($validate->getReCaptchaError());
-						}
-					}
-					else
-					{
-						$validate->setErrors('There is a reCaptcha on this page that needs to be filled out. It is generated by a different website. Please give it a moment to appear before you click the "register" button.');
-					}
-				}
-
-				# Check for errors.
-				if($validate->checkErrors()===TRUE)
-				{
-					# Display errors
-					$error='<h3>Correct the following errors then click "Register":</h3>';
-					$error.=$validate->displayErrors();
-					$this->setError($error);
-				}
-				else
-				{
-					try
-					{
-						# Capture the POST Data.
-						$this->setUsername($username);
-						$username=$this->getUsername();
-						$this->setEmail($email);
-						$email=$this->getEmail();
-						# Get the Encryption Class.
-						require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
-						# Instantiate a new Encryption object.
-						$encrypt=new Encryption(MYKEY);
-						$encrypted_password=$encrypt->enCodeIt(trim($_POST['password']));
-						$this->setPassword($encrypted_password);
-						$password=$this->getPassword();
-						try
-						{
-							$insert_user=$db->query('INSERT INTO `'.DBPREFIX.'users` (`display`, `username`, `email`, `password`, `random`, `registered`) VALUES ('.
-								$db->quote($db->escape($username)).
-								', '.$db->quote($db->escape($username)).
-								', '.$db->quote($db->escape($email)).
-								', '.$db->quote($db->escape($password)).
-								', '.$db->quote($db->escape($this->randomString('alnum', 32))).
-								', '.$db->quote($db->escape(YEAR_MM_DD)).
-								')');
-							# If WordPress is installed add the user the the WordPress users table.
-							if(WP_INSTALLED===TRUE)
-							{
-								$this->createWP_User($_POST['password']);
-							}
-							try
-							{
-								$row=$db->get_row('SELECT `ID`, `random` FROM '.DBPREFIX.'users WHERE `username` = '.$db->quote($db->escape($username)).' LIMIT 1');
-								if($row!==NULL)
-								{
-									# Make sure the post login info is sent to the login page. Set it in a session.
-									$_SESSION['_post_login']=$this->getPostLogin();
-									# send the confirmation email
-									$subject="Activation email from ".DOMAIN_NAME;
-									$to_address=trim($_POST['email']);
-									# Did they fill in the "Title" field? If so, address them appropriately in the email.
-									$message=$username.','."<br />\n<br />\n".
-									'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
-									'You have received this email because this email address was used during registration for our site.'."<br />\n".
-									'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
-									'------------------------------------------------'."<br />\n".
-									' Activation Instructions'."<br />\n".
-									'------------------------------------------------'."<br />\n<br />\n".
-									'Thank you for registering.'."<br />\n".
-									'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
-									'To activate your account, simply click on the following link:'."<br />\n<br />\n".
-									'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
-									'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
-									'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
-									try
-									{
-										$doc->sendEmail($subject, $to_address, $message);
-										$_SESSION['message']='Account created. Please check your email for details on how to activate it. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there. After your account is activated, you may sign in to the '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
-									}
-									catch(Exception $e)
-									{
-										$_SESSION['message']='I managed to create your profile but failed to send the validation email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
-										$doc->redirect(REDIRECT_TO_LOGIN);
-									}
-									$doc->redirect(REDIRECT_TO_LOGIN);
-								}
-							}
-							catch(ezDB_Error $ez)
-							{
-								throw new Exception('There was an error retrieving the new user info for "'.$username.'" from the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-							}
-						}
-						catch(ezDB_Error $ez)
-						{
-							throw new Exception('There was an error registering a new user: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-						}
-					}
-					catch(Exception $e)
-					{
-						throw $e;
-					}
-				}
-			}
-		}
-	} #==== End -- processRegistration
-
-	/**
 	 *  resendActivation
 	 *
 	 *  Resends the activation email originally sent at registration.
@@ -875,7 +784,10 @@ class Login Extends User
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		if($this->isLoggedIn()===TRUE) { $doc->redirect(REDIRECT_AFTER_LOGIN); }
+		if($this->isLoggedIn()===TRUE)
+		{
+			$doc->redirect(REDIRECT_AFTER_LOGIN);
+		}
 
 		# Check if the form has been submitted.
 		if(array_key_exists('_submit_check', $_POST))
@@ -1336,9 +1248,9 @@ class Login Extends User
 	 *
 	 *  @param	$type 	(The type of random string.  Options: alunum, numeric, nozero, unique)
 	 *  @param	$len		(The string length. Default is 8 characters.)
-	 *  @access private
+	 *  @access public
 	 */
-	private function randomString($type='alnum', $len=8)
+	public function randomString($type='alnum', $len=8)
 	{
 		switch($type)
 		{
@@ -1438,17 +1350,27 @@ class Login Extends User
 	 *
 	 *  Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
 	 *
+	 *	@param	string $password		Optional. Used only for Login->changePassword() method.
 	 *  @access private
 	 */
-	private function ecodeWP_Password($password)
+	private function ecodeWP_Password($wp_password=NULL)
 	{
 		# Get the PasswordHash Class.
 		require_once Utility::locateFile(MODULES.'Encryption'.DS.'PasswordHash.php');
 		# Instantiate a PasswordHash object
 		$hasher=new PasswordHash(8, TRUE);
-		# Format the password
-		$wp_password=$hasher->HashPassword(trim($password));
-		return $wp_password;
+		# If $password param is NOT set.
+		if($wp_password===NULL)
+		{
+			# Get the Wordpress password.
+			$wp_password=$this->getWPPassword();
+		}
+		# Format the password.
+		$wp_password=$hasher->HashPassword($wp_password);
+		# Set the formatted password.
+		$this->setWPPassword($wp_password);
+		# Return the password (for backwards compatibility).
+		return $this->getWPPassword();
 	} # ----End ecodeWP_Password
 
 	/**
@@ -1456,20 +1378,22 @@ class Login Extends User
 	 *
 	 * Creates a WordPress user in the WordPress Database tables. Assumes a user was just created in the main users table.
 	 *
-	 * @param	$password (The password of the user to create.)
-	 * @access	private
+	 * @access	public
 	 */
-	private function createWP_User($password)
+	public function createWP_User()
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
 		# Format the password
-		$wp_password=$this->ecodeWP_Password($password);
+		$this->ecodeWP_Password();
+
 		# Get the username.
 		$username=$this->getUsername();
 		# Get the email address.
 		$email=$this->getEmail();
+		# Get the password.
+		$wp_password=$this->getWPPassword();
 
 		try
 		{

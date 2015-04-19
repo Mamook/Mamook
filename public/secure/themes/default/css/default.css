@@ -716,6 +716,7 @@ img {
 }
 .checkbox,
 .dropMenu,
+.email,
 .file,
 .password,
 .radio,
@@ -738,6 +739,7 @@ img {
 	font-size:1em;
 	color:#000;
 }
+.email,
 .text,
 .password,
 .uploader {

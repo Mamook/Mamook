@@ -1,10 +1,18 @@
 <?php /* templates/forms/register.php */
 
+require Utility::locateFile(TEMPLATES.'forms'.DS.'register_form_defaults.php');
+$delete_form_display=$fp->processRegistration($default_data);
+
+# Do we need some javascripts? (Use the script content name before the ".js".)
+$doc->setJavaScripts('uniform,bsmSelect');
+# Do we need some JavaScripts in the footer? (Use the script content name before the ".php".)
+$doc->setFooterJS('uniform-select,fileOption-submit');
+
 $display='<div id="register" class="register form">';
 # Create and display form.
 $display.=$head;
 # Instantiate FormGenerator object.
-$register=new FormGenerator('register', REDIRECT_TO_LOGIN.'register/');
+$register=new FormGenerator('register', $fp->getFormAction());
 $register->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 $register->addElement('hidden', array('name'=>'_reg', 'value'=>'1'));
 if($login->getPostLogin() !== NULL)
@@ -14,16 +22,16 @@ if($login->getPostLogin() !== NULL)
 $register->addFormPart('<fieldset>');
 $register->addFormPart('<ul class="reg">');
 $register->addFormPart('<li>');
-$register->addFormPart('<label class="label" for="username">Username</label>');
-$register->addElement('text', array('name'=>'username', 'value'=>$username, 'id'=>'username'));
+$register->addFormPart('<label class="label" for="username">Username:</label>');
+$register->addElement('text', array('name'=>'username', 'value'=>$login->getUsername(), 'id'=>'username'));
 $register->addFormPart('</li>');
 $register->addFormPart('<li>');
-$register->addFormPart('<label class="label" for="email">Email</label>');
-$register->addElement('text', array('name'=>'email', 'value'=>$email, 'id'=>'email'));
+$register->addFormPart('<label class="label" for="email">Email:</label>');
+$register->addElement('email', array('name'=>'email', 'value'=>$login->getEmail(), 'id'=>'email'));
 $register->addFormPart('</li>');
 $register->addFormPart('<li>');
 $register->addFormPart('<label class="label" for="email_conf">Confirm Email</label>');
-$register->addElement('text', array('name'=>'email_conf', 'value'=>$email_conf, 'id'=>'email_conf'));
+$register->addElement('email', array('name'=>'email_conf', 'value'=>$login->getEmailConf(), 'id'=>'email_conf'));
 $register->addFormPart('</li>');
 $register->addFormPart('<li>');
 $register->addFormPart('<label class="label" for="password">Password</label>');

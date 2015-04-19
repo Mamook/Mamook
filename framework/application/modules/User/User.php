@@ -1733,6 +1733,64 @@ class User
 	} #==== End -- countAllUsers
 
 	/**
+	 * createAccount
+	 *
+	 * Creates a new account in the database.
+	 *
+	 * @access	public
+	 */
+	public function createAccount()
+	{
+		try
+		{
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Bring the Document class into the scope.
+			global $doc;
+			# Bring Login class into the scope.
+			global $login;
+
+			# Set the email data member to a variable.
+			$email=$login->getEmail();
+			# Set the password data member to a variable.
+			$password=$login->getPassword();
+			# Set username data member to a variable.
+			$username=$login->getUsername();
+
+			# Insert user into the `users` table.
+			$insert_user=$db->query('INSERT INTO `'.DBPREFIX.'users` (`display`, `username`, `email`, `password`, `random`, `registered`) VALUES ('.
+				$db->quote($db->escape($username)).
+				', '.$db->quote($db->escape($username)).
+				', '.$db->quote($db->escape($email)).
+				', '.$db->quote($db->escape($password)).
+				', '.$db->quote($db->escape($login->randomString('alnum', 32))).
+				', '.$db->quote($db->escape(YEAR_MM_DD)).
+				')');
+			# If WordPress is installed add the user the the WordPress users table.
+			if(WP_INSTALLED===TRUE)
+			{
+				# Get the wordpress password.
+				$wp_password=$login->getWPPassword();
+				$login->createWP_User($wp_password);
+			}
+			# Account was not created. Return error.
+			if($insert_user<=0)
+			{
+				$_SESSION['message']='There was an error registering your account. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
+				$doc->redirect(REDIRECT_TO_LOGIN);
+			}
+		}
+		catch(ezDB_Error $ez)
+		{
+			throw new Exception('There was an error registering a new user: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- createAccount
+
+	/**
 	 * deleteAccount
 	 *
 	 * Delete's the user's account.
@@ -2694,6 +2752,17 @@ class User
 					# Set the value to the ID data member effectively "cleaning" it.
 					$this->setID($value);
 					# Set the data member to a variable.
+					$id=$this->getID();
+				}
+				elseif($validator->validEmail($value)===TRUE)
+				{
+					# Find the users username using the passed value as the email and set it to a variable.
+					$username=$this->findUsername($value);
+					# Find the user ID $username variable.
+					$id=$this->findUserID($username);
+					# Set the ID to the data member effectively "cleaning" it.
+					$this->setID($id);
+					# Reset the id variable from the data member.
 					$id=$this->getID();
 				}
 				else
