@@ -9,6 +9,8 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 	$header.='<head>';
 		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
 		$header.='<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
+		# Set the viewport.
+		$header.='<meta name="viewport" content="width=device-width, initial-scale=1">';
 		# The title for each page is filled by a variable set on each page.
 		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
 		# Use a custom favicon.
