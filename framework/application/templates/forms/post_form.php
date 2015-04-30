@@ -365,7 +365,7 @@ if(empty($duplicates))
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="text">Text</label>');
-			$fg->addElement('textarea', array('name'=>'text', 'id'=>'text', 'wrap'=>'physical', 'text'=>$sc_object->getText()), '', NULL, 'textarea tinymce');
+			$fg->addElement('textarea', array('name'=>'text', 'id'=>'text', 'text'=>$sc_object->getText()), '', NULL, 'textarea tinymce');
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="text_language">Text Language</label>');
@@ -375,7 +375,7 @@ if(empty($duplicates))
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="text_trans">Text Translation</label>');
-			$fg->addElement('textarea', array('name'=>'text_trans', 'id'=>'text_trans', 'wrap'=>'physical', 'text'=>$sc_object->getTextTrans()), '', NULL, 'textarea tinymce');
+			$fg->addElement('textarea', array('name'=>'text_trans', 'id'=>'text_trans', 'text'=>$sc_object->getTextTrans()), '', NULL, 'textarea tinymce');
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="trans_language">Translation Language</label>');

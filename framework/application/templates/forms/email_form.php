@@ -75,7 +75,7 @@ if($fp->getUpload()===TRUE)
 }
 $form_mail->addFormPart('<li>');
 $form_mail->addFormPart('<label class="label msg" for="mesg">Message</label>');
-$form_mail->addElement('textarea', array('id'=>'mesg', 'name'=>'mesg', 'wrap'=>'physical', 'text'=>$email->getMessage()));
+$form_mail->addElement('textarea', array('id'=>'mesg', 'name'=>'mesg', 'text'=>$email->getMessage()));
 $form_mail->addFormPart('</li>');
 $form_mail->addFormPart('<li>');
 $form_mail->addElement('submit', array('name'=>'send', 'value'=>'Send Email'), '', NULL, 'submit-email');

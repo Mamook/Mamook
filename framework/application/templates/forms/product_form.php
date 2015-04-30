@@ -215,11 +215,11 @@ if(empty($duplicates))
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="description">Description</label>');
-	$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$product_obj->getDescription()), '', NULL, 'textarea tinymce');
+	$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$product_obj->getDescription()), '', NULL, 'textarea tinymce');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="content">Content</label>');
-	$fg->addElement('textarea', array('name'=>'content', 'id'=>'content', 'wrap'=>'physical', 'text'=>$product_obj->getContent()), '', NULL, 'textarea tinymce');
+	$fg->addElement('textarea', array('name'=>'content', 'id'=>'content', 'text'=>$product_obj->getContent()), '', NULL, 'textarea tinymce');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="imageOption">Image</label>');

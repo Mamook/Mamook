@@ -52,7 +52,7 @@ if(empty($duplicates))
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="description">Position Description</label>');
-	$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$position_description), '', NULL, 'textarea tinymce');
+	$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$position_description), '', NULL, 'textarea tinymce');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$button_value='Submit';

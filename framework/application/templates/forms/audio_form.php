@@ -445,7 +445,7 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
-		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$audio_obj->getDescription()), '', NULL, 'textarea');
+		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$audio_obj->getDescription()), '', NULL, 'textarea');
 		$fg->addFormPart('</li>');
 /*
 		$fg->addFormPart('<li>');

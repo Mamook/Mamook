@@ -79,7 +79,7 @@ if(isset($_GET['content']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="text">Text</label>');
-		$fg->addElement('textarea', array('name'=>'text', 'id'=>'text', 'wrap'=>'physical', 'text'=>$text), '', NULL, 'textarea tinymce');
+		$fg->addElement('textarea', array('name'=>'text', 'id'=>'text', 'text'=>$text), '', NULL, 'textarea tinymce');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="quote">Quote</label>');

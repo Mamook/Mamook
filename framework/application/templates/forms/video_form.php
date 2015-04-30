@@ -427,7 +427,7 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
-		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$video_obj->getDescription()), '', NULL, 'textarea');
+		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$video_obj->getDescription()), '', NULL, 'textarea');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> YouTube Category</label>');

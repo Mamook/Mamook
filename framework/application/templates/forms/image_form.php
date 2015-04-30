@@ -120,7 +120,7 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
-		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'wrap'=>'physical', 'text'=>$image->getDescription()), '', NULL, 'textarea tinymce');
+		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$image->getDescription()), '', NULL, 'textarea tinymce');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="location">Location</label>');

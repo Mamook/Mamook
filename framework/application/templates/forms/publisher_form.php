@@ -54,7 +54,7 @@ if(empty($duplicates))
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="description">Publisher Info</label>');
-	$fg->addElement('textarea', array('name'=>'info', 'id'=>'info', 'wrap'=>'physical', 'text'=>$publisher->getInfo()), '', NULL, 'textarea tinymce');
+	$fg->addElement('textarea', array('name'=>'info', 'id'=>'info', 'text'=>$publisher->getInfo()), '', NULL, 'textarea tinymce');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$button_value='Submit';

@@ -8,7 +8,7 @@
 	$fg->addFormPart('<label for="message">Message</label>');
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
-	$fg->addElement('textarea', array('name'=>'message', 'wrap'=>'physical'));
+	$fg->addElement('textarea', array('name'=>'message'));
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$fg->addElement('image', array('name'=>'send', 'value'=>'Send'), '', THEME.'images/transparent.dot.png');
