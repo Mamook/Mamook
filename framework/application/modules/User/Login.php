@@ -13,7 +13,7 @@ require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
  *
  * The Login Class is used to login in and out users as well as checking various login privileges.
  */
-class Login Extends User
+class Login extends User
 {
 	/*** data members ***/
 
