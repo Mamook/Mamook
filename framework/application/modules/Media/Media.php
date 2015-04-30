@@ -1064,11 +1064,11 @@ class Media
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image=new Image();
+			$image_obj=new Image();
 			# Get the institutions.
-			$image->getImages($limit, $fields, $order, $direction, $where);
+			$image_obj->getImages($limit, $fields, $order, $direction, $where);
 			# Set the retrieved images to a variable.
-			$images=$image->getAllImages();
+			$images=$image_obj->getAllImages();
 			# Check if there were records retrieved.
 			if($images!==NULL)
 			{

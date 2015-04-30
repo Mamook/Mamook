@@ -391,11 +391,11 @@ if(empty($duplicates))
 				# Get the file info.
 				$sc_object->getThisImage($image_id);
 				# Set the File object to a variable.
-				$image=$sc_object->getImage();
-				$image_name=$image->getImage();
+				$image_obj=$sc_object->getImageObj();
+				$image_name=$image_obj->getImage();
 				$fg->addFormPart('<ul>');
 				$fg->addFormPart('<li class="file-current">');
-				$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
+				$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 				$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 				$fg->addFormPart('</li>');
 				$fg->addFormPart('</ul>');

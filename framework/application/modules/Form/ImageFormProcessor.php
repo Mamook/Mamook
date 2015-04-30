@@ -461,7 +461,7 @@ class ImageFormProcessor extends FormProcessor
 						if($record_retrieved===TRUE)
 						{
 							# Set the Image object to a local variable.
-							$image=$subcontent->getImage();
+							$image=$subcontent->getImageObj();
 							# Set the image name to a local variable.
 							$image_name=$image->getImage();
 							# Set the "cleaned id to a local variable.
@@ -649,18 +649,18 @@ class ImageFormProcessor extends FormProcessor
 					# Get the Populator object and set it to a local variable.
 					$populator=$this->getPopulator();
 					# Get the Image object and set it to a local variable.
-					$image=$populator->getImageObject();
+					$image_obj=$populator->getImageObject();
 					$colon_pos=strpos($_POST['image_info'], ':');
 					$image_id=substr($_POST['image_info'], 0, $colon_pos);
 					$image_name=substr($_POST['image_info'], $colon_pos+1);
 					# Set the image id to the Image data member.
-					$image->setID($image_id);
+					$image_obj->setID($image_id);
 					# Set the image name to the Image data member.
-					$image->setImage($image_name);
+					$image_obj->setImage($image_name);
 					# Set the image's id to a variable.
-					$image_id=$image->getID();
+					$image_id=$image_obj->getID();
 					# Set the image's name to a variable.
-					$image_name=$image->getImage();
+					$image_name=$image_obj->getImage();
 					# Redirect the User back to the form that sent them to fetch an image.
 					$this->redirectImage($image_name, 'selected');
 				}
@@ -692,11 +692,11 @@ class ImageFormProcessor extends FormProcessor
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
 			# Get the Image object and set it to a local variable.
-			$image=$populator->getImageObject();
+			$image_obj=$populator->getImageObject();
 			# Get the data for the new image.
-			$image->getThisImage($image_name, FALSE);
+			$image_obj->getThisImage($image_name, FALSE);
 			# Get the new image's id.
-			$image_id=$image->getID();
+			$image_id=$image_obj->getID();
 			# Remove the image session.
 			unset($_SESSION['form']['image']);
 			# Set a nice message for the user in a session.
@@ -767,7 +767,7 @@ class ImageFormProcessor extends FormProcessor
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
 			# Get the Image object and set it to a local variable.
-			$image=$populator->getImageObject();
+			$image_obj=$populator->getImageObject();
 
 			# Set the form URL's to a variable.
 			$form_url=$populator->getFormURL();
@@ -779,18 +779,18 @@ class ImageFormProcessor extends FormProcessor
 			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
 			$_SESSION['form']['image']=
 				array(
-					'ID'=>$image->getID(),
-					'Categories'=>$image->getCategories(),
-					'ContID'=>$image->getContID(),
-					'Description'=>$image->getDescription(),
+					'ID'=>$image_obj->getID(),
+					'Categories'=>$image_obj->getCategories(),
+					'ContID'=>$image_obj->getContID(),
+					'Description'=>$image_obj->getDescription(),
 					'FormURL'=>$form_url,
-					'Image'=>$image->getImage(),
-					'Height'=>$image->getHeight(),
-					'Hide'=>$image->getHide(),
-					'Location'=>$image->getLocation(),
-					'Title'=>$image->getTitle(),
+					'Image'=>$image_obj->getImage(),
+					'Height'=>$image_obj->getHeight(),
+					'Hide'=>$image_obj->getHide(),
+					'Location'=>$image_obj->getLocation(),
+					'Title'=>$image_obj->getTitle(),
 					'Unique'=>$populator->getUnique(),
-					'Width'=>$image->getWidth()
+					'Width'=>$image_obj->getWidth()
 				);
 		}
 		catch(Exception $e)
