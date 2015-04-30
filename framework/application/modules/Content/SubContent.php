@@ -3,6 +3,8 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
+# Get the parent Content class.
+require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
 
 /**
  * SubContent
@@ -10,13 +12,19 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
  * The SubContent Class is used access and maintain the `subcontent` table in the database.
  *
  */
-class SubContent
+class SubContent extends Content
 {
 	/*** data members ***/
 
-	private $all_subcontent=NULL;
-	private $id=NULL;
 	private $all_audio=NULL;
+	private $all_contributors=NULL;
+	private $all_files=NULL;
+	private $all_images=NULL;
+	private $all_institutions=NULL;
+	private $all_languages=NULL;
+	private $all_publishers=NULL;
+	private $all_subcontent=NULL;
+	private $all_videos=NULL;
 	private $audio_obj=NULL;
 	private $audio_id=NULL;
 	private $availability;
@@ -25,49 +33,40 @@ class SubContent
 	private $branch_id=NULL;
 	private $branch_domain=NULL;
 	private $branch_where_sql=NULL;
-	private $record_branches=NULL;
-	private $wanted_branches=NULL;
-	private $all_contributors=NULL;
 	private $contributor=NULL;
 	private $cont_id=NULL;
-	private $recent_cont_id=NULL;
 	private $date='0000-00-00';
-	private $last_edit='0000-00-00';
-	private $all_files=NULL;
 	private $file=NULL;
 	private $file_id=NULL;
 	private $file_info_display=array('header'=>NULL, 'name'=>NULL, 'title'=>NULL, 'author'=>NULL, 'publisher'=>NULL, 'language'=>NULL, 'year'=>NULL, 'location'=>NULL, 'contributor'=>NULL, 'date'=>NULL, 'recent_contributor'=>NULL, 'last_edit'=>NULL, 'all'=>NULL);
-	private $all_images=NULL;
-	private $image=NULL;
+	private $hide;
+	private $image_obj=NULL;
 	private $image_id=NULL;
-	private $all_institutions=NULL;
 	private $institution=NULL;
 	private $institution_id=NULL;
-	private $all_languages=NULL;
 	private $language=NULL;
 	private $language_id=NULL;
 	private $language_iso=NULL;
 	private $link=NULL;
+	private $last_edit='0000-00-00';
 	private $more='more';
 	private $post_title_display=NULL;
 	private $premium;
-	private $all_publishers=NULL;
 	private $publisher=NULL;
 	private $publisher_id=NULL;
-	private $sub_title=NULL;
+	private $recent_cont_id=NULL;
+	private $record_branches=NULL;
 	private $text_language=NULL;
 	private $text_language_iso=NULL;
-	private $text=NULL;
 	private $trans_language=NULL;
 	private $trans_language_iso=NULL;
 	private $text_trans=NULL;
 	private $title=NULL;
-	private $hide;
 	private $user=NULL;
-	private $all_videos=NULL;
 	private $video_obj=NULL;
 	private $video_id=NULL;
 	private $visibility;
+	private $wanted_branches=NULL;
 
 	/*** End data members ***/
 
@@ -99,40 +98,6 @@ class SubContent
 			$this->all_subcontent=NULL;
 		}
 	} #==== End -- setAllSubContent
-
-	/**
-	 * setID
-	 *
-	 * Sets the data member $id.
-	 *
-	 * @param		$id
-	 * @access	public
-	 */
-	public function setID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Set the data member explicitly making it an integer.
-				$this->id=(int)$id;
-			}
-			else
-			{
-				throw new Exception('The passed subcontent id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->id=NULL;
-		}
-	} #==== End -- setID
 
 	/**
 	 * setAllAudio
@@ -203,7 +168,7 @@ class SubContent
 	 *
 	 * Sets the data member $availability.
 	 *
-	 * @param		$availability
+	 * @param	$availability
 	 * @access	public
 	 */
 	public function setAvailability($availability)
@@ -237,7 +202,7 @@ class SubContent
 	 *
 	 * Sets the data member $all_branches.
 	 *
-	 * @param		$branches
+	 * @param	$branches
 	 * @access	protected
 	 */
 	protected function setAllBranches($branches)
@@ -645,18 +610,18 @@ class SubContent
 	} #==== End -- setAllImages
 
 	/**
-	 * setImage
+	 * setImageObj
 	 *
-	 * Sets the data member $image.
+	 * Sets the data member $image_obj.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
-	protected function setImage($object)
+	protected function setImageObj($object)
 	{
 		# Set the data member.
-		$this->image=$object;
-	} #==== End -- setImage
+		$this->image_obj=$object;
+	} #==== End -- setImageObj
 
 	/**
 	 * setImageID
@@ -1019,63 +984,6 @@ class SubContent
 	} #==== End -- setPublisherID
 
 	/**
-	 * setSubTitle
-	 *
-	 * Sets the data member $sub_title.
-	 *
-	 * @param		$sub_title
-	 * @access	protected
-	 */
-	protected function setSubTitle($sub_title)
-	{
-		# Check if the passed value is empty.
-		if(!empty($sub_title))
-		{
-			# Strip slashes, decode any html entities, strip any tags, and set the data member.
-			$this->sub_title=strip_tags(html_entity_decode(stripslashes($sub_title), ENT_COMPAT, 'UTF-8'));
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->sub_title=NULL;
-		}
-	} #==== End -- setPublisherID
-
-	/**
-	 * setText
-	 *
-	 * Sets the data member $text.
-	 *
-	 * @param	string $text
-	 * @access	public
-	 */
-	public function setText($text)
-	{
-		# Bring the content object into scope.
-		global $main_content;
-
-		# Check if the value is empty.
-		if(!empty($text))
-		{
-			# The the site name.
-			$site_name=$main_content->getSiteName();
-			# Strip slashes and decode any html entities in UTF-8 charset.
-			$text=html_entity_decode(stripslashes($text), ENT_NOQUOTES, 'UTF-8');
-			# Clean it up.
-			$text=trim($text);
-			# Replace any domain tokens with the current domain name.
-			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
-		}
-		else
-		{
-			# Explicitly set it to NULL.
-			$text=NULL;
-		}
-		# Set the data member.
-		$this->text=$text;
-	} #==== End -- setText
-
-	/**
 	 * setTextLanguage
 	 *
 	 * Sets the data member $text_language.
@@ -1358,18 +1266,6 @@ class SubContent
 	} #==== End -- getAllSubContent
 
 	/**
-	 * getID
-	 *
-	 * Returns the data member $id.
-	 *
-	 * @access	public
-	 */
-	public function getID()
-	{
-		return $this->id;
-	} #==== End -- getID
-
-	/**
 	 * getAllAudio
 	 *
 	 * Returns the data member $all_audio.
@@ -1622,16 +1518,16 @@ class SubContent
 	} #==== End -- getAllImages
 
 	/**
-	 * getImage
+	 * getImageObj
 	 *
-	 * Returns the data member $image.
+	 * Returns the data member $image_obj.
 	 *
 	 * @access	public
 	 */
-	public function getImage()
+	public function getImageObj()
 	{
-		return $this->image;
-	} #==== End -- getImage
+		return $this->image_obj;
+	} #==== End -- getImageObj
 
 	/**
 	 * getImageID
@@ -1812,30 +1708,6 @@ class SubContent
 	{
 		return $this->publisher_id;
 	} #==== End -- getPublisherID
-
-	/**
-	 * getSubTitle
-	 *
-	 * Returns the data member $sub_title.
-	 *
-	 * @access	public
-	 */
-	public function getSubTitle()
-	{
-		return $this->sub_title;
-	} #==== End -- getSubTitle
-
-	/**
-	 * getText
-	 *
-	 * Returns the data member $text.
-	 *
-	 * @access	public
-	 */
-	public function getText()
-	{
-		return $this->text;
-	} #==== End -- getText
 
 	/**
 	 * getTextLanguage
@@ -2489,7 +2361,7 @@ class SubContent
 							if($this->getImageID()!==NULL)
 							{
 								# Set this Image object to a variable.
-								$image_obj=$this->getImage();
+								$image_obj=$this->getImageObj();
 								$image_cats=$image_obj->getCategories();
 								$image_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $image_obj->getImage());
 								# Set the displayed image to a variable.
@@ -3370,16 +3242,16 @@ class SubContent
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image=new Image();
+			$image_obj=new Image();
 			# Get the info for this image and set the return boolean to a variable.
-			$record_retrieved=$image->getThisImage($value, $id);
+			$record_retrieved=$image_obj->getThisImage($value, $id);
 			# Set the image object to the data member.
-			$this->setImage($image);
+			$this->setImageObj($image_obj);
 			# Check if there was an image retrieved.
 			if($record_retrieved===TRUE)
 			{
 				# Set the id to the data member.
-				$this->setImageID($image->getID());
+				$this->setImageID($image_obj->getID());
 				return TRUE;
 			}
 			# Set the image id data member to NULL.

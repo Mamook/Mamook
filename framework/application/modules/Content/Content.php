@@ -14,34 +14,34 @@ class Content
 {
 	/*** data members ***/
 
-	protected static $content;
-	protected $all_content=NULL;
-	protected $site_name;
-	protected $slogan=NULL;
-	protected $id=NULL;
-	protected $page_title=NULL;
-	protected $sub_title=NULL;
-	protected $hide_title;
-	protected $text='';
-	protected $topic='';
-	protected $quote='';
-	protected $image=NULL;
-	protected $image_title=NULL;
-	protected $sub_domain=NULL;
-	protected $page=NULL;
-	protected $archive;
 	protected $address1=NULL;
 	protected $address2=NULL;
+	protected $all_content=NULL;
+	protected $archive;
 	protected $city=NULL;
-	protected $state=NULL;
+	protected static $content;
 	protected $country=NULL;
-	protected $zipcode=NULL;
-	protected $phone=NULL;
-	protected $fax=NULL;
-	protected $maintenance;
 	protected $email=NULL;
+	protected $fax=NULL;
+	protected $hide_title;
+	protected $id=NULL;
+	protected $image=NULL;
+	protected $image_title=NULL;
+	protected $maintenance;
+	protected $page=NULL;
+	protected $page_title=NULL;
+	protected $phone=NULL;
+	protected $quote='';
 	protected $registration=NULL;
+	protected $site_name;
+	protected $slogan=NULL;
+	protected $state=NULL;
+	protected $sub_domain=NULL;
+	protected $sub_title=NULL;
+	protected $text='';
+	protected $topic='';
 	protected $use_social=NULL;
+	protected $zipcode=NULL;
 
 	/*** End data members ***/
 
@@ -52,7 +52,7 @@ class Content
 	/**
 	 * __construct
 	 *
-	 * @access	private
+	 * @access	public
 	 */
 	public function __construct()
 	{
@@ -333,7 +333,7 @@ class Content
 	 *
 	 * Sets the data member $image
 	 *
-	 * @param		$image
+	 * @param	$image
 	 * @access	public
 	 */
 	public function setImage($image)
