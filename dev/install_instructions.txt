@@ -149,3 +149,192 @@ FFMPEG
 15. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
 
 16. FFMPEG needs to be installed on the server for Audio & Video.
+	A.	Make the needed directories (in root of user directory $HOME)
+		1.	mkdir tmp
+		2.	mkdir src
+		3.	mkdir opt
+	B.	 Set folder permissions
+		1.	chmod 777 tmp
+		2.	chmod 775 opt
+	C.	Export variables
+		1.	export TMPDIR=$HOME/tmp
+		2.	export PATH=$HOME/opt/bin:$PATH
+		3.	export LD_LIBRARY_PATH=$HOME/opt/lib:/usr/local/lib:$LD_LIBRARY_PATH
+		4.	export CPATH=$HOME/opt/include:/usr/local/include:$CPATH
+		5.	export LIBRARY_PATH=$HOME/opt/lib:/usr/local/lib:$LIBRARY_PATH
+	D.	Install dependencies.
+		1.	autoconf:
+			cd $HOME/src
+			wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+			tar xzvf autoconf-2.69.tar.gz
+			cd autoconf-2.69
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f autoconf-2.69
+			rm autoconf-2.69.tar.gz
+		2.	yasm:
+			cd $HOME/src
+			wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+			tar xzvf yasm-1.3.0.tar.gz
+			cd yasm-1.3.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f yasm-1.3.0
+			rm yasm-1.3.0.tar.gz
+		3.	libogg:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.gz
+			tar xzvf libogg-1.3.2.tar.gz
+			cd libogg-1.3.2
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libogg-1.3.2
+			rm libogg-1.3.2.tar.gz
+		4.	libvorbis:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
+			tar xzvf libvorbis-1.3.5.tar.gz
+			cd libvorbis-1.3.5
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libvorbis-1.3.5
+			rm libvorbis-1.3.5.tar.gz
+		5.	libvpx:
+			cd $HOME/src
+			git clone http://git.chromium.org/webm/libvpx.git
+			cd libvpx
+			./configure --prefix=$HOME/opt --disable-shared --disable-examples --disable-unit-tests
+			make
+			make install
+			cd ..
+			rm -R -f libvpx
+		6.	libsdl:
+			cd $HOME/src
+			wget http://www.libsdl.org/release/SDL-1.2.15.tar.gz
+			tar xzvf SDL-1.2.15.tar.gz
+			cd SDL-1.2.15
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f SDL-1.2.15
+			rm SDL-1.2.15.tar.gz
+		7.	x264:
+			cd $HOME/src
+			git clone --depth 1 git://git.videolan.org/x264
+			cd x264
+			./configure --prefix=$HOME/opt --enable-shared --disable-asm
+			make
+			make install
+			cd ..
+			rm -R -f x264
+		8.	fdk-aac:
+			cd $HOME/src
+			git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+			cd fdk-aac
+			autoreconf -fiv
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f fdk-aac
+		9.	opus:
+			cd $HOME/src
+			git clone --depth 1 git://git.xiph.org/opus.git
+			cd opus
+			./autogen.sh
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f opus
+		10.	lame:
+			cd $HOME/src
+			wget http://nchc.dl.sourceforge.net/sourceforge/lame/lame-398.tar.gz
+			tar xzvf lame-398.tar.gz
+			cd lame-398
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f lame-398
+			rm lame-398.tar.gz
+		11.	amr:
+			cd $HOME/src
+			wget ftp://ftp.penguin.cz/pub/users/utx/amr/amrnb-11.0.0.0.tar.bz2
+			wget ftp://ftp.penguin.cz/pub/users/utx/amr/amrwb-11.0.0.0.tar.bz2
+			bzip2 -d  amrnb-11.0.0.0.tar.bz2
+			bzip2 -d  amrwb-11.0.0.0.tar.bz2
+			tar xvf  amrnb-11.0.0.0.tar
+			tar xvf  amrwb-11.0.0.0.tar
+			cd amrnb-11.0.0.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			cd amrwb-11.0.0.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f amrnb-11.0.0.0
+			rm amrnb-11.0.0.0.tar.bz2
+			rm -R -f amrwb-11.0.0.0
+			rm amrwb-11.0.0.0.tar.bz2
+		12.	faac:
+			cd $HOME/src
+			wget http://downloads.sourceforge.net/faac/faac-1.28.tar.gz
+			tar -xzf faac-1.28.tar.gz
+			cd faac-1.28
+			./bootstrap
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f faac-1.28
+			rm faac-1.28.tar.gz
+		13.	theora:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+			bzip2 -d libtheora-1.1.1.tar.bz2
+			tar xvf  libtheora-1.1.1.tar
+			cd libtheora-1.1.1
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libtheora-1.1.1
+			rm faac-1.28.tar
+		14.	xvid:
+			cd $HOME/src
+			wget http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.gz
+			tar -zxf xvidcore-1.3.2.tar.gz
+			cd xvidcore/build/generic
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f xvidcore
+			rm xvidcore-1.3.2.tar.gz
+	E.	Install ffmpeg
+		cd $HOME/src
+		git clone git://source.ffmpeg.org/ffmpeg.git
+		cd ffmpeg
+		./configure --prefix=/home/cwis/opt --enable-cross-compile --enable-shared \
+		--enable-gpl --enable-libass --enable-libfaac --enable-libfdk-aac --enable-libx264 \
+		--enable-libvpx --enable-libvorbis -–enable-libamr-nb -–enable-libamr-wb \
+		--enable-libxvid --enable-libtheora --enable-libfaac \
+		--enable-nonfree --enable-version3 --arch=amd64 --target-os=linux \
+		-–extra-cflags=-I$HOME/opt/include -–extra-ldflags=-L$HOME/opt/lib
+		make
+		make install
+		cd ..
+		rm -R -f ffmpeg
