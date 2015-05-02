@@ -1,7 +1,8 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/AudioFormPopulator.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 # Get the FormPopulator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormPopulator.php');
@@ -183,11 +184,11 @@ class AudioFormPopulator extends FormPopulator
 				}
 
 				# Check if the Image category was passed via POST data.
-				if(isset($_POST['category']))
-				{
-					# Set the category to the data array.
-					$data['Category']=$_POST['category'];
-				}
+// 				if(isset($_POST['category']))
+// 				{
+// 					# Set the category to the data array.
+// 					$data['Category']=$_POST['category'];
+// 				}
 
 				# Explicitly make the month an integer.
 				$month=(int)$_POST['month'];
@@ -297,8 +298,8 @@ class AudioFormPopulator extends FormPopulator
 						# Set "add" to the "PlaylistOption" index of the data array.
 						$data['PlaylistOption']='add';
 					}
-					# Set the Audio playlists data member.
-					$data['Playlists']=$_POST['playlist'];
+					# Set the Audio categories data member.
+					$data['Categories']=$_POST['playlist'];
 				}
 
 				# Check if the publisher id POST data was sent.
@@ -358,9 +359,9 @@ class AudioFormPopulator extends FormPopulator
 				if(isset($_POST['audio_year']))
 				{
 					$year=$_POST['audio_year'];
-					if(empty($_POST['audio_year']))
+					if(empty($_POST['audio_year']) OR ($_POST['audio_year']=='unknown'))
 					{
-						$year=NULL;
+						$year='0000';
 					}
 					# Set the year the audio was first published to the data array.
 					$data['Year']=$year;

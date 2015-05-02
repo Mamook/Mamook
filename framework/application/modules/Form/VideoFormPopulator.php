@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/VideoFormPopulator.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -265,7 +265,7 @@ class VideoFormPopulator extends FormPopulator
 						$data['PlaylistOption']='add';
 					}
 					# Set the Video playlists data member.
-					$data['Playlists']=$_POST['playlist'];
+					$data['Categories']=$_POST['playlist'];
 				}
 
 				# Check if the publisher id POST data was sent.
@@ -325,9 +325,9 @@ class VideoFormPopulator extends FormPopulator
 				if(isset($_POST['video_year']))
 				{
 					$year=$_POST['video_year'];
-					if(empty($_POST['video_year']))
+					if(empty($_POST['video_year']) OR ($_POST['video_year']=='unknown'))
 					{
-						$year=NULL;
+						$year='0000';
 					}
 					# Set the year the video was first published to the data array.
 					$data['Year']=$year;

@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/AudioFormProcessor.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -110,8 +110,6 @@ class AudioFormProcessor extends FormProcessor
 			$author=$audio_obj->getAuthor();
 			# Set the audio's availability to a variable.
 			$availability=$audio_obj->getAvailability();
-			# Set the audio's category to a variable.
-			$category=$audio_obj->getCategory();
 			# Set the confirmation email template to a variable.
 			$confirmation_template=$audio_obj->getConfirmationTemplate();
 			# Set the post contributor's id to a variable.
@@ -145,7 +143,7 @@ class AudioFormProcessor extends FormProcessor
 			# Set the language id to a variable.
 			$language_id=$language_obj->getID();
 			# Set the audio's playlists to a variable.
-			$playlists=$audio_obj->getPlaylists();
+			$playlists=$audio_obj->getCategories();
 			# Create an empty variable for the playlist id's.
 			$playlist_ids=NULL;
 			# Check if there are categories.
@@ -201,10 +199,13 @@ class AudioFormProcessor extends FormProcessor
 				# Check if the image is an id.
 				if($validator->isInt($image_id)!==TRUE)
 				{
-					# Get the image info from the `images` table.
-					$audio_obj->getThisImage($image_id, FALSE);
-					# Reset the variable with the id.
-					$image_id=$audio_obj->getImageID();
+					if(!empty($image_id))
+					{
+						# Get the image info from the `images` table.
+						$audio_obj->getThisImage($image_id, FALSE);
+						# Reset the variable with the id.
+						$image_id=$audio_obj->getImageID();
+					}
 				}
 				else
 				{
@@ -230,6 +231,7 @@ class AudioFormProcessor extends FormProcessor
 				$file_handler=new FileHandler();
 				# Create safe image name based on the title.
 				$clean_filename=$file_handler->cleanFilename($title);
+				$new_audio_name='';
 
 				if(empty($id) && $audio_type=='file')
 				{
@@ -400,12 +402,40 @@ class AudioFormProcessor extends FormProcessor
 					# Check if the post is considered unique and may be added to the Database.
 					if($unique==1)
 					{
+						# Check if there was no passed image ID.
+						if($image_id===NULL)
+						{
+							# Get the default image information from the database, and set them to data members.
+							$audio_obj->getThisImage('Audio Default Thumbnail', 'title');
+							# Set the returned image ID to the image_id variable.
+							$image_id=$audio_obj->getImageID();
+						}
 						# Create the default value for the message action.
 						$message_action='added';
+						# Clean up the description and prepare it for the DB.
+						$sql_description=(
+							(!empty($description))
+							?
+								$db->quote(
+									$db->escape(
+										preg_replace(
+											"/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i",
+											"$1\n",
+											str_replace(
+												array("\r\n", "\n", "\r", DOMAIN_NAME),
+												array('', '', '', '%{domain_name}'),
+												htmlspecialchars_decode($description)
+											)
+										)
+									)
+								)
+							:
+								$db->quote('')
+						);
 						# Create the default sql as an INSERT and set it to a variable.
 						$sql='INSERT INTO `'.DBPREFIX.'audio` ('.
 							'`title`,'.
-							'`description`,'.
+							((!empty($sql_description)) ? ' `description`,' : '').
 							((!empty($new_audio_name)) ? ' `file_name`,' : '').
 							((!empty($embed_code)) ? ' `embed_code`,' : '').
 							((isset($embed_json)) ? ' `api`,' : '').
@@ -414,7 +444,7 @@ class AudioFormProcessor extends FormProcessor
 							((!empty($playlist_ids)) ? ' `playlist`,' : '').
 							' `availability`,'.
 							' `date`,'.
-							(($image_id!==NULL) ? ' `image`,' : '').
+							' `image`,'.
 							' `institution`,'.
 							((!empty($publisher_id)) ? ' `publisher`,' : '').
 							' `language`,'.
@@ -422,7 +452,7 @@ class AudioFormProcessor extends FormProcessor
 							' `new`'.
 							') VALUES ('.
 							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
-							((!empty($description)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($description))))).',' : ' \'\',').
+							((!empty($sql_description)) ? ' '.$sql_description.',' : '').
 							((!empty($new_audio_name)) ? ' '.$db->quote($db->escape($new_audio_name)).',' : '').
 							((!empty($embed_code)) ? ' '.$db->quote($db->escape($embed_code)).',' : '').
 							((isset($embed_json)) ? ' '.$db->quote($embed_json).',' : '').
@@ -431,7 +461,7 @@ class AudioFormProcessor extends FormProcessor
 							((!empty($playlist_ids)) ? ' '.$db->quote($playlist_ids).',' : '').
 							' '.$db->quote($availability).','.
 							' '.$db->quote($date).','.
-							(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : '').
+							' '.$db->quote($image_id).','.
 							' '.$db->quote($institution_id).','.
 							((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : '').
 							' '.$db->quote($language_id).','.
@@ -447,20 +477,20 @@ class AudioFormProcessor extends FormProcessor
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'audio` SET'.
 								((isset($embed_json)) ? ' `api` = '.$db->quote($embed_json).',' : '').
-								' `author` = '.((!empty($author)) ? ' '.$db->quote($author).',' : 'NULL,').
+								' `author` = '.((!empty($author)) ? ' '.$db->quote($db->escape($author)).',' : 'NULL,').
 								' `availability` = '.$db->quote($availability).','.
 								' `contributor` = '.$db->quote($contributor_id).','.
 								' `date` = '.$db->quote($date).','.
-								' `description` = '.((!empty($description)) ? ' '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i", "$1\n", str_replace(array("\r\n", "\n", "\r"), '', htmlspecialchars_decode($description))))).',' : 'NULL,').
+								' `description` = '.$sql_description.','.
 								((!empty($embed_code)) ? ' `embed_code` = '.$db->quote($db->escape($embed_code)).',' : '').
 								((!empty($new_audio_name)) ? ' `file_name` = '.$db->quote($db->escape($new_audio_name)).',' : '').
 								' `institution` = '.$db->quote($institution_id).','.
-								' `image` = '.(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : 'NULL,').
+								' `image` = '.$db->quote($image_id).','.
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
 								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
-								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
+								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : '0000').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}
@@ -524,24 +554,35 @@ class AudioFormProcessor extends FormProcessor
 									}
 								}
 
-								# Change the Playlists index to a string with IDs instead of an array. These IDs are inserted into the `image` table for the thumbnail.
-								$_SESSION['form']['audio']['Playlists']=$playlist_ids;
+								# Check if a new audio file was uploaded.
+								if(!empty($new_audio_name))
+								{
+									# Change the Playlists index to a string with IDs instead of an array. These IDs are inserted into the `image` table for the thumbnail.
+									$_SESSION['form']['audio']['Categories']=$playlist_ids;
 
-								# Instantiate the new CommandLine object.
-								$cl=new CommandLine();
-								# Set the video form session to a new session for use in the command line.
-								$_SESSION['audio_upload']=$_SESSION['form']['audio'];
-								$_SESSION['audio_upload']['Environment']=DOMAIN_NAME;
-								$_SESSION['audio_upload']['ConfirmationTemplate']=$confirmation_template;
+									# Instantiate the new CommandLine object.
+									$cl=new CommandLine();
+									# Set the video form session to a new session for use in the command line.
+									$_SESSION['audio_upload']=$_SESSION['form']['audio'];
+									$_SESSION['audio_upload']['Environment']=DOMAIN_NAME;
+									$_SESSION['audio_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
+									$_SESSION['audio_upload']['StagingEnvironment']=STAGING_DOMAIN;
+									$_SESSION['audio_upload']['ConfirmationTemplate']=$confirmation_template;
 
-								# Create an array with video data.
-								$audio_data=array('Environment'=>DOMAIN_NAME, 'SessionId'=>session_id(), 'SessionPath'=>session_save_path());
-								# Run the upload script.
-								$cl->runScript(MODULES.'Media'.DS.'AudioUpload.php', $audio_data);
+									# Create an array with video data.
+									$audio_data=array(
+										'Environment'=>DOMAIN_NAME,
+										'DevEnvironment'=>DEVELOPMENT_DOMAIN,
+										'StagingEnvironment'=>STAGING_DOMAIN,
+										'SessionId'=>session_id(),
+										'SessionPath'=>session_save_path());
+									# Run the upload script.
+									$cl->runScript(MODULES.'Media'.DS.'AudioUpload.php', $audio_data);
 
-								# Convert to 128bit mp3.
-								$cl2=new CommandLine('ffmpeg');
-								$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
+									# Convert to 128bit mp3.
+									$cl2=new CommandLine('ffmpeg');
+									$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
+								}
 
 								# Check if the availability allows posting to social networks.
 								if($availability==1)
@@ -967,6 +1008,23 @@ class AudioFormProcessor extends FormProcessor
 			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
 			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
 
+			# Get the audio's playlists and set them to a local variable as a dash (-) separated string of the playlist id's.
+			# Set the categories to a local variable.
+			$playlists_array=$audio_obj->getCategories();
+			$audio_playlists=NULL;
+			# Check if there are any playlists.
+			if(!empty($playlists_array))
+			{
+				# Create a local variable to hold the first dash (-).
+				$audio_playlists='-';
+				# Loop through the playlists.
+				foreach($playlists_array as $key=>$value)
+				{
+					# Add the playlist id to the string appended with a dash (-).
+					$audio_playlists.=$key.'-';
+				}
+			}
+
 			# Set the audio's associated institution name to a variable.
 			$institution_name=$audio_obj->getInstitution();
 			# Get the Institution class.
@@ -1027,7 +1085,6 @@ class AudioFormProcessor extends FormProcessor
 					'AudioType'=>$audio_obj->getAudioType(),
 					'Author'=>$audio_obj->getAuthor(),
 					'Availability'=>$audio_obj->getAvailability(),
-					'Category'=>$audio_obj->getCategory(),
 					'ContID'=>$audio_obj->getContID(),
 					'Date'=>$audio_obj->getDate(),
 					'Description'=>$audio_obj->getDescription(),
@@ -1036,7 +1093,7 @@ class AudioFormProcessor extends FormProcessor
 					$file_embed=>$file_name,
 					'Institution'=>$institution_id,
 					'Language'=>$language_id,
-					'Playlists'=>$audio_obj->getPlaylists(),
+					'Categories'=>$audio_playlists,
 					'Publisher'=>$publisher_id,
 					'Title'=>$audio_obj->getTitle(),
 					'Twitter'=>$populator->getTwitter(),

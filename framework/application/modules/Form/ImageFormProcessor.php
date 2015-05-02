@@ -1,8 +1,7 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/ImageFormProcessor.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
-
 
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
