@@ -1,6 +1,8 @@
-<?php /* templates/forms/audio_form.php */
+<?php /* framework/application/templates/forms/audio_form.php */
 
+# Get the audio form defaults
 require Utility::locateFile(TEMPLATES.'forms'.DS.'audio_form_defaults.php');
+
 $display_delete_form=$form_processor->processAudio($default_data);
 
 # Set the AudioFormPopulator object from the AudioFormProcessor data member to a variable.
@@ -65,7 +67,7 @@ elseif(!isset($_GET['select']))
 	if(empty($duplicates))
 	{
 		# Do we need some javascripts? (Use the script audio name before the ".js".)
-		$doc->setJavaScripts('uniform,bsmSelect');
+		$doc->setJavaScripts('uniform,bsmSelect,audio');
 		# Do we need some JavaScripts in the footer? (Use the script audio name before the ".php".)
 		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
 
@@ -227,39 +229,43 @@ elseif(!isset($_GET['select']))
 		# Instantiate a new Category object.
 		$playlist=new Category();
 		# get the categories from the `categories` table.
-		$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC');
+		$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC');
 		# Set the playlists to a variable.
 		$playlists=$playlist->getAllCategories();
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
-			# Create the "Add Playlist" option.
-			//$playlist_options['add']='Add Playlist';
 			# Set the current playlists to a variable.
 			$audio_playlists=array_flip((array)$audio_obj->getCategories());
 			foreach($playlists as $row)
 			{
-				# Create an option for each playlist.
-				$playlist_options[$row->id]=$row->category;
-				# Check if this audio currently has a playlist.
-				if(!empty($audio_playlists))
+				# Decode the returned API JSON and set it to a local variable.
+				$api=json_decode($row->api, TRUE);
+				# Check if "site_video" exists as a property of the JSON.
+				if(!empty($api) && array_key_exists('site_audio', $api))
 				{
-					# Check if the current playlist is default or has been selected by the user.
-					if(in_array($row->id, $audio_playlists)===TRUE)
+					# Create an option for each playlist.
+					$playlist_options[$row->id]=$row->category;
+					# Check if this audio currently has a playlist.
+					if(!empty($audio_playlists))
 					{
-						# Set the selected playlist to the default.
-						$playlist_options['multiple_selected'][$row->id]=$row->category;
-					}
-					elseif(
-							(in_array('add', $audio_playlists)===TRUE) &&
-							(
-								isset($playlist_options['multiple_selected']) &&
-								in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
+						# Check if the current playlist is default or has been selected by the user.
+						if(in_array($row->id, $audio_playlists)===TRUE)
+						{
+							# Set the selected playlist to the default.
+							$playlist_options['multiple_selected'][$row->id]=$row->category;
+						}
+						elseif(
+								(in_array('add', $audio_playlists)===TRUE) &&
+								(
+									isset($playlist_options['multiple_selected']) &&
+									in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
+								)
 							)
-						)
-					{
-						# Set the "Add Playlist" option as selected.
-						$playlist_options['multiple_selected']['add']='Add Playlist';
+						{
+							# Set the "Add Playlist" option as selected.
+							$playlist_options['multiple_selected']['add']='Add Playlist';
+						}
 					}
 				}
 			}
@@ -273,7 +279,7 @@ elseif(!isset($_GET['select']))
 		$fg=new FormGenerator('audio', $form_processor->getFormAction(), 'POST', '_top', TRUE);
 		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>(string)$populator->getUnique()));
-		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>((isset($max_file_size)) ? $max_file_size : 314572800)));
+		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>$max_file_size));
 		$fg->addElement('hidden', array('name'=>'_contributor', 'value'=>$audio_obj->getContID()));
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<ul>');
@@ -285,7 +291,7 @@ elseif(!isset($_GET['select']))
 		# Check if the date is unknown (0000-00-00).
 		if($date=='0000-00-00')
 		{
-			# Set the date to the defaul "impossible" date.
+			# Set the date to the default "impossible" date.
 			$date='1970-02-31';
 			# Set the date comment.
 			$date_comment='<span class="comment">(Upload date unknown)</span>';
@@ -385,11 +391,11 @@ elseif(!isset($_GET['select']))
 					# Create audio URL.
 					$audio_obj->setAudioUrl($yt->getSoundcloudUrl().$audio_obj->getAudioId());
 
-					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				else
 				{
-					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="'.$audio_obj->getTitle().' poster"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
 				$fg->addFormPart('</li>');
@@ -421,7 +427,7 @@ elseif(!isset($_GET['select']))
 			$image_name=$image_obj->getImage();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" class="image-link" rel="'.FW_POPUP_HANDLE.'"><img class="image" src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');

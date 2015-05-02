@@ -1,4 +1,4 @@
-<?php /* templates/forms/audio_form_defaults.php */
+<?php /* framework/application/templates/forms/audio_form_defaults.php */
 
 # Get the Contributor Class.
 require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
@@ -22,14 +22,16 @@ $audio_image_id=NULL;
 $audio_institution=9; # Set the default to "Other" (9)
 $audio_language=3; # Set the default to "English" (3)
 $audio_last_edit_date=NULL;
-$audio_playlists=array(37); # Set the default to "Audio" (37)
+$audio_playlists=array(5); # Set the default to "Audio" (5)
 $audio_publisher=NULL;
 $audio_recent_contributor_id=NULL;
 $audio_title=NULL;
 $audio_twitter='tweet'; # Set the default to "tweet" to Twitter.
 $audio_unique=0; # Set the default to "Not Unique" (0)
 $audio_type='file';
-$audio_year='unknown'; # Set the default year that the audio was originally published to "unknown".
+$audio_year=date('Y'); # Set the default year that the audio was originally published to the current year.
+
+$max_file_size=814743552; # Set the default max file size in bytes to "814743552" (777MB).
 
 # Check if there is GET data called "audio".
 if(isset($_GET['audio']))

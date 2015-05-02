@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageMedia/images/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageMedia/images/index.php */
 
 # Get the Image Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');

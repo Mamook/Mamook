@@ -1,4 +1,4 @@
-<?php /* public/index.php */
+<?php /* framework/application/controllers/index.php */
 
 # Get the SubContent Class (also includes Content Class).
 require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');

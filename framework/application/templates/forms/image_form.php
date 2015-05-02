@@ -1,4 +1,4 @@
-<?php /* templates/forms/image_form.php */
+<?php /* framework/application/templates/forms/image_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'image_form_defaults.php');
 $display_delete_form=$form_processor->processImage($default_data);

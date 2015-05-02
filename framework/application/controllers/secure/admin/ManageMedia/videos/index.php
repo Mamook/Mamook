@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageMedia/videos/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageMedia/videos/index.php */
 
 # Get the Video Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
@@ -26,18 +26,10 @@ $display='';
 $head='';
 $video_nav='';
 
-# Check if YouTube has been set up. (There won't be a value for YOUTUBE_CLIENT_ID if it hasn't.)
-if(YOUTUBE_CLIENT_ID!=='')
-{
-	$form_processor=new VideoFormProcessor();
+$form_processor=new VideoFormProcessor();
 
-	# Get the video form template.
-	require Utility::locateFile(TEMPLATES.'forms'.DS.'video_form.php');
-}
-else
-{
-	$display='<div>Video has not been set up for this site yet. Please <a href="'.APPLICATION_URL.'webSupport/" title="Send an email to the Webmaster">contact the Webmaster</a> to set it up.</div>';
-}
+# Get the video form template.
+require Utility::locateFile(TEMPLATES.'forms'.DS.'video_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
@@ -52,8 +44,8 @@ $display_main2.=$display;
 # Get the quote text to display in main-3.
 $display_main3.=$main_content->displayQuote();
 
-# Do we need some more CSS?
-$doc->setStyle(THEME.'css/media.css');
+# Add additional CSS documents.
+$doc->setStyle('media');
 
 /*
  ** In the page template we

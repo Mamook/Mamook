@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageMedia/files/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageMedia/files/index.php */
 
 # Get the SubContent Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'File.php');

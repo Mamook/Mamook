@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageMedia/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageMedia/index.php */
 
 $login->checkLogin(ALL_BRANCH_USERS);
 

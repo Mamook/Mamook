@@ -1,14 +1,20 @@
-<?php /* templates/forms/video_form.php */
+<?php /* framework/application/templates/forms/video_form.php */
 
+# Get the video form defaults.
 require Utility::locateFile(TEMPLATES.'forms'.DS.'video_form_defaults.php');
-$display_delete_form=$form_processor->processVideo($default_data);
+
+$display_delete_form=$form_processor->processVideo($default_data, $max_file_size);
 
 # Set the VideoFormPopulator object from the VideoFormProcessor data member to a variable.
 $populator=$form_processor->getPopulator();
 # Set the Video object from the FormProcessor data member to a variable.
 $video_obj=$populator->getVideoObject();
-# Get the YouTube instance. Starts the YouTubeService if it's not already started.
-$yt=$video_obj->getYouTubeObject();
+# Check if the YouTube credentials are available.
+if(YOUTUBE_CLIENT_ID!=='')
+{
+	# Get the YouTube instance. Starts the YouTubeService if it's not already started.
+	$yt=$video_obj->getYouTubeObject();
+}
 
 $select=TRUE;
 
@@ -86,7 +92,7 @@ elseif(!isset($_GET['select']))
 
 		$display.='<div id="file_form" class="form">';
 
-		# create and display form.
+		# Create and display form.
 		$display.=$head;
 
 		# Add the statement about requirements.
@@ -107,19 +113,23 @@ elseif(!isset($_GET['select']))
 			$availability_options[$value]=$option;
 		}
 
-		# Get all the YouTube categories.
-		$youtube_category_options=$yt->listVideoCategories('snippet', array('regionCode'=>'US'));
-		# Loop through the YouTube categories.
-		foreach($youtube_category_options['items'] as $option)
+		# Check if the YouTube credentials are available.
+		if(YOUTUBE_CLIENT_ID!=='')
 		{
-			# Check if the POST data equals the index of the current option.
-			if($video_obj->getCategory()==$option['id'])
+			# Get all the YouTube categories.
+			$youtube_category_options=$yt->listVideoCategories('snippet', array('regionCode'=>'US'));
+			# Loop through the YouTube categories.
+			foreach($youtube_category_options['items'] as $option)
 			{
-				# Set the selected category to the default.
-				$category_options['selected']=$option['snippet']['title'];
+				# Check if the POST data equals the index of the current option.
+				if($video_obj->getCategory()==$option['id'])
+				{
+					# Set the selected category to the default.
+					$category_options['selected']=$option['snippet']['title'];
+				}
+				# Set the option to the options array.
+				$category_options[$option['id']]=$option['snippet']['title'];
 			}
-			# Set the option to the options array.
-			$category_options[$option['id']]=$option['snippet']['title'];
 		}
 
 		$image_options[0]='';
@@ -177,7 +187,7 @@ elseif(!isset($_GET['select']))
 		# Get the publish year from the Video data member.
 		$video_year=$video_obj->getYear();
 		# Check if the publish year value is empty.
-		if(empty($video_year))
+		if(empty($video_year) OR ($video_year=='0000'))
 		{
 			# Reset the value to "Unknown".
 			$video_year='Unknown';
@@ -193,17 +203,20 @@ elseif(!isset($_GET['select']))
 		$publishers=$publisher->getAllPublishers();
 		$pub_options[0]='';
 		$pub_options['add']='Add Publisher';
-		foreach($publishers as $row)
+		if(!empty($publishers))
 		{
-			$pub_options[$row->id]=$row->name;
-			if($row->name==$video_obj->getPublisher())
+			foreach($publishers as $row)
 			{
-				# Set the selected publisher to the default.
-				$pub_options['selected']=$row->name;
-			}
-			elseif($video_obj->getPublisher()==='add')
-			{
-				$pub_options['selected']='Add Publisher';
+				$pub_options[$row->id]=$row->name;
+				if($row->name==$video_obj->getPublisher())
+				{
+					# Set the selected publisher to the default.
+					$pub_options['selected']=$row->name;
+				}
+				elseif($video_obj->getPublisher()==='add')
+				{
+					$pub_options['selected']='Add Publisher';
+				}
 			}
 		}
 
@@ -212,37 +225,43 @@ elseif(!isset($_GET['select']))
 		# Instantiate a new Category object.
 		$playlist=new Category();
 		# get the categories from the `categories` table.
-		$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
+		$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
 		# Set the playlists to a variable.
 		$playlists=$playlist->getAllCategories();
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
 			# Set the current playlists to a variable.
-			$video_playlists=array_flip((array)$video_obj->getPlaylists());
+			$video_playlists=array_flip((array)$video_obj->getCategories());
 			foreach($playlists as $row)
 			{
-				# Create an option for each playlist.
-				$playlist_options[$row->id]=$row->category;
-				# Check if this video currently has a playlist.
-				if(!empty($video_playlists))
+				# Decode the returned API JSON and set it to a local variable.
+				$api=json_decode($row->api, TRUE);
+				# Check if "site_video" exists as a property of the JSON.
+				if(!empty($api) && array_key_exists('site_video', $api))
 				{
-					# Check if the current playlist is default or has been selected by the user.
-					if(in_array($row->id, $video_playlists)===TRUE)
+					# Create an option for each playlist.
+					$playlist_options[$row->id]=$row->category;
+					# Check if this video currently has a playlist.
+					if(!empty($video_playlists))
 					{
-						# Set the selected playlist to the default.
-						$playlist_options['multiple_selected'][$row->id]=$row->category;
-					}
-					elseif(
-							(in_array('add', $video_playlists)===TRUE) &&
-							(
-								isset($playlist_options['multiple_selected']) &&
-								in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
+						# Check if the current playlist is default or has been selected by the user.
+						if(in_array($row->id, $video_playlists)===TRUE)
+						{
+							# Set the selected playlist to the default.
+							$playlist_options['multiple_selected'][$row->id]=$row->category;
+						}
+						elseif(
+								(in_array('add', $video_playlists)===TRUE) &&
+								(
+									isset($playlist_options['multiple_selected']) &&
+									in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
+								)
 							)
-						)
-					{
-						# Set the "Add Playlist" option as selected.
-						$playlist_options['multiple_selected']['add']='Add Playlist';
+						{
+							# Set the "Add Playlist" option as selected.
+							$playlist_options['multiple_selected']['add']='Add Playlist';
+						}
 					}
 				}
 			}
@@ -256,7 +275,7 @@ elseif(!isset($_GET['select']))
 		$fg=new FormGenerator('video', $form_processor->getFormAction(), 'POST', '_top', TRUE);
 		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>(string)$populator->getUnique()));
-		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>((isset($max_file_size)) ? $max_file_size : 314572800)));
+		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>$max_file_size));
 		$fg->addElement('hidden', array('name'=>'_contributor', 'value'=>$video_obj->getContID()));
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<ul>');
@@ -365,7 +384,7 @@ elseif(!isset($_GET['select']))
 					# Create video URL.
 					$video_obj->setVideoUrl($yt->getYoutubeUrl().$video_obj->getVideoId());
 
-					$fg->addFormPart('<a href="'.$video_obj->getVideoUrl().'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><img src="'.$video_obj->getThumbnailUrl().'" alt="'.$video_obj->getTitle().' poster" /><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<a href="'.$video_obj->getVideoUrl().'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><img src="'.$video_obj->getThumbnailUrl().'" alt="Poster for '.$video_obj->getTitle().'"/><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 				}
 				else
 				{
@@ -403,7 +422,7 @@ elseif(!isset($_GET['select']))
 			$image_name=$image_obj->getImage();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" class="image-link" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" class="image" alt="'.$image_obj->getTitle().'"/><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
@@ -429,10 +448,14 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
 		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$video_obj->getDescription()), '', NULL, 'textarea');
 		$fg->addFormPart('</li>');
-		$fg->addFormPart('<li>');
-		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> YouTube Category</label>');
-		$fg->addElement('select', array('name'=>'category', 'id'=>'category'), $category_options);
-		$fg->addFormPart('</li>');
+		# Check if the YouTube credentials are available.
+		if(YOUTUBE_CLIENT_ID!=='')
+		{
+			$fg->addFormPart('<li>');
+			$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> YouTube Category</label>');
+			$fg->addElement('select', array('name'=>'category', 'id'=>'category'), $category_options);
+			$fg->addFormPart('</li>');
+		}
 		$fg->addFormPart('<li class="mult">');
 		$fg->addFormPart('<label class="label" for="playlist"><span class="required">*</span> Playlist</label>');
 		$fg->addElement('select', array('name'=>'playlist[]', 'multiple'=>'multiple', 'title'=>'Select a Playlist', 'id'=>'playlist'), $playlist_options);

@@ -1,4 +1,4 @@
-<?php /* templates/forms/video_form_defaults.php */
+<?php /* framework/application/templates/forms/video_form_defaults.php */
 
 # Get the Contributor Class.
 require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
@@ -23,14 +23,16 @@ $video_image_id=NULL;
 $video_institution=9; # Set the default to "Other" (9)
 $video_language=3; # Set the default to "English" (3)
 $video_last_edit_date=NULL;
-$video_playlists=array(36); # Set the default to "General" (6)
+$video_playlists=array(2); # Set the default to "Videos" (2)
 $video_publisher=NULL;
 $video_recent_contributor_id=NULL;
 $video_title=NULL;
 $video_twitter='tweet'; # Set the default to "tweet" to Twitter.
 $video_unique=0; # Set the default to "Not Unique" (0)
 $video_video_type='file';
-$video_year='unknown'; # Set the default year that the video was originally published to "unknown".
+$video_year=date('Y'); # Set the default year that the video was originally published to the current year.
+
+$max_file_size=2147483648; # Set the default max file size in bytes to "2147483648" (2GB).
 
 # Check if there is GET data called "video".
 if(isset($_GET['video']))
@@ -44,7 +46,7 @@ if(isset($_GET['video']))
 	{
 		# Get the video's playlists and set them to a local variable as a dash (-) separated string of the playlist id's.
 		# Set the categories to a local variable.
-		$playlists_array=$video_obj->getPlaylists();
+		$playlists_array=$video_obj->getCategories();
 		# Check if there are any playlists.
 		if(!empty($playlists_array))
 		{
@@ -136,7 +138,7 @@ $default_data=array(
 		'Institution'=>$video_institution,
 		'Language'=>$video_language,
 		'LastEdit'=>$video_last_edit_date,
-		'Playlists'=>$video_playlists,
+		'Categories'=>$video_playlists,
 		'Publisher'=>$video_publisher,
 		'RecentContID'=>$video_recent_contributor_id,
 		'Title'=>$video_title,

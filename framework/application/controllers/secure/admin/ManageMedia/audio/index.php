@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageMedia/audio/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageMedia/audio/index.php */
 
 # Get the Audio Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
@@ -27,6 +27,7 @@ $head='';
 
 $form_processor=new AudioFormProcessor();
 
+# Get the audio form.
 require Utility::locateFile(TEMPLATES.'forms'.DS.'audio_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
@@ -42,8 +43,8 @@ $display_main2.=$display;
 # Get the quote text to display in main-3.
 $display_main3.=$main_content->displayQuote();
 
-# Do we need some more CSS?
-$doc->setStyle(THEME.'css/media.css');
+# Add additional CSS documents.
+$doc->setStyle('media');
 
 /*
  ** In the page template we

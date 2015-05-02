@@ -1,4 +1,4 @@
-<?php /* templates/videos_nav.php */
+<?php /* framework/application/templates/videos_nav.php */
 
 $videos_nav='<ul class="nav-1">'.
 	'<li class="list-nav-1'.Document::addHereClass(VIDEOS_URL, TRUE, FALSE).'">'.
