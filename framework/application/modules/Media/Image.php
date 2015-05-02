@@ -1,4 +1,10 @@
-<?php /* Requires PHP5+ */
+<?php
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
+# Get the Media class.
+require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
 
 /**
  * Image
@@ -6,25 +12,14 @@
  * The Image Class is used access and maintain the `images` table in the database.
  *
  */
-class Image
+class Image extends Media
 {
 	/*** data members ***/
 
 	private $all_images=array();
 	private $image=NULL;
-	private $id=NULL;
-	private $categories=array();
-	private $cat_object=NULL;
-	private $contributor=NULL;
-	private $cont_id=NULL;
-	private $recent_contributor=NULL;
-	private $recent_cont_id=NULL;
-	private $description=NULL;
 	private $height=NULL;
 	private $hide;
-	private $last_edit='0000-00-00';
-	private $location=NULL;
-	private $title=NULL;
 	private $width=NULL;
 
 	/*** End data members ***/
@@ -83,286 +78,33 @@ class Image
 		}
 	} #==== End -- setImage
 
-	/*
+	/**
 	 * setID
 	 *
 	 * Sets the data member $id.
+	 * Extends setID in Media.
 	 *
-	 * @param		$id
+	 * @param		$id						Integer			A numeric ID representing the audio.
+	 * @param		$media_type		String			The type of media that the ID represents. Default is "image".
 	 * @access	public
 	 */
-	public function setID($id)
+	public function setID($id, $media_type='image')
 	{
-		# Check if the passed $id is NULL.
-		if(!empty($id) && $id!=='add' && $id!=='select')
+		try
 		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
+			# Check if the passed $id is empty.
+			if($id=='add' OR $id=='select')
 			{
-				# Set the data member explicitly making it an integer.
-				$this->id=(int)$id;
+				# Explicitly set the data member to NULL.
+				$id=NULL;
 			}
-			else
-			{
-				throw new Exception('The passed image id was not an integer!', E_RECOVERABLE_ERROR);
-			}
+			parent::setID($id, $media_type);
 		}
-		else
+		catch(Exception $error)
 		{
-			# Explicitly set the data member to NULL.
-			$this->id=NULL;
+			throw $error;
 		}
 	} #==== End -- setID
-
-	/*
-	 * setCategories
-	 *
-	 * Sets the data member $categories.
-	 *
-	 * @param		$value
-	 * @access	public
-	 */
-	public function setCategories($value)
-	{
-		# Check if the passed value if empty.
-		if(!empty($value))
-		{
-			# Check if the passed value is an array.
-			if(!is_array($value))
-			{
-				# Trim dashes(-) off both ends of the string.
-				$value=trim($value, '-');
-				# Explode the string into an array.
-				$value=explode('-', $value);
-			}
-			# Create an empty array to hold the categories.
-			$categories=array();
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$category=new Category();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Loop through the array of catagory id's.
-			foreach($value as $cat_value)
-			{
-				# Check if the value passed is a category id.
-				if($validator->isInt($cat_value)===TRUE)
-				{
-					# Get the category name.
-					$category->getThisCategory($cat_value);
-					# Set the category name and id to the $categories array.
-					$categories[$cat_value]=$category->getCategory();
-				}
-				else
-				{
-					# Get the category id.
-					$category->getThisCategory($cat_value, FALSE);
-					# Set the category name and id to the $categories array.
-					$categories[$category->getID()]=$cat_value;
-				}
-			}
-			# Set the data member.
-			$this->categories=$categories;
-		}
-		else
-		{
-			# Explicitly set the data member to an empty array.
-			$this->categories=array();
-		}
-	} #==== End -- setCategories
-
-	/*
-	 * setCatObject
-	 *
-	 * Sets the data member $cat_object.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setCatObject($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->cat_object=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cat_object=NULL;
-		}
-	} #==== End -- setCatObject
-
-	/*
-	 * setContributor
-	 *
-	 * Sets the data member $contributor.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->contributor=NULL;
-		}
-	} #==== End -- setContributor
-
-	/*
-	 * setRecentContributor
-	 *
-	 * Sets the data member $recent_contributor.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setRecentContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->recent_contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->recent_contributor=NULL;
-		}
-	} #==== End -- setRecentContributor
-
-	/*
-	 * setContID
-	 *
-	 * Sets the data member $cont_id.
-	 *
-	 * @param		$id
-	 * @access	public
-	 */
-	public function setContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value is empty.
-		if(!empty($id))
-		{
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-				# Get the Contributor class.
-				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
-				# Instantiate a new Contributor object.
-				$cont=new Contributor();
-				# Get the contributor name.
-				$cont->getThisContributor($id, 'id', FALSE);
-				# Set the Contributor object to the data member making it available outside the method.
-				$this->setContributor($cont);
-			}
-			else
-			{
-				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->cont_id=$id;
-	} #==== End -- setContID
-
-	/*
-	 * setRecentContID
-	 *
-	 * Sets the data member $recent_cont_id.
-	 *
-	 * @param		$id
-	 * @access	public
-	 */
-	public function setRecentContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value is empty.
-		if(!empty($id))
-		{
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-				# Get the Contributor class.
-				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
-				# Instantiate a new Contributor object.
-				$cont=new Contributor();
-				# Get the contributor name.
-				$cont->getThisContributor($id, 'id', FALSE);
-				# Set the Contributor object to the data member making it available outside the method.
-				$this->setRecentContributor($cont);
-			}
-			else
-			{
-				throw new Exception('The passed recent contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->recent_cont_id=$id;
-	} #==== End -- setRecentContID
-
-	/*
-	 * setDescription
-	 *
-	 * Sets the data member $description.
-	 *
-	 * @param		$description
-	 * @access	public
-	 */
-	public function setDescription($description)
-	{
-		# Check if the passed value is empty.
-		if(!empty($description))
-		{
-			# Strip slashes and decode any html entities.
-			$description=html_entity_decode(stripslashes($description), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$description=trim($description);
-			# Set the data member.
-			$this->description=$description;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->description=NULL;
-		}
-	} #==== End -- setDescription
 
 	/*
 	 * setHeight
@@ -424,89 +166,6 @@ class Image
 			$this->hide=NULL;
 		}
 	} #==== End -- setHide
-
-	/*
-	 * setLastEdit
-	 *
-	 * Sets the data member $last_edit.
-	 *
-	 * @param		$date
-	 * @access	public
-	 */
-	public function setLastEdit($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
-		{
-			# Clean it up,
-			$date=trim($date);
-			# Set the data member.
-			$this->last_edit=$date;
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->last_edit='0000-00-00';
-		}
-	} #==== End -- setLastEdit
-
-	/*
-	 * setLocation
-	 *
-	 * Sets the data member $location.
-	 *
-	 * @param		$location
-	 * @access	public
-	 */
-	public function setLocation($location)
-	{
-		# Check if the passed value is empty.
-		if(!empty($location))
-		{
-			# Strip slashes, decode any html entities, and strip tags.
-			$location=strip_tags(html_entity_decode(stripslashes($location), ENT_COMPAT, 'UTF-8'));
-			# Re-encde any special characters to html entities in UTF-8 encoding including quotes.
-			$location=htmlentities($location, ENT_QUOTES, 'UTF-8');
-			# Clean it up.
-			$location=trim($location);
-			# Set the data member.
-			$this->location=$location;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->location=NULL;
-		}
-	} #==== End -- setLocation
-
-	/*
-	 * setTitle
-	 *
-	 * Sets the data member $title.
-	 *
-	 * @param		$title
-	 * @access	public
-	 */
-	public function setTitle($title)
-	{
-		# Check if the passed value is empty.
-		if(!empty($title))
-		{
-			# Strip slashes, decode any html entities, and strip tags.
-			$title=strip_tags(html_entity_decode(stripslashes($title), ENT_COMPAT, 'UTF-8'));
-			# Re-encde any special characters to html entities in UTF-8 encoding including quotes.
-			$title=htmlentities($title, ENT_QUOTES, 'UTF-8');
-			# Clean it up.
-			$title=trim($title);
-			# Set the data member.
-			$this->title=$title;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->title=NULL;
-		}
-	} #==== End -- setTitle
 
 	/*
 	 * setWidth
@@ -577,90 +236,6 @@ class Image
 	} #==== End -- getImage
 
 	/*
-	 * getID
-	 *
-	 * Returns the data member $id.
-	 *
-	 * @access	public
-	 */
-	public function getID()
-	{
-		return $this->id;
-	} #==== End -- getID
-
-	/*
-	 * getCategories
-	 *
-	 * Returns the data member $categories.
-	 *
-	 * @access	public
-	 */
-	public function getCategories()
-	{
-		return $this->categories;
-	} #==== End -- getCategories
-
-	/*
-	 * getCatObject
-	 *
-	 * Returns the data member $cat_object.
-	 *
-	 * @access	protected
-	 */
-	protected function getCatObject()
-	{
-		return $this->cat_object;
-	} #==== End -- getCatObject
-
-	/*
-	 * getContributor
-	 *
-	 * Returns the data member $contributor.
-	 *
-	 * @access	public
-	 */
-	public function getContributor()
-	{
-		return $this->contributor;
-	} #==== End -- getContID
-
-	/*
-	 * getContID
-	 *
-	 * Returns the data member $cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getContID()
-	{
-		return $this->cont_id;
-	} #==== End -- getContID
-
-	/*
-	 * getRecentContID
-	 *
-	 * Returns the data member $recent_cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getRecentContID()
-	{
-		return $this->recent_cont_id;
-	} #==== End -- getRecentContID
-
-	/*
-	 * getDescription
-	 *
-	 * Returns the data member $description.
-	 *
-	 * @access	public
-	 */
-	public function getDescription()
-	{
-		return $this->description;
-	} #==== End -- getDescription
-
-	/*
 	 * getHeight
 	 *
 	 * Returns the data member $height.
@@ -683,42 +258,6 @@ class Image
 	{
 		return $this->hide;
 	} #==== End -- getHide
-
-	/*
-	 * getLastEdit
-	 *
-	 * Returns the data member $last_edit.
-	 *
-	 * @access	public
-	 */
-	public function getLastEdit()
-	{
-		return $this->last_edit;
-	} #==== End -- getLastEdit
-
-	/*
-	 * getLocation
-	 *
-	 * Returns the data member $location.
-	 *
-	 * @access	public
-	 */
-	public function getLocation()
-	{
-		return $this->location;
-	} #==== End -- getLocation
-
-	/*
-	 * getTitle
-	 *
-	 * Returns the data member $title.
-	 *
-	 * @access	public
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	} #==== End -- getTitle
 
 	/*
 	 * getWidth
@@ -1283,12 +822,36 @@ class Image
 			}
 			else
 			{
-				# Set the field to search for $value.
-				$field='image';
-				# Set the image name to the data member "cleaning" it.
-				$this->setImage($value);
-				# Get the image name and reset it to the variable.
-				$value=$this->getImage();
+				if($id===FALSE)
+				{
+					# Set the field to search for $value.
+					$field='image';
+					# Set the image name to the data member "cleaning" it.
+					$this->setImage($value);
+					# Get the image name and reset it to the variable.
+					$value=$this->getImage();
+				}
+				else
+				{
+					# Set the field to search for $value.
+					$field=$id;
+					# Create the name of the set method.
+					$set_method='set'.ucfirst($id);
+					# Create the name of the set method.
+					$get_method='get'.ucfirst($id);
+					# Check if the setter exists in this class.
+					if((method_exists($this, $set_method)===TRUE) && (method_exists($this, $get_method)===TRUE))
+					{
+						# Set the image name to the data member "cleaning" it.
+						$this->$set_method($value);
+						# Set the image name to the data member "cleaning" it.
+						$value=$this->$get_method();
+					}
+					else
+					{
+						throw new Exception($id.' is not a valid field in the image table.', E_RECOVERABLE_ERROR);
+					}
+				}
 			}
 			# Get the image info from the Database.
 			$image=$db->get_row('SELECT `id`, `image`, `title`, `description`, `location`, `category`, `contributor`, `recent_contributor`, `last_edit`, `hide` FROM `'.DBPREFIX.'images` WHERE `'.$field.'` = '.$db->quote($value).' LIMIT 1');

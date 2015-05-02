@@ -1,7 +1,11 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Media/Video.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
+
+# Get the Media class.
+require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
 
 
 /**
@@ -10,55 +14,26 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
  * The Video class is used to access and manipulate data from the YouTube API & Vimeo API.
  *
  */
-class Video
+class Video extends Media
 {
 	/*** data members ***/
 
 	private static $video_obj;
 	private $all_videos=array();
 	private $api=NULL;
-	private $author=NULL;
-	private $availability;
 	private $category=NULL;
-	private $cat_object=NULL;
 	private $confirmation_template=NULL;
-	# $contributor is an object.
-	private $contributor=NULL;
-	private $cont_id=NULL;
-	private $date='0000-00-00';
-	private $description=NULL;
-	private $embed=NULL;
 	private $embed_code=NULL;
 	private $google_client=NULL;
-	private $id=NULL;
-	private $image_id=NULL;
-	private $image_obj=NULL;
-	private $institution=NULL;
 	private $is_playlist=FALSE;
 	private $file_name=NULL;
-	private $language=NULL;
-	private $last_edit='0000-00-00';
-	private $playlists=array();
-	private $playlist_object=NULL;
-	private $publisher=NULL;
-	# $recent_contributor is an object.
-	private $recent_contributor=NULL;
-	private $recent_cont_id=NULL;
 	private $thumbnail_url=NULL;
-	private $title=NULL;
 	private $video_id=NULL;
 	private $video_type=NULL;
 	private $video_url=NULL;
-	private $year=NULL;
 	private $youtube_obj=NULL;
 
 	/*** End data members ***/
-
-
-
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
 
 
 
@@ -115,60 +90,6 @@ class Video
 	} #==== End -- setAPI
 
 	/**
-	 * setAuthor
-	 *
-	 * Sets the data member $author.
-	 *
-	 * @param	int $author
-	 * @access	public
-	 */
-	public function setAuthor($author)
-	{
-		# Check if the passed value is empty.
-		if(!empty($author))
-		{
-			# Strip slashes and decode any html entities.
-			$author=html_entity_decode(stripslashes($author), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$author=trim($author);
-			# Set the data member.
-			$this->author=$author;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->author=NULL;
-		}
-	} #==== End -- setAuthor
-
-	/**
-	 * setAvailability
-	 *
-	 * Sets the data member $availability.
-	 *
-	 * @param	int $availability
-	 * @access	public
-	 */
-	public function setAvailability($availability)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Clean it up.
-		$availability=trim($availability);
-		# Check if the passed value is an integer.
-		if($validator->isInt($availability)===TRUE)
-		{
-			# Set the data member explicitly making it an integer.
-			$this->availability=(int)$availability;
-		}
-		else
-		{
-			throw new Exception('The passed value for availability was not an integer!', E_RECOVERABLE_ERROR);
-		}
-	} #==== End -- setAvailability
-
-	/**
 	 * setCategory
 	 *
 	 * Sets the data member $category.
@@ -192,29 +113,6 @@ class Video
 			$this->category=NULL;
 		}
 	} #==== End -- setCategory
-
-	/**
-	 * setCatObject
-	 *
-	 * Sets the data member $cat_object.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setCatObject($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->cat_object=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cat_object=NULL;
-		}
-	} #==== End -- setCatObject
 
 	/**
 	 * setConfirmationTemplate
@@ -248,163 +146,6 @@ class Video
 	} #==== End -- setConfirmationTemplate
 
 	/**
-	 * setContributor
-	 *
-	 * Sets the data member $contributor.
-	 *
-	 * @param	$object
-	 * @access	public
-	 */
-	public function setContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->contributor=NULL;
-		}
-	} #==== End -- setContributor
-
-	/**
-	 * setContID
-	 *
-	 * Sets the data member $cont_id.
-	 *
-	 * @param	int $id
-	 * @access	public
-	 */
-	public function setContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value is empty.
-		if(!empty($id))
-		{
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-				# Get the Contributor class.
-				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
-				# Instantiate a new Contributor object.
-				$cont=new Contributor();
-				# Get the contributor name.
-				$cont->getThisContributor($id, 'id', FALSE);
-				# Set the Contributor object to the data member making it available outside the method.
-				$this->setContributor($cont);
-			}
-			else
-			{
-				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->cont_id=$id;
-	} #==== End -- setContID
-
-	/**
-	 * setDate
-	 *
-	 * Sets the data member $date.
-	 *
-	 * @param	$date
-	 * @access	public
-	 */
-	public function setDate($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
-		{
-			# Clean it up,
-			$date=trim($date);
-			# Set the data member.
-			$this->date=$date;
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->date='0000-00-00';
-		}
-	} #==== End -- setDate
-
-	/**
-	 * setDescription
-	 *
-	 * Sets the data member $description.
-	 *
-	 * @param	string $description
-	 * @access	public
-	 */
-	public function setDescription($description)
-	{
-		# Check if the passed value is empty.
-		if(!empty($description))
-		{
-			# Strip slashes and decode any html entities.
-			$description=html_entity_decode(stripslashes($description), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$description=trim($description);
-			# Set the data member.
-			$this->description=$description;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->description=NULL;
-		}
-	} #==== End -- setDescription
-
-	/**
-	 * setEmbed
-	 *
-	 * Set the data member $embed.
-	 * Converts string to UTF-8. If the string is HTML then it strips the HTML and get's the first URL.
-	 * Then it get's the value after the last slash (/) in the URL which will be the Video ID (on YouTube).
-	 *
-	 * @param	string $embed_code
-	 * @access	public
-	 */
-	public function setEmbed($embed_code)
-	{
-		# Check if the passed value is empty.
-		if(!empty($embed_code))
-		{
-			# Clean it up.
-			$embed_code=htmlspecialchars(str_replace('"', '', $embed_code), ENT_COMPAT, 'UTF-8');
-
-			# Is $embed_code an HTML tag?
-			if($embed_code==strip_tags($embed_code))
-			{
-				# Extract the first URL from $embed.
-				preg_match('/\b(?:(?:https?):\/\/|www\.)[-A-Z0-9+&@#\/%=~_|$?!:,.]*[A-Z0-9+&@#\/%=~_|$]/i', $embed_code, $matches);
-				# Get's the value after the last slash in the URL (which will be the YouTube Video ID).
-				$embed=substr(strrchr(rtrim($matches[0], '/'), '/'), 1);
-			}
-			# Set the data member.
-			$this->embed=$embed;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->embed=NULL;
-		}
-	} #==== End -- setEmbed
-
-	/**
 	 * setEmbedCode
 	 *
 	 * Sets the data member $embed_code.
@@ -421,16 +162,14 @@ class Video
 			$embed_code=html_entity_decode(stripslashes($embed_code), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$embed_code=trim($embed_code);
-			# Get the video ID from the $emebed_code.
-			$this->setEmbed($embed_code);
-			# Set the data member.
-			$this->embed_code=$embed_code;
 		}
 		else
 		{
-			# Explicitly set the data member to NULL.
-			$this->embed_code=NULL;
+			# Explicitly set the value to NULL.
+			$embed_code=NULL;
 		}
+		# Set the data member.
+		$this->embed_code=$embed_code;
 	} #==== End -- setEmbedCode
 
 	/**
@@ -485,127 +224,29 @@ class Video
 	 * setID
 	 *
 	 * Sets the data member $id.
+	 * Extends setID in Media.
 	 *
-	 * @param	int $id
+	 * @param		$id						Integer			A numeric ID representing the video.
+	 * @param		$media_type		String			The type of media that the ID represents. Default is "video".
 	 * @access	public
 	 */
-	public function setID($id)
+	public function setID($id, $media_type='video')
 	{
-		# Check if the passed $id is empty.
-		if(!empty($id) && $id!=='add' && $id!=='select')
+		try
 		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
+			# Check if the passed $id is empty.
+			if($id=='add' OR $id=='select')
 			{
-				# Explicitly making it an integer.
-				$id=(int)trim($id);
+				# Explicitly set the data member to NULL.
+				$id=NULL;
 			}
-			else
-			{
-				throw new Exception('The passed video id was not an integer!', E_RECOVERABLE_ERROR);
-			}
+			parent::setID($id, $media_type);
 		}
-		else
+		catch(Exception $error)
 		{
-			# Explicitly set the data member to NULL.
-			$id=NULL;
+			throw $error;
 		}
-		# Set the data member.
-		$this->id=$id;
 	} #==== End -- setID
-
-	/**
-	 * setImageID
-	 *
-	 * Sets the data member $image_id.
-	 *
-	 * @param	$id
-	 * @access	public
-	 */
-	public function setImageID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-			}
-			elseif($id!=='add' && $id!=='select' && $id!=='remove')
-			{
-				throw new Exception('The passed image id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->image_id=$id;
-	} #==== End -- setImageID
-
-	/**
-	 * setImageObj
-	 *
-	 * Sets the data member $image_obj.
-	 *
-	 * @param	$object
-	 * @access	protected
-	 */
-	protected function setImageObj($object)
-	{
-		# Set the data member.
-		$this->image_obj=$object;
-	} #==== End -- setImageObj
-
-	/**
-	 * setInstitution
-	 *
-	 * Sets the data member $institution.
-	 *
-	 * @param	$institution
-	 * @access	public
-	 */
-	public function setInstitution($institution)
-	{
-		# Check if the passed value is empty.
-		if(!empty($institution))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$institution=trim($institution);
-			# Check if the value passed is an institution id.
-			if($validator->isInt($institution)===TRUE)
-			{
-				# Get the Institution class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Institution.php');
-				# Instantiate a new Cnstitution object.
-				$inst=new institution();
-				# Get the institution name.
-				$inst->getThisInstitution($institution, TRUE);
-				# Set the institution name to a variable.
-				$institution=$inst->getInstitution();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$institution=NULL;
-		}
-		# Set the data member.
-		$this->institution=$institution;
-	} #==== End -- setInstitution
 
 	/**
 	 * setIsPlaylist
@@ -621,269 +262,6 @@ class Video
 	} #==== End -- setIsPlaylist
 
 	/**
-	 * setLanguage
-	 *
-	 * Sets the data member $language.
-	 *
-	 * @param	int $language
-	 * @access	public
-	 */
-	public function setLanguage($language)
-	{
-		# Check if the passed value is empty.
-		if(!empty($language))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$language=trim($language);
-			# Check if the value passed is an language id.
-			if($validator->isInt($language)===TRUE)
-			{
-				# Get the Language class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Language.php');
-				# Instantiate a new Cnstitution object.
-				$lang=new language();
-				# Get the language name.
-				$lang->getThisLanguage($language);
-				# Set the language name to a variable.
-				$language=$lang->getLanguage();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$language=NULL;
-		}
-		# Set the data member.
-		$this->language=$language;
-	} #==== End -- setLanguage
-
-	/**
-	 * setLastEdit
-	 *
-	 * Sets the data member $last_edit.
-	 *
-	 * @param	$date
-	 * @access	public
-	 */
-	public function setLastEdit($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00'))
-		{
-			# Explode the date into an array casting each as an integer.
-			$date=explode('-', $date);
-			$year=(int)$date[0];
-			$month=(int)$date[1];
-			$day=(int)$date[2];
-			if(checkdate($month, $day, $year)===TRUE)
-			{
-				# Make sure the day is the correct length.
-				if(strlen($day)!=2)
-				{
-					$day='0'.$day;
-				}
-				# Make sure the month is the correct length.
-				if(strlen($month)!=2)
-				{
-					$month='0'.$month;
-				}
-				# Put the date back together in the correct format.
-				$date=$year.'-'.$month.'-'.$day;
-				# Set the data member.
-				$this->last_edit=$date;
-			}
-			else
-			{
-				throw new Exception('The passed last edit date was not an acceptable date.', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->last_edit='0000-00-00';
-		}
-	} #==== End -- setLastEdit
-
-	/**
-	 * setPlaylists
-	 *
-	 * Sets the data member $playlists.
-	 *
-	 * @param	$value
-	 * @access	public
-	 */
-	public function setPlaylists($value)
-	{
-		# Check if the passed value if empty.
-		if(!empty($value))
-		{
-			# Check if the passed value is an array.
-			if(!is_array($value))
-			{
-				# Trim dashes(-) off both ends of the string.
-				$value=trim($value, '-');
-				# Explode the string into an array.
-				$value=explode('-', $value);
-			}
-			# Create an empty array to hold the playlist.
-			$playlists=array();
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$playlist=new Category();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Loop through the array of playlist id's.
-			foreach($value as $playlist_value)
-			{
-				# Check if the value passed is a category id.
-				if($validator->isInt($playlist_value)===TRUE)
-				{
-					# Get the playlist name.
-					$playlist->getThisCategory($playlist_value);
-					# Set the playlist name and id to the $playlist array.
-					$playlists[$playlist_value]=$playlist->getCategory();
-				}
-				else
-				{
-					# Get the playlist id.
-					$playlist->getThisCategory($playlist_value, FALSE);
-					# Set the playlist name and id to the $playlist array.
-					$playlists[$playlist->getID()]=$playlist_value;
-				}
-			}
-			# Set the data member.
-			$this->playlists=$playlists;
-		}
-		else
-		{
-			# Explicitly set the data member to an empty array.
-			$this->playlists=array();
-		}
-	} #==== End -- setPlaylists
-
-	/**
-	 * setPlaylistObject
-	 *
-	 * Sets the data member $playlist_object.
-	 *
-	 * @param	$object
-	 * @access	protected
-	 */
-	protected function setPlaylistObject($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->playlist_object=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->playlist_object=NULL;
-		}
-	} #==== End -- setPlaylistObject
-
-	/**
-	 * setPublisher
-	 *
-	 * Sets the data member $publisher.
-	 *
-	 * @param	int $publisher
-	 * @access	public
-	 */
-	public function setPublisher($publisher)
-	{
-		# Check if the passed value is empty.
-		if(!empty($publisher))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$publisher=trim($publisher);
-			# Check if the value passed is an publisher id.
-			if($validator->isInt($publisher)===TRUE)
-			{
-				# Get the Publisher class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Publisher.php');
-				# Instantiate a new Cnstitution object.
-				$pub=new publisher();
-				# Get the publisher name.
-				$pub->getThisPublisher($publisher, TRUE);
-				# Set the publisher name to the variable.
-				$publisher=$pub->getPublisher();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$publisher=NULL;
-		}
-		# Set the data member.
-		$this->publisher=$publisher;
-	} #==== End -- setPublisher
-
-	/**
-	 * setRecentContributor
-	 *
-	 * Sets the data member $recent_contributor.
-	 *
-	 * @param	$object
-	 * @access	public
-	 */
-	public function setRecentContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->recent_contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->recent_contributor=NULL;
-		}
-	} #==== End -- setRecentContributor
-
-	/**
-	 * setRecentContID
-	 *
-	 * Sets the data member $recent_cont_id.
-	 *
-	 * @param	$id
-	 * @access	public
-	 */
-	public function setRecentContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer and set the data member.
-				$this->recent_cont_id=(int)$id;
-			}
-			else
-			{
-				throw new Exception('The passed recent contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->recent_cont_id=NULL;
-		}
-	} #==== End -- setRecentContID
-
-	/**
 	 * setThumbnailUrl
 	 *
 	 * Set the data member $thumbnail_url
@@ -895,33 +273,6 @@ class Video
 	{
 		$this->thumbnail_url=$thumbnail_url;
 	} #==== End -- setThumbnailUrl
-
-	/**
-	 * setTitle
-	 *
-	 * Set the data member $title
-	 *
-	 * @param	string $title
-	 * @access	public
-	 */
-	public function setTitle($title)
-	{
-		# Check if the passed value is empty.
-		if(!empty($title))
-		{
-			# Strip slashes and decode any html entities.
-			$title=html_entity_decode(stripslashes($title), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$title=trim($title);
-			# Set the data member.
-			$this->title=$title;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->title=NULL;
-		}
-	} #==== End -- setTitle
 
 	/**
 	 * setVideoId
@@ -963,31 +314,6 @@ class Video
 	{
 		$this->video_url=$video_url;
 	} #==== End -- setVideoUrl
-
-	/**
-	 * setYear
-	 *
-	 * Sets the data member $year.
-	 *
-	 * @param	int $year
-	 * @access	public
-	 */
-	public function setYear($year)
-	{
-		# Check if the passed value is empty.
-		if(!empty($year))
-		{
-			# Clean it up.
-			$year=trim($year);
-			# Set the data member.
-			$this->year=$year;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->year=NULL;
-		}
-	} #==== End -- setYear
 
 	/**
 	 * setYouTubeObject
@@ -1040,30 +366,6 @@ class Video
 	} #==== End -- getAPI
 
 	/**
-	 * getAuthor
-	 *
-	 * Returns the data member $author.
-	 *
-	 * @access	public
-	 */
-	public function getAuthor()
-	{
-		return $this->author;
-	} #==== End -- getAuthor
-
-	/**
-	 * getAvailability
-	 *
-	 * Returns the data member $availability.
-	 *
-	 * @access	public
-	 */
-	public function getAvailability()
-	{
-		return $this->availability;
-	} #==== End -- getAvailability
-
-	/**
 	 * getCategory
 	 *
 	 * Returns the data member $category.
@@ -1076,18 +378,6 @@ class Video
 	} #==== End -- getCategory
 
 	/**
-	 * getCatObject
-	 *
-	 * Returns the data member $cat_object.
-	 *
-	 * @access	protected
-	 */
-	protected function getCatObject()
-	{
-		return $this->cat_object;
-	} #==== End -- getCatObject
-
-	/**
 	 * getConfirmationTemplate
 	 *
 	 * Returns the data member $confirmation_template.
@@ -1098,66 +388,6 @@ class Video
 	{
 		return $this->confirmation_template;
 	} #==== End -- getConfirmationTemplate
-
-	/**
-	 * getContributor
-	 *
-	 * Returns the data member $contributor.
-	 *
-	 * @access	public
-	 */
-	public function getContributor()
-	{
-		return $this->contributor;
-	} #==== End -- getContributor
-
-	/**
-	 * getContID
-	 *
-	 * Returns the data member $cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getContID()
-	{
-		return $this->cont_id;
-	} #==== End -- getContID
-
-	/**
-	 * getDate
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getDate()
-	{
-		return $this->date;
-	} #==== End -- getDate
-
-	/**
-	 * getDescription
-	 *
-	 * Returns the data member $description.
-	 *
-	 * @access	public
-	 */
-	public function getDescription()
-	{
-		return $this->description;
-	} #==== End -- getDescription
-
-	/**
-	 * getEmbed
-	 *
-	 * Gets the data member $embed
-	 *
-	 * @access	public
-	 */
-	public function getEmbed()
-	{
-		return $this->embed;
-	} #==== End -- getEmbed
 
 	/**
 	 * getEmbedCode
@@ -1193,55 +423,7 @@ class Video
 	public function getGoogleClient()
 	{
 		return $this->google_client;
-	} #==== End -- getGoogleClient
-
-	/**
-	 * getID
-	 *
-	 * Returns the data member $id.
-	 *
-	 * @access	public
-	 */
-	public function getID()
-	{
-		return $this->id;
-	} #==== End -- getID
-
-	/**
-	 * getImageID
-	 *
-	 * Returns the data member $image_id.
-	 *
-	 * @access	public
-	 */
-	public function getImageID()
-	{
-		return $this->image_id;
-	} #==== End -- getImageID
-
-	/**
-	 * getImageObj
-	 *
-	 * Returns the data member $image_obj.
-	 *
-	 * @access	public
-	 */
-	public function getImageObj()
-	{
-		return $this->image_obj;
-	} #==== End -- getImageObj
-
-	/**
-	 * getInstitution
-	 *
-	 * Returns the data member $institution.
-	 *
-	 * @access	public
-	 */
-	public function getInstitution()
-	{
-		return $this->institution;
-	} #==== End -- getInstitution
+	} #==== End -- getGoogleClien
 
 	/**
 	 * getIsPlaylist
@@ -1256,90 +438,6 @@ class Video
 	} #==== End -- getIsPlaylist
 
 	/**
-	 * getLanguage
-	 *
-	 * Returns the data member $language.
-	 *
-	 * @access	public
-	 */
-	public function getLanguage()
-	{
-		return $this->language;
-	} #==== End -- getLanguage
-
-	/**
-	 * getLastEdit
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getLastEdit()
-	{
-		return $this->last_edit;
-	} #==== End -- getLastEdit
-
-	/**
-	 * getPlaylists
-	 *
-	 * Returns the data member $playlists.
-	 *
-	 * @access	public
-	 */
-	public function getPlaylists()
-	{
-		return $this->playlists;
-	} #==== End -- getPlaylists
-
-	/**
-	 * getPlaylistObject
-	 *
-	 * Returns the data member $playlist_object.
-	 *
-	 * @access	protected
-	 */
-	protected function getPlaylistObject()
-	{
-		return $this->playlist_object;
-	} #==== End -- getPlaylistObject
-
-	/**
-	 * getPublisher
-	 *
-	 * Returns the data member $publisher.
-	 *
-	 * @access	public
-	 */
-	public function getPublisher()
-	{
-		return $this->publisher;
-	} #==== End -- getPublisher
-
-	/**
-	 * getRecentContributor
-	 *
-	 * Returns the data member $recent_contributor.
-	 *
-	 * @access	public
-	 */
-	public function getRecentContributor()
-	{
-		return $this->recent_contributor;
-	} #==== End -- getRecentContributor
-
-	/**
-	 * getRecentContID
-	 *
-	 * Returns the data member $recent_cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getRecentContID()
-	{
-		return $this->recent_cont_id;
-	} #==== End -- getRecentContID
-
-	/**
 	 * getThumbnailUrl
 	 *
 	 * Gets the data member $thumbnail_url
@@ -1350,18 +448,6 @@ class Video
 	{
 		return $this->thumbnail_url;
 	} #==== End -- getThumbnailUrl
-
-	/**
-	 * getTitle
-	 *
-	 * Gets the data member $title
-	 *
-	 * @access	public
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	} #==== End -- getTitle
 
 	/**
 	 * getVideoId
@@ -1399,18 +485,6 @@ class Video
 	{
 		return $this->video_url;
 	} #==== End -- getVideoUrl
-
-	/**
-	 * getYear
-	 *
-	 * Returns the data member $year.
-	 *
-	 * @access	public
-	 */
-	public function getYear()
-	{
-		return $this->year;
-	} #==== End -- getYear
 
 	/**
 	 * getYouTubeObject
@@ -1499,6 +573,7 @@ class Video
 				{
 					# Set the Database instance to a variable.
 					$db=DB::get_instance();
+var_dump('SELECT `id` FROM `'.DBPREFIX.'videos` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' AND `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));exit;
 					# Count the records.
 					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'videos` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' AND `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
 					return $count;
@@ -1522,7 +597,7 @@ class Video
 	 *
 	 * @access	public
 	 */
-	public function createPlaylistMenu()
+	public function createPlaylistMenu($default_playlist=NULL, $excludes=array())
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
@@ -1534,7 +609,7 @@ class Video
 			# Instantiate a new Category object.
 			$playlist=new Category();
 			# get the categories from the `categories` table.
-			$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
+			$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
 			# Set the playlists to a variable.
 			$playlists=$playlist->getAllCategories();
 
@@ -1544,14 +619,30 @@ class Video
 				$playlist_items='';
 				foreach($playlists as $playlists_data)
 				{
-					$title=$playlists_data->category;
-					$playlist_id=$playlists_data->id;
-					$url=VIDEOS_URL.'?playlist='.$playlist_id;
-					$playlist_items.='<li class="list-nav-1'.$doc->addHereClass($url, TRUE, FALSE).'">'.
-						'<a href="'.$url.'" title="'.$title.' video playlist">'.
-							$title.
-						'</a>'.
-					'</li>';
+					# Decode the returned API JSON.
+					$api=json_decode($playlists_data->api, TRUE);
+					# Check if "site_video" exists as a property of the JSON.
+					if(!empty($api) && array_key_exists('site_video', $api))
+					{
+						$this->setCategoryID($playlists_data->id);
+						$current_playlist_id=$this->getCategoryID();
+						# Check if the current playlist ID is NOT in the excludes array.
+						if(!in_array($current_playlist_id, $excludes))
+						{
+							$title=$playlists_data->category;
+							$url=VIDEOS_URL.'?playlist='.$current_playlist_id;
+							$here_class=$doc->addHereClass($url, TRUE, FALSE);
+							if($default_playlist==$current_playlist_id)
+							{
+								$here_class=' here';
+							}
+							$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
+								'<a href="'.$url.'" title="'.$title.' video playlist">'.
+									$title.
+								'</a>'.
+							'</li>';
+						}
+					}
 				}
 			}
 			return $playlist_items;
@@ -1617,7 +708,7 @@ class Video
 						return FALSE;
 					}
 					# Set the video's categories data member to a local variable.
-					$video_cats=$this->getPlaylists();
+					$video_cats=$this->getCategories();
 					# Set the video's name data member to a local variable.
 					$video_name=$this->getFileName();
 					# Get the FileHandler class.
@@ -1638,8 +729,8 @@ class Video
 
 						# Delete the video.
 						# DRAVEN: Change when we do video streaming from the server.
-						//if(($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp3')===TRUE) && ($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
-						if(($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
+						if(($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE) && ($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE) && ($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
+						//if(($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
 						{
 							try
 							{
@@ -1720,7 +811,16 @@ class Video
 	public function displayRecentVideo()
 	{
 		# Get's the Recent Video from the Video class.
-		return $this->getRecentVideo();
+		$single_video=$this->getRecentVideo();
+
+		# Display the video details.
+		$video_display.='<div class="video-lg">';
+		$video_display.=$single_video['video'];
+		$video_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$video_display.=$single_video['description'];
+		$video_display.='<div>';
+
+		return $video_display;
 	} #==== End -- displayRecentVideo
 
 	/**
@@ -1859,7 +959,11 @@ class Video
 					if(count($all_videos)>0)
 					{
 						# Remove the first array element
-						$display.=$this->markupSmallVideos($all_videos);
+						$display.=$this->markupSmallVideos(
+							$all_videos,
+							((isset($_GET['playlist']) ? $_GET['playlist'] : NULL)),
+							array($video_id)
+						);
 					}
 				}
 				elseif(SECURE_VIDEOS_PATH==Utility::removeIndex(HERE))
@@ -1900,9 +1004,16 @@ class Video
 			$large_video=array_slice($video_search, 0, 1);
 		}
 		# Get large video markup.
-		$display=$this->markupLargeVideo($large_video);
+		$single_video=$this->markupLargeVideo($large_video);
 
-		return $display;
+		# Display the video details.
+		$video_display.='<div class="video-lg">';
+		$video_display.=$single_video['video'];
+		$video_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$video_display.=$single_video['description'];
+		$video_display.='<div>';
+
+		return $video_display;
 	} #==== End -- getFirstVideo
 
 	/**
@@ -1945,48 +1056,8 @@ class Video
 		# Set the returned Video records to a variable.
 		$recent_video=$this->getAllVideos();
 
-		$display=$this->markupLargeVideo($recent_video);
-
-		return $display;
+		return $this->markupLargeVideo($recent_video);
 	} #==== End -- getRecentVideo
-
-	/**
-	 * getThisImage
-	 *
-	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member. A wrapper method for getThisImage from the Image class.
-	 *
-	 * @param	string $value			The name or id of the image to retrieve.
-	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
-	 * @access	public
-	 */
-	public function getThisImage($value, $id=TRUE)
-	{
-		try
-		{
-			# Get the Image class.
-			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
-			# Instantiate a new Image object.
-			$image_obj=new Image();
-			# Get the info for this image and set the return boolean to a variable.
-			$record_retrieved=$image_obj->getThisImage($value, $id);
-			# Set the image object to the data member.
-			$this->setImageObj($image_obj);
-			# Check if there was an image retrieved.
-			if($record_retrieved===TRUE)
-			{
-				# Set the id to the data member.
-				$this->setImageID($image_obj->getID());
-				return TRUE;
-			}
-			# Set the image id data member to NULL.
-			$this->setImageID(NULL);
-			return FALSE;
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- getThisImage
 
 	/**
 	 * getThisVideo
@@ -2040,7 +1111,7 @@ class Video
 				# Set the video availability to the data member.
 				$this->setAvailability($video->availability);
 				# Pass the video playlist id(s) to the setPlaylist method, thus setting the data member with the playlist name(s).
-				$this->setPlaylists($video->playlist);
+				$this->setCategories($video->playlist);
 				# Set the contributor id to the data member.
 				$this->setContID($video->contributor);
 				# Set the video post/edit date to the data member.
@@ -2059,7 +1130,7 @@ class Video
 				$this->setTitle($video->title);
 				# Set the video publish year to the data member.
 				$this->setYear($video->year);
-				return TRUE;
+				return $video;
 			}
 			# Return FALSE because the video wasn't in the table.
 			return FALSE;
@@ -2203,15 +1274,15 @@ class Video
 			# Set the markup to a variable
 			$display.='<tr>'.
 				'<td>'.
-					'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
-						'<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' poster"/>'.
+					'<a class="image-link" href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
+						'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
 					'</a>'.
 				'</td>'.
 				'<td>'.
-					$this->getTitle().
+					'<a href="'.VIDEO_URL.'?video='.$this->getID().'" title="View \''.$this->getTitle().'\' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
 				'</td>'.
 				'<td>'.
-					'<a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="edit" title="Edit this">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&amp;delete" class="delete" title="Delete This">Delete</a>'.
+					'<a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="button-edit" title="Edit this video entry">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&delete" class="button-delete" title="Delete this video entry">Delete</a>'.
 				'</td>'.
 			'</tr>';
 		}
@@ -2233,6 +1304,9 @@ class Video
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+
+		$display=array();
+
 		if(!empty($large_video))
 		{
 			# Get the video ID and assign it to a variable.
@@ -2259,7 +1333,10 @@ class Video
 			}
 			else
 			{
-				$video_url='server_url';
+				$video_name=$this->getFileName();
+				# Remove the file extension.
+				$video_name_no_ext=substr($video_name, 0, strrpos($video_name, '.'));
+				$video_url=VIDEOS_URL.'files/'.$video_name_no_ext.'.mp4';
 			}
 
 			# Set the availability.
@@ -2286,9 +1363,6 @@ class Video
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
 
-				# Set the current categories to a variable.
-				$image_categories=$image_obj->getCategories();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
@@ -2296,20 +1370,19 @@ class Video
 			# Set the description
 			$this->setDescription($db->sanitize($large_video[0]->description, 5));
 
-			# Set the markup to a variable
-			$display='<div class="video-lg">'.
-				'<a class="image-link" href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
-					'<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'"/>'.
-					'<span class="play-static"></span>'.
-				'</a>'.
-				'<h3 class="h-3">'.
-					'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on YouTube" target="_blank">'.$this->getTitle().'</a>'.
-				'</h3>'.
-				'<p>'.$this->getDescription().'</p>'.
-			'</div>';
+			# Set the thumbnail image to a local variable.
+			$thumbnail=$this->getThumbnailUrl();
 
-			return $display;
+			# Set the markup to the display array.
+			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
+				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
+				'<span class="play-static"></span>'.
+			'</a>';
+			$display['title']='<a href="'.VIDEO_URL.'?video='.$this->getID().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>';
+			$display['description']='<p>'.$this->getDescription().'</p>';
 		}
+
+		return $display;
 	} #==== End -- markupLargeVideo
 
 	/**
@@ -2320,7 +1393,7 @@ class Video
 	 * @param	array $small_videos			The array for the small videos.
 	 * @access	public
 	 */
-	public function markupSmallVideos($small_videos)
+	public function markupSmallVideos($small_videos, $playlist_value=NULL, $exclude_video=NULL)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -2331,56 +1404,64 @@ class Video
 		'<div class="feed_list-video">'.
 		'<ul class="feed-video">';
 
+		$playlist_param='';
+		# Chaeck if the videos belong to a playlist.
+		if($playlist_value!=NULL)
+		{
+			$playlist_param='playlist='.$playlist_value.'&';
+		}
+
 		foreach($small_videos as $videos)
 		{
 			# Get the video ID and assign it to a variable.
 			$this->setID($videos->id);
 
-			# If the videos belong to a playlist
-			if(isset($_GET['playlist']))
+			$include_it=TRUE;
+
+			# Check if video should be excluded.
+			if(!empty($exclude_video) && in_array($this->getID(), $exclude_video))
+			{
+				$include_it=FALSE;
+			}
+
+			# Check if this specific audio should be included.
+			if($include_it===TRUE)
 			{
 				# Create video URL.
-				$this->setVideoUrl('?playlist='.$_GET['playlist'].'&video='.$this->getID());
+				$this->setVideoUrl(AUDIO_URL.'?'.$playlist_param.'video='.$this->getID());
+
+				# Set the title to a variable
+				$this->setTitle($db->sanitize($videos->title));
+
+				# Decode the `api` field.
+				$api_decoded=json_decode($videos->api);
+
+				if(isset($api_decoded->youtube_thumbnails->default->url))
+				{
+					$this->setThumbnailUrl($api_decoded->youtube_thumbnails->default->url);
+				}
+				else
+				{
+					# Set the image ID.
+					$this->setImageID($videos->image);
+
+					# Get the image information from the database, and set them to data members.
+					$this->getThisImage($this->getImageID());
+
+					# Set the Image object to a variable.
+					$image_obj=$this->getImageObj();
+
+					# Set the the thumbnail to a variable.
+					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				}
+
+				# Set the markup to a variable
+				$display.='<li>'.
+					'<a href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
+						'<img src="'.$this->getThumbnailUrl().'" alt="Poster for '.$this->getTitle().'" class="thumbnail-small"/>'.
+					'</a>'.
+				'</li>';
 			}
-			else
-			{
-				$this->setVideoUrl('?video='.$this->getID());
-			}
-
-			# Set the title to a variable
-			$this->setTitle($db->sanitize($videos->title));
-
-			# Decode the `api` field.
-			$api_decoded=json_decode($videos->api);
-
-			if(isset($api_decoded->youtube_thumbnails->default->url))
-			{
-				$this->setThumbnailUrl($api_decoded->youtube_thumbnails->default->url);
-			}
-			else
-			{
-				# Set the image ID.
-				$this->setImageID($videos->image);
-
-				# Get the image information from the database, and set them to data members.
-				$this->getThisImage($this->getImageID());
-
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-
-				# Set the current categories to a variable.
-				$image_categories=$image_obj->getCategories();
-
-				# Set the the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
-
-			# Set the markup to a variable
-			$display.='<li>'.
-				'<a href="'.VIDEOS_URL.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
-					'<img src="'.$this->getThumbnailUrl().'" alt="'.$this->getTitle().' on '.DOMAIN_NAME.'" class="thumbnail-small"/>'.
-				'</a>'.
-			'</li>';
 		}
 
 		$display.='</ul>'.
@@ -2392,11 +1473,5 @@ class Video
 	} #==== End -- markupSmallVideos
 
 	/*** End public methods ***/
-
-
-
-	/*** protected methods ***/
-
-	/*** End protected methods ***/
 
 } # end Video class

@@ -1,4 +1,8 @@
-<?php
+<?php /* framework/application/modules/Media/YouTube.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 /**
  * YouTube
@@ -24,12 +28,6 @@ class YouTube
 	private $yt_channel_id=YOUTUBE_CHANNELID;
 
 	/*** End data members ***/
-
-
-
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
 
 
 
@@ -459,6 +457,35 @@ class YouTube
 		}
 		return self::$youtube;
 	} #==== End -- getInstance
+
+	/**
+	 * getYouTubeIdFromEmbedCode
+	 *
+	 * Converts string to UTF-8. If the string is HTML then it strips the HTML and get's the first URL.
+	 * Then it get's the value after the last slash (/) in the URL which will be the Video ID (on YouTube).
+	 *
+	 * @param	string $embed_code
+	 * @access	public
+	 */
+	public function getYouTubeIdFromEmbedCode($embed_code)
+	{
+		# Check if the passed value is empty.
+		if(!empty($embed_code))
+		{
+			# Clean it up.
+			$embed_code=htmlspecialchars(str_replace('"', '', $embed_code), ENT_COMPAT, 'UTF-8');
+
+			# Is $embed_code an HTML tag?
+			if($embed_code==strip_tags($embed_code))
+			{
+				# Extract the first URL from $embed.
+				preg_match('/\b(?:(?:https?):\/\/|www\.)[-A-Z0-9+&@#\/%=~_|$?!:,.]*[A-Z0-9+&@#\/%=~_|$]/i', $embed_code, $matches);
+				# Get's the value after the last slash in the URL (which will be the YouTube Video ID).
+				$embed=substr(strrchr(rtrim($matches[0], '/'), '/'), 1);
+			}
+			return $embed;
+		}
+	} #==== End -- getYouTubeIdFromEmbedCode
 
 	/**
 	 * insertThumbnail

@@ -1,4 +1,8 @@
-<?php
+<?php /* framework/application/modules/Media/Media.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 /**
  * Media
@@ -11,34 +15,45 @@ class Media
 	/*** data members ***/
 
 	private $id=NULL;
-	private $all_media;
 	private $author=NULL;
+	private $availability;
+	# $category is an object.
+	private $category=NULL;
 	private $categories=array();
+	private $category_id=NULL;
 	private $content=NULL;
+	# $contributor is an object.
+	private $contributor=NULL;
+	private $cont_id=NULL;
+	# $recent_contributor is an object.
+	private $recent_contributor=NULL;
+	private $recent_cont_id=NULL;
+	private $date='0000-00-00';
 	private $description=NULL;
-	private $exploded_categories;
 	private $all_files=NULL;
+	# $file is an object.
 	private $file=NULL;
 	private $file_id=NULL;
 	private $file_info_display=NULL;
 	private $all_images=NULL;
-	private $image=NULL;
+	# $image_object is an object.
+	private $image_object=NULL;
 	private $image_id=NULL;
+	private $institution=NULL;
+	private $language=NULL;
+	private $last_edit='0000-00-00';
 	private $link=NULL;
+	private $location=NULL;
 	private $all_publishers=NULL;
+	# $publisher is an object or a string.
 	private $publisher=NULL;
 	private $publisher_id=NULL;
 	private $title=NULL;
-	private $audio_obj=NULL;
+	private $year=NULL;
+	private $audio_instance=NULL;
 	private $video_obj=NULL;
 
 	/*** End data members ***/
-
-
-
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
 
 
 
@@ -49,10 +64,11 @@ class Media
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param		$id
-	 * @access	protected
+	 * @param		$id						Integer			A numeric ID representing the media.
+	 * @param		$media_type		String			The type of media that the ID represents. Default is "media".
+	 * @access	public
 	 */
-	protected function setID($id)
+	public function setID($id, $media_type='media')
 	{
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
@@ -68,7 +84,7 @@ class Media
 			}
 			else
 			{
-				throw new Exception('The passed media id was not an integer!', E_RECOVERABLE_ERROR);
+				throw new Exception('The passed '.$media_type.' id was not an integer!', E_RECOVERABLE_ERROR);
 			}
 		}
 		else
@@ -79,27 +95,14 @@ class Media
 	} #==== End -- setID
 
 	/**
-	 * setAllMedia
-	 *
-	 * Sets the data member $all_media.
-	 *
-	 * @param		$all_media
-	 * @access	protected
-	 */
-	protected function setAllMedia($all_media)
-	{
-		$this->all_media=$all_media;
-	} #==== End -- setAllMedia
-
-	/**
 	 * setAuthor
 	 *
 	 * Sets the data member $author.
 	 *
 	 * @param		$author
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setAuthor($author)
+	public function setAuthor($author)
 	{
 		# Check if the passed value is empty.
 		if(!empty($author))
@@ -119,63 +122,156 @@ class Media
 	} #==== End -- setAuthor
 
 	/**
+	 * setAvailability
+	 *
+	 * Sets the data member $availability.
+	 *
+	 * @param		$availability
+	 * @access	public
+	 */
+	public function setAvailability($availability)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Clean it up.
+		$availability=trim($availability);
+		# Check if the passed value is an integer.
+		if($validator->isInt($availability)===TRUE)
+		{
+			# Set the data member explicitly making it an integer.
+			$this->availability=(int)$availability;
+		}
+		else
+		{
+			throw new Exception('The passed value for availability was not an integer!', E_RECOVERABLE_ERROR);
+		}
+	} #==== End -- setAvailability
+
+	/*
+	 * setCatObject
+	 *
+	 * Sets the data member $category.
+	 *
+	 * @param		$object
+	 * @access	protected
+	 */
+	protected function setCatObject($object)
+	{
+		# Check if the passed value is an object.
+		if(is_object($object))
+		{
+			# Set the data member.
+			$this->category=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->category=NULL;
+		}
+	} #==== End -- setCatObject
+
+	/**
 	 * setCategories
 	 *
 	 * Sets the data member $categories.
 	 *
 	 * @param		$value
-	 * @param		$id 			   (TRUE if the passed value $value is an id, FALSE if not.)
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setCategories($value, $id=TRUE)
+	public function setCategories($value)
 	{
+		# Create an empty array to hold the categories.
+		$categories=array();
 		# Check if the passed value if empty.
 		if(!empty($value))
 		{
-			# Check if the passed value is an array.
-			if(is_array($value))
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+			# Check if the passed value is NOT an array.
+			if(!is_array($value))
 			{
-				$categories=$value;
-			}
-			else
-			{
-				# Trim dashes(-) off both ends of the string.
+				# Trim both ends of the string.
+				$value=trim($value);
+				# Trim any dashes (-) off both ends of the string .
 				$value=trim($value, '-');
-				# Explode the string into an array.
+				# Explode the array to an array separated with dashes (-).
 				$value=explode('-', $value);
-				# Create an empty array to hold the categories.
-				$categories=array();
-				# Get the Category class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-				# Instantiate a new Category object.
-				$category=new Category();
-				# Loop through the array of catagory id's.
-				foreach($value as $cat_value)
-				# Check if the value passed is a category id.
-				if($id===TRUE)
+			}
+			# Get the Category class.
+			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+			# Instantiate a new Category object.
+			$category=new Category();
+			# Create a variable to hold the "WHERE" clause.
+			$where_clause=array();
+			# Loop through the $value array to build the "WHERE" clause.
+			foreach($value as $category_value)
+			{
+				# Set the default field name to search the categories tablee as "category".
+				$field_name='category';
+				# Check if the value is an integer. If so, set the field name to "id".
+				if($validator->isInt($category_value))
 				{
-					# Get the category name.
-					$category->getThisCategory($cat_value);
-					# Set the category name and id to the $categories array.
-					$categories[$cat_value]=$category->getCategory();
+					$field_name='id';
 				}
-				else
+				$where_clause[]='`'.$field_name.'` = '.$db->quote($category_value);
+			}
+			# Create the "WHERE" clause.
+			$where_clause=' WHERE ('.implode(' OR ', $where_clause).')';
+			# Retreive the categories in as single call.
+			$category->getCategories(NULL, '*', 'id', 'ASC', $where_clause);
+			# Set the returned records to a variable.
+			$all_categories=$category->getAllCategories();
+			# Check if there WERE any returned records.
+			if(!empty($all_categories))
+			{
+				# Loop through the returned categories.
+				foreach($all_categories as $single_category)
 				{
-					# Get the category id.
-					$category->getThisCategory($cat_value, FALSE);
 					# Set the category name and id to the $categories array.
-					$categories[$category->getID()]=$cat_value;
+					$categories[$single_category->id]=$single_category->category;
 				}
 			}
-		}
-		else
-		{
-			# Explicitly set the value to an empty array.
-			$categories=array();
 		}
 		# Set the data member.
 		$this->categories=$categories;
 	} #==== End -- setCategories
+
+	/**
+	 * setCategoryID
+	 *
+	 * Sets the data member $category_id.
+	 *
+	 * @param		$id
+	 * @access	public
+	 */
+	public function setCategoryID($id)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed $id is empty.
+		if(!empty($id))
+		{
+				# Check if the passed $id is an integer.
+			if($validator->isInt($id)===TRUE)
+			{
+				# Set the data member explicitly making it an integer.
+				$this->category_id=(int)$id;
+			}
+			else
+			{
+				throw new Exception('The passed category id was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->category_id=NULL;
+		}
+	} #==== End -- setCategoryID
 
 	/**
 	 * setContent
@@ -207,6 +303,169 @@ class Media
 	} #==== End -- setContent
 
 	/**
+	 * setContributor
+	 *
+	 * Sets the data member $contributor.
+	 *
+	 * @param	$object
+	 * @access	public
+	 */
+	public function setContributor($object)
+	{
+		# Check if the passed value is an object.
+		if(is_object($object))
+		{
+			# Set the data member.
+			$this->contributor=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->contributor=NULL;
+		}
+	} #==== End -- setContributor
+
+	/*
+	 * setContID
+	 *
+	 * Sets the data member $cont_id.
+	 *
+	 * @param		$id
+	 * @access	public
+	 */
+	public function setContID($id)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value is empty.
+		if(!empty($id))
+		{
+			# Clean it up.
+			$id=trim($id);
+			# Check if the passed $id is an integer.
+			if($validator->isInt($id)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$id=(int)$id;
+				# Get the Contributor class.
+				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
+				# Instantiate a new Contributor object.
+				$cont=new Contributor();
+				# Get the contributor name.
+				$cont->getThisContributor($id, 'id', FALSE);
+				# Set the Contributor object to the data member making it available outside the method.
+				$this->setContributor($cont);
+			}
+			else
+			{
+				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$id=NULL;
+		}
+		# Set the data member.
+		$this->cont_id=$id;
+	} #==== End -- setContID
+
+	/**
+	 * setRecentContributor
+	 *
+	 * Sets the data member $recent_contributor.
+	 *
+	 * @param	$object
+	 * @access	public
+	 */
+	public function setRecentContributor($object)
+	{
+		# Check if the passed value is an object.
+		if(is_object($object))
+		{
+			# Set the data member.
+			$this->recent_contributor=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->recent_contributor=NULL;
+		}
+	} #==== End -- setRecentContributor
+
+	/*
+	 * setRecentContID
+	 *
+	 * Sets the data member $recent_cont_id.
+	 *
+	 * @param		$id
+	 * @access	public
+	 */
+	public function setRecentContID($id)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value is empty.
+		if(!empty($id))
+		{
+			# Clean it up.
+			$id=trim($id);
+			# Check if the passed $id is an integer.
+			if($validator->isInt($id)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$id=(int)$id;
+				# Get the Contributor class.
+				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
+				# Instantiate a new Contributor object.
+				$cont=new Contributor();
+				# Get the contributor name.
+				$cont->getThisContributor($id, 'id', FALSE);
+				# Set the Contributor object to the data member making it available outside the method.
+				$this->setRecentContributor($cont);
+			}
+			else
+			{
+				throw new Exception('The passed recent contributor id was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$id=NULL;
+		}
+		# Set the data member.
+		$this->recent_cont_id=$id;
+	} #==== End -- setRecentContID
+
+	/**
+	 * setDate
+	 *
+	 * Sets the data member $date.
+	 *
+	 * @param		$date
+	 * @access	public
+	 */
+	public function setDate($date)
+	{
+		# Check if the passed value is empty.
+		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
+		{
+			# Clean it up,
+			$date=trim($date);
+			# Set the data member.
+			$this->date=$date;
+		}
+		else
+		{
+			# Explicitly set the data member to the default.
+			$this->date='0000-00-00';
+		}
+	} #==== End -- setDate
+
+	/**
 	 * setDescription
 	 *
 	 * Sets the data member $description.
@@ -214,7 +473,7 @@ class Media
 	 * @param		$description
 	 * @access	protected
 	 */
-	protected function setDescription($description)
+	public function setDescription($description)
 	{
 		# Check if the passed value is empty.
 		if(!empty($description))
@@ -234,19 +493,6 @@ class Media
 			$this->description=NULL;
 		}
 	} #==== End -- setDescription
-
-	/**
-	 * setExplodedCategories
-	 *
-	 * Sets the data member $exploded_categories.
-	 *
-	 * @param		$exploded_categories
-	 * @access	protected
-	 */
-	protected function setExplodedCategories($exploded_categories)
-	{
-		$this->exploded_categories=$exploded_categories;
-	} #==== End -- setExplodedCategories
 
 	/**
 	 * setAllFiles
@@ -359,27 +605,27 @@ class Media
 	} #==== End -- setAllImages
 
 	/**
-	 * setImage
+	 * setImageObj
 	 *
-	 * Sets the data member $image.
+	 * Sets the data member $image_object.
 	 *
 	 * @param		$object
 	 * @access	protected
 	 */
-	protected function setImage($object)
+	protected function setImageObj($object)
 	{
 		# Check if the passed value is an object.
 		if(is_object($object))
 		{
 			# Set the data member.
-			$this->image=$object;
+			$this->image_object=$object;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->image=NULL;
+			$this->image_object=NULL;
 		}
-	} #==== End -- setImage
+	} #==== End -- setImageObj
 
 	/**
 	 * setImageID
@@ -387,33 +633,160 @@ class Media
 	 * Sets the data member $image_id.
 	 *
 	 * @param		$id
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setImageID($id)
+	public function setImageID($id)
 	{
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
-		# Check if the passed $id is NULL.
+		# Check if the passed $id is empty.
 		if(!empty($id))
 		{
 			# Check if the passed $id is an integer.
 			if($validator->isInt($id)===TRUE)
 			{
-				# Set the data member explicitly making it an integer.
-				$this->image_id=(int)$id;
+				# Explicitly make it an integer.
+				$id=(int)$id;
 			}
-			else
+			elseif($id!=='add' && $id!=='select' && $id!=='remove')
 			{
 				throw new Exception('The passed image id was not an integer!', E_RECOVERABLE_ERROR);
 			}
 		}
 		else
 		{
-			# Explicitly set the data member to NULL.
-			$this->image_id=NULL;
+			# Explicitly set the value to NULL.
+			$id=NULL;
 		}
+		# Set the data member.
+		$this->image_id=$id;
 	} #==== End -- setImageID
+
+	/**
+	 * setInstitution
+	 *
+	 * Sets the data member $institution.
+	 *
+	 * @param		$institution
+	 * @access	public
+	 */
+	public function setInstitution($institution)
+	{
+		# Check if the passed value is empty.
+		if(!empty($institution))
+		{
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+			# Clean it up.
+			$institution=trim($institution);
+			# Check if the value passed is an institution id.
+			if($validator->isInt($institution)===TRUE)
+			{
+				# Get the Institution class.
+				require_once Utility::locateFile(MODULES.'Content'.DS.'Institution.php');
+				# Instantiate a new Cnstitution object.
+				$inst=new institution();
+				# Get the institution name.
+				$inst->getThisInstitution($institution);
+				# Set the institution name to a variable.
+				$institution=$inst->getInstitution();
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$institution=NULL;
+		}
+		# Set the data member.
+		$this->institution=$institution;
+	} #==== End -- setInstitution
+
+	/**
+	 * setLanguage
+	 *
+	 * Sets the data member $language.
+	 *
+	 * @param		$language
+	 * @access	public
+	 */
+	public function setLanguage($language)
+	{
+		# Check if the passed value is empty.
+		if(!empty($language))
+		{
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+			# Clean it up.
+			$language=trim($language);
+			# Check if the value passed is an language id.
+			if($validator->isInt($language)===TRUE)
+			{
+				# Get the Language class.
+				require_once Utility::locateFile(MODULES.'Content'.DS.'Language.php');
+				# Instantiate a new Cnstitution object.
+				$lang=new language();
+				# Get the language name.
+				$lang->getThisLanguage($language);
+				# Set the language name to a variable.
+				$language=$lang->getLanguage();
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$language=NULL;
+		}
+		# Set the data member.
+		$this->language=$language;
+	} #==== End -- setLanguage
+
+	/**
+	 * setLastEdit
+	 *
+	 * Sets the data member $last_edit.
+	 *
+	 * @param	$date
+	 * @access	public
+	 */
+	public function setLastEdit($date)
+	{
+		# Check if the passed value is empty.
+		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
+		{
+			# Explode the date into an array casting each as an integer.
+			$date=explode('-', $date);
+			$year=(int)$date[0];
+			$month=(int)$date[1];
+			$day=(int)$date[2];
+			if(checkdate($month, $day, $year)===TRUE)
+			{
+				# Make sure the day is the correct length.
+				if(strlen($day)!=2)
+				{
+					$day='0'.$day;
+				}
+				# Make sure the month is the correct length.
+				if(strlen($month)!=2)
+				{
+					$month='0'.$month;
+				}
+				# Put the date back together in the correct format.
+				$date=$year.'-'.$month.'-'.$day;
+				# Set the data member.
+				$this->last_edit=$date;
+			}
+			else
+			{
+				throw new Exception('The passed last edit date was not an acceptable date.', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the data member to the default.
+			$this->last_edit='0000-00-00';
+		}
+	} #==== End -- setLastEdit
 
 	/**
 	 * setLink
@@ -442,6 +815,35 @@ class Media
 		}
 	} #==== End -- setLink
 
+	/*
+	 * setLocation
+	 *
+	 * Sets the data member $location.
+	 *
+	 * @param		$location
+	 * @access	public
+	 */
+	public function setLocation($location)
+	{
+		# Check if the passed value is empty.
+		if(!empty($location))
+		{
+			# Strip slashes, decode any html entities, and strip tags.
+			$location=strip_tags(html_entity_decode(stripslashes($location), ENT_COMPAT, 'UTF-8'));
+			# Re-encde any special characters to html entities in UTF-8 encoding including quotes.
+			$location=htmlentities($location, ENT_QUOTES, 'UTF-8');
+			# Clean it up.
+			$location=trim($location);
+			# Set the data member.
+			$this->location=$location;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->location=NULL;
+		}
+	} #==== End -- setLocation
+
 	/**
 	 * setAllPublishers
 	 *
@@ -459,12 +861,12 @@ class Media
 	 * setPublisher
 	 *
 	 * Sets the data member $publisher. May be used to store an instance of the Publisher class
-	 * or the name of a publisher as astring.
+	 * or the name of a publisher as a string.
 	 *
 	 * @param		$publisher
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setPublisher($publisher)
+	public function setPublisher($publisher)
 	{
 		# Check if the passed value is empty.
 		if(!empty($publisher))
@@ -472,10 +874,24 @@ class Media
 			# Check if the passed value is the Publisher class instance.
 			if(!is_object($publisher))
 			{
+				# Set the Validator instance to a variable.
+				$validator=Validator::getInstance();
 				# Strip slashes and decode any html entities.
 				$publisher=html_entity_decode(stripslashes($publisher), ENT_COMPAT, 'UTF-8');
 				# Clean it up.
 				$publisher=trim($publisher);
+				# Check if the value passed is an publisher id.
+				if($validator->isInt($publisher)===TRUE)
+				{
+					# Get the Publisher class.
+					require_once Utility::locateFile(MODULES.'Content'.DS.'Publisher.php');
+					# Instantiate a new Publisher object.
+					$publisher_instance=new Publisher();
+					# Get the publisher name.
+					$publisher_instance->getThisPublisher($publisher);
+					# Set the publisher name to the variable.
+					$publisher=$publisher_instance->getPublisher();
+				}
 			}
 			# Set the data member.
 			$this->publisher=$publisher;
@@ -548,21 +964,23 @@ class Media
 		}
 	} #==== End -- setPurchaseLink
 
-	/**
+	/*
 	 * setTitle
 	 *
 	 * Sets the data member $title.
 	 *
 	 * @param		$title
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setTitle($title)
+	public function setTitle($title)
 	{
 		# Check if the passed value is empty.
 		if(!empty($title))
 		{
-			# Strip slashes and decode any html entities.
-			$title=html_entity_decode(stripslashes($title), ENT_COMPAT, 'UTF-8');
+			# Strip slashes, decode any html entities, and strip tags.
+			$title=strip_tags(html_entity_decode(stripslashes($title), ENT_COMPAT, 'UTF-8'));
+			# Re-encde any special characters to html entities in UTF-8 encoding including quotes.
+			$title=htmlentities($title, ENT_QUOTES, 'UTF-8');
 			# Clean it up.
 			$title=trim($title);
 			# Set the data member.
@@ -576,26 +994,51 @@ class Media
 	} #==== End -- setTitle
 
 	/**
-	 * setAudioObject
+	 * setYear
 	 *
-	 * Set the data member $audio_obj
+	 * Sets the data member $year.
 	 *
-	 * @param	string $audio_obj
+	 * @param		$year
+	 * @access	public
+	 */
+	public function setYear($year)
+	{
+		# Check if the passed value is empty.
+		if(empty($year) OR ($year=='0000'))
+		{
+			# Explicitly set the value to NULL.
+			$year=NULL;
+		}
+		else
+		{
+			# Clean it up.
+			$year=trim($year);
+		}
+			# Set the data member.
+			$this->year=$year;
+	} #==== End -- setYear
+
+	/**
+	 * setAudioInstance
+	 *
+	 * Set the data member $audio_instance
+	 *
+	 * @param	string $audio_instance
 	 * @access	private
 	 */
-	private function setAudioObject($audio_obj)
+	private function setAudioInstance($audio_instance)
 	{
 		# Check if the passed value is an object.
-		if(is_object($audio_obj))
+		if(is_object($audio_instance))
 		{
-			$this->audio_obj=$audio_obj;
+			$this->audio_instance=$audio_instance;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->audio_obj=NULL;
+			$this->audio_instance=NULL;
 		}
-	} #==== End -- setAudioObject
+	} #==== End -- setAudioInstance
 
 	/**
 	 * setVideoObject
@@ -638,18 +1081,6 @@ class Media
 	} #==== End -- getID
 
 	/**
-	 * getAllMedia
-	 *
-	 * Returns the data member $all_media.
-	 *
-	 * @access	protected
-	 */
-	public function getAllMedia()
-	{
-		return $this->all_media;
-	} #==== End -- getAllMedia
-
-	/**
 	 * getAuthor
 	 *
 	 * Returns the data member $author.
@@ -662,6 +1093,30 @@ class Media
 	} #==== End -- getAuthor
 
 	/**
+	 * getAvailability
+	 *
+	 * Returns the data member $availability.
+	 *
+	 * @access	public
+	 */
+	public function getAvailability()
+	{
+		return $this->availability;
+	} #==== End -- getAvailability
+
+	/*
+	 * getCatObject
+	 *
+	 * Returns the data member $category.
+	 *
+	 * @access	protected
+	 */
+	protected function getCatObject()
+	{
+		return $this->category;
+	} #==== End -- getCatObject
+
+	/**
 	 * getCategories
 	 *
 	 * Returns the data member $categories.
@@ -672,18 +1127,6 @@ class Media
 	{
 		return $this->categories;
 	} #==== End -- getCategories
-
-	/**
-	 * getCategory
-	 *
-	 * Returns the data member $category.
-	 *
-	 * @access	public
-	 */
-	public function getCategory()
-	{
-		return $this->category;
-	} #==== End -- getCategory
 
 	/**
 	 * getCategoryID
@@ -710,6 +1153,66 @@ class Media
 	} #==== End -- getContent
 
 	/**
+	 * getContributor
+	 *
+	 * Returns the data member $contributor.
+	 *
+	 * @access	public
+	 */
+	public function getContributor()
+	{
+		return $this->contributor;
+	} #==== End -- getContributor
+
+	/*
+	 * getContID
+	 *
+	 * Returns the data member $cont_id.
+	 *
+	 * @access	public
+	 */
+	public function getContID()
+	{
+		return $this->cont_id;
+	} #==== End -- getContID
+
+	/**
+	 * getRecentContributor
+	 *
+	 * Returns the data member $recent_contributor.
+	 *
+	 * @access	public
+	 */
+	public function getRecentContributor()
+	{
+		return $this->recent_contributor;
+	} #==== End -- getRecentContributor
+
+	/*
+	 * getRecentContID
+	 *
+	 * Returns the data member $recent_cont_id.
+	 *
+	 * @access	public
+	 */
+	public function getRecentContID()
+	{
+		return $this->recent_cont_id;
+	} #==== End -- getRecentContID
+
+	/**
+	 * getDate
+	 *
+	 * Returns the data member $date.
+	 *
+	 * @access	public
+	 */
+	public function getDate()
+	{
+		return $this->date;
+	} #==== End -- getDate
+
+	/**
 	 * getDescription
 	 *
 	 * Returns the data member $description.
@@ -720,18 +1223,6 @@ class Media
 	{
 		return $this->description;
 	} #==== End -- getDescription
-
-	/**
-	 * getExplodedCategories
-	 *
-	 * Returns the data member $exploded_categories.
-	 *
-	 * @access	protected
-	 */
-	protected function getExplodedCategories()
-	{
-		return $this->exploded_categories;
-	} #==== End -- getExplodedCategories
 
 	/**
 	 * getAllFiles
@@ -796,13 +1287,13 @@ class Media
 	/**
 	 * getImage
 	 *
-	 * Returns the data member $image.
+	 * Returns the data member $image_object.
 	 *
 	 * @access	public
 	 */
-	public function getImage()
+	public function getImageObj()
 	{
-		return $this->image;
+		return $this->image_object;
 	} #==== End -- getImage
 
 	/**
@@ -818,6 +1309,42 @@ class Media
 	} #==== End -- getImageID
 
 	/**
+	 * getInstitution
+	 *
+	 * Returns the data member $institution.
+	 *
+	 * @access	public
+	 */
+	public function getInstitution()
+	{
+		return $this->institution;
+	} #==== End -- getInstitution
+
+	/**
+	 * getLanguage
+	 *
+	 * Returns the data member $language.
+	 *
+	 * @access	public
+	 */
+	public function getLanguage()
+	{
+		return $this->language;
+	} #==== End -- getLanguage
+
+	/*
+	 * getLastEdit
+	 *
+	 * Returns the data member $last_edit.
+	 *
+	 * @access	public
+	 */
+	public function getLastEdit()
+	{
+		return $this->last_edit;
+	} #==== End -- getLastEdit
+
+	/**
 	 * getLink
 	 *
 	 * Returns the data member $link.
@@ -828,6 +1355,18 @@ class Media
 	{
 		return $this->link;
 	} #==== End -- getLink
+
+	/*
+	 * getLocation
+	 *
+	 * Returns the data member $location.
+	 *
+	 * @access	public
+	 */
+	public function getLocation()
+	{
+		return $this->location;
+	} #==== End -- getLocation
 
 	/**
 	 * getAllPublishers
@@ -878,26 +1417,38 @@ class Media
 	} #==== End -- getTitle
 
 	/**
-	 * getAudioObject
+	 * getYear
 	 *
-	 * Returns the data member $audio_obj.
+	 * Returns the data member $year.
 	 *
 	 * @access	public
 	 */
-	public function getAudioObject()
+	public function getYear()
+	{
+		return $this->year;
+	} #==== End -- getYear
+
+	/**
+	 * getAudioInstance
+	 *
+	 * Returns the data member $audio_instance.
+	 *
+	 * @access	public
+	 */
+	public function getAudioInstance()
 	{
 		# Check if there is an Audio object.
-		if($this->audio_obj===NULL)
+		if($this->audio_instance===NULL)
 		{
 			# Get the Audio Class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
 			# Instantiate a new Audio object.
-			$audio_obj=Audio::getInstance();
+			$audio_instance=Audio::getInstance();
 			# Set the Audio object to the data member.
-			$this->setAudioObject($audio_obj);
+			$this->setAudioObject($audio_instance);
 		}
-		return $this->audio_obj;
-	} #==== End -- getAudioObject
+		return $this->audio_instance;
+	} #==== End -- getAudioInstance
 
 	/**
 	 * getVideoObject
@@ -926,52 +1477,6 @@ class Media
 
 
 	/*** public methods ***/
-
-	/**
-	 * countAllRecords
-	 *
-	 * Returns the number of media in the database that are marked available.
-	 *
-	 * @param	$category (The id of the category database table to access.)
-	 * @param	$limit (The limit of records to count)
-	 * @param	$and_sql (Extra AND statements in the query)
-	 * @access	public
-	 */
-	public function countAllRecords($categories=NULL, $limit=NULL, $and_sql=NULL)
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		try
-		{
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$category=new Category();
-			# Check if all categories are requested.
-			if(strtolower($categories)!=='all')
-			{
-				$category->createWhereSQL($categories);
-			}
-			# Set the WHERE portion of the SQL statement for the categories requested to a variable.
-			$where=$category->getWhereSQL();
-			# Check if there should be a WHERE portion of the SQL statement.
-			if(!empty($where) || !empty($and_sql))
-			{
-				$where='WHERE'.((empty($where)) ? '' : ' '.$where).((empty($and_sql)) ? '' : ' '.((!empty($where)) ? 'AND ' : '').$and_sql);
-			}
-			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'media` '.$where.(($limit===NULL) ? '' : ' LIMIT '.$limit));
-			return $count;
-		}
-		catch(ezDB_Error $e)
-		{
-			throw new Exception('An error occured counting Media in the Database: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- countAllRecords
 
 	/**
 	 * getFiles
@@ -1064,11 +1569,11 @@ class Media
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image_obj=new Image();
-			# Get the institutions.
-			$image_obj->getImages($limit, $fields, $order, $direction, $where);
+			$image=new Image();
+			# Get the images.
+			$image->getImages($limit, $fields, $order, $direction, $where);
 			# Set the retrieved images to a variable.
-			$images=$image_obj->getAllImages();
+			$images=$image->getAllImages();
 			# Check if there were records retrieved.
 			if($images!==NULL)
 			{
@@ -1101,73 +1606,27 @@ class Media
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image=new Image();
-			# Get the image info.
-			$image->getThisImage($value, $id);
+			$image_obj=new Image();
+			# Get the info for this image and set the return boolean to a variable.
+			$record_retrieved=$image_obj->getThisImage($value, $id);
 			# Set the image object to the data member.
-			$this->setImage($image);
-			# Set the image id to the data member.
-			$this->setImageID($image->getID());
+			$this->setImageObj($image_obj);
+			# Check if there was an image retrieved.
+			if($record_retrieved===TRUE)
+			{
+				# Set the id to the data member.
+				$this->setImageID($image_obj->getID());
+				return TRUE;
+			}
+			# Set the image id data member to NULL.
+			$this->setImageID(NULL);
+			return FALSE;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
 	} #==== End -- getThisImage
-
-	/**
-	 * getMedia
-	 *
-	 * Retrieves Media records from the DataBase.
-	 *
-	 * @param	$category					The name of the category(ies) to be retrieved. May be multiple categories - separate with a dash, ie. 'Music-Books'.
-	 * @param	$limit						The LIMIT of the records.
-	 * @param	$fields						The name of the field(s) to be retrieved.
-	 * @param	$order						The name of the field to order the records by.
-	 * @param	$direction					The direction to order the records.
-	 * @param	$and_sql					Any extra AND queries.
-	 * @access	public
-	 */
-	public function getMedia($categories=NULL, $limit=NULL, $fields='*', $order='title', $direction='DESC', $and_sql=NULL)
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		try
-		{
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$category=new Category();
-			# Check if all categories are requested.
-			if(strtolower($categories)!=='all')
-			{
-				# Create the WHERE portion of the SQL statement for the categories requested.
-				$category->createWhereSQL($categories);
-			}
-			# Set the WHERE portion of the SQL statement for the categories requested to a variable.
-			$where=$category->getWhereSQL();
-			# Check if there should be a WHERE portion of the SQL statement.
-			if(!empty($where) || !empty($and_sql))
-			{
-				$where='WHERE'.((empty($where)) ? '' : ' '.$where).((empty($and_sql)) ? '' : ' '.((!empty($where)) ? 'AND ' : '').$and_sql);
-			}
-			# Get the records from the `media` table.
-			$records=$db->get_results('SELECT '.$fields.' FROM `'.DBPREFIX.'media` '.$where.' ORDER BY `'.$order.'` '.$direction.(($limit===NULL) ? '' : ' LIMIT '.$limit));
-			# Set the returned records to the data member.
-			$this->setAllMedia($records);
-		}
-		catch(ezDB_Error $e)
-		{
-			# Throw an error because there was aproblem accessing the database.
-			throw new Exception('An error occured retrieving Media from the Database: '.$e->error.'<br />Code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
-		}
-		catch(Exception $e)
-		{
-			# Re-throw any uncaught errors.
-			throw $e;
-		}
-	} #==== End -- getMedia
 
 	/**
 	 * getPublishers
@@ -1252,59 +1711,59 @@ class Media
 	 * Sets all the data returned in a row from the various media tables to the appropriate data members.
 	 *
 	 * @param		$row 		(The returned row of data from a record to set to the data members.)
-	 * @access	public
+	 * @access	protected
 	 */
-	public function setDataMembers($row)
-	{
-		try
-		{
-			/* Reset all the data members. */
-			$this->setID(NULL);
-			$this->setAuthor(NULL);
-			$this->setContent(NULL);
-			$this->setDescription(NULL);
-			$this->setFile(NULL);
-			$this->setImage(NULL);
-			$this->setLink(NULL);
-			$this->setPublisher(NULL);
-			$this->setTitle(NULL);
-			# Set media id to the data member.
-			$this->setID($row->id);
-
-			# Set the author to the data member.
-			$this->setAuthor($row->author);
-			# Set media description to the data member.
-			$this->setContent($row->content);
-			# Set media description to the data member.
-			$this->setDescription($row->description);
-			# Check if there is a file value.
-			if($row->file!==NULL)
-			{
-				# Retrieve the file info from the `files` table via the file id returned in the $row data.
-				$this->getThisFile($row->file);
-			}
-			# Check if there is an image value.
-			if($row->image!==NULL)
-			{
-				# Retrieve the image info from the `images` table via the image id returned in the $row data.
-				$this->getThisImage($row->image);
-			}
-			# Set media link to the data member.
-			$this->setLink($row->link);
-			# Check if there is an publisher value.
-			if($row->publisher!==NULL)
-			{
-				# Retrieve the publisher info from the `publishers` table via the publisher id returned in the $row data.
-				$this->getThisPublisher($row->publisher);
-			}
-			# Set the media title to the data member.
-			$this->setTitle($row->title);
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- setDataMembers
+// 	protected function setDataMembers($row)
+// 	{
+// 		try
+// 		{
+// 			/* Reset all the data members. */
+// 			$this->setID(NULL);
+// 			$this->setAuthor(NULL);
+// 			$this->setContent(NULL);
+// 			$this->setDescription(NULL);
+// 			$this->setFile(NULL);
+// 			$this->setImage(NULL);
+// 			$this->setLink(NULL);
+// 			$this->setPublisher(NULL);
+// 			$this->setTitle(NULL);
+// 			# Set media id to the data member.
+// 			$this->setID($row->id);
+//
+// 			# Set the author to the data member.
+// 			$this->setAuthor($row->author);
+// 			# Set media description to the data member.
+// 			$this->setContent($row->content);
+// 			# Set media description to the data member.
+// 			$this->setDescription($row->description);
+// 			# Check if there is a file value.
+// 			if($row->file!==NULL)
+// 			{
+// 				# Retrieve the file info from the `files` table via the file id returned in the $row data.
+// 				$this->getThisFile($row->file);
+// 			}
+// 			# Check if there is an image value.
+// 			if($row->image!==NULL)
+// 			{
+// 				# Retrieve the image info from the `images` table via the image id returned in the $row data.
+// 				$this->getThisImage($row->image);
+// 			}
+// 			# Set media link to the data member.
+// 			$this->setLink($row->link);
+// 			# Check if there is an publisher value.
+// 			if($row->publisher!==NULL)
+// 			{
+// 				# Retrieve the publisher info from the `publishers` table via the publisher id returned in the $row data.
+// 				$this->getThisPublisher($row->publisher);
+// 			}
+// 			# Set the media title to the data member.
+// 			$this->setTitle($row->title);
+// 		}
+// 		catch(Exception $e)
+// 		{
+// 			throw $e;
+// 		}
+// 	} #==== End -- setDataMembers
 
 	/*** End protected methods ***/
 

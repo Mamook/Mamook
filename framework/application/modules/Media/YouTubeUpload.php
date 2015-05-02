@@ -1,4 +1,5 @@
-<?php
+<?php /* framework/application/modules/Media/YouTubeUpload.php */
+
 
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
@@ -13,14 +14,14 @@ $session_id=$passed_data['SessionId'];
 # Need these for database_definitions.php and email_definitions.php
 # Need this for the Image class and APPLICATION_URL.
 if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
+# Need this for the FileHandler class and APPLICATION_URL.
+if(!defined('DEVELOPMENT_DOMAIN')) define('DEVELOPMENT_DOMAIN', $passed_data['DevEnvironment']);
+# Need this for the FileHandler class and APPLICATION_URL.
+if(!defined('STAGING_DOMAIN')) define('STAGING_DOMAIN', $passed_data['StagingEnvironment']);
 # Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
 if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', DOMAIN_NAME.'/');
 # Define the url that points to our application. (ends with a slash)
 define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
-# The domain name of the developement application. (doesn't end with a slash)
-define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
-# The domain name of the staging application. (doesn't end with a slash)
-define('STAGING_DOMAIN', 'test.jamtheforce.org');
 # Set to TRUE to see the nasty errors for debugging, FALSE to hide them.
 if(DOMAIN_NAME===DEVELOPMENT_DOMAIN)
 {
@@ -60,7 +61,7 @@ require UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
 require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init();
+DB::init('mysqli');
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
@@ -71,7 +72,7 @@ $video_data=$session['video_upload'];
 # Get the Video Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 # Instantiate the new Video object.
-$video_obj=new Video();
+$video_obj=Video::getInstance();
 # Get the YouTube instance. Starts the YouTubeService if it's not already started.
 $yt=$video_obj->getYouTubeObject(FULL_DOMAIN);
 # Get Google Client
@@ -205,7 +206,7 @@ if(!empty($video_data['FileName']))
 		foreach($get_playlists as $playlists)
 		{
 			# Find the playlist in the $video_data array.
-			if(array_key_exists($playlists->id, $video_data['Playlists']))
+			if(array_key_exists($playlists->id, $video_data['Categories']))
 			{
 				# Decode the `api` field in the `categories` table.
 				$playlist_api_decoded=json_decode($playlists->api);

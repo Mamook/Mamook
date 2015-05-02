@@ -1,7 +1,11 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Media/Audio.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
+
+# Get the Media class.
+require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
 
 
 /**
@@ -17,46 +21,23 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
  * @dependencies		Requires "{MODULES}/Media/Soundcloud/Soundcloud.php".
  * @dependencies		Requires "{MODULES}/User/Contributor.php".
  */
-class Audio
+class Audio extends Media
 {
 	/*** data members ***/
 
-	private static $audio_obj;
+	protected static $audio_obj;
 	private $all_audio=array();
 	private $api=NULL;
 	private $audio_id=NULL;
 	private $audio_type=NULL;
 	private $audio_url=NULL;
-	private $author=NULL;
-	private $availability;
-	private $category=NULL;
-	private $cat_object=NULL;
 	private $confirmation_template=NULL;
-	# $contributor is an object.
-	private $contributor=NULL;
-	private $cont_id=NULL;
-	private $date='0000-00-00';
-	private $description=NULL;
 	private $embed=NULL;
 	private $embed_code=NULL;
 	private $file_name=NULL;
-	private $id=NULL;
-	private $image_id=NULL;
-	private $image_obj=NULL;
-	private $institution=NULL;
 	private $is_playlist=FALSE;
-	private $language=NULL;
-	private $last_edit='0000-00-00';
-	private $playlists=array();
-	private $playlist_object=NULL;
-	private $publisher=NULL;
-	# $recent_contributor is an object.
-	private $recent_contributor=NULL;
-	private $recent_cont_id=NULL;
 	private $soundcloud_obj=NULL;
 	private $thumbnail_url=NULL;
-	private $title=NULL;
-	private $year=NULL;
 
 	/*** End data members ***/
 
@@ -156,108 +137,6 @@ class Audio
 	} #==== End -- setAudioUrl
 
 	/**
-	 * setAuthor
-	 *
-	 * Sets the data member $author.
-	 *
-	 * @param	int $author
-	 * @access	public
-	 */
-	public function setAuthor($author)
-	{
-		# Check if the passed value is empty.
-		if(!empty($author))
-		{
-			# Strip slashes and decode any html entities.
-			$author=html_entity_decode(stripslashes($author), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$author=trim($author);
-			# Set the data member.
-			$this->author=$author;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->author=NULL;
-		}
-	} #==== End -- setAuthor
-
-	/**
-	 * setAvailability
-	 *
-	 * Sets the data member $availability.
-	 *
-	 * @param	int $availability
-	 * @access	public
-	 */
-	public function setAvailability($availability)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Clean it up.
-		$availability=trim($availability);
-		# Check if the passed value is an integer.
-		if($validator->isInt($availability)===TRUE)
-		{
-			# Set the data member explicitly making it an integer.
-			$this->availability=(int)$availability;
-		}
-		else
-		{
-			throw new Exception('The passed value for availability was not an integer!', E_RECOVERABLE_ERROR);
-		}
-	} #==== End -- setAvailability
-
-	/**
-	 * setCategory
-	 *
-	 * Sets the data member $category.
-	 *
-	 * @param	int $category
-	 * @access	public
-	 */
-	public function setCategory($category)
-	{
-		# Check if the passed value is empty.
-		if(!empty($category))
-		{
-			# Clean it up.
-			$category=trim($category);
-			# Set the data member.
-			$this->category=$category;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->category=NULL;
-		}
-	} #==== End -- setCategory
-
-	/**
-	 * setCatObject
-	 *
-	 * Sets the data member $cat_object.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setCatObject($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->cat_object=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cat_object=NULL;
-		}
-	} #==== End -- setCatObject
-
-	/**
 	 * setConfirmationTemplate
 	 *
 	 * Sets the data member $confirmation_template.
@@ -287,127 +166,6 @@ class Audio
 		# Set the data member.
 		$this->confirmation_template=$path;
 	} #==== End -- setConfirmationTemplate
-
-	/**
-	 * setContributor
-	 *
-	 * Sets the data member $contributor.
-	 *
-	 * @param	$object
-	 * @access	public
-	 */
-	public function setContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->contributor=NULL;
-		}
-	} #==== End -- setContributor
-
-	/**
-	 * setContID
-	 *
-	 * Sets the data member $cont_id.
-	 *
-	 * @param	int $id
-	 * @access	public
-	 */
-	public function setContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value is empty.
-		if(!empty($id))
-		{
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-				# Get the Contributor class.
-				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
-				# Instantiate a new Contributor object.
-				$cont=new Contributor();
-				# Get the contributor name.
-				$cont->getThisContributor($id, 'id', FALSE);
-				# Set the Contributor object to the data member making it available outside the method.
-				$this->setContributor($cont);
-			}
-			else
-			{
-				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->cont_id=$id;
-	} #==== End -- setContID
-
-	/**
-	 * setDate
-	 *
-	 * Sets the data member $date.
-	 *
-	 * @param	$date
-	 * @access	public
-	 */
-	public function setDate($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
-		{
-			# Clean it up,
-			$date=trim($date);
-			# Set the data member.
-			$this->date=$date;
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->date='0000-00-00';
-		}
-	} #==== End -- setDate
-
-	/**
-	 * setDescription
-	 *
-	 * Sets the data member $description.
-	 *
-	 * @param	string $description
-	 * @access	public
-	 */
-	public function setDescription($description)
-	{
-		# Check if the passed value is empty.
-		if(!empty($description))
-		{
-			# Strip slashes and decode any html entities.
-			$description=html_entity_decode(stripslashes($description), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$description=trim($description);
-			# Set the data member.
-			$this->description=$description;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->description=NULL;
-		}
-	} #==== End -- setDescription
 
 	/**
 	 * setEmbed
@@ -504,127 +262,29 @@ class Audio
 	 * setID
 	 *
 	 * Sets the data member $id.
+	 * Extends setID in Media.
 	 *
-	 * @param	int $id
+	 * @param		$id						Integer			A numeric ID representing the audio.
+	 * @param		$media_type		String			The type of media that the ID represents. Default is "audio".
 	 * @access	public
 	 */
-	public function setID($id)
+	public function setID($id, $media_type='audio')
 	{
-		# Check if the passed $id is empty.
-		if(!empty($id) && $id!=='add' && $id!=='select')
+		try
 		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
+			# Check if the passed $id is empty.
+			if($id=='add' OR $id=='select')
 			{
-				# Explicitly making it an integer.
-				$id=(int)trim($id);
+				# Explicitly set the data member to NULL.
+				$id=NULL;
 			}
-			else
-			{
-				throw new Exception('The passed audio id was not an integer!', E_RECOVERABLE_ERROR);
-			}
+			parent::setID($id, $media_type);
 		}
-		else
+		catch(Exception $error)
 		{
-			# Explicitly set the data member to NULL.
-			$id=NULL;
+			throw $error;
 		}
-		# Set the data member.
-		$this->id=$id;
 	} #==== End -- setID
-
-	/**
-	 * setImageID
-	 *
-	 * Sets the data member $image_id.
-	 *
-	 * @param	$id
-	 * @access	public
-	 */
-	public function setImageID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$id=(int)$id;
-			}
-			elseif($id!=='add' && $id!=='select' && $id!=='remove')
-			{
-				throw new Exception('The passed image id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$id=NULL;
-		}
-		# Set the data member.
-		$this->image_id=$id;
-	} #==== End -- setImageID
-
-	/**
-	 * setImageObj
-	 *
-	 * Sets the data member $image_obj.
-	 *
-	 * @param	$object
-	 * @access	protected
-	 */
-	protected function setImageObj($object)
-	{
-		# Set the data member.
-		$this->image_obj=$object;
-	} #==== End -- setImageObj
-
-	/**
-	 * setInstitution
-	 *
-	 * Sets the data member $institution.
-	 *
-	 * @param	$institution
-	 * @access	public
-	 */
-	public function setInstitution($institution)
-	{
-		# Check if the passed value is empty.
-		if(!empty($institution))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$institution=trim($institution);
-			# Check if the value passed is an institution id.
-			if($validator->isInt($institution)===TRUE)
-			{
-				# Get the Institution class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Institution.php');
-				# Instantiate a new Cnstitution object.
-				$inst=new institution();
-				# Get the institution name.
-				$inst->getThisInstitution($institution, TRUE);
-				# Set the institution name to a variable.
-				$institution=$inst->getInstitution();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$institution=NULL;
-		}
-		# Set the data member.
-		$this->institution=$institution;
-	} #==== End -- setInstitution
 
 	/**
 	 * setIsPlaylist
@@ -638,270 +298,6 @@ class Audio
 	{
 		$this->is_playlist=$is_playlist;
 	} #==== End -- setIsPlaylist
-
-	/**
-	 * setLanguage
-	 *
-	 * Sets the data member $language.
-	 *
-	 * @param	int $language
-	 * @access	public
-	 */
-	public function setLanguage($language)
-	{
-		# Check if the passed value is empty.
-		if(!empty($language))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$language=trim($language);
-			# Check if the value passed is an language id.
-			if($validator->isInt($language)===TRUE)
-			{
-				# Get the Language class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Language.php');
-				# Instantiate a new Cnstitution object.
-				$lang=new language();
-				# Get the language name.
-				$lang->getThisLanguage($language);
-				# Set the language name to a variable.
-				$language=$lang->getLanguage();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$language=NULL;
-		}
-		# Set the data member.
-		$this->language=$language;
-	} #==== End -- setLanguage
-
-	/**
-	 * setLastEdit
-	 *
-	 * Sets the data member $last_edit.
-	 *
-	 * @param	$date
-	 * @access	public
-	 */
-	public function setLastEdit($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00'))
-		{
-			# Explode the date into an array casting each as an integer.
-			$date=explode('-', $date);
-			$year=(int)$date[0];
-			$month=(int)$date[1];
-			$day=(int)$date[2];
-			if(checkdate($month, $day, $year)===TRUE)
-			{
-				# Make sure the day is the correct length.
-				if(strlen($day)!=2)
-				{
-					$day='0'.$day;
-				}
-				# Make sure the month is the correct length.
-				if(strlen($month)!=2)
-				{
-					$month='0'.$month;
-				}
-				# Put the date back together in the correct format.
-				$date=$year.'-'.$month.'-'.$day;
-				# Set the data member.
-				$this->last_edit=$date;
-			}
-			else
-			{
-				throw new Exception('The passed last edit date was not an acceptable date.', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->last_edit='0000-00-00';
-		}
-	} #==== End -- setLastEdit
-
-	/**
-	 * setPlaylists
-	 *
-	 * Sets the data member $playlists.
-	 *
-	 * @param	$value
-	 * @access	public
-	 */
-	public function setPlaylists($value)
-	{
-		# Check if the passed value if empty.
-		if(!empty($value))
-		{
-			# Check if the passed value is an array.
-			if(!is_array($value))
-			{
-				# Trim dashes(-) off both ends of the string.
-				$value=trim($value, '-');
-				# Explode the string into an array.
-				$value=explode('-', $value);
-			}
-			# Create an empty array to hold the playlist.
-			$playlists=array();
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$playlist=new Category();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Loop through the array of playlist id's.
-			foreach($value as $playlist_value)
-			{
-				# Check if the value passed is a category id.
-				if($validator->isInt($playlist_value)===TRUE)
-				{
-					# Get the playlist name.
-					$playlist->getThisCategory($playlist_value);
-					# Set the playlist name and id to the $playlist array.
-					$playlists[$playlist_value]=$playlist->getCategory();
-				}
-				else
-				{
-					# Get the playlist id.
-					$playlist->getThisCategory($playlist_value, FALSE);
-					# Set the playlist name and id to the $playlist array.
-					$playlists[$playlist->getID()]=$playlist_value;
-				}
-			}
-			# Set the data member.
-			$this->playlists=$playlists;
-		}
-		else
-		{
-			# Explicitly set the data member to an empty array.
-			$this->playlists=array();
-		}
-	} #==== End -- setPlaylists
-
-	/**
-	 * setPlaylistObject
-	 *
-	 * Sets the data member $playlist_object.
-	 *
-	 * @param	$object
-	 * @access	protected
-	 */
-	protected function setPlaylistObject($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->playlist_object=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->playlist_object=NULL;
-		}
-	} #==== End -- setPlaylistObject
-
-	/**
-	 * setPublisher
-	 *
-	 * Sets the data member $publisher.
-	 *
-	 * @param	int $publisher
-	 * @param	boolean $id 				TRUE if the passed value $publisher is an id, FALSE if not.
-	 * @access	public
-	 */
-	public function setPublisher($publisher)
-	{
-		# Check if the passed value is empty.
-		if(!empty($publisher))
-		{
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Clean it up.
-			$publisher=trim($publisher);
-			# Check if the value passed is an publisher id.
-			if($validator->isInt($publisher)===TRUE)
-			{
-				# Get the Publisher class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Publisher.php');
-				# Instantiate a new Cnstitution object.
-				$pub=new publisher();
-				# Get the publisher name.
-				$pub->getThisPublisher($publisher, $id);
-				# Set the publisher name to the variable.
-				$publisher=$pub->getPublisher();
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$publisher=NULL;
-		}
-		# Set the data member.
-		$this->publisher=$publisher;
-	} #==== End -- setPublisher
-
-	/**
-	 * setRecentContributor
-	 *
-	 * Sets the data member $recent_contributor.
-	 *
-	 * @param	$object
-	 * @access	public
-	 */
-	public function setRecentContributor($object)
-	{
-		# Check if the passed value is an object.
-		if(is_object($object))
-		{
-			# Set the data member.
-			$this->recent_contributor=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->recent_contributor=NULL;
-		}
-	} #==== End -- setRecentContributor
-
-	/**
-	 * setRecentContID
-	 *
-	 * Sets the data member $recent_cont_id.
-	 *
-	 * @param	$id
-	 * @access	public
-	 */
-	public function setRecentContID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Explicitly make it an integer and set the data member.
-				$this->recent_cont_id=(int)$id;
-			}
-			else
-			{
-				throw new Exception('The passed recent contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->recent_cont_id=NULL;
-		}
-	} #==== End -- setRecentContID
 
 	/**
 	 * setSoundcloudObject
@@ -963,58 +359,6 @@ class Audio
 	{
 		$this->thumbnail_url=$thumbnail_url;
 	} #==== End -- setThumbnailUrl
-
-	/**
-	 * setTitle
-	 *
-	 * Set the data member $title
-	 *
-	 * @param	string $title
-	 * @access	public
-	 */
-	public function setTitle($title)
-	{
-		# Check if the passed value is empty.
-		if(!empty($title))
-		{
-			# Strip slashes and decode any html entities.
-			$title=html_entity_decode(stripslashes($title), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$title=trim($title);
-			# Set the data member.
-			$this->title=$title;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->title=NULL;
-		}
-	} #==== End -- setTitle
-
-	/**
-	 * setYear
-	 *
-	 * Sets the data member $year.
-	 *
-	 * @param	int $year
-	 * @access	public
-	 */
-	public function setYear($year)
-	{
-		# Check if the passed value is empty.
-		if(!empty($year))
-		{
-			# Clean it up.
-			$year=trim($year);
-			# Set the data member.
-			$this->year=$year;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->year=NULL;
-		}
-	} #==== End -- setYear
 
 	/*** End mutator methods ***/
 
@@ -1084,54 +428,6 @@ class Audio
 	} #==== End -- getAudioUrl
 
 	/**
-	 * getAuthor
-	 *
-	 * Returns the data member $author.
-	 *
-	 * @access	public
-	 */
-	public function getAuthor()
-	{
-		return $this->author;
-	} #==== End -- getAuthor
-
-	/**
-	 * getAvailability
-	 *
-	 * Returns the data member $availability.
-	 *
-	 * @access	public
-	 */
-	public function getAvailability()
-	{
-		return $this->availability;
-	} #==== End -- getAvailability
-
-	/**
-	 * getCategory
-	 *
-	 * Returns the data member $category.
-	 *
-	 * @access	public
-	 */
-	public function getCategory()
-	{
-		return $this->category;
-	} #==== End -- getCategory
-
-	/**
-	 * getCatObject
-	 *
-	 * Returns the data member $cat_object.
-	 *
-	 * @access	protected
-	 */
-	protected function getCatObject()
-	{
-		return $this->cat_object;
-	} #==== End -- getCatObject
-
-	/**
 	 * getConfirmationTemplate
 	 *
 	 * Returns the data member $confirmation_template.
@@ -1142,54 +438,6 @@ class Audio
 	{
 		return $this->confirmation_template;
 	} #==== End -- getConfirmationTemplate
-
-	/**
-	 * getContributor
-	 *
-	 * Returns the data member $contributor.
-	 *
-	 * @access	public
-	 */
-	public function getContributor()
-	{
-		return $this->contributor;
-	} #==== End -- getContributor
-
-	/**
-	 * getContID
-	 *
-	 * Returns the data member $cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getContID()
-	{
-		return $this->cont_id;
-	} #==== End -- getContID
-
-	/**
-	 * getDate
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getDate()
-	{
-		return $this->date;
-	} #==== End -- getDate
-
-	/**
-	 * getDescription
-	 *
-	 * Returns the data member $description.
-	 *
-	 * @access	public
-	 */
-	public function getDescription()
-	{
-		return $this->description;
-	} #==== End -- getDescription
 
 	/**
 	 * getEmbed
@@ -1228,54 +476,6 @@ class Audio
 	} #==== End -- getFileName
 
 	/**
-	 * getID
-	 *
-	 * Returns the data member $id.
-	 *
-	 * @access	public
-	 */
-	public function getID()
-	{
-		return $this->id;
-	} #==== End -- getID
-
-	/**
-	 * getImageID
-	 *
-	 * Returns the data member $image_id.
-	 *
-	 * @access	public
-	 */
-	public function getImageID()
-	{
-		return $this->image_id;
-	} #==== End -- getImageID
-
-	/**
-	 * getImageObj
-	 *
-	 * Returns the data member $image_obj.
-	 *
-	 * @access	public
-	 */
-	public function getImageObj()
-	{
-		return $this->image_obj;
-	} #==== End -- getImageObj
-
-	/**
-	 * getInstitution
-	 *
-	 * Returns the data member $institution.
-	 *
-	 * @access	public
-	 */
-	public function getInstitution()
-	{
-		return $this->institution;
-	} #==== End -- getInstitution
-
-	/**
 	 * getIsPlaylist
 	 *
 	 * Gets the data member $is_playlist
@@ -1286,90 +486,6 @@ class Audio
 	{
 		return $this->is_playlist;
 	} #==== End -- getIsPlaylist
-
-	/**
-	 * getLanguage
-	 *
-	 * Returns the data member $language.
-	 *
-	 * @access	public
-	 */
-	public function getLanguage()
-	{
-		return $this->language;
-	} #==== End -- getLanguage
-
-	/**
-	 * getLastEdit
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getLastEdit()
-	{
-		return $this->last_edit;
-	} #==== End -- getLastEdit
-
-	/**
-	 * getPlaylists
-	 *
-	 * Returns the data member $playlists.
-	 *
-	 * @access	public
-	 */
-	public function getPlaylists()
-	{
-		return $this->playlists;
-	} #==== End -- getPlaylists
-
-	/**
-	 * getPlaylistObject
-	 *
-	 * Returns the data member $playlist_object.
-	 *
-	 * @access	protected
-	 */
-	protected function getPlaylistObject()
-	{
-		return $this->playlist_object;
-	} #==== End -- getPlaylistObject
-
-	/**
-	 * getPublisher
-	 *
-	 * Returns the data member $publisher.
-	 *
-	 * @access	public
-	 */
-	public function getPublisher()
-	{
-		return $this->publisher;
-	} #==== End -- getPublisher
-
-	/**
-	 * getRecentContributor
-	 *
-	 * Returns the data member $recent_contributor.
-	 *
-	 * @access	public
-	 */
-	public function getRecentContributor()
-	{
-		return $this->recent_contributor;
-	} #==== End -- getRecentContributor
-
-	/**
-	 * getRecentContID
-	 *
-	 * Returns the data member $recent_cont_id.
-	 *
-	 * @access	public
-	 */
-	public function getRecentContID()
-	{
-		return $this->recent_cont_id;
-	} #==== End -- getRecentContID
 
 	/**
 	 * getSoundcloudObject
@@ -1436,30 +552,6 @@ class Audio
 		return $this->thumbnail_url;
 	} #==== End -- getThumbnailUrl
 
-	/**
-	 * getTitle
-	 *
-	 * Gets the data member $title
-	 *
-	 * @access	public
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	} #==== End -- getTitle
-
-	/**
-	 * getYear
-	 *
-	 * Returns the data member $year.
-	 *
-	 * @access	public
-	 */
-	public function getYear()
-	{
-		return $this->year;
-	} #==== End -- getYear
-
 	/*** End accessor methods ***/
 
 
@@ -1491,10 +583,6 @@ class Audio
 				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 				# Instantiate a new Category object.
 				$category=new Category();
-				# Set the Category object to a data member.
-				$this->setCatObject($category);
-				# Reset the Category object variable with the instance from the data member.
-				$category=$this->getCatObject();
 				# Create the WHERE clause for the passed $categories string.
 				$category->createWhereSQL($categories, 'playlist');
 				# Set the newly created WHERE clause to a variable.
@@ -1526,7 +614,7 @@ class Audio
 	 *
 	 * @access	public
 	 */
-	public function createPlaylistMenu()
+	public function createPlaylistMenu($default_playlist=NULL, $excludes=array())
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
@@ -1538,7 +626,7 @@ class Audio
 			# Instantiate a new Category object.
 			$playlist=new Category();
 			# get the categories from the `categories` table.
-			$playlist->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
+			$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
 			# Set the playlists to a variable.
 			$playlists=$playlist->getAllCategories();
 
@@ -1548,14 +636,30 @@ class Audio
 				$playlist_items='';
 				foreach($playlists as $playlists_data)
 				{
-					$title=$playlists_data->category;
-					$playlist_id=$playlists_data->id;
-					$url=APPLICATION_URL.AUDIO_PATH.'?playlist='.$playlist_id;
-					$playlist_items.='<li class="list-nav-1'.$doc->addHereClass($url, TRUE, FALSE).'">'.
-							'<a href="'.$url.'" title="'.$title.' audio playlist">'.
-								$title.
-							'</a>'.
-						'</li>';
+					# Decode the returned API JSON.
+					$api=json_decode($playlists_data->api, TRUE);
+					# Check if "site_video" exists as a property of the JSON.
+					if(array_key_exists('site_audio', $api))
+					{
+						$this->setCategoryID($playlists_data->id);
+						$current_playlist_id=$this->getCategoryID();
+						# Check if the current playlist ID is NOT in the excludes array.
+						if(!in_array($current_playlist_id, $excludes))
+						{
+							$title=$playlists_data->category;
+							$url=AUDIO_URL.'?playlist='.$current_playlist_id;
+							$here_class=$doc->addHereClass($url, TRUE, FALSE);
+							if($default_playlist==$current_playlist_id)
+							{
+								$here_class=' here';
+							}
+							$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
+								'<a href="'.$url.'" title="'.$title.' audio playlist">'.
+									$title.
+								'</a>'.
+							'</li>';
+						}
+					}
 				}
 			}
 			return $playlist_items;
@@ -1611,7 +715,7 @@ class Audio
 					# Check if the audio is premium content or not.
 					$this_audio=$this->getThisAudio($id);
 					# Check if the audio was found.
-					if($this_audio!==TRUE)
+					if($this_audio===FALSE)
 					{
 						# Set a nice message to the session.
 						$_SESSION['message']='The audio was not found.';
@@ -1621,7 +725,7 @@ class Audio
 						return FALSE;
 					}
 					# Set the audio's categories data member to a local variable.
-					$audio_cats=$this->getPlaylists();
+					$audio_cats=$this->getCategories();
 					# Set the audio's name data member to a local variable.
 					$audio_name=$this->getFileName();
 					# Get the FileHandler class.
@@ -1803,7 +907,11 @@ class Audio
 					if(count($all_audio)>0)
 					{
 						# Remove the first array element
-						$display.=$this->markupSmallAudio($all_audio);
+						$display.=$this->markupSmallAudio(
+							$all_audio,
+							((isset($_GET['playlist']) ? $_GET['playlist'] : NULL)),
+							array($audio_id)
+						);
 					}
 				}
 				elseif(SECURE_AUDIO_PATH==Utility::removeIndex(HERE))
@@ -1813,7 +921,7 @@ class Audio
 			}
 			else
 			{
-				$display='<h3>There is no audio to display.</h3>';
+				$display='<h3 class="h-3">There is no audio to display.</h3>';
 			}
 			return $display;
 		}
@@ -1885,7 +993,13 @@ class Audio
 			$large_audio=array_slice($audio_search, 0, 1);
 		}
 		# Get large audio markup.
-		$display=$this->markupLargeAudio($large_audio);
+		$single_audio=$this->markupLargeAudio($large_audio);
+		# Display the audio details.
+		$display='<div class="audio-lg">';
+		$display.=$single_audio['audio'];
+		$display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$display.=$single_audio['description'];
+		$display.='<div>';
 
 		return $display;
 	} #==== End -- getFirstAudio
@@ -1943,39 +1057,47 @@ class Audio
 				$value=$this->getFileName();
 			}
 			# Get the audio info from the Database.
-			$audio=$db->get_row('SELECT `id`, `title`, `file_name`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `embed_code`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor`, `recent_contributor`, `last_edit`, `new` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($audio!==NULL)
 			{
 				# Set the audio name to the data member.
 				$this->setID($audio->id);
-				# Set the audio name to the data member.
-				$this->setFileName($audio->file_name);
 				# Set the audio API to the data member.
 				$this->setAPI($audio->api);
 				# Set the audio author to the data member.
 				$this->setAuthor($audio->author);
 				# Set the audio availability to the data member.
 				$this->setAvailability($audio->availability);
-				# Pass the audio playlist id(s) to the setPlaylist method, thus setting the data member with the playlist name(s).
-				$this->setPlaylists($audio->playlist);
 				# Set the contributor id to the data member.
 				$this->setContID($audio->contributor);
 				# Set the audio post/edit date to the data member.
 				$this->setDate($audio->date);
+				# Set the description to the data member.
+				$this->setDescription($audio->description);
+				# Set the embed_code to the data member.
+				$this->setEmbedCode($audio->embed_code);
+				# Set the audio name to the data member.
+				$this->setFileName($audio->file_name);
 				# Set the audio's image ID to the data member.
 				$this->setImageID($audio->image);
 				# Pass the audio institution id to the setInstitution method, thus setting the data member with the institution name.
 				$this->setInstitution($audio->institution);
 				# Pass the audio language id to the setLanguage method, thus setting the data member with the language name.
 				$this->setLanguage($audio->language);
+				# Set the last edit date to the data member.
+				$this->setLastEdit($audio->last_edit);
+				# Pass the audio playlist id(s) to the setCategories method, thus setting the data member with the playlist name(s).
+				$this->setCategories($audio->playlist);
 				# Pass the audio publisher id to the setPublisher method, thus setting the data member with the publisher name.
 				$this->setPublisher($audio->publisher);
+				# Set the recent contributor id to the data member.
+				$this->setRecentContID($audio->recent_contributor);
 				# Set the audio title to the data member.
 				$this->setTitle($audio->title);
 				# Set the audio publish year to the data member.
 				$this->setYear($audio->year);
-				return TRUE;
+				return $audio;
 			}
 			# Return FALSE because the audio wasn't in the table.
 			return FALSE;
@@ -1991,44 +1113,6 @@ class Audio
 			throw $e;
 		}
 	} #==== End -- getThisAudio
-
-	/**
-	 * getThisImage
-	 *
-	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member. A wrapper method for getThisImage from the Image class.
-	 *
-	 * @param	string $value			The name or id of the image to retrieve.
-	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
-	 * @access	public
-	 */
-	public function getThisImage($value, $id=TRUE)
-	{
-		try
-		{
-			# Get the Image class.
-			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
-			# Instantiate a new Image object.
-			$image_obj=new Image();
-			# Get the info for this image and set the return boolean to a variable.
-			$record_retrieved=$image_obj->getThisImage($value, $id);
-			# Set the image object to the data member.
-			$this->setImageObj($image_obj);
-			# Check if there was an image retrieved.
-			if($record_retrieved===TRUE)
-			{
-				# Set the id to the data member.
-				$this->setImageID($image_obj->getID());
-				return TRUE;
-			}
-			# Set the image id data member to NULL.
-			$this->setImageID(NULL);
-			return FALSE;
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- getThisImage
 
 	/**
 	 * markupManageAudio
@@ -2047,15 +1131,15 @@ class Audio
 		//$soundcloud_obj=$this->getSoundcloudObject();
 
 		$display='<table class="table-audio">'.
-		'<th>'.
-			'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_audio_name=DESC" title="Order by audio name">View</a>'.
-		'</th>'.
-		'<th>'.
-			'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_title=DESC" title="Order by title">Title</a>'.
-		'</th>'.
-		'<th>'.
-			'Options'.
-		'</th>';
+			'<th>'.
+				'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_audio_name=DESC" title="Order by audio name">View</a>'.
+			'</th>'.
+			'<th>'.
+				'<a href="'.ADMIN_URL.'ManageMedia/audio/?by_title=DESC" title="Order by title">Title</a>'.
+			'</th>'.
+			'<th>'.
+				'Options'.
+			'</th>';
 
 		foreach($audio_search as $audio)
 		{
@@ -2099,7 +1183,7 @@ class Audio
 			{
 				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
 			}
-			else
+			elseif(!empty($audio->image))
 			{
 				# Set the image ID.
 				$this->setImageID($audio->image);
@@ -2113,19 +1197,31 @@ class Audio
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
+			else
+			{
+				### Get the default thumbnail image. ###
+				# Get the image information from the database, and set them to data members.
+				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
+
+				# Set the Image object to a variable.
+				$image_obj=$this->getImageObj();
+
+				# Set the thumbnail to a variable.
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+			}
 
 			# Set the markup to a variable
 			$display.='<tr>'.
 				'<td>'.
-					'<a class="image-link" href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
-						($this->getImageID()===NULL ? '<div class="audio_default_thumbnail_manage"></div>' : '<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>').
+					'<a class="image-link" href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'" data-image="'.$this->getThumbnailUrl().'">'.
+						'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Cover for '.$this->getTitle().'"/>'.
 					'</a>'.
 				'</td>'.
 				'<td>'.
-					$this->getTitle().
+					'<a href="'.AUDIO_URL.'?audio='.$this->getID().'" title="View \''.$this->getTitle().'\' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
 				'</td>'.
 				'<td>'.
-					'<a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="button-edit" title="Edit this audio entry">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&amp;delete" class="button-delete" title="Delete this audio entry">Delete</a>'.
+					'<a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'" class="button-edit" title="Edit this audio entry">Edit</a><a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$this->getID().'&delete" class="button-delete" title="Delete this audio entry">Delete</a>'.
 				'</td>'.
 			'</tr>';
 		}
@@ -2148,145 +1244,59 @@ class Audio
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		# Get the audio ID and assign it to a variable.
-		$this->setID($large_audio[0]->id);
+		$display=array();
 
-		# Decode the `api` field.
-		$api_decoded=json_decode($large_audio[0]->api);
-
-		# If the soundcloud_id is in the `api` field then this audio is on Soundcloud.
-		if(isset($api_decoded->soundcloud_id))
-		{
-			# Set the Soundcloud instance to a variable.
-			$soundcloud_obj=$this->getSoundcloudObject();
-
-			# Set Soundcloud ID
-			$this->setAudioId($api_decoded->soundcloud_id);
-
-			# Create audio_url variable.
-			$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
-		}
-		elseif(isset($api_decoded->vimeo_id))
-		{
-			# Create audio_url variable.
-			$audio_url='vimeo_url';
-		}
-		else
-		{
-			# Remove the file extension.
-			$file_name_no_ext=substr($large_audio[0]->file_name, 0, strrpos($large_audio[0]->file_name, '.'));
-
-			# Create audio_url variable.
-			$audio_url=AUDIO_URL.'files'.DS.$file_name_no_ext.'.mp3';
-		}
-
-		# Create audio URL.
-		$this->setAudioUrl($audio_url);
-
-		# Set the title
-		$this->setTitle($db->sanitize($large_audio[0]->title));
-		$alt_text=$this->getTitle().' on '.DOMAIN_NAME;
-
-		if(isset($api_decoded->soundcloud_thumbnails->medium->url))
-		{
-			$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->medium->url);
-		}
-		elseif(!empty($large_audio[0]->image))
-		{
-			# Set the image ID.
-			$this->setImageID($large_audio[0]->image);
-
-			# Get the image information from the database, and set them to data members.
-			$this->getThisImage($this->getImageID());
-
-			# Set the Image object to a variable.
-			$image_obj=$this->getImageObj();
-
-			# Set the thumbnail to a variable.
-			$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-		}
-		else
-		{
-			### Get the default thumbnail image. ###
-			# Get the image information from the database, and set them to data members.
-			$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-
-			# Set the Image object to a variable.
-			$image_obj=$this->getImageObj();
-
-			# Set the thumbnail to a variable.
-			$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-		}
-
-		# Set the description
-		$this->setDescription($db->sanitize($large_audio[0]->description, 5));
-
-		# Set the thumbnail image to a local variable. If there is no thumbnail, use the default.
-		$thumbnail=$this->getThumbnailUrl();
-
-		$display='<div class="audio-lg">'.
-			'<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
-				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="'.$this->getTitle().'"/>'.
-				'<span class="play-static"></span>'.
-			'</a>'.
-			'<h3 class="h-3">'.
-				'<a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
-			'</h3>'.
-			'<p>'.$this->getDescription().'</p>'.
-		'</div>';
-
-		return $display;
-	} #==== End -- markupLargeAudio
-
-	/**
-	 * markupSmallAudio
-	 *
-	 * Returns the HTML markup for the small audio.
-	 *
-	 * @param	array $small_audio			The array for the small audio.
-	 * @access	public
-	 */
-	public function markupSmallAudio($small_audio)
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		# Small Audio
-		$display='<div class="feed_wrapper-audio">'.
-			'<div class="arrow-prev"></div>'.
-			'<div class="feed_list-audio">'.
-			'<ul class="feed-audio">';
-
-		foreach($small_audio as $audio)
+		if(!empty($large_audio))
 		{
 			# Get the audio ID and assign it to a variable.
-			$this->setID($audio->id);
+			$this->setID($large_audio[0]->id);
 
-			# If the audio belong to a playlist
-			if(isset($_GET['playlist']))
+			# Decode the `api` field.
+			$api_decoded=json_decode($large_audio[0]->api);
+
+			# If the soundcloud_id is in the `api` field then this audio is on Soundcloud.
+			if(isset($api_decoded->soundcloud_id))
 			{
-				# Create audio URL.
-				$this->setAudioUrl('?playlist='.$_GET['playlist'].'&audio='.$this->getID());
+				# Set the Soundcloud instance to a variable.
+				$soundcloud_obj=$this->getSoundcloudObject();
+
+				# Set Soundcloud ID
+				$this->setAudioId($api_decoded->soundcloud_id);
+
+				# Create audio_url variable.
+				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
+			}
+			elseif(isset($api_decoded->vimeo_id))
+			{
+				# Create audio_url variable.
+				$audio_url='vimeo_url';
 			}
 			else
 			{
-				$this->setAudioUrl('?audio='.$this->getID());
+				# Remove the file extension.
+				$file_name_no_ext=substr($large_audio[0]->file_name, 0, strrpos($large_audio[0]->file_name, '.'));
+
+				# Create audio_url variable.
+				$audio_url=AUDIO_URL.'files'.DS.$file_name_no_ext.'.mp3';
 			}
 
-			# Set the title to a variable
-			$this->setTitle($db->sanitize($audio->title));
+			# Set the availability.
+			$this->setAvailability($large_audio[0]->availability);
 
-			# Decode the `api` field.
-			$api_decoded=json_decode($audio->api);
+			# Create audio URL.
+			$this->setAudioUrl($audio_url);
 
-			if(isset($api_decoded->soundcloud_thumbnails->default->url))
+			# Set the title
+			$this->setTitle($db->sanitize($large_audio[0]->title));
+
+			if(isset($api_decoded->soundcloud_thumbnails->medium->url))
 			{
-				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
+				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->medium->url);
 			}
-			elseif(!empty($audio->image))
+			elseif(!empty($large_audio[0]->image))
 			{
 				# Set the image ID.
-				$this->setImageID($audio->image);
+				$this->setImageID($large_audio[0]->image);
 
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage($this->getImageID());
@@ -2294,7 +1304,7 @@ class Audio
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
 
-				# Set the the thumbnail to a variable.
+				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
 			else
@@ -2310,17 +1320,117 @@ class Audio
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
 
-			# Set the markup to a variable
-			$display.='<li>'.
-				'<a href="'.AUDIO_URL.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
-					'<img src="'.$this->getThumbnailUrl().'" class="poster" alt="'.$this->getTitle().'"/>'.
-				'</a>'.
+			# Set the description
+			$this->setDescription($db->sanitize($large_audio[0]->description, 5));
+
+			# Set the thumbnail image to a local variable.
+			$thumbnail=$this->getThumbnailUrl();
+
+			$display['audio']='<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
+				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Cover for '.$this->getTitle().'"/>'.
+				'<span class="play-static"></span>'.
+			'</a>';
+			$display['title']='<a href="'.AUDIO_URL.'?audio='.$this->getID().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>';
+			$display['description']='<p>'.$this->getDescription().'</p>';
+		}
+
+		return $display;
+	} #==== End -- markupLargeAudio
+
+	/**
+	 * markupSmallAudio
+	 *
+	 * Returns the HTML markup for the small audio.
+	 *
+	 * @param	array $small_audio			The array for the small audio.
+	 * @access	public
+	 */
+	public function markupSmallAudio($small_audio, $playlist_value=NULL, $exclude_audio=NULL)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
+		# Small Audio
+		$display='<div class="feed_wrapper-audio">'.
+			'<button class="arrow-prev">Previous Audio</button>'.
+		'<div class="feed_list-audio">'.
+		'<ul class="feed-audio">';
+
+		$playlist_param='';
+		# Check if the audio belong to a playlist.
+		if($playlist_value!=NULL)
+		{
+			$playlist_param='playlist='.$playlist_value.'&';
+		}
+
+		foreach($small_audio as $audio)
+		{
+			# Get the audio ID and assign it to a variable.
+			$this->setID($audio->id);
+
+			$include_it=TRUE;
+
+			# Check if audio should be excluded.
+			if(!empty($exclude_audio) && in_array($this->getID(), $exclude_audio))
+			{
+				$include_it=FALSE;
+			}
+
+			# Check if this specific audio should be included.
+			if($include_it===TRUE)
+			{
+				# Create audio URL.
+				$this->setAudioUrl(AUDIO_URL.'?'.$playlist_param.'audio='.$this->getID());
+
+				# Set the title to a variable
+				$this->setTitle($db->sanitize($audio->title));
+
+				# Decode the `api` field.
+				$api_decoded=json_decode($audio->api);
+
+				if(isset($api_decoded->soundcloud_thumbnails->default->url))
+				{
+					$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
+				}
+				elseif(!empty($audio->image))
+				{
+					# Set the image ID.
+					$this->setImageID($audio->image);
+
+					# Get the image information from the database, and set them to data members.
+					$this->getThisImage($this->getImageID());
+
+					# Set the Image object to a variable.
+					$image_obj=$this->getImageObj();
+
+					# Set the the thumbnail to a variable.
+					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				}
+				else
+				{
+					### Get the default thumbnail image. ###
+					# Get the image information from the database, and set them to data members.
+					$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
+
+					# Set the Image object to a variable.
+					$image_obj=$this->getImageObj();
+
+					# Set the thumbnail to a variable.
+					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				}
+
+				# Set the markup to a variable
+				$display.='<li>'.
+					'<a href="'.$this->getAudioUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'">'.
+						'<img src="'.$this->getThumbnailUrl().'" alt="Cover for '.$this->getTitle().'" class="thumbnail-small"/>'.
+					'</a>'.
 				'</li>';
+			}
 		}
 
 		$display.='</ul>'.
 			'</div>'.
-			'<div class="arrow-next"></div>'.
+			'<button class="arrow-next">Next Audio</button>'.
 		'</div>';
 
 		return $display;

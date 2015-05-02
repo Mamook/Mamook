@@ -1,4 +1,4 @@
-<?php /* framework/application/modules/Media/AudioUpload.php */
+<?php /* framework/application/modules/Media/VideoUpload.php */
 
 
 # Put the keys into an array.
@@ -67,14 +67,17 @@ $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
 # Get the session data.
 $session=Utility::returnSessionData($session_id, $session_path);
-$audio_data=$session['audio_upload'];
+$audio_data=$session['video_upload'];
 
 # Get the Audio Class.
-//require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
-# Instantiate the new Audio object.
-//$audio_obj=new Audio();
+//require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
+# Instantiate the new Video object.
+//$video_obj=new Video();
 # Get the Soundcloud instance. Starts the SoundcloudService if it's not already started.
-//$soundcloud_obj=$audio_obj->getSoundcloudObject(FULL_DOMAIN);
+//$soundcloud_obj=$video_obj->getSoundcloudObject(FULL_DOMAIN);
+
+# Get the YouTubeUpload class.
+require_once Utility::locateFile(MODULES.'media'.DS.'YouTubeUpload.php');
 
 # If there is an audio file.
 if(!empty($audio_data['FileName']))
