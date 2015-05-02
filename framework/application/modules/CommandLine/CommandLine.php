@@ -1,7 +1,4 @@
-<?php /* Requires PHP5+ */
-
-# Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
+<?php /* framework/application/modules/CommandLine/CommandLine.php */
 
 
 /*** Constants ***/
@@ -96,23 +93,37 @@ class CommandLine
 	 * @param	$file
 	 * @access	public
 	 */
-	public function setScript($file)
+	public function setScript($script)
 	{
 		# Check if the passed value is empty.
-		if(empty($file) OR !is_string($file))
+		if(empty($script) OR !(is_string($script) OR is_array($script)))
 		{
 			# Explicitly set the language to "php".
-			throw new Exception('There must be a filename passed to run a script in the background!', E_RECOVERABLE_ERROR);
+			throw new Exception('There must be a filename or command passed to run in the background!', E_RECOVERABLE_ERROR);
 		}
-		if($this->getLanguage()!='ffmpeg')
+		if(is_array($script))
 		{
-			# Explicitly remove the BASE_PATH from the filename for normalization.
-			$file=str_replace(BASE_PATH, '', $file);
-			# Prepend the filename with the BASE_PATH to make a complete path.
-			$file=BASE_PATH.$file;
+			$executable=$this->getExecutable();
+			$new_commands=array();
+			# Loop through the Array.
+			foreach($script as $current_script)
+			{
+				$current_script=trim($current_script);
+				$new_commands[]=$executable.' '.$current_script;
+			}
+			# Separate the values with ( && \).
+			$script=implode(' && \\', $new_commands);
+			$script=ltrim($script, $executable.' ');
 		}
+// 		if($this->getLanguage()!='ffmpeg')
+// 		{
+// 			# Explicitly remove the BASE_PATH from the filename for normalization.
+// 			$script=str_replace(BASE_PATH, '', $script);
+// 			# Prepend the filename with the BASE_PATH to make a complete path.
+// 			$script=BASE_PATH.$script;
+// 		}
 		# Set the data member.
-		$this->script=$file;
+		$this->script=$script;
 	} #==== End -- setScript
 
 	/*** End mutator methods ***/
@@ -140,7 +151,7 @@ class CommandLine
 	 *
 	 * @access	private
 	 */
-	private function getScript()
+	public function getScript()
 	{
 		return $this->script;
 	} #==== End -- getScript
@@ -167,16 +178,9 @@ class CommandLine
 			# Set the script to the data member effectively "cleaning" it.
 			$this->setScript($script);
 			# Get the correct executable.
-			$getExecutableMethod='get'.strtoupper($this->getLanguage()).'_Executable';
+			$executable=$this->getExecutable();
 
-			if($this->getLanguage()=='php' || $this->getLanguage()=='python')
-			{
-				$command=$this->$getExecutableMethod().' -f '.$this->getScript();
-			}
-			else
-			{
-				$command=$this->$getExecutableMethod().' '.$this->getScript();
-			}
+			$command=$executable.' '.$this->getScript();
 
 			# Check if $params is set, and if it's an array.
 			if(isset($params) && is_array($params))
@@ -197,12 +201,12 @@ class CommandLine
 				# Get the array keys.
 				$keys=array_keys($new_params);
 				# Separate the keys with a pipe (|).
-				$pipe_separated_keys=implode("|", $keys);
+				$pipe_separated_keys=implode('|', $keys);
 
 				# Get the array values.
 				$values=array_values($new_params);
 				# Separate the values with a pipe (|).
-				$pipe_separated_values=implode("|", $values);
+				$pipe_separated_values=implode('|', $values);
 
 				$command.=' "'.$pipe_separated_keys.'" "'.$pipe_separated_values.'"';
 			}
@@ -234,7 +238,7 @@ class CommandLine
 	 * Execute the passed command in the background. On linux errors are written to a log file.
 	 *
 	 * @access	protected
-	 * @param	command						The command to execute in the background.
+	 * @param		command						The command to execute in the background.
 	 */
 	protected function execInBackground($command)
 	{
@@ -277,6 +281,38 @@ class CommandLine
 
 
 	/*** private methods ***/
+
+	/**
+	 * getExecutable
+	 *
+	 * Returns the path to the current executable as a String.
+	 *
+	 * @access	private
+	 * @return	The executable location on success, otherwise FALSE.
+	 */
+	public function getExecutable()
+	{
+		# Set the default executable path as FALSE.
+		$executable=FALSE;
+
+		try
+		{
+			# Get the correct executable.
+			$getExecutableMethod='get'.strtoupper($this->getLanguage()).'_Executable';
+
+			$executable=$this->$getExecutableMethod();
+
+			if($this->getLanguage()=='php' || $this->getLanguage()=='python')
+			{
+				$executable.=' -f';
+			}
+			return $executable;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getExecutable
 
 	/**
 	 * getFFMPEG_Executable

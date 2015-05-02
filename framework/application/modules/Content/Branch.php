@@ -1,4 +1,8 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Content/Branch.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 /**
  * Branch

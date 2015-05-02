@@ -1,10 +1,11 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Content/SubContent.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 # Get the parent Content class.
 require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
+
 
 /**
  * SubContent

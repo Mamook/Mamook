@@ -1,4 +1,8 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Content/Category.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 /**
  * Category
@@ -12,16 +16,13 @@ class Category
 
 	private $all_categories=NULL;
 	private $id=NULL;
+	private $api=NULL;
 	private $category=NULL;
+	private $is_private=NULL;
+	private $is_product=NULL;
 	private $where_sql=NULL;
 
 	/*** End data members ***/
-
-
-
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
 
 
 
@@ -89,6 +90,33 @@ class Category
 	} #==== End -- setID
 
 	/**
+	 * setAPI
+	 *
+	 * Sets the data member $api.
+	 *
+	 * @param		$api
+	 * @access	protected
+	 */
+	protected function setAPI($api)
+	{
+		# Check if the passed value is empty.
+		if(!empty($api))
+		{
+			# Strip slashes and decode any html entities.
+			$api=html_entity_decode(stripslashes($api), ENT_COMPAT, 'UTF-8');
+			# Clean it up.
+			$api=trim($api);
+			# Set the data member.
+			$this->api=$api;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->api=NULL;
+		}
+	} #==== End -- setAPI
+
+	/**
 	 * setCategory
 	 *
 	 * Sets the data member $category.
@@ -114,6 +142,54 @@ class Category
 			$this->category=NULL;
 		}
 	} #==== End -- setCategory
+
+	/**
+	 * setPrivate
+	 *
+	 * Sets the data member $is_private.
+	 * 0 indicates private, NULL inidcates public.
+	 *
+	 * @param		$private
+	 * @access	protected
+	 */
+	protected function setPrivate($private)
+	{
+		# Check if the passed value is 0.
+		if(($private===0) OR ($private==='0'))
+		{
+			# Set the data member.
+			$this->is_private=$private;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->is_private=NULL;
+		}
+	} #==== End -- setPrivate
+
+	/**
+	 * setProduct
+	 *
+	 * Sets the data member $is_product.
+	 * 0 indicates a product, NULL inidcates NOT a product.
+	 *
+	 * @param		$product
+	 * @access	protected
+	 */
+	protected function setProduct($product)
+	{
+		# Check if the passed value is 0.
+		if(($product===0) OR ($product==='0'))
+		{
+			# Set the data member.
+			$this->is_product=0;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->product=NULL;
+		}
+	} #==== End -- setProduct
 
 	/**
 	 * setWhereSQL
@@ -169,6 +245,18 @@ class Category
 	} #==== End -- getID
 
 	/**
+	 * getAPI
+	 *
+	 * Returns the data member $api.
+	 *
+	 * @access	public
+	 */
+	public function getAPI()
+	{
+		return $this->api;
+	} #==== End -- getAPI
+
+	/**
 	 * getCategory
 	 *
 	 * Returns the data member $category.
@@ -179,6 +267,30 @@ class Category
 	{
 		return $this->category;
 	} #==== End -- getCategory
+
+	/**
+	 * getPrivate
+	 *
+	 * Returns the data member $private.
+	 *
+	 * @access	public
+	 */
+	public function getPrivate()
+	{
+		return $this->is_private;
+	} #==== End -- getPrivate
+
+	/**
+	 * getProduct
+	 *
+	 * Returns the data member $is_product.
+	 *
+	 * @access	public
+	 */
+	public function getProduct()
+	{
+		return $this->is_product;
+	} #==== End -- getProduct
 
 	/**
 	 * getWhereSQL
@@ -373,14 +485,26 @@ class Category
 				$value=$this->getCategory();
 			}
 			# Get the category info from the Database.
-			$category=$db->get_row('SELECT `id`, `category` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$category=$db->get_row('SELECT `id`, `category`, `api`, `private` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($category!==NULL)
 			{
 				# Set the category id to the data member "cleaning" it.
 				$this->setID($category->id);
 				# Set the category name to the data member.
+				$this->setAPI($category->api);
+				# Set the returned API value to a local variable.
+				$api=json_decode($this->getAPI());
+				# Set the category name to the data member.
 				$this->setCategory($category->category);
+				# Set the category name to the data member.
+				$this->setPrivate($category->private);
+				# Check if this category also represnets product.
+				if(($api!==NULL) && !empty($api->site_product))
+				{
+					# Set the category name to the data member.
+					$this->setProduct($category->product);
+				}
 				return TRUE;
 			}
 			# Return FALSE because the category wasn't in the table.

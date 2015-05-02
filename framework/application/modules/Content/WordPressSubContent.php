@@ -1,7 +1,8 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Content/WordPressSubContent.php */
 
-# Get the parent SubContent class.
-require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 
 /**
  * WordPressSubContent
