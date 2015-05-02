@@ -573,7 +573,6 @@ class Video extends Media
 				{
 					# Set the Database instance to a variable.
 					$db=DB::get_instance();
-var_dump('SELECT `id` FROM `'.DBPREFIX.'videos` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' AND `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));exit;
 					# Count the records.
 					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'videos` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' AND `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
 					return $count;
