@@ -667,7 +667,7 @@ class Staff
 	 * @return	array
 	 * @access	public
 	 */
-	public function displayStaff($value, $label=TRUE)
+	public function displayStaff($value, $label=TRUE, $image_link=FW_POPUP_HANDLE)
 	{
 		# Get the person's info and set it to the data members.
 		$person=$this->getThisStaff($value);
@@ -740,7 +740,7 @@ class Staff
 				$image_obj=new Image();
 				# Set the person's image to a variable.
 				$profile_image='<div class="profile-image">';
-				$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title);
+				$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title, $image_link);
 				$profile_image.='</div>';
 				# Set the image XHTML to the display content array.
 				$display_content['image']=$profile_image;
@@ -1153,4 +1153,4 @@ class Staff
 	} #==== End -- updateStaff
 
 	/*** End public methods ***/
-}
+} # End Staff class.

@@ -1906,7 +1906,7 @@ class User
 	 * @param	string $table			The table that the id is related to.
 	 * @access	public
 	 */
-	public function displayProfile($id, $table='user')
+	public function displayProfile($id, $table='user', $image_link=FW_POPUP_HANDLE)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -2063,7 +2063,7 @@ class User
 					$image_obj=new Image();
 					# Set the person's image to a variable.
 					$profile_image='<div class="profile-image">';
-					$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title);
+					$profile_image.=$image_obj->displayImage(TRUE, $image, $image_title, $image_link);
 					$profile_image.='</div>';
 					# Set the image XHTML to the display content array.
 					$display_content['image']=$profile_image;
