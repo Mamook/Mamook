@@ -815,7 +815,7 @@ class Video extends Media
 		# Display the video details.
 		$video_display='<div class="video-lg">';
 		$video_display.=$single_video['video'];
-		$video_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$video_display.='<h3 class="h-3">'.$single_video['title'].'</h3>';
 		$video_display.=$single_video['description'];
 		$video_display.='<div>';
 
@@ -1007,9 +1007,9 @@ class Video extends Media
 		$single_video=$this->markupLargeVideo($large_video);
 
 		# Display the video details.
-		$video_display.='<div class="video-lg">';
+		$video_display='<div class="video-lg">';
 		$video_display.=$single_video['video'];
-		$video_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$video_display.='<h3 class="h-3">'.$single_video['title'].'</h3>';
 		$video_display.=$single_video['description'];
 		$video_display.='<div>';
 
@@ -1424,11 +1424,11 @@ class Video extends Media
 				$include_it=FALSE;
 			}
 
-			# Check if this specific audio should be included.
+			# Check if this specific video should be included.
 			if($include_it===TRUE)
 			{
 				# Create video URL.
-				$this->setVideoUrl(AUDIO_URL.'?'.$playlist_param.'video='.$this->getID());
+				$this->setVideoUrl(VIDEOS_URL.'?'.$playlist_param.'video='.$this->getID());
 
 				# Set the title to a variable
 				$this->setTitle($db->sanitize($videos->title));
