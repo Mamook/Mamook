@@ -813,7 +813,7 @@ class Video extends Media
 		$single_video=$this->getRecentVideo();
 
 		# Display the video details.
-		$video_display.='<div class="video-lg">';
+		$video_display='<div class="video-lg">';
 		$video_display.=$single_video['video'];
 		$video_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
 		$video_display.=$single_video['description'];
@@ -831,6 +831,7 @@ class Video extends Media
 	 */
 	public function displayVideoFeed()
 	{
+		# Bring the Login Class into scope.
 		global $login;
 
 		try
