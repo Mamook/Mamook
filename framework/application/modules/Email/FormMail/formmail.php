@@ -1,4 +1,10 @@
 <?php
+/*
+ *
+ * Search for FW_CUSTOM in this document for custom changes to the FormMail script.
+ *
+ */
+
 $FM_VERS = "9.07"; // script version
 
 /* ex:set ts=4 sw=4 et:
@@ -514,6 +520,7 @@ $CSVLINE = "\n";		/* line termination for CSV files.  The default is a single li
 	                    this value, you *must* set $CSVOPEN = "b". */
 
 /* Help: http://www.tectite.com/fmdoc/templatedir.php */
+# FW_CUSTOM: Assign our FormMail templates directory.
 $TEMPLATEDIR = TEMPLATES.'fm'; /* directory for template files; empty string if you don't have any templates */
 
 /* Help: http://www.tectite.com/fmdoc/templateurl.php */
@@ -7334,6 +7341,10 @@ function LoadTemplate($s_name,$s_dir,$s_url,$b_ret_lines = false)
 	$a_lines = array();
 	if (!empty($s_dir)) {
 		$s_name = "$s_dir/" . basename($s_name);
+
+		# FW_CUSTOM: Added this custom code to locate the template file.
+		$s_name=Utility::locateFile($s_name);
+
 		@       $fp = fopen($s_name,"r");
 		if ($fp === false) {
 			SendAlert(GetMessage(MSG_OPEN_TEMPLATE,array("NAME"  => $s_name,
