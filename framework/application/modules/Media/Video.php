@@ -1278,7 +1278,7 @@ class Video extends Media
 					'</a>'.
 				'</td>'.
 				'<td>'.
-					'<a href="'.VIDEO_URL.'?video='.$this->getID().'" title="View \''.$this->getTitle().'\' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
+					'<a href="'.VIDEOS_URL.'?video='.$this->getID().'" title="View \''.$this->getTitle().'\' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>'.
 				'</td>'.
 				'<td>'.
 					'<a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'" class="button-edit" title="Edit this video entry">Edit</a><a href="'.ADMIN_URL.'ManageMedia/videos/?video='.$this->getID().'&delete" class="button-delete" title="Delete this video entry">Delete</a>'.
@@ -1377,7 +1377,7 @@ class Video extends Media
 				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.
 			'</a>';
-			$display['title']='<a href="'.VIDEO_URL.'?video='.$this->getID().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>';
+			$display['title']='<a href="'.VIDEOS_URL.'?video='.$this->getID().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" target="_blank">'.$this->getTitle().'</a>';
 			$display['description']='<p>'.$this->getDescription().'</p>';
 		}
 
