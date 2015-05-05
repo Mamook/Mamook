@@ -1,9 +1,9 @@
-<?php /* public/search/index.php */
+<?php /* framework/application/controllers/search/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
-# Get the Search Class.
-require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
+# Get the SearchFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'SearchFormProcessor.php');
 
 # Create display variables.
 $display_main1='';
@@ -14,8 +14,16 @@ $display_box1b='';
 $display_box1c='';
 $display_box2='';
 
+$display='';
+$head='<p class="h-form">Use the form below to search the site.</p>';
 $page_class='searchpage';
 
+# Instantiate a new SearchFormProcessor object.
+$search_form_processor=new SearchFormProcessor();
+# Get the search form.
+require_once Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
+
+/*
 $search=new Search();
 
 $head='<p class="h-form">Use the form below to search the site.</p>';
@@ -30,6 +38,7 @@ $search_count='';
 if(array_key_exists('_submit_check', $_POST))
 {
 }
+*/
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
