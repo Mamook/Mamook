@@ -2347,8 +2347,12 @@ class SubContent extends Content
 										{
 											# Use truncate from the Document class to truncate the text.
 											$text=WebUtility::truncate($text, $max_char, '&hellip;%1s', TRUE, FALSE, $max_br);
+
 											# Add a "more" link to the text.
+											# NOTE! "sprintf() [function.sprintf]: Too few arguments" error get's returned here.
+											#	I believe it's from percentage signs in the text. It's thinking there is extra placeholders.
 											$text=sprintf($text, ' <a class="more" href="'.$domain.'?post='.$id.'" title="more on: '.str_replace('"', '`', $title).'">'.$this->getMore().'</a>');
+
 											# Set the $more value to TRUE.
 											$more=TRUE;
 										}
