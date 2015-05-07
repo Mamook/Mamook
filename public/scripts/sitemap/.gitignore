@@ -1,7 +1,0 @@
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
-!images
-!sitemap.big.js
-!sitemap.js
