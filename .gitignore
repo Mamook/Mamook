@@ -8,6 +8,9 @@ bodega/**
 # Cache
 cache/**
 
+# Custom Sessions
+custom_sessions/**
+
 # Logs
 logs/**
 
