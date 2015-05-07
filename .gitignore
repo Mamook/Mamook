@@ -1,2 +1,42 @@
 # Ignore these file(s)
+# Global
 *.DS_Store
+
+# Bodega
+bodega/**
+
+# Cache
+cache/**
+
+# Logs
+logs/**
+
+# Public
+#public/images/**
+public/media/audio/files/**
+public/media/videos/files/**
+
+
+# Do not ignore these files
+# Root
+!.gitignore
+
+# Bodega
+!bodega/audio
+!bodega/cv
+!bodega/premium
+!bodega/videos
+
+# Cache
+!cache/screenshots
+
+# Public
+#!public/images/audio-default-thumbnail.jpg
+#!public/images/default-avatar.png
+#!public/images/no.image.available.gif
+#!public/images/notfound.jpg
+#!public/images/original
+#!public/images/original/audio-default-thumbnail.jpg
+#!public/images/original/default-avatar.png
+#!public/images/original/no.image.available.gif
+#!public/images/original/notfound.jpg
