@@ -19,6 +19,9 @@ logs/**
 public/media/audio/files/**
 public/media/videos/files/**
 
+# Tmp
+tmp/**
+
 
 # Do not ignore these files
 # Root
