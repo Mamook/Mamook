@@ -1,7 +1,9 @@
 <?php /* framework/application/controllers/media/audio/index.php */
 
-# Get the Media Class.
+# Get the Audio Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
+# Get the Category class.
+require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 # Get the Slideshow Class.
 require_once Utility::locateFile(MODULES.'Document'.DS.'Slideshow.php');
 
@@ -22,7 +24,7 @@ $meta_desc='Audio featured on '.DOMAIN_NAME;
 $page_class='audiopage';
 
 $large_audio=NULL;
-// Set the "Audio" playlist as the default.
+# Set the "Audio" playlist as the default.
 $playlist=DEFAULT_AUDIO_PLAYLIST;
 # Set a variable to indicate whether the passed audio should be displayed or not. Set the default as FALSE.
 $display_it=FALSE;
@@ -31,44 +33,45 @@ $message_append='';
 $empty_playlist=FALSE;
 
 # Instantiate a new Audio object.
-$audio=Audio::getInstance();
+$audio_obj=Audio::getInstance();
+
+# Get the audio feed and set it to a variable for display.
+$audio_feed=$audio_obj->displayAudioFeed();
 
 # Check if a playlist was passed in the URL.
 if(isset($_GET['playlist']))
 {
 	$playlist=$_GET['playlist'];
 }
-# Get the Category class.
-require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 # Instantiate a new Category object.
-$category=new Category();
+$category_obj=new Category();
 # Get the playlist from the "categories" table.
-$category->getThisCategory($playlist, $validator->isInt($playlist));
+$category_obj->getThisCategory($playlist, $validator->isInt($playlist));
 # Ensure theat the playlist value is an ID.
-$playlist=$category->getID();
+$playlist=$category_obj->getID();
 # Check if the following is NOT true: an audio ID was passed AND a playlist was NOT passed.
 if(!(isset($_GET['audio']) && !isset($_GET['playlist'])))
 {
 	# Create the "WHERE" clause.
-	$category->createWhereSQL($category->getID(), 'playlist');
+	$category_obj->createWhereSQL($category_obj->getID(), 'playlist');
 	# If the Playlist is the generic "Audio" playlist, don't set it as the page subtitle.
-	if(!((DEFAULT_AUDIO_PLAYLIST=='Audio') && ($category->getCategory()==DEFAULT_AUDIO_PLAYLIST)))
+	if(!((DEFAULT_AUDIO_PLAYLIST=='Audio') && ($category_obj->getCategory()==DEFAULT_AUDIO_PLAYLIST)))
 	{
 		# Set the page subtitle with the playlist name.
-		$main_content->setSubTitle($category->getCategory());
+		$main_content->setSubTitle($category_obj->getCategory());
 	}
 	# Get the Audio from the database.
-	$audio_retreived=$audio->getAudio(NULL, '*', 'date', 'DESC', ' WHERE `new` = 0 AND '.$category->getWhereSQL());
+	$audio_retreived=$audio_obj->getAudio(NULL, '*', 'date', 'DESC', ' WHERE `new` = 0 AND '.$category_obj->getWhereSQL());
 	# Check if there was audio retreived for this playlist.
 	if($audio_retreived!==FALSE)
 	{
 		# Set the returned Audio records to a variable.
-		$all_audio=$audio->getAllAudio();
+		$all_audio=$audio_obj->getAllAudio();
 		# Check if there is more than a single audio in this playlist.
 		if(count($all_audio)>1)
 		{
 			# Display the list of audio in this playlist.
-			$audio_display.=$audio->markupSmallAudio(
+			$audio_display.=$audio_obj->markupSmallAudio(
 				$all_audio,
 				$playlist,
 				((isset($_GET['audio'])) ? array($_GET['audio']) : $all_audio[0]->id)
@@ -101,13 +104,13 @@ if(isset($_GET['audio']))
 	# Create an empty variable to hold potential additional information to append to the "audio not available" message.
 	$message_append='';
 	# Set the ID to the ID data member.
-	$audio->setID($_GET['audio']);
+	$audio_obj->setID($_GET['audio']);
 	# Retreive the passed audio from the DB.
-	$audio_retreived=$audio->getThisAudio($audio->getID());
+	$audio_retreived=$audio_obj->getThisAudio($audio_obj->getID());
 	# Check if the audio info was retreived.
 	if($audio_retreived!==FALSE)
 	{
-		$associated_playlists=$audio->getCategories();
+		$associated_playlists=$audio_obj->getCategories();
 		$large_audio=$audio_retreived;
 		if(isset($_GET['playlist']))
 		{
@@ -135,7 +138,7 @@ if(isset($large_audio))
 {
 	# Indicate that the audio should be displayed.
 	$display_it=TRUE;
-	$single_audio=$audio->markupLargeAudio(array($large_audio));
+	$single_audio=$audio_obj->markupLargeAudio(array($large_audio));
 	if(isset($_GET['playlist']))
 	{
 		# Set the page title as the title of the audio.
@@ -165,7 +168,7 @@ elseif($empty_playlist===FALSE)
 }
 
 # Create playlist menu. This will be used in the audio_nav template.
-$playlist_items=$audio->createPlaylistMenu($playlist, array(5));
+$playlist_items=$audio_obj->createPlaylistMenu($playlist, array(5));
 # Check if there are any playlists to display in the audio nav.
 if(!empty($playlist_items))
 {
@@ -187,7 +190,7 @@ $display_main1.=$main_content->displayTitles();
 # Get the main content to display in main-2.
 $display_main2.=$main_content->displayContent();
 # Add the audio feed to main-2.
-$display_main2.=$audio_display;
+$display_main2.=$audio_feed;
 
 # Get the quote text to display in main-3.
 $display_main3.=$main_content->displayQuote();
