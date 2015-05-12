@@ -22,6 +22,8 @@ $videos_nav='';
 # Set the meta discription for this page.
 $meta_desc='Video featured on '.DOMAIN_NAME;
 $page_class='videopage';
+# Set the page subtitle.
+$main_content->setSubTitle('Spotlight Videos');
 
 $large_video=NULL;
 # Set the "Videos" playlist as the default.

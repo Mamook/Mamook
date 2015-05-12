@@ -22,6 +22,8 @@ $audio_nav='';
 # Set the meta discription for this page.
 $meta_desc='Audio featured on '.DOMAIN_NAME;
 $page_class='audiopage';
+# Set the page subtitle.
+$main_content->setSubTitle('Spotlight Audio');
 
 $large_audio=NULL;
 # Set the "Audio" playlist as the default.
