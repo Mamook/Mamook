@@ -223,11 +223,11 @@ elseif(!isset($_GET['select']))
 		# Get the Category class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 		# Instantiate a new Category object.
-		$playlist=new Category();
+		$playlist_obj=new Category();
 		# get the categories from the `categories` table.
-		$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
+		$playlist_obj->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
 		# Set the playlists to a variable.
-		$playlists=$playlist->getAllCategories();
+		$playlists=$playlist_obj->getAllCategories();
 		# If there are playlist results.
 		if(!empty($playlists))
 		{

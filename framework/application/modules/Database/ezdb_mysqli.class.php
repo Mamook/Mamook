@@ -49,13 +49,13 @@ class ezDB_mysqli extends ezDB_Base
 	 * @return bool Connect status
 	 *
 	 */
-	public function __construct($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost')
+	public function __construct($dbuser='', $dbpassword='', $dbname='', $dbhost='localhost', $char_set='utf8')
 	{
 		if($dbname == '') return false;
 
 		parent::__construct();
 
-		if($this->connect($dbuser, $dbpassword, $dbhost))
+		if($this->connect($dbuser, $dbpassword, $dbhost, $char_set))
 		{
 			return $this->select($dbname);
 		}
@@ -66,7 +66,6 @@ class ezDB_mysqli extends ezDB_Base
 	/**
 	 * Explicitly close the connection on destruct
 	 */
-
 	public function __destruct()
 	{
 		$this->close();
@@ -96,7 +95,7 @@ class ezDB_mysqli extends ezDB_Base
 	 * @return bool Success
 	 *
 	 */
-	public function connect($dbuser='', $dbpassword='', $dbhost='localhost')
+	public function connect($dbuser='', $dbpassword='', $dbhost='localhost', $char_set='utf8')
 	{
 		$this->dbh =  new mysqli($dbhost, $dbuser, $dbpassword);
 
@@ -110,6 +109,11 @@ class ezDB_mysqli extends ezDB_Base
 		}
 		else
 		{
+			# Change character set.
+			if(!$this->dbh->set_charset($char_set))
+			{
+				throw new ezDB_Error('Error loading character set '.$char_set.': %s\n', $this->dbh->error);
+			}
 			$this->clear_errors();
 			return true;
 		}

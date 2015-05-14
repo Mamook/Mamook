@@ -4,7 +4,7 @@
 require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 # Get the Slideshow Class.
 require_once Utility::locateFile(MODULES.'Document'.DS.'Slideshow.php');
-# Get the Media Class.
+# Get the Video Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 
 # Create display variables.
@@ -22,9 +22,11 @@ $videos_nav='';
 # Set the meta discription for this page.
 $meta_desc='Video featured on '.DOMAIN_NAME;
 $page_class='videopage';
+# Set the page subtitle.
+$main_content->setSubTitle('Spotlight Videos');
 
 $large_video=NULL;
-// Set the "Videos" playlist as the default.
+# Set the "Videos" playlist as the default.
 $playlist=DEFAULT_VIDEO_PLAYLIST;
 # Set a variable to indicate whether the passed video should be displayed or not. Set the default as FALSE.
 $display_it=FALSE;
@@ -33,10 +35,10 @@ $message_append='';
 $empty_playlist=FALSE;
 
 # Instantiate a new Video object.
-$video=Video::getInstance();
+$video_obj=Video::getInstance();
 
 # Get the video feed and set it to a variable for display.
-$video_feed=$video->displayVideoFeed();
+$video_feed=$video_obj->displayVideoFeed();
 
 # Check if a playlist was passed in the URL.
 if(isset($_GET['playlist']))
@@ -44,34 +46,34 @@ if(isset($_GET['playlist']))
 	$playlist=$_GET['playlist'];
 }
 # Instantiate a new Category object.
-$category=new Category();
+$category_obj=new Category();
 # Get the playlist from the "categories" table.
-$category->getThisCategory($playlist, $validator->isInt($playlist));
+$category_obj->getThisCategory($playlist, $validator->isInt($playlist));
 # Ensure theat the playlist value is an ID.
-$playlist=$category->getID();
+$playlist=$category_obj->getID();
 # Check if the following is NOT true: a video ID was passed AND a playlist was NOT passed.
 if(!(isset($_GET['video']) && !isset($_GET['playlist'])))
 {
 	# Create the "WHERE" clause.
-	$category->createWhereSQL($category->getID(), 'playlist');
+	$category_obj->createWhereSQL($category_obj->getID(), 'playlist');
 	# If the Playlist is the generic "Videos" playlist, don't set it as the page subtitle.
-	if(!((DEFAULT_VIDEO_PLAYLIST=='Videos') && ($category->getCategory()==DEFAULT_VIDEO_PLAYLIST)))
+	if(!((DEFAULT_VIDEO_PLAYLIST=='Videos') && ($category_obj->getCategory()==DEFAULT_VIDEO_PLAYLIST)))
 	{
 		# Set the page subtitle with the playlist name.
-		$main_content->setSubTitle($category->getCategory());
+		$main_content->setSubTitle($category_obj->getCategory());
 	}
 	# Get the Videos from the database.
-	$video_retreived=$video->getVideos(NULL, '*', 'date', 'DESC', ' WHERE `new` = 0 AND '.$category->getWhereSQL());
+	$video_retreived=$video_obj->getVideos(NULL, '*', 'date', 'DESC', ' WHERE `new` = 0 AND '.$category_obj->getWhereSQL());
 	# Check if there was video retreived for this playlist.
 	if($video_retreived!==FALSE)
 	{
 		# Set the returned Video records to a variable.
-		$all_video=$video->getAllVideo();
+		$all_video=$video_obj->getAllVideo();
 		# Check if there is more than a single video in this playlist.
 		if(count($all_video)>1)
 		{
 			# Display the list of video in this playlist.
-			$video_display.=$audio->markupSmallVideo(
+			$video_display.=$video_obj->markupSmallVideo(
 				$all_video,
 				$playlist,
 				((isset($_GET['video'])) ? array($_GET['video']) : $all_video[0]->id)
@@ -104,13 +106,13 @@ if(isset($_GET['video']))
 	# Create an empty variable to hold potential additional information to append to the "video not available" message.
 	$message_append='';
 	# Set the ID to the ID data member.
-	$video->setID($_GET['video']);
+	$video_obj->setID($_GET['video']);
 	# Retreive the passed video from the DB.
-	$video_retreived=$video->getThisVideo($video->getID());
+	$video_retreived=$video_obj->getThisVideo($video_obj->getID());
 	# Check if the video info was retreived.
 	if($video_retreived!==FALSE)
 	{
-		$associated_playlists=$video->getCategories();
+		$associated_playlists=$video_obj->getCategories();
 		$large_video=$video_retreived;
 		if(isset($_GET['playlist']))
 		{
@@ -138,10 +140,10 @@ if(isset($large_video))
 {
 	# Indicate that the video should be displayed.
 	$display_it=TRUE;
-	$single_video=$audio->markupLargeVideo(array($large_video));
+	$single_video=$video_obj->markupLargeVideo(array($large_video));
 	if(isset($_GET['playlist']))
 	{
-		# Set the page title as the title of the audio.
+		# Set the page title as the title of the video.
 		$main_content->setPageTitle($main_content->getSubTitle());
 		# Set the subtitle to the title of the video.
 		$main_content->setSubTitle($single_video['title']);
@@ -164,11 +166,11 @@ if($display_it===TRUE)
 }
 elseif($empty_playlist===FALSE)
 {
-	$video_display.='<p>That video is not available'.$message_append.'.</p>';
+	$video_display.='<p>That video file is not available'.$message_append.'.</p>';
 }
 
 # Create playlist menu. This will be used in the videos_nav template.
-$playlist_items=$video->createPlaylistMenu($playlist, array(2));
+$playlist_items=$video_obj->createPlaylistMenu($playlist, array(2));
 # Check if there are any playlists to display in the videos nav.
 if(!empty($playlist_items))
 {
