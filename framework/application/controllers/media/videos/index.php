@@ -36,19 +36,22 @@ $video_feed=$video_obj->displayVideoFeed();
 $content_api_decode=json_decode($main_content->getAPI(), TRUE);
 # Asign playlists to a variable.
 $content_playlists=$content_api_decode['Site']['Playlists'];
-# Creates the SQL from an array of Playlist IDs.
-$playlist_obj->createWhereSQL($content_playlists);
-# Get the playlists from the `playlists` table.
-$playlist_obj->getPlaylists(NULL, '`id`, `name`, `api`', 'name', 'ASC', ' WHERE '.$playlist_obj->getWhereSQL());
-# Set the playlists to a variable.
-$playlists=$playlist_obj->getAllPlaylists();
-# Create playlist menu. This will be used in the videos_nav template.
-$playlist_items=$video_obj->createPlaylistMenu($playlists);
-# Check if there are any playlists to display in the videos nav.
-if(!empty($playlist_items))
+if($content_playlists!==NULL)
 {
-	# Get the videos navigation.
-	require Utility::locateFile(TEMPLATES.'videos_nav.php');
+	# Creates the SQL from an array of Playlist IDs.
+	$playlist_obj->createWhereSQL($content_playlists);
+	# Get the playlists from the `playlists` table.
+	$playlist_obj->getPlaylists(NULL, '`id`, `name`, `api`', 'name', 'ASC', ' WHERE '.$playlist_obj->getWhereSQL());
+	# Set the playlists to a variable.
+	$playlists=$playlist_obj->getAllPlaylists();
+	# Create playlist menu. This will be used in the videos_nav template.
+	$playlist_items=$video_obj->createPlaylistMenu($playlists);
+	# Check if there are any playlists to display in the videos nav.
+	if(!empty($playlist_items))
+	{
+		# Get the videos navigation.
+		require Utility::locateFile(TEMPLATES.'videos_nav.php');
+	}
 }
 # If this page is a playlist.
 if(isset($_GET['playlist']))
