@@ -69,7 +69,7 @@ class CategoryFormProcessor extends FormProcessor
 			# Set the category's id to a variable.
 			$id=$category->getID();
 			# Set the category's name to a variable.
-			$name=$category->getCategory();
+			$name=$category->getName();
 			# Set the site name to a variable.
 			$site_name=$main_content->getSiteName();
 			# Set the category's unique status to a variable.
@@ -136,7 +136,7 @@ class CategoryFormProcessor extends FormProcessor
 								# Set the record fields to the dup_display array.
 								$dup_display[$dup_category->getID()]=array(
 									'id'=>$dup_category->getID(),
-									'name'=>$dup_category->getCategory()
+									'name'=>$dup_category->getName()
 								);
 							}
 							# Explicitly set unique to 0 (not unique).
@@ -161,7 +161,7 @@ class CategoryFormProcessor extends FormProcessor
 						$message_action='added';
 						# Create the default sql as an INSERT and set it to a variable.
 						$sql='INSERT INTO `'.DBPREFIX.'categories` ('.
-							'`category`'.
+							'`name`'.
 							') VALUES ('.
 							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).
 							')';
@@ -172,7 +172,7 @@ class CategoryFormProcessor extends FormProcessor
 							$message_action='updated';
 							# Reset the sql variable with the UPDATE sql.
 							$sql='UPDATE `'.DBPREFIX.'categories` SET
-								`category` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).
+								`name` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}
@@ -286,7 +286,7 @@ class CategoryFormProcessor extends FormProcessor
 							# Set the Category object to a local variable.
 							$category=$subcontent->getCategory();
 							# Set the category name to a local variable.
-							$category_name=$category->getCategory();
+							$category_name=$category->getName();
 							# Set the "cleaned id to a local variable.
 							$id=$category->getID();
 							# Get all subcontent with this category associated.
@@ -488,11 +488,11 @@ class CategoryFormProcessor extends FormProcessor
 					# Set the category id to the Category data member.
 					$category->setID($category_id);
 					# Set the category name to the Category data member.
-					$category->setCategory($category_name);
+					$category->setName($category_name);
 					# Set the category's id to a variable.
 					$category_id=$category->getID();
 					# Set the category's name to a variable.
-					$category_name=$category->getCategory();
+					$category_name=$category->getName();
 					# Redirect the User back to the form that sent them to fetch an category.
 					$this->redirectCategory($category_name, 'selected');
 				}
@@ -620,7 +620,7 @@ class CategoryFormProcessor extends FormProcessor
 				array(
 					'ID'=>$category->getID(),
 					'FormURL'=>$form_url,
-					'Category'=>$category->getCategory(),
+					'Category'=>$category->getName(),
 					'Unique'=>$populator->getUnique()
 				);
 		}

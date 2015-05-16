@@ -22,7 +22,7 @@ if(empty($duplicates))
 	# Set the default sub title of the page to "Add New Category".
 	$sub_title='Add New '.ucfirst($descriptive);
 	# Set the category's name to a local variable.
-	$category_name=$category->getCategory();
+	$category_name=$category->getName();
 	# Check if this is an edit or delete page.
 	if(isset($_GET['category']))
 	{
@@ -54,7 +54,7 @@ if(empty($duplicates))
 	$fg->addFormPart('<ul>');
 	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="name"><span class="required">*</span> Name</label>');
-	$fg->addElement('text', array('name'=>'name', 'id'=>'name', 'value'=>$category->getCategory()));
+	$fg->addElement('text', array('name'=>'name', 'id'=>'name', 'value'=>$category->getName()));
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li>');
 	$button_value='Submit';

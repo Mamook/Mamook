@@ -3,6 +3,9 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
+# Get the parent Content class.
+require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
+
 
 /**
  * Category
@@ -15,11 +18,11 @@ class Category
 	/*** data members ***/
 
 	private $all_categories=NULL;
-	private $id=NULL;
 	private $api=NULL;
-	private $category=NULL;
-	private $is_private=NULL;
-	private $is_product=NULL;
+	private $id=NULL;
+	private $name=NULL;
+	private $privacy=NULL;
+	private $product=NULL;
 	private $where_sql=NULL;
 
 	/*** End data members ***/
@@ -33,7 +36,7 @@ class Category
 	 *
 	 * Sets the data member $all_categories.
 	 *
-	 * @param		$categories (May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$categories				May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllCategories($categories)
@@ -58,7 +61,7 @@ class Category
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	protected
 	 */
 	protected function setID($id)
@@ -94,7 +97,7 @@ class Category
 	 *
 	 * Sets the data member $api.
 	 *
-	 * @param		$api
+	 * @param	$api
 	 * @access	protected
 	 */
 	protected function setAPI($api)
@@ -117,63 +120,63 @@ class Category
 	} #==== End -- setAPI
 
 	/**
-	 * setCategory
+	 * setName
 	 *
-	 * Sets the data member $category.
+	 * Sets the data member $name.
 	 *
-	 * @param		$category
+	 * @param	$name
 	 * @access	protected
 	 */
-	protected function setCategory($category)
+	protected function setName($name)
 	{
 		# Check if the passed value is empty.
-		if(!empty($category))
+		if(!empty($name))
 		{
 			# Strip slashes and decode any html entities.
-			$category=html_entity_decode(stripslashes($category), ENT_COMPAT, 'UTF-8');
+			$name=html_entity_decode(stripslashes($name), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
-			$category=trim($category);
+			$name=trim($name);
 			# Set the data member.
-			$this->category=$category;
+			$this->name=$name;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->category=NULL;
+			$this->name=NULL;
 		}
-	} #==== End -- setCategory
+	} #==== End -- setName
 
 	/**
-	 * setPrivate
+	 * setPrivacy
 	 *
-	 * Sets the data member $is_private.
+	 * Sets the data member $privacy.
 	 * 0 indicates private, NULL inidcates public.
 	 *
-	 * @param		$private
+	 * @param	$privacy
 	 * @access	protected
 	 */
-	protected function setPrivate($private)
+	protected function setPrivacy($privacy)
 	{
 		# Check if the passed value is 0.
-		if(($private===0) OR ($private==='0'))
+		if(($privacy===0) OR ($privacy==='0'))
 		{
 			# Set the data member.
-			$this->is_private=$private;
+			$this->privacy=$privacy;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->is_private=NULL;
+			$this->privacy=NULL;
 		}
-	} #==== End -- setPrivate
+	} #==== End -- setPrivacy
 
 	/**
 	 * setProduct
 	 *
-	 * Sets the data member $is_product.
+	 * Sets the data member $product.
 	 * 0 indicates a product, NULL inidcates NOT a product.
 	 *
-	 * @param		$product
+	 * @param	$product
 	 * @access	protected
 	 */
 	protected function setProduct($product)
@@ -182,7 +185,7 @@ class Category
 		if(($product===0) OR ($product==='0'))
 		{
 			# Set the data member.
-			$this->is_product=0;
+			$this->product=0;
 		}
 		else
 		{
@@ -196,7 +199,7 @@ class Category
 	 *
 	 * Sets the data member $where_sql.
 	 *
-	 * @param		$where_sql
+	 * @param	$where_sql
 	 * @access	protected
 	 */
 	protected function setWhereSQL($where_sql)
@@ -257,28 +260,28 @@ class Category
 	} #==== End -- getAPI
 
 	/**
-	 * getCategory
+	 * getName
 	 *
-	 * Returns the data member $category.
+	 * Returns the data member $name.
 	 *
 	 * @access	public
 	 */
-	public function getCategory()
+	public function getName()
 	{
-		return $this->category;
-	} #==== End -- getCategory
+		return $this->name;
+	} #==== End -- getName
 
 	/**
-	 * getPrivate
+	 * getPrivacy
 	 *
-	 * Returns the data member $private.
+	 * Returns the data member $privacy.
 	 *
 	 * @access	public
 	 */
-	public function getPrivate()
+	public function getPrivacy()
 	{
-		return $this->is_private;
-	} #==== End -- getPrivate
+		return $this->privacy;
+	} #==== End -- getPrivacy
 
 	/**
 	 * getProduct
@@ -319,7 +322,7 @@ class Category
 	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110')
 	 * @access	protected
 	 */
-	public function createWhereSQL($categories=NULL, $field_name='category')
+	public function createWhereSQL($categories=NULL, $field_name='name')
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -412,12 +415,12 @@ class Category
 	 *
 	 * Retrieves records from the `categories` table.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	$limit					The LIMIT of the records.
+	 * @param	$fields					The name of the field(s) to be retrieved.
+	 * @param	$order					The name of the field to order the records by.
+	 * @param	$direction				The direction to order the records.
+	 * @param	$and_sql				Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getCategories($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -453,9 +456,9 @@ class Category
 	 *
 	 * Retrieves category info from the `categories` table in the Database for the passed id or category name and sets it to the data member.
 	 *
-	 * @param		String	$value 	(The name or id of the category to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @return	Boolean 				(TRUE if a record is returned, FALSE if not.)
+	 * @param	string $value			The name or id of the category to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
+	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisCategory($value, $id=TRUE)
@@ -478,14 +481,14 @@ class Category
 			else
 			{
 				# Set a variable with the field to search for the passed $value.
-				$field='category';
+				$field='name';
 				# Set the category name to the data member.
-				$this->setCategory($value);
+				$this->setName($value);
 				# Get the category name and reset it to the variable.
-				$value=$this->getCategory();
+				$value=$this->getName();
 			}
 			# Get the category info from the Database.
-			$category=$db->get_row('SELECT `id`, `category`, `api`, `private` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$category=$db->get_row('SELECT `id`, `name`, `api` FROM `'.DBPREFIX.'categories` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($category!==NULL)
 			{
@@ -496,14 +499,18 @@ class Category
 				# Set the returned API value to a local variable.
 				$api=json_decode($this->getAPI());
 				# Set the category name to the data member.
-				$this->setCategory($category->category);
-				# Set the category name to the data member.
-				$this->setPrivate($category->private);
-				# Check if this category also represnets product.
+				$this->setName($category->name);
+				# Check if this category also represents product.
 				if(($api!==NULL) && !empty($api->site_product))
 				{
-					# Set the category name to the data member.
-					$this->setProduct($category->product);
+					# Set the category product to the data member.
+					$this->setProduct($api->site_product);
+				}
+				# Check if this category also represents privacy.
+				if(($api!==NULL) && !empty($api->privacy))
+				{
+					# Set the category privacy to the data member.
+					$this->setPrivacy($api->privacy);
 				}
 				return TRUE;
 			}

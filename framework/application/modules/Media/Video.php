@@ -541,34 +541,35 @@ class Video extends Media
 	 *
 	 * Returns the number of videos in the database.
 	 *
+	 * @param	$playlists				The id's of the playlist(s) to be retrieved.
+	 *										May be an array or dash separeted values, ie. '50-60-70-110'.
+	 * @param	$limit					The limit of records to count.
+	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
-	 * @param		$categories (The names and/or id's of the category(ies) to be retrieved. May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110')
-	 * @param		$limit 		(The limit of records to count.)
-	 * @param		$and_sql 	(Extra AND statements in the query.)
 	 */
-	public function countAllVideos($categories=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllVideos($playlists=NULL, $limit=NULL, $and_sql=NULL)
 	{
-		# Check if there were categories passed.
-		if($categories===NULL)
+		# Check if there were playlists passed.
+		if($playlists===NULL)
 		{
-			throw new Exception('You must provide a category!', E_RECOVERABLE_ERROR);
+			throw new Exception('You must provide a playlist!', E_RECOVERABLE_ERROR);
 		}
 		else
 		{
 			try
 			{
-				# Get the Category class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-				# Instantiate a new Category object.
-				$category=new Category();
-				# Set the Category object to a data member.
-				$this->setCatObject($category);
-				# Reset the Category object variable with the instance from the data member.
-				$category=$this->getCatObject();
-				# Create the WHERE clause for the passed $categories string.
-				$category->createWhereSQL($categories, 'playlist');
+				# Get the Playlist class.
+				require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
+				# Instantiate a new Playlist object.
+				$playlist_obj=Playlist::getInstance();
+				# Set the Playlist object to a data member.
+				$this->setPlaylistObject($playlist_obj);
+				# Reset the Playlist object variable with the instance from the data member.
+				$playlist_obj=$this->getPlaylistObject();
+				# Create the WHERE clause for the passed $playlists string.
+				$playlist_obj->createWhereSQL($playlists, 'playlist', FALSE);
 				# Set the newly created WHERE clause to a variable.
-				$where=$category->getWhereSQL();
+				$where=$playlist_obj->getWhereSQL();
 				try
 				{
 					# Set the Database instance to a variable.
@@ -596,52 +597,27 @@ class Video extends Media
 	 *
 	 * @access	public
 	 */
-	public function createPlaylistMenu($default_playlist=NULL, $excludes=array())
+	public function createPlaylistMenu($playlists)
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
 
 		try
 		{
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$playlist=new Category();
-			# get the categories from the `categories` table.
-			$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
-			# Set the playlists to a variable.
-			$playlists=$playlist->getAllCategories();
-
 			$playlist_items='<li class="list-nav-1">No playlists</li>';
 			if(!empty($playlists))
 			{
 				$playlist_items='';
 				foreach($playlists as $playlists_data)
 				{
-					# Decode the returned API JSON.
-					$api=json_decode($playlists_data->api, TRUE);
-					# Check if "site_video" exists as a property of the JSON.
-					if(!empty($api) && array_key_exists('site_video', $api))
-					{
-						$this->setCategoryID($playlists_data->id);
-						$current_playlist_id=$this->getCategoryID();
-						# Check if the current playlist ID is NOT in the excludes array.
-						if(!in_array($current_playlist_id, $excludes))
-						{
-							$title=$playlists_data->category;
-							$url=VIDEOS_URL.'?playlist='.$current_playlist_id;
-							$here_class=$doc->addHereClass($url, TRUE, FALSE);
-							if($default_playlist==$current_playlist_id)
-							{
-								$here_class=' here';
-							}
-							$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
-								'<a href="'.$url.'" title="'.$title.' video playlist">'.
-									$title.
-								'</a>'.
-							'</li>';
-						}
-					}
+					$name=$playlists_data->name;
+					$url=VIDEOS_URL.'?playlist='.$playlists_data->id;
+					$here_class=$doc->addHereClass($url, FALSE, FALSE);
+					$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
+						'<a href="'.$url.'" title="'.$name.' video playlist">'.
+							$name.
+						'</a>'.
+					'</li>';
 				}
 			}
 			return $playlist_items;
@@ -651,6 +627,85 @@ class Video extends Media
 			throw $e;
 		}
 	} #==== End -- createPlaylistMenu
+
+	/**
+	 * createWhereSQL
+	 *
+	 * Explodes a dash sepparated list of playlists and formats them for the WHERE portion of an sql query.
+	 *
+	 * @param	$playlists				The names and/or id's of the playlist(s) to be retrieved.
+	 *										May be multiple playlists - separate with a dash, ie. '50-70-Archive-110'.
+	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110'
+	 * @access	public
+	 */
+	public function createWhereSQL($playlists=NULL, $field_name='playlist')
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value was empty.
+		if(!empty($playlists))
+		{
+			# Trim any dashes(-) off the ends of the string.
+			$playlists=trim($playlists, '-');
+			# Create an array of the playlists.
+			$playlists=explode('-', $playlists);
+			# Create an empty array to hold the "OR" sql strings.
+			$playlist_or=array();
+			# Create an empty array to hold the "AND" sql strings.
+			$playlist_and=array();
+			foreach($playlists as $playlist)
+			{
+				# Clean it up.
+				$playlist=trim($playlist);
+				# Get the first character of the string.
+				$top=substr($playlist, 0, 1);
+				# Check if the first character was an "!".
+				if($top=='!')
+				{
+					# Remove the "!" from the front of the string.
+					$playlist=ltrim($playlist, '!');
+				}
+				# Check if $playlist is not an integer.
+				if($validator->isInt($playlist)!==TRUE)
+				{
+					# Get the playlist data that cooresponds to the passed $playlist name.
+					$this->getThisPlaylist($playlist, FALSE);
+					$playlist=$this->getID();
+				}
+				# Check if the first character was an "!".
+				if($top!='!')
+				{
+					# Set the newly created sql string to the $playlist_or array.
+					$playlist_or[]='`'.$field_name.'` REGEXP '.$db->quote('-'.$playlist.'-');
+				}
+				else
+				{
+					# Set the newly created sql string to the $playlist_and array.
+					$playlist_and[]='`'.$field_name.'` NOT REGEXP '.$db->quote('-'.$playlist.'-');
+				}
+			}
+			# Implode the $playlist_or array into one complete sql string.
+			$ors=implode(' OR ', $playlist_or);
+			# Implode the $playlist_and array into one complete sql string.
+			$ands=implode(' AND ', $playlist_and);
+			# Concatenate the $ands and $ors together.
+			$playlists=(((!empty($ors)) ? '('.$ors.')' : '').((!empty($ors) && !empty($ands)) ? ' AND ' : '').((!empty($ands)) ? '('.$ands.')' : ''));
+		}
+		else
+		{
+			# Explicitly set categories to NULL.
+			$playlists=NULL;
+		}
+		# Check if the $category_a array is empty.
+		if(!empty($playlists))
+		{
+			# Set the sql string to the data member.
+			$this->setWhereSQL($playlists);
+		}
+	} #==== End -- createWhereSQL
 
 	/**
 	 * deleteVideo
@@ -1011,7 +1066,7 @@ class Video extends Media
 		$video_display.=$single_video['video'];
 		$video_display.='<h3 class="h-3">'.$single_video['title'].'</h3>';
 		$video_display.=$single_video['description'];
-		$video_display.='<div>';
+		$video_display.='</div>';
 
 		return $video_display;
 	} #==== End -- getFirstVideo

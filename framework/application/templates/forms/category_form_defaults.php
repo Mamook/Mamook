@@ -21,7 +21,7 @@ if(isset($_GET['category']))
 	{
 		# Reset the defaults.
 		$category_id=$inst_id;
-		$category_name=$category->getCategory();
+		$category_name=$category->getName();
 		$category_unique=1; # Set to "Unique" (1) since it is already an category.
 	}
 }

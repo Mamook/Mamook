@@ -17,6 +17,7 @@ class Content
 	protected $address1=NULL;
 	protected $address2=NULL;
 	protected $all_content=NULL;
+	protected $api=NULL;
 	protected $archive;
 	protected $city=NULL;
 	protected static $content;
@@ -114,6 +115,31 @@ class Content
 			$this->all_content=NULL;
 		}
 	} #==== End -- setAllContent
+
+	/**
+	 * setAPI
+	 *
+	 * Sets the data member $api.
+	 *
+	 * @param	string $api
+	 * @access	protected
+	 */
+	protected function setAPI($api)
+	{
+		# Check if the passed value is empty.
+		if(!empty($api))
+		{
+			# Clean it up.
+			$api=trim($api);
+			# Set the data member.
+			$this->api=$api;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->api=NULL;
+		}
+	} #==== End -- setAPI
 
 	/***
 	 * setSiteName
@@ -778,6 +804,18 @@ class Content
 	{
 		return $this->all_content;
 	} #==== End -- getAllContent
+
+	/**
+	 * getAPI
+	 *
+	 * Returns the data member $api.
+	 *
+	 * @access	public
+	 */
+	public function getAPI()
+	{
+		return $this->api;
+	} #==== End -- getAPI
 
 	/***
 	 * getSiteName
@@ -1542,7 +1580,7 @@ class Content
 			if(!empty($value))
 			{
 				# Get the content info from the Database.
-				$content=$db->get_row('SELECT `id`, `page_title`, `sub_title`, `hide_title`, `content`, `quote`, `topic`,  `image`, `image_title`, `sub_domain`, `page`, `archive`, `social` FROM `'.DBPREFIX.'content` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+				$content=$db->get_row('SELECT `id`, `page_title`, `sub_title`, `hide_title`, `content`, `quote`, `topic`,  `image`, `image_title`, `sub_domain`, `page`, `archive`, `social`, `api` FROM `'.DBPREFIX.'content` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 				# Check if there was content retrieved from the Database.
 				if($content!==NULL)
 				{
@@ -1572,6 +1610,8 @@ class Content
 					$this->setArchive($content->archive);
 					# Set whether the social links should be displayed to the data member.
 					$this->setUseSocial($content->social);
+					# Set the content's `api` to the data member.
+					$this->setAPI($content->api);
 					return TRUE;
 				}
 			}
@@ -1648,7 +1688,7 @@ class Content
 		}
 		try
 		{
-			$content=$db->get_row('SELECT `id`, `page_title`, `sub_title`, `hide_title`, `content`, `quote`, `topic`,  `image`, `image_title`, `archive`, `social` FROM `'.DBPREFIX.'content`'.$where.' LIMIT 1');
+			$content=$db->get_row('SELECT `id`, `page_title`, `sub_title`, `hide_title`, `content`, `quote`, `topic`,  `image`, `image_title`, `archive`, `social`, `api` FROM `'.DBPREFIX.'content`'.$where.' LIMIT 1');
 			# Check if there was content retrieved from the Database.
 			if($content!==NULL)
 			{
@@ -1678,6 +1718,8 @@ class Content
 				$this->setArchive($content->archive);
 				# Set whether the social links should be displayed to the data member.
 				$this->setUseSocial($content->social);
+				# Set the content's api to a variable.
+				$this->setAPI($content->api);
 				return TRUE;
 			}
 			return FALSE;

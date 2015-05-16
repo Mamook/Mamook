@@ -57,10 +57,10 @@ if(!(isset($_GET['audio']) && !isset($_GET['playlist'])))
 	# Create the "WHERE" clause.
 	$category_obj->createWhereSQL($category_obj->getID(), 'playlist');
 	# If the Playlist is the generic "Audio" playlist, don't set it as the page subtitle.
-	if(!((DEFAULT_AUDIO_PLAYLIST=='Audio') && ($category_obj->getCategory()==DEFAULT_AUDIO_PLAYLIST)))
+	if(!((DEFAULT_AUDIO_PLAYLIST=='Audio') && ($category_obj->getName()==DEFAULT_AUDIO_PLAYLIST)))
 	{
 		# Set the page subtitle with the playlist name.
-		$main_content->setSubTitle($category_obj->getCategory());
+		$main_content->setSubTitle($category_obj->getName());
 	}
 	# Get the Audio from the database.
 	$audio_retreived=$audio_obj->getAudio(NULL, '*', 'date', 'DESC', ' WHERE `new` = 0 AND '.$category_obj->getWhereSQL());

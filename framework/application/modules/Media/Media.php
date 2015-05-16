@@ -44,6 +44,7 @@ class Media
 	private $last_edit='0000-00-00';
 	private $link=NULL;
 	private $location=NULL;
+	private $playlist_obj=NULL;
 	private $all_publishers=NULL;
 	# $publisher is an object or a string.
 	private $publisher=NULL;
@@ -210,7 +211,7 @@ class Media
 			foreach($value as $category_value)
 			{
 				# Set the default field name to search the categories tablee as "category".
-				$field_name='category';
+				$field_name='name';
 				# Check if the value is an integer. If so, set the field name to "id".
 				if($validator->isInt($category_value))
 				{
@@ -231,7 +232,7 @@ class Media
 				foreach($all_categories as $single_category)
 				{
 					# Set the category name and id to the $categories array.
-					$categories[$single_category->id]=$single_category->category;
+					$categories[$single_category->id]=$single_category->name;
 				}
 			}
 		}
@@ -844,6 +845,29 @@ class Media
 		}
 	} #==== End -- setLocation
 
+	/*
+	 * setPlaylistObject
+	 *
+	 * Sets the data member $playlist_obj.
+	 *
+	 * @param	$object
+	 * @access	protected
+	 */
+	protected function setPlaylistObject($object)
+	{
+		# Check if the passed value is an object.
+		if(is_object($object))
+		{
+			# Set the data member.
+			$this->playlist_obj=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->playlist_obj=NULL;
+		}
+	} #==== End -- setPlaylistObject
+
 	/**
 	 * setAllPublishers
 	 *
@@ -1367,6 +1391,18 @@ class Media
 	{
 		return $this->location;
 	} #==== End -- getLocation
+
+	/*
+	 * getPlaylistObject
+	 *
+	 * Returns the data member $playlist_obj.
+	 *
+	 * @access	protected
+	 */
+	protected function getPlaylistObject()
+	{
+		return $this->playlist_obj;
+	} #==== End -- getPlaylistObject
 
 	/**
 	 * getAllPublishers

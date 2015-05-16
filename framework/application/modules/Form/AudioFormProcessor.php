@@ -526,13 +526,13 @@ class AudioFormProcessor extends FormProcessor
 										$resourceId->setKind('youtube#video');
 
 										# Get the playlists from the database.
-										$playlist_results=$db->get_results('SELECT `category`, `api` FROM `'.DBPREFIX.'categories` WHERE `api` IS NOT NULL');
+										$playlist_results=$db->get_results('SELECT `name`, `api` FROM `'.DBPREFIX.'categories` WHERE `api` IS NOT NULL');
 
 										# Loop through the database categories.
 										foreach($playlist_results as $playlist_row)
 										{
 											# Find the playlist in the $playlists array.
-											if(array_key_exists($playlist_row->category, $playlists))
+											if(array_key_exists($playlist_row->name, $playlists))
 											{
 												# Decode the `api` field in the `categories` table.
 												$playlist_api_decoded=json_decode($playlist_row->api);

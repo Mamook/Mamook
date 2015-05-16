@@ -18,7 +18,7 @@ class Product
 	protected $collected_asins=array();
 	protected $author=NULL;
 	protected $button_id=NULL;
-	protected $categories=NULL;
+	//protected $categories=NULL;
 	protected $content=NULL;
 	protected $currency=NULL;
 	protected $description=NULL;
@@ -175,6 +175,7 @@ class Product
 	 * @param	$value
 	 * @access	public
 	 */
+	/*
 	public function setCategories($value)
 	{
 		# Check if the passed value if empty.
@@ -224,6 +225,7 @@ class Product
 			$this->categories=array();
 		}
 	} #==== End -- setCategories
+	*/
 
 	/*
 	 * setContent
@@ -833,10 +835,12 @@ class Product
 	 *
 	 * @access	public
 	 */
+	/*
 	public function getCategories()
 	{
 		return $this->categories;
 	} #==== End -- getCategories
+	*/
 
 	/*
 	 * getCategory
@@ -1137,9 +1141,9 @@ class Product
 	 *
 	 * Returns the number of products in the database that are marked available.
 	 *
-	 * @param	$category (The id of the category database table to access.)
-	 * @param	$limit (The limit of records to count)
-	 * @param	$and_sql (Extra AND statements in the query)
+	 * @param	$category				The id of the category database table to access.
+	 * @param	$limit					The limit of records to count.
+	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
 	 */
 	public function countAllRecords($categories=NULL, $limit=NULL, $and_sql=NULL)
@@ -1152,14 +1156,14 @@ class Product
 			# Get the Category class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 			# Instantiate a new Category object.
-			$category=new Category();
+			$category_obj=new Category();
 			# Check if all categories are requested.
 			if(strtolower($categories)!=='all')
 			{
-				$category->createWhereSQL($categories);
+				$category_obj->createWhereSQL($categories, 'category');
 			}
 			# Set the WHERE portion of the SQL statement for the categories requested to a variable.
-			$where=$category->getWhereSQL();
+			$where=$category_obj->getWhereSQL();
 			# Check if there should be a WHERE portion of the SQL statement.
 			if(!empty($where) || !empty($and_sql))
 			{
@@ -2277,7 +2281,7 @@ class Product
 			if(strtolower($categories)!=='all')
 			{
 				# Create the WHERE portion of the SQL statement for the categories requested.
-				$category_obj->createWhereSQL($categories);
+				$category_obj->createWhereSQL($categories, 'category');
 			}
 			# Set the WHERE portion of the SQL statement for the categories requested to a variable.
 			$where=$category_obj->getWhereSQL();
