@@ -66,7 +66,7 @@ $display_main1.=$main_content->displayTitles();
 # Get the main content to display in main-2.
 $display_main2.=$main_content->displayContent();
 # Add content to main-2.
-$display_main2.='<a href="'.APPLICATION_URL.'profile/?member='.$account_id.'" target="_blank" title="View '.$user_obj->getDisplayName().'\'s Profile" class="view">>>view</a>';
+$display_main2.='<a href="'.APPLICATION_URL.'profile/?member='.$account_id.'" target="_blank" title="View '.$user_obj->getDisplayName().'\'s Profile" class="view">view</a>';
 # Add any display content to main-2.
 $display_main2.=$display;
 
