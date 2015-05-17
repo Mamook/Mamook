@@ -845,7 +845,8 @@ class Video extends Media
 					# Set a nice message to the session.
 					$_SESSION['message']='That video was not valid.';
 					# Redirect the user back to the page without GET or POST data.
-					$doc->redirect($redirect);				}
+					$doc->redirect($redirect);
+				}
 			}
 			return FALSE;
 		}
