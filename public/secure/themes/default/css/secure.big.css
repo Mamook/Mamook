@@ -619,7 +619,7 @@ select {
 	margin:0 auto;
 	padding:10px;
 	color:#fff;
-	z-index:100;
+	z-index:10000;
 }
 .noscript .alertBox {
 	position:relative;
