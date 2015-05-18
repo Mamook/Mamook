@@ -44,6 +44,7 @@ class Media
 	private $last_edit='0000-00-00';
 	private $link=NULL;
 	private $location=NULL;
+	private $playlists=NULL;
 	private $playlist_obj=NULL;
 	private $all_publishers=NULL;
 	# $publisher is an object or a string.
@@ -177,7 +178,7 @@ class Media
 	 *
 	 * Sets the data member $categories.
 	 *
-	 * @param		$value
+	 * @param	$value
 	 * @access	public
 	 */
 	public function setCategories($value)
@@ -845,6 +846,74 @@ class Media
 		}
 	} #==== End -- setLocation
 
+	/**
+	 * setPlaylists
+	 *
+	 * Sets the data member $playlists.
+	 *
+	 * @param	$value
+	 * @access	public
+	 */
+	public function setPlaylists($value)
+	{
+		# Create an empty array to hold the playlists.
+		$playlists=array();
+		# Check if the passed value if empty.
+		if(!empty($value))
+		{
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+			# Check if the passed value is NOT an array.
+			if(!is_array($value))
+			{
+				# Trim both ends of the string.
+				$value=trim($value);
+				# Trim any dashes (-) off both ends of the string .
+				$value=trim($value, '-');
+				# Explode the array to an array separated with dashes (-).
+				$value=explode('-', $value);
+			}
+			# Get the Playlist class.
+			require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
+			# Instantiate a new Playlist object.
+			$playlist_obj=new Playlist();
+			# Create a variable to hold the "WHERE" clause.
+			$where_clause=array();
+			# Loop through the $value array to build the "WHERE" clause.
+			foreach($value as $playlist_value)
+			{
+				# Set the default field name to search the playlists tablee as "playlist".
+				$field_name='name';
+				# Check if the value is an integer. If so, set the field name to "id".
+				if($validator->isInt($playlist_value))
+				{
+					$field_name='id';
+				}
+				$where_clause[]='`'.$field_name.'` = '.$db->quote($playlist_value);
+			}
+			# Create the "WHERE" clause.
+			$where_clause=' WHERE ('.implode(' OR ', $where_clause).')';
+			# Retreive the playlists in as single call.
+			$playlist_obj->getPlaylists(NULL, '*', 'id', 'ASC', $where_clause);
+			# Set the returned records to a variable.
+			$all_playlists=$playlist_obj->getAllPlaylists();
+			# Check if there WERE any returned records.
+			if(!empty($all_playlists))
+			{
+				# Loop through the returned playlists.
+				foreach($all_playlists as $single_playlist)
+				{
+					# Set the playlist name and id to the $playlists array.
+					$playlists[$single_playlist->id]=$single_playlist->name;
+				}
+			}
+		}
+		# Set the data member.
+		$this->playlists=$playlists;
+	} #==== End -- setPlaylists
+
 	/*
 	 * setPlaylistObject
 	 *
@@ -1391,6 +1460,18 @@ class Media
 	{
 		return $this->location;
 	} #==== End -- getLocation
+
+	/**
+	 * getPlaylists
+	 *
+	 * Returns the data member $playlists.
+	 *
+	 * @access	public
+	 */
+	public function getPlaylists()
+	{
+		return $this->playlists;
+	} #==== End -- getPlaylists
 
 	/*
 	 * getPlaylistObject

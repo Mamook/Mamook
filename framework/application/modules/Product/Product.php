@@ -18,7 +18,7 @@ class Product
 	protected $collected_asins=array();
 	protected $author=NULL;
 	protected $button_id=NULL;
-	//protected $categories=NULL;
+	protected $categories=NULL;
 	protected $content=NULL;
 	protected $currency=NULL;
 	protected $description=NULL;
@@ -175,7 +175,6 @@ class Product
 	 * @param	$value
 	 * @access	public
 	 */
-	/*
 	public function setCategories($value)
 	{
 		# Check if the passed value if empty.
@@ -225,7 +224,6 @@ class Product
 			$this->categories=array();
 		}
 	} #==== End -- setCategories
-	*/
 
 	/*
 	 * setContent
@@ -835,12 +833,10 @@ class Product
 	 *
 	 * @access	public
 	 */
-	/*
 	public function getCategories()
 	{
 		return $this->categories;
 	} #==== End -- getCategories
-	*/
 
 	/*
 	 * getCategory
