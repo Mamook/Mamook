@@ -63,7 +63,7 @@ img {
 	float:left;
 	width:1px;
 	height:50%;
-	margin-bottom:-50%; /*Half of wrapper's height*/;
+	margin-bottom:-50%; /*Half of wrapper's height*/
 }
 #wrapper {
 	clear:left;
@@ -403,11 +403,10 @@ img {
 [class|=button],
 [class|=button]:visited,
 [class|=submit],
-[class|=submit]:visited,
-.okBtn,
-.okBtn:visited {
+[class|=submit]:visited {
 	float:left;
 	height:23px;
+	min-width:23px;
 	background:#fa0; /* for non-css3 browsers */
 	background:-webkit-linear-gradient(left, red, #ffb600); /* For Safari 5.1 to 6.0 */
 	background:-moz-linear-gradient(right, red, #ffb600); /* for firefox 3.6+ */
@@ -923,7 +922,6 @@ img {
 
 
 /* Pretty Photo, Alert, and Error */
-.okBtn,
 .fwpLoader,
 .fwpHolder,
 .button-close,
@@ -962,8 +960,7 @@ img {
 .button-expand:hover {
 	background-position:-31px -21px;
 }
-.button-close,
-.okBtn {
+.button-close {
 	top:-6px;
 	right:-6px;
 	margin:0;
