@@ -563,30 +563,35 @@ class Audio extends Media
 	 *
 	 * Returns the number of audio files in the database.
 	 *
+	 * @param	$playlists				The id's of the playlist(s) to be retrieved.
+	 *										May be an array or dash separeted values, ie. '50-60-70-110'.
+	 * @param	$limit					The limit of records to count.
+	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
-	 * @param		$categories (The names and/or id's of the category(ies) to be retrieved. May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110')
-	 * @param		$limit 		(The limit of records to count.)
-	 * @param		$and_sql 	(Extra AND statements in the query.)
 	 */
-	public function countAllAudio($categories=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllAudio($playlists=NULL, $limit=NULL, $and_sql=NULL)
 	{
 		# Check if there were categories passed.
-		if($categories===NULL)
+		if($playlists===NULL)
 		{
-			throw new Exception('You must provide a category!', E_RECOVERABLE_ERROR);
+			throw new Exception('You must provide a playlist!', E_RECOVERABLE_ERROR);
 		}
 		else
 		{
 			try
 			{
-				# Get the Category class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-				# Instantiate a new Category object.
-				$category=new Category();
-				# Create the WHERE clause for the passed $categories string.
-				$category->createWhereSQL($categories, 'playlist');
+				# Get the Playlist class.
+				require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
+				# Instantiate a new Playlist object.
+				$playlist_obj=Playlist::getInstance();
+				# Set the Playlist object to a data member.
+				$this->setPlaylistObject($playlist_obj);
+				# Reset the Playlist object variable with the instance from the data member.
+				$playlist_obj=$this->getPlaylistObject();
+				# Create the WHERE clause for the passed $playlists string.
+				$playlist_obj->createWhereSQL($playlists, 'playlist', FALSE);
 				# Set the newly created WHERE clause to a variable.
-				$where=$category->getWhereSQL();
+				$where=$playlist_obj->getWhereSQL();
 				try
 				{
 					# Set the Database instance to a variable.
@@ -612,54 +617,30 @@ class Audio extends Media
 	 *
 	 * Creates media XHTML elements and sets them to an array for display.
 	 *
+	 * @param	array $playlists
 	 * @access	public
 	 */
-	public function createPlaylistMenu($default_playlist=NULL, $excludes=array())
+	public function createPlaylistMenu($playlists)
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
 
 		try
 		{
-			# Get the Category class.
-			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-			# Instantiate a new Category object.
-			$playlist=new Category();
-			# get the categories from the `categories` table.
-			$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL AND `private` IS NULL');
-			# Set the playlists to a variable.
-			$playlists=$playlist->getAllCategories();
-
 			$playlist_items='<li class="list-nav-1">No playlists</li>';
 			if(!empty($playlists))
 			{
 				$playlist_items='';
 				foreach($playlists as $playlists_data)
 				{
-					# Decode the returned API JSON.
-					$api=json_decode($playlists_data->api, TRUE);
-					# Check if "site_video" exists as a property of the JSON.
-					if(array_key_exists('site_audio', $api))
-					{
-						$this->setCategoryID($playlists_data->id);
-						$current_playlist_id=$this->getCategoryID();
-						# Check if the current playlist ID is NOT in the excludes array.
-						if(!in_array($current_playlist_id, $excludes))
-						{
-							$title=$playlists_data->category;
-							$url=AUDIO_URL.'?playlist='.$current_playlist_id;
-							$here_class=$doc->addHereClass($url, TRUE, FALSE);
-							if($default_playlist==$current_playlist_id)
-							{
-								$here_class=' here';
-							}
-							$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
-								'<a href="'.$url.'" title="'.$title.' audio playlist">'.
-									$title.
-								'</a>'.
-							'</li>';
-						}
-					}
+					$name=$playlists_data->name;
+					$url=AUDIO_URL.'?playlist='.$current_playlist_id;
+					$here_class=$doc->addHereClass($url, FALSE, FALSE);
+					$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
+						'<a href="'.$url.'" title="'.$name.' audio playlist">'.
+							$name.
+						'</a>'.
+					'</li>';
 				}
 			}
 			return $playlist_items;
@@ -790,6 +771,9 @@ class Audio extends Media
 	 */
 	public function displayAudioFeed()
 	{
+		# Bring the Login Class into scope.
+		global $login;
+
 		try
 		{
 			# Count the returned files.
@@ -819,7 +803,7 @@ class Audio extends Media
 					# No audio in the playlist. Return error image.
 					if(empty($all_audio))
 					{
-						return $display='<div id="no_video"></div>';
+						return $display='<div class="no_video"></div>';
 					}
 					else
 					{
@@ -854,8 +838,16 @@ class Audio extends Media
 					# This is not a playlist.
 					$this->setIsPlaylist(FALSE);
 
-					# Get the Audio.
-					$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `new` = 0');
+					if($login->checkAccess(MAN_USERS)===TRUE)
+					{
+						# Get the Audio.
+						$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `new` = 0');
+					}
+					else
+					{
+						# Get the Audio.
+						$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `availability` = 1 AND `new` = 0');
+					}
 					# Set the returned Audio records to a variable.
 					$all_audio=$this->getAllAudio();
 
@@ -1056,8 +1048,8 @@ class Audio extends Media
 				# Get the audio name and reset it to the variable.
 				$value=$this->getFileName();
 			}
-			# Get the audio info from the Database.
-			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `embed_code`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor`, `recent_contributor`, `last_edit`, `new` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			# Get the audio info from the database.
+			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($audio!==NULL)
 			{
@@ -1069,14 +1061,14 @@ class Audio extends Media
 				$this->setAuthor($audio->author);
 				# Set the audio availability to the data member.
 				$this->setAvailability($audio->availability);
-				# Set the contributor id to the data member.
+				# Pass the audio category id(s) to the setCategories method, thus setting the data member with the category name(s).
+				$this->setCategories($audio->category);
+				# Set the audio contributor id to the data member.
 				$this->setContID($audio->contributor);
 				# Set the audio post/edit date to the data member.
 				$this->setDate($audio->date);
-				# Set the description to the data member.
+				# Set the audio description to the data member.
 				$this->setDescription($audio->description);
-				# Set the embed_code to the data member.
-				$this->setEmbedCode($audio->embed_code);
 				# Set the audio name to the data member.
 				$this->setFileName($audio->file_name);
 				# Set the audio's image ID to the data member.
@@ -1085,14 +1077,10 @@ class Audio extends Media
 				$this->setInstitution($audio->institution);
 				# Pass the audio language id to the setLanguage method, thus setting the data member with the language name.
 				$this->setLanguage($audio->language);
-				# Set the last edit date to the data member.
-				$this->setLastEdit($audio->last_edit);
-				# Pass the audio playlist id(s) to the setCategories method, thus setting the data member with the playlist name(s).
-				$this->setCategories($audio->playlist);
+				# Pass the audio playlist id(s) to the setPlaylists method, thus setting the data member with the playlist name(s).
+				$this->setPlaylists($audio->playlist);
 				# Pass the audio publisher id to the setPublisher method, thus setting the data member with the publisher name.
 				$this->setPublisher($audio->publisher);
-				# Set the recent contributor id to the data member.
-				$this->setRecentContID($audio->recent_contributor);
 				# Set the audio title to the data member.
 				$this->setTitle($audio->title);
 				# Set the audio publish year to the data member.
@@ -1236,7 +1224,7 @@ class Audio extends Media
 	 *
 	 * Returns the HTML markup to display a large audio.
 	 *
-	 * @param	array $large_audio			The array for the large audio.
+	 * @param	array $large_audio		The array for the large audio.
 	 * @access	public
 	 */
 	public function markupLargeAudio($large_audio)

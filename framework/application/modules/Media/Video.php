@@ -27,6 +27,7 @@ class Video extends Media
 	private $google_client=NULL;
 	private $is_playlist=FALSE;
 	private $file_name=NULL;
+	private $playlist=NULL;
 	private $thumbnail_url=NULL;
 	private $video_id=NULL;
 	private $video_type=NULL;
@@ -262,6 +263,31 @@ class Video extends Media
 	} #==== End -- setIsPlaylist
 
 	/**
+	 * setPlaylist
+	 *
+	 * Sets the data member $playlist.
+	 *
+	 * @param	int $playlist
+	 * @access	public
+	 */
+	public function setPlaylist($playlist)
+	{
+		# Check if the passed value is empty.
+		if(!empty($playlist))
+		{
+			# Clean it up.
+			$playlist=trim($playlist);
+			# Set the data member.
+			$this->playlist=$playlist;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->playlist=NULL;
+		}
+	} #==== End -- setPlaylist
+
+	/**
 	 * setThumbnailUrl
 	 *
 	 * Set the data member $thumbnail_url
@@ -438,6 +464,18 @@ class Video extends Media
 	} #==== End -- getIsPlaylist
 
 	/**
+	 * getPlaylist
+	 *
+	 * Returns the data member $playlist.
+	 *
+	 * @access	public
+	 */
+	public function getPlaylist()
+	{
+		return $this->playlist;
+	} #==== End -- getPlaylist
+
+	/**
 	 * getThumbnailUrl
 	 *
 	 * Gets the data member $thumbnail_url
@@ -595,6 +633,7 @@ class Video extends Media
 	 *
 	 * Creates media XHTML elements and sets them to an array for display.
 	 *
+	 * @param	array $playlists
 	 * @access	public
 	 */
 	public function createPlaylistMenu($playlists)
@@ -638,6 +677,7 @@ class Video extends Media
 	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110'
 	 * @access	public
 	 */
+	/*
 	public function createWhereSQL($playlists=NULL, $field_name='playlist')
 	{
 		# Set the Database instance to a variable.
@@ -706,6 +746,7 @@ class Video extends Media
 			$this->setWhereSQL($playlists);
 		}
 	} #==== End -- createWhereSQL
+	*/
 
 	/**
 	 * deleteVideo
@@ -752,7 +793,7 @@ class Video extends Media
 					# Check if the video is premium content or not.
 					$this_video=$this->getThisVideo($id);
 					# Check if the video was found.
-					if($this_video!==TRUE)
+					if($this_audio===FALSE)
 					{
 						# Set a nice message to the session.
 						$_SESSION['message']='The video was not found.';
@@ -782,9 +823,7 @@ class Video extends Media
 						$yt_id=$api_decoded->youtube_id;
 
 						# Delete the video.
-						# DRAVEN: Change when we do video streaming from the server.
 						if(($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE) && ($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE) && ($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
-						//if(($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
 						{
 							try
 							{
@@ -845,8 +884,7 @@ class Video extends Media
 					# Set a nice message to the session.
 					$_SESSION['message']='That video was not valid.';
 					# Redirect the user back to the page without GET or POST data.
-					$doc->redirect($redirect);
-				}
+					$doc->redirect($redirect);				}
 			}
 			return FALSE;
 		}
@@ -1061,7 +1099,6 @@ class Video extends Media
 		}
 		# Get large video markup.
 		$single_video=$this->markupLargeVideo($large_video);
-
 		# Display the video details.
 		$video_display='<div class="video-lg">';
 		$video_display.=$single_video['video'];
@@ -1151,35 +1188,37 @@ class Video extends Media
 				# Get the video name and reset it to the variable.
 				$value=$this->getFileName();
 			}
-			# Get the video info from the Database.
-			$video=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'videos` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			# Get the video info from the database.
+			$video=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `category`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'videos` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($video!==NULL)
 			{
 				# Set the video name to the data member.
 				$this->setID($video->id);
-				# Set the video name to the data member.
-				$this->setFileName($video->file_name);
 				# Set the video API to the data member.
 				$this->setAPI($video->api);
 				# Set the video author to the data member.
 				$this->setAuthor($video->author);
 				# Set the video availability to the data member.
 				$this->setAvailability($video->availability);
-				# Pass the video playlist id(s) to the setPlaylist method, thus setting the data member with the playlist name(s).
-				$this->setCategories($video->playlist);
-				# Set the contributor id to the data member.
+				# Pass the video category id(s) to the setCategories method, thus setting the data member with the category name(s).
+				$this->setCategories($video->category);
+				# Set the video contributor id to the data member.
 				$this->setContID($video->contributor);
 				# Set the video post/edit date to the data member.
 				$this->setDate($video->date);
 				# Set the video description to the data member.
 				$this->setDescription($video->description);
+				# Set the video name to the data member.
+				$this->setFileName($video->file_name);
 				# Set the video's image ID to the data member.
 				$this->setImageID($video->image);
 				# Pass the video institution id to the setInstitution method, thus setting the data member with the institution name.
 				$this->setInstitution($video->institution);
 				# Pass the video language id to the setLanguage method, thus setting the data member with the language name.
 				$this->setLanguage($video->language);
+				# Pass the video playlist id(s) to the setPlaylists method, thus setting the data member with the playlist name(s).
+				$this->setPlaylists($video->playlist);
 				# Pass the video publisher id to the setPublisher method, thus setting the data member with the publisher name.
 				$this->setPublisher($video->publisher);
 				# Set the video title to the data member.
@@ -1260,7 +1299,7 @@ class Video extends Media
 		# Set the YouTube instance to a variable.
 		$yt=$this->getYouTubeObject();
 
-		$display='<table class="table-image">'.
+		$display='<table class="table-video">'.
 			'<th>'.
 				'<a href="'.ADMIN_URL.'ManageMedia/videos/?by_video_name=DESC" title="Order by video name">View</a>'.
 			'</th>'.

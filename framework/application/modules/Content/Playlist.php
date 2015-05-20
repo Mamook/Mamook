@@ -18,11 +18,7 @@ class Playlist extends Category
 	/*** data members ***/
 
 	private $all_playlists=NULL;
-	private $api=NULL;
-	private $id=NULL;
-	private $name=NULL;
 	private static $playlist_obj;
-	private $where_sql=NULL;
 
 	/*** End data members ***/
 
@@ -55,119 +51,6 @@ class Playlist extends Category
 		}
 	} #==== End -- setAllPlaylists
 
-	/**
-	 * setAPI
-	 *
-	 * Sets the data member $api.
-	 *
-	 * @param	$api
-	 * @access	protected
-	 */
-	protected function setAPI($api)
-	{
-		# Check if the passed value is empty.
-		if(!empty($api))
-		{
-			# Strip slashes and decode any html entities.
-			$api=html_entity_decode(stripslashes($api), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$api=trim($api);
-			# Set the data member.
-			$this->api=$api;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->api=NULL;
-		}
-	} #==== End -- setAPI
-
-	/**
-	 * setID
-	 *
-	 * Sets the data member $id.
-	 *
-	 * @param	$id
-	 * @access	protected
-	 */
-	protected function setID($id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $id is empty.
-		if(!empty($id))
-		{
-			# Clean it up.
-			$id=trim($id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($id)===TRUE)
-			{
-				# Set the data member explicitly making it an integer.
-				$this->id=(int)$id;
-			}
-			else
-			{
-				throw new Exception('The passed playlist id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->id=NULL;
-		}
-	} #==== End -- setID
-
-	/**
-	 * setName
-	 *
-	 * Sets the data member $name.
-	 *
-	 * @param	$name
-	 * @access	protected
-	 */
-	protected function setName($name)
-	{
-		# Check if the passed value is empty.
-		if(!empty($name))
-		{
-			# Strip slashes and decode any html entities.
-			$name=html_entity_decode(stripslashes($name), ENT_COMPAT, 'UTF-8');
-			# Clean it up.
-			$name=trim($name);
-			# Set the data member.
-			$this->name=$name;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->name=NULL;
-		}
-	} #==== End -- setName
-
-	/**
-	 * setWhereSQL
-	 *
-	 * Sets the data member $where_sql.
-	 *
-	 * @param	$where_sql
-	 * @access	protected
-	 */
-	protected function setWhereSQL($where_sql)
-	{
-		# Check if the passed value is empty.
-		if(!empty($where_sql))
-		{
-			# Set the data member.
-			$this->where_sql=$where_sql;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->where_sql=NULL;
-		}
-	} #==== End -- setWhereSQL
-
 	/*** End mutator methods ***/
 
 
@@ -185,54 +68,6 @@ class Playlist extends Category
 	{
 		return $this->all_playlists;
 	} #==== End -- getAllPlaylists
-
-	/**
-	 * getAPI
-	 *
-	 * Returns the data member $api.
-	 *
-	 * @access	public
-	 */
-	public function getAPI()
-	{
-		return $this->api;
-	} #==== End -- getAPI
-
-	/**
-	 * getID
-	 *
-	 * Returns the data member $id.
-	 *
-	 * @access	public
-	 */
-	public function getID()
-	{
-		return $this->id;
-	} #==== End -- getID
-
-	/**
-	 * getName
-	 *
-	 * Returns the data member $name.
-	 *
-	 * @access	public
-	 */
-	public function getName()
-	{
-		return $this->name;
-	} #==== End -- getName
-
-	/**
-	 * getWhereSQL
-	 *
-	 * Returns the data member $where_sql.
-	 *
-	 * @access	public
-	 */
-	public function getWhereSQL()
-	{
-		return $this->where_sql;
-	} #==== End -- getWhereSQL
 
 	/*** End accessor methods ***/
 
@@ -349,40 +184,6 @@ class Playlist extends Category
 			$this->setWhereSQL($playlists);
 		}
 	} #==== End -- createWhereSQL
-
-/*
-			# Check if $playlists equals "all".
-			if(!is_array($playlists) && strtolower($playlists)=='all')
-			{
-				# Chenage $playlists into an empty array.
-				$playlists=array();
-				# Get all the playlists.
-				$this->getPlaylists();
-				# Set the results to a variable.
-				$results=$this->getAllPlaylists();
-				# Loop through the categories.
-				foreach($results as $row)
-				{
-					# Set the category id to the $categories array.
-					$playlists[]=$row->id;
-				}
-			}
-			elseif(!is_array($playlists))
-			{
-				# Trim any dashes(-) off the ends of the string.
-				$playlists=trim($playlists, '-');
-				# Create an array of the playlists.
-				$playlists=explode('-', $playlists);
-			}
-
-				# If not an array, turn it into an array.
-				if(!is_array($playlists))
-				{
-					# Turn array into comma-separated-values.
-					$csv_playlists=implode(',', $playlists);
-					$playlists='`'.$field_name.'` IN ('.$csv_playlists.')';
-				}
-*/
 
 	/**
 	 * getInstance
