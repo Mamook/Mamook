@@ -81,7 +81,7 @@ $designer_site=$theme->getWebsite();
 # Set the designer for the designer meta tag in header.php
 $meta_designer=$theme->getDesigner().((!empty($designer_site)) ? ', '.$designer_site : '');
 
-if(!preg_match('/\bsecure\b(?!\/login)/i', $_SERVER['REQUEST_URI'], $matches))
+if(!preg_match('/\bsecure\b(?!\/login)/i', FULL_DOMAIN.HERE, $matches))
 {
 // 	# Create an Array with properties for the default stylesheet.
 // 	$default_JSON=array(
