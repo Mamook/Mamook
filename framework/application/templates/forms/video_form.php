@@ -61,7 +61,7 @@ if(isset($_GET['create_playlist']))
 }
 elseif(!isset($_GET['select']))
 {
-	$head='';
+	$head=(!isset($head) ? '' : $head);
 	$select=FALSE;
 
 	$duplicates=$form_processor->getDuplicates();
@@ -113,22 +113,108 @@ elseif(!isset($_GET['select']))
 			$availability_options[$value]=$option;
 		}
 
-		# Check if the YouTube credentials are available.
+		# Get the Category class.
+		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+		# Instantiate a new Category object.
+		$category_obj=new Category();
+		/*
+		# Set the current categories to a variable.
+		$video_categories=array_flip((array)$video_obj->getCategories());
+		if(empty($video_categories))
+		{
+			foreach($video_categories as $category_name=>$category_id)
+			{
+				print_r($category_name);exit;
+				# Retreive the categories in as single call.
+				if($category_obj->getThisCategory($category_name, FALSE)===FALSE)
+				{
+					if(YOUTUBE_CLIENT_ID!=='')
+					{
+						# Get the YouTube instance. Starts the YouTubeService if it's not already started.
+						$yt=$video_obj->getYouTubeObject();
+						# Get all the YouTube categories.
+						$youtube_category=$yt->listVideoCategories('snippet', array('id'=>$category_id));
+						# Set the YouTube Category ID to an array.
+						$api_array['YouTube']['category_id']=$category_id;
+						# Convert the api array to JSON.
+						$api=json_encode($api_array, JSON_FORCE_OBJECT);
+						# Set the category title to a variable.
+						$name=$youtube_category['items'][0]['snippet']['title'];
+						# Insert the category into the database.
+						$db->query('INSERT INTO `'.DBPREFIX.'categories` ('.
+							'`name`, '.
+							'`api`'.
+							') VALUES ('.
+							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
+							$db->quote($api).
+							')'
+						);
+					}
+				}
+			}
+		}
+		*/
+		# get the categories from the `categories` table.
+		$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
+		# Set the categories to a variable.
+		$all_categories=$category_obj->getAllCategories();
+		# Loop through the categories.
+		foreach($all_categories as $row)
+		{
+			# Create an option for each category.
+			$categories[$row->id]=$row->name;
+		}
 		if(YOUTUBE_CLIENT_ID!=='')
 		{
 			# Get all the YouTube categories.
-			$youtube_category_options=$yt->listVideoCategories('snippet', array('regionCode'=>'US'));
+			$all_youtube_categories=$yt->listVideoCategories('snippet', array('regionCode'=>'US'));
 			# Loop through the YouTube categories.
-			foreach($youtube_category_options['items'] as $option)
+			foreach($all_youtube_categories['items'] as $option)
 			{
-				# Check if the POST data equals the index of the current option.
-				if($video_obj->getCategory()==$option['id'])
+				# Set the option to the options array.
+				$youtube_categories[$option['id']]=$option['snippet']['title'];
+				//$youtube_categories[$option['id'].'-YouTube']=$option['snippet']['title'];
+				//$youtube_categories['{"YouTube":'.$option['id'].'}']=$option['snippet']['title'];
+			}
+			# Flip the categories.
+			$categories_flip=array_flip($categories);
+			# Flip the YouTube categories.
+			$youtube_categories_flip=array_flip($youtube_categories);
+			# NOTE! array_merge() overwrites the the previous key.
+			# 	Example: The Education category in our `category` table is ID 25.
+			#	ID 25 in the YoUTube category is News & Politics.
+			#	So the News & Politics category would not show up in the options unless it was in our database. This is a problem for new videos.
+			# Merge $categories with the YouTube categories.
+			$categories=array_merge($youtube_categories_flip, $categories_flip);
+		}
+		# Set the current categories to a variable.
+		$video_categories=array_flip((array)$video_obj->getCategories());
+		//print_r($video_categories);
+		# Loop through the categories.
+		foreach($categories as $category_name=>$category_id)
+		{
+			# Create an option for each category.
+			$category_options[$category_id]=$category_name;
+			# Check if this image currently has a category.
+			if(!empty($video_categories))
+			{
+				# Check if the current category is default or has been selected by the user.
+				if(in_array($category_id, $video_categories)===TRUE)
 				{
 					# Set the selected category to the default.
-					$category_options['selected']=$option['snippet']['title'];
+					$category_options['selected']=$category_name;
 				}
-				# Set the option to the options array.
-				$category_options[$option['id']]=$option['snippet']['title'];
+				elseif(
+						(in_array('add', $video_categories)===TRUE) &&
+						(
+							isset($category_options['selected']) &&
+							in_array('Add Category', $category_options['selected']!==TRUE)
+						)
+					)
+				{
+					# Set the "Add Category" option as selected.
+					$category_options['selected']['add']='Add Category';
+				}
 			}
 		}
 
@@ -220,55 +306,57 @@ elseif(!isset($_GET['select']))
 			}
 		}
 
-		# Get the Category class.
-		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-		# Instantiate a new Category object.
-		$playlist_obj=new Category();
-		# get the categories from the `categories` table.
-		$playlist_obj->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC', ' WHERE `api` IS NOT NULL');
+		# Get the Playlist class.
+		require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
+		# Instantiate a new Playlist object.
+		$playlist_obj=Playlist::getInstance();
+		$where=NULL;
+		# Decode the returned API JSON.
+		$content_api_decode=json_decode($main_content->getAPI(), TRUE);
+		# Asign playlists to a variable.
+		$content_playlists=$content_api_decode['Site']['Playlists'];
+		if($content_playlists!==NULL)
+		{
+			# Creates the SQL from an array of Playlist IDs.
+			$playlist_obj->createWhereSQL($content_playlists);
+			$where=' WHERE '.$playlist_obj->getWhereSQL();
+		}
+		# Get the playlists from the `playlists` table.
+		$playlist_obj->getPlaylists(NULL, '`id`, `name`, `api`', 'name', 'ASC', $where);
 		# Set the playlists to a variable.
-		$playlists=$playlist_obj->getAllCategories();
+		$playlists=$playlist_obj->getAllPlaylists();
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
 			# Set the current playlists to a variable.
-			$video_playlists=array_flip((array)$video_obj->getCategories());
+			$video_playlists=array_flip((array)$video_obj->getPlaylists());
+			# Loop through the playlists.
 			foreach($playlists as $row)
 			{
-				# Decode the returned API JSON and set it to a local variable.
-				$api=json_decode($row->api, TRUE);
-				# Check if "site_video" exists as a property of the JSON.
-				if(!empty($api) && array_key_exists('site_video', $api))
+				# Create an option for each playlist.
+				$playlist_options[$row->id]=$row->name;
+				# Check if this video currently has a playlist.
+				if(!empty($video_playlists))
 				{
-					# Create an option for each playlist.
-					$playlist_options[$row->id]=$row->category;
-					# Check if this video currently has a playlist.
-					if(!empty($video_playlists))
+					# Check if the current playlist is default or has been selected by the user.
+					if(in_array($row->id, $video_playlists)===TRUE)
 					{
-						# Check if the current playlist is default or has been selected by the user.
-						if(in_array($row->id, $video_playlists)===TRUE)
-						{
-							# Set the selected playlist to the default.
-							$playlist_options['multiple_selected'][$row->id]=$row->category;
-						}
-						elseif(
-								(in_array('add', $video_playlists)===TRUE) &&
-								(
-									isset($playlist_options['multiple_selected']) &&
-									in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
-								)
+						# Set the selected playlist to the default.
+						$playlist_options['multiple_selected'][$row->id]=$row->name;
+					}
+					elseif(
+							(in_array('add', $video_playlists)===TRUE) &&
+							(
+								isset($playlist_options['multiple_selected']) &&
+								in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
 							)
-						{
-							# Set the "Add Playlist" option as selected.
-							$playlist_options['multiple_selected']['add']='Add Playlist';
-						}
+						)
+					{
+						# Set the "Add Playlist" option as selected.
+						$playlist_options['multiple_selected']['add']='Add Playlist';
 					}
 				}
 			}
-		}
-		else
-		{
-			$playlist_options[]='No Playlists';
 		}
 
 		# Instantiate a new FormGenerator object.
@@ -453,7 +541,7 @@ elseif(!isset($_GET['select']))
 		{
 			$fg->addFormPart('<li>');
 			$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> YouTube Category</label>');
-			$fg->addElement('select', array('name'=>'category', 'id'=>'category'), $category_options);
+			$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
 			$fg->addFormPart('</li>');
 		}
 		$fg->addFormPart('<li class="mult">');

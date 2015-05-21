@@ -130,10 +130,10 @@ class VideoFormPopulator extends FormPopulator
 			{
 				# Set the data array to a local variable.
 				$data=$this->getData();
+				# Set the Database instance to a variable.
+				$db=DB::get_instance();
 				# Set the Validator instance to a variable.
 				$validator=Validator::getInstance();
-
-				/* Capture POST data. */
 
 				# Check if the author was passed via POST data.
 				if(isset($_POST['author']))
@@ -149,11 +149,67 @@ class VideoFormPopulator extends FormPopulator
 					$data['Availability']=$_POST['availability'];
 				}
 
-				# Check if the Image category was passed via POST data.
+				# Check if the video category was passed via POST data.
 				if(isset($_POST['category']))
 				{
-					# Set the category to the data array.
-					$data['Category']=$_POST['category'];
+					$category_array=$_POST['category'];
+					# Check if the category option "add" was passed in POST data.
+					if(($key=array_search('add', $category_array))!==FALSE)
+					{
+						# Remove the index from the array that holds the "add" value.
+						unset($category_array[$key]);
+						# Set "add" to the "CategoryOption" index of the data array.
+						$data['CategoryOption']='add';
+					}
+					/*
+					# Get the Category class.
+					require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+					# Instantiate a new Category object.
+					$category_obj=new Category();
+					# Loop through the categories.
+					foreach($category_array as $category_value)
+					{
+						# Retreive the categories in as single call.
+						if($category_obj->getThisCategory(NULL, '*', 'id', 'ASC', ' WHERE `id` = '.$db->quote($category_value))===FALSE)
+						{
+							if(YOUTUBE_CLIENT_ID!=='')
+							{
+								# Get the Video class.
+								$video_obj=$this->getVideoObject();
+								# Get the YouTube instance. Starts the YouTubeService if it's not already started.
+								$yt=$video_obj->getYouTubeObject();
+								# Check if the value is an integer.
+								if($validator->isInt($category_value))
+								{
+									# Get all the YouTube categories.
+									$youtube_category=$yt->listVideoCategories('snippet', array('id'=>$category_value));
+									# Set the YouTube Category ID to an array.
+									$api_array['YouTube']['category_id']=$category_value;
+									# Convert the api array to JSON.
+									$api=json_encode($api_array, JSON_FORCE_OBJECT);
+									# Set the category title to a variable.
+									$name=$youtube_category['items'][0]['snippet']['title'];
+									# Insert the category into the database.
+									$db->query('INSERT INTO `'.DBPREFIX.'categories` ('.
+										'`name`, '.
+										'`api`'.
+										') VALUES ('.
+										$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
+										$db->quote($api).
+										')'
+									);
+									# Assign the image ID to a variable.
+									$category_id=$db->get_insert_id();
+									# Set the new category ID to an array.
+									$category_array=array($category_id);
+								}
+							}
+						}
+					}
+					print_r($category_array);
+					*/
+					# Set the video categories data member.
+					$data['Categories']=$category_array;
 				}
 
 				# Explicitly make the month an integer.
@@ -265,7 +321,7 @@ class VideoFormPopulator extends FormPopulator
 						$data['PlaylistOption']='add';
 					}
 					# Set the Video playlists data member.
-					$data['Categories']=$_POST['playlist'];
+					$data['Playlists']=$_POST['playlist'];
 				}
 
 				# Check if the publisher id POST data was sent.

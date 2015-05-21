@@ -21,13 +21,11 @@ class Video extends Media
 	private static $video_obj;
 	private $all_videos=array();
 	private $api=NULL;
-	private $category=NULL;
 	private $confirmation_template=NULL;
 	private $embed_code=NULL;
 	private $google_client=NULL;
 	private $is_playlist=FALSE;
 	private $file_name=NULL;
-	private $playlist=NULL;
 	private $thumbnail_url=NULL;
 	private $video_id=NULL;
 	private $video_type=NULL;
@@ -89,31 +87,6 @@ class Video extends Media
 			$this->api=NULL;
 		}
 	} #==== End -- setAPI
-
-	/**
-	 * setCategory
-	 *
-	 * Sets the data member $category.
-	 *
-	 * @param	int $category
-	 * @access	public
-	 */
-	public function setCategory($category)
-	{
-		# Check if the passed value is empty.
-		if(!empty($category))
-		{
-			# Clean it up.
-			$category=trim($category);
-			# Set the data member.
-			$this->category=$category;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->category=NULL;
-		}
-	} #==== End -- setCategory
 
 	/**
 	 * setConfirmationTemplate
@@ -263,31 +236,6 @@ class Video extends Media
 	} #==== End -- setIsPlaylist
 
 	/**
-	 * setPlaylist
-	 *
-	 * Sets the data member $playlist.
-	 *
-	 * @param	int $playlist
-	 * @access	public
-	 */
-	public function setPlaylist($playlist)
-	{
-		# Check if the passed value is empty.
-		if(!empty($playlist))
-		{
-			# Clean it up.
-			$playlist=trim($playlist);
-			# Set the data member.
-			$this->playlist=$playlist;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->playlist=NULL;
-		}
-	} #==== End -- setPlaylist
-
-	/**
 	 * setThumbnailUrl
 	 *
 	 * Set the data member $thumbnail_url
@@ -392,18 +340,6 @@ class Video extends Media
 	} #==== End -- getAPI
 
 	/**
-	 * getCategory
-	 *
-	 * Returns the data member $category.
-	 *
-	 * @access	public
-	 */
-	public function getCategory()
-	{
-		return $this->category;
-	} #==== End -- getCategory
-
-	/**
 	 * getConfirmationTemplate
 	 *
 	 * Returns the data member $confirmation_template.
@@ -462,18 +398,6 @@ class Video extends Media
 	{
 		return $this->is_playlist;
 	} #==== End -- getIsPlaylist
-
-	/**
-	 * getPlaylist
-	 *
-	 * Returns the data member $playlist.
-	 *
-	 * @access	public
-	 */
-	public function getPlaylist()
-	{
-		return $this->playlist;
-	} #==== End -- getPlaylist
 
 	/**
 	 * getThumbnailUrl
@@ -1193,8 +1117,6 @@ class Video extends Media
 			# Check if a row was returned.
 			if($video!==NULL)
 			{
-				# Set the video name to the data member.
-				$this->setID($video->id);
 				# Set the video API to the data member.
 				$this->setAPI($video->api);
 				# Set the video author to the data member.
@@ -1211,6 +1133,8 @@ class Video extends Media
 				$this->setDescription($video->description);
 				# Set the video name to the data member.
 				$this->setFileName($video->file_name);
+				# Set the video name to the data member.
+				$this->setID($video->id);
 				# Set the video's image ID to the data member.
 				$this->setImageID($video->image);
 				# Pass the video institution id to the setInstitution method, thus setting the data member with the institution name.
@@ -1358,9 +1282,6 @@ class Video extends Media
 
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
-				# Set the current categories to a variable.
-				$image_categories=$image_obj->getCategories();
 
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));

@@ -1,16 +1,15 @@
 <?php /* framework/application/controllers/secure/admin/ManageMedia/videos/index.php */
 
-# Get the Video Class.
-require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
-# Get the VideoFormProcessor Class.
-require_once Utility::locateFile(MODULES.'Form'.DS.'VideoFormProcessor.php');
 # Get the PageNavigator Class.
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
+# Get the Video Class.
+require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
+# Get the VideoFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'VideoFormProcessor.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
-
 $login->findUserData();
 
 # Create display variables.

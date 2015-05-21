@@ -80,10 +80,8 @@ class VideoFormProcessor extends FormProcessor
 
 			# Set the video's id to a variable.
 			$id=$video_obj->getID();
-
 			# Get the video type (file or embed code)
 			$video_type=$video_obj->getVideoType();
-
 			# Get the current video's name and set it to a variable.
 			if($video_type=='file')
 			{
@@ -106,8 +104,18 @@ class VideoFormProcessor extends FormProcessor
 			$author=$video_obj->getAuthor();
 			# Set the video's availability to a variable.
 			$availability=$video_obj->getAvailability();
-			# Set the video's category to a variable.
-			$category=$video_obj->getCategory();
+			# Set the video's categories to a variable.
+			$categories=$video_obj->getCategories();
+			# Create an empty variable for the category id's.
+			$category_ids=NULL;
+			# Check if there are categories.
+			if(!empty($categories))
+			{
+				# Change the values for the id's.
+				$categories=array_flip($categories);
+				# Separate the category id's with dashes (-).
+				$category_ids='-'.implode('-', $categories).'-';
+			}
 			# Set the confirmation email template to a variable.
 			$confirmation_template=$video_obj->getConfirmationTemplate();
 			# Set the video contributor's id to a variable.
@@ -147,7 +155,7 @@ class VideoFormProcessor extends FormProcessor
 			# Check if there are categories.
 			if(!empty($playlists))
 			{
-				# Echange the values for the id's.
+				# Change the values for the id's.
 				$playlists=array_flip($playlists);
 				# Separate the category id's with dashes (-).
 				$playlist_ids='-'.implode('-', $playlists).'-';
@@ -186,10 +194,10 @@ class VideoFormProcessor extends FormProcessor
 				$empty_title=$fv->validateEmpty('title', 'Please enter a title for the video.', 2, 1024);
 				# Check if the title field was empty (or less than 2 characters or more than 1024 characters long).
 				$empty_title=$fv->validateEmpty('author', 'Please enter an author for the video.', 2, 1024);
-				if(empty($playlist_ids))
+				if(empty($category_ids))
 				{
 					# Set an error.
-					$fv->setErrors('You must select at least one playlist for this video.');
+					$fv->setErrors('You must select at least one category for this video.');
 				}
 
 				# Check if the image is an id.
@@ -452,6 +460,23 @@ class VideoFormProcessor extends FormProcessor
 							:
 								$db->quote('')
 						);
+
+						# Check if the category exists in our database.
+						# Get the Category class.
+						require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+						# Instantiate a new Category object.
+						$category_obj=new Category();
+						# Loop through the categories.
+						foreach($categories as $category_name=>$category_id)
+						{
+							# If this category does not exist in our database, then insert it.
+							if($category_obj->getThisCategory($category_name, FALSE)===FALSE)
+							{
+								# Insert the category into the database.
+
+							}
+						}
+
 						# Create the default sql as an INSERT and set it to a variable.
 						$sql='INSERT INTO `'.DBPREFIX.'videos` ('.
 							'`title`,'.
@@ -461,6 +486,7 @@ class VideoFormProcessor extends FormProcessor
 							((!empty($api)) ? ' `api`,' : '').
 							((!empty($author)) ? ' `author`,' : '').
 							((!empty($year)) ? ' `year`,' : '').
+							((!empty($category_ids)) ? ' `category`,' : '').
 							((!empty($playlist_ids)) ? ' `playlist`,' : '').
 							' `availability`,'.
 							' `date`,'.
@@ -477,6 +503,7 @@ class VideoFormProcessor extends FormProcessor
 							((!empty($api)) ? ' '.$db->quote($api).',' : '').
 							((!empty($author)) ? ' '.$db->quote($db->escape($author)).',' : '').
 							((!empty($year)) ? ' '.$db->quote($year).',' : '').
+							((!empty($category_ids)) ? ' '.$db->quote($category_ids).',' : '').
 							((!empty($playlist_ids)) ? ' '.$db->quote($playlist_ids).',' : '').
 							' '.$db->quote($availability).','.
 							' '.$db->quote($date).','.
@@ -505,6 +532,7 @@ class VideoFormProcessor extends FormProcessor
 								' `institution` = '.$db->quote($institution_id).','.
 								' `image` = '.(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : 'NULL,').
 								' `language` = '.$db->quote($language_id).','.
+								((!empty($category_ids)) ? ' `category` = '.$db->quote($category_ids).',' : '').
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
 								' `publisher` = '.((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : 'NULL,').
 								' `title` = '.$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).','.
@@ -544,10 +572,8 @@ class VideoFormProcessor extends FormProcessor
 											$resourceId=new Google_Service_YouTube_ResourceId();
 											$resourceId->setVideoId($current_video);
 											$resourceId->setKind('youtube#video');
-
 											# Get the playlists from the database.
 											$playlist_results=$db->get_results('SELECT `name`, `api` FROM `'.DBPREFIX.'categories` WHERE `api` IS NOT NULL');
-
 											# Loop through the database categories.
 											foreach($playlist_results as $playlist_row)
 											{
@@ -556,16 +582,13 @@ class VideoFormProcessor extends FormProcessor
 												{
 													# Decode the `api` field in the `categories` table.
 													$playlist_api_decoded=json_decode($playlist_row->api);
-
 													# Create a snippet with resource id.
 													$playlistItemSnippet=new Google_Service_YouTube_PlaylistItemSnippet();
 													$playlistItemSnippet->setPlaylistId($playlist_api_decoded->youtube_playlist_id);
 													$playlistItemSnippet->setResourceId($resourceId);
-
 													# Create a playlist item request request with snippet.
 													$playlistItem=new Google_Service_YouTube_PlaylistItem();
 													$playlistItem->setSnippet($playlistItemSnippet);
-
 													# Execute the request and return an object containing information about the new playlistItem.
 													$playlistItemResponse=$yt->PlaylistItemsInsert('snippet,contentDetails', $playlistItem);
 												}
@@ -1113,7 +1136,7 @@ class VideoFormProcessor extends FormProcessor
 					'API'=>$video_obj->getAPI(),
 					'Author'=>$video_obj->getAuthor(),
 					'Availability'=>$video_obj->getAvailability(),
-					'Category'=>$video_obj->getCategory(),
+					'Categories'=>$video_obj->getCategories(),
 					'ContID'=>$video_obj->getContID(),
 					'Date'=>$video_obj->getDate(),
 					'Description'=>$video_obj->getDescription(),
@@ -1121,7 +1144,7 @@ class VideoFormProcessor extends FormProcessor
 					'ImageID'=>$video_obj->getImageID(),
 					'Institution'=>$institution_id,
 					'Language'=>$language_id,
-					'Categories'=>$video_obj->getCategories(),
+					'Playlists'=>$video_obj->getPlaylists(),
 					'Publisher'=>$publisher_id,
 					'Title'=>$video_obj->getTitle(),
 					'Twitter'=>$populator->getTwitter(),
