@@ -173,6 +173,8 @@ elseif(!isset($_GET['select']))
 			{
 				# Set the option to the options array.
 				$youtube_categories[$option['id']]=$option['snippet']['title'];
+				//$youtube_categories[$option['id'].'-YouTube']=$option['snippet']['title'];
+				//$youtube_categories['{"YouTube":'.$option['id'].'}']=$option['snippet']['title'];
 			}
 			# Flip the categories.
 			$categories_flip=array_flip($categories);
