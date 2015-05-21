@@ -61,7 +61,7 @@ if(isset($_GET['create_playlist']))
 }
 elseif(!isset($_GET['select']))
 {
-	$head='';
+	$head=(!isset($head) ? '' : $head);
 	$select=FALSE;
 
 	$duplicates=$form_processor->getDuplicates();
