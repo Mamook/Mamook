@@ -29,7 +29,7 @@ $display='';
 $username=NULL;
 # Get the logged in User's ID.
 $id=$user_obj->findUserID();
-$head='<h3>Please use the form below to update your personal information!</h3>';
+$head='<h3 class="h-3">Please use the form below to update your personal information!</h3>';
 
 # Set the User data members.
 $user_obj->findUserData($username);
@@ -47,7 +47,7 @@ $img=$user_obj->getImg();
 $cv=$user_obj->getCV();
 if(!empty($img))
 {
-	$display_box1b.='<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
+	$display_box1b.='<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'"/></a>';
 }
 if(!empty($cv))
 {

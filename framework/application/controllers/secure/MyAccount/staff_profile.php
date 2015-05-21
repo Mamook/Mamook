@@ -25,7 +25,7 @@ $display_box2='';
 $display='';
 # Get the user's staff ID.
 $staff_id=$login->findStaffID();
-$head='<h3>Please use the form below to update your staff information!</h3>';
+$head='<h3 class="h-3">Please use the form below to update your staff information!</h3>';
 
 # Set the Staff data members.
 $staff_obj->getThisStaff($staff_id);
