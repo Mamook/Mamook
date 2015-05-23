@@ -754,7 +754,7 @@ class Staff
 					{
 						$profile_bio.='<span class="label">Biographical Information:</span>';
 					}
-					$profile_bio.=$text;
+					$profile_bio.='<span>'.$text.'</span>';
 					$profile_bio.='</span>';
 					# Set the biographical text XHTML to the display content array.
 					$display_content['text']=$profile_bio;
