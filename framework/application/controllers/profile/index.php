@@ -236,7 +236,7 @@ if(!isset($_GET['publisher']) && !isset($_GET['person']))
 # Set the meta discription for this page.
 $meta_desc='The profile for '.strip_tags($page_title).' on '.DOMAIN_NAME.'.';
 
-# Set the page title to the post's title.
+# Set the page title to the profile's title.
 $main_content->setPageTitle($page_title);
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
