@@ -432,7 +432,8 @@ class Institution
 					$institution->setInstitution($row->institution);
 					# Set the relevant Institution data members to local variables.
 					$institution_id=$institution->getID();
-					$institution_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $institution->getInstitution());
+					# Replace any tokens with their correlating value.
+					$institution_name=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $institution->getInstitution());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;

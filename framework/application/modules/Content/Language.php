@@ -473,7 +473,8 @@ class Language
 					$language->setISO($row->ISO);
 					# Set the relevant Language data members to local variables.
 					$language_id=$language->getID();
-					$language_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $language->getLanguage());
+					# Replace any tokens with their correlating value.
+					$language_name=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $language->getLanguage());
 					$language_iso=$language->getISO();
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;

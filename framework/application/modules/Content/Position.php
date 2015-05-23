@@ -405,8 +405,8 @@ class Position
 			$site_name=$main_content->getSiteName();
 			# Set the Position description to a variable.
 			$description=$row->description;
-			# Replace any domain tokens with the current domain name.
-			$description=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $description);
+			# Replace any tokens with their correlating value.
+			$description=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $description);
 			# Set Position link to the data member.
 			$this->setDescription($description);
 		}

@@ -152,8 +152,8 @@ class Comment
 			$content=html_entity_decode(stripslashes($content), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$content=trim($content);
-			# Replace any domain or site name tokens with the current domain name and site name.
-			$content=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $content);
+			# Replace any tokens with their correlating value.
+			$content=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $content);
 			# Set the data member.
 			$this->content=$content;
 		}

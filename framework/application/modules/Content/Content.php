@@ -233,9 +233,9 @@ class Content
 				$page_title=html_entity_decode(stripslashes($page_title), ENT_NOQUOTES, 'UTF-8');
 				# Clean it up.
 				$page_title=trim($page_title);
-				# Replace any domain tokens with the current domain name.
 			}
-			$page_title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $page_title);
+			# Replace any tokens with their correlating value.
+			$page_title=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $page_title);
 		}
 		else
 		{
@@ -265,8 +265,8 @@ class Content
 			$sub_title=html_entity_decode(stripslashes($sub_title), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$sub_title=trim($sub_title);
-			# Replace any domain tokens with the current domain name.
-			$this->sub_title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $sub_title);
+			# Replace any tokens with their correlating value.
+			$this->sub_title=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $sub_title);
 		}
 		else
 		{
@@ -1206,7 +1206,8 @@ class Content
 
 		if(!empty($text))
 		{
-			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
+			# Replace any tokens with their correlating value.
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $text);
 			$text='<div class="content-text">'.$text.'</div>';
 		}
 		return $text;

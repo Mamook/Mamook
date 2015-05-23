@@ -1044,8 +1044,8 @@ class SubContent extends Content
 			$text_trans=html_entity_decode(stripslashes($text_trans), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$text_trans=trim($text_trans);
-			# Replace any domain tokens with the current domain name.
-			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text_trans);
+			# Replace any tokens with their correlating value.
+			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $text_trans);
 		}
 		else
 		{
@@ -1123,8 +1123,8 @@ class SubContent extends Content
 			$title=$db->sanitize($title);
 			# Clean it up.
 			$title=trim($title);
-			# Replace any domain tokens with the current domain name.
-			$title=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $title);
+			# Replace any tokens with their correlating value.
+			$title=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $title);
 		}
 		else
 		{
@@ -2368,6 +2368,7 @@ class SubContent extends Content
 								# Set this Image object to a variable.
 								$image_obj=$this->getImageObj();
 								$image_cats=$image_obj->getCategories();
+								# Replace any domain name tokens with the current domain name.
 								$image_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $image_obj->getImage());
 								# Set the displayed image to a variable.
 								$image_content=$image_obj->displayImage(TRUE, NULL, NULL);
@@ -3772,8 +3773,8 @@ class SubContent extends Content
 			$site_name=$main_content->getSiteName();
 			# Set the SubContent link to a variable.
 			$link=$row->link;
-			# Replace any domain tokens with the current domain name.
-			$link=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $link);
+			# Replace any tokens with their correlating value.
+			$link=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $link);
 			# Set SubContent link to the data member.
 			$this->setLink($link);
 
@@ -3791,8 +3792,8 @@ class SubContent extends Content
 
 			# Set the SubContent text to a variable.
 			$text=$row->text;
-			# Replace any domain tokens with the current domain name.
-			$text=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text);
+			# Replace any tokens with their correlating value.
+			$text=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $text);
 			# Strip slashes and decode any html entities.
 			$text=((empty($text)) ? '' : html_entity_decode(stripslashes($text), ENT_COMPAT, 'UTF-8'));
 			# Convert new lines to <br />.
@@ -3823,8 +3824,8 @@ class SubContent extends Content
 
 			# Set the SubContent translated text to a variable.
 			$text_trans=$row->text_trans;
-			# Replace any domain tokens with the current domain name.
-			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $text_trans);
+			# Replace any tokens with their correlating value.
+			$text_trans=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $text_trans);
 			# Strip slashes and decode any html entities.
 			$text_trans=((empty($text_trans)) ? '' : html_entity_decode(stripslashes($text_trans), ENT_COMPAT, 'UTF-8'));
 			# Convert new lines to <br />.

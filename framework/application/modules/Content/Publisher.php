@@ -310,8 +310,8 @@ class Publisher
 			$info=html_entity_decode(nl2br(stripslashes($info)), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$info=trim($info);
-			# Replace any domain tokens with the current domain name.
-			$info=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $info);
+			# Replace any tokens with their correlating value.
+			$info=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $info);
 		}
 		else
 		{
@@ -835,10 +835,12 @@ class Publisher
 					$publisher->setInfo($row->info);
 					$publisher->setID($row->id);
 					$publisher->setPublisher($row->name);
-					# Set the relevant Publisher data members to local variables.
-					$publisher_info=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $publisher->getInfo());
+					/* Set the relevant Publisher data members to local variables. */
+					# Replace any tokens with their correlating value.
+					$publisher_info=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $publisher->getInfo());
 					$publisher_id=$publisher->getID();
-					$publisher_name=str_ireplace(array('%{domain_name}', '%{site_name}'), array(DOMAIN_NAME, $site_name), $publisher->getPublisher());
+					# Replace any tokens with their correlating value.
+					$publisher_name=str_ireplace(array('%{domain_name}', '%{site_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, $site_name, FW_POPUP_HANDLE), $publisher->getPublisher());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
