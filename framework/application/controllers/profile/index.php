@@ -259,6 +259,9 @@ if($login->checkAccess(MAN_USERS)===TRUE)
 	$display_box1a.=$cv_display;
 }
 
+# Add additional CSS documents. Add the media CSS for videos or audio in profiles.
+$doc->setStyle('media');
+
 /*
 ** In the page template we
 ** get the header
