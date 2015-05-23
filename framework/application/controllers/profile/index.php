@@ -191,7 +191,7 @@ if(!isset($_GET['publisher']) && !isset($_GET['person']))
 				$bad_url=Utility::removeIndex('http://'.FULL_URL).'&mail_error=true';
 
 				# Set the email form to a variable.
-				$head='<h3>Use the form below to ask '.$member['display_name'].' a question.</h3>';
+				$head='<h3 class="h-3">Use the form below to ask '.$member['display_name'].' a question.</h3>';
 
 				if(isset($_GET['success']) && ($_GET['success']=='yes'))
 				{
@@ -200,7 +200,7 @@ if(!isset($_GET['publisher']) && !isset($_GET['person']))
 
 				if(isset($_GET['mail_error']) && ($_GET['mail_error']=='true'))
 				{
-					$doc->setError('<h3>There was an error sending you\'re email...</h3>
+					$doc->setError('<h3 class="h-3">There was an error sending you\'re email...</h3>
 					Please make sure you entered your name and a valid email address. If it still isn\'t working, rest assured that the webmaster has received an email and will work out the issue as soon as possible. You may try again later. Thanks.');
 				}
 
