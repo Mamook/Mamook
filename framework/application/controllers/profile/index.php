@@ -53,8 +53,8 @@ elseif(isset($_GET['person']) && ($validator->isInt(trim($_GET['person']))===TRU
 	{
 		# Set the display xhtml to a variable for display to the user.
 		$display='<div id="profile" class="profile">';
-		$display.=$staff['affiliation'];
 		$display.=$staff['image'];
+		$display.=$staff['affiliation'];
 		# Count the number of positions held.
 		$num_position=count($staff['position']);
 		$position_fix='<span class="profile-position">'.
