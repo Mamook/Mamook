@@ -52,7 +52,7 @@ elseif(isset($_GET['person']) && ($validator->isInt(trim($_GET['person']))===TRU
 	if(!empty($staff))
 	{
 		# Set the display xhtml to a variable for display to the user.
-		$display='<div id="profile" class="profile post">';
+		$display='<div id="profile" class="profile">';
 		$display.=$staff['affiliation'];
 		$display.=$staff['image'];
 		# Count the number of positions held.
@@ -129,7 +129,7 @@ elseif(isset($_GET['publisher']))
 	if(!empty($publisher))
 	{
 		# Set the display xhtml to a variable for display to the user.
-		$display='<div id="profile" class="profile post">';
+		$display='<div id="profile" class="profile">';
 		$display.=$publisher['info'];
 		$display.=$publisher['contributor'];
 		$display.=$publisher['recent_contributor'];
