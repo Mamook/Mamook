@@ -373,8 +373,8 @@ class File extends Media
 				$file_row->setTitle($row->title);
 				$file_id=$file_row->getID();
 				# Set the relevant File data members to local variables.
-				$file_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $file_row->getFile());
-				$file_title=str_ireplace('%{domain_name}', DOMAIN_NAME, $file_row->getTitle());
+				$file_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getFile());
+				$file_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getTitle());
 				# Create empty variables for the edit and delete buttons.
 				$edit_content=NULL;
 				$delete_content=NULL;
@@ -750,8 +750,8 @@ class File extends Media
 					$file_row->setTitle($row->title);
 					$file_id=$file_row->getID();
 					# Set the relevant File data members to local variables.
-					$file_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $file_row->getFile());
-					$file_title=str_ireplace('%{domain_name}', DOMAIN_NAME, $file_row->getTitle());
+					$file_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getFile());
+					$file_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getTitle());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;

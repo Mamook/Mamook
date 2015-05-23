@@ -756,8 +756,8 @@ class User
 		{
 			# Clean it up and set the data member.
 			$interests=trim($interests);
-			# Replace any domain tokens with the current domain name.
-			$interests=str_ireplace('%{domain_name}', DOMAIN_NAME, $interests);
+			# Replace any tokens with their correlating value.
+			$interests=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $interests);
 			# Strip slashes and change new lines to <br />.
 			$interests=html_entity_decode(stripslashes($interests), ENT_NOQUOTES, 'UTF-8');
 		}
@@ -787,8 +787,8 @@ class User
 			$bio=html_entity_decode(stripslashes($bio), ENT_NOQUOTES, 'UTF-8');
 			# Clean it up.
 			$bio=trim($bio);
-			# Replace any domain tokens with the current domain name.
-			$bio=str_ireplace('%{domain_name}', DOMAIN_NAME, $bio);
+			# Replace any tokens with their correlating value.
+			$bio=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $bio);
 		}
 		else
 		{
@@ -866,8 +866,8 @@ class User
 		{
 			# Clean it up.
 			$website=trim($website);
-			# Replace any domain tokens with the current domain name.
-			$website=str_ireplace('%{domain_name}', DOMAIN_NAME, $website);
+			# Replace any tokens with their correlating value.
+			$website=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $website);
 		}
 		else
 		{
@@ -2787,9 +2787,7 @@ class User
 					$this->setActive($row->active);
 					$this->setAddress($row->address);
 					$this->setAddress2($row->address2);
-					# Replace any domain name tokens with the current domain name.
-					$bio=str_ireplace('%{domain_name}', DOMAIN_NAME, $row->bio);
-					$this->setBio($bio);
+					$this->setBio($row->bio);
 					$this->setCity($row->city);
 					$this->setCountry($row->country);
 					$this->setCV($row->cv);
@@ -2797,9 +2795,7 @@ class User
 					$this->setEmail($row->email);
 					$this->setFirstName($row->fname);
 					$this->setID($row->ID);
-					# Replace any domain name tokens with the current domain name.
-					$interests=str_ireplace('%{domain_name}', DOMAIN_NAME, $row->interests);
-					$this->setInterests($interests);
+					$this->setInterests($row->interests);
 					$this->setImg($row->img);
 					$this->setImgTitle($row->img_title);
 					$this->setIP($this->findIP());

@@ -670,10 +670,10 @@ class Image extends Media
 					$image->setTitle($row->title);
 					# Set the relevant Image data members to local variables.
 					$image_cats=$image->getCategories();
-					$image_desc=str_ireplace('%{domain_name}', DOMAIN_NAME, $image->getDescription());
+					$image_desc=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getDescription());
 					$image_id=$image->getID();
-					$image_name=str_ireplace('%{domain_name}', DOMAIN_NAME, $image->getImage());
-					$image_title=str_ireplace('%{domain_name}', DOMAIN_NAME, $image->getTitle());
+					$image_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getImage());
+					$image_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getTitle());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
@@ -869,8 +869,8 @@ class Image extends Media
 
 				# Set the image description to a variable.
 				$description=$image->description;
-				# Replace any domain tokens with the current domain name.
-				$description=str_ireplace('%{domain_name}', DOMAIN_NAME, $description);
+				# Replace any tokens with their correlating value.
+				$description=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $description);
 				# Strip slashes and decode any html entities.
 				$description=((empty($description)) ? '' : html_entity_decode(stripslashes($description), ENT_COMPAT, 'UTF-8'));
 				# Convert new lines to <br />.

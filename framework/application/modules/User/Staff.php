@@ -376,8 +376,8 @@ class Staff
 			$text=html_entity_decode(stripslashes($text), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$text=trim($text);
-			# Replace any donain tokens with the current domain name.
-			$text=str_ireplace('%{domain_name}', DOMAIN_NAME, $text);
+			# Replace any tokens with their correlating value.
+			$text=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $text);
 			# Set the data member.
 			$this->text=$text;
 		}

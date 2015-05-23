@@ -334,8 +334,8 @@ class Media
 			$content=html_entity_decode(stripslashes($content), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$content=trim($content);
-			# Replace any domain tokens with the current domain name.
-			$content=str_ireplace('%{domain_name}', DOMAIN_NAME, $content);
+			# Replace any tokens with their correlating value.
+			$content=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $content);
 			# Set the data member.
 			$this->content=$content;
 		}
@@ -526,8 +526,8 @@ class Media
 			$description=html_entity_decode(stripslashes($description), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$description=trim($description);
-			# Replace any domain tokens with the current domain name.
-			$description=str_ireplace('%{domain_name}', DOMAIN_NAME, $description);
+			# Replace any tokens with their correlating value.
+			$description=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $description);
 			# Set the data member.
 			$this->description=$description;
 		}
@@ -847,8 +847,8 @@ class Media
 		{
 			# Clean it up.
 			$link=trim($link);
-			# Replace any domain tokens with the current domain name.
-			$link=str_ireplace('%{domain_name}', DOMAIN_NAME, $link);
+			# Replace any tokens with their correlating value.
+			$link=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $link);
 			# Set the data member.
 			$this->link=$link;
 		}
@@ -1087,8 +1087,8 @@ class Media
 		{
 			# Clean it up.
 			$purchase_link=trim($purchase_link);
-			# Replace any domain tokens with the current domain name.
-			$purchase_link=str_ireplace('%{domain_name}', DOMAIN_NAME, $purchase_link);
+			# Replace any tokens with their correlating value.
+			$purchase_link=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $purchase_link);
 			# Set the data member.
 			$this->purchase_link=$purchase_link;
 		}

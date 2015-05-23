@@ -1,6 +1,10 @@
 <?php /* Requires PHP5+ */
 
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
+
 
 /**
  * Contributor
@@ -25,12 +29,6 @@ class Contributor extends User
 	protected $user=NULL;
 
 	/*** End data members ***/
-
-
-
-	/*** magic methods ***/
-
-	/*** End magic methods ***/
 
 
 

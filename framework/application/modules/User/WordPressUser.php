@@ -3,6 +3,7 @@
 # Get the parent User class.
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
 
+
 /**
  * WordPressUser
  *
