@@ -57,7 +57,8 @@ a {
 a:hover,
 .list-nav-1.here > a,
 .list-nav-3.here > a,
-.list-nav-3 > a:hover {
+.list-nav-3 > a:hover,
+.pagenavigator .inactive {
 	color:#09c;
 	text-shadow:0 0 5px #05698a;
 }
@@ -79,12 +80,28 @@ a:hover,
 #wrapper {
 	position:relative;
 	clear:left;
-	background:#b5c4f6 url(../images/secure-bg.png) no-repeat top center;
+	background:transparent url(../images/secure-bg.png) no-repeat top center;
 	max-width:1018px;
 	min-height:100%;
 	margin:0 auto;
 	border:0;
 	text-align:left;
+}
+#wrapper:before {
+	content:'';
+	display:block;
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background:#b5c4f6;
+	background:-moz-linear-gradient(left, rgba(129, 183, 203, 1) 0%, rgba(129, 183, 207, 1) 8%, rgba(127, 190, 210, 1) 14%, rgba(168, 212, 240, 01) 40%, rgba(172, 212, 243, 1) 51%, rgba(187, 205, 251, 1) 75%, rgba(182, 202, 251, 1) 85%, rgba(178, 199, 249, 1) 88%, rgba(175, 199, 249, 1) 100%);
+	background:-webkit-gradient(linear, left top, right top, color-stop(0%, rgba(129, 183, 203, 1)), color-stop(8%, rgba(129, 183, 207, 1)), color-stop(14%, rgba(127, 190, 210, 1)), color-stop(40%, rgba(168, 212, 240, 01)), color-stop(51%, rgba(187, 205, 251, 1)), color-stop(75%, rgba(187, 205, 251, 1)), color-stop(85%, rgba(182, 202, 251, 1)), color-stop(88%, rgba(178, 199, 249, 1)), color-stop(100%, rgba(175, 199, 249, 1)));
+	background:-webkit-linear-gradient(left, rgba(129, 183, 203, 1) 0%, rgba(129, 183, 207, 1) 8%, rgba(127, 190, 210, 1) 14%, rgba(168, 212, 240, 01) 40%, rgba(172, 212, 243, 1) 51%, rgba(187, 205, 251, 1) 75%, rgba(182, 202, 251, 1) 85%, rgba(178, 199, 249, 1) 88%, rgba(175, 199, 249, 1) 100%);
+	background:-o-linear-gradient(left, rgba(129, 183, 203, 1) 0%, rgba(129, 183, 207, 1) 8%, rgba(127, 190, 210, 1) 14%, rgba(168, 212, 240, 01) 40%, rgba(172, 212, 243, 1) 51%, rgba(187, 205, 251, 1) 75%, rgba(182, 202, 251, 1) 85%, rgba(178, 199, 249, 1) 88%, rgba(175, 199, 249, 1) 100%);
+	background:linear-gradient(to right, rgba(129, 183, 203, 1) 0%, rgba(129, 183, 207, 1) 8%, rgba(127, 190, 210, 1) 14%, rgba(168, 212, 240, 01) 40%, rgba(172, 212, 243, 1) 51%, rgba(187, 205, 251, 1) 75%, rgba(182, 202, 251, 1) 85%, rgba(178, 199, 249, 1) 88%, rgba(175, 199, 249, 1) 100%);
+	z-index:-1;
 }
 
 
