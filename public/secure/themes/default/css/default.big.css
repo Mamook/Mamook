@@ -1,7 +1,4 @@
-/*! GENERATED FILE! DO NOT MODIFY! !*/
-
 @charset "UTF-8";
-
 
 /*CSS3 Document*/
 
@@ -484,6 +481,18 @@ img {
 	font:bold 12px/14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#000;
 }
+.profile .label,
+.profile .label + span {
+	display:inline-block;
+	min-width:60px;
+}
+.profile .label:after {
+	content:' ';
+}
+[class|=profile] .label + span {
+	vertical-align:top;
+	max-width:140px;
+}
 .post-author {
 	display:inline-block;
 	border:1px solid #5e5e5e;
@@ -530,6 +539,9 @@ img {
 	display:block;
 	clear:both;
 	padding:5px 0;
+}
+.profile-bio .label + span {
+	max-width:100%;
 }
 .profile-bio .label {
 	display:block;
