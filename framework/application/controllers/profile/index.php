@@ -124,7 +124,6 @@ elseif(isset($_GET['publisher']))
 	$pub=new Publisher();
 	# Get the Publisher display XHTML and set it to a variable.
 	$publisher=$pub->displayPublisher($value, $id);
-	print_r($publisher);exit;
 	# Check if there was a publisher to display.
 	if(!empty($publisher))
 	{
