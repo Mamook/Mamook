@@ -113,6 +113,8 @@ class AccountFormProcessor extends FormProcessor
 			}
 			# Set the user's phone to a variable.
 			$phone=$user_obj->getPhone();
+			# Set the user's region to a variable.
+			$region=$user_obj->getRegion();
 			# Set the site name to a vaiable.
 			$site_name=$main_content->getSiteName();
 			# Set the user's state to a variable.
