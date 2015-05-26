@@ -11,7 +11,7 @@ $user_obj=$populator->getUserObject();
 # Do we need some javascripts? (Use the script video name before the ".js".)
 $doc->setJavaScripts('uniform,bsmSelect');
 # Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple');
+$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple,removeCurrentItem');
 
 $display.='<div id="profile_form" class="form">';
 # create and display form
@@ -97,6 +97,15 @@ $fg->addFormPart('<ul>');
 $fg->addFormPart('<li>');
 $fg->addFormPart('<label class="label" for="cv">Curriculum Vitae (CV)</label>');
 $fg->addElement('file', array('name'=>'cv', 'id'=>'cv'));
+$cv=$user_obj->getCV();
+if(!empty($cv))
+{
+	$fg->addFormPart('<div class="file-current">');
+	$fg->addFormPart('<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download your current cv">'.$cv.'</a>');
+	$fg->addElement('hidden', array('name'=>'_cv_current', 'value'=>$cv));
+	$fg->addFormPart('<a class="remove" href="?removeFile='.$cv.'" title="Remove your current cv.">X</a>');
+	$fg->addFormPart('</div>');
+}
 $fg->addFormPart('</li>');
 $fg->addFormPart('<li>');
 $fg->addFormPart('<label class="label" for="interests">Interests</label>');
@@ -113,7 +122,16 @@ $fg->addElement('textarea', array('name'=>'bio', 'text'=>$user_obj->getBio(), 'i
 $fg->addFormPart('</li>');
 $fg->addFormPart('<li>');
 $fg->addFormPart('<label class="label" for="image">Image</label>');
-$fg->addElement('file', array('name'=>'image', 'value'=>$user_obj->getImg(), 'id'=>'image'));
+$img=$user_obj->getImg();
+$fg->addElement('file', array('name'=>'image', 'value'=>$img, 'id'=>'image'));
+if(!empty($img))
+{
+	$fg->addFormPart('<div class="file-current">');
+	$fg->addFormPart('<a href="'.IMAGES.'original/'.$img.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$img.'" alt="'.$user_obj->getImgTitle().'" /><span>'.$img.' - "'.$user_obj->getImgTitle().'"</span></a>');
+	$fg->addElement('hidden', array('name'=>'_image_current', 'value'=>$img));
+	$fg->addFormPart('<a class="remove" href="?removeFile='.$img.'" title="Remove your current profile image.">X</a>');
+	$fg->addFormPart('</div>');
+}
 $fg->addFormPart('</li>');
 $fg->addFormPart('<li>');
 $fg->addFormPart('<label class="label" for="imgTitle">Image Caption</label>');
