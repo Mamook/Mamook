@@ -1115,7 +1115,7 @@ class VideoFormProcessor extends FormProcessor
 			# If the video type file.
 			if($video_type=='file')
 			{
-				# Set the sessen key is FileName.
+				# Set the session key to FileName.
 				$file_embed='FileName';
 				# Set the value of $file_embed.
 				$file_name=$video_obj->getFileName();

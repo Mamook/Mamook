@@ -18,7 +18,7 @@ $video_date=date('Y-m-d'); # Set the default to todays date.
 $video_description=NULL;
 $video_embed_code=NULL;
 $video_facebook='post'; # Set the default to "post" to Facebook.
-$video_file_name=NULL;
+$video_file_name='';
 $video_image_id=NULL;
 $video_institution=9; # Set the default to "Other" (9)
 $video_language=3; # Set the default to "English" (3)
@@ -32,7 +32,7 @@ $video_unique=0; # Set the default to "Not Unique" (0)
 $video_video_type='file';
 $video_year=date('Y'); # Set the default year that the video was originally published to the current year.
 
-$max_file_size=2147483648; # Set the default max file size in bytes to "2147483648" (2GB).
+$max_file_size=1073741824; # Set the default max file size in bytes to "1073741824" (1GB).
 
 # Check if there is GET data called "video".
 if(isset($_GET['video']))
