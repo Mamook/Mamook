@@ -499,7 +499,7 @@ elseif(!isset($_GET['select']))
 		$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li class="mult">');
-		$fg->addFormPart('<label class="label" for="playlist"><span class="required">*</span> Playlist</label>');
+		$fg->addFormPart('<label class="label" for="playlist"> Playlist</label>');
 		$fg->addElement('select', array('name'=>'playlist[]', 'multiple'=>'multiple', 'title'=>'Select a Playlist', 'id'=>'playlist'), $playlist_options);
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
