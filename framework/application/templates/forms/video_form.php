@@ -494,14 +494,10 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
 		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$video_obj->getDescription()), '', NULL, 'textarea');
 		$fg->addFormPart('</li>');
-		# Check if the YouTube credentials are available.
-		if(YOUTUBE_CLIENT_ID!=='')
-		{
-			$fg->addFormPart('<li>');
-			$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> YouTube Category</label>');
-			$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
-			$fg->addFormPart('</li>');
-		}
+		$fg->addFormPart('<li>');
+		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Category</label>');
+		$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
+		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li class="mult">');
 		$fg->addFormPart('<label class="label" for="playlist"><span class="required">*</span> Playlist</label>');
 		$fg->addElement('select', array('name'=>'playlist[]', 'multiple'=>'multiple', 'title'=>'Select a Playlist', 'id'=>'playlist'), $playlist_options);
