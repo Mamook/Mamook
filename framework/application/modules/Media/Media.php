@@ -183,6 +183,7 @@ class Media
 	 */
 	public function setCategories($value)
 	{
+		//print_r($value);
 		# Create an empty array to hold the categories.
 		$categories=array();
 		# Check if the passed value if empty.
@@ -200,7 +201,55 @@ class Media
 				# Trim any dashes (-) off both ends of the string .
 				$value=trim($value, '-');
 				# Explode the array to an array separated with dashes (-).
-				$value=explode('-', $value);
+				$categories_array=explode('-', $value);
+			}
+			else
+			{
+				# Create an empty array to hold the categories.
+				$categories_array=$value;
+				# NOTE! Logic will need to be changed a little when we add more API's.
+				if(YOUTUBE_CLIENT_ID!=='')
+				{
+					# Get the Video class.
+					$video_obj=$this->getVideoObject();
+					# Get the YouTube instance. Starts the YouTubeService if it's not already started.
+					$yt=$video_obj->getYouTubeObject();
+					# Loop through the category array.
+					foreach($value as $category)
+					{
+						# If "YouTube" exists in the string.
+						if(strpos($category, 'YouTube')!==FALSE)
+						{
+							# Remove "-YouTube" from the string.
+							$category_id=str_replace('-YouTube', '', $category);
+							# Check if the value is an integer.
+							if($validator->isInt($category_id))
+							{
+								# Get all the YouTube categories.
+								$youtube_category=$yt->listVideoCategories('snippet', array('id'=>$category_id));
+								# Set the YouTube Category ID to an array.
+								$api_array['YouTube']['category_id']=$category_id;
+								# Convert the api array to JSON.
+								$api=json_encode($api_array, JSON_FORCE_OBJECT);
+								# Set the category title to a variable.
+								$name=$youtube_category['items'][0]['snippet']['title'];
+								# Insert the category into the database.
+								$db->query('INSERT INTO `'.DBPREFIX.'categories` ('.
+									'`name`, '.
+									'`api`'.
+									') VALUES ('.
+									$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
+									$db->quote($api).
+									')'
+								);
+								# Assign the image ID to a variable.
+								$category_id=$db->get_insert_id();
+								# Assign the new category ID to an array.
+								$categories_array=array($category_id);
+							}
+						}
+					}
+				}
 			}
 			# Get the Category class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
@@ -209,7 +258,7 @@ class Media
 			# Create a variable to hold the "WHERE" clause.
 			$where_clause=array();
 			# Loop through the $value array to build the "WHERE" clause.
-			foreach($value as $category_value)
+			foreach($categories_array as $category_value)
 			{
 				# Set the default field name to search the categories tablee as "category".
 				$field_name='name';
@@ -236,49 +285,7 @@ class Media
 					$categories[$single_category->id]=$single_category->name;
 				}
 			}
-			/*
-			else
-			{
-				if(YOUTUBE_CLIENT_ID!=='')
-				{
-					# Get the Video class.
-					$video_obj=$this->getVideoObject();
-					# Get the YouTube instance. Starts the YouTubeService if it's not already started.
-					$yt=$video_obj->getYouTubeObject();
-					# Loop through the categories.
-					foreach($value as $category_value)
-					{
-						# Check if the value is an integer.
-						if($validator->isInt($category_value))
-						{
-							# Get all the YouTube categories.
-							$youtube_category=$yt->listVideoCategories('snippet', array('id'=>$category_value));
-							# Set the YouTube Category ID to an array.
-							$api_array['YouTube']['category_id']=$category_value;
-							# Convert the api array to JSON.
-							$api=json_encode($api_array, JSON_FORCE_OBJECT);
-							# Set the category title to a variable.
-							$name=$youtube_category['items'][0]['snippet']['title'];
-							# Insert the category into the database.
-							$db->query('INSERT INTO `'.DBPREFIX.'categories` ('.
-								'`name`, '.
-								'`api`'.
-								') VALUES ('.
-								$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
-								$db->quote($api).
-								')'
-							);
-							# Assign the image ID to a variable.
-							$category_id=$db->get_insert_id();
-							# Set the category name and id to the $categories array.
-							$categories[$category_id]=$name;
-						}
-					}
-				}
-			}
-			*/
 		}
-		//print_r($categories);
 		# Set the data member.
 		$this->categories=$categories;
 	} #==== End -- setCategories

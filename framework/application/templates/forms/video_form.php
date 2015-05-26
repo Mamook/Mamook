@@ -117,43 +117,6 @@ elseif(!isset($_GET['select']))
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 		# Instantiate a new Category object.
 		$category_obj=new Category();
-		/*
-		# Set the current categories to a variable.
-		$video_categories=array_flip((array)$video_obj->getCategories());
-		if(empty($video_categories))
-		{
-			foreach($video_categories as $category_name=>$category_id)
-			{
-				print_r($category_name);exit;
-				# Retreive the categories in as single call.
-				if($category_obj->getThisCategory($category_name, FALSE)===FALSE)
-				{
-					if(YOUTUBE_CLIENT_ID!=='')
-					{
-						# Get the YouTube instance. Starts the YouTubeService if it's not already started.
-						$yt=$video_obj->getYouTubeObject();
-						# Get all the YouTube categories.
-						$youtube_category=$yt->listVideoCategories('snippet', array('id'=>$category_id));
-						# Set the YouTube Category ID to an array.
-						$api_array['YouTube']['category_id']=$category_id;
-						# Convert the api array to JSON.
-						$api=json_encode($api_array, JSON_FORCE_OBJECT);
-						# Set the category title to a variable.
-						$name=$youtube_category['items'][0]['snippet']['title'];
-						# Insert the category into the database.
-						$db->query('INSERT INTO `'.DBPREFIX.'categories` ('.
-							'`name`, '.
-							'`api`'.
-							') VALUES ('.
-							$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $name))).', '.
-							$db->quote($api).
-							')'
-						);
-					}
-				}
-			}
-		}
-		*/
 		# get the categories from the `categories` table.
 		$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
 		# Set the categories to a variable.
@@ -172,24 +135,19 @@ elseif(!isset($_GET['select']))
 			foreach($all_youtube_categories['items'] as $option)
 			{
 				# Set the option to the options array.
-				$youtube_categories[$option['id']]=$option['snippet']['title'];
-				//$youtube_categories[$option['id'].'-YouTube']=$option['snippet']['title'];
-				//$youtube_categories['{"YouTube":'.$option['id'].'}']=$option['snippet']['title'];
+				$youtube_categories[$option['id'].'-YouTube']=$option['snippet']['title'];
+				# NOTE! This causes problems with the value quotations in the option tag.
+				//$youtube_categories['{"YouTube":{"category_id":"'.$option['id'].'"}}']=$option['snippet']['title'];
 			}
 			# Flip the categories.
 			$categories_flip=array_flip($categories);
 			# Flip the YouTube categories.
 			$youtube_categories_flip=array_flip($youtube_categories);
-			# NOTE! array_merge() overwrites the the previous key.
-			# 	Example: The Education category in our `category` table is ID 25.
-			#	ID 25 in the YoUTube category is News & Politics.
-			#	So the News & Politics category would not show up in the options unless it was in our database. This is a problem for new videos.
 			# Merge $categories with the YouTube categories.
 			$categories=array_merge($youtube_categories_flip, $categories_flip);
 		}
 		# Set the current categories to a variable.
 		$video_categories=array_flip((array)$video_obj->getCategories());
-		//print_r($video_categories);
 		# Loop through the categories.
 		foreach($categories as $category_name=>$category_id)
 		{
@@ -199,7 +157,7 @@ elseif(!isset($_GET['select']))
 			if(!empty($video_categories))
 			{
 				# Check if the current category is default or has been selected by the user.
-				if(in_array($category_id, $video_categories)===TRUE)
+				if(in_array($category_id, $video_categories, TRUE)===TRUE)
 				{
 					# Set the selected category to the default.
 					$category_options['selected']=$category_name;
