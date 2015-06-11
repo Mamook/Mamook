@@ -637,15 +637,15 @@ class Email
 			# Get the Utility Class.
 			require_once UTILITY_CLASS;
 			# Get the PHPMailer class.
-			require_once Utility::locateFile(MODULES.'Email'.DS.'phpMailer'.DS.'class.phpmailer.php');
+			require_once Utility::locateFile(MODULES.'Email'.DS.'phpMailer'.DS.'PHPMailerAutoload.php');
 			# Instantiate a new PHPMailer object.
-			$mail=new PHPMailer(TRUE);
+			$mail=new PHPMailer;
 
 			# Check if SMTP is enabled.
 			if(USE_SMTP===TRUE)
 			{
 				$mail->SMTPDebug=0;
-				$mail->IsSMTP(TRUE);
+				$mail->IsSMTP();
 				$mail->SMTPAuth=TRUE;
 				$mail->Host=SMTP_HOST;
 				$mail->Port=SMTP_PORT;
@@ -671,7 +671,7 @@ class Email
 				$mail->AddAttachment($attachment);
 			}
 
-			if(!$mail->Send())
+			if(!$mail->send())
 			{
 				if(RUN_ON_DEVELOPMENT)
 				{
