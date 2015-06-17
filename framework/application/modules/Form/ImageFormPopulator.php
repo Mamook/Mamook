@@ -11,6 +11,7 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormPopulator.php');
  * ImageFormPopulator
  *
  * The ImageFormPopulator Class is used populate image select, upload, edit, or delete forms.
+ *
  */
 class ImageFormPopulator extends FormPopulator
 {
@@ -71,10 +72,11 @@ class ImageFormPopulator extends FormPopulator
 	/**
 	 * populateImageForm
 	 *
-	 * Populates an image form.
+	 * Populates a image form with content from the `images` table in the databse using the id passed
+	 * via GET data, default image data, values passed via POST, or saved SESSION data.
 	 *
-	 * @param		$data		An array of values to populate the form with.
-	 * @access					public
+	 * @param	$data					An array of values to populate the form with.
+	 * @access	public
 	 */
 	public function populateImageForm($data=array())
 	{
@@ -83,9 +85,9 @@ class ImageFormPopulator extends FormPopulator
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image=new Image();
+			$image_obj=new Image();
 			# Set the Image object to the image data member for use outside of this method.
-			$this->setImageObject($image);
+			$this->setImageObject($image_obj);
 
 			# Set the passed data array to the data member.
 			$this->setData($data);
@@ -128,10 +130,10 @@ class ImageFormPopulator extends FormPopulator
 			{
 				# Set the data array to a local variable.
 				$data=$this->getData();
+				# Set the Validator instance to a variable.
+				$validator=Validator::getInstance();
 
-				# Capture POST data.
-
-				# Check if the Image category was passed via POST data.
+				# Check if the category was passed via POST data.
 				if(isset($_POST['category']))
 				{
 					# Check if the category option "add" was passed in POST data.
@@ -142,7 +144,7 @@ class ImageFormPopulator extends FormPopulator
 						# Set "add" to the "CategoryOption" index of the data array.
 						$data['CategoryOption']='add';
 					}
-					# Set the Image categories data member.
+					# Set the categories data member.
 					$data['Categories']=$_POST['category'];
 				}
 

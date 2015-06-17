@@ -32,7 +32,6 @@ class Audio extends Media
 	private $audio_type=NULL;
 	private $audio_url=NULL;
 	private $confirmation_template=NULL;
-	private $embed=NULL;
 	private $embed_code=NULL;
 	private $file_name=NULL;
 	private $is_playlist=FALSE;
@@ -50,18 +49,18 @@ class Audio extends Media
 	 *
 	 * Sets the data member $all_audio.
 	 *
-	 * @param	$all_audio					May be an array or a string. The method makes it into an array regardless.
+	 * @param	$audio					May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
-	protected function setAllAudio($all_audio)
+	protected function setAllAudio($audio)
 	{
 		# Check if the passed value is empty.
-		if(!empty($all_audio))
+		if(!empty($audio))
 		{
 			# Explicitly make it an array.
-			$all_audio=(array)$all_audio;
+			$audio=(array)$audio;
 			# Set the data member.
-			$this->all_audio=$all_audio;
+			$this->all_audio=$audio;
 		}
 		else
 		{
@@ -168,42 +167,6 @@ class Audio extends Media
 	} #==== End -- setConfirmationTemplate
 
 	/**
-	 * setEmbed
-	 *
-	 * Set the data member $embed.
-	 * Converts string to UTF-8. If the string is HTML then it strips the HTML and get's the first URL.
-	 * Then it get's the value after the last slash (/) in the URL which will be the Audio ID (on Soundcloud).
-	 *
-	 * @param	string $embed_code
-	 * @access	public
-	 */
-	public function setEmbed($embed_code)
-	{
-		# Check if the passed value is empty.
-		if(!empty($embed_code))
-		{
-			# Clean it up.
-			$embed_code=htmlspecialchars(str_replace('"', '', $embed_code), ENT_COMPAT, 'UTF-8');
-
-			# Is $embed_code an HTML tag?
-			if($embed_code==strip_tags($embed_code))
-			{
-				# Extract the first URL from $embed.
-				preg_match('/\b(?:(?:https?):\/\/|www\.)[-A-Z0-9+&@#\/%=~_|$?!:,.]*[A-Z0-9+&@#\/%=~_|$]/i', $embed_code, $matches);
-				# Get's the value after the last slash in the URL (which will be the Soundcloud Audio ID).
-				$embed=substr(strrchr(rtrim($matches[0], '/'), '/'), 1);
-			}
-			# Set the data member.
-			$this->embed=$embed;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->embed=NULL;
-		}
-	} #==== End -- setEmbed
-
-	/**
 	 * setEmbedCode
 	 *
 	 * Sets the data member $embed_code.
@@ -220,16 +183,14 @@ class Audio extends Media
 			$embed_code=html_entity_decode(stripslashes($embed_code), ENT_COMPAT, 'UTF-8');
 			# Clean it up.
 			$embed_code=trim($embed_code);
-			# Get the audio ID from the $emebed_code.
-			$this->setEmbed($embed_code);
-			# Set the data member.
-			$this->embed_code=$embed_code;
 		}
 		else
 		{
-			# Explicitly set the data member to NULL.
-			$this->embed_code=NULL;
+			# Explicitly set the value to NULL.
+			$embed_code=NULL;
 		}
+		# Set the data member.
+		$this->embed_code=$embed_code;
 	} #==== End -- setEmbedCode
 
 	/**
@@ -264,8 +225,8 @@ class Audio extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param		$id						Integer			A numeric ID representing the audio.
-	 * @param		$media_type		String			The type of media that the ID represents. Default is "audio".
+	 * @param	int $id					A numeric ID representing the audio.
+	 * @param	string $media_type		The type of media that the ID represents. Default is "audio".
 	 * @access	public
 	 */
 	public function setID($id, $media_type='audio')
@@ -320,32 +281,6 @@ class Audio extends Media
 			$this->soundcloud_obj=NULL;
 		}
 	} #==== End -- setSoundcloudObject
-
-	/**
-	 * setThumbnail
-	 *
-	 * Sets the data member $thumbnail.
-	 *
-	 * @param	$thumbnail
-	 * @access	public
-	 */
-	public function setThumbnail($thumbnail)
-	{
-		# Check if the passed value is empty.
-		if(!empty($thumbnail))
-		{
-			# Clean it up.
-			$thumbnail=trim($thumbnail);
-
-			# Set the data member.
-			$this->thumbnail=$thumbnail;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->thumbnail=NULL;
-		}
-	} #==== End -- setThumbnail
 
 	/**
 	 * setThumbnailUrl
@@ -440,18 +375,6 @@ class Audio extends Media
 	} #==== End -- getConfirmationTemplate
 
 	/**
-	 * getEmbed
-	 *
-	 * Gets the data member $embed
-	 *
-	 * @access	public
-	 */
-	public function getEmbed()
-	{
-		return $this->embed;
-	} #==== End -- getEmbed
-
-	/**
 	 * getEmbedCode
 	 *
 	 * Gets the data member $embed_code
@@ -527,18 +450,6 @@ class Audio extends Media
 		}
 		return $this->soundcloud_obj;
 	} #==== End -- getSoundcloudObject
-
-	/**
-	 * getThumbnail
-	 *
-	 * Returns the data member $thumbnail.
-	 *
-	 * @access	public
-	 */
-	public function getThumbnail()
-	{
-		return $this->thumbnail;
-	} #==== End -- getThumbnail
 
 	/**
 	 * getThumbnailUrl
@@ -715,9 +626,45 @@ class Audio extends Media
 					$file_handler=new FileHandler();
 					# Remove the file extension.
 					$audio_name_no_ext=substr($audio_name, 0, strrpos($audio_name, '.'));
-					# Delete the audio.
-					if(($file_handler->deleteFile(AUDIO_PATH.'files'.DS.$audio_name_no_ext.'.mp3')===TRUE) && ($file_handler->deleteFile(BODEGA.'audio'.DS.$audio_name)===TRUE))
+					# If $audio_name is not set then there shouldn't be a copy on the server.
+					if(!empty($audio_name))
 					{
+						# Delete the audio.
+						if(($file_handler->deleteFile(AUDIO_PATH.'files'.DS.$audio_name_no_ext.'.mp3')===TRUE) && ($file_handler->deleteFile(BODEGA.'audio'.DS.$audio_name)===TRUE))
+						{
+							try
+							{
+								# Delete the audio from the `audio` table.
+								$deleted=$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
+								# Set a nice message to display to the user.
+								$_SESSION['message']='The audio '.$audio_name.' was successfully deleted.';
+								# Redirect the user back to the page without GET or POST data.
+								$doc->redirect($redirect);
+								# If there is no redirect, return TRUE.
+								return TRUE;
+							}
+							catch(ezDB_Error $ez)
+							{
+								throw new Exception('Error occured: ' . $ez->message . ', but the audio file itself was deleted.<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+							}
+							catch(Exception $e)
+							{
+								throw $e;
+							}
+						}
+						else
+						{
+							# Set a message to display to the user.
+							$_SESSION['message']='That was not a valid audio for deletion.';
+							# Redirect the user back to the page without GET or POST data.
+							$doc->redirect($redirect);
+						}
+					}
+					else
+					{
+						# Set the video's name data member to a local variable.
+						$audio_name=$this->getTitle();
+						# Delete the video.
 						try
 						{
 							# Delete the audio from the `audio` table.
@@ -731,19 +678,12 @@ class Audio extends Media
 						}
 						catch(ezDB_Error $ez)
 						{
-							throw new Exception('Error occured: ' . $ez->message . ', but the audio file itself was deleted.<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+							throw new Exception('Error occured: ' . $ez->message . ', but the audio itself was deleted.<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
 						}
 						catch(Exception $e)
 						{
 							throw $e;
 						}
-					}
-					else
-					{
-						# Set a message to display to the user.
-						$_SESSION['message']='That was not a valid audio for deletion.';
-						# Redirect the user back to the page without GET or POST data.
-						$doc->redirect($redirect);
 					}
 				}
 				else
@@ -1049,12 +989,10 @@ class Audio extends Media
 				$value=$this->getFileName();
 			}
 			# Get the audio info from the database.
-			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `category`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($audio!==NULL)
 			{
-				# Set the audio name to the data member.
-				$this->setID($audio->id);
 				# Set the audio API to the data member.
 				$this->setAPI($audio->api);
 				# Set the audio author to the data member.
@@ -1071,6 +1009,8 @@ class Audio extends Media
 				$this->setDescription($audio->description);
 				# Set the audio name to the data member.
 				$this->setFileName($audio->file_name);
+				# Set the audio name to the data member.
+				$this->setID($audio->id);
 				# Set the audio's image ID to the data member.
 				$this->setImageID($audio->image);
 				# Pass the audio institution id to the setInstitution method, thus setting the data member with the institution name.
@@ -1085,7 +1025,7 @@ class Audio extends Media
 				$this->setTitle($audio->title);
 				# Set the audio publish year to the data member.
 				$this->setYear($audio->year);
-				return $audio;
+				return TRUE;
 			}
 			# Return FALSE because the audio wasn't in the table.
 			return FALSE;
@@ -1263,7 +1203,6 @@ class Audio extends Media
 			{
 				# Remove the file extension.
 				$file_name_no_ext=substr($large_audio[0]->file_name, 0, strrpos($large_audio[0]->file_name, '.'));
-
 				# Create audio_url variable.
 				$audio_url=AUDIO_URL.'files'.DS.$file_name_no_ext.'.mp3';
 			}

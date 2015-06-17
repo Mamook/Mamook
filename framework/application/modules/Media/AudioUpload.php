@@ -69,13 +69,6 @@ $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 $session=Utility::returnSessionData($session_id, $session_path);
 $audio_data=$session['audio_upload'];
 
-# Get the Audio Class.
-//require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
-# Instantiate the new Audio object.
-//$audio_obj=new Audio();
-# Get the Soundcloud instance. Starts the SoundcloudService if it's not already started.
-//$soundcloud_obj=$audio_obj->getSoundcloudObject(FULL_DOMAIN);
-
 # If there is an audio file.
 if(!empty($audio_data['FileName']))
 {
@@ -140,38 +133,4 @@ if(!empty($audio_data['FileName']))
 			}
 		}
 	}
-	/*
-	# Want to move editing audio here.
-	elseif(isset($audio_data['ID']))
-	{
-		# Get new uploaded videos from the database.
-		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id` = '.$video_data['ID']);
-
-		# Decode the `api` field.
-		$api_decoded=json_decode($video_row->api);
-		# Get the YouTube Video ID.
-		$video_yt_id=$api_decoded->youtube_id;
-
-		# Create a video list request.
-		$listResponse=$yt->listVideos('snippet,status', array('id' => $video_yt_id));
-		$videoList=$listResponse['items'];
-
-		# Since a unique video id is given, it will only return 1 video.
-		$video=$videoList[0];
-
-		# Associate the snippet and status objects with a new video resource.
-		$google_video=new Google_Service_YouTube_Video();
-		$google_video->setSnippet($google_video_snippet);
-		$google_video->setStatus($google_video_status);
-
-		# Setting the defer flag to true tells the client to return a request which can be called
-		# with ->execute(); instead of making the API call immediately.
-		$client->setDefer(TRUE);
-
-		$update_response=$yt->updateVideo('snippet,status', $updateVideo);
-
-		# If you want to make other calls after the file upload, set setDefer back to false
-		$client->setDefer(FALSE);
-	}
-	*/
 }

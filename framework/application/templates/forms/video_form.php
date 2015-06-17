@@ -127,6 +127,8 @@ elseif(!isset($_GET['select']))
 			# Create an option for each category.
 			$categories[$row->id]=$row->name;
 		}
+		# Flip the categories.
+		$categories=array_flip($categories);
 		if(YOUTUBE_CLIENT_ID!=='')
 		{
 			# Get all the YouTube categories.
@@ -136,15 +138,11 @@ elseif(!isset($_GET['select']))
 			{
 				# Set the option to the options array.
 				$youtube_categories[$option['id'].'-YouTube']=$option['snippet']['title'];
-				# NOTE! This causes problems with the value quotations in the option tag.
-				//$youtube_categories['{"YouTube":{"category_id":"'.$option['id'].'"}}']=$option['snippet']['title'];
 			}
-			# Flip the categories.
-			$categories_flip=array_flip($categories);
 			# Flip the YouTube categories.
 			$youtube_categories_flip=array_flip($youtube_categories);
 			# Merge $categories with the YouTube categories.
-			$categories=array_merge($youtube_categories_flip, $categories_flip);
+			$categories=array_merge($youtube_categories_flip, $categories);
 		}
 		# Set the current categories to a variable.
 		$video_categories=array_flip((array)$video_obj->getCategories());
@@ -153,7 +151,7 @@ elseif(!isset($_GET['select']))
 		{
 			# Create an option for each category.
 			$category_options[$category_id]=$category_name;
-			# Check if this image currently has a category.
+			# Check if this video currently has a category.
 			if(!empty($video_categories))
 			{
 				# Check if the current category is default or has been selected by the user.
@@ -333,7 +331,7 @@ elseif(!isset($_GET['select']))
 		# Check if the date is unknown (0000-00-00).
 		if($date=='0000-00-00')
 		{
-			# Set the date to the defaul "impossible" date.
+			# Set the date to the default "impossible" date.
 			$date='1970-02-31';
 			# Set the date comment.
 			$date_comment='<span class="comment">(Upload date unknown)</span>';
@@ -423,13 +421,10 @@ elseif(!isset($_GET['select']))
 				{
 					# Decode the `api` field.
 					$api_decoded=json_decode($video_obj->getAPI());
-
 					# Set YouTube ID
 					$video_obj->setVideoId($api_decoded->youtube_id);
-
 					# Create video URL.
 					$video_obj->setVideoUrl($yt->getYoutubeUrl().$video_obj->getVideoId());
-
 					$fg->addFormPart('<a href="'.$video_obj->getVideoUrl().'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><img src="'.$video_obj->getThumbnailUrl().'" alt="Poster for '.$video_obj->getTitle().'"/><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 				}
 				else

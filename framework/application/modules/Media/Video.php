@@ -13,6 +13,13 @@ require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
  *
  * The Video class is used to access and manipulate data from the YouTube API & Vimeo API.
  *
+ * @dependencies		Requires "data/path_definitions.php".
+ * @dependencies		Requires "{MODULES}/Content/Category.php".
+ * @dependencies		Requires "{MODULES}/Content/Language.php".
+ * @dependencies		Requires "{MODULES}/FileHandler/FileHandler.php".
+ * @dependencies		Requires "{MODULES}/Media/Image.php".
+ * @dependencies		Requires "{MODULES}/Media/Soundcloud/Soundcloud.php".
+ * @dependencies		Requires "{MODULES}/User/Contributor.php".
  */
 class Video extends Media
 {
@@ -43,7 +50,7 @@ class Video extends Media
 	 *
 	 * Sets the data member $all_videos.
 	 *
-	 * @param	$videos							May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$videos					May be an array or a string. The method makes it into an array regardless.)
 	 * @access	protected
 	 */
 	protected function setAllVideos($videos)
@@ -200,8 +207,8 @@ class Video extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param		$id						Integer			A numeric ID representing the video.
-	 * @param		$media_type		String			The type of media that the ID represents. Default is "video".
+	 * @param	int $id					A numeric ID representing the video.
+	 * @param	string $media_type		The type of media that the ID represents. Default is "video".
 	 * @access	public
 	 */
 	public function setID($id, $media_type='video')
@@ -592,87 +599,6 @@ class Video extends Media
 	} #==== End -- createPlaylistMenu
 
 	/**
-	 * createWhereSQL
-	 *
-	 * Explodes a dash sepparated list of playlists and formats them for the WHERE portion of an sql query.
-	 *
-	 * @param	$playlists				The names and/or id's of the playlist(s) to be retrieved.
-	 *										May be multiple playlists - separate with a dash, ie. '50-70-Archive-110'.
-	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110'
-	 * @access	public
-	 */
-	/*
-	public function createWhereSQL($playlists=NULL, $field_name='playlist')
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value was empty.
-		if(!empty($playlists))
-		{
-			# Trim any dashes(-) off the ends of the string.
-			$playlists=trim($playlists, '-');
-			# Create an array of the playlists.
-			$playlists=explode('-', $playlists);
-			# Create an empty array to hold the "OR" sql strings.
-			$playlist_or=array();
-			# Create an empty array to hold the "AND" sql strings.
-			$playlist_and=array();
-			foreach($playlists as $playlist)
-			{
-				# Clean it up.
-				$playlist=trim($playlist);
-				# Get the first character of the string.
-				$top=substr($playlist, 0, 1);
-				# Check if the first character was an "!".
-				if($top=='!')
-				{
-					# Remove the "!" from the front of the string.
-					$playlist=ltrim($playlist, '!');
-				}
-				# Check if $playlist is not an integer.
-				if($validator->isInt($playlist)!==TRUE)
-				{
-					# Get the playlist data that cooresponds to the passed $playlist name.
-					$this->getThisPlaylist($playlist, FALSE);
-					$playlist=$this->getID();
-				}
-				# Check if the first character was an "!".
-				if($top!='!')
-				{
-					# Set the newly created sql string to the $playlist_or array.
-					$playlist_or[]='`'.$field_name.'` REGEXP '.$db->quote('-'.$playlist.'-');
-				}
-				else
-				{
-					# Set the newly created sql string to the $playlist_and array.
-					$playlist_and[]='`'.$field_name.'` NOT REGEXP '.$db->quote('-'.$playlist.'-');
-				}
-			}
-			# Implode the $playlist_or array into one complete sql string.
-			$ors=implode(' OR ', $playlist_or);
-			# Implode the $playlist_and array into one complete sql string.
-			$ands=implode(' AND ', $playlist_and);
-			# Concatenate the $ands and $ors together.
-			$playlists=(((!empty($ors)) ? '('.$ors.')' : '').((!empty($ors) && !empty($ands)) ? ' AND ' : '').((!empty($ands)) ? '('.$ands.')' : ''));
-		}
-		else
-		{
-			# Explicitly set categories to NULL.
-			$playlists=NULL;
-		}
-		# Check if the $category_a array is empty.
-		if(!empty($playlists))
-		{
-			# Set the sql string to the data member.
-			$this->setWhereSQL($playlists);
-		}
-	} #==== End -- createWhereSQL
-	*/
-
-	/**
 	 * deleteVideo
 	 *
 	 * Removes an video record from the `videos` table and the actual video file from the system.
@@ -808,7 +734,8 @@ class Video extends Media
 					# Set a nice message to the session.
 					$_SESSION['message']='That video was not valid.';
 					# Redirect the user back to the page without GET or POST data.
-					$doc->redirect($redirect);				}
+					$doc->redirect($redirect);
+				}
 			}
 			return FALSE;
 		}
@@ -1149,7 +1076,7 @@ class Video extends Media
 				$this->setTitle($video->title);
 				# Set the video publish year to the data member.
 				$this->setYear($video->year);
-				return $video;
+				return TRUE;
 			}
 			# Return FALSE because the video wasn't in the table.
 			return FALSE;
@@ -1345,6 +1272,7 @@ class Video extends Media
 			}
 			elseif(isset($api_decoded->vimeo_id))
 			{
+				# Create video_url variable.
 				$video_url='vimeo_url';
 			}
 			else
@@ -1352,6 +1280,7 @@ class Video extends Media
 				$video_name=$this->getFileName();
 				# Remove the file extension.
 				$video_name_no_ext=substr($video_name, 0, strrpos($video_name, '.'));
+				# Create video_url variable.
 				$video_url=VIDEOS_URL.'files/'.$video_name_no_ext.'.mp4';
 			}
 
@@ -1421,7 +1350,7 @@ class Video extends Media
 		'<ul class="feed-video">';
 
 		$playlist_param='';
-		# Chaeck if the videos belong to a playlist.
+		# Check if the videos belong to a playlist.
 		if($playlist_value!=NULL)
 		{
 			$playlist_param='playlist='.$playlist_value.'&';
@@ -1467,7 +1396,7 @@ class Video extends Media
 					# Set the Image object to a variable.
 					$image_obj=$this->getImageObj();
 
-					# Set the the thumbnail to a variable.
+					# Set the thumbnail to a variable.
 					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 				}
 

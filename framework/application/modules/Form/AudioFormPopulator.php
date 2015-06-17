@@ -3,7 +3,6 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
-
 # Get the FormPopulator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormPopulator.php');
 
@@ -18,7 +17,6 @@ class AudioFormPopulator extends FormPopulator
 {
 	/*** data members ***/
 
-	private $playlist_option=NULL;
 	private $audio_object=NULL;
 
 	/*** End data members ***/
@@ -26,26 +24,6 @@ class AudioFormPopulator extends FormPopulator
 
 
 	/*** mutator methods ***/
-
-	/***
-	 * setPlaylistOption
-	 *
-	 * Sets the data member $playlist_option
-	 *
-	 * @param	$playlist_option
-	 * @access	protected
-	 */
-	protected function setPlaylistOption($playlist_option)
-	{
-		# Check if the passed value is empty or doesn't exactly match one of the playlist options.
-		if(empty($playlist_option) OR $playlist_option!=='add')
-		{
-			# Explicitly set the value to NULL.
-			$playlist_option=NULL;
-		}
-		# Set the data member.
-		$this->playlist_option=$playlist_option;
-	} #==== End -- setPlaylistOption
 
 	/**
 	 * setAudioObject
@@ -72,18 +50,6 @@ class AudioFormPopulator extends FormPopulator
 
 
 	/*** accessor methods ***/
-
-	/**
-	 * getPlaylistOption
-	 *
-	 * Returns the data member $playlist_option.
-	 *
-	 * @access	public
-	 */
-	public function getPlaylistOption()
-	{
-		return $this->playlist_option;
-	} #==== End -- getPlaylistOption
 
 	/**
 	 * getAudioObject
@@ -167,8 +133,6 @@ class AudioFormPopulator extends FormPopulator
 				# Set the Validator instance to a variable.
 				$validator=Validator::getInstance();
 
-				/* Capture POST data. */
-
 				# Check if the author was passed via POST data.
 				if(isset($_POST['author']))
 				{
@@ -183,12 +147,20 @@ class AudioFormPopulator extends FormPopulator
 					$data['Availability']=$_POST['availability'];
 				}
 
-				# Check if the Image category was passed via POST data.
-// 				if(isset($_POST['category']))
-// 				{
-// 					# Set the category to the data array.
-// 					$data['Category']=$_POST['category'];
-// 				}
+				# Check if the category was passed via POST data.
+				if(isset($_POST['category']))
+				{
+					# Check if the category option "add" was passed in POST data.
+					if(($key=array_search('add', $_POST['category']))!==FALSE)
+					{
+						# Remove the index from the array that holds the "add" value.
+						unset($_POST['category'][$key]);
+						# Set "add" to the "CategoryOption" index of the data array.
+						$data['CategoryOption']='add';
+					}
+					# Set the categories data member.
+					$data['Categories']=$_POST['category'];
+				}
 
 				# Explicitly make the month an integer.
 				$month=(int)$_POST['month'];
@@ -209,7 +181,7 @@ class AudioFormPopulator extends FormPopulator
 				}
 
 				# Check if the audio type is an embed code.
-				if(isset($_POST['video-type']) && $_POST['audio-type']=='embed' && isset($_POST['embed_code']))
+				if(isset($_POST['audio-type']) && $_POST['audio-type']=='embed' && isset($_POST['embed_code']))
 				{
 					# Set the embed code to the data array.
 					$data['EmbedCode']=$_POST['embed_code'];
@@ -298,8 +270,8 @@ class AudioFormPopulator extends FormPopulator
 						# Set "add" to the "PlaylistOption" index of the data array.
 						$data['PlaylistOption']='add';
 					}
-					# Set the Audio categories data member.
-					$data['Categories']=$_POST['playlist'];
+					# Set the Audio playlists data member.
+					$data['Playlists']=$_POST['playlist'];
 				}
 
 				# Check if the publisher id POST data was sent.

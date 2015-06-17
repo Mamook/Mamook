@@ -15,6 +15,7 @@ class Media
 	/*** data members ***/
 
 	private $id=NULL;
+	private $audio_obj=NULL;
 	private $author=NULL;
 	private $availability;
 	# $category is an object.
@@ -52,7 +53,6 @@ class Media
 	private $publisher_id=NULL;
 	private $title=NULL;
 	private $year=NULL;
-	private $audio_instance=NULL;
 	private $video_obj=NULL;
 
 	/*** End data members ***/
@@ -66,8 +66,8 @@ class Media
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param		$id						Integer			A numeric ID representing the media.
-	 * @param		$media_type		String			The type of media that the ID represents. Default is "media".
+	 * @param	int $id					A numeric ID representing the media.
+	 * @param	string $media_type		The type of media that the ID represents. Default is "media".
 	 * @access	public
 	 */
 	public function setID($id, $media_type='media')
@@ -183,7 +183,6 @@ class Media
 	 */
 	public function setCategories($value)
 	{
-		//print_r($value);
 		# Create an empty array to hold the categories.
 		$categories=array();
 		# Check if the passed value if empty.
@@ -254,7 +253,7 @@ class Media
 			# Get the Category class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 			# Instantiate a new Category object.
-			$category=new Category();
+			$category_obj=new Category();
 			# Create a variable to hold the "WHERE" clause.
 			$where_clause=array();
 			# Loop through the $value array to build the "WHERE" clause.
@@ -272,9 +271,9 @@ class Media
 			# Create the "WHERE" clause.
 			$where_clause=' WHERE ('.implode(' OR ', $where_clause).')';
 			# Retreive the categories in as single call.
-			$category->getCategories(NULL, '*', 'id', 'ASC', $where_clause);
+			$category_obj->getCategories(NULL, '*', 'id', 'ASC', $where_clause);
 			# Set the returned records to a variable.
-			$all_categories=$category->getAllCategories();
+			$all_categories=$category_obj->getAllCategories();
 			# Check if there WERE any returned records.
 			if(!empty($all_categories))
 			{
@@ -295,7 +294,7 @@ class Media
 	 *
 	 * Sets the data member $category_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setCategoryID($id)
@@ -306,7 +305,7 @@ class Media
 		# Check if the passed $id is empty.
 		if(!empty($id))
 		{
-				# Check if the passed $id is an integer.
+			# Check if the passed $id is an integer.
 			if($validator->isInt($id)===TRUE)
 			{
 				# Set the data member explicitly making it an integer.
@@ -1161,14 +1160,14 @@ class Media
 	} #==== End -- setYear
 
 	/**
-	 * setAudioInstance
+	 * setAudioObject
 	 *
 	 * Set the data member $audio_instance
 	 *
 	 * @param	string $audio_instance
 	 * @access	private
 	 */
-	private function setAudioInstance($audio_instance)
+	private function setAudioObject($audio_instance)
 	{
 		# Check if the passed value is an object.
 		if(is_object($audio_instance))
@@ -1180,7 +1179,7 @@ class Media
 			# Explicitly set the data member to NULL.
 			$this->audio_instance=NULL;
 		}
-	} #==== End -- setAudioInstance
+	} #==== End -- setAudioObject
 
 	/**
 	 * setVideoObject
@@ -1595,26 +1594,26 @@ class Media
 	} #==== End -- getYear
 
 	/**
-	 * getAudioInstance
+	 * getAudioObject
 	 *
-	 * Returns the data member $audio_instance.
+	 * Returns the data member $audio_obj.
 	 *
 	 * @access	public
 	 */
-	public function getAudioInstance()
+	public function getAudioObject()
 	{
 		# Check if there is an Audio object.
-		if($this->audio_instance===NULL)
+		if($this->audio_obj===NULL)
 		{
 			# Get the Audio Class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
 			# Instantiate a new Audio object.
-			$audio_instance=Audio::getInstance();
+			$audio_obj=Audio::getInstance();
 			# Set the Audio object to the data member.
-			$this->setAudioObject($audio_instance);
+			$this->setAudioObject($audio_obj);
 		}
-		return $this->audio_instance;
-	} #==== End -- getAudioInstance
+		return $this->audio_obj;
+	} #==== End -- getAudioObject
 
 	/**
 	 * getVideoObject

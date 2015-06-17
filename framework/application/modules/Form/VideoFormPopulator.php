@@ -130,8 +130,6 @@ class VideoFormPopulator extends FormPopulator
 			{
 				# Set the data array to a local variable.
 				$data=$this->getData();
-				# Set the Database instance to a variable.
-				$db=DB::get_instance();
 				# Set the Validator instance to a variable.
 				$validator=Validator::getInstance();
 
@@ -149,10 +147,9 @@ class VideoFormPopulator extends FormPopulator
 					$data['Availability']=$_POST['availability'];
 				}
 
-				# Check if the video category was passed via POST data.
+				# Check if the category was passed via POST data.
 				if(isset($_POST['category']))
 				{
-					$category_array=$_POST['category'];
 					# Check if the category option "add" was passed in POST data.
 					if(($key=array_search('add', $_POST['category']))!==FALSE)
 					{
@@ -161,7 +158,7 @@ class VideoFormPopulator extends FormPopulator
 						# Set "add" to the "CategoryOption" index of the data array.
 						$data['CategoryOption']='add';
 					}
-					# Set the video categories data member.
+					# Set the categories data member.
 					$data['Categories']=$_POST['category'];
 				}
 

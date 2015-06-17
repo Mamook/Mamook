@@ -1,17 +1,20 @@
 <?php /* framework/application/templates/forms/image_form.php */
 
+# Get the video form defaults
 require Utility::locateFile(TEMPLATES.'forms'.DS.'image_form_defaults.php');
+
 $display_delete_form=$form_processor->processImage($default_data);
 
 # Set the ImageFormPopulator object from the ImageFormProcessor data member to a variable.
 $populator=$form_processor->getPopulator();
 # Set the Image object from the ImageFormPopulator data member to a variable.
-$image=$populator->getImageObject();
+$image_obj=$populator->getImageObject();
 
 $select=TRUE;
 
 if(!isset($_GET['select']))
 {
+	$head=(!isset($head) ? '' : $head);
 	$select=FALSE;
 
 	$duplicates=$form_processor->getDuplicates();
@@ -23,7 +26,7 @@ if(!isset($_GET['select']))
 		$doc->setFooterJS('uniform-select,uniform-file,bsmSelect-multiple');
 
 		# Set the image name to a variable.
-		$image_name=$image->getImage();
+		$image_name=$image_obj->getImage();
 
 		# Check if this is an edit or delete page.
 		if(isset($_GET['image']))
@@ -51,40 +54,46 @@ if(!isset($_GET['select']))
 		# Get the Category class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 		# Instantiate a new Category object.
-		$category=new Category();
+		$category_obj=new Category();
 		# get the categories from the `categories` table.
-		$category->getCategories(NULL, '`id`, `category`', 'category', 'ASC', ' WHERE `category` != \'Subscription\' AND `category` != \'Donation\' AND `category` != \'Music\'');
+		$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
 		# Set the categories to a variable.
-		$categories=$category->getAllCategories();
-		# Create the "Add Category" option.
-		//$cat_options['add']='Add Category';
-		# Set the current categories to a variable.
-		$image_categories=array_flip((array)$image->getCategories());
-
+		$all_categories=$category_obj->getAllCategories();
 		# Loop through the categories.
-		foreach($categories as $row)
+		foreach($all_categories as $row)
 		{
 			# Create an option for each category.
-			$cat_options[$row->id]=$row->category;
+			$categories[$row->id]=$row->name;
+		}
+		# Flip the categories.
+		$categories=array_flip($categories);
+		# Set the current categories to a variable.
+		$image_categories=array_flip((array)$image_obj->getCategories());
+		$category_options[]='';
+		# Loop through the categories.
+		foreach($categories as $category_name=>$category_id)
+		{
+			# Create an option for each category.
+			$category_options[$category_id]=$category_name;
 			# Check if this image currently has a category.
 			if(!empty($image_categories))
 			{
 				# Check if the current category is default or has been selected by the user.
-				if(in_array($row->id, $image_categories)===TRUE)
+				if(in_array($category_id, $image_categories, TRUE)===TRUE)
 				{
 					# Set the selected category to the default.
-					$cat_options['multiple_selected'][$row->id]=$row->category;
+					$category_options['selected']=$category_name;
 				}
 				elseif(
 						(in_array('add', $image_categories)===TRUE) &&
 						(
-							isset($cat_options['multiple_selected']) &&
-							in_array('Add Category', $cat_options['multiple_selected']!==TRUE)
+							isset($category_options['selected']) &&
+							in_array('Add Category', $category_options['selected']!==TRUE)
 						)
 					)
 				{
 					# Set the "Add Category" option as selected.
-					$cat_options['multiple_selected']['add']='Add Category';
+					$category_options['selected']['add']='Add Category';
 				}
 			}
 		}
@@ -93,12 +102,12 @@ if(!isset($_GET['select']))
 		$fg=new FormGenerator('image', $form_processor->getFormAction(), 'POST', '_top', TRUE);
 		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>(string)$populator->getUnique()));
-		$fg->addElement('hidden', array('name'=>'_contributor', 'value'=>$image->getContID()));
+		$fg->addElement('hidden', array('name'=>'_contributor', 'value'=>$image_obj->getContID()));
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<ul>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
-		$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$image->getTitle()));
+		$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$image_obj->getTitle()));
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="image"><span class="required">*</span> Image</label>');
@@ -107,7 +116,7 @@ if(!isset($_GET['select']))
 		{
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image->getTitle().'" /><span>'.$image_name.' - "'.$image->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image', 'value'=>$image_name));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
@@ -115,20 +124,20 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="image_width"><span class="required">*</span> Dimensions</label>');
-		$fg->addElement('text', array('name'=>'width', 'id'=>'image_width', 'value'=>$image->getWidth())).$fg->addFormPart('px ');
-		$fg->addElement('text', array('name'=>'height', 'id'=>'image_height', 'value'=>$image->getHeight())).$fg->addFormPart('px');
+		$fg->addElement('text', array('name'=>'width', 'id'=>'image_width', 'value'=>$image_obj->getWidth())).$fg->addFormPart('px ');
+		$fg->addElement('text', array('name'=>'height', 'id'=>'image_height', 'value'=>$image_obj->getHeight())).$fg->addFormPart('px');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
-		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$image->getDescription()), '', NULL, 'textarea tinymce');
+		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$image_obj->getDescription()), '', NULL, 'textarea tinymce');
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="location">Location</label>');
-		$fg->addElement('text', array('name'=>'location', 'id'=>'location', 'value'=>$image->getLocation()));
+		$fg->addElement('text', array('name'=>'location', 'id'=>'location', 'value'=>$image_obj->getLocation()));
 		$fg->addFormPart('</li>');
-		$fg->addFormPart('<li class="mult">');
-		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Category</label>');
-		$fg->addElement('select', array('name'=>'category[]', 'multiple'=>'multiple', 'title'=>'Select a Catagory', 'id'=>'category'), $cat_options);
+		$fg->addFormPart('<li>');
+		$fg->addFormPart('<label class="label" for="category">Category</label>');
+		$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$button_value='Add Image';
@@ -141,7 +150,7 @@ if(!isset($_GET['select']))
 		# Check if this is an edit page.
 		if(isset($_GET['image']) && !isset($_GET['delete']))
 		{
-			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/images/?image='.$image->getID().'&amp;delete" class="submit-delete" title="Delete This">Delete</a>');
+			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/images/?image='.$image_obj->getID().'&amp;delete" class="submit-delete" title="Delete This">Delete</a>');
 		}
 		$fg->addElement('submit', array('name'=>'image', 'value'=>'Reset'), '', NULL, 'submit-reset');
 		if(isset($_GET['add']))
@@ -156,6 +165,6 @@ if(!isset($_GET['select']))
 	}
 }
 
-$display.=$image->displayImageList('all', $select);
+$display.=$image_obj->displayImageList($select);
 
 $display=$display_delete_form.$display;

@@ -3,20 +3,17 @@
 # Get the audio form defaults
 require Utility::locateFile(TEMPLATES.'forms'.DS.'audio_form_defaults.php');
 
-$display_delete_form=$form_processor->processAudio($default_data);
+$display_delete_form=$form_processor->processAudio($default_data, $max_file_size);
 
 # Set the AudioFormPopulator object from the AudioFormProcessor data member to a variable.
 $populator=$form_processor->getPopulator();
-# Create a new Audio object from the Media class. Creates a new instance of the Audio class if it doesn't exist.
+# Set the Audio object from the FormProcessor data member to a variable.
 $audio_obj=$populator->getAudioObject();
 
 $select=TRUE;
 
 if(isset($_GET['create_playlist']))
 {
-	# Set the Soundcloud instance to a variable.
-	//$soundcloud_obj=$audio_obj->getSoundcloudObject();
-
 	$display.='<div id="file_form" class="form">';
 
 	# Add the statement about requirements.
@@ -45,22 +42,10 @@ if(isset($_GET['create_playlist']))
 	$fg->addFormPart('</fieldset>');
 	$display.=$fg->display();
 	$display.='</div>';
-
-/*
-	# Get the playlists feed.
-	$playlists=$soundcloud_obj->PlaylistsListFeed();
-
-	# Loop through the playlists
-	foreach($playlists as $row)
-	{
-		# Display playlists - Temporary.
-		$display.=$row['title'].'<br>';
-	}
-*/
 }
 elseif(!isset($_GET['select']))
 {
-	$head='';
+	$head=(!isset($head) ? '' : $head);
 	$select=FALSE;
 
 	$duplicates=$form_processor->getDuplicates();
@@ -70,13 +55,6 @@ elseif(!isset($_GET['select']))
 		$doc->setJavaScripts('uniform,bsmSelect,audio');
 		# Do we need some JavaScripts in the footer? (Use the script audio name before the ".php".)
 		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
-
-		# Set the AudioFormPopulator object from the AudioFormProcessor data member to a variable.
-		$populator=$form_processor->getPopulator();
-		# Set the Audio object from the FormProcessor data member to a variable.
-		$audio_obj=$populator->getAudioObject();
-		# Get the Soundcloud instance. Starts the SoundcloudService if it's not already started.
-		//$soundcloud_obj=$audio_obj->getSoundcloudObject();
 
 		# Set the audio name to a variable.
 		$file_name=$audio_obj->getFileName();
@@ -104,9 +82,9 @@ elseif(!isset($_GET['select']))
 		# Add the statement about requirements.
 		$display.='<span class="required">* = required field</span>';
 
-		# Create an array to hold the available availability options.
+		# Create an array to hold the availability options.
 		$available_options=array(0=>'This site does not yet have the legal rights to display', 1=>'This site has the legal rights to display', 2=>'Internal document only', 3=>'Can not distribute');
-		# Loop through the available availability options.
+		# Loop through the availability options.
 		foreach($available_options as $value=>$option)
 		{
 			# Check if the POST data equals the index of the current option.
@@ -119,22 +97,51 @@ elseif(!isset($_GET['select']))
 			$availability_options[$value]=$option;
 		}
 
-/*
-		# Create an array to hold the Soundcloud availability options.
-		$soundcloud_category_options=$soundcloud_obj->listAudioCategories('snippet', array('regionCode'=>'US'));
-		# Loop through the available availability options.
-		foreach($soundcloud_category_options['items'] as $option)
+		# Get the Category class.
+		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+		# Instantiate a new Category object.
+		$category_obj=new Category();
+		# get the categories from the `categories` table.
+		$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
+		# Set the categories to a variable.
+		$all_categories=$category_obj->getAllCategories();
+		# Loop through the categories.
+		foreach($all_categories as $row)
 		{
-			# Check if the POST data equals the index of the current option.
-			if($audio_obj->getCategory()==$option['id'])
-			{
-				# Set the selected category to the default.
-				$category_options['selected']=$option['snippet']['title'];
-			}
-			# Set the option to the options array.
-			$category_options[$option['id']]=$option['snippet']['title'];
+			# Create an option for each category.
+			$categories[$row->id]=$row->name;
 		}
-*/
+		# Flip the categories.
+		$categories=array_flip($categories);
+		# Set the current categories to a variable.
+		$audio_categories=array_flip((array)$audio_obj->getCategories());
+		# Loop through the categories.
+		foreach($categories as $category_name=>$category_id)
+		{
+			# Create an option for each category.
+			$category_options[$category_id]=$category_name;
+			# Check if this audio currently has a category.
+			if(!empty($audio_categories))
+			{
+				# Check if the current category is default or has been selected by the user.
+				if(in_array($category_id, $audio_categories, TRUE)===TRUE)
+				{
+					# Set the selected category to the default.
+					$category_options['selected']=$category_name;
+				}
+				elseif(
+						(in_array('add', $audio_categories)===TRUE) &&
+						(
+							isset($category_options['selected']) &&
+							in_array('Add Category', $category_options['selected']!==TRUE)
+						)
+					)
+				{
+					# Set the "Add Category" option as selected.
+					$category_options['selected']['add']='Add Category';
+				}
+			}
+		}
 
 		$image_options[0]='';
 		$image_options['select']='Select Existing Image (submit this form to select an image from the database)';
@@ -152,7 +159,7 @@ elseif(!isset($_GET['select']))
 		$institution=new Institution();
 		$institution->getInstitutions(NULL, '`id`, `institution`', 'institution', 'ASC');
 		$institutions=$institution->getAllInstitutions();
-		$inst_options['add']='Add Institution';
+		//$inst_options['add']='Add Institution';
 		foreach($institutions as $row)
 		{
 			$inst_options[$row->id]=$row->institution;
@@ -173,7 +180,7 @@ elseif(!isset($_GET['select']))
 		$language=new Language();
 		$language->getLanguages(NULL, '`id`, `language`', 'language', 'ASC');
 		$languages=$language->getAllLanguages();
-		$language_options['add']='Add Language';
+		//$language_options['add']='Add Language';
 		foreach($languages as $row)
 		{
 			$language_options[$row->id]=$row->language;
@@ -224,55 +231,57 @@ elseif(!isset($_GET['select']))
 			}
 		}
 
-		# Get the Category class.
-		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-		# Instantiate a new Category object.
-		$playlist=new Category();
-		# get the categories from the `categories` table.
-		$playlist->getCategories(NULL, '`id`, `category`, `api`', 'category', 'ASC');
+		# Get the Playlist class.
+		require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
+		# Instantiate a new Playlist object.
+		$playlist_obj=Playlist::getInstance();
+		$where=NULL;
+		# Decode the returned API JSON.
+		$content_api_decode=json_decode($main_content->getAPI(), TRUE);
+		# Asign playlists to a variable.
+		$content_playlists=$content_api_decode['Site']['Playlists'];
+		if($content_playlists!==NULL)
+		{
+			# Creates the SQL from an array of Playlist IDs.
+			$playlist_obj->createWhereSQL($content_playlists);
+			$where=' WHERE '.$playlist_obj->getWhereSQL();
+		}
+		# Get the playlists from the `playlists` table.
+		$playlist_obj->getPlaylists(NULL, '`id`, `name`, `api`', 'name', 'ASC', $where);
 		# Set the playlists to a variable.
-		$playlists=$playlist->getAllCategories();
+		$playlists=$playlist_obj->getAllPlaylists();
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
 			# Set the current playlists to a variable.
-			$audio_playlists=array_flip((array)$audio_obj->getCategories());
+			$audio_playlists=array_flip((array)$audio_obj->getPlaylists());
+			# Loop through the playlists.
 			foreach($playlists as $row)
 			{
-				# Decode the returned API JSON and set it to a local variable.
-				$api=json_decode($row->api, TRUE);
-				# Check if "site_video" exists as a property of the JSON.
-				if(!empty($api) && array_key_exists('site_audio', $api))
+				# Create an option for each playlist.
+				$playlist_options[$row->id]=$row->name;
+				# Check if this audio currently has a playlist.
+				if(!empty($audio_playlists))
 				{
-					# Create an option for each playlist.
-					$playlist_options[$row->id]=$row->category;
-					# Check if this audio currently has a playlist.
-					if(!empty($audio_playlists))
+					# Check if the current playlist is default or has been selected by the user.
+					if(in_array($row->id, $audio_playlists)===TRUE)
 					{
-						# Check if the current playlist is default or has been selected by the user.
-						if(in_array($row->id, $audio_playlists)===TRUE)
-						{
-							# Set the selected playlist to the default.
-							$playlist_options['multiple_selected'][$row->id]=$row->category;
-						}
-						elseif(
-								(in_array('add', $audio_playlists)===TRUE) &&
-								(
-									isset($playlist_options['multiple_selected']) &&
-									in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
-								)
+						# Set the selected playlist to the default.
+						$playlist_options['multiple_selected'][$row->id]=$row->name;
+					}
+					elseif(
+							(in_array('add', $audio_playlists)===TRUE) &&
+							(
+								isset($playlist_options['multiple_selected']) &&
+								in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
 							)
-						{
-							# Set the "Add Playlist" option as selected.
-							$playlist_options['multiple_selected']['add']='Add Playlist';
-						}
+						)
+					{
+						# Set the "Add Playlist" option as selected.
+						$playlist_options['multiple_selected']['add']='Add Playlist';
 					}
 				}
 			}
-		}
-		else
-		{
-			$playlist_options[]='No Playlists';
 		}
 
 		# Instantiate a new FormGenerator object.
@@ -348,22 +357,22 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
 		$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$audio_obj->getTitle()));
 		$fg->addFormPart('</li>');
-		$fg->addFormPart('<li class="vis">');
-		$fg->addFormPart('<span class="label">Audio Type</span>');
-		$fg->addFormPart('<ul>');
-		$fg->addFormPart('<li>');
-		$fg->addElement('radio', array('name'=>'audio-type', 'id'=>'audio-type-file', 'value'=>'file', 'checked'=>$audio_obj->getAudioType()), NULL, NULL, 'radio audio_type_radio');
-		$fg->addFormPart('<label class="label-radio" for="audio-type-file">File</label>');
-		$fg->addFormPart('</li>');
-		$fg->addFormPart('<li>');
-		$fg->addElement('radio', array('name'=>'audio-type', 'id'=>'audio-type-embed', 'value'=>'embed', 'checked'=>$audio_obj->getAudioType()), NULL, NULL, 'radio audio_type_radio');
-		$fg->addFormPart('<label class="label-radio" for="audio-type-embed">Embed</label>');
-		$fg->addFormPart('</li>');
-		$fg->addFormPart('</ul>');
-		$fg->addFormPart('</li>');
 		# Check if there is GET data. If there is, it's a audio edit, and don't show this part of the form.
-		//if(!isset($_GET['audio']))
-		//{
+		if(!isset($_GET['audio']))
+		{
+			$fg->addFormPart('<li class="vis">');
+			$fg->addFormPart('<span class="label">Audio Type</span>');
+			$fg->addFormPart('<ul>');
+			$fg->addFormPart('<li>');
+			$fg->addElement('radio', array('name'=>'audio-type', 'id'=>'audio-type-file', 'value'=>'file', 'checked'=>$audio_obj->getAudioType()), NULL, NULL, 'radio audio_type_radio');
+			$fg->addFormPart('<label class="label-radio" for="audio-type-file">File</label>');
+			$fg->addFormPart('</li>');
+			$fg->addFormPart('<li>');
+			$fg->addElement('radio', array('name'=>'audio-type', 'id'=>'audio-type-embed', 'value'=>'embed', 'checked'=>$audio_obj->getAudioType()), NULL, NULL, 'radio audio_type_radio');
+			$fg->addFormPart('<label class="label-radio" for="audio-type-embed">Embed</label>');
+			$fg->addFormPart('</li>');
+			$fg->addFormPart('</ul>');
+			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li id="file">');
 			$fg->addFormPart('<label class="label" for="audio"><span class="required">*</span> Audio</label>');
 			$fg->addElement('file', array('name'=>'audio', 'id'=>'audio'));
@@ -371,26 +380,20 @@ elseif(!isset($_GET['select']))
 			{
 				# Get the image information from the database, and set them to data members.
 				$audio_obj->getThisImage($audio_obj->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$audio_obj->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$audio_obj->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-
 				$fg->addFormPart('<ul>');
 				$fg->addFormPart('<li class="file-current">');
 				if($audio_obj->getAPI()!==NULL)
 				{
 					# Decode the `api` field.
 					$api_decoded=json_decode($audio_obj->getAPI());
-
 					# Set Soundcloud ID
 					$audio_obj->setAudioId($api_decoded->soundcloud_id);
-
 					# Create audio URL.
 					$audio_obj->setAudioUrl($yt->getSoundcloudUrl().$audio_obj->getAudioId());
-
 					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
 				}
 				else
@@ -402,7 +405,7 @@ elseif(!isset($_GET['select']))
 				$fg->addFormPart('</ul>');
 			}
 			$fg->addFormPart('</li>');
-		//}
+		}
 		# Check if there is GET data. If there is, it's a audio edit, and don't show this part of the form.
 		if(!isset($_GET['audio']) || $audio_obj->getAudioType()!='file')
 		{
@@ -427,7 +430,7 @@ elseif(!isset($_GET['select']))
 			$image_name=$image_obj->getImage();
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" class="image-link" rel="'.FW_POPUP_HANDLE.'"><img class="image" src="'.IMAGES.$image_name.'" alt="'.$image_obj->getTitle().'" /><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
+			$fg->addFormPart('<a href="'.IMAGES.'original/'.$image_name.'" title="Current Image" class="image-link" rel="'.FW_POPUP_HANDLE.'"><img src="'.IMAGES.$image_name.'" class="image" alt="'.$image_obj->getTitle().'"/><span>'.$image_name.' - "'.$image_obj->getTitle().'"</span></a>');
 			$fg->addElement('hidden', array('name'=>'_image_id', 'value'=>$image_id));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
@@ -453,14 +456,12 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('<label class="label" for="description">Description</label>');
 		$fg->addElement('textarea', array('name'=>'description', 'id'=>'description', 'text'=>$audio_obj->getDescription()), '', NULL, 'textarea');
 		$fg->addFormPart('</li>');
-/*
 		$fg->addFormPart('<li>');
-		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Soundcloud Category</label>');
-		$fg->addElement('select', array('name'=>'category', 'id'=>'category'), $category_options);
+		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Category</label>');
+		$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
 		$fg->addFormPart('</li>');
-*/
 		$fg->addFormPart('<li class="mult">');
-		$fg->addFormPart('<label class="label" for="playlist"><span class="required">*</span> Playlist</label>');
+		$fg->addFormPart('<label class="label" for="playlist"> Playlist</label>');
 		$fg->addElement('select', array('name'=>'playlist[]', 'multiple'=>'multiple', 'title'=>'Select a Playlist', 'id'=>'playlist'), $playlist_options);
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
@@ -482,7 +483,7 @@ elseif(!isset($_GET['select']))
 		# Check if this is an edit page.
 		if(isset($_GET['audio']) && !isset($_GET['delete']))
 		{
-			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$audio_obj->getID().'&amp;delete=yes" class="submit-delete" title="Delete This">Delete</a>');
+			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/audio/?audio='.$audio_obj->getID().'&amp;delete" class="submit-delete" title="Delete This">Delete</a>');
 		}
 		$fg->addElement('submit', array('name'=>'audio', 'value'=>'Reset'), '', NULL, 'submit-reset');
 		$fg->addFormPart('</li>');

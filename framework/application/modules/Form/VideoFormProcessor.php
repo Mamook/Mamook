@@ -5,7 +5,6 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
 
@@ -214,6 +213,8 @@ class VideoFormProcessor extends FormProcessor
 					$video_obj->getThisImage($image_id);
 				}
 
+				# Create an empty variable for the thumbnail name.
+				$thumbnail_file_name='';
 				if($image_id!==NULL)
 				{
 					# Get the Image object.
@@ -295,6 +296,7 @@ class VideoFormProcessor extends FormProcessor
 
 					//youtube\.com\/watch/i) || source.match(/youtu\.be/i
 
+					# No custom thumbnail image.
 					if($uploaded_thumbnail===FALSE)
 					{
 						# Check if the YouTube credentials are available.
@@ -397,7 +399,7 @@ class VideoFormProcessor extends FormProcessor
 						# Set the duplicates to display to the data member for retrieval outside of the method.
 						$this->setDuplicates($dup_display);
 					}
-					# Check if the post is considered unique and may be added to the Database.
+					# Check if the video is considered unique and may be added to the Database.
 					if($unique==1)
 					{
 						# If there is no custom thumbnail image.
@@ -425,7 +427,6 @@ class VideoFormProcessor extends FormProcessor
 									')';
 								# Run the sql query.
 								$db_post=$db->query($insert_image);
-
 								# Assign the image ID to a variable.
 								$image_id=$db->get_insert_id();
 							}
@@ -460,22 +461,6 @@ class VideoFormProcessor extends FormProcessor
 							:
 								$db->quote('')
 						);
-
-						# Check if the category exists in our database.
-						# Get the Category class.
-						require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-						# Instantiate a new Category object.
-						$category_obj=new Category();
-						# Loop through the categories.
-						foreach($categories as $category_name=>$category_id)
-						{
-							# If this category does not exist in our database, then insert it.
-							if($category_obj->getThisCategory($category_name, FALSE)===FALSE)
-							{
-								# Insert the category into the database.
-
-							}
-						}
 
 						# Create the default sql as an INSERT and set it to a variable.
 						$sql='INSERT INTO `'.DBPREFIX.'videos` ('.
@@ -647,7 +632,6 @@ class VideoFormProcessor extends FormProcessor
 										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -force_key_frames "expr:gte(t,n_forced*2)" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v baseline -level 3.0 -threads 1 -codec:a libfdk_aac -b:a 128k -y '.TEMP.$clean_filename.'mp4');
 										//$cl->runScript('-y -i '.TEMP.$clean_filename.'mp4 -c:v copy -map 0 -bsf:v h264_mp4toannexb -f segment -segment_list '.AUDIO_PATH.'files'.DS.$clean_filename'.m3u8 -segment_time 2 -segment_format mpeg_ts -segment_list_type m3u8 '.AUDIO_PATH.'files'.DS.$clean_filename'.ts && \ rm -R -f '.TEMP.$clean_filename.'mp4');
 										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -hls_time 2 -hls_list_size 0 -hls_wrap 0 -start_number 0 -hls_allow_cache 1 -hls_segment_filename -hls_segment_filename \'hls_segment%03d.ts\' '.AUDIO_PATH.'files'.DS.$clean_filename.DS.'video.m3u8');
-
 								}
 
 								# Check if the availability allows posting to social networks.
@@ -1141,6 +1125,7 @@ class VideoFormProcessor extends FormProcessor
 					'Date'=>$video_obj->getDate(),
 					'Description'=>$video_obj->getDescription(),
 					'Facebook'=>$populator->getFacebook(),
+					$file_embed=>$file_name,
 					'ImageID'=>$video_obj->getImageID(),
 					'Institution'=>$institution_id,
 					'Language'=>$language_id,
@@ -1150,7 +1135,6 @@ class VideoFormProcessor extends FormProcessor
 					'Twitter'=>$populator->getTwitter(),
 					'Unique'=>$populator->getUnique(),
 					'VideoType'=>$video_obj->getVideoType(),
-					$file_embed=>$file_name,
 					'Year'=>$video_obj->getYear()
 				);
 		}

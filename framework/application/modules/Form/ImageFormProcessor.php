@@ -5,7 +5,6 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
 
@@ -35,16 +34,18 @@ class ImageFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
-			# Bring the content object into scope.
-			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+
 			# Get the ImageFormPopulator Class.
 			require_once Utility::locateFile(MODULES.'Form'.DS.'ImageFormPopulator.php');
 
-			# Remove any un-needed CMS session data. (This needs to happen before populatImageForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.)
+			# Remove any un-needed CMS session data.
+			# This needs to happen before populatImageForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
 			$this->loseSessionData('image');
 
 			# Reset the form if the "reset" button was submitted.
@@ -57,59 +58,62 @@ class ImageFormProcessor extends FormProcessor
 			# Set the Populator object to the data member.
 			$this->setPopulator($populator);
 
+			# If the URL params indicate this is a delete, process it. If the submit button hasn't been clicked yet, this will return the delete for itself.
 			$display_delete_form=$this->processImageDelete();
+			# Check if the delete form was returned.
 			if($display_delete_form!==FALSE)
 			{
+				# Return the delete form and leave this method.
 				return $display_delete_form;
 			}
+
+			# Check if the user clicked on a form that sends them back to a previous form that sent them to the audio form in the first place.
 			$this->processImageBack();
 			$this->processImageSelect();
 
 			# Get the Image object from the ImageFormPopulator object and set it to a variable for use in this method.
-			$image=$populator->getImageObject();
+			$image_obj=$populator->getImageObject();
 
 			# Get the current image's name and set it to a variable.
-			$current_image=$image->getImage();
+			$current_image=$image_obj->getImage();
 			# Create an empty variable to hold the new name of an uplaoded file.
 			$new_name=NULL;
 			# Set a variable to FALSE indicating that an image has not been uploaded.
 			$uploaded_document=FALSE;
 			# Set the image's id to a variable.
-			$id=$image->getID();
+			$id=$image_obj->getID();
 			# Set the image's categories to a variable.
-			$categories=$image->getCategories();
+			$categories=$image_obj->getCategories();
 			# Create an empty variable for the category id's.
 			$category_ids=NULL;
 			# Check if there are categories.
 			if(!empty($categories))
 			{
-				# Echange the values for the id's.
+				# Change the values for the id's.
 				$categories=array_flip($categories);
 				# Separate the category id's with dashes (-).
 				$category_ids='-'.implode('-', $categories).'-';
 			}
 			# Set the image contributor's id to a variable.
-			$contributor_id=$image->getContID();
+			$contributor_id=$image_obj->getContID();
 			# Set the image's recent contributor's id to a variable.
-			$recent_cont_id=$image->getRecentContID();
+			$recent_cont_id=$image_obj->getRecentContID();
 			# Set the image's last edit date to a variable.
-			$last_edit=$image->getLastEdit();
+			$last_edit=$image_obj->getLastEdit();
 			# Set the image's description to a variable.
-			$description=$image->getDescription();
+			$description=$image_obj->getDescription();
 			# Set the image's height to a variable.
-			$height=$image->getHeight();
+			$height=$image_obj->getHeight();
 			# Set the image's hide status to a variable.
-			$hide=$image->getHide();
+			$hide=$image_obj->getHide();
 			# Set the image's location to a variable.
-			$location=$image->getLocation();
-			# Set the site name to a variable.
-			$site_name=$main_content->getSiteName();
+			$location=$image_obj->getLocation();
 			# Set the image's title to a variable.
-			$title=$image->getTitle();
+			$title=$image_obj->getTitle();
 			# Set the image's unique status to a variable.
 			$unique=$populator->getUnique();
 			# Set the image's width to a variable.
-			$width=$image->getWidth();
+			$width=$image_obj->getWidth();
 
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['image']) && ($_POST['image']=='Add Image' OR $_POST['image']=='Update')))
@@ -124,11 +128,6 @@ class ImageFormProcessor extends FormProcessor
 				$fv=new FormValidator();
 				# Check if the title field was empty (or less than 2 characters or more than 1024 characters long).
 				$empty_title=$fv->validateEmpty('title', 'Please enter a title for the image.', 2, 1024);
-				if(empty($category_ids))
-				{
-					# Set an error.
-					$fv->setErrors('You must select at least one category for this image.');
-				}
 				$u_image=$_FILES['image'];
 				if(((is_uploaded_file($u_image['tmp_name'])!==TRUE) OR ($u_image['error'] === UPLOAD_ERR_NO_FILE) OR ($u_image['error'] === 4)) && empty($current_image))
 				{
@@ -290,13 +289,35 @@ class ImageFormProcessor extends FormProcessor
 					{
 						# Create the default value for the message action.
 						$message_action='added';
+
+						# Clean up the description and prepare it for the DB.
+						$sql_description=(
+							(!empty($description))
+							?
+								$db->quote(
+									$db->escape(
+										preg_replace(
+											"/<p>(.*?)<\/p>(\n?\r?(\n\r)?)/i",
+											"$1\n",
+											str_replace(
+												array("\r\n", "\n", "\r", DOMAIN_NAME),
+												array('', '', '', '%{domain_name}'),
+												htmlspecialchars_decode($description)
+											)
+										)
+									)
+								)
+							:
+								$db->quote('')
+						);
+
 						# Create the default sql as an INSERT and set it to a variable.
 						$sql='INSERT INTO `'.DBPREFIX.'images` ('.
 							'`title`, '.
 							'`image`, '.
 							((!empty($location)) ? ' `location`, ' : '').
 							((!empty($category_ids)) ? ' `category`, ' : '').
-							((!empty($description)) ? ' `description`, ' : '').
+							((!empty($sql_description)) ? ' `description`, ' : '').
 							'`last_edit`, '.
 							(($hide===NULL) ? ' `hide`, ' : '').
 							' `contributor`'.
@@ -305,7 +326,7 @@ class ImageFormProcessor extends FormProcessor
 							$db->quote($db->escape($new_name)).', '.
 							((!empty($location)) ? ' '.$db->quote($db->escape($location)).', ' : '').
 							((!empty($category_ids)) ? ' '.$db->quote($category_ids).', ' : '').
-							((!empty($description)) ? ' '.$db->quote($db->escape($description)).', ' : '').
+							((!empty($sql_description)) ? ' '.$sql_description.', ' : '').
 							$db->quote($db->escape($last_edit)).','.
 							((!empty($hide)) ? '0,' : '').
 							' '.$db->quote($contributor_id).
@@ -324,7 +345,7 @@ class ImageFormProcessor extends FormProcessor
 								' `contributor` = '.$db->quote($contributor_id).','.
 								' `recent_contributor` = '.$db->quote($recent_cont_id).','.
 								' `last_edit` = '.$db->quote($last_edit).','.
-								' `description` = '.((empty($description)) ? $db->quote('') : $db->quote($db->escape($description))).','.
+								' `description` = '.$sql_description.','.
 								' `hide` = '.(($hide===NULL) ? 'NULL' : 0).
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
@@ -334,7 +355,7 @@ class ImageFormProcessor extends FormProcessor
 							# Run the sql query.
 							$db_post=$db->query($sql);
 							# Check if the query was successful.
-							if($db_post>0)
+							if(TRUE)//if($db_post>0)
 							{
 								# Unset the CMS session data.
 								unset($_SESSION['form']['image']);
@@ -701,7 +722,12 @@ class ImageFormProcessor extends FormProcessor
 			# Set a nice message for the user in a session.
 			$_SESSION['message']='The image "'.$image_name.'" was successfully '.$action.'!';
 			# Check if there is a post or content session.
-			if(isset($_SESSION['form']['post']) OR isset($_SESSION['form']['audio']) OR isset($_SESSION['form']['video']) OR isset($_SESSION['form']['content']) OR isset($_SESSION['form']['product']))
+			if(
+				isset($_SESSION['form']['post']) OR
+				isset($_SESSION['form']['audio']) OR
+				isset($_SESSION['form']['video']) OR
+				isset($_SESSION['form']['content']) OR
+				isset($_SESSION['form']['product']))
 			{
 				# Set the default origin form's name.
 				$origin_form='product';

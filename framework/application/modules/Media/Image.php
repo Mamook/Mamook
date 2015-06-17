@@ -282,53 +282,27 @@ class Image extends Media
 	 *
 	 * Returns the number of images in the database.
 	 *
-	 * @param	$categories				The names and/or id's of the category(ies) to be retrieved.
-	 *										May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110'
-	 * @param	$limit 					The limit of records to count.)
-	 * @param	$and_sql				Extra AND statements in the query.)
+	 * @param	$limit 					The limit of records to count.
+	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
 	 */
-	public function countAllImages($categories=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllImages($limit=NULL, $where=NULL)
 	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		# Check if there were categories passed.
-		if($categories===NULL)
+		try
 		{
-			throw new Exception('You must provide a category!', E_RECOVERABLE_ERROR);
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Count the records.
+			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'images`'.(($where===NULL) ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+			return $count;
 		}
-		else
+		catch(ezDB_Error $ez)
 		{
-			try
-			{
-				# Get the Category class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-				# Instantiate a new Category object.
-				$category=new Category();
-				# Set the Category object to a data member.
-				$this->setCatObject($category);
-				# Reset the Category object variable with the instance from the data member.
-				$category=$this->getCatObject();
-				# Create the WHERE clause for the passed $categories string.
-				$category->createWhereSQL($categories);
-				# Set the newly created WHERE clause to a variable.
-				$where=$category->getWhereSQL();
-				try
-				{
-					# Count the records.
-					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'images` WHERE '.$where.' '.(($and_sql===NULL) ? '' : $and_sql).(($limit===NULL) ? '' : ' LIMIT '.$limit));
-					return $count;
-				}
-				catch(ezDB_Error $ez)
-				{
-					throw new Exception('Error occured: ' . $ez->message . '<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
-				}
-			}
-			catch(Exception $e)
-			{
-				throw $e;
-			}
+			throw new Exception('Error occured: ' . $ez->message . '<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
 		}
 	} #==== End -- countAllImages
 
@@ -511,11 +485,10 @@ class Image extends Media
 	 *
 	 * Returns a selectable list of images.
 	 *
-	 * @param	$categories
 	 * @param	$select
 	 * @access	public
 	 */
-	public function displayImageList($categories=NULL, $select=FALSE)
+	public function displayImageList($select=FALSE)
 	{
 		# Bring the Login object into scope.
 		global $login;
@@ -525,7 +498,7 @@ class Image extends Media
 		try
 		{
 			# Count the returned images.
-			$content_count=$this->countAllImages($categories);
+			$content_count=$this->countAllImages();
 			# Check if there was returned content.
 			if($content_count>0)
 			{
@@ -612,13 +585,8 @@ class Image extends Media
 				$paginator->setStrNext('Next Page');
 				$paginator->setStrPrevious('Previous Page');
 
-				# Set the Category object created in the countAllImages method to a variable.
-				$category=$this->getCatObject();
-				# Set the newly created WHERE clause to a variable.
-				$and_sql=' WHERE '.$category->getWhereSQL();
-
 				# Get the Images.
-				$this->getImages($paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', $sort_by, $sort_dir, $and_sql);
+				$this->getImages($paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', $sort_by, $sort_dir);
 				# Set the returned Image records to a variable.
 				$all_images=$this->getAllImages();
 
@@ -661,19 +629,19 @@ class Image extends Media
 				foreach($all_images as $row)
 				{
 					# Instantiate a new Image object.
-					$image=New Image();
+					$image_obj=new Image();
 					# Set the relevant returned field values File data members.
-					$image->setCategories($row->category);
-					$image->setDescription($row->description);
-					$image->setID($row->id);
-					$image->setImage($row->image);
-					$image->setTitle($row->title);
+					$image_obj->setCategories($row->category);
+					$image_obj->setDescription($row->description);
+					$image_obj->setID($row->id);
+					$image_obj->setImage($row->image);
+					$image_obj->setTitle($row->title);
 					# Set the relevant Image data members to local variables.
-					$image_cats=$image->getCategories();
-					$image_desc=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getDescription());
-					$image_id=$image->getID();
-					$image_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getImage());
-					$image_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image->getTitle());
+					$image_cats=$image_obj->getCategories();
+					$image_desc=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image_obj->getDescription());
+					$image_id=$image_obj->getID();
+					$image_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image_obj->getImage());
+					$image_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image_obj->getTitle());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;

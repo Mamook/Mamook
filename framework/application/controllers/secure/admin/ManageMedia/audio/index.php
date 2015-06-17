@@ -10,7 +10,6 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'AudioFormProcessor.php');
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
-
 $login->findUserData();
 
 # Create display variables.
@@ -24,10 +23,11 @@ $display_box2='';
 
 $display='';
 $head='';
+$audio_nav='';
 
 $form_processor=new AudioFormProcessor();
 
-# Get the audio form.
+# Get the audio form template.
 require Utility::locateFile(TEMPLATES.'forms'.DS.'audio_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
