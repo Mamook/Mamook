@@ -502,13 +502,13 @@ class Audio extends Media
 				# Create the WHERE clause for the passed $playlists string.
 				$playlist_obj->createWhereSQL($playlists, 'playlist', FALSE);
 				# Set the newly created WHERE clause to a variable.
-				$where=$playlist_obj->getWhereSQL();
+				$where=($playlist_obj->getWhereSQL()!==NULL ? $playlist_obj->getWhereSQL().' AND' : '');
 				try
 				{
 					# Set the Database instance to a variable.
 					$db=DB::get_instance();
 					# Count the records.
-					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'audio` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' AND `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
+					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'audio` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
 					return $count;
 				}
 				catch(ezDB_Error $ez)

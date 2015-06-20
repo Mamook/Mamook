@@ -106,11 +106,14 @@ class Playlist extends Category
 					$this->getPlaylists();
 					# Set the results to a variable.
 					$results=$this->getAllPlaylists();
-					# Loop through the playlists.
-					foreach($results as $row)
+					if($results!==NULL)
 					{
-						# Set the playlist id to the $playlists array.
-						$playlists[]=$row->id;
+						# Loop through the playlists.
+						foreach($results as $row)
+						{
+							# Set the playlist id to the $playlists array.
+							$playlists[]=$row->id;
+						}
 					}
 				}
 				else
@@ -133,43 +136,51 @@ class Playlist extends Category
 				$playlist_or=array();
 				# Create an empty array to hold the "AND" sql strings.
 				$playlist_and=array();
-				foreach($playlists as $playlist)
+				if(!empty($playlists))
 				{
-					# Clean it up.
-					$playlist=trim($playlist);
-					# Get the first character of the string.
-					$top=substr($playlist, 0, 1);
-					# Check if the first character was an "!".
-					if($top=='!')
+					foreach($playlists as $playlist)
 					{
-						# Remove the "!" from the front of the string.
-						$playlist=ltrim($playlist, '!');
+						# Clean it up.
+						$playlist=trim($playlist);
+						# Get the first character of the string.
+						$top=substr($playlist, 0, 1);
+						# Check if the first character was an "!".
+						if($top=='!')
+						{
+							# Remove the "!" from the front of the string.
+							$playlist=ltrim($playlist, '!');
+						}
+						# Check if $playlist is not an integer.
+						if($validator->isInt($playlist)!==TRUE)
+						{
+							# Get the category data that cooresponds to the passed $playlist name.
+							$this->getThisPlaylist($playlist, FALSE);
+							$playlist=$this->getID();
+						}
+						# Check if the first character was an "!".
+						if($top!='!')
+						{
+							# Set the newly created sql string to the $playlist_or array.
+							$playlist_or[]='`'.$field_name.'` REGEXP '.$db->quote('-'.$playlist.'-');
+						}
+						else
+						{
+							# Set the newly created sql string to the $playlist_and array.
+							$playlist_and[]='`'.$field_name.'` NOT REGEXP '.$db->quote('-'.$playlist.'-');
+						}
 					}
-					# Check if $playlist is not an integer.
-					if($validator->isInt($playlist)!==TRUE)
-					{
-						# Get the category data that cooresponds to the passed $playlist name.
-						$this->getThisPlaylist($playlist, FALSE);
-						$playlist=$this->getID();
-					}
-					# Check if the first character was an "!".
-					if($top!='!')
-					{
-						# Set the newly created sql string to the $playlist_or array.
-						$playlist_or[]='`'.$field_name.'` REGEXP '.$db->quote('-'.$playlist.'-');
-					}
-					else
-					{
-						# Set the newly created sql string to the $playlist_and array.
-						$playlist_and[]='`'.$field_name.'` NOT REGEXP '.$db->quote('-'.$playlist.'-');
-					}
+					# Implode the $playlist_or array into one complete sql string.
+					$ors=implode(' OR ', $playlist_or);
+					# Implode the $playlist_and array into one complete sql string.
+					$ands=implode(' AND ', $playlist_and);
+					# Concatenate the $ands and $ors together.
+					$playlists=(((!empty($ors)) ? '('.$ors.')' : '').((!empty($ors) && !empty($ands)) ? ' AND ' : '').((!empty($ands)) ? '('.$ands.')' : ''));
 				}
-				# Implode the $playlist_or array into one complete sql string.
-				$ors=implode(' OR ', $playlist_or);
-				# Implode the $playlist_and array into one complete sql string.
-				$ands=implode(' AND ', $playlist_and);
-				# Concatenate the $ands and $ors together.
-				$playlists=(((!empty($ors)) ? '('.$ors.')' : '').((!empty($ors) && !empty($ands)) ? ' AND ' : '').((!empty($ands)) ? '('.$ands.')' : ''));
+				else
+				{
+					# Explicitly set playlists to NULL.
+					$playlists=NULL;
+				}
 			}
 		}
 		else

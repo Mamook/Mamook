@@ -250,6 +250,7 @@ elseif(!isset($_GET['select']))
 		$playlist_obj->getPlaylists(NULL, '`id`, `name`, `api`', 'name', 'ASC', $where);
 		# Set the playlists to a variable.
 		$playlists=$playlist_obj->getAllPlaylists();
+		$playlist_options['add']='Add Playlist';
 		# If there are playlist results.
 		if(!empty($playlists))
 		{
