@@ -28,12 +28,12 @@ class Image extends Media
 
 	/*** mutator methods ***/
 
-	/*
+	/**
 	 * setAllImages
 	 *
 	 * Sets the data member $images.
 	 *
-	 * @param		$images (May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$images					May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllImages($images)
@@ -53,12 +53,12 @@ class Image extends Media
 		}
 	} #==== End -- setAllImages
 
-	/*
+	/**
 	 * setImage
 	 *
 	 * Sets the data member $image.
 	 *
-	 * @param		$image
+	 * @param	$image
 	 * @access	public
 	 */
 	public function setImage($image)
@@ -84,8 +84,8 @@ class Image extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param		$id						Integer			A numeric ID representing the audio.
-	 * @param		$media_type		String			The type of media that the ID represents. Default is "image".
+	 * @param	int $id					A numeric ID representing the image.
+	 * @param	string $media_type		The type of media that the ID represents. Default is "image".
 	 * @access	public
 	 */
 	public function setID($id, $media_type='image')
@@ -106,7 +106,7 @@ class Image extends Media
 		}
 	} #==== End -- setID
 
-	/*
+	/**
 	 * setHeight
 	 *
 	 * Sets the data member $height.
@@ -144,12 +144,12 @@ class Image extends Media
 		$this->height=$height;
 	} #==== End -- setHeight
 
-	/*
+	/**
 	 * setHide
 	 *
 	 * Sets the data member $hide.
 	 *
-	 * @param		$hide
+	 * @param	$hide
 	 * @access	public
 	 */
 	public function setHide($hide)
@@ -167,7 +167,7 @@ class Image extends Media
 		}
 	} #==== End -- setHide
 
-	/*
+	/**
 	 * setWidth
 	 *
 	 * Sets the data member $width.
@@ -211,7 +211,7 @@ class Image extends Media
 
 	/*** accessor methods ***/
 
-	/*
+	/**
 	 * getAllImages
 	 *
 	 * Returns the data member $all_images.
@@ -223,7 +223,7 @@ class Image extends Media
 		return $this->all_images;
 	} #==== End -- getAllImages
 
-	/*
+	/**
 	 * getImage
 	 *
 	 * Returns the data member $image.
@@ -235,7 +235,7 @@ class Image extends Media
 		return $this->image;
 	} #==== End -- getImage
 
-	/*
+	/**
 	 * getHeight
 	 *
 	 * Returns the data member $height.
@@ -247,7 +247,7 @@ class Image extends Media
 		return $this->height;
 	} #==== End -- getHeight
 
-	/*
+	/**
 	 * getHide
 	 *
 	 * Returns the data member $hide.
@@ -259,7 +259,7 @@ class Image extends Media
 		return $this->hide;
 	} #==== End -- getHide
 
-	/*
+	/**
 	 * getWidth
 	 *
 	 * Returns the data member $width.
@@ -277,13 +277,13 @@ class Image extends Media
 
 	/*** public methods ***/
 
-	/*
+	/**
 	 * countAllImages
 	 *
 	 * Returns the number of images in the database.
 	 *
 	 * @param	$limit 					The limit of records to count.
-	 * @param	$and_sql				Extra AND statements in the query.
+	 * @param	$where					WHERE statements in the query.
 	 * @access	public
 	 */
 	public function countAllImages($limit=NULL, $where=NULL)
@@ -306,19 +306,16 @@ class Image extends Media
 		}
 	} #==== End -- countAllImages
 
-	/*
+	/**
 	 * deleteImage
 	 *
 	 * Removes an image from the `images` table and the actual image from the system.
 	 *
-	 * @param		int			(The id of the image in the `images` table.
+	 * @param	int $id					The id of the image in the `images` table.
 	 * @access	public
 	 */
 	public function deleteImage($id, $redirect=NULL)
 	{
-		# Bring the Login object into scope.
-		global $login;
-
 		try
 		{
 			# Set the Database instance to a variable.
@@ -403,7 +400,8 @@ class Image extends Media
 					# Set a nice message to the session.
 					$_SESSION['message']='That image was not valid.';
 					# Redirect the user back to the page without GET or POST data.
-					$doc->redirect($redirect);				}
+					$doc->redirect($redirect);
+				}
 			}
 			return FALSE;
 		}
@@ -413,7 +411,7 @@ class Image extends Media
 		}
 	} #==== End -- deleteImage
 
-	/*
+	/**
 	 * displayImage
 	 *
 	 * Displays the image associated with the SubContent record.
@@ -480,7 +478,7 @@ class Image extends Media
 		}
 	} #==== End -- displayImage
 
-	/*
+	/**
 	 * displayImageList
 	 *
 	 * Returns a selectable list of images.
@@ -631,13 +629,11 @@ class Image extends Media
 					# Instantiate a new Image object.
 					$image_obj=new Image();
 					# Set the relevant returned field values File data members.
-					$image_obj->setCategories($row->category);
 					$image_obj->setDescription($row->description);
 					$image_obj->setID($row->id);
 					$image_obj->setImage($row->image);
 					$image_obj->setTitle($row->title);
-					# Set the relevant Image data members to local variables.
-					$image_cats=$image_obj->getCategories();
+					# Get the relevant Image data members to local variables.
 					$image_desc=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image_obj->getDescription());
 					$image_id=$image_obj->getID();
 					$image_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $image_obj->getImage());
@@ -720,17 +716,17 @@ class Image extends Media
 		}
 	} #==== End -- displayImageList
 
-	/*
+	/**
 	 * getImages
 	 *
 	 * Retrieves records from the `images` table.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	$limit					The LIMIT of the records.
+	 * @param	$fields					The name of the field(s) to be retrieved.
+	 * @param	$order					The name of the field to order the records by.
+	 * @param	$direction				The direction to order the records.
+	 * @param	$and_sql				Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getImages($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -761,7 +757,7 @@ class Image extends Media
 		}
 	} #==== End -- getImages
 
-	/*
+	/**
 	 * getThisImage
 	 *
 	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.

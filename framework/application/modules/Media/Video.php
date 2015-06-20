@@ -609,9 +609,6 @@ class Video extends Media
 	 */
 	public function deleteVideo($id, $redirect=NULL)
 	{
-		# Bring the Login object into scope.
-		global $login;
-
 		try
 		{
 			# Set the Database instance to a variable.

@@ -573,9 +573,6 @@ class Audio extends Media
 	 */
 	public function deleteAudio($id, $redirect=NULL)
 	{
-		# Bring the Login object into scope.
-		global $login;
-
 		try
 		{
 			# Set the Database instance to a variable.

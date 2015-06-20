@@ -14,7 +14,7 @@ $select=TRUE;
 
 if(isset($_GET['create_playlist']))
 {
-	$display.='<div id="file_form" class="form">';
+	$display.='<div id="playlist_form" class="form">';
 
 	# Add the statement about requirements.
 	$display.='<span class="required">* = required field</span>';
@@ -74,9 +74,9 @@ elseif(!isset($_GET['select']))
 			$main_content->setSubTitle($sub_title);
 		}
 
-		$display.='<div id="file_form" class="form">';
+		$display.='<div id="audio_form" class="form">';
 
-		# create and display form.
+		# Create and display form.
 		$display.=$head;
 
 		# Add the statement about requirements.
@@ -195,17 +195,6 @@ elseif(!isset($_GET['select']))
 			}
 		}
 
-		# Get the publish year from the Audio data member.
-		$audio_year=$audio_obj->getYear();
-		# Check if the publish year value is empty.
-		if(empty($audio_year) OR ($audio_year=='0000'))
-		{
-			# Reset the value to "Unknown".
-			$audio_year='Unknown';
-		}
-		# Set the selected year to the options array and create the "Unknown" option.
-		$select_audio_year=array('selected'=>$audio_year, 'unknown'=>'Unknown');
-
 		# Get the Publisher class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Publisher.php');
 		# Instantiate a new Publisher object.
@@ -284,6 +273,17 @@ elseif(!isset($_GET['select']))
 				}
 			}
 		}
+
+		# Get the publish year from the Audio data member.
+		$audio_year=$audio_obj->getYear();
+		# Check if the publish year value is empty.
+		if(empty($audio_year) OR ($audio_year=='0000'))
+		{
+			# Reset the value to "Unknown".
+			$audio_year='Unknown';
+		}
+		# Set the selected year to the options array and create the "Unknown" option.
+		$select_audio_year=array('selected'=>$audio_year, 'unknown'=>'Unknown');
 
 		# Instantiate a new FormGenerator object.
 		$fg=new FormGenerator('audio', $form_processor->getFormAction(), 'POST', '_top', TRUE);

@@ -38,8 +38,6 @@ class ImageFormProcessor extends FormProcessor
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
 
 			# Get the ImageFormPopulator Class.
 			require_once Utility::locateFile(MODULES.'Form'.DS.'ImageFormPopulator.php');
@@ -481,9 +479,9 @@ class ImageFormProcessor extends FormProcessor
 						if($record_retrieved===TRUE)
 						{
 							# Set the Image object to a local variable.
-							$image=$subcontent->getImageObj();
+							$image_obj=$subcontent->getImageObj();
 							# Set the image name to a local variable.
-							$image_name=$image->getImage();
+							$image_name=$image_obj->getImage();
 							# Set the "cleaned id to a local variable.
 							$id=$subcontent->getImageID();
 							# Get all subcontent with this image associated.
@@ -552,27 +550,27 @@ class ImageFormProcessor extends FormProcessor
 										# DRAVEN: We should be using prepared statements!
 										# Remove the file from all `content` records.
 										$db_submit=$db->query('UPDATE '.
-										'`'.DBPREFIX.'content` '.
-										'SET '.
-										DBPREFIX.'content.image = NULL '.
-										'WHERE '.
-										DBPREFIX.'content.image = '.$db->quote($db->escape($image_name)));
+											'`'.DBPREFIX.'content` '.
+											'SET '.
+											DBPREFIX.'content.image = NULL '.
+											'WHERE '.
+											DBPREFIX.'content.image = '.$db->quote($db->escape($image_name)));
 
 										# Remove the file from all `products` records.
 										$db_submit=$db->query('UPDATE '.
-										'`'.DBPREFIX.'products` '.
-										'SET '.
-										DBPREFIX.'products.image = NULL '.
-										'WHERE '.
-										DBPREFIX.'products.image = '.$db->quote($id));
+											'`'.DBPREFIX.'products` '.
+											'SET '.
+											DBPREFIX.'products.image = NULL '.
+											'WHERE '.
+											DBPREFIX.'products.image = '.$db->quote($id));
 
 										# Remove the file from all `subcontent` records.
 										$db_submit=$db->query('UPDATE '.
-										'`'.DBPREFIX.'subcontent` '.
-										'SET '.
-										DBPREFIX.'subcontent.image = NULL '.
-										'WHERE '.
-										DBPREFIX.'subcontent.image = '.$db->quote($id));
+											'`'.DBPREFIX.'subcontent` '.
+											'SET '.
+											DBPREFIX.'subcontent.image = NULL '.
+											'WHERE '.
+											DBPREFIX.'subcontent.image = '.$db->quote($id));
 
 										if(empty($db_submit))
 										{
@@ -590,7 +588,7 @@ class ImageFormProcessor extends FormProcessor
 								# Get rid of any CMS form sessions.
 								unset($_SESSION['form']['image']);
 								# Delete the image from the Database and set the returned value to a variable.
-								$deleted=$image->deleteImage($id, FALSE);
+								$deleted=$image_obj->deleteImage($id, FALSE);
 								if($deleted===TRUE)
 								{
 									$this->redirectImage($image_name, 'deleted');

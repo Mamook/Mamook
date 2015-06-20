@@ -20,7 +20,7 @@ $select=TRUE;
 
 if(isset($_GET['create_playlist']))
 {
-	$display.='<div id="file_form" class="form">';
+	$display.='<div id="playlist_form" class="form">';
 
 	# Add the statement about requirements.
 	$display.='<span class="required">* = required field</span>';
@@ -90,7 +90,7 @@ elseif(!isset($_GET['select']))
 			$main_content->setSubTitle($sub_title);
 		}
 
-		$display.='<div id="file_form" class="form">';
+		$display.='<div id="video_form" class="form">';
 
 		# Create and display form.
 		$display.=$head;
@@ -226,17 +226,6 @@ elseif(!isset($_GET['select']))
 			}
 		}
 
-		# Get the publish year from the Video data member.
-		$video_year=$video_obj->getYear();
-		# Check if the publish year value is empty.
-		if(empty($video_year) OR ($video_year=='0000'))
-		{
-			# Reset the value to "Unknown".
-			$video_year='Unknown';
-		}
-		# Set the selected year to the options array and create the "Unknown" option.
-		$select_video_year=array('selected'=>$video_year, 'unknown'=>'Unknown');
-
 		# Get the Publisher class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Publisher.php');
 		# Instantiate a new Publisher object.
@@ -315,6 +304,17 @@ elseif(!isset($_GET['select']))
 				}
 			}
 		}
+
+		# Get the publish year from the Video data member.
+		$video_year=$video_obj->getYear();
+		# Check if the publish year value is empty.
+		if(empty($video_year) OR ($video_year=='0000'))
+		{
+			# Reset the value to "Unknown".
+			$video_year='Unknown';
+		}
+		# Set the selected year to the options array and create the "Unknown" option.
+		$select_video_year=array('selected'=>$video_year, 'unknown'=>'Unknown');
 
 		# Instantiate a new FormGenerator object.
 		$fg=new FormGenerator('video', $form_processor->getFormAction(), 'POST', '_top', TRUE);

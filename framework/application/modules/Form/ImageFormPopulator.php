@@ -130,8 +130,6 @@ class ImageFormPopulator extends FormPopulator
 			{
 				# Set the data array to a local variable.
 				$data=$this->getData();
-				# Set the Validator instance to a variable.
-				$validator=Validator::getInstance();
 
 				# Check if the category was passed via POST data.
 				if(isset($_POST['category']))

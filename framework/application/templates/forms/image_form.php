@@ -1,6 +1,6 @@
 <?php /* framework/application/templates/forms/image_form.php */
 
-# Get the video form defaults
+# Get the image form defaults
 require Utility::locateFile(TEMPLATES.'forms'.DS.'image_form_defaults.php');
 
 $display_delete_form=$form_processor->processImage($default_data);
@@ -45,7 +45,7 @@ if(!isset($_GET['select']))
 
 		$display.='<div id="image_form" class="form">';
 
-		# create and display form.
+		# Create and display form.
 		$display.=$head;
 
 		# Add the statement about requirements.
