@@ -75,7 +75,7 @@ class FileFormPopulator extends FormPopulator
 	 * Populates a file form with content from the File table in the Databse using the id passed
 	 * via GET data, default file data, values passed via POST, or saved SESSION data.
 	 *
-	 * @param		$data			(An array of values tp populate the form with.)
+	 * @param	$data					An array of values tp populate the form with.
 	 * @access	public
 	 */
 	public function populateFileForm($data=array())
@@ -85,9 +85,9 @@ class FileFormPopulator extends FormPopulator
 			# Get the File class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'File.php');
 			# Instantiate a new File object.
-			$file=new File();
+			$file_obj=new File();
 			# Set the File object to the file data member for use outside of this method.
-			$this->setFileObject($file);
+			$this->setFileObject($file_obj);
 
 			# Set the passed data array to the data member.
 			$this->setData($data);
@@ -133,8 +133,6 @@ class FileFormPopulator extends FormPopulator
 				# Set the Validator instance to a variable.
 				$validator=Validator::getInstance();
 
-				/* Capture POST data. */
-
 				# Check if the author was passed via POST data.
 				if(isset($_POST['author']))
 				{
@@ -160,7 +158,7 @@ class FileFormPopulator extends FormPopulator
 						# Set "add" to the "CategoryOption" index of the data array.
 						$data['CategoryOption']='add';
 					}
-					# Set the File categories data member.
+					# Set the categories data member.
 					$data['Categories']=$_POST['category'];
 				}
 

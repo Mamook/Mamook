@@ -2,18 +2,15 @@
 
 # Get the SubContent Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'File.php');
-# Get the FormGenerator Class.
-require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the FileFormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FileFormProcessor.php');
+# Get the FormGenerator Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the PageNavigator Class.
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
-
 $login->findUserData();
-
-$form_processor=new FileFormProcessor();
 
 # Create display variables.
 $display_main1='';
@@ -27,9 +24,10 @@ $display_box2='';
 $display='';
 $head='';
 
-require Utility::locateFile(TEMPLATES.'forms'.DS.'file_form.php');
+$form_processor=new FileFormProcessor();
 
-//require Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
+# Get the image form template.
+require Utility::locateFile(TEMPLATES.'forms'.DS.'file_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);

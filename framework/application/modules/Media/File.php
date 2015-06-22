@@ -31,7 +31,7 @@ class File extends Media
 	 *
 	 * Sets the data member $files.
 	 *
-	 * @param		$files (May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$files					May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllFiles($files)
@@ -56,7 +56,7 @@ class File extends Media
 	 *
 	 * Sets the data member $file.
 	 *
-	 * @param		$file
+	 * @param	$file
 	 * @access	public
 	 */
 	public function setFile($file)
@@ -82,8 +82,8 @@ class File extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param		$id						Integer			A numeric ID representing the file.
-	 * @param		$media_type		String			The type of media that the ID represents. Default is "file".
+	 * @param	int $id					A numeric ID representing the file.
+	 * @param	string $media_type		The type of media that the ID represents. Default is "file".
 	 * @access	public
 	 */
 	public function setID($id, $media_type='file')
@@ -109,7 +109,7 @@ class File extends Media
 	 *
 	 * Sets the data member $premium.
 	 *
-	 * @param		$premium 	(NULL=Not Premium Content, 0=Premium Content)
+	 * @param	$premium				NULL=Not Premium Content, 0=Premium Content
 	 * @access	public
 	 */
 	public function setPremium($premium)
@@ -177,281 +177,36 @@ class File extends Media
 	 *
 	 * Returns the number of files in the database.
 	 *
-	 * @param		$categories (The names and/or id's of the category(ies) to be retrieved. May be multiple categories - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude categories, ie. '50-!60-Archives-110')
-	 * @param		$limit 		(The limit of records to count.)
-	 * @param		$and_sql 	(Extra AND statements in the query.)
+	 * @param	$limit					The limit of records to count.
+	 * @param	$where					WHERE statements in the query.
 	 * @access	public
 	 */
-	public function countAllFiles($categories=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllFiles($limit=NULL, $where=NULL)
 	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-
-		# Check if there were categories passed.
-		if($categories===NULL)
-		{
-			throw new Exception('You must provide a category!', E_RECOVERABLE_ERROR);
-		}
-		else
-		{
-			try
-			{
-				# Get the Category class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
-				# Instantiate a new Category object.
-				$category=new Category();
-				# Set the Category object to a data member.
-				$this->setCatObject($category);
-				# Create the WHERE clause for the passed $categories string.
-				$category->createWhereSQL($categories);
-				# Set the newly created WHERE clause to a variable.
-				$where=$category->getWhereSQL();
-				try
-				{
-					# Count the records.
-					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'files` WHERE '.$where.' '.(($and_sql===NULL) ? '' : $and_sql).(($limit===NULL) ? '' : ' LIMIT '.$limit));
-					return $count;
-				}
-				catch(ezDB_Error $ez)
-				{
-					throw new Exception('Error occured: ' . $ez->message . '<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
-				}
-			}
-			catch(Exception $e)
-			{
-				throw $e;
-			}
-		}
-	} #==== End -- countAllFiles
-
-	/**
-	 * createFileList
-	 *
-	 * Returns a selectable list of files.
-	 *
-	 * @param		$select				(TRUE if there should be check boxes to select files, FALSE if not.)
-	 * @access	public
-	 */
-	public function createFileList($select=FALSE)
-	{
-		# Set the Document instance to a variable.
-		$doc=Document::getInstance();
-		# Bring the Login object into scope.
-		global $login;
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
 		try
 		{
-			# Create an empty array to hold query parameters.
-			$params_a=array();
-			# Set the default sort order to a variable.
-			$sort_dir='ASC';
-			# Set the default "sort by" to a variable.
-			$sort_by='file';
-			# Set the default sort direction of files for the file sorting link to a variable.
-			$file_dir='DESC';
-			# Set the default sort direction of titles for the title sorting link to a variable.
-			$title_dir='DESC';
-			# Check if GET data for file has been passed and it is an integer.
-			if(isset($_GET['file']) && $validator->isInt($_GET['file'])===TRUE)
-			{
-				# Set the query to the query parameters array.
-				$params_a['file']='file='.$_GET['file'];
-			}
-			# Check if GET data for "add" has been passed.
-			if(isset($_GET['add']))
-			{
-				# Set the query to the query parameters array.
-				$params_a['add']='add';
-			}
-			# Check if this should be a selectable list and that GET data for "select" has been passed.
-			if($select===TRUE && isset($_GET['select']))
-			{
-				# Reset the $select variable to the value "select" indicating that this conditional is all TRUE.
-				$select='select';
-				# Get rid of any "file" GET query; it can't be passed with "select".
-				unset($params_a['file']);
-				# Set the query to the query parameters array.
-				$params_a['select']='select';
-			}
-			# Check if GET data for "by_file" has been passed and it equals "ASC" or "DESC" and that GET data for "by_title" has not also been passed.
-			if(isset($_GET['by_file']) && ($_GET['by_file']==='ASC' OR $_GET['by_file']==='DESC') && !isset($_GET['by_title']))
-			{
-				# Set the query to the query parameters array.
-				$params_a['by_file']='by_file='.$_GET['by_file'];
-				# Check if the order is to be descending.
-				if($_GET['by_file']==='DESC')
-				{
-					# Reset the default "sort by" to "DESC".
-					$sort_dir='DESC';
-					# Reset the sort direction of files for the file sorting link to "ASC".
-					$file_dir='ASC';
-				}
-			}
-			# Check if GET data for "by_title" has been passed and it equals "ASC" or "DESC" and that GET data for "by_file" has not also been passed.
-			if(isset($_GET['by_title']) && ($_GET['by_title']==='ASC' OR $_GET['by_title']==='DESC') && !isset($_GET['by_file']))
-			{
-				# Set the query to the query parameters array.
-				$params_a['by_title']='by_title='.$_GET['by_title'];
-				# Reset the default "sort by" to "title".
-				$sort_by='title';
-				# Check if the order is to be descending.
-				if($_GET['by_title']==='DESC')
-				{
-					# Reset the default "sort by" to "DESC".
-					$sort_dir='DESC';
-					# Reset the sort direction of titles for the title sorting link to "ASC".
-					$title_dir='ASC';
-				}
-			}
-			# Implode the query parameters array to a string sepparated by ampersands.
-			$params=implode('&amp;', $params_a);
-			# Get rid of the "by_file" and "by_title" indexes of the array.
-			unset($params_a['by_file']);
-			unset($params_a['by_title']);
-			# Implode the query parameters array to a string sepparated by ampersands for the file and title sorting links.
-			$query_params=implode('&amp;', $params_a);
-			# Set the default value for displaying an edit button and a delete button to FALSE.
-			$edit=FALSE;
-			$delete=FALSE;
-
-			# Check if the logged in User has access to editing a branch.
-			if($login->checkAccess(ALL_BRANCH_USERS)===TRUE)
-			{
-				# Set the default value for displaying an edit button and a delete button to TRUE.
-				$edit=TRUE;
-				$delete=TRUE;
-			}
-			# Set the returned File records to a variable.
-			$all_files=$this->getAllFiles();
-
-			# Start a table for the files and set the markup to a variable.
-			$table_header='<table class="'.(($select==='select') ? 'select': 'table').'-file">';
-			# Set the table header for the file column to a variable.
-			$general_header='<th class="download-file"><a href="'.ADMIN_URL.'ManageMedia/files/?'.$query_params.((!empty($query_params)) ? '&amp;' : '').'by_file='.$file_dir.'" title="Order by file name">Download</a></th>';
-			# Add the table header for the title column to the $general_header variable.
-			$general_header.='<th><a href="'.ADMIN_URL.'ManageMedia/files/?'.$query_params.((!empty($query_params)) ? '&amp;' : '').'by_title='.$title_dir.'" title="Order by title">Title</a></th>';
-			# Check if this is a select list.
-			if($select==='select')
-			{
-				# Get the FormGenerator class.
-				require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
-				# Instantiate a new FormGenerator object.
-				$fg=new FormGenerator('post', PROTOCAL.FULL_URL, 'post', '_top', FALSE, 'file-list');
-				# Create the hidden submit check input.
-				$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
-				# Open the fieldset tag.
-				$fg->addFormPart('<fieldset>');
-				# Add a table header for the Select column and concatenate the table header.
-				$table_header.='<th>Select</th>'.$general_header;
-				# Add the table header to the form.
-				$fg->addFormPart($table_header);
-			}
-			else
-			{
-				# Concatenate the table header.
-				$table_header.=$general_header;
-				# Check if edit and delete buttons should be displayed.
-				if($delete===TRUE OR $edit===TRUE)
-				{
-					# Concatenate the options header to the table header.
-					$table_header.='<th>Options</th>';
-				}
-			}
-			# Creat an empty variable for the table body.
-			$table_body='';
-			# Loop through the all_files array.
-			foreach($all_files as $row)
-			{
-				# Instantiate a new File object.
-				$file_row=New File();
-				# Set the relevant returned field values File data members.
-				$file_row->setID($row->id);
-				$file_row->setFile($row->file);
-				$file_row->setPremium($row->premium);
-				$file_row->setTitle($row->title);
-				$file_id=$file_row->getID();
-				# Set the relevant File data members to local variables.
-				$file_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getFile());
-				$file_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getTitle());
-				# Create empty variables for the edit and delete buttons.
-				$edit_content=NULL;
-				$delete_content=NULL;
-				# Set the file markup to the $general_data variable.
-				$general_data='<td><a href="'.DOWNLOADS.'?f='.$file_name.(($file_row->getPremium()===0) ? '&amp;t=premium' : '').'" title="'.$file_title.'">'.$file_name.'</a></td>';
-				# Add the title markup to the $general_data variable.
-				$general_data.='<td>'.(($select==='select') ? '<label for="file'.$file_id.'">' : '').$file_title.(($select==='select') ? '</label>' : '').'</td>';
-				# Check if there should be an edit button displayed.
-				if($edit===TRUE)
-				{
-					# Set the edit button to a variable.
-					$edit_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'" class="edit" title="Edit this">Edit</a>';
-				}
-				# Check f there should be a delete button displayed.
-				if($delete===TRUE)
-				{
-					# Set the delete button to a variable.
-					$delete_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'&amp;delete=yes" class="delete" title="Delete This">Delete</a>';
-				}
-				# Check if this is a select list.
-				if($select==='select')
-				{
-					# Open a tr and td tag and add them to the form.
-					$fg->addFormPart('<tr><td>');
-					# Create the radio button for this file.
-					$fg->addElement('radio', array('name'=>'file_info', 'value'=>$file_id.':'.$file_name, 'id'=>'file'.$file_id));
-					# Reset the $table_body variable with the general data closing the radio button's td tag and closing the tr.
-					$table_body='</td>'.$general_data.'</tr>';
-					# Add the table body to the form.
-					$fg->addFormPart($table_body);
-				}
-				else
-				{
-					# Concatenate the general data to the $table_body variable first opening a new tr.
-					$table_body.='<tr>'.$general_data;
-					# Check if there should be edit or Delete buttons displayed.
-					if($delete===TRUE OR $edit===TRUE)
-					{
-						# Concatenate the button(s) to the $table_body variable wrapped in td tags.
-						$table_body.='<td>'.$edit_content.$delete_content.'</td>';
-					}
-					# Close the current tr.
-					$table_body.='</tr>';
-				}
-			}
-			# Check if this is a select list.
-			if($select==='select')
-			{
-				# Close the table.
-				$fg->addFormPart('</table>');
-				# Add the submit button.
-				$fg->addElement('submit', array('name'=>'file', 'value'=>'Select File'), '', NULL, 'submit-file');
-				$fg->addElement('submit', array('name'=>'file', 'value'=>'Go Back'), '', NULL, 'submit-back');
-				# Close the fieldset.
-				$fg->addFormPart('</fieldset>');
-				# Set the form to a local variable.
-				$display='<h4>Select a file below</h4>'.$fg->display();
-			}
-			else
-			{
-				# Concatenate the table header and body and close the table setting it all to a local variable.
-				$display=$table_header.$table_body.'</table>';
-			}
-			return $display;
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Count the records.
+			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'files`'.(($where===NULL) ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+			return $count;
+		}
+		catch(ezDB_Error $ez)
+		{
+			throw new Exception('Error occured: ' . $ez->message . '<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- createFileList
+	} #==== End -- countAllFiles
 
 	/**
 	 * deleteFile
 	 *
 	 * Removes a file from the `files` table and the actual file from the system.
 	 *
-	 * @param		int			(The id of the file in the `files` table.
+	 * @param	int $id					The id of the file in the `files` table.
 	 * @access	public
 	 */
 	public function deleteFile($id, $redirect=NULL)
@@ -471,7 +226,7 @@ class File extends Media
 				if($redirect===NULL)
 				{
 					# Set the redirect to the default.
-					$redirect=PROTOCAL.FULL_URL.HERE;
+					$redirect=PROTOCAL.FULL_DOMAIN.HERE;
 				}
 				# Check if the passed redirect URL was FALSE.
 				if($redirect===FALSE)
@@ -487,7 +242,7 @@ class File extends Media
 					# Check if the file is premium content or not.
 					$this_file=$this->getThisFile($id);
 					# Check if the file was found.
-					if($this_file==TRUE)
+					if($this_file===TRUE)
 					{
 						# Create an empty variable to hold the name of a folder for the file.
 						$folder='';
@@ -571,13 +326,11 @@ class File extends Media
 	 *
 	 * Returns a selectable list of files.
 	 *
-	 * @param		$branch 	(The name or id of the branch to display.)
+	 * @param	$select
 	 * @access	public
 	 */
-	public function displayFileList($categories=NULL, $select=FALSE)
+	public function displayFileList($select=FALSE)
 	{
-		# Set the Document instance to a variable.
-		$doc=Document::getInstance();
 		# Bring the Login object into scope.
 		global $login;
 		# Set the Validator instance to a variable.
@@ -585,22 +338,22 @@ class File extends Media
 
 		try
 		{
-			# Set a default variable for the "AND" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
-			$and_sql=' AND `availability` = 1';
+			# Set a default variable for the "WHERE" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
+			$where_statement=NULL;
 			# Check if the logged in User is a Managing User.
 			if($login->checkAccess(MAN_USERS)===TRUE)
 			{
 				# Set a variable for the "AND" portion of the sql statement.
-				$and_sql=' AND (`availability` = 1 || `availability` = 2)';
+				$where_statement='(`availability` = 1 || `availability` = 2)';
 			}
 			# Check if the logged in User is an Admin.
 			if($login->checkAccess(ADMIN_USERS)===TRUE)
 			{
-				# Set a variable for the "AND" portion of the sql statement.
-				$and_sql=' AND `availability` = 1';
+				# Set a variable for the "WHERE" portion of the sql statement.
+				$where_statement='`availability` = 1';
 			}
 			# Count the returned files.
-			$content_count=$this->countAllFiles($categories, NULL, $and_sql);
+			$content_count=$this->countAllFiles(NULL, $where_statement);
 			# Check if there was returned content.
 			if($content_count>0)
 			{
@@ -620,12 +373,15 @@ class File extends Media
 					# Set the query to the query parameters array.
 					$params_a['file']='file='.$_GET['file'];
 				}
+				# NOTE: What's this? Old code?
+				/*
 				# Check if GET data for "add" has been passed.
 				if(isset($_GET['add']))
 				{
 					# Set the query to the query parameters array.
 					$params_a['add']='add';
 				}
+				*/
 				# Check if this should be a selectable list and that GET data for "select" has been passed.
 				if($select===TRUE && isset($_GET['select']))
 				{
@@ -678,7 +434,7 @@ class File extends Media
 				$delete=FALSE;
 
 				# Check if the logged in User has access to editing a branch.
-				if($login->checkAccess(ALL_BRANCH_USERS)===TRUE)
+				if($login->checkAccess(ALL_BRANCH_USERS)===TRUE && $select!=='select')
 				{
 					# Set the default value for displaying an edit button and a delete button to TRUE.
 					$edit=TRUE;
@@ -693,13 +449,8 @@ class File extends Media
 				$paginator->setStrNext('Next Page');
 				$paginator->setStrPrevious('Previous Page');
 
-				# Set the Category object created in the countAllFiles method to a variable.
-				$category=$this->getCatObject();
-				# Set the newly created WHERE clause to a variable.
-				$and_sql=' WHERE '.$category->getWhereSQL().$and_sql;
-
 				# Get the Files.
-				$this->getFiles($paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', $sort_by, $sort_dir, $and_sql);
+				$this->getFiles($paginator->getRecordOffset().', '.$paginator->getRecordsPerPage(), '*', $sort_by, $sort_dir);
 				# Set the returned File records to a variable.
 				$all_files=$this->getAllFiles();
 
@@ -742,21 +493,21 @@ class File extends Media
 				foreach($all_files as $row)
 				{
 					# Instantiate a new File object.
-					$file_row=New File();
+					$file_obj=new File();
 					# Set the relevant returned field values File data members.
-					$file_row->setID($row->id);
-					$file_row->setFile($row->file);
-					$file_row->setPremium($row->premium);
-					$file_row->setTitle($row->title);
-					$file_id=$file_row->getID();
-					# Set the relevant File data members to local variables.
-					$file_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getFile());
-					$file_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_row->getTitle());
+					$file_obj->setID($row->id);
+					$file_obj->setFile($row->file);
+					$file_obj->setPremium($row->premium);
+					$file_obj->setTitle($row->title);
+					# Get the relevant File data members to local variables.
+					$file_id=$file_obj->getID();
+					$file_name=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_obj->getFile());
+					$file_title=str_ireplace(array('%{domain_name}', '%{fw_popup_handle}'), array(DOMAIN_NAME, FW_POPUP_HANDLE), $file_obj->getTitle());
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
 					# Set the file markup to the $general_data variable.
-					$general_data='<td><a href="'.DOWNLOADS.'?f='.$file_name.(($file_row->getPremium()===0) ? '&amp;t=premium' : '').'" title="'.$file_title.'">'.$file_name.'</a></td>';
+					$general_data='<td><a href="'.DOWNLOADS.'?f='.$file_name.(($file_obj->getPremium()===0) ? '&amp;t=premium' : '').'" title="'.$file_title.'">'.$file_name.'</a></td>';
 					# Add the title markup to the $general_data variable.
 					$general_data.='<td>'.(($select==='select') ? '<label for="file'.$file_id.'">' : '').$file_title.(($select==='select') ? '</label>' : '').'</td>';
 					# Check if there should be an edit button displayed.
@@ -835,12 +586,12 @@ class File extends Media
 	 *
 	 * Retrieves records from the `files` table.
 	 *
-	 * @param		$limit 			(The LIMIT of the records.)
-	 * @param		$fields 		(The name of the field(s) to be retrieved.)
-	 * @param		$order 			(The name of the field to order the records by.)
-	 * @param		$direction 	(The direction to order the records.)
-	 * @param		$and_sql 		(Extra AND statements in the query.)
-	 * @return	Boolean 		(TRUE if records are returned, FALSE if not.)
+	 * @param	$limit					The LIMIT of the records.
+	 * @param	$fields					The name of the field(s) to be retrieved.
+	 * @param	$order					The name of the field to order the records by.
+	 * @param	$direction				The direction to order the records.
+	 * @param	$and_sql				Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getFiles($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -876,9 +627,9 @@ class File extends Media
 	 *
 	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member.
 	 *
-	 * @param		String	$value 	(The name or id of the file to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @return	Boolean 				(TRUE if a record is returned, FALSE if not.)
+	 * @param	string $value			The name or id of the file to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
+	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisFile($value, $id=TRUE)

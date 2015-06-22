@@ -1,20 +1,21 @@
 <?php /* framework/application/templates/forms/file_form.php */
 
+# Get the file form defaults
 require Utility::locateFile(TEMPLATES.'forms'.DS.'file_form_defaults.php');
-$display_delete_form=$form_processor->processFile($default_data);
+
+$display_delete_form=$form_processor->processFile($default_data, $max_file_size);
 
 # Set the FileFormPopulator object from the FileFormProcessor data member to a variable.
 $populator=$form_processor->getPopulator();
 # Set the File object from the FileFormPopulator data member to a variable.
-$file=$populator->getFileObject();
+$file_obj=$populator->getFileObject();
 
 $select=TRUE;
-$display='';
 
 if(!isset($_GET['select']))
 {
+	$head=(!isset($head) ? '' : $head);
 	$select=FALSE;
-	$sub_title='Files';
 
 	$duplicates=$form_processor->getDuplicates();
 	if(empty($duplicates))
@@ -25,7 +26,8 @@ if(!isset($_GET['select']))
 		$doc->setFooterJS('uniform-select,uniform-file,bsmSelect-multiple');
 
 		# Set the file name to a variable.
-		$file_name=$file->getFile();
+		$file_name=$file_obj->getFile();
+
 		# Check if this is an edit or delete page.
 		if(isset($_GET['file']))
 		{
@@ -37,23 +39,25 @@ if(!isset($_GET['select']))
 				# Set the page's subtitle as a delete page.
 				$sub_title='Files - Delete <span>'.$file_name.'</span>';
 			}
+			# Set the sub title.
+			$main_content->setSubTitle($sub_title);
 		}
 
 		$display='<div id="file_form" class="form">';
 
-		# create and display form.
-		$display.='<h3>'.$head.'</h3>';
+		# Create and display form.
+		$display.=$head;
 
 		# Add the statement about requirements.
 		$display.='<span class="required">* = required field</span>';
 
-		# Create an array to hold the available availability options.
+		# Create an array to hold the availability options.
 		$available_options=array(0=>'This site does not yet have the legal rights to display', 1=>'This site has the legal rights to display', 2=>'Internal document only', 3=>'Can not distribute');
-		# Loop through the available availability options.
+		# Loop through the availability options.
 		foreach($available_options as $value=>$option)
 		{
 			# Check if the POST data equals the index of the current option.
-			if($file->getAvailability()==$value)
+			if($file_obj->getAvailability()==$value)
 			{
 				# Set the selected availability to the default.
 				$availability_options['selected']=$option;
@@ -62,47 +66,49 @@ if(!isset($_GET['select']))
 			$availability_options[$value]=$option;
 		}
 
-		# Get the publish year from the File data member.
-		$file_year=$file->getYear();
-		# Check if the publish year value is empty.
-		if(empty($file_year))
-		{
-			# Reset the value to "Unknown".
-			$file_year='Unknown';
-		}
-		# Set the selected year to the options array and create the "Unknown" option.
-		$select_file_year=array('selected'=>$file_year, 'unknown'=>'Unknown');
-
 		# Get the Category class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 		# Instantiate a new Category object.
-		$category=new Category();
+		$category_obj=new Category();
 		# get the categories from the `categories` table.
-		$category->getCategories(NULL, '`id`, `category`', 'category', 'ASC');
+		$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
 		# Set the categories to a variable.
-		$categories=$category->getAllCategories();
-		# Create the "Add Category" option.
-		//$cat_options['add']='Add Category';
-		# Set the current categories to a variable.
-		$file_categories=array_flip((array)$file->getCategories());
+		$all_categories=$category_obj->getAllCategories();
 		# Loop through the categories.
-		foreach($categories as $row)
+		foreach($all_categories as $row)
 		{
 			# Create an option for each category.
-			$cat_options[$row->id]=$row->category;
+			$categories[$row->id]=$row->name;
+		}
+		# Flip the categories.
+		$categories=array_flip($categories);
+		# Set the current categories to a variable.
+		$file_categories=array_flip((array)$file_obj->getCategories());
+		$category_options[]='';
+		# Loop through the categories.
+		foreach($categories as $category_name=>$category_id)
+		{
+			# Create an option for each category.
+			$category_options[$category_id]=$category_name;
 			# Check if this file currently has a category.
 			if(!empty($file_categories))
 			{
 				# Check if the current category is default or has been selected by the user.
-				if(in_array($row->id, $file_categories)===TRUE)
+				if(in_array($category_id, $file_categories, TRUE)===TRUE)
 				{
 					# Set the selected category to the default.
-					$cat_options['multiple_selected'][$row->id]=$row->category;
+					$category_options['selected']=$category_name;
 				}
-				elseif($populator->getCategoryOption()==='add')
+				elseif(
+						(in_array('add', $file_categories)===TRUE) &&
+						(
+							isset($category_options['selected']) &&
+							in_array('Add Category', $category_options['selected']!==TRUE)
+						)
+					)
 				{
 					# Set the "Add Category" option as selected.
-					$cat_options['multiple_selected']['add']='Add Category';
+					$category_options['selected']['add']='Add Category';
 				}
 			}
 		}
@@ -117,12 +123,12 @@ if(!isset($_GET['select']))
 		foreach($institutions as $row)
 		{
 			$inst_options[$row->id]=$row->institution;
-			if($row->institution==$file->getInstitution())
+			if($row->institution==$file_obj->getInstitution())
 			{
 				# Set the selected institution to the default.
 				$inst_options['selected']=$row->institution;
 			}
-			elseif($populator->getInstitutionOption()==='add')
+			elseif($file_obj->getInstitution()==='add')
 			{
 				$inst_options['selected']='Add Institution';
 			}
@@ -138,18 +144,18 @@ if(!isset($_GET['select']))
 		foreach($languages as $row)
 		{
 			$language_options[$row->id]=$row->language;
-			if($row->language==$file->getLanguage())
+			if($row->language==$file_obj->getLanguage())
 			{
 				# Set the selected language to the default.
 				$language_options['selected']=$row->language;
 			}
-			elseif($populator->getLanguageOption()==='add')
+			elseif($file_obj->getLanguage()==='add')
 			{
 				$language_options['selected']='Add Language';
 			}
 		}
 
-		$premium=$file->getPremium();
+		$premium=$file_obj->getPremium();
 		if($premium===0)
 		{
 			$premium=TRUE;
@@ -172,34 +178,46 @@ if(!isset($_GET['select']))
 			foreach($publishers as $row)
 			{
 				$pub_options[$row->id]=$row->name;
-				if($row->name==$file->getPublisher())
+				if($row->name==$file_obj->getPublisher())
 				{
 					# Set the selected publisher to the default.
 					$pub_options['selected']=$row->name;
 				}
-				elseif($populator->getPublisherOption()==='add')
+				elseif($file_obj->getPublisher()==='add')
 				{
 					$pub_options['selected']='Add Publisher';
 				}
 			}
 		}
 
+		# Get the publish year from the File data member.
+		$file_year=$file_obj->getYear();
+		# Check if the publish year value is empty.
+		if(empty($file_year))
+		{
+			# Reset the value to "Unknown".
+			$file_year='Unknown';
+		}
+		# Set the selected year to the options array and create the "Unknown" option.
+		$select_file_year=array('selected'=>$file_year, 'unknown'=>'Unknown');
+
 		# Instantiate a new FormGenerator object.
 		$fg=new FormGenerator('file', $form_processor->getFormAction(), 'POST', '_top', TRUE);
 		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>(string)$populator->getUnique()));
-		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>((isset($max_file_size)) ? $max_file_size : 104857600)));
+		$fg->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>$max_file_size));
+		$fg->addElement('hidden', array('name'=>'_contributor', 'value'=>$file_obj->getContID()));
 		$fg->addFormPart('<fieldset>');
 		$fg->addFormPart('<ul>');
 		$fg->addFormPart('<li class="date">');
 		# Get the dat from the SubContent data member.
-		$date=$file->getDate();
+		$date=$file_obj->getDate();
 		# Create an empty variable for date comment.
 		$date_comment='';
 		# Check if the date is unknown (0000-00-00).
 		if($date=='0000-00-00')
 		{
-			# Set the date to the defaul "impossible" date.
+			# Set the date to the default "impossible" date.
 			$date='1970-02-31';
 			# Set the date comment.
 			$date_comment='<span class="comment">(Upload date unknown)</span>';
@@ -228,7 +246,7 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
-		$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$file->getTitle()));
+		$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$file_obj->getTitle()));
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="file"><span class="required">*</span> File</label>');
@@ -237,7 +255,7 @@ if(!isset($_GET['select']))
 		{
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($file->getPremium()!==NULL) ? '&amp;t=premium' : '').'" title="Current File">'.$file_name.' - "'.$file->getTitle().'"</a>');
+			$fg->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($file_obj->getPremium()!==NULL) ? '&amp;t=premium' : '').'" title="Current File">'.$file_name.' - "'.$file->getTitle().'"</a>');
 			$fg->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
@@ -257,7 +275,7 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="author"><span class="required">*</span> Author</label>');
-		$fg->addElement('text', array('name'=>'author', 'id'=>'author', 'value'=>$file->getAuthor()));
+		$fg->addElement('text', array('name'=>'author', 'id'=>'author', 'value'=>$file_obj->getAuthor()));
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="file_year">Publish Year</label>');
@@ -265,11 +283,11 @@ if(!isset($_GET['select']))
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="location"><span class="required">*</span> Publish Location</label>');
-		$fg->addElement('text', array('name'=>'location', 'id'=>'location', 'value'=>$file->getLocation()));
+		$fg->addElement('text', array('name'=>'location', 'id'=>'location', 'value'=>$file_obj->getLocation()));
 		$fg->addFormPart('</li>');
-		$fg->addFormPart('<li class="mult">');
-		$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Category</label>');
-		$fg->addElement('select', array('name'=>'category[]', 'multiple'=>'multiple', 'title'=>'Select a Catagory', 'id'=>'category'), $cat_options);
+		$fg->addFormPart('<li>');
+		$fg->addFormPart('<label class="label" for="category">Category</label>');
+		$fg->addElement('select', array('name'=>'category[]', 'title'=>'Select a Catagory', 'id'=>'category'), $category_options);
 		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="institution">Institution</label>');
@@ -307,6 +325,9 @@ if(!isset($_GET['select']))
 	{
 		# Set the page's sub title.
 		$sub_title='Duplicate File';
+		# Set the sub title.
+		$main_content->setSubTitle($sub_title);
+
 		$dup_display[$dup_file->getID()]=array(
 									'id'=>$dup_file->getID(),
 									'author'=>$dup_file->getAuthor(),
@@ -325,7 +346,7 @@ if(!isset($_GET['select']))
 									);
 
 		# Set the duplicates to the File all_files data member.
-		$file->setAllFiles($duplicates);
+		$file_obj->setAllFiles($duplicates);
 		# Display the SubContent.
 		$display_array=$sc->displaySubContent(255, constant(strtoupper(str_replace(' ', '_', $branch_name)).'_USERS'));
 		$display.='<h3>The following file(s) seem to closely resemble the file you are submitting. If you feel your file is unique and would like to continue uploading it, simply click on the "Back" button below. Conversely, you may choose to edit an existing file or click <a href="'.SECURE_URL.WebUtility::removeIndex(SECURE_HERE).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without uploading.</h3>';
@@ -365,10 +386,8 @@ if(!isset($_GET['select']))
 		# Concatenate the Back button to the duplicates to be displayed.
 		$display.=$fg->display();
 	}
-	# Set the sub title.
-	$main_content->setSubTitle($sub_title);
 }
 
-$display.=$file->displayFileList('!1-!2-!3-!4-!5', $select);
+$display.=$file_obj->displayFileList($select);
 
 $display=$display_delete_form.$display;
