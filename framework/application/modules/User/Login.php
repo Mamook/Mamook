@@ -554,7 +554,7 @@ class Login extends User
 		# Reset the time on the session cookie.
 		if(isset($_COOKIE[SESSIONS_NAME]))
 		{
-			setcookie(SESSIONS_NAME, $_COOKIE[SESSIONS_NAME], time()+(($remember!==TRUE) ? LOGIN_LIFE_SHORT : LOGIN_LIFE), COOKIE_PATH, '.'.DOMAIN_NAME, $secure);
+			setcookie(SESSIONS_NAME, $_COOKIE[SESSIONS_NAME], (($remember!==TRUE) ? LOGIN_LIFE_SHORT : LOGIN_LIFE), COOKIE_PATH, '.'.DOMAIN_NAME, $secure);
 		}
 		# Set the User's login sessions.
 		$_SESSION['user_id']=$user_id;
@@ -574,9 +574,9 @@ class Login extends User
 			# Encrypt the password.
 			$authenticate=md5($password);
 			# Set the cookies.
-			setcookie('cookie_id', $user_id, time()+LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
-			setcookie('authenticate', $authenticate, time()+LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
-			setcookie('user_ip', $ip, time()+LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
+			setcookie('cookie_id', $user_id, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
+			setcookie('authenticate', $authenticate, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
+			setcookie('user_ip', $ip, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
 		}
 	} # ----End setLoginSessions
 

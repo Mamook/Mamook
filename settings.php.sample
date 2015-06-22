@@ -212,10 +212,10 @@ else
 define('PAYPAL_URL', SECURE_URL.'PayPal.php');
 
 # The length of time (in seconds) the cookies should remain active if "remember me" was selected on login. (default is 14 days)
-define('LOGIN_LIFE', 60*60*24*14);
+define('LOGIN_LIFE', time()+60*60*24*14);
 
 # The length of time (in seconds) the cookies should remain active if "remember me" was not selected on login. (default is 2 days)
-define('LOGIN_LIFE_SHORT', 60*60*24*2);
+define('LOGIN_LIFE_SHORT', time()+60*60*24*2);
 
 # Define where cookies may be active. ('/' means the entire domain)
 define('COOKIE_PATH', '/');
