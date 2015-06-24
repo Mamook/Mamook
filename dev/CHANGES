@@ -1,0 +1,276 @@
+Version 2.4.0:
+ - Category & Playlist work done to Audio, Video, and Images
+ - Updating PHPMailer
+ - Lowering max_file_size to 1GB
+ - Removing playlist requirement
+ - Remove YouTube Client ID check on the category select
+ - If category doesn't exist, add it (video only so far)
+ - Account form now displays image and cv under upload inputs.
+ - Cleaned up the fileOption-submit JS and minified it.
+ - Cleaned up and minified bsmSelect-multiple JS.
+ - Hack to make account form work. Should look at region.
+ - Removed print_r
+ - Paginator styles.
+ - Fixed where background image ends. Now has nice matching gradient.
+ - Default CSS for Profile pages.
+ - Added %{fw_popup_handle} token logic.
+ - Added %{fw_popup_handle} as token.
+ - Put affiliation after image.
+ - Added span around bio text.
+ - Added span around bio text.
+ - Removed the "post" class.
+ - Removed "post" class.
+ - Added the media CSS for videos or audio in profiles.
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - Style for view profile link. Added h-3 classes.
+ - Fixing $head
+ - video template notes
+ - Commenting out print
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - Video Category work
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - Fixed error page displaying with secure CSS when error comes from the backend.
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - List of changes...
+ - increased z-index of alertbox
+ - secure css fixes. minified default css. updated default big css.
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - Removed display characters. Will add them in CSS.
+ - Fixed bracket
+ - Fixing no playlists in content table
+ - Updating DB
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - Category & Playlists... the correct way!....?
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/framework
+ - fixed audio js.
+ - Fixing MySQLi character set and object variable in video_form
+ - Set default sub title
+ - Fixing Audio and Video controllers
+ - More gitignore
+ - More gitignore work
+ - Empty folders still need a hidden file
+ - Trying new Gitignore setup
+ - Gitignore files should be mostly client site specific. Removing them from FW
+ - Little work to the search page. Not finished
+ - Making a note of an error
+ - FormMail fix to use Utility::locateFile() method
+ - Another concantenation error and wrong variable name
+ - Fixing variable concatenation
+ - Fixing VIDEOS_URL typo
+ - Added Default Audio and Video playlists to API.
+ - FWPOPUP fix
+ - Updated to use mysqli by default.
+ - Added CategoryForm files (beginning)
+ - Form Module updates to suppert Media Module updates.
+ - Added ffmpeg instructions
+ - Removed var_dump!
+ - Added Category form files (beginning)
+ - Media Updates
+ - Updated Media Modules
+ - Added path comment in Content, Cache, and CommandLine modules.
+ - Removing wrap from textarea boxes
+ - Fixing SubContent getImage() calls to getImageObj()
+ - Moving HTMLPurifier and deleted some views
+ - Nothing important
+ - Extends SubContent from Content
+ - Added viewport meta tag to header
+ - Updates phpMailer, Added RegisterForm files
+ - Updating ignore files
+ - Moved the templates folders.
+ - Updated default audio thumbnail name (HACK)
+ - Code fixes
+ - Fixed typo and remove outdated comments.
+ - Fixed little spacing in comment.
+ - Added missing get_insert_id method.
+ - Updated phpinfo file to give best information
+ - Changed Audio default category to "audio"
+ - Changed default to mysqli
+ - Added sanitize method
+ - Fixed fwAlert
+ - Fixed wrapper class
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/jamtheforce
+ - Page comment
+ - Fixed class names
+ - Staff positions finished?
+ - Small class name fix in login. Added a stem for node.js support in CommandLine module.
+ - Staff position work
+ - Fixed slideshow to work with new staff sitch.
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/jamtheforce
+ - Fixed not concatenating each year.
+ - Updating database
+ - Throw error if staff is not found
+ - Manage Staff
+ - Forgot file
+ - Fixed $head error. Staff fixes
+ - URL Fix
+ - URL Fix
+ - Staff profile image
+ - Separated staff from Users
+ - Fixed Slideshow markup and class
+ - Removed dumb classname
+ - Removed dumb classname
+ - Media CSS tightening
+ - Minified Media CSS
+ - Markup and CSS fixes/changes for media.
+ - Fixed video category list to match current framework-wide practice.
+ - Part of last commit - left out.
+ - JavaScript cleanup
+ - general html and css fixes
+ - Added default template for views
+ - Fixed errors
+ - Updated Quick Reg Box (box3) markup and class names.
+ - Updated Quick Reg Box (box3) markup and class names.
+ - Quick Registration Box Clean Up.
+ - ImageFormProcessor search fix
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/jamtheforce
+ - Changed "First" and "Last" default strings.
+ - Search fix
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/jamtheforce
+ - Missing quotation delete extra folders
+ - Merge branch 'master' of ssh://jamtheforce.com:8022/jamtheforce
+ - Content display change
+ - Fixing UTILITY_CLASS constant
+ - Adding email as an input type
+ - Removed duplicate views
+ - fwPopUp Handle Constant
+ - Versioning JavaScript dev files
+ - Trying to get dev files versioned!
+ - Updated gitignore for ALL DS_Stroe files.
+ - Including some dev files
+ - Unminified version of customAlert.js
+ - Removed var_dump from Slideshow module.
+ - Removed extra Soundcloud module.
+ - New JavaScript dev location. With new fwPopup script.
+ - Commented out sample of pulling in responsive CSS.
+ - Responsive CSS
+ - Responsive stylesheets.
+ - Merge branch 'master' of jamtheforce.com:jamtheforce
+ - Fixed JavaScript and CSS for AddThis.
+ - A little closer
+ - Made search label dynamic.
+ - Yay, search!
+ - Merge branch 'master' of jamtheforce.com:jamtheforce
+ - Fixed amazon call.
+ - .DS_Store banished!
+ - Updates to Product classes to make them more flexible.
+ - Adding templates folder
+ - Adding search
+ - Pulled Utility Class into setting
+
+Version 2.0.0:
+ - Added VERSION and CHANGES files, Version bump to v0.1.0
+ - New routing. Framework files live in framework folder. Put any custom files in the root(client) folders. If a file does not exist in the root(client) folders, the app will look in the framework folder for the default file.
+ - Some JavaScript fixes. Minifications. Updates to head for better lint.
+ - added h-3 class
+ - added h-3 class
+ - Added heading for address and container
+ - Added heading for address and container
+ - Fixed typo.
+ - normalized head for all front end forms. Added pageclass to all pages.
+ - added page_class
+ - Added here class to footer
+ - Had to remove converting any match to sitename to a token. Breaks things. Left in converting token to sitename
+ - Removed dumb background images
+ - minified css and left big versions
+ - Added breadcrumb to page template - commented out.
+ - Added breadcrumb template
+ - Updated ALL views and controllers to show no_content class if element is empty. Lot's of touching-fixing.
+ - Merge branch 'master' of jamtheforce.com:jamtheforce
+ - Updated instructions
+ - Small CSS update
+ - Fixed page_title. CSS Updates
+ - Fixed page_title variable.
+ - Minified JS. More CSS fixes. Fixed adding publisher to Product.
+ - store css
+ - Added pointers to contact form.
+ - CSS balancing
+ - Committing correct store CSS
+ - CSS for contact forms. Minified store CSS.
+ - Fixed Title on individual details page
+ - begin Store css
+ - Added big version of store css
+ - added minified and big CSS and JS
+ - More CSS and markup fixes.
+ - Removed button images that can be created with CSS.
+ - CSS fixes for media page.
+ - Fixing manage users page
+ - Fixing comments
+ - Removing extra space
+ - Fixing authorize user
+ - CSS Updates, Markup fixes, image upload fix.
+ - CSS to support new lines
+ - Fixed to preserve line breaks when adding content and posts.
+ - Fixed widthand height when uploading an image
+ - removed maintenance page from sitemap
+ - Fixed some Sitemap errors
+ - Added info menu and copyright to footer. Fixed error in FAQ page.
+ - CSS Updates
+ - Minified default and secure css
+ - Added Ant Minifier Scripts
+ - Added Ant Minifier Scripts
+ - Fixed typo
+ - Added CONSTANTS for Google Apps URLs
+ - Fixed here class for MyAccount
+ - Fixed here class for MyAccount
+ - Added nav-1 class
+ - css updates
+ - Fixed hardcoded branchId
+ - Changed ManageUsers Index
+ - Markup and css updates.
+ - Markup and css updates.
+ - Removed nav from views
+ - Removing some nav files
+ - Fixed JS, Fixed audio default image
+ - Removing product from categories table
+ - Changed YouTube Privacy settings
+ - List of changes...
+ - List of Changes...
+ - Updating SQL file, and install instructions
+ - Authorize User fix
+ - Small fixes
+ - CSS fixes
+ - Changes...
+ - Removing CustomSearch from Framework
+ - Shiv fix
+ - Adding shiv
+ - Changing how reset is called
+ - Adding normalize
+ - Changing tags to main and header
+ - typo
+ - Adding search to framework
+ - Small download fix
+ - Test
+ - Test
+ - Test
+ - Test
+ - Changes..
+ - Adding missing folders
+ - WebSupport fix
+ - WebSupport fix
+ - WebSupport typo fix
+ - WebSupport nav fix
+ - Changes...
+ - Adding books nav
+ - Fixed sub titles
+ - List of Changes..
+ - Fixing nav
+ - Adding ignore files
+ - Install Instructions
+ - So many changes
+ - Adding image and height to image form
+ - Updating gitignore
+ - Changing some image paths
+ - Modifying gitignore for images
+ - Error fix
+ - Removing Image sub folders
+ - Bug fix to ImageFormProcessor
+ - Changed methods to protected. Re-wrote delete queries
+ - Post form
+ - Content
+ - Many changes
+ - Updating db
+ - Updating SQL file
+
+Version 0.1.0
+ - Initial Commit
+
