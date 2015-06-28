@@ -1,6 +1,8 @@
 Instructions for setting up a new "clean" site:
 
 Must have the following installed:
+Git
+Git Flow
 PHP 5.3+ (with Curl & GD Library)
 MySQL
 FFMPEG
@@ -14,15 +16,60 @@ FFMPEG
 		Command:
 			ssh-add ~/.ssh/your_username (or wherever your key is located)
 
-2. Create local repository (client_website is replaced with the clients name, this is just an example):
-	Client repositories must be made by a lead developer.
+2. Repository (client_website is replaced with the clients name, this is just an example):
+	2a. Create Repository:
+		Client repositories must be made by a lead developer.
 
-	Commands:
-		mkdir client_website.com
-		cd client_website.com
-		git init
-		git remote add Client_Website gitolite@jamtheforce.com:client_website
-		git pull Client_Website master
+	2b. Create local repositories:
+		After the repository has been created add it to your development machine and to the host.
+
+		Create local repository on the host’s server:
+
+			Commands:
+				mkdir client_website.com
+				cd client_website.com
+				git init
+				git remote add Client_Website ssh://gitolite@jamtheforce.com:8022/client_website
+				git pull Client_Website master
+
+		For the development machine do the above command and then add the Framework repository.
+			Commands:
+				git remote add Framework ssh://gitolite@jamtheforce.com:8022/framework
+				git pull Framework master
+
+			(Optional)
+				This command stops “git fetch Framework” from getting the Frameworks Git tags.
+				This is mandatory if the client wants to version their website because it will conflict with Git Flow Hooks.
+			Command:
+				git config remote.Framework.tagopt --no-tags
+
+	2c. Install Git Flow Hooks & Enable Git Flow:
+		What does Git Flow Hooks do?
+			Prevent direct commits to the master branch.
+			Prevent merge marker commits.
+			Automatically bump versions when starting a release or hotfix. Versions are generated, written to file and committed.
+			Automatically specify tag messages.
+
+		Install Git Flow Hooks:
+			Clone this repository somewhere on your disk.
+			Command:
+				git clone git@github.com:jaspernbrouwer/git-flow-hooks.git
+
+			Whenever your read /path/to/git-flow-hooks, replace it with the actual path to your clone/working copy.
+
+			OS X:
+				OS X doesn't support sort -V, which is used to sort git tags by version number, which in turn is needed to correctly bump versions.
+				On OS X you can install coreutils (using MacPorts or Homebrew).
+
+		Activate Git Flow & Git Flow Hooks:
+			Initialize git-flow.
+			Command:
+				git flow init
+
+			It will ask you some questions, the last will be Hooks and filters directory?, which you can answer with /path/to/git-flow-hooks.
+			If you've already initialized git-flow, you can still set/change the path manually.
+			Command:
+				git config gitflow.path.hooks /path/to/git-flow-hooks
 
 3. Make sure the following folders are readable and writable (775):
 	bodega/
@@ -71,15 +118,15 @@ FFMPEG
 6. Edit the following files (mandatory):
 	a. data/database_definitions.php
 	b. data/formmail.ini
-			Change webmaster email address
+		Change webmaster email address
 	c. data/user_privileges.php
-			Change email addresses
+		Change email addresses
 
 	d. If you want WordPress integration:
-			data/WordPress_settings.php
-				Line 12 - enter the prefix (if any) for the WordPress Database tables.
-				Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
-				Line 33-61 - edit as needed.
+		data/WordPress_settings.php
+			Line 12 - enter the prefix (if any) for the WordPress Database tables.
+			Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
+			Line 33-61 - edit as needed.
 
 7. Edit the following files (optional):
 	a. data/API_definitions.php
