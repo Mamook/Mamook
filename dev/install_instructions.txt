@@ -60,6 +60,10 @@ FFMPEG
 			OS X:
 				OS X doesn't support sort -V, which is used to sort git tags by version number, which in turn is needed to correctly bump versions.
 				On OS X you can install coreutils (using MacPorts or Homebrew).
+				Optionally, you can use the configuration option VERSION_SORT to point to a different command. See Configuration below.
+
+		Configuration
+			Copy the file /path/to/git-flow-hooks/modules/git-flow-hooks-config.sh.dist to .git/git-flow-hooks-config.sh and change whatever you like. This is completely optional.
 
 		Activate Git Flow & Git Flow Hooks:
 			Initialize git-flow.
