@@ -15,7 +15,6 @@ custom_sessions/**
 logs/**
 
 # Public
-#public/images/**
 public/media/audio/files/**
 public/media/videos/files/**
 
@@ -35,14 +34,3 @@ tmp/**
 
 # Cache
 !cache/screenshots
-
-# Public
-#!public/images/audio-default-thumbnail.jpg
-#!public/images/default-avatar.png
-#!public/images/no.image.available.gif
-#!public/images/notfound.jpg
-#!public/images/original
-#!public/images/original/audio-default-thumbnail.jpg
-#!public/images/original/default-avatar.png
-#!public/images/original/no.image.available.gif
-#!public/images/original/notfound.jpg
