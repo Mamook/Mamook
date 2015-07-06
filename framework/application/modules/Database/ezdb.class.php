@@ -60,7 +60,7 @@ class DB
 	 * Private contructor, don't allow for
 	 * initialization of this class
 	 */
-	private function __contruct()
+	private function __construct()
 	{
 		return;
 	}

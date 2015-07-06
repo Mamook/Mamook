@@ -3,46 +3,54 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
-
 # Get the Utility Class.
 require_once UTILITY_CLASS;
-
 
 /**
  * WebUtility
  *
  * The WebUtility class is used to for miscellaneous utility
- * methods that must be used on scripts in a browser. Most methods
- * here are static.
+ * methods that must be used on scripts in a browser.
+ * Most methods here are static.
+ *
  */
 class WebUtility extends Utility
 {
-	/*** data members ***/
-
-	/*** End data members ***/
-
-
-
-	/*** mutator methods ***/
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
-
-	/*** End accessor methods ***/
-
-
-
 	/*** public methods ***/
+
+	/**
+	 * findIP
+	 *
+	 * A wrapper method for findIP() from the IP calss.
+	 *
+	 * Returns the IP of the visitor.
+	 * Throws an error if the IP address is not valid.
+	 *
+	 * @param	bool $for_sql_query		Convert IP addresss to binary for database.
+	 * @access	public
+	 * @return	string
+	 */
+	public static function findIP($for_sql_query=FALSE)
+	{
+		# Get the IP Class.
+		require_once Utility::locateFile(MODULES.'IP'.DS.'IP.php');
+		# Create a new IP object.
+		$ip_obj=IP::getInstance();
+		# Set the visitor's IP addreess.
+		#	Use $_SERVER over getenv() since it's more server compatible.
+		#	If $_SERVER['REMOTE_ADDR'] is empty, use getenv().
+		$ip=$ip_obj->findIP($for_sql_query);
+		# Return the visitor's IP address.
+		return $ip;
+	} #==== End -- findIP
 
 	/**
 	 * removeGetQuery
 	 *
-	 * Removes GET query from the passed URL. Must be called before removeIndex method.
+	 * Removes GET query from the passed URL.
+	 * Must be called before removeIndex method.
 	 *
-	 * @param 	$url 		(The URL to check.)
+	 * @param 	$url					The URL to check.
 	 * @access	public
 	 */
 	public static function removeGetQuery($url)
@@ -62,7 +70,7 @@ class WebUtility extends Utility
 	 *
 	 * Removes "?page=#" query from the passed URL.
 	 *
-	 * @param 	$url 		(The URL to check.)
+	 * @param 	$url					The URL to check.
 	 * @access	public
 	 */
 	public static function removePageQuery($url)
@@ -80,7 +88,7 @@ class WebUtility extends Utility
 	 *
 	 * Removes scheme name (ie http://) from the passed URL.
 	 *
-	 * @param 	$url 		(The URL to check.)
+	 * @param 	$url					The URL to check.
 	 * @access	public
 	 */
 	public static function removeSchemeName($url)
@@ -94,17 +102,5 @@ class WebUtility extends Utility
 	} #==== End -- removeSchemeName
 
 	/*** End public methods ***/
-
-
-
-	/*** protected methods ***/
-
-	/*** End protected methods ***/
-
-
-
-	/*** private methods ***/
-
-	/*** End private methods ***/
 
 } #=== End WebUtility class.

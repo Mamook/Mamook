@@ -1074,43 +1074,6 @@ class FormProcessor
 	} #==== End -- contentRedirect
 
 	/**
-	 * ipFirst - let's get a clean ip
-	 *
-	 * @access	public
-	 * @param		$ips (The IP address to clean)
-	 * @return	string
-	 */
-	protected function ipFirst($ips)
-	{
-		if(($pos=strpos($ips, ',')) !== FALSE)
-		{
-			return substr($ips, 0, $pos);
-		}
-		else { return $ips; }
-	} #==== End -- ipFirst
-
-	/**
-	 * ipValid
-	 *
-	 * Will try to determine if a given ip is valid or not
-	 *
-	 * @access	public
-	 * @param		$ips (The IP address to validate)
-	 * @return	bool
-	 */
-	protected function ipValid($ips)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		if($validator->ipValid($ips)===TRUE)
-		{
-			return TRUE;
-		}
-		else { return FALSE; }
-	} #==== End -- ipValid
-
-	/**
 	 * loseSessionData
 	 *
 	 * Gets rid of old CMS session data.

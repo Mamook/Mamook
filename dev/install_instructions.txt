@@ -2,13 +2,15 @@ Instructions for setting up a new "clean" site:
 
 Must have the following installed:
 Git
-Git Flow
 PHP 5.3+ (with Curl & GD Library)
 MySQL
 FFMPEG
 
+These also need to be installed for developers:
+Git Flow
 
-1. Create your RSA key, and email the public key (your_username.pub) to Michael Delle (dravenlon@gmail.com):
+
+1. Create your RSA key, and email the public key (your_username.pub), along with your IP address (so it can be added to the server) to Michael Delle (dravenlon@gmail.com):
 	Command:
 		ssh-keygen -t rsa -C “your_username”
 

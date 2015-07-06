@@ -1100,13 +1100,13 @@ class User
 	} #==== End -- setAllUsers
 
 	/**
-	* setIP
-	*
-	* Sets the data member $ip.
-	*
-	* @param	$ip
-	* @access	protected
-	*/
+	 * setIP
+	 *
+	 * Sets the data member $ip.
+	 *
+	 * @param	$ip
+	 * @access	protected
+	 */
 	protected function setIP($ip)
 	{
 		# Check if the passed value is empty.
@@ -1752,19 +1752,24 @@ class User
 
 			# Set the email data member to a variable.
 			$email=$login->getEmail();
+			# Set the IP address to a variable.
+			#	findIP() passes the IP to the $validator->ipValid().
+			#	ipValid() checks if the IP is valid, and if it's an IPv4 or IPv6 address, then it sets the version number.
+			$ip=$this->findIP(TRUE);
 			# Set the password data member to a variable.
 			$password=$login->getPassword();
 			# Set username data member to a variable.
 			$username=$login->getUsername();
 
 			# Insert user into the `users` table.
-			$insert_user=$db->query('INSERT INTO `'.DBPREFIX.'users` (`display`, `username`, `email`, `password`, `random`, `registered`) VALUES ('.
+			$insert_user=$db->query('INSERT INTO `'.DBPREFIX.'users` (`display`, `username`, `email`, `password`, `random`, `registered`, `reg_ip`) VALUES ('.
 				$db->quote($db->escape($username)).
 				', '.$db->quote($db->escape($username)).
 				', '.$db->quote($db->escape($email)).
 				', '.$db->quote($db->escape($password)).
 				', '.$db->quote($db->escape($login->randomString('alnum', 32))).
 				', '.$db->quote($db->escape(YEAR_MM_DD)).
+				', '.$db->escape($ip).
 				')');
 			# If WordPress is installed add the user the the WordPress users table.
 			if(WP_INSTALLED===TRUE)
@@ -2294,21 +2299,19 @@ class User
 	/**
 	 * findIP
 	 *
-	 * Returns the IP of the visitor
+	 * A wrapper method for findIP() from the WebUtility calss.
+	 *
+	 * Returns the IP of the visitor.
 	 *
 	 * @access	public
 	 * @return	string
 	 */
 	public function findIP()
 	{
-		# Check the data member for an IP address.
-		if($this->getIP()===NULL)
-		{
-			# Set the IP address to the data member.
-			$this->setIP(getenv('REMOTE_ADDR'));
-		}
-		# Return the data member.
-		return $this->getIP();
+		# find the visitor's IP address.
+		$ip=WebUtility::findIP();
+		# Return the visitor's IP address.
+		return $ip;
 	} #==== End -- findIP
 
 	/**
@@ -3369,31 +3372,13 @@ class User
 	/*** protected methods ***/
 
 	/**
-	 * ipFirst - let's get a clean ip
-	 *
-	 * @access	public
-	 * @param		$ips (The IP address to clean)
-	 * @return	string
-	 */
-	protected function ipFirst($ips)
-	{
-		# Check if there is a comma and set it's position to a variable.
-		if(($pos=strpos($ips, ',')) !== FALSE)
-		{
-			# Return everything before the comma.
-			return substr($ips, 0, $pos);
-		}
-		else { return $ips; }
-	} #==== End -- ipFirst
-
-	/**
 	 * ipValid
 	 *
 	 * Will try to determine if a given ip is valid or not.
 	 * A wrapper method for the ipValid method from the Validator class.
 	 *
-	 * @access	public
-	 * @param		$ips (The IP address to validate)
+	 * @access	protected
+	 * @param	$ips					The IP address to validate
 	 * @return	bool
 	 */
 	protected function ipValid($ips)
@@ -3406,7 +3391,7 @@ class User
 		{
 			return TRUE;
 		}
-		else { return FALSE; }
+		return FALSE;
 	} #==== End -- ipValid
 
 	/*** End protected methods ***/

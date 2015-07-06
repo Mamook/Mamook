@@ -299,7 +299,7 @@ class Utility
 		return trim($text);
 	} #==== End -- htmlToText
 
-	/*
+	/**
 	 * locateFile
 	 *
 	 * Checks if the file is located in the client directory. If not, it changes the path to point to the framework folder.
