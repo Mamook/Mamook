@@ -21,7 +21,7 @@ $body.='</td>';
 $body.='</tr>';
 $body.='<tr>';
 $body.='<td>';
-$body.='<p>* This email was sent to you because you have opted in to receive emails from <a href="'.APPLICATION_URL.'" style="color:#f05033;" title="'.DOMAIN_NAME.' website">'.DOMAIN_NAME.'</a>. If you would prefer not to receive these emails in the future, simply go to your privacy settings at <a href="'.SECURE_URL.'MyAccount/privacy.php" style="color:#f05033;" title="Your Privacy Settings at '.DOMAIN_NAME.'">'.SECURE_URL.'MyAccount/privacy.php</a>, de-select the information you would not like to receive and click "Update". Learn more about '.$main_content->getSiteName().'\'s privacy policy at <a href="'.APPLICATION_URL.'policy/" style="color:#f05033;" title="'.DOMAIN_NAME.' privacy policy">'.APPLICATION_URL.'policy</a></p>'."\n";
+$body.='<p>* This email was sent to you because you have opted in to receive emails from <a href="'.APPLICATION_URL.'" style="color:#f05033;" title="'.DOMAIN_NAME.' website">'.DOMAIN_NAME.'</a>. If you would prefer not to receive these emails in the future, simply go to your privacy settings at <a href="'.SECURE_URL.'MyAccount/privacy.php" style="color:#f05033;" title="Your Privacy Settings at '.DOMAIN_NAME.'">'.SECURE_URL.'MyAccount/privacy.php</a>, de-select the information you would not like to receive and click "Update". Learn more about '.$site_name.'\'s privacy policy at <a href="'.APPLICATION_URL.'policy/" style="color:#f05033;" title="'.DOMAIN_NAME.' privacy policy">'.APPLICATION_URL.'policy</a></p>'."\n";
 $body.='</td>';
 $body.='</tr>';
 $body.='</table>';

@@ -308,8 +308,10 @@ class EmailFormProcessor extends FormProcessor
 						# 	Lastly, we convert the array into a string separated by a comma (,).
 						$recipients=implode(',', array_unique(explode(' ', $implode_recipients)));
 
+						# Get the Content Class.
+						require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
 						# Add the email data to a session.
-						$_SESSION['email_users']=array('Attachment'=>$attachment, 'ConfirmationTemplate'=>$confirmation_template, 'Environment'=>DOMAIN_NAME, 'IsHTML'=>$is_html, 'MaxFileSize'=>$max_size, 'Message'=>$message, 'Recipients'=>$recipients, 'SenderEmail'=>$sender_email, 'SenderName'=>$sender_name, 'Subject'=>$subject, 'Template'=>$template);
+						$_SESSION['email_users']=array('Attachment'=>$attachment, 'ConfirmationTemplate'=>$confirmation_template, 'Environment'=>DOMAIN_NAME, 'IsHTML'=>$is_html, 'MaxFileSize'=>$max_size, 'Message'=>$message, 'Recipients'=>$recipients, 'SenderEmail'=>$sender_email, 'SenderName'=>$sender_name, 'SiteName'=>Content::getInstance()->getSiteName(), 'Subject'=>$subject, 'Template'=>$template);
 
 						# Create an array with email data.
 						$email_array=array('Environment'=>DOMAIN_NAME, 'SessionId'=>session_id(), 'SessionPath'=>session_save_path());
@@ -318,7 +320,7 @@ class EmailFormProcessor extends FormProcessor
 						require_once Utility::locateFile(MODULES.'CommandLine'.DS.'CommandLine.php');
 						# Send emails via CommandLine.
 						$cl=new CommandLine();
-						$cl->runScript(MODULES.'Email'.DS.'EmailUsers.php', $email_array);
+						$cl->runScript(COMMAND_LINE.'Email'.DS.'EmailUsers.php', $email_array);
 
 						# Set a nice message for the user in a session.
 						$_SESSION['message']='Your email has been initiated. You will receive an email at '.$sender_email.' notifying you as to the success of the mailing. Thank you!';
