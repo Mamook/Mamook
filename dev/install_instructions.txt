@@ -52,6 +52,7 @@ FFMPEG
 
 		Install Git Flow Hooks:
 			Clone this repository somewhere on your disk.
+			For the rest of this, use command line git and not a GUI like Tower.
 			Command:
 				git clone git@github.com:jaspernbrouwer/git-flow-hooks.git
 
