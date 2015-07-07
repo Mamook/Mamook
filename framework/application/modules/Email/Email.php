@@ -980,8 +980,6 @@ class Email
 			$subject=htmlentities($this->getSubject(), ENT_QUOTES, 'UTF-8', FALSE);
 			# Set the site name to a variable.
 			$site_name=$this->getSiteName();
-			# Set the template to a variable.
-			$template=$this->getTemplate();
 			# Set the "to" array to a variable.
 			$to=$this->getRecipients();
 			# Create an array of user levels.
