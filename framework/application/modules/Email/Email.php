@@ -978,6 +978,8 @@ class Email
 			$start_time=time();
 			# Set the subject to a variable.
 			$subject=htmlentities($this->getSubject(), ENT_QUOTES, 'UTF-8', FALSE);
+			# Set the site name to a variable.
+			$site_name=$this->getSiteName();
 			# Set the template to a variable.
 			$template=$this->getTemplate();
 			# Set the "to" array to a variable.
@@ -1178,7 +1180,6 @@ class Email
 				}
 				$string.="\n\n".'The message you emailed was:'."\n";
 				$string.=html_entity_decode($sent_message, ENT_QUOTES, 'UTF-8');
-				$site_name=$this->getSiteName();
 				$subject='Results of your group emailing from '.DOMAIN_NAME;
 				$email_report=TEMP.date('Ymd').'EmailReport.txt';
 				# Get the confirmation email template. (Resets and populates the $body variable.)
