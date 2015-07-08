@@ -26,11 +26,11 @@ class WebUtility extends Utility
 	 * Returns the IP of the visitor.
 	 * Throws an error if the IP address is not valid.
 	 *
-	 * @param	bool $for_sql_query		Convert IP addresss to binary for database.
+	 * @param	bool $for_insert_query	Convert IP addresss to binary for database.
 	 * @access	public
 	 * @return	string
 	 */
-	public static function findIP($for_sql_query=FALSE)
+	public static function findIP($for_insert_query=TRUE)
 	{
 		# Get the IP Class.
 		require_once Utility::locateFile(MODULES.'IP'.DS.'IP.php');
@@ -39,7 +39,7 @@ class WebUtility extends Utility
 		# Set the visitor's IP addreess.
 		#	Use $_SERVER over getenv() since it's more server compatible.
 		#	If $_SERVER['REMOTE_ADDR'] is empty, use getenv().
-		$ip=$ip_obj->findIP($for_sql_query);
+		$ip=$ip_obj->findIP($for_insert_query);
 		# Return the visitor's IP address.
 		return $ip;
 	} #==== End -- findIP

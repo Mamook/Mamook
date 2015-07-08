@@ -2303,13 +2303,14 @@ class User
 	 *
 	 * Returns the IP of the visitor.
 	 *
+	 * @param	bool $for_insert_query	Convert IP addresss to binary for database.
 	 * @access	public
 	 * @return	string
 	 */
-	public function findIP()
+	public function findIP($for_insert_query=TRUE)
 	{
 		# find the visitor's IP address.
-		$ip=WebUtility::findIP();
+		$ip=WebUtility::findIP($for_insert_query);
 		# Return the visitor's IP address.
 		return $ip;
 	} #==== End -- findIP
@@ -2801,7 +2802,7 @@ class User
 					$this->setInterests($row->interests);
 					$this->setImg($row->img);
 					$this->setImgTitle($row->img_title);
-					$this->setIP($this->findIP());
+					$this->setIP($this->findIP(FALSE));
 					$this->setLastLogin($row->lastlogin);
 					$this->setLastName($row->lname);
 					$this->setNewsletter($row->newsletter);

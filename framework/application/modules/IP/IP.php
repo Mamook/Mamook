@@ -249,11 +249,11 @@ class IP
 	 * Returns the IP of the visitor.
 	 * Throws an error if the IP address is not valid.
 	 *
-	 * @param	bool $for_sql_query		Convert IP addresss to binary for database.
+	 * @param	bool $for_insert_query	Convert IP addresss to binary for database.
 	 * @access	public
 	 * @return	string
 	 */
-	public function findIP($for_sql_query=FALSE)
+	public function findIP($for_insert_query=TRUE)
 	{
 		# Get the visitor's IP addreess.
 		#	Use $_SERVER over getenv() since it's more server compatible.
@@ -264,7 +264,7 @@ class IP
 		if($this->ipValid($ip)===TRUE)
 		{
 			# If we need to create the IP to a binary.
-			if($for_sql_query===TRUE)
+			if($for_insert_query===TRUE)
 			{
 				# Convert the visitor's IP to a binary.
 				//$ip=$this->createQueryParam($ip);
