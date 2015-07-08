@@ -1,4 +1,4 @@
-﻿<?php /* templates/fm/email_users_template.php */
+﻿<?php /* templates/fm/email_template_html.php */
 
 # Create the body of the message.
 $body='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';

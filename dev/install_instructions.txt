@@ -2,13 +2,15 @@ Instructions for setting up a new "clean" site:
 
 Must have the following installed:
 Git
-Git Flow
 PHP 5.3+ (with Curl & GD Library)
 MySQL
 FFMPEG
 
+These also need to be installed for developers:
+Git Flow
 
-1. Create your RSA key, and email the public key (your_username.pub) to Michael Delle (dravenlon@gmail.com):
+
+1. Create your RSA key, and email the public key (your_username.pub), along with your IP address (so it can be added to the server) to Michael Delle (dravenlon@gmail.com):
 	Command:
 		ssh-keygen -t rsa -C “your_username”
 
@@ -73,8 +75,10 @@ FFMPEG
 
 			It will ask you some questions, the last will be Hooks and filters directory?, which you can answer with /path/to/git-flow-hooks.
 			If you've already initialized git-flow, you can still set/change the path manually.
+
+			You can use "--global" so Git always uses this directory for Git Flow Hooks.
 			Command:
-				git config gitflow.path.hooks /path/to/git-flow-hooks
+				git config [--global] gitflow.path.hooks /path/to/git-flow-hooks
 
 3. Make sure the following folders are readable and writable (775):
 	bodega/

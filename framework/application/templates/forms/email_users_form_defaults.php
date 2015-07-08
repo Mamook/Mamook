@@ -13,11 +13,11 @@ if($login->isLoggedIn()===TRUE)
 # The key MUST be the name of a "set" mutator method in the Email class (ie setMessage).
 $default_data=array(
 	'Attachment'=>NULL,
-	'ConfirmationTemplate'=>TEMPLATES.'fm'.DS.'confirmation_template.php',
+	'ConfirmationTemplate'=>Utility::locateFile(TEMPLATES.'fm'.DS.'confirmation_template.php'),
 	'EmailPage'=>'email_users',
 	'Message'=>NULL,
 	'SenderEmail'=>$sender_email,
 	'SenderName'=>$sender_name,
 	'Subject'=>NULL,
-	'Template'=>TEMPLATES.'fm'.DS.'email_users_template.php'
+	'Template'=>Utility::locateFile(TEMPLATES.'fm'.DS.'email_users_template.php')
 	);

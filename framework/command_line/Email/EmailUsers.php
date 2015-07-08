@@ -1,6 +1,4 @@
-<?php
-# Change the directory to where this cron script is located.
-chdir(dirname(__FILE__));
+<?php /* framework/command_line/Email/EmailUsers.php */
 
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
@@ -12,17 +10,17 @@ $passed_data=array_combine($keys, $values);
 $session_path=$passed_data['SessionPath'];
 $session_id=$passed_data['SessionId'];
 
-/* Need these for database_definitions.php and email_definitions.php */
-# Need this for the email and APPLICATION_URL.
+# Need these for database_definitions.php and email_definitions.php
+# Need this for the FileHandler class and APPLICATION_URL.
 if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
+# Need this for the FileHandler class and APPLICATION_URL.
+if(!defined('DEVELOPMENT_DOMAIN')) define('DEVELOPMENT_DOMAIN', $passed_data['DevEnvironment']);
+# Need this for the FileHandler class and APPLICATION_URL.
+if(!defined('STAGING_DOMAIN')) define('STAGING_DOMAIN', $passed_data['StagingEnvironment']);
 # Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
 if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', DOMAIN_NAME.'/');
 # Define the url that points to our application. (ends with a slash)
 define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
-# The domain name of the developement application. (doesn't end with a slash)
-define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
-# The domain name of the staging application. (doesn't end with a slash)
-define('STAGING_DOMAIN', 'test.jamtheforce.org');
 # Set to TRUE to see the nasty errors for debugging, FALSE to hide them.
 if(DOMAIN_NAME===DEVELOPMENT_DOMAIN)
 {
@@ -63,7 +61,7 @@ else
 }
 
 # Get the Path definitions.
-require '../../../data/path_definitions.php';
+require '../../../../../data/path_definitions.php';
 # Get the database definitions.
 require DATA_FILES.'database_definitions.php';
 # Get the Email definitions.
@@ -77,7 +75,7 @@ require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
 
 # Get the DB Class needed to operate with MySQL.
 require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init();
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 

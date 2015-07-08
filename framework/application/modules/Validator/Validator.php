@@ -31,6 +31,7 @@ class Validator
 	 * Sets the data member $error.
 	 *
 	 * @param	$error
+	 * @param	$key
 	 * @access	public
 	 */
 	public function setError($error, $key=NULL)
@@ -291,45 +292,25 @@ class Validator
 	} #==== End -- isSSL
 
 	/**
-	 * ipValid - will try to determine if a given IP address is valid or not
+	 * ipValid
+	 *
+	 * A wrapper method for ipValid() from the IP calss.
+	 *
+	 * Will determine if a given IP address is valid or not.
+	 * Will set the version of the IP address to the $ip_version data member.
 	 *
 	 * @access	public
-	 * @param		$ips (The IP address to validate)
-	 * @return	bool
+	 * @param	$ip						The IP address to validate
+	 * @return	boolean
 	 */
-	public function ipValid($ips)
+	public function ipValid($ip)
 	{
-		if(isset($ips))
-		{
-			$ip=ip_first($ips);
-			$ipnum=ip2long($ip);
-			if($ipnum !== -1 && $ipnum !== FALSE && (long2ip($ipnum)===$ip))
-			{
-				# Check if the passed IP fits within the permissible range.
-				if(
-						(
-							// Not in 10.0.0.0/8
-							$ipnum < 167772160 OR
-							$ipnum > 184549375
-						) &&
-						(
-							// Not in 172.16.0.0/12
-							$ipnum < - 1408237568 OR
-							$ipnum > - 1407188993
-						) &&
-						(
-							// Not in 192.168.0.0/16
-							$ipnum < - 1062731776 OR
-							$ipnum > - 1062666241
-						)
-					)
-				{
-					return TRUE;
-				}
-			}
-		}
-		return FALSE;
-	} #==== End -- ipValid
+		# Get the IP Class.
+		require_once Utility::locateFile(MODULES.'IP'.DS.'IP.php');
+		# Create a new IP object.
+		$ip_obj=IP::getInstance();
+		return $ip_obj->ipValid($ip);
+	} #=== End -- ipValid
 
 	/*** End public methods ***/
 

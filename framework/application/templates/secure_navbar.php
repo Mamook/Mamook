@@ -112,7 +112,7 @@ echo '<nav id="navbar" class="nav nav1">',
 			'</li>';
 	}
 
-	if($login->checkAccess(GAPPS_USERS)===TRUE)
+	if(GOOGLE_CLIENT_ID!="" && ($login->checkAccess(GAPPS_USERS)===TRUE))
 	{
 		echo '<li class="list-nav-1">',
 			'<a href="http://'.GOOGLE_APPS_DRIVE.'" title="Go to your Google Drive" target="_blank">Documents</a>',

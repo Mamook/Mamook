@@ -75,8 +75,8 @@ class Utility
 	 * Returns a string stating the elapsed time in years, months, days, weeks, hours, minutes, and seconds.
 	 *
 	 * @access	public
-	 * @param		start_time			The unix timestamp of the start time.
-	 * @param		end_time				The unix timestamp of the end time.
+	 * @param	start_time				The unix timestamp of the start time.
+	 * @param	end_time				The unix timestamp of the end time.
 	 * @return	String					ie. 2 years, 1 week, 0 days, 4 hours, 1 minute, and 58 seconds.
 	 */
 	public static function getElapsedTime($start_time, $end_time)
@@ -125,9 +125,9 @@ class Utility
 	 *
 	 * Converts passed HTML to text
 	 *
-	 * @param		$document 					(An HTML document or a string of html.)
-	 * @param		$utf8 							(True will return UTF-8 encoded text, FALSE returns ASCII text)
-	 * @param		$remove_white_space (True will remove whitespace, tabs, carriage returns, and line breaks)
+	 * @param	$document 				An HTML document or a string of html.
+	 * @param	$utf8 					True will return UTF-8 encoded text, FALSE returns ASCII text
+	 * @param	$remove_white_space		True will remove whitespace, tabs, carriage returns, and line breaks
 	 * @access	public
 	 * @return	string
 	 */
@@ -299,12 +299,12 @@ class Utility
 		return trim($text);
 	} #==== End -- htmlToText
 
-	/*
+	/**
 	 * locateFile
 	 *
 	 * Checks if the file is located in the client directory. If not, it changes the path to point to the framework folder.
 	 *
-	 * @param		string 	$file	  	(The path to the file.)
+	 * @param	string $file			The path to the file.
 	 * @access	public
 	 */
 	public static function locateFile($file)
