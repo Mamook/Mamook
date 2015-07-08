@@ -1,5 +1,6 @@
 <?php /* data/database_definitions.php */
 
+# The Database engine we are using.
 define('DB_TYPE', 'mysqli');
 
 if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
