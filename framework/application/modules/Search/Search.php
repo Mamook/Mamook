@@ -189,6 +189,9 @@ class Search
 					# Perform search.
 					$this->searchUsers($filter);
 					break;
+				case "all":
+					# NOTE! Search entire site.
+					break;
 				default;
 			}
 		}
@@ -267,9 +270,7 @@ class Search
 
 		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
 		$sql='SELECT '.$select_fields.' FROM `'.$table.'` WHERE '.$where;
-		//print_r($sql);exit;
 		$search_results=$db->get_results($sql);
-		//print_r($search_results);exit;
 		# Set results to the data member.
 		$this->setAllResults($search_results);
 	} #==== End -- performSearch
@@ -337,7 +338,7 @@ class Search
 				foreach($matches as $match)
 				{
 					return Search::change2Token($match);
-        }
+				}
 			},
 			$terms
 		);
@@ -391,109 +392,8 @@ class Search
 		foreach($out as $term)
 		{
 			# First, replace HTML entities
-			$dblquote_search='/&(ldquo|#8220|rdquo|#8221|quot|#34|#034|#x22);/i';
-			$search[]=$dblquote_search;
-			$snglquote_search='/&(lsquo|#8216|rsquo|#8217);/i';
-			$search[]=$snglquote_search;
-			$dash_search='/&(ndash|#x2013|#8211|mdash|#x2014|#8212|#150);/i';
-			$search[]=$dash_search;
-			$ampersand_search='/&(amp|#38|#038|#x26);/i';
-			$search[]=$ampersand_search;
-			$lessthan_search='/&(lt|#60|#060|#x3c);/i';
-			$search[]=$lessthan_search;
-			$greaterthan_search='/&(gt|#62|#062|#x3e);/i';
-			$search[]=$greaterthan_search;
-			$space_search='/&(nbsp|#160|#xa0);/i';
-			$search[]=$space_search;
-			$inverted_exclamation_mark_search='/&(iexcl|#161);/i';
-			$search[]=$inverted_exclamation_mark_search;
-			$inverted_question_mark_search='/&(iquest|#191);/i';
-			$search[]=$inverted_question_mark_search;
-			$cent_search='/&(cent|#162);/i';
-			$search[]=$cent_search;
-			$pound_search='/&(pound|#163);/i';
-			$search[]=$pound_search;
-			$copyright_search='/&(copy|#169);/i';
-			$search[]=$copyright_search;
-			$registered_search='/&(reg|#174);/i';
-			$search[]=$registered_search;
-			$degrees_search='/&(deg|#176);/i';
-			$search[]=$degrees_search;
-			$apostrophe_search='/&(apos|#39|#039|#x27);/';
-			$search[]=$apostrophe_search;
-			$euro_search='/&(euro|#8364);/i';
-			$search[]=$euro_search;
-			$umlaut_a_search='/&a(uml|UML);/';
-			$search[]=$umlaut_a_search;
-			$umlaut_o_search='/&o(uml|UML);/';
-			$search[]=$umlaut_o_search;
-			$umlaut_u_search='/&u(uml|UML);/';
-			$search[]=$umlaut_u_search;
-			$umlaut_y_search='/&y(uml|UML);/';
-			$search[]=$umlaut_y_search;
-			$umlaut_A_search='/&A(uml|UML);/';
-			$search[]=$umlaut_A_search;
-			$umlaut_O_search='/&O(uml|UML);/';
-			$search[]=$umlaut_O_search;
-			$umlaut_U_search='/&U(uml|UML);/';
-			$search[]=$umlaut_U_search;
-			$umlaut_Y_search='/&Y(uml|UML);/';
-			$search[]=$umlaut_Y_search;
-			$latin_small_letter_sharp_s_search='/&(szlig|#xdf|#223);/i';
-			$search[]=$latin_small_letter_sharp_s_search;
+			$alt_term=Utility::htmlToText($term, FALSE);
 
-			$dblquote_replace=chr(34);
-			$replace[]=$dblquote_replace;
-			$snglquote_replace="'";
-			$replace[]=$snglquote_replace;
-			$dash_replace=chr(45);
-			$replace[]=$dash_replace;
-			$ampersand_replace=chr(38);
-			$replace[]=$ampersand_replace;
-			$lessthan_replace=chr(60);
-			$replace[]=$lessthan_replace;
-			$greaterthan_replace=chr(62);
-			$replace[]=$greaterthan_replace;
-			$space_replace=' ';
-			$replace[]=$space_replace;
-			$inverted_exclamation_mark_replace='¡';
-			$replace[]=$inverted_exclamation_mark_replace;
-			$inverted_question_mark_replace='¿';
-			$replace[]=$inverted_question_mark_replace;
-			$cent_replace='¢';
-			$replace[]=$cent_replace;
-			$pound_replace='£';
-			$replace[]=$pound_replace;
-			$copyright_replace='©';
-			$replace[]=$copyright_replace;
-			$registered_replace='®';
-			$replace[]=$registered_replace;
-			$degrees_replace='°';
-			$replace[]=$degrees_replace;
-			$apostrophe_replace=chr(39);
-			$replace[]=$apostrophe_replace;
-			$euro_replace='€';
-			$replace[]=$euro_replace;
-			$umlaut_a_replace='ä';
-			$replace[]=$umlaut_a_replace;
-			$umlaut_o_replace="ö";
-			$replace[]=$umlaut_o_replace;
-			$umlaut_u_replace="ü";
-			$replace[]=$umlaut_u_replace;
-			$umlaut_y_replace="ÿ";
-			$replace[]=$umlaut_y_replace;
-			$umlaut_A_replace="Ä";
-			$replace[]=$umlaut_A_replace;
-			$umlaut_O_replace="Ö";
-			$replace[]=$umlaut_O_replace;
-			$umlaut_U_replace="Ü";
-			$replace[]=$umlaut_U_replace;
-			$umlaut_Y_replace="Ÿ";
-			$replace[]=$umlaut_Y_replace;
-			$latin_small_letter_sharp_s_replace="ß";
-			$replace[]=$latin_small_letter_sharp_s_replace;
-
-			$alt_term=preg_replace($search, $replace, $term);
 			if(!in_array($alt_term, $alt_terms))
 			{
 				$alt_terms[]=$alt_term;

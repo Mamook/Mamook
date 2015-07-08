@@ -96,7 +96,7 @@ class Content
 	 *
 	 * Sets the data member $all_content.
 	 *
-	 * @param	$all_content		(May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$all_content			May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllContent($all_content)
@@ -146,7 +146,7 @@ class Content
 	 *
 	 * Sets the data member $site_name.
 	 *
-	 * @param		$site_name
+	 * @param	$site_name
 	 * @access	protected
 	 */
 	protected function setSiteName($site_name)
@@ -160,7 +160,7 @@ class Content
 	 *
 	 * Sets the data member $slogan.
 	 *
-	 * @param		$slogan
+	 * @param	$slogan
 	 * @access	protected
 	 */
 	protected function setSlogan($slogan)
