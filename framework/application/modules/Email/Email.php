@@ -32,6 +32,7 @@ class Email
 	private $recipients=NULL;
 	private $sender_email=NULL;
 	private $sender_name=NULL;
+	private $site_name=NULL;
 	private $subject=NULL;
 	private $template=NULL;
 
@@ -341,6 +342,33 @@ class Email
 	} #==== End -- setSenderName
 
 	/**
+	 * setSiteName
+	 *
+	 * Sets the data member $site_name.
+	 *
+	 * @param		$site_name
+	 * @access	public
+	 */
+	public function setSiteName($site_name)
+	{
+		# Check if the passed value is empty.
+		if(!empty($site_name))
+		{
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Clean it up.
+			$site_name=$db->sanitize($site_name);
+			# Set the data member.
+			$this->sender_name=$site_name;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->sender_name=NULL;
+		}
+	} #==== End -- setSiteName
+
+	/**
 	 * setSubject
 	 *
 	 * Sets the data member $subject.
@@ -535,6 +563,18 @@ class Email
 	{
 		return $this->sender_name;
 	} #==== End -- getSenderName
+
+	/**
+	 * getSiteName
+	 *
+	 * Returns the data member $site_name.
+	 *
+	 * @access	public
+	 */
+	public function getSiteName()
+	{
+		return $this->site_name;
+	} #==== End -- getSiteName
 
 	/**
 	 * getSubject
@@ -938,8 +978,8 @@ class Email
 			$start_time=time();
 			# Set the subject to a variable.
 			$subject=htmlentities($this->getSubject(), ENT_QUOTES, 'UTF-8', FALSE);
-			# Set the template to a variable.
-			$template=$this->getTemplate();
+			# Set the site name to a variable.
+			$site_name=$this->getSiteName();
 			# Set the "to" array to a variable.
 			$to=$this->getRecipients();
 			# Create an array of user levels.
@@ -1195,6 +1235,7 @@ class Email
 				$this->setRecipients($data['Recipients']);
 				$this->setSenderEmail($data['SenderEmail']);
 				$this->setSenderName($data['SenderName']);
+				$this->setSiteName($data['SiteName']);
 				$this->setSubject($data['Subject']);
 				$this->setTemplate($data['Template']);
 			}
@@ -1207,6 +1248,7 @@ class Email
 				$this->setMessage(((isset($_SESSION['email_body'])) ? $_SESSION['email_body'] : NULL));
 				$this->setSenderEmail(((isset($_SESSION['email'])) ? $_SESSION['email'] : NULL));
 				$this->setSenderName(((isset($_SESSION['realname'])) ? $_SESSION['realname'] : NULL));
+				$this->setSiteName(((isset($_SESSION['sitename'])) ? $_SESSION['sitename'] : NULL));
 				$this->setSubject(((isset($_SESSION['email_subject'])) ? $_SESSION['email_subject'] : NULL));
 				$this->setRecipients(((isset($_SESSION['email_to'])) ? $_SESSION['email_to'] : NULL));
 			}
@@ -1219,6 +1261,7 @@ class Email
 				$this->setMessage(((isset($_POST['message'])) ? $_POST['message'] : NULL));
 				$this->setSenderEmail(((isset($_POST['email'])) ? $_POST['email'] : NULL));
 				$this->setSenderName(((isset($_POST['realname'])) ? $_POST['realname'] : NULL));
+				$this->setSiteName(((isset($_POST['sitename'])) ? $_POST['sitename'] : NULL));
 				$this->setSubject(((isset($_POST['subject'])) ? $_POST['subject'] : NULL));
 				$this->setRecipients(((isset($_POST['to'])) ? $_POST['to'] : NULL));
 			}

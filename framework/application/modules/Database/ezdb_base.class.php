@@ -127,6 +127,9 @@ class ezDB_Base
 
 	protected $last_result;
 
+	# MySQL Server Version.
+	public $server_version;
+
 	public function __construct()
 	{
 		# Check for memcache support

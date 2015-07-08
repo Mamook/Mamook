@@ -39,7 +39,8 @@ class Contributor extends User
 	 *
 	 * Sets the data member $all_contributors.
 	 *
-	 * @param		$contributors (May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$contributors			May be an array or a string.
+	 *										The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllContributors($contributors)
@@ -853,30 +854,37 @@ class Contributor extends User
 					$value=array($field=>$this->getContID());
 				}
 				# Create the WHERE sql statement.
-					# Create an empty array to hold the WHERE statement pieces.
-					$where=array();
-					# Loop throught the $value array.
-					foreach($value as $table=>$t_value)
+				# Create an empty array to hold the WHERE statement pieces.
+				$where=array();
+				# Loop throught the $value array.
+				foreach($value as $table=>$t_value)
+				{
+					# Check if $t_value is empty.
+					if(empty($t_value))
 					{
-						# Check if $t_value is empty.
-						if(empty($t_value))
-						{
-							# Reset $t_value to search for NULL fields.
-							$t_value='IS NULL';
-						}
-						else
-						{
-							# Set $t_value to search for the $t_value.
-							$t_value='= '.$db->quote($db->escape($t_value));
-						}
-						$where[]='`'.$table.'` '.$t_value;
+						# Reset $t_value to search for NULL fields.
+						$t_value='IS NULL';
 					}
-					# Implode the $where array to join the pieces with "AND".
-					$where=implode(' AND ', $where);
+					else
+					{
+						# Set $t_value to search for the $t_value.
+						$t_value='= '.$db->quote($db->escape($t_value));
+					}
+					$where[]='`'.$table.'` '.$t_value;
+				}
+				# Implode the $where array to join the pieces with "AND".
+				$where=implode(' AND ', $where);
+				# Get the IP Class.
+				require_once Utility::locateFile(MODULES.'IP'.DS.'IP.php');
+				# Create a new IP object.
+				$ip_obj=IP::getInstance();
+				# Will return the correct MySQL function to use.
+				$ip_field=$ip_obj->createSelectQueryParam('ip');
+				# If $ip_field is FALSE, then the server is not running MySQL 5.6.3+ so just use the `ip` field.
+				#	Then after the query use PHP's inet_ntop() function.
+				$ip_field=($ip_field===FALSE ? '`ip`' : $ip_field.' AS ip');
 				# Retrieve the contributor from the `contributors` table.
-				//echo 'SELECT `id`, `fname`, `lname`, `email`, INET_NTOA(`ip`) AS ip, `region`, `country`, `organization`, `privacy`, `user` FROM `'.DBPREFIX.'contributors` WHERE '.$where.' LIMIT 1<br>';exit;
-				$row=$db->get_row('SELECT `id`, `fname`, `lname`, `email`, INET_NTOA(`ip`) AS ip, `region`, `country`, `organization`, `privacy`, `user` FROM `'.DBPREFIX.'contributors` WHERE '.$where.' LIMIT 1');
-
+				$row=$db->get_row('SELECT `id`, `fname`, `lname`, `email`, '.$ip_field.', `region`, `country`, `organization`, `privacy`, `user` FROM `'.DBPREFIX.'contributors` WHERE '.$where.' LIMIT 1');
 				# Check if a record was returned.
 				if($row!==NULL)
 				{
@@ -885,7 +893,8 @@ class Contributor extends User
 					$this->setContFirstName($row->fname);
 					$this->setContLastName($row->lname);
 					$this->setContEmail($row->email);
-					$this->setContIP($row->ip);
+					# NOTE: Should put this in the IP class?
+					$this->setContIP(($ip_field===FALSE ? inet_ntop($row->ip) : $row->ip));
 					$this->setContRegion($row->region);
 					$this->setContCountry($row->country);
 					$this->setContOrganization($row->organization);

@@ -114,6 +114,8 @@ class ezDB_mysqli extends ezDB_Base
 			{
 				throw new ezDB_Error('Error loading character set '.$char_set.': %s\n', $this->dbh->error);
 			}
+			# Set MySQL Version
+			$this->server_version=$this->dbh->server_version;
 			$this->clear_errors();
 			return true;
 		}
