@@ -24,10 +24,10 @@ define('APPLICATION_FOLDER', BASE_PATH.'application'.DS);
 define('FW_APPLICATION_FOLDER', BASE_PATH.'framework'.DS.'application'.DS);
 
 # Define the path to the command_line folder. (ends with a slash)
-define('COMMAND_LINE', APPLICATION_FOLDER.'command_line'.DS);
+define('COMMAND_LINE', BASE_PATH.'command_line'.DS);
 
 # Define the path to the framework command_line folder. (ends with a slash)
-define('FW_COMMAND_LINE', FW_APPLICATION_FOLDER.'command_line'.DS);
+define('FW_COMMAND_LINE', BASE_PATH.'framework'.DS.'command_line'.DS);
 
 # Define the path to the controllers folder. (ends with a slash)
 define('CONTROLLERS', APPLICATION_FOLDER.'controllers'.DS);

@@ -304,7 +304,7 @@ class Utility
 	 *
 	 * Checks if the file is located in the client directory. If not, it changes the path to point to the framework folder.
 	 *
-	 * @param		string 	$file	  	(The path to the file.)
+	 * @param	string $file			The path to the file.
 	 * @access	public
 	 */
 	public static function locateFile($file)

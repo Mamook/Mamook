@@ -1,5 +1,7 @@
 <?php /* data/database_definitions.php */
 
+define('DB_TYPE', 'mysqli');
+
 if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
 {
 	# The hostname for the Database.
