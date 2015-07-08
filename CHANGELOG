@@ -1,3 +1,26 @@
+Version 2.4.11:
+ - Lots of bug fixes to mass emailer, created DB_TYPE constant
+ - Fixing wrong syntax for checking if a constant is empty
+ - Don't show Google App links in Secure Nav if GOOGLE_CLIENT_ID is empty
+ - Removing extra code from Search
+ - Minor code fixesd with IP
+ - Version file fixes
+ - Updated install instructions
+ - Removed redundant unused variable.
+ - Further fixing of sprintf email users error.
+
+Version 2.4.10:
+ - Email Users sprintf fix.
+ - Removed duplicate VERSION file
+
+Version 2.4.9:
+ - Added no-Tower instruction.
+ - Adding IP class, IP code changes, updated SQL file
+ - Modifying gitignore
+ - Updatng install instructions
+ - Moving ChangeLog to root dir
+ - Updating install instructions
+
 Version 2.4.5:
  - Let's start versioning (Michael Delle)
  - Version bump to 2.4.0 (Michael Delle)
