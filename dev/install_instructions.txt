@@ -75,8 +75,10 @@ Git Flow
 
 			It will ask you some questions, the last will be Hooks and filters directory?, which you can answer with /path/to/git-flow-hooks.
 			If you've already initialized git-flow, you can still set/change the path manually.
+
+			You can use "--global" so Git always uses this directory for Git Flow Hooks.
 			Command:
-				git config gitflow.path.hooks /path/to/git-flow-hooks
+				git config [--global] gitflow.path.hooks /path/to/git-flow-hooks
 
 3. Make sure the following folders are readable and writable (775):
 	bodega/
