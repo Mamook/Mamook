@@ -527,7 +527,7 @@ class AudioFormProcessor extends FormProcessor
 										'SessionId'=>session_id(),
 										'SessionPath'=>session_save_path());
 									# Run the upload script.
-									$cl->runScript(MODULES.'Media'.DS.'AudioUpload.php', $audio_data);
+									$cl->runScript(COMMAND_LINE.'Media'.DS.'AudioUpload.php', $audio_data);
 
 									# Convert to 128bit mp3.
 									$cl2=new CommandLine('ffmpeg');
