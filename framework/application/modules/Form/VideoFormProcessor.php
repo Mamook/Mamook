@@ -606,7 +606,7 @@ class VideoFormProcessor extends FormProcessor
 										# Instantiate the new CommandLine object.
 										//$cl=new CommandLine();
 										# Run the upload script.
-										//$cl->runScript(MODULES.'Media'.DS.'YouTubeUpload.php', $video_data);
+										//$cl->runScript(COMMAND_LINE.'Media'.DS.'YouTubeUpload.php', $video_data);
 									}
 
 									# Convert to webm.
