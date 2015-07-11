@@ -91,26 +91,29 @@ Git Flow
 	public/media/videos/files/
 	tmp/
 
-	Command:
+	Command (assumes you're in the root folder):
 		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
 
-4. Make a copy of the configuration files:
-	settings.php.sample				-> settings.php
+4. Make a copy of the configuration & cron files:
+	settings.php.sample						-> settings.php
+	cron/api_sync.php.sample				-> cron/api_sync.php
+	cron/new_media.php.sample				-> cron/new_media.php
 	data/API_definitions.php.sample			-> data/API_definitions.php
-	data/database_definitions.php.sample		-> data/database_definitions.php
+	data/database_definitions.php.sample	-> data/database_definitions.php
 	data/email_definitions.php.sample		-> data/email_definitions.php
-	data/formmail.ini.sample			-> data/formmail.ini
-	data/init.php.sample				-> data/init.php
+	data/formmail.ini.sample				-> data/formmail.ini
+	data/init.php.sample					-> data/init.php
 	data/user_privileges.php.sample			-> data/user_privileges.php
 
 	If you want WordPress integration:
 	data/WordPress_settings.php.sample		-> data/WordPress_settings.php
 
-	Command:
-		cp settings.php.sample settings.php && cp data/API_definitions.php.sample data/API_definitions.php && cp data/database_definitions.php.sample data/database_definitions.php && cp data/email_definitions.php.sample data/email_definitions.php && cp data/formmail.ini.sample data/formmail.ini && cp data/init.php.sample data/init.php && cp data/user_privileges.php.sample data/user_privileges.php
+	Command (assumes you're in the root folder):
+		cp settings.php.sample settings.php && cp cron/api_sync.php.sample cron/api_sync.php && cp cron/new_media.php.sample cron/new_media.php && cp data/API_definitions.php.sample data/API_definitions.php && cp data/database_definitions.php.sample data/database_definitions.php && cp data/email_definitions.php.sample data/email_definitions.php && cp data/formmail.ini.sample data/formmail.ini && cp data/init.php.sample data/init.php && cp data/user_privileges.php.sample data/user_privileges.php
 
 	If you want WordPress integration:
-	Command: cp data/WordPress_settings.php.sample data/WordPress_settings.php
+	Command (assumes you're in the root folder):
+		cp data/WordPress_settings.php.sample data/WordPress_settings.php
 
 5. Edit root->settings.php:
 	Search for each constant (string in capital letters).

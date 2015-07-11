@@ -1,20 +1,31 @@
-<?php
+<?php /* cron/api_sync.php */
+
 # TODO: Check if video is no longer in the playlist. If it's not. then remove the playlist ID from the `playlist` field.
+
+/**
+ * This script runs every hour.
+ * 00      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/api_sync.php
+ *
+ * Edit the domains from jamtheforce.com/.dev to your domain.
+ *
+ * Use dev/api_sync_Dev.php if you need this for your development machine.
+ * Use dev/api_sync_Staging.php if you need this for your staging server.
+ */
+
+# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
+if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', 'jamtheforce.com/');
+# Need this for the database insert.
+if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
+
+# Need this for API_definitions.php
+# The domain name of the developement application. (doesn't end with a slash)
+define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
 
 # Need these for database_definitions.php and email_definitions.php
 # Only need to change the RUN_ON_DEVELOPMENT definition.
 # TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
 if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
-define('RUN_ON_STAGING', ((RUN_ON_DEVELOPMENT===TRUE) ? FALSE : TRUE));
-
-# Need this for the database insert.
-if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'test.jamtheforce.com');
-# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
-if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', 'test.jamtheforce.com/');
-
-# Need this for API_definitions.php
-# The domain name of the developement application. (doesn't end with a slash)
-define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
+if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 
 # Change the directory to where this cron script is located.
 chdir(dirname(__FILE__));
@@ -30,7 +41,7 @@ require_once UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
 require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init();
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
@@ -160,7 +171,7 @@ foreach($all_playlists as $playlist_row)
 		foreach($playlist_items as $playlist_item)
 		{
 			# Create a video list request.
-			$video_list_response=$yt->listVideos('snippet', array('id' => $filtered['videoId']));
+			$video_list_response=$yt->listVideos('snippet,status', array('id' => $playlist_item['videoId']));
 
 			# If this video has not been deleted from YouTube.
 			if(($playlist_item['title']!='Deleted Video') && ($video_list_response[0]['status']['embeddable']===TRUE))
