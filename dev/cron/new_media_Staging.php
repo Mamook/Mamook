@@ -2,20 +2,30 @@
 # TODO: As we add more services (Vimeo) we'll check for rejection and if they're rejected from everything we'll stream from the server.
 # TODO: Delete video from playlists when deleting from YouTube.
 
-# Need these for database_definitions.php and email_definitions.php
-# Only need to change the RUN_ON_DEVELOPMENT definition.
-# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
-if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
-define('RUN_ON_STAGING', ((RUN_ON_DEVELOPMENT===TRUE) ? FALSE : TRUE));
+/**
+ * This script runs every 10 minutes. Had to escape the forward slash.
+ * *\/10      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/new_media_Staging.php
+ *
+ * Edit the domains from jamtheforce.com/.dev to your domain.
+ *
+ * Use dev/new_mediac_Dev.php if you need this for your development machine.
+ * Use dev/new_mediac_Staging.php if you need this for your staging server.
+ */
 
-# Need this for the email.
-if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'test.jamtheforce.com');
-# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);), and the URL in the email.
-if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', 'test.jamtheforce.com/');
+# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
+if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', 'jamtheforce.com/');
+# Need this for the database insert.
+if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
 
 # Need this for API_definitions.php
 # The domain name of the developement application. (doesn't end with a slash)
 define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
+
+# Need these for database_definitions.php and email_definitions.php
+# Only need to change the RUN_ON_DEVELOPMENT definition.
+# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
+if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', TRUE);
 
 # Change the directory to where this cron script is located.
 chdir(dirname(__FILE__));
