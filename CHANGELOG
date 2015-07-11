@@ -1,3 +1,7 @@
+Version v2.4.13:
+ * Moved command line scripts to framework/command_line/ folder (Michael Delle)
+ * Bumped version to 2.4.13 (Michael Delle)
+
 Version v2.4.12:
  * Bumped version to 2.4.12 (Michael Delle)
  * Organized cron scripts (Michael Delle)
