@@ -1,3 +1,7 @@
+Version v2.4.14:
+ * Bumped version to 2.4.14 (Michael Delle)
+ * Made Logger class and added timestamp to CommandLine log file. (Michael Delle)
+
 Version v2.4.13:
  * Moved command line scripts to framework/command_line/ folder (Michael Delle)
  * Bumped version to 2.4.13 (Michael Delle)
