@@ -149,7 +149,7 @@ class CommandLine
 	 *
 	 * Returns the data member $script.
 	 *
-	 * @access	private
+	 * @access	public
 	 */
 	public function getScript()
 	{
@@ -244,31 +244,35 @@ class CommandLine
 	{
 		try
 		{
-			//echo microtime().'<br/>';
-			//echo $command.'<br/>';
 			# Check if this is a Windows server.
 			if($this->isWindows()===TRUE)
 			{
 				# Execute the script in the background Windows style.
 				pclose(popen('start /B '. $command, 'r'));
-				//echo 'Did that on Windows.<br/>';
 			}
 			else
 			{
-				# Create time. Example: [Fri Jan 30 14:33:59 2014]
-				$debug_date='['.date('D M d H:i:s Y').'] ';
 				# Execute the script in the background Linux style. Writes errors to a log file.
-				exec($command.' >> '.LOGS.'cl_log_file.log &', $arrOutput);
-				//exec($command." > /dev/null &", $arrOutput);
-				$error_result=print_r($arrOutput,TRUE);
-				if(!empty($error_result))
-				{
-					//file_put_contents(LOGS.'cl_log_file.log', $debug_date." ".$command."\r\n", FILE_APPEND | LOCK_EX);
-					//file_put_contents(LOGS.'cl_log_file.log', $debug_date.' '.$error_result."\r\n", FILE_APPEND);
-				}
-				//echo 'Did that.<br/>';
+				//exec($command.' >> '.LOGS.'cl_log_file.log &', $output);
+				exec($command." 2>&1 &", $error_result);
 			}
-			//echo microtime().'<br/>';
+			# If $error_result is not empty, there was an error (2>&1).
+			if(!empty($error_result))
+			{
+				# If $error_result is an array, convert it to a string seperated by PHP End of Line.
+				if(is_array($error_result))
+				{
+					$error_result=implode(PHP_EOL, $error_result);
+				}
+				# Get the Logger Class.
+				require_once Utility::locateFile(MODULES.'Logger'.DS.'Logger.php');
+				# Create a new Document object, and set the log file to use.
+				$logger_obj=new Logger('cl_log_file.log');
+				# Write exec() output to log file.
+				$logger_obj->writeLogFile($error_result);
+				# Close log file.
+				$logger_obj->closeLogFile();
+			}
 		}
 		catch(Exception $e)
 		{
