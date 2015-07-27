@@ -1,5 +1,8 @@
 <?php /* framework/application/modules/Logger/Logger.php */
 
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
+
 /**
  * Logger
  *
