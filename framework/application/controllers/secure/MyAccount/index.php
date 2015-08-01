@@ -74,9 +74,9 @@ $display_main2.=$display;
 $display_main3.=$main_content->displayQuote();
 
 # Do we need some javascripts? (Use the script file name before the ".js".)
-$doc->setJavaScripts('uniform');
+#$doc->setJavaScripts('uniform');
 # Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
-$doc->setFooterJS('uniform-file');
+#$doc->setFooterJS('uniform-file');
 
 /*
 ** In the page template we
