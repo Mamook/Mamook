@@ -11,7 +11,7 @@ $user_obj=$populator->getUserObject();
 # Do we need some javascripts? (Use the script video name before the ".js".)
 $doc->setJavaScripts('uniform,bsmSelect');
 # Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple,removeCurrentItem');
+$doc->setFooterJS('uniform-file,uniform-select,fileOption-submit,bsmSelect-multiple,removeCurrentItem');
 
 $display.='<div id="profile_form" class="form">';
 # create and display form
