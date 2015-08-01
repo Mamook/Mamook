@@ -166,11 +166,24 @@ class AccountFormPopulator extends FormPopulator
 				}
 
 				# Check if there was POST data sent.
-				if(isset($_POST['cv']))
+				if(isset($_POST['_cv_current']))
 				{
 					# Clean it up and set it to the data array index.
-					$data['CV']=$db->sanitize($_POST['cv']);
+					$data['CV']=$db->sanitize($_POST['_cv_current']);
 				}
+				# Check if there was POST data sent.
+				if(isset($_POST['_cv_current_remove']))
+				{
+					# Clean it up and set it to the data array index.
+					$data['CV']=NULL;
+				}
+			/*** I believe this value is never captured. It will be $_FILE['cv'] that gets captured in the AccountFormProcessor script. **/
+				# Check if there was POST data sent.
+// 				if(isset($_POST['cv']))
+// 				{
+// 					# Clean it up and set it to the data array index.
+// 					$data['CV']=$db->sanitize($_POST['cv']);
+// 				}
 
 				# Check if there was POST data sent.
 				if(isset($_POST['display']))
@@ -191,6 +204,19 @@ class AccountFormPopulator extends FormPopulator
 				{
 					# Clean it up and set it to the data array index.
 					$data['FirstName']=$db->sanitize($_POST['fname']);
+				}
+
+				# Check if there was POST data sent.
+				if(isset($_POST['_image_current']))
+				{
+					# Clean it up and set it to the data array index.
+					$data['Img']=$db->sanitize($_POST['_image_current']);
+				}
+				# Check if there was POST data sent.
+				if(isset($_POST['_image_current_remove']))
+				{
+					# Clean it up and set it to the data array index.
+					$data['Img']=NULL;
 				}
 
 				# Check if there was POST data sent.
