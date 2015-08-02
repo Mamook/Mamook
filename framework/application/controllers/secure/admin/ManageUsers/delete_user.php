@@ -21,6 +21,8 @@ $display_box2='';
 
 $display='';
 
+$head='';
+
 if(isset($_GET['user']))
 {
 	# Instantiate a new User object.
