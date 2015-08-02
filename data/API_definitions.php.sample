@@ -4,6 +4,7 @@
 define('DEFAULT_AUDIO_PLAYLIST', 'Audio');
 define('DEFAULT_VIDEO_PLAYLIST', 'Videos');
 define('FW_POPUP_HANDLE', 'fwpopup');
+define('FW_API_KEY', '');
 
 # AddThis Variables
 define('ADDTHIS_ID', '');

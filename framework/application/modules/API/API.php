@@ -13,7 +13,7 @@ class API
 {
 	/*** data members ***/
 
-	private $server_api_key=API_KEY;
+	private $server_api_key=FW_API_KEY;
 
 	/*** End data members ***/
 
