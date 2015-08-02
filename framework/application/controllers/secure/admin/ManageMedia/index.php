@@ -2,6 +2,8 @@
 
 $login->checkLogin(ALL_BRANCH_USERS);
 
+$page_class='manageMediapage';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

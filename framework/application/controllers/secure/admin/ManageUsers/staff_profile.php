@@ -10,6 +10,8 @@ require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 # Check if the logged in User is an Admin.
 $login->checkLogin(ADMIN_USERS);
 
+$page_class='manageUserspage-staffprofile';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

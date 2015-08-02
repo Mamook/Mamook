@@ -10,6 +10,8 @@ require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 # Check if the User is logged in and has the proper privileges to be here.
 $login->checkLogin(ADMIN_USERS);
 
+$page_class='manageUserspage-privacy';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

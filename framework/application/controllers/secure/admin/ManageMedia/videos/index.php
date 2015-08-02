@@ -10,6 +10,9 @@ require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 require_once Utility::locateFile(MODULES.'Form'.DS.'VideoFormProcessor.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
+
+$page_class='manageMediapage-videos';
+
 $login->findUserData();
 
 # Create display variables.

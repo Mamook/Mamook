@@ -12,6 +12,8 @@ require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php')
 # Check if the logged in User is an Admin.
 $login->checkLogin(ALL_ADMIN_MAN);
 
+$page_class='manageUserspage';
+
 $login->findUserData();
 
 # Create a new User object.

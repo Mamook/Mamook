@@ -7,6 +7,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'PublisherFormProcessor.php')
 
 $login->checkLogin(ALL_BRANCH_USERS);
 
+$page_class='manageContentpage-publishers';
+
 $login->findUserData();
 
 # Create display variables.

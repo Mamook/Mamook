@@ -7,6 +7,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'ProductFormProcessor.php');
 
 $login->checkLogin(MAN_USERS);
 
+$page_class='manageContentpage-products';
+
 $login->findUserData();
 
 # Create display variables.

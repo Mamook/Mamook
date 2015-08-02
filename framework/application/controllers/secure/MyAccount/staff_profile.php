@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 
 $login->checkLogin(ALL_USERS);
 
+$page_class='myaccount-staffprofile';
+
 # Instantiate a new Staff object.
 $staff_obj=new Staff();
 

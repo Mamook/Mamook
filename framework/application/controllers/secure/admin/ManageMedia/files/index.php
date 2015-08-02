@@ -10,6 +10,9 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
+
+$page_class='manageMediapage-files';
+
 $login->findUserData();
 
 # Create display variables.

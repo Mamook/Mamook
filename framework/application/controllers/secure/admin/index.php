@@ -2,6 +2,8 @@
 
 $login->checkLogin(ALL_ADMIN_MAN);
 
+$page_class='adminpage';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

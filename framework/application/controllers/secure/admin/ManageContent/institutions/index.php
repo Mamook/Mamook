@@ -7,6 +7,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'InstitutionFormProcessor.php
 
 $login->checkLogin(ALL_BRANCH_USERS);
 
+$page_class='manageContentpage-institutions';
+
 $login->findUserData();
 
 # Create display variables.

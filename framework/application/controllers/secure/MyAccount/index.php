@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 
 $login->checkLogin(ALL_USERS);
 
+$page_class='myaccount';
+
 # Instantiate a new User object.
 $user_obj=new User();
 # Instantiate a new Staff object. Being used in secure_navbar.php.

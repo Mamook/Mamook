@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 
 $login->checkLogin(ALL_USERS);
 
+$page_class='myaccount-privacy';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

@@ -6,6 +6,9 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 require_once Utility::locateFile(MODULES.'Form'.DS.'EmailFormProcessor.php');
 
 $login->checkLogin(ADMIN_USERS);
+
+$page_class='manageUserspage-emailusers';
+
 $login->findUserData();
 
 # Get the email form default values.

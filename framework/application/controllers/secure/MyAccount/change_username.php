@@ -8,6 +8,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);
 
+$page_class='myaccount-changeusername';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

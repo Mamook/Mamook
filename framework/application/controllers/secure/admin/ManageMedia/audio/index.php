@@ -10,6 +10,9 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'AudioFormProcessor.php');
 require_once Utility::locateFile(MODULES.'PageNavigator'.DS.'PageNavigator.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
+
+$page_class='manageMediapage-audio';
+
 $login->findUserData();
 
 # Create display variables.

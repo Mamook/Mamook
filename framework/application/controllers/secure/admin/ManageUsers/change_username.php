@@ -8,6 +8,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
 # Check if the logged in User is an Admin.
 $login->checkLogin(ADMIN_USERS);
 
+$page_class='manageUserspage-changeusername';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

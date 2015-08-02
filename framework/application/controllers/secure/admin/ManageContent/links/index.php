@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'LinkFormProcessor.php');
 
 $login->checkLogin(MAN_USERS);
 
+$page_class='manageContentpage-links';
+
 $login->findUserData();
 
 $fp=new LinkFormProcessor();

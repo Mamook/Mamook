@@ -7,6 +7,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'PositionFormProcessor.php');
 
 $login->checkLogin(MAN_USERS);
 
+$page_class='manageContentpage-positions';
+
 $login->findUserData();
 
 $fp=new PositionFormProcessor();

@@ -10,6 +10,8 @@ require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 # Check if the User is logged in.
 $login->checkLogin(ALL_ADMIN_MAN);
 
+$page_class='manageUserspage-authorizeuser';
+
 # Get the User's access levels.
 $levels=$login->findUserLevel();
 

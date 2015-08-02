@@ -10,6 +10,8 @@ require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);
 
+$page_class='myaccount-authorizations';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';

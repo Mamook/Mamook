@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'CategoryFormProcessor.php');
 
 $login->checkLogin(ALL_BRANCH_USERS);
 
+$page_class='manageContentpage-categories';
+
 $login->findUserData();
 
 $fp=new CategoryFormProcessor();

@@ -9,6 +9,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'PostFormProcessor.php');
 
 $login->checkLogin(ANNOUNCEMENT_USERS);
 
+$page_class='manageContentpage-announcement';
+
 $login->findUserData();
 
 $fp=new PostFormProcessor();

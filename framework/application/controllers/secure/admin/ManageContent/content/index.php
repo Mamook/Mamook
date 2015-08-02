@@ -7,6 +7,8 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'ContentFormProcessor.php');
 
 $login->checkLogin(MAN_USERS);
 
+$page_class='manageContentpage-content';
+
 # Create display variables.
 $display_main1='';
 $display_main2='';
