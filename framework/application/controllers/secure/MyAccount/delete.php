@@ -19,6 +19,8 @@ $display_box1b='';
 $display_box1c='';
 $display_box2='';
 
+$who='my';
+
 $display='';
 $head='';
 

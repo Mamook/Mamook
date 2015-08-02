@@ -35,6 +35,8 @@ if(isset($_GET['user']))
 	$form_processor->processDeleteAccount();
 	$current_username=$user->findUsername($id);
 
+	$who=$current_username."'s";
+
 	# Get the delete_user form.
 	require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_user.php');
 }
