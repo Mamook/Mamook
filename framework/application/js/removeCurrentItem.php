@@ -1,7 +1,7 @@
 <?php /* application/js/removeCurrentItem.php */
 
 # Minified version.
-$js='$(function(){$(".file-current .remove").click(function(){var a=$(this).closest(".file-current");$(this).prev("input").clone().attr({name:$(this).attr("name")+"_remove"}).appendTo(a.closest("li"));a.remove();return!1})});';
+$js='$(function(){$(".file-current .remove").click(function(){var a=$(this).closest(".file-current"),b=$(this).prev("input").clone();b.attr({name:b.attr("name")+"_remove"}).appendTo(a.closest("li"));a.remove();return!1})});';
 
 # Long version.
 /*$js='// Wrap it all in the jQuery(document).ready method to ensure the internal variables and functions are not invasive to the page and so that this will execute after the document is loaded.
@@ -11,9 +11,8 @@ $js='$(function(){$(".file-current .remove").click(function(){var a=$(this).clos
 			.click(function(){
 				var currentFileContainer = $(this).closest(".file-current");
 				// Clone the hidden input.
-				var hidden = $(this).prev("input")
-					.clone()
-					.attr({name:$(this).attr("name") + "_remove"})
+				var hidden = $(this).prev("input").clone();
+				hidden.attr({name:hidden.attr("name") + "_remove"})
 					.appendTo(currentFileContainer.closest("li"));
 				currentFileContainer.remove();
 				return false;
