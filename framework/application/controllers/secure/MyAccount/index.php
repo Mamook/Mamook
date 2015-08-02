@@ -44,18 +44,9 @@ $main_content->setPageTitle($display_name.'\'s Profile');
 require Utility::locateFile(TEMPLATES.'forms'.DS.'account_form.php');
 
 $img=$user_obj->getImg();
-$cv=$user_obj->getCV();
 if(!empty($img))
 {
 	$display_box1b.='<a href="'.IMAGES.'original/'.$img.'" class="profile-image" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'"/></a>';
-}
-if(!empty($cv))
-{
-	$user_cv='<div class="profile-cv">';
-	$user_cv.='<span class="label">Your current <abbr title="Curriculum Vitae">CV</abbr> is:</span>';
-	$user_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download your CV">'.$cv.'</a>';
-	$user_cv.='</div>';
-	$display_box1b.=$user_cv;
 }
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
