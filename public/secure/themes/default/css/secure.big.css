@@ -247,6 +247,11 @@ a:hover,
 	max-height:75px;
 	max-width:50px;
 }
+[class|=table] a:hover img,
+[class|=select] a:hover img,
+.file-current a:hover img {
+	opacity:0.8;
+}
 [class|=submit],
 [class|=button] {
 	display:block;
