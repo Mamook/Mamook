@@ -852,13 +852,13 @@ class Publisher
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="'.ADMIN_URL.'ManageContent/publishers/?publisher='.$publisher_id.'" class="edit" title="Edit '.$publisher_name.'">Edit</a>';
+						$edit_content='<a href="'.ADMIN_URL.'ManageContent/publishers/?publisher='.$publisher_id.'" class="button-edit" title="Edit '.$publisher_name.'">Edit</a>';
 					}
 					# Check f there should be a delete button displayed.
 					if($delete===TRUE)
 					{
 						# Set the delete button to a variable.
-						$delete_content='<a href="'.ADMIN_URL.'ManageContent/publishers/?publisher='.$publisher_id.'&amp;delete" class="delete" title="Delete '.$publisher_name.'">Delete</a>';
+						$delete_content='<a href="'.ADMIN_URL.'ManageContent/publishers/?publisher='.$publisher_id.'&amp;delete" class="button-delete" title="Delete '.$publisher_name.'">Delete</a>';
 					}
 					# Check if this is a select list.
 					if($select==='select')
