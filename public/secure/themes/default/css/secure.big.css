@@ -187,12 +187,11 @@ a:hover,
 }
 .post .post-title {
 	font-weight:400;
-	text-shadow:0 0 3px;
 	color:#fff;
 }
 .post .post-date {
+	display:block;
 	font-style:italic;
-	text-shadow:0 0 3px;
 	color:#fff;
 }
 .post .entry {
@@ -200,7 +199,6 @@ a:hover,
 	border-radius:6px;
 	margin:3px 4px;
 	padding:4px 6px;
-	text-shadow:0 0 3px #fff;
 	color:#000;
 }
 [class|=table],
