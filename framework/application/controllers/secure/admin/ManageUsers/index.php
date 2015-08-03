@@ -116,7 +116,7 @@ if(isset($_GET['user']))
 	# Make sure the User is an admin.
 	if($login->checkAccess(ADMIN_USERS)===TRUE)
 	{
-		$head='<h3>Please use the form below to update user: '.$current_username.'</h3>';
+		$head='<h3 class="h-3">Please use the form below to update user: '.$current_username.'</h3>';
 
 		# Get the User's display name and set it to a variable.
 		$display_name=$user_obj->findDisplayName($id);
@@ -136,14 +136,6 @@ if(isset($_GET['user']))
 		$user_image.='<a href="'.IMAGES.'original/'.$img.'" rel="'.FW_POPUP_HANDLE.'" title="'.((!empty($img_title)) ? $img_title : $display_name).'" target="_blank"><img src="'.IMAGES.$img.'?vers='.mt_rand().'" alt="'.((!empty($img_title)) ? $img_title : $display_name).'" /></a>';
 		$user_image.='</div>';
 		$display_box1b.=$user_image;
-	}
-	if(!empty($cv))
-	{
-		$user_cv='<div class="profile-cv">';
-		$user_cv.='<span class="label">'.$display_name.'\'s current CV is:</span>';
-		$user_cv.='<a href="'.DOWNLOADS.'?f='.$cv.'&t=cv" title="Download '.$display_name.'\'s CV">'.$cv.'</a>';
-		$user_cv.='</div>';
-		$display_box1b.=$user_cv;
 	}
 }
 else
