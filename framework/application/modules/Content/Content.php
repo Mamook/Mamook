@@ -1340,7 +1340,7 @@ class Content
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="//'.DOMAIN_NAME.'/'.UTILITY::removeIndex(HERE).'?content='.$content_id.'" class="submit-edit edit" title="Edit this">Edit</a>';
+						$edit_content='<a href="//'.DOMAIN_NAME.'/'.UTILITY::removeIndex(HERE).'?content='.$content_id.'" class="button-edit" title="Edit this">Edit</a>';
 					}
 					# Concatenate the general data to the $table_body variable first opening a new tr.
 					$table_body.='<tr>'.$general_data;

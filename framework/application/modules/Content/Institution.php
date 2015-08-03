@@ -445,13 +445,13 @@ class Institution
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="'.ADMIN_URL.'ManageContent/institutions/?institution='.$institution_id.'" class="edit" title="Edit '.$institution_name.'">Edit</a>';
+						$edit_content='<a href="'.ADMIN_URL.'ManageContent/institutions/?institution='.$institution_id.'" class="button-edit" title="Edit '.$institution_name.'">Edit</a>';
 					}
 					# Check f there should be a delete button displayed.
 					if($delete===TRUE)
 					{
 						# Set the delete button to a variable.
-						$delete_content='<a href="'.ADMIN_URL.'ManageContent/institutions/?institution='.$institution_id.'&amp;delete" class="delete" title="Delete '.$institution_name.'">Delete</a>';
+						$delete_content='<a href="'.ADMIN_URL.'ManageContent/institutions/?institution='.$institution_id.'&amp;delete" class="button-delete" title="Delete '.$institution_name.'">Delete</a>';
 					}
 					# Check if this is a select list.
 					if($select==='select')

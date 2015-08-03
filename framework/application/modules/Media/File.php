@@ -514,13 +514,13 @@ class File extends Media
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'" class="edit" title="Edit this">Edit</a>';
+						$edit_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'" class="button-edit" title="Edit this">Edit</a>';
 					}
 					# Check f there should be a delete button displayed.
 					if($delete===TRUE)
 					{
 						# Set the delete button to a variable.
-						$delete_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'&amp;delete=yes" class="delete" title="Delete This">Delete</a>';
+						$delete_content='<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_id.'&amp;delete=yes" class="button-delete" title="Delete This">Delete</a>';
 					}
 					# Check if this is a select list.
 					if($select==='select')
