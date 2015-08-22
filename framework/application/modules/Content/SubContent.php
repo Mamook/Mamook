@@ -2023,11 +2023,11 @@ class SubContent extends Content
 					{
 						$display.='<p class="hide">This post is hidden.</p>';
 					}
-					$display.=$display_subcontent[$post_id]['image'];
 					$display.=$display_subcontent[$post_id]['date'];
 					$display.=$display_subcontent[$post_id]['contributor'];
 					$display.=$display_subcontent[$post_id]['recent_contributor'];
 					$display.=$display_subcontent[$post_id]['publisher'];
+					$display.=$display_subcontent[$post_id]['image'];
 					$display.=$display_subcontent[$post_id]['text'];
 					$display.=$display_subcontent[$post_id]['text_trans'];
 					$file_info=$this->getFileInfoDisplay();
