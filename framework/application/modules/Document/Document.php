@@ -223,8 +223,6 @@ class Document
 			$error_box.='<h1 class="h-1">'.$alert_title.'</h1>';
 			if(!empty($error))
 			{
-				# Format the message for xhtml display and set it to a variable.
-				//$error='<div>'.$error.'</div>';
 				# Concatenate the error message to the error box.
 				$error_box.=$error;
 				# Concatenate the error message to the errorvariable for Javascript error display.
@@ -234,7 +232,7 @@ class Document
 			}
 			if(isset($_SESSION['message']))
 			{
-				# Format the message for xhtml display and set it to a variable.
+				# Format the message for html display and set it to a variable.
 				$message='<div>'.$_SESSION['message'].'</div>';
 				# Concatenate the error message to the error box.
 				$error_box.=$message;
