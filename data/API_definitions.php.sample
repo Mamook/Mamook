@@ -51,6 +51,11 @@ define('GOOGLE_CLIENT_ID', '');
 define('GOOGLE_CLIENT_SECRET', '');
 define('GOOGLE_REFRESH_TOKEN', '');
 
+# Google+ Platform API
+define('GOOGLE_PLUS_PAGE_ID', '');
+define('GOOGLE_PLUS_URL', 'plus.google.com/');
+define('GOOGLE_PLUS_PROJECT_ID', '');
+
 # Google APPS
 define('GOOGLE_APPS_CALENDAR', 'calendar.jamtheforce.com');
 define('GOOGLE_APPS_DRIVE', 'docs.jamtheforce.com');
