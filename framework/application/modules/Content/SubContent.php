@@ -549,6 +549,21 @@ class SubContent extends Content
 	} #==== End -- setHide
 
 	/**
+	 * setID
+	 *
+	 * Sets the data member $id.
+	 * This is a wrapper method for setID of the parent class.
+	 *
+	 * @param		$id
+	 * @access	protected
+	 */
+	public function setID($id)
+	{
+		# Set the data member using the parent class method.
+		parent::setID($id, 'SubContent');
+	} #==== End -- setID
+
+	/**
 	 * setAllImages
 	 *
 	 * Sets the data member $images.

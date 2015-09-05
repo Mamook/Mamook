@@ -225,7 +225,7 @@ class Content
 	 * @param	$id
 	 * @access	public
 	 */
-	public function setID($id)
+	public function setID($id, $class='content')
 	{
 		# Check if the passed $id is empty.
 		if(!empty($id) && $id!=='add' && $id!=='select')
@@ -242,7 +242,7 @@ class Content
 			}
 			else
 			{
-				throw new Exception('The passed content id was not an integer!', E_RECOVERABLE_ERROR);
+				throw new Exception('The passed '.$class.' id was not an integer!', E_RECOVERABLE_ERROR);
 			}
 		}
 		else
