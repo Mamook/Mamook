@@ -36,7 +36,6 @@ class SubContent extends Content
 	private $branch_where_sql=NULL;
 	private $contributor=NULL;
 	private $cont_id=NULL;
-	private $date='0000-00-00';
 	private $file=NULL;
 	private $file_id=NULL;
 	private $file_info_display=array('header'=>NULL, 'name'=>NULL, 'title'=>NULL, 'author'=>NULL, 'publisher'=>NULL, 'language'=>NULL, 'year'=>NULL, 'location'=>NULL, 'contributor'=>NULL, 'date'=>NULL, 'recent_contributor'=>NULL, 'last_edit'=>NULL, 'all'=>NULL);
@@ -381,53 +380,6 @@ class SubContent extends Content
 			$this->recent_cont_id=NULL;
 		}
 	} #==== End -- setRecentContID
-
-	/**
-	 * setDate
-	 *
-	 * Sets the data member $date.
-	 *
-	 * @param		$date
-	 * @access	public
-	 */
-	public function setDate($date)
-	{
-		# Check if the passed value is empty.
-		if(!empty($date) && ($date!=='0000-00-00') && ($date!=='1970-02-31'))
-		{
-			# Explode the date into an array casting each as an integer.
-			$date=explode('-', $date);
-			$year=(int)$date[0];
-			$month=(int)$date[1];
-			$day=(int)$date[2];
-			if(checkdate($month, $day, $year)===TRUE)
-			{
-				# Make sure the day is the correct length.
-				if(strlen($day)!=2)
-				{
-					$day='0'.$day;
-				}
-				# Make sure the month is the correct length.
-				if(strlen($month)!=2)
-				{
-					$month='0'.$month;
-				}
-				# Put the date back together in the correct format.
-				$date=$year.'-'.$month.'-'.$day;
-				# Set the data member.
-				$this->date=$date;
-			}
-			else
-			{
-				throw new Exception('The passed post date was not an acceptable date.', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the data member to the default.
-			$this->date='0000-00-00';
-		}
-	} #==== End -- setDate
 
 	/**
 	 * setLastEdit
@@ -1421,18 +1373,6 @@ class SubContent extends Content
 	{
 		return $this->recent_cont_id;
 	} #==== End -- getRecentContID
-
-	/**
-	 * getDate
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getDate()
-	{
-		return $this->date;
-	} #==== End -- getDate
 
 	/**
 	 * getLastEdit
@@ -4020,4 +3960,4 @@ class SubContent extends Content
 
 	/*** End protected methods ***/
 
-} #=== End SubContent class.
+#} #=== End SubContent class.
