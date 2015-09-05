@@ -557,10 +557,10 @@ class SubContent extends Content
 	 * @param		$id
 	 * @access	protected
 	 */
-	public function setID($id)
+	public function setID($id, $class='SubContent')
 	{
 		# Set the data member using the parent class method.
-		parent::setID($id, 'SubContent');
+		parent::setID($id, $class);
 	} #==== End -- setID
 
 	/**
