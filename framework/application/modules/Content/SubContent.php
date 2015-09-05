@@ -3960,4 +3960,4 @@ class SubContent extends Content
 
 	/*** End protected methods ***/
 
-#} #=== End SubContent class.
+} #=== End SubContent class.
