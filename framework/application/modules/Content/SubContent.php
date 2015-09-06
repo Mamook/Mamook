@@ -803,8 +803,10 @@ class SubContent extends Content
 	 */
 	public function setLink($link)
 	{
+		# Clean it up.
+		$link=trim($link);
 		# Check if the passed value is empty or only the sheme name was passed.
-		if(empty($link) || ($link=='http://'))
+		if(empty($link) || ($link=='http://') || ($link=='https://'))
 		{
 			# Explicitly set the value to NULL.
 			$link=NULL;
