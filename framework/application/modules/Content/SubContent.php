@@ -36,7 +36,7 @@ class SubContent extends Content
 	private $branch_where_sql=NULL;
 	private $contributor=NULL;
 	private $cont_id=NULL;
-	private $file=NULL;
+	protected $file=NULL;
 	private $file_id=NULL;
 	private $file_info_display=array('header'=>NULL, 'name'=>NULL, 'title'=>NULL, 'author'=>NULL, 'publisher'=>NULL, 'language'=>NULL, 'year'=>NULL, 'location'=>NULL, 'contributor'=>NULL, 'date'=>NULL, 'recent_contributor'=>NULL, 'last_edit'=>NULL, 'all'=>NULL);
 	private $hide;
