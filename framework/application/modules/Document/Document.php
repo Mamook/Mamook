@@ -286,32 +286,35 @@ class Document
 			$error=$this->getError();
 		}
 
+		$page_error='""';
 		$js_no_cookie_msg='';
+		if(!empty($error))
+		{
+			$error=preg_replace('/\r?\n/', '\\n', addslashes($error));
+			$page_error='"'.$error.'"';
+		}
 		if(!isset($no_cookie_msg) || empty($no_cookie_msg))
 		{
 			$js_no_cookie_msg='You do not have cookies enabled in you browser. Some aspects of this website may not function correctly. You may enable or disable cookies in your browser. You may find out more about cookies at <a href="http://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">http://en.wikipedia.org/wiki/HTTP_cookie</a>';
 			$js_no_cookie_msg=preg_replace('/\r?\n/', '\\n', addslashes($js_no_cookie_msg));
 		}
 
-		$js_error_msg='var noCookie=null;';
+		$js_error_msg='$(window).load(function(){';
+		$js_error_msg.='var noCookie=false;';
 		$js_error_msg.='$().fwAlert({'.
-		'close:\'OK\','.
+		'close:"OK",'.
 		'draggable:true});';
 		$js_error_msg.='var noCookieMsg="";';
-		$js_error_msg.='var pageError="";';
+		$js_error_msg.='var pageError='.$page_error.';';
 		$js_error_msg.='if(navigator.cookieEnabled == 0){noCookie=true}';
 		if($check_cookies!==FALSE)
 		{
-			$js_error_msg.='if(noCookie!==null){noCookieMsg="'.$js_no_cookie_msg.'"}';
+			$js_error_msg.='if(noCookie){noCookieMsg="'.$js_no_cookie_msg.'"}';
 		}
-		if(!empty($error))
-		{
-			$error=preg_replace('/\r?\n/', '\\n', addslashes($error));
-			$js_error_msg.='pageError="'.$error.'";';
-		}
-		$js_error_msg.='if((noCookieMsg!=\'\') || (pageError!=\'\')){
-			alert(\''.$alert_title.'\', noCookieMsg + pageError)
-		}';
+		$js_error_msg.='if((noCookieMsg)||(pageError)){'.
+			'alert("'.$alert_title.'",noCookieMsg+pageError)'.
+		'}';
+		$js_error_msg.='});';
 
 		return $js_error_msg;
 	} #==== End -- addJSErrorBox
