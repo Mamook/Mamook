@@ -210,13 +210,17 @@ class Document
 	 */
 	public function addErrorBox()
 	{
+		# Get the Session Class
+		require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
+		$session=Session::getInstance();
+		$session_message=$session->getMessage();
+
 		global $alert_title;
 
 		$error_box='';
 		$error=$this->getError();
 		$js_errors='';
-
-		if(!empty($error) || (isset($_SESSION['message']) && !empty($_SESSION['message'])))
+		if(!empty($error) || !empty($session_message))
 		{
 			$error_box.='<noscript>';
 			$error_box.='<section class="alertBox">';
@@ -230,16 +234,14 @@ class Document
 				# clear the error
 				unset($error);
 			}
-			if(isset($_SESSION['message']))
+			if(!empty($session_message))
 			{
 				# Format the message for html display and set it to a variable.
-				$message='<div>'.$_SESSION['message'].'</div>';
+				$message='<div>'.$session_message.'</div>';
 				# Concatenate the error message to the error box.
 				$error_box.=$message;
 				# Concatenate the error message to the errorvariable for Javascript error display.
 				$js_errors.=$message;
-				# Clear the message
-				unset($_SESSION['message']);
 			}
 			$error_box.='</section>';
 			$error_box.='</noscript>';
@@ -722,7 +724,7 @@ class Document
 	 * @param		$delay 	(The delay in seconds before redirecting.)
 	 * @access	public
 	 */
-	public function redirect($url, $delay=0)
+	public function redirect($url, $delay=0, $clear_session_data=FALSE)
 	{
 		# Check if the URL is empty.
 		if(!empty($url))
@@ -734,15 +736,26 @@ class Document
 			{
 				$url=$url_parsed['path'].$url_parsed['query'];
 			}
+			# Get the Session Class
+			require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
+			$session=Session::getInstance();
+			# Ensure the $_SESSION data is cleared or kept as passed.
+			$session->keepSessionData(!$clear_session_data);
 			# Check if headers have already been sent.
 			if(headers_sent()===FALSE)
 			{
-				# Do a PHP redirect.
+				ob_end_clean();
+				# Do a PHP redirect with the passed delay.
 				header('Refresh: '.$delay.'; url='.$url);
+				ob_flush();
+				# Output some content so the header will get pushed.
+				echo ' ';
+				# Kill PHP so nothing else will execute.
+				die;
 			}
 			# Do a Javascript redirect.
 			$script='<script type="text/javascript">';
-			$script.='window.setTimeout(\'window.location="'.$url.'"; \','.($delay*1000).');';
+			$script.='setTimeout(function(){window.location="'.$url.'";}),'.($delay*1000).');';
 			$script.='</script>';
 			# Do an HTML redirect.
 			$script.='<noscript>';

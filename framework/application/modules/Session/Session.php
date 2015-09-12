@@ -14,8 +14,9 @@ class Session
 {
 	/*** data members ***/
 
+	private $message=FALSE;
 	private static $session;
-	private $sessname='';
+	private $sessname=FALSE;
 
 	/*** End data members ***/
 
@@ -110,6 +111,9 @@ class Session
 			# set the s_set session so we can tell if session_start has been called already
 			$_SESSION['s_set']=1;
 		}
+
+		# Capture any messages set before this page was loaded.
+		$this->captureMessage();
 	} #==== End -- __construct
 
 	/*** End magic methods ***/
@@ -119,22 +123,53 @@ class Session
 	/*** mutator methods ***/
 
 	/**
+	* setMessage
+	*
+	* Sets the data member $message. If an empty value is passed, the data member will
+	* be set with FALSE. Returns the set data member value.
+	*
+	* @param	$message
+	* @access	private
+	*/
+	private function setMessage($message)
+	{
+		# Clean it up...
+		$message=trim($message);
+		# Check if the passed value is now empty.
+		if(empty($message))
+		{
+			# Explicitly set the data member to false.
+			$message=FALSE;
+		}
+		# Set the data member.
+		$this->message=$message;
+		# Return the data member after it has gone through the get method.
+		return $this->getMessage();
+	} #==== End -- setMessage
+
+	/**
 	* setSessname
 	*
-	* Sets the data member $sessname. Returns FALSE on failure.
+	* Sets the data member $sessname. If an empty value is passed, the data member will
+	* be set with FALSE. Returns the set data member value.
 	*
-	* @param	$name (Must be numeric.)
-	* @access	public
+	* @param		$name
+	* @access		public
 	*/
 	public function setSessname($sessname)
 	{
 		# Clean it up...
 		$sessname=trim($sessname);
-		if (!empty($sessname))
+		# Check if the passed value is now empty.
+		if(empty($sessname))
 		{
-			$this->sessname=$sessname;
+			# Explicitly set the data member to false.
+			$sessname=FALSE;
 		}
-		else { return FALSE; }
+		# Set the data member.
+		$this->sessname=$sessname;
+		# Return the data member after it has gone through the get method.
+		return $this->getSessname();
 	} #==== End -- setSessname
 
 	/*** End mutator methods ***/
@@ -144,19 +179,27 @@ class Session
 	/*** accessor methods ***/
 
 	/**
+	* getMessage
+	*
+	* Returns the data member $message.
+	*
+	* @access	public
+	*/
+	public function getMessage()
+	{
+		return $this->message;
+	} #==== End -- getMessage
+
+	/**
 	* getSessname
 	*
-	* Returns the data member $sessname. Returns FALSE on failure.
+	* Returns the data member $sessname.
 	*
 	* @access	public
 	*/
 	public function getSessname()
 	{
-		if (isset($this->sessname) && !empty($this->sessname))
-		{
-			return $this->sessname;
-		}
-		else { return FALSE; }
+		return $this->sessname;
 	} #==== End -- getSessname
 
 	/*** End accessor methods ***/
@@ -224,6 +267,67 @@ class Session
 	} #==== End -- getInstance
 
 	/**
+	 * keepSessionData
+	 *
+	 * Try PHP header redirect, then Java redirect, then try http redirect.
+	 *
+	 * @param		$keep_session_data 	(A Boolean indicating whether the $_SESSION data should be kept (TRUE) or not (FALSE).)
+	 * @access	public
+	 */
+	public function keepSessionData($keep_session_data=TRUE)
+	{
+		# Check if it is indicated that sessions should NOT be kept.
+		if($keep_session_data!==TRUE)
+		{
+			# Loop through the SESSION.
+			foreach($_SESSION as $index->$value)
+			{
+				# Check if the current index NOT is "s_set". This is the index that keeps the current session active.
+				if($index!=='s_set')
+				{
+					# Unset the SESSION data for the current index.
+					$session->loseSessionData($index);
+				}
+			}
+		}
+		else
+		{
+			$current_message=$this->getMessage();
+			if($current_message!==FALSE)
+			{
+				$_SESSION['message']=$current_message;
+			}
+		}
+		return $keep_session_data;
+	} #==== End -- keepSessionData
+
+	/**
+	* loseAllSessionData
+	*
+	* Unsets ALL session data.
+	*
+	* @access	public
+	*/
+	public function loseAllSessionData()
+	{
+		# Remove session data.
+		unset($_SESSION[$index]);
+	} #==== End -- loseAllSessionData
+
+	/**
+	* loseSessionData
+	*
+	* Unsets session data from the passed index.
+	*
+	* @access	public
+	*/
+	public function loseSessionData($index)
+	{
+		# Remove session data.
+		unset($_SESSION[$index]);
+	} #==== End -- loseSessionData
+
+	/**
 	* setPostLogin
 	*
 	* Sets the _post_login Session to the current page.
@@ -254,19 +358,31 @@ class Session
 		}
 	} #==== End -- setPostLogin
 
-	/**
-	* loseSessionData
-	*
-	* Unsets session data from the passed index.
-	*
-	* @access	public
-	*/
-	public function loseSessionData($index)
-	{
-		# Remove session data.
-		unset($_SESSION[$index]);
-	} #==== End -- loseSessionData
-
 	/*** End public methods ***/
+
+
+
+	/*** private methods ***/
+
+	/**
+	* captureMessage
+	*
+	* Captures any messages set the SESSION.
+	*
+	* @access	private
+	*/
+	private function captureMessage()
+	{
+		# Check if the "message" index is set to the SESSION and it isn't empty.
+		if(isset($_SESSION['message']) && !empty($_SESSION['message']))
+		{
+			# Set the value to the data member.
+			$this->setMessage($_SESSION['message']);
+			# Clear the message
+			unset($_SESSION['message']);
+		}
+	} #==== End -- captureMessage
+
+	/*** End private methods ***/
 
 } #==== End Session class.
