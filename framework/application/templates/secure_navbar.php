@@ -129,7 +129,7 @@ echo '<nav id="navbar" class="nav nav1">',
 	}
 
 		echo '<li class="list-nav-1', Document::addHereClass(APPLICATION_URL.'contact/', FALSE, FALSE), '">',
-			'<a href="', APPLICATION_URL, 'contact/" title="Contact Steve">contact</a>',
+			'<a href="', APPLICATION_URL, 'contact/" title="Contact '.DOMAIN_NAME.'">Contact</a>',
 		'</li>',
 	'</ol>',
 '</nav>';
