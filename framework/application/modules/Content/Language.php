@@ -342,8 +342,8 @@ class Language
 	{
 		# Bring the Login object into scope.
 		global $login;
-		# Bring the content object into scope.
-		global $main_content;
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 

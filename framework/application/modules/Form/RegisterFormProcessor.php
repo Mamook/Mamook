@@ -41,12 +41,12 @@ class RegisterFormProcessor extends FormProcessor
 			global $alert_title;
 			# Bring the login object into scope.
 			global $login;
-			# bring the content object into scope.
-			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
+			# Bring the content instance into scope.
+			$main_content=Content::getInstance();
 			# Set the Validator instance to a variable.
 			$validator=Validator::getInstance();
 			# Get the PostFormPopulator Class.

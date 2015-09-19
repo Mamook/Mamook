@@ -34,12 +34,12 @@ class InstitutionFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
-			# Bring the content object into scope.
-			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
+			# Bring the content instance into scope.
+			$main_content=Content::getInstance();
 			# Get the InstitutionFormPopulator Class.
 			require_once Utility::locateFile(MODULES.'Form'.DS.'InstitutionFormPopulator.php');
 

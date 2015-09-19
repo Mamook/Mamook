@@ -140,8 +140,8 @@ class Comment
 	 */
 	protected function setContent($content)
 	{
-		# Bring the content object into scope.
-		global $main_content;
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 
 		# Check if the passed value is empty.
 		if(!empty($content))

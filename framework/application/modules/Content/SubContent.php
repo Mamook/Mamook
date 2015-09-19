@@ -1001,8 +1001,8 @@ class SubContent extends Content
 	 */
 	public function setTextTrans($text_trans)
 	{
-		# Bring the content object into scope.
-		global $main_content;
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 
 		# Check if the value is empty.
 		if(!empty($text_trans))
@@ -1073,10 +1073,10 @@ class SubContent extends Content
 	 */
 	public function setTitle($title)
 	{
-		# Bring the content object into scope.
-		global $main_content;
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 
 		# Check if the value is empty.
 		if(!empty($title))
@@ -3610,8 +3610,8 @@ class SubContent extends Content
 	 */
 	public function setDataMembers($row)
 	{
-		# Bring the content object into scope.
-		global $main_content;
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 

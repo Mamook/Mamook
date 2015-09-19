@@ -336,10 +336,10 @@ class FormProcessor
 		$db=DB::get_instance();
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 		# Bring the User object into scope.
 		global $user;
-		# Bring the content object into scope.
-		global $main_content;
 
 		try
 		{

@@ -390,8 +390,8 @@ class Position
 	 */
 	public function setDataMembers($row)
 	{
-		# Bring the content object into scope.
-		global $main_content;
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 
 		try
 		{
