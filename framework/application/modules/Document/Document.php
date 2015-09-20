@@ -741,17 +741,12 @@ class Document
 			$session=Session::getInstance();
 			# Ensure the $_SESSION data is cleared or kept as passed.
 			$session->keepSessionData(!$clear_session_data);
+			ob_clean();
 			# Check if headers have already been sent.
 			if(headers_sent()===FALSE)
 			{
-				ob_end_clean();
 				# Do a PHP redirect with the passed delay.
-				header('Refresh: '.$delay.'; url='.$url);
-				ob_flush();
-				# Output some content so the header will get pushed.
-				echo ' ';
-				# Kill PHP so nothing else will execute.
-				die;
+				header('Refresh: '.$delay.'; url='.str_replace(array("\n", "\r"), array('', ''), $url));
 			}
 			# Do a Javascript redirect.
 			$script='<script type="text/javascript">';
@@ -761,7 +756,11 @@ class Document
 			$script.='<noscript>';
 			$script.='<meta http-equiv="refresh" content="'.$delay.';url='.$url.'" />';
 			$script.='</noscript>';
+			# Output the content. This will cause the header will get pushed as well.
 			echo $script;
+			# Send the buffer to the user's browser.
+			ob_flush();
+			# Kill PHP so nothing else will execute.
 			die;
 		}
 		return FALSE;
