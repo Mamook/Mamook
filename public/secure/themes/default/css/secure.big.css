@@ -874,8 +874,7 @@ a.button-close {
 	z-index:10000;
 }
 .fwpContent {
-	width:40px;
-	min-width:200px;
+	min-width:40px;
 	height:40px;
 }
 .fwpContainer {
