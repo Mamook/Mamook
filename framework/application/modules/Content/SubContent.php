@@ -2479,7 +2479,7 @@ class SubContent extends Content
 							if($edit===TRUE)
 							{
 								# Set the edit button to a variable.
-								$edit_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;edit" class="button-edit" title="Edit this">Edit</a>';
+								$edit_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?edit&amp;post='.$id.'" class="button-edit" title="Edit this">Edit</a>';
 								# Set the edit content to the array.
 								$display_content[$id]['edit']=$edit_content;
 							}
@@ -2488,7 +2488,7 @@ class SubContent extends Content
 							if($delete===TRUE)
 							{
 								# Set the delete button to a variable.
-								$delete_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?post='.$id.'&amp;delete" class="button-delete" title="Delete This">Delete</a>';
+								$delete_content='<a href="'.ADMIN_URL.'ManageContent/'.$branch_folder.'/?delete&amp;post='.$id.'" class="button-delete" title="Delete This">Delete</a>';
 								# Set the delete content to the array.
 								$display_content[$id]['delete']=$delete_content;
 							}
