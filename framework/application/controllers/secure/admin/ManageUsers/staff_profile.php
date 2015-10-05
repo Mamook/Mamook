@@ -27,18 +27,25 @@ $head='';
 # Create a new Staff object.
 $staff_obj=new Staff();
 
-if(isset($_GET['user']))
+if(isset($_GET['user']) OR isset($_GET['person']))
 {
-	# Create a new User object.
-	$user_obj=new User();
-	# Set the User ID to the data member; effectively cleaning it.
-	$staff_obj->setUser($_GET['user']);
-	# Set the data member to a variable.
-	$user_id=$staff_obj->getUser();
-	# Get this user's staff ID from the `users` table.
-	$staff_id=$user_obj->findStaffID($user_id);
-	# Get this user's username.
-	$current_username=$user_obj->findUsername($user_id);
+	if(isset($_GET['user']))
+	{
+		# Create a new User object.
+		$user_obj=new User();
+		# Set the User ID to the data member; effectively cleaning it.
+		$staff_obj->setUser($_GET['user']);
+		# Set the data member to a variable.
+		$user_id=$staff_obj->getUser();
+		# Get this user's staff ID from the `users` table.
+		$staff_id=$user_obj->findStaffID($user_id);
+		# Get this user's username.
+		$current_username=$user_obj->findUsername($user_id);
+	}
+	if(isset($_GET['person']))
+	{
+		$staff_id=$_GET['person'];
+	}
 	# Set the Staff ID to the data member; effectively cleaning it.
 	$staff_obj->setID($staff_id);
 	# Make sure the User is an admin.
