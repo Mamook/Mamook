@@ -24,7 +24,7 @@
 
 	<!-- Concatenates all CSS files to the minified directory. -->
 	<concat destfile="minified/style.big.css">
-		<header>/*! GENERATED FILE! DO NOT MODIFY! !*/${line.separator}${line.separator}</header>
+		<header>@charset "UTF-8";${line.separator}/*! GENERATED FILE! DO NOT MODIFY! !*/${line.separator}${line.separator}</header>
 		<fileset dir="css"/>
 	</concat>
 
