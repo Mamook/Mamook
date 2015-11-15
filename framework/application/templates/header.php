@@ -4,7 +4,7 @@
 $header='<!DOCTYPE html>';
 
 # Open the html tag and define the default language.
-$header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/fbml fb: http://ogp.me/ns/fb#" lang="en">';
+$header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/fbml fb: http://ogp.me/ns/fb#" lang="'.((!isset($meta_language) || empty($meta_language)) ? 'en' : $meta_language).'">';
 	# Open the head tag.
 	$header.='<head>';
 		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
@@ -49,6 +49,9 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		$header.=$doc->addStyle();
 		# Include IE Style Sheets if that is the user's browser.
 		$header.=$doc->addIEStyle('ie8,ie7,ie6,ie5mac');
+
+		# Add a javascript variable that indicates whether the user is on a mobile device or not.
+		$header.=$doc->addMobileJavaScriptVariable();
 
 		# Add HTML5Shiv if lower then IE9
 		$header.='<!--[if lt IE 9]><script src="'.THEME.'js/html5shiv.min.js"></script><![endif]-->';
