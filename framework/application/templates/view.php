@@ -1,6 +1,6 @@
 <?php /* templates/view.php */
 
-echo '<main id="main" class="main',((empty($display_main1) && empty($display_main2) && empty($display_main3)) ? ' no_content' : ''),'" role="main">',
+echo '<main id="main" class="main',((empty($display_main1) && empty($display_main2) && empty($display_main3)) ? ' no_content' : ''),'" role="main" tabindex="-1">',
 	'<div class="main-1',((empty($display_main1)) ? ' no_content' : ''),'">',
 		$display_main1,
 	'</div>',
