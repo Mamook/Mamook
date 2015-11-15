@@ -4,7 +4,7 @@ $street=$main_content->getAddress1();
 $street=((empty($street)) ? '' : '<span class="street">'.$street.'</span> ');
 
 $city=$main_content->getCity();
-$city=((empty($city)) ? '' : '<span class="city">'.$city.'</span>,');
+$city=((empty($city)) ? '' : '<span class="city">'.$city.'</span>');
 
 $state=$main_content->getState();
 $state=((empty($state)) ? '' : ' <span class="state">'.$state.'</span>');
@@ -15,6 +15,8 @@ $zip=((empty($zip)) ? '' : ' <span class="zip">'.$zip.'</span>');
 $phone=$main_content->getPhone();
 $phone=((empty($phone)) ? '' : '<span class="phone">'.$phone.'</span>');
 
+$full_address=$street.$city.((!empty($state)) ? ',' : '').$state.$zip.$phone;
+
 echo '<footer id="info" class="footer" role="contentinfo">',
 				'<ul class="info">',
 					'<li class="list-info-copyright">',
@@ -23,7 +25,7 @@ echo '<footer id="info" class="footer" role="contentinfo">',
 					'<li class="list-info-statement">',
 					'</li>',
 					'<li class="list-info-address">',
-						$street,$city,$state,$zip,$phone,
+						$full_address,
 					'</li>',
 					'<li class="list-info-nav nav">',
 						'<ul class="nav-1">',
