@@ -1,4 +1,7 @@
-<?php if(!defined('BASE_PATH')) exit('No direct script access allowed');
+<?php /* framework/application/modules/Social/Facebook/CustomFacebook.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 /***
  * CustomFacebook
@@ -447,10 +450,10 @@ class CustomFacebook
 				return FALSE;
 			}
 		}
-  	catch(Exception $e)
-  	{
-  		throw $e;
-  	}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
 	} #==== End -- postToFB
 
 	/*** End public methods ***/

@@ -274,7 +274,12 @@ if(empty($duplicates))
 			# Check if there is GET data and it is for the post.
 			if(!isset($_GET['post']))
 			{
-				if(FB_APP_ID!="" && FB_APP_SECRET!='' && FB_ID!='' && FB_SESSION!='' && FB_TOKEN!='' && FB_URL!='')
+				if(
+					FB_APP_ID!="" &&
+					FB_APP_SECRET!='' &&
+					FB_PAGE_ID!='' &&
+					FB_PAGE_ACCESS_TOKEN!=''
+					)
 				{
 					$fg->addFormPart('<li>');
 					# Get whether or not the post should be posted to Facebook from the data member and set it to a variable.
@@ -285,7 +290,16 @@ if(empty($duplicates))
 					$fg->addElement('checkbox', array('name'=>'facebook', 'value'=>'post', 'id'=>'facebook', 'checked'=>$facebook, 'title'=>'Post on Facebook'));
 					$fg->addFormPart('</li>');
 				}
-				if(TWITTER_USERNAME!="" && TWITTER_PASSWORD!='' && TWITTER_CONSUMER_KEY!='' && TWITTER_CONSUMER_SECRET!='' && TWITTER_CALLBACK!='' && TWITTER_TOKEN!='' && TWITTER_TOKEN_SECRET!='' && TWITTER_URL!='')
+				if(
+					TWITTER_USERNAME!="" &&
+					TWITTER_PASSWORD!='' &&
+					TWITTER_CONSUMER_KEY!='' &&
+					TWITTER_CONSUMER_SECRET!='' &&
+					TWITTER_CALLBACK!='' &&
+					TWITTER_TOKEN!='' &&
+					TWITTER_TOKEN_SECRET!='' &&
+					TWITTER_URL!=''
+					)
 				{
 					$fg->addFormPart('<li>');
 					# Get whether or not the post should be posted to Twitter from the data member and set it to a variable.
