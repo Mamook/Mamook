@@ -372,6 +372,7 @@ class PostFormProcessor extends FormProcessor
 								# Check if the post should be posted on Facebook.com.
 								if($facebook==='post')
 								{
+									/*
 									# Check if there was an image associated with the post.
 									if(!empty($image_id))
 									{
@@ -387,6 +388,7 @@ class PostFormProcessor extends FormProcessor
 									{
 										$image_name='SiteShot.jpg';
 									}
+									*/
 									require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
 									$contributor_obj=new Contributor();
 									$contributor_obj->getThisContributor($contributor_id, 'id');
@@ -397,12 +399,19 @@ class PostFormProcessor extends FormProcessor
 									{
 										$contributor_name='Posted by '.$contributor_obj->getContName().' - ';
 									}
+									# Get the Facebook API Class.
+									require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
+									# Instantiate a new API object.
+									$api_obj=new API('facebook');
+									$api_obj->post($contributor_name.'Read more at '.DOMAIN_NAME, $post_url, WebUtility::truncate($title, 420, '&hellip;', FALSE, TRUE), $image_id);
+									/*
 									# Get the CustomFacebook class.
 									require_once Utility::locateFile(MODULES.'Social'.DS.'Facebook'.DS.'CustomFacebook.php');
 									# Instantiate a new CustomFacebook object.
 									$fb=new CustomFacebook();
 									# Post to Facebook.
 									$post_id=$fb->postToFB($contributor_name.'Read more at '.DOMAIN_NAME, $post_url, WebUtility::truncate($title, 420, '&hellip;', FALSE, TRUE), IMAGES.$image_name);
+									*/
 								}
 							}
 							# Unset the CMS session data.

@@ -80,21 +80,7 @@ Git Flow
 			Command:
 				git config [--global] gitflow.path.hooks /path/to/git-flow-hooks
 
-3. Make sure the following folders are readable and writable (775):
-	bodega/
-	cache/
-	custom_sessions/
-	logs/
-	public/images/
-	public/images/original/
-	public/media/audio/files/
-	public/media/videos/files/
-	tmp/
-
-	Command (assumes you're in the root folder):
-		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
-
-4. Make a copy of the configuration & cron files:
+3. Make a copy of the configuration & cron files:
 	settings.php.sample						-> settings.php
 	cron/api_sync.php.sample				-> cron/api_sync.php
 	cron/new_media.php.sample				-> cron/new_media.php
@@ -114,6 +100,21 @@ Git Flow
 	If you want WordPress integration:
 	Command (assumes you're in the root folder):
 		cp data/WordPress_settings.php.sample data/WordPress_settings.php
+
+4. Make sure the following folders are readable and writable (777):
+	bodega/
+	cache/
+	custom_sessions/
+	data/formmail.ini
+	logs/
+	public/images/
+	public/images/original/
+	public/media/audio/files/
+	public/media/videos/files/
+	tmp/
+
+	Command (assumes you're in the root folder):
+		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ data/formmail.ini logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
 
 5. Edit root->settings.php:
 	Search for each constant (string in capital letters).

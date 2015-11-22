@@ -435,6 +435,8 @@ class CommandLine
 				$php_executable_path=PHP_BINARY;
 			}
 			# Try the PHP_BINDIR constant.
+			#	NOTE: PHP will give an error for file_exists() if the path is not in open_basedir.
+			#		"Error: Warning: file_exists(): open_basedir restriction in effect. File(/usr/local/bin/php) is not within the allowed path(s):"
 			elseif(defined('PHP_BINDIR') && file_exists(PHP_BINDIR.$php_executable) && is_file(PHP_BINDIR.$php_executable))
 			{
 				$php_executable_path=PHP_BINDIR.$php_executable;
