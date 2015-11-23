@@ -1,11 +1,11 @@
-<?php /* public/secure/admin/ManageUsers/staff_profile.php */
+<?php /* public/secure/admin/ManageUsers/ManageStaff/index.php */
 
 ob_start(); # Begin output buffering
 
 try
 {
 	# Define the location of this page.
-	define('HERE_PATH', 'secure/admin/ManageUsers/staff_profile.php');
+	define('HERE_PATH', 'secure/admin/ManageUsers/ManageStaff/index.php');
 	/*
 	** In settings we
 	** define application settings
@@ -13,10 +13,10 @@ try
 	** start a new session
 	** connect to the Database
 	*/
-	require_once '../../../../settings.php';
+	require_once '../../../../../settings.php';
 
 	# Get the Controller.
-	require_once Utility::locateFile(CONTROLLERS.'secure'.DS.'admin'.DS.'ManageUsers'.DS.'staff_profile.php');
+	require_once Utility::locateFile(CONTROLLERS.'secure'.DS.'admin'.DS.'ManageUsers'.DS.'ManageStaff'.DS.'index.php');
 }
 catch(Exception $e)
 {
