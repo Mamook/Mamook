@@ -1769,7 +1769,7 @@ class User
 				', '.$db->quote($db->escape($password)).
 				', '.$db->quote($db->escape($login->randomString('alnum', 32))).
 				', '.$db->quote($db->escape(YEAR_MM_DD)).
-				', '.$db->escape($ip).
+				', '.$db->quote($db->escape($ip)).
 				')');
 			# If WordPress is installed add the user the the WordPress users table.
 			if(WP_INSTALLED===TRUE)
