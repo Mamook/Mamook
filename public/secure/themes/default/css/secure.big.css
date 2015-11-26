@@ -537,7 +537,7 @@ select {
 [class^=file-] {
 	line-height:1.2;
 	word-wrap:break-word;
-	margin:-3px 0 0 170px;
+	margin:0 0 0 170px;
 }
 [class^=file-]:after {
 	content:'';
