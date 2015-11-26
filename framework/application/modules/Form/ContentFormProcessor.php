@@ -73,6 +73,12 @@ class ContentFormProcessor extends FormProcessor
 			$quote=$content->getQuote();
 			# Set the content's `topic` to a variable.
 			$topic=$content->getTopic();
+			# Set the content's `image option` to a variable.
+			$image_option=$populator->getImageOption();
+			if($image_option=='remove')
+			{
+				$content->setImage(NULL);
+			}
 			# Set the content's `image` to a variable.
 			$image=$content->getImage();
 			# Set the content's `image_title` to a variable.

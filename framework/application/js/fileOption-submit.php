@@ -1,7 +1,7 @@
 <?php /* application/js/fileOption-submit.php */
 
 # Minified version.
-$js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fileOption"),$("#imageOption"),$("#institution"),$("#language"),$("#text_language"),$("#trans_language"),$("#publisher")],a=0;a<b.length;++a)b[a].change(function(){"add"==$(this).val()||"select"==$(this).val()&&c.click()})});';
+$js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fileOption"),$("#imageOption"),$("#institution"),$("#language"),$("#text_language"),$("#trans_language"),$("#publisher")],a=0;a<b.length;++a)b[a].change(function(){"add"==$(this).val()||"select"==$(this).val()||"remove"==$(this).val()&&c.click()})});';
 
 # Long version.
 /*$js='
@@ -22,7 +22,7 @@ $js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fil
 				// Set a funtion to the onChange event for this element.
 				$element.change(function(){
 					// Check if the value of the element on change was "add". If so, trigger the click of the submit button.
-					if($(this).val()=="add" || $(this).val()=="select")
+					if($(this).val()=="add" || $(this).val()=="select" || $(this).val()=="remove")
 						submitButton.click();
 				});
 			}
