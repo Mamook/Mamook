@@ -54,8 +54,8 @@ echo '<nav id="navbar" class="nav nav1">',
 						'</li>'.
 						# Check if logged in user is in the `staff` table.
 						(($login->isStaff($_GET['user'])===TRUE) ?
-						'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/staff_profile.php', FALSE, FALSE).'">'.
-							'<a href="'.ADMIN_URL.'ManageUsers/staff_profile.php'.GET_QUERY.'" title="Update Staff Profile">Update Staff Profile</a>'.
+						'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/ManageStaff/index.php', FALSE, FALSE).'">'.
+							'<a href="'.ADMIN_URL.'ManageUsers/ManageStaff/index.php'.GET_QUERY.'" title="Update Staff Profile">Update Staff Profile</a>'.
 						'</li>' : '').
 						'<li class="list-nav-3'.Document::addHereClass(ADMIN_URL.'ManageUsers/change_username.php', FALSE, FALSE).'">'.
 							'<a href="'.ADMIN_URL.'ManageUsers/change_username.php'.GET_QUERY.'" title="Change Username">Change Username</a>'.

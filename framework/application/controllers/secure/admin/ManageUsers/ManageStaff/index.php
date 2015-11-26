@@ -1,4 +1,4 @@
-<?php /* application/controllers/secure/admin/ManageUsers/staff_profile.php */
+<?php /* application/controllers/secure/admin/ManageUsers/ManageStaff/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
@@ -10,7 +10,7 @@ require_once Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 # Check if the logged in User is an Admin.
 $login->checkLogin(ADMIN_USERS);
 
-$page_class='manageUserspage-staffprofile';
+$page_class='manageUserspage-manageStaffpage';
 
 # Create display variables.
 $display_main1='';
@@ -53,19 +53,19 @@ if(isset($_GET['user']) OR isset($_GET['person']))
 	{
 		# Get the staff's name and set it to a variable.
 		$staff_name=$staff_obj->getStaffName($staff_id);
-		$head='<h3>Please use the form below to update staff: '.$staff_name.'</h3>';
+		$head='<h3 class="h-3">Please use the form below to update staff: '.$staff_name.'</h3>';
 		# Set the page title.
 		$page_title=$staff_name.'\'s Staff Profile';
 	}
-	# Instantiate a new StaffFormProcessor object.
-	$form_processor=new StaffFormProcessor();
-	# Get the staff profile form.
-	require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form.php');
 }
 else
 {
-	$doc->redirect(ADMIN_URL.'ManageUsers/');
+
 }
+# Instantiate a new StaffFormProcessor object.
+$form_processor=new StaffFormProcessor();
+# Get the staff profile form.
+require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
