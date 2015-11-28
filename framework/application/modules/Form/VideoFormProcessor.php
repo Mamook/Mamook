@@ -640,42 +640,20 @@ class VideoFormProcessor extends FormProcessor
 									# Check if the post should be posted on Twitter.com or Facebook.com.
 									if($twitter==='0' OR $facebook==='post')
 									{
+										# Get the API Class.
+										require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
 										$post_url=VIDEOS_URL.'?video='.$db->get_insert_id();
 									}
 									# Check if the post should be posted on Twitter.com.
 									if($twitter==='0')
 									{
-										# Set the Twitter constructor params to an array.
-										$params=array(
-											'consumer_key'=>TWITTER_CONSUMER_KEY,
-											'consumer_secret'=>TWITTER_CONSUMER_SECRET,
-											'oauth_token'=>TWITTER_TOKEN,
-											'oauth_token_secret'=>TWITTER_TOKEN_SECRET
-										);
-										# Get the Twitter class.
-										require_once Utility::locateFile(MODULES.'Social'.DS.'Twitter'.DS.'Twitter.php');
-										# Instantiate a new Twitter object.
-										$twitter=new Twitter($params);
-										$max_short_url_length=$twitter->getMaxShortURL_Length();
-										$tweet=$twitter->postToTwitter(WebUtility::truncate($title, 139-$max_short_url_length, '&hellip;', FALSE, TRUE).' '.$post_url);
+										# Instantiate a new API object.
+										$api_obj=new API('twitter');
+										$api_obj->post($title, $post_url);
 									}
 									# Check if the post should be posted on Facebook.com.
 									if($facebook==='post')
 									{
-										if(file_exists(IMAGES_PATH.'original'.DS.$thumbnail_file_name))
-										{
-											$image_name='original'.DS.$thumbnail_file_name;
-										}
-										elseif(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg'))
-										{
-											$image_name='original'.DS.$clean_filename.'.jpg';
-										}
-										else
-										{
-											# Defult image.
-											$image_name='SiteShot.jpg';
-										}
-
 										require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
 										$contributor_obj=new Contributor();
 										$contributor_obj->getThisContributor($contributor_id, 'id');
@@ -686,15 +664,11 @@ class VideoFormProcessor extends FormProcessor
 										{
 											$contributor_name='Posted by '.$contributor_obj->getContName().' - ';
 										}
-										# Get the CustomFacebook class.
-										require_once Utility::locateFile(MODULES.'Social'.DS.'Facebook'.DS.'CustomFacebook.php');
-										# Instantiate a new CustomFacebook object.
-										$fb=new CustomFacebook();
-										# Post to Facebook.
-										$post_id=$fb->postToFB($contributor_name.'Read more at '.DOMAIN_NAME, $post_url, WebUtility::truncate($title, 420, '&hellip;', FALSE, TRUE), IMAGES.$image_name);
+										# Instantiate a new API object.
+										$api_obj=new API('facebook');
+										$api_obj->post($contributor_name.'Read more at '.DOMAIN_NAME, $post_url, $title, $image_id);
 									}
 								}
-
 								# Remove the video's session.
 								unset($_SESSION['form']);
 								# Set a nice message for the user in a session.

@@ -100,14 +100,13 @@ define('SOUNDCLOUD_PERMALINK', '');
 define('SOUNDCLOUD_URL', '');
 
 # Twitter Variables
+# TWITTER_USERNAME only needed for AddThis.
 define('TWITTER_USERNAME', '');
-define('TWITTER_PASSWORD', '');
 define('TWITTER_CONSUMER_KEY', '');
 define('TWITTER_CONSUMER_SECRET', '');
-if(defined('SECURE_URL')) define('TWITTER_CALLBACK', SECURE_URL.'xhr/index.php');
+# Access Token.
 define('TWITTER_TOKEN', '');
 define('TWITTER_TOKEN_SECRET', '');
-define('TWITTER_URL', '');
 
 # Vimeo Variables
 define('VIMEO_CONSUMER_KEY', '');

@@ -71,15 +71,16 @@ class FacebookAPI
 	/**
 	 * __contruct
 	 *
-	 * Description.
+	 * Loads the Facebook PHP library and instantiates it.
 	 *
 	 * @access	public
+	 * @return	object
 	 */
 	public function __construct()
 	{
 		# Get the Facebook API Class.
 		require_once Utility::locateFile(MODULES.'Social'.DS.'Facebook'.DS.'autoload.php');
-		# Check if there is a YouTube object.
+		# Check if there is a Facebook object.
 		if(empty($this->facebook_obj) OR !is_object($this->facebook_obj))
 		{
 			# Instantiate a new Facebook object.

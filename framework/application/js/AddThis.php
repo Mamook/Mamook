@@ -1,6 +1,6 @@
-<?php /* application/js/AddThis.php */
+<?php /* framework/application/js/AddThis.php */
 
-$facebook_id=((defined('FB_ID')) ? FB_ID : '');
+$facebook_id=((defined('FB_PAGE_ID')) ? FB_PAGE_ID : '');
 $rss_id=((defined('RSS_ID')) ? RSS_ID : '');
 $twitter_id=((defined('TWITTER_USERNAME')) ? TWITTER_USERNAME : '');
 $vimeo_id=((defined('VIMEO_ID')) ? VIMEO_ID : '');
