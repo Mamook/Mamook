@@ -40,7 +40,7 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		$header.='<meta property="og:url" content="'.WebUtility::removeIndex(COMPLETE_URL).'">';
 		$header.='<meta property="og:type" content="website">';
 		$header.='<meta property="og:title" content="'.strip_tags($main_content->getPageTitle()).'">';
-		$header.='<meta property="og:image" content="'.((isset($og_image) && !empty($og_image)) ? $og_image : THEME.'Images/Facebook.png').'" />';
+		$header.='<meta property="og:image" content="'.((isset($og_image) && !empty($og_image)) ? $og_image : THEME.'images/Facebook.png').'" />';
 		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'">';
 		$header.='<meta property="og:locale" content="EN_US">';
 		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'">';

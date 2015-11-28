@@ -291,14 +291,10 @@ if(empty($duplicates))
 					$fg->addFormPart('</li>');
 				}
 				if(
-					TWITTER_USERNAME!="" &&
-					TWITTER_PASSWORD!='' &&
 					TWITTER_CONSUMER_KEY!='' &&
 					TWITTER_CONSUMER_SECRET!='' &&
-					TWITTER_CALLBACK!='' &&
 					TWITTER_TOKEN!='' &&
-					TWITTER_TOKEN_SECRET!='' &&
-					TWITTER_URL!=''
+					TWITTER_TOKEN_SECRET!=''
 					)
 				{
 					$fg->addFormPart('<li>');

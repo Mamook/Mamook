@@ -89,12 +89,13 @@ class API
 	 */
 	private function setImageID($image_id)
 	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
 		# Check if the passed $id is empty.
 		if(!empty($image_id))
 		{
+			# Get the Validator Class.
+			require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
 			# Check if the passed $id is an integer.
 			if($validator->isInt($image_id)===TRUE)
 			{
@@ -340,10 +341,18 @@ class API
 			# The Facebook API is loaded.
 			elseif($this->getLoadedAPI()=='facebook')
 			{
-				# Get the Facebook API Class.
+				# Get the FacebookAPI Class.
 				require_once Utility::locateFile(MODULES.'API'.DS.'FacebookAPI.php');
-				# Instantiate a new Facebook API object.
+				# Instantiate a new FacebookAPI object.
 				$api_obj=new FacebookAPI();
+			}
+			# The Twitter API is loaded.
+			elseif($this->getLoadedAPI()=='twitter')
+			{
+				# Get the TwitterAPI class.
+				require_once Utility::locateFile(MODULES.'API'.DS.'TwitterAPI.php');
+				# Instantiate a new TwitterAPI object.
+				$api_obj=new TwitterAPI();
 			}
 			# The YouTube API is loaded.
 			elseif($this->getLoadedAPI()=='youtube')
@@ -431,11 +440,17 @@ class API
 					'description'=>$description,
 					'link'=>$url,
 					'message'=>$message,
-					'name'=>$title,
+					'name'=>WebUtility::truncate($title, 420, '&hellip;', FALSE, TRUE),
 					'picture'=>IMAGES.$image_name
 				);
 				# Send the array to the FacebookAPI class.
 				$this->getAPIObj()->post($data);
+			}
+			# The Twitter API is loaded.
+			elseif($this->getLoadedAPI()=='twitter')
+			{
+				$max_short_url_length=$this->getAPIObj()->getMaxShortURL_Length();
+				$this->getAPIObj()->postToTwitter(WebUtility::truncate($message, 139-$max_short_url_length, '&hellip;', FALSE, TRUE).' '.$url);
 			}
 			# The YouTube API is loaded.
 			elseif($this->getLoadedAPI()=='youtube')
