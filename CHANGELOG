@@ -1,3 +1,19 @@
+Version v2.7.1:
+ * Updated Twitter API library, create a TwitterAPI wrapper class, cleaned up Twitter API definitions (Michael Delle)
+ * Bumped version to 2.7.1 (Michael Delle)
+ * Tightened up JS (Jon Ryser)
+ * Fixing remove image functionality (Jon Ryser)
+ * Fixing image submit on forms (Jon Ryser)
+ * Fixed file-current margin (Jon Ryser)
+ * Forgot $db->quote() around $ip (Michael Delle)
+ * Changed Manage Staff Profile location (Michael Delle)
+ * Eliminated comma after cirty if no state after it. (Jon Ryser)
+ * Moved mobile detection to server side. (Jon Ryser)
+ * Updated mobile detection in JS. (Jon Ryser)
+ * Accessibility feature for tabbing to main content. (Jon Ryser)
+ * Re-minifed all default CSS and removed @charset from big documents. (Jon Ryser)
+ * Fixed CSS minifier to prepend Charset before comment. (Jon Ryser)
+
 Version v2.7.0:
  * Bumped version to 2.7.0 (Michael Delle)
  * Added a note to the CommandLine class (Michael Delle)
