@@ -4,7 +4,7 @@
 $product_asin=NULL;
 $product_author=NULL;
 $product_button_id=NULL;
-$product_categories=NULL;
+$product_categories=25; # Set the default to "Education" (25)
 $product_content=NULL;
 $product_currency='USD';
 $product_description=NULL;
@@ -37,7 +37,22 @@ if(isset($_GET['product']))
 		$product_asin=$product_obj->getASIN();
 		$product_author=$product_obj->getAuthor();
 		$product_button_id=$product_obj->getButtonID();
-		$product_categories=$product_obj->getCategories();
+		# Get the product's categories and set them to a local variable as a dash (-) separated string of the category id's.
+		# Set the categories to a local variable.
+		$categories_array=$product_obj->getCategories();
+		# Check if there are any categories.
+		if(!empty($categories_array))
+		{
+			# Create a local variable to hold the first dash (-).
+			$product_categories='-';
+			# Loop through the categories.
+			foreach($categories_array as $key=>$value)
+			{
+				# Add the category id to the string appended with a dash (-).
+				$product_categories.=$key.'-';
+			}
+		}
+		$product_categories=$product_categories;
 		$product_content=$product_obj->getContent();
 		$product_currency=$product_obj->getCurrency();
 		$product_description=$product_obj->getDescription();

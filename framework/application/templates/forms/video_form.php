@@ -146,6 +146,7 @@ elseif(!isset($_GET['select']))
 		}
 		# Set the current categories to a variable.
 		$video_categories=array_flip((array)$video_obj->getCategories());
+		$category_options[]='';
 		# Loop through the categories.
 		foreach($categories as $category_name=>$category_id)
 		{

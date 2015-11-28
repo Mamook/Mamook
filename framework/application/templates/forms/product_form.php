@@ -46,43 +46,48 @@ if(empty($duplicates))
 	# Get the Category class.
 	require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 	# Instantiate a new Category object.
-	$category=new Category();
+	$category_obj=new Category();
 	# get the categories from the `categories` table.
-	$category->getCategories(NULL, '`id`, `category`', 'category', 'ASC');
+	$category_obj->getCategories(NULL, '`id`, `name`', 'name', 'ASC');
 	# Set the categories to a variable.
-	$categories=$category->getAllCategories();
-	# If there are category results.
-	if(!empty($categories))
+	$all_categories=$category_obj->getAllCategories();
+	# Loop through the categories.
+	foreach($all_categories as $row)
 	{
-		# Create the "Add Category" option.
-		//$cat_options['add']='Add Category';
-		# Set the current categories to a variable.
-		$product_categories=array_flip((array)$product_obj->getCategories());
-		# Loop through the categories.
-		foreach($categories as $row)
+		# Create an option for each category.
+		$categories[$row->id]=$row->name;
+	}
+	# Flip the categories.
+	$categories=array_flip($categories);
+	# Set the current categories to a variable.
+	$product_categories=array_flip((array)$product_obj->getCategories());
+	$category_options[]='';
+	# Loop through the categories.
+	foreach($categories as $category_name=>$category_id)
+	{
+		# Create an option for each category.
+		$category_options[$category_id]=$category_name;
+		# Check if this product currently has a category.
+		if(!empty($product_categories))
 		{
-			# Create an option for each category.
-			$cat_options[$row->id]=$row->category;
-			# Check if this file currently has a category.
-			if(!empty($product_categories))
+			# Check if the current category is default or has been selected by the user.
+			if(in_array($category_id, $product_categories, TRUE)===TRUE)
 			{
-				# Check if the current category is default or has been selected by the user.
-				if(in_array($row->id, $product_categories)===TRUE)
-				{
-					# Set the selected category to the default.
-					$cat_options['multiple_selected'][$row->id]=$row->category;
-				}
-				elseif($populator->getCategoryOption()==='add')
-				{
-					# Set the "Add Category" option as selected.
-					$cat_options['multiple_selected']['add']='Add Category';
-				}
+				# Set the selected category to the default.
+				$category_options['selected']=$category_name;
+			}
+			elseif(
+					(in_array('add', $product_categories)===TRUE) &&
+					(
+						isset($category_options['selected']) &&
+						in_array('Add Category', $category_options['selected']!==TRUE)
+					)
+				)
+			{
+				# Set the "Add Category" option as selected.
+				$category_options['selected']['add']='Add Category';
 			}
 		}
-	}
-	else
-	{
-		$cat_options[]='No Categories';
 	}
 
 	$file_options[0]='';
@@ -141,9 +146,9 @@ if(empty($duplicates))
 	$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
 	$fg->addElement('text', array('name'=>'title', 'id'=>'title', 'value'=>$product_obj->getTitle()));
 	$fg->addFormPart('</li>');
-	$fg->addFormPart('<li class="mult">');
+	$fg->addFormPart('<li>');
 	$fg->addFormPart('<label class="label" for="category"><span class="required">*</span> Category</label>');
-	$fg->addElement('select', array('name'=>'category[]', 'multiple'=>'multiple', 'title'=>'Select a Catagory', 'id'=>'category'), $cat_options);
+	$fg->addElement('select', array('name'=>'category[]', 'id'=>'category'), $category_options);
 	$fg->addFormPart('</li>');
 	$fg->addFormPart('<li class="vis">');
 	$fg->addFormPart('<span class="label">Product Type</span>');

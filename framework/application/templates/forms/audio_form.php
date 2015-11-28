@@ -115,6 +115,7 @@ elseif(!isset($_GET['select']))
 		$categories=array_flip($categories);
 		# Set the current categories to a variable.
 		$audio_categories=array_flip((array)$audio_obj->getCategories());
+		$category_options[]='';
 		# Loop through the categories.
 		foreach($categories as $category_name=>$category_id)
 		{
