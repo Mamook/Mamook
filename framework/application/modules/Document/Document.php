@@ -866,6 +866,9 @@ class Document
 		# Check if the URL is empty.
 		if(!empty($url))
 		{
+			if(ob_get_level()) ob_end_clean();
+			# Begin output buffering
+			ob_start();
 			# Parse the passed url.
 			$url_parsed=parse_url($url);
 			# Check if the domain is this site.
@@ -878,7 +881,6 @@ class Document
 			$session=Session::getInstance();
 			# Ensure the $_SESSION data is cleared or kept as passed.
 			$session->keepSessionData(!$clear_session_data);
-			ob_clean();
 			# Check if headers have already been sent.
 			if(headers_sent()===FALSE)
 			{
