@@ -36,6 +36,8 @@ else
 	define('FB_APP_SECRET', '');
 }
 define('FB_PAGE_ID', '');
+# FB_URL required for /social/ page.
+define('FB_URL', '');
 # Must be a never expire token.
 #	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
 define('FB_PAGE_ACCESS_TOKEN', '');
@@ -100,14 +102,16 @@ define('SOUNDCLOUD_PERMALINK', '');
 define('SOUNDCLOUD_URL', '');
 
 # Twitter Variables
+# TWITTER_USERNAME required for AddThis.
 define('TWITTER_USERNAME', '');
-define('TWITTER_PASSWORD', '');
+# TWITTER_URL required for /social/ page.
+# NOTE! To make it easier on the client; Remove TWITTER_URL and use 'https://twitter.com/'.TWITTER_USERNAME
+define('TWITTER_URL', '');
 define('TWITTER_CONSUMER_KEY', '');
 define('TWITTER_CONSUMER_SECRET', '');
-if(defined('SECURE_URL')) define('TWITTER_CALLBACK', SECURE_URL.'xhr/index.php');
+# Access Token.
 define('TWITTER_TOKEN', '');
 define('TWITTER_TOKEN_SECRET', '');
-define('TWITTER_URL', '');
 
 # Vimeo Variables
 define('VIMEO_CONSUMER_KEY', '');
@@ -118,22 +122,10 @@ define('VIMEO_URL', '');
 define('WEBSNAPR_DEV_KEY', '');
 
 # YouTube Variables
-# Development sites.
-if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
-{
-	define('YOUTUBE_SESSION_TOKEN', '');
-}
-# Production sites.
-else
-{
-	define('YOUTUBE_SESSION_TOKEN', NULL);
-}
 define('YOUTUBE_CLIENT_ID', '');
 define('YOUTUBE_CLIENT_SECRET', '');
 define('YOUTUBE_DEV_KEY', '');
 define('YOUTUBE_REFRESH_TOKEN', '');
 define('YOUTUBE_USERNAME', '');
 define('YOUTUBE_CHANNELID', '');
-define('YOUTUBE_USERID', '');
-define('YOUTUBE_URL', '');
 # end YouTube Variables

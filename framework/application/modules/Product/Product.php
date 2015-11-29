@@ -167,7 +167,7 @@ class Product
 		}
 	} #==== End -- setButtonID
 
-	/*
+	/**
 	 * setCategories
 	 *
 	 * Sets the data member $categories.
@@ -177,52 +177,67 @@ class Product
 	 */
 	public function setCategories($value)
 	{
+		# Create an empty array to hold the categories.
+		$categories=array();
 		# Check if the passed value if empty.
 		if(!empty($value))
 		{
-			# Check if the passed value is an array.
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Set the Validator instance to a variable.
+			$validator=Validator::getInstance();
+			# Check if the passed value is NOT an array.
 			if(!is_array($value))
 			{
-				# Trim dashes(-) off both ends of the string.
+				# Trim both ends of the string.
+				$value=trim($value);
+				# Trim any dashes (-) off both ends of the string .
 				$value=trim($value, '-');
-				# Explode the string into an array.
-				$value=explode('-', $value);
+				# Explode the array to an array separated with dashes (-).
+				$categories_array=explode('-', $value);
 			}
-			# Create an empty array to hold the categories.
-			$categories=array();
+			else
+			{
+				# Create an empty array to hold the categories.
+				$categories_array=$value;
+			}
 			# Get the Category class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 			# Instantiate a new Category object.
-			$category=new Category();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
-			# Loop through the array of catagory id's.
-			foreach($value as $cat_value)
+			$category_obj=new Category();
+			# Create a variable to hold the "WHERE" clause.
+			$where_clause=array();
+			# Loop through the $value array to build the "WHERE" clause.
+			foreach($categories_array as $category_value)
 			{
-				# Check if the value passed is a category id.
-				if($validator->isInt($cat_value)===TRUE)
+				# Set the default field name to search the categories tablee as "category".
+				$field_name='name';
+				# Check if the value is an integer. If so, set the field name to "id".
+				if($validator->isInt($category_value))
 				{
-					# Get the category name.
-					$category->getThisCategory($cat_value);
-					# Set the category name and id to the $categories array.
-					$categories[$cat_value]=$category->getCategory();
+					$field_name='id';
 				}
-				else
+				$where_clause[]='`'.$field_name.'` = '.$db->quote($category_value);
+			}
+			# Create the "WHERE" clause.
+			$where_clause=' WHERE ('.implode(' OR ', $where_clause).')';
+			# Retreive the categories in as single call.
+			$category_obj->getCategories(NULL, '*', 'id', 'ASC', $where_clause);
+			# Set the returned records to a variable.
+			$all_categories=$category_obj->getAllCategories();
+			# Check if there WERE any returned records.
+			if(!empty($all_categories))
+			{
+				# Loop through the returned categories.
+				foreach($all_categories as $single_category)
 				{
-					# Get the category id.
-					$category->getThisCategory($cat_value, FALSE);
 					# Set the category name and id to the $categories array.
-					$categories[$category->getID()]=$cat_value;
+					$categories[$single_category->id]=$single_category->name;
 				}
 			}
-			# Set the data member.
-			$this->categories=$categories;
 		}
-		else
-		{
-			# Explicitly set the data member to an empty array.
-			$this->categories=array();
-		}
+		# Set the data member.
+		$this->categories=$categories;
 	} #==== End -- setCategories
 
 	/*
