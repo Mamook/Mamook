@@ -122,22 +122,10 @@ define('VIMEO_URL', '');
 define('WEBSNAPR_DEV_KEY', '');
 
 # YouTube Variables
-# Development sites.
-if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
-{
-	define('YOUTUBE_SESSION_TOKEN', '');
-}
-# Production sites.
-else
-{
-	define('YOUTUBE_SESSION_TOKEN', NULL);
-}
 define('YOUTUBE_CLIENT_ID', '');
 define('YOUTUBE_CLIENT_SECRET', '');
 define('YOUTUBE_DEV_KEY', '');
 define('YOUTUBE_REFRESH_TOKEN', '');
 define('YOUTUBE_USERNAME', '');
 define('YOUTUBE_CHANNELID', '');
-define('YOUTUBE_USERID', '');
-define('YOUTUBE_URL', '');
 # end YouTube Variables
