@@ -5,9 +5,9 @@ require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
 # Create a new API object.
 $api_obj=new API();
 
-$api_key=$_REQUEST['api_key'];
-$api_obj->validateAPIKey($api_key);
-$context=$_REQUEST['api_context'];
+$api_key=(isset($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '');
+$api_obj->validateServerAPIKey($api_key);
+$context=(isset($_REQUEST['api_key']) ? $_REQUEST['api_context'] : '');
 
 # Insert application specific code
 /*

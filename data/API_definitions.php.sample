@@ -36,6 +36,8 @@ else
 	define('FB_APP_SECRET', '');
 }
 define('FB_PAGE_ID', '');
+# FB_URL required for /social/ page.
+define('FB_URL', '');
 # Must be a never expire token.
 #	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
 define('FB_PAGE_ACCESS_TOKEN', '');
@@ -100,8 +102,11 @@ define('SOUNDCLOUD_PERMALINK', '');
 define('SOUNDCLOUD_URL', '');
 
 # Twitter Variables
-# TWITTER_USERNAME only needed for AddThis.
+# TWITTER_USERNAME required for AddThis.
 define('TWITTER_USERNAME', '');
+# TWITTER_URL required for /social/ page.
+# NOTE! To make it easier on the client; Remove TWITTER_URL and use 'https://twitter.com/'.TWITTER_USERNAME
+define('TWITTER_URL', '');
 define('TWITTER_CONSUMER_KEY', '');
 define('TWITTER_CONSUMER_SECRET', '');
 # Access Token.

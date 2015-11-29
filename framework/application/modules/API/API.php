@@ -337,6 +337,8 @@ class API
 			# The FW API is loaded.
 			if($this->getLoadedAPI()=='framework')
 			{
+				# NOTE! Must be a better way to do this?
+				$api_obj=$this;
 			}
 			# The Facebook API is loaded.
 			elseif($this->getLoadedAPI()=='facebook')
