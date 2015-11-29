@@ -53,7 +53,7 @@ if(empty($duplicates))
 			$post_form_display='<div id="post_form" class="form">';
 
 			# Create and display form.
-			$post_form_display.='<h3>'.$head.'</h3>';
+			$post_form_display.='<h3 class="h-3">'.$head.'</h3>';
 
 			# Add the statement about requirements.
 			$post_form_display.='<span class="required">* = required field</span>';
@@ -474,7 +474,7 @@ else
 	$sc_object->setWantedBranches($dup_branches);
 	# Display the SubContent.
 	$display_array=$sc_object->displaySubContent(255, constant(strtoupper(str_replace(' ', '_', $branch_name)).'_USERS'));
-	$display.='<h3>The following post(s) seem to closely resemble the post you are submitting. If you feel your post is unique and would like to continue posting it, simply click on the "Back" button below. Conversely, you may choose to edit an existing post or click <a href="'.SECURE_URL.WebUtility::removeIndex(preg_replace('/'.$branch_name.'/i', '', SECURE_HERE)).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without posting.</h3>';
+	$display.='<h3 class="h-3">The following post(s) seem to closely resemble the post you are submitting. If you feel your post is unique and would like to continue posting it, simply click on the "Back" button below. Conversely, you may choose to edit an existing post or click <a href="'.SECURE_URL.WebUtility::removeIndex(preg_replace('/'.$branch_name.'/i', '', SECURE_HERE)).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without posting.</h3>';
 
 	# Instantiate a new formGenerator object.
 	$fg=new formGenerator('back_button');

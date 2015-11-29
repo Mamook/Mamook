@@ -23,12 +23,12 @@ if(isset($_GET['content']))
 		if(isset($_GET['content']))
 		{
 			# Set the page's subtitle as an edit page.
-			$sub_title='Page - Edit '.$content_page_title;
+			$sub_title='Edit <span>"'.$content_page_title.'"</span>';
 			# Check if this is a delete page.
 			if(isset($_GET['delete']))
 			{
 				# Set the page's subtitle as a delete page.
-				$sub_title='Page - Delete '.$content_page_title;
+				$sub_title='Delete <span>"'.$content_page_title.'"</span>';
 			}
 			# Set the sub title.
 			$main_content->setSubTitle($sub_title);

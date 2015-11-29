@@ -1,5 +1,12 @@
 <?php /* templates/forms/content_form_defaults.php */
 
+# Get the Contributor Class.
+//require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
+# Instantiate a new Contributor object.
+//$contributor=new Contributor();
+# Add/Update the contributor table in the Database to reflect this user.
+//$contributor->addContributor();
+
 # Create defaults.
 $content_id=NULL;
 $content_archive=NULL; # NULL=Not Archived | 0=Archived
@@ -24,11 +31,13 @@ if(isset($_GET['content']))
 	$content=new Content();
 	# Set the passed content ID to the Content data member, effectively "cleaning" it.
 	$content->setID($_GET['content']);
+	# Set the cleaned Content id to a local variable.
+	$returned_content_id=$content->getID();
 	# Get the content from the `content` table.
-	if($content->getThisContent($content->getID())===TRUE)
+	if($content->getThisContent($returned_content_id)===TRUE)
 	{
 		# Reset the defaults.
-		$content_id=$content->getID();
+		$content_id=$returned_content_id;
 		$content_archive=$content->getArchive(); # NULL=Not Archived | 0=Archived
 		$content_image=$content->getImage();
 		$content_image_title=$content->getImageTitle();
