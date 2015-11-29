@@ -217,7 +217,7 @@ class VideoFormPopulator extends FormPopulator
 				if(isset($_POST['image_option']) && !empty($_POST['image_option']))
 				{
 					# Set the image option ("add", "remove", or "select") to the Content data member.
-					$this->setImageOption($_POST['image_option']);
+					$data['ImageOption']=$_POST['image_option'];
 				}
 
 				# Check if the institution id POST data was sent.

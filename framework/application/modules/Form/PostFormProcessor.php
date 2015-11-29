@@ -327,9 +327,10 @@ class PostFormProcessor extends FormProcessor
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
 						}
+						# Run the sql query.
 						$db_post=$db->query($sql);
 						# Check if the database query was successful.
-						if($db_post>0)
+						if(TRUE)//if($db_post>0)
 						{
 							$id=$db->get_insert_id();
 							# Check if the visibility allows posting to social networks.

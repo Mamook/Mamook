@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/ContentFormPopulator.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -30,7 +30,7 @@ class ContentFormPopulator extends FormPopulator
 	 *
 	 * Sets the data member $content_object.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
 	protected function setContentObject($object)
@@ -74,8 +74,8 @@ class ContentFormPopulator extends FormPopulator
 	 *
 	 * Populates a content form.
 	 *
-	 * @param		$data		An array of values to populate the form with.
-	 * @access					public
+	 * @param	$data					An array of values to populate the form with.
+	 * @access	public
 	 */
 	public function populateContentForm($data=array())
 	{
@@ -84,9 +84,9 @@ class ContentFormPopulator extends FormPopulator
 			# Get the Content class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
 			# Instantiate a new Content object.
-			$content=new Content();
+			$content_object=new Content();
 			# Set the Content object to the content_object data member for use outside of this method.
-			$this->setContentObject($content);
+			$this->setContentObject($content_object);
 
 			# Set the passed data array to the data member.
 			$this->setData($data);
@@ -133,20 +133,11 @@ class ContentFormPopulator extends FormPopulator
 			{
 				$data=$this->getData();
 
-				/* Capture POST data. */
-
-				# Check if page_title POST data was sent.
-				if(isset($_POST['page_title']) && !empty($_POST['page_title']))
+				# Check if archive POST data was sent.
+				if(isset($_POST['archive']))
 				{
-					# Set the page_title to the PageTitle data index.
-					$data['PageTitle']=$_POST['page_title'];
-				}
-
-				# Check if sub_title POST data was sent.
-				if(isset($_POST['sub_title']))
-				{
-					# Set the sub_title to the SubTitle data index.
-					$data['SubTitle']=$_POST['sub_title'];
+					# Set the archive value to 0.
+					$data['Archive']=0;
 				}
 
 				# Check if hide_title POST data was sent.
@@ -154,27 +145,6 @@ class ContentFormPopulator extends FormPopulator
 				{
 					# Set the hide_title value to 0.
 					$data['HideTitle']=0;
-				}
-
-				# Check if text POST data was sent.
-				if(isset($_POST['text']))
-				{
-					# Set the text to the Text data index.
-					$data['Text']=$_POST['text'];
-				}
-
-				# Check if quote POST data was sent.
-				if(isset($_POST['quote']))
-				{
-					# Set the quote to the Text data index.
-					$data['Quote']=$_POST['quote'];
-				}
-
-				# Check if topic POST data was sent.
-				if(isset($_POST['topic']))
-				{
-					# Set the topic to the Topic data index.
-					$data['Topic']=$_POST['topic'];
 				}
 
 				# Check if image POST data was sent.
@@ -188,7 +158,7 @@ class ContentFormPopulator extends FormPopulator
 				if(isset($_POST['image_option']) && !empty($_POST['image_option']))
 				{
 					# Set the image option ("add", "remove", or "select") to the Content data member.
-					$this->setImageOption($_POST['image_option']);
+					$data['ImageOption']=$_POST['image_option'];
 				}
 
 				# Check if image_title POST data was sent.
@@ -198,13 +168,6 @@ class ContentFormPopulator extends FormPopulator
 					$data['ImageTitle']=$_POST['image_title'];
 				}
 
-				# Check if sub_domain POST data was sent.
-				if(isset($_POST['sub_domain']))
-				{
-					# Set the sub_domain to the SubDomain data index.
-					$data['SubDomain']=$_POST['sub_domain'];
-				}
-
 				# Check if page POST data was sent.
 				if(isset($_POST['page']))
 				{
@@ -212,11 +175,11 @@ class ContentFormPopulator extends FormPopulator
 					$data['Page']=$_POST['page'];
 				}
 
-				# Check if archive POST data was sent.
-				if(isset($_POST['archive']))
+				# Check if page_title POST data was sent.
+				if(isset($_POST['page_title']) && !empty($_POST['page_title']))
 				{
-					# Set the archive value to 0.
-					$data['Archive']=0;
+					# Set the page_title to the PageTitle data index.
+					$data['PageTitle']=$_POST['page_title'];
 				}
 
 				# Check if social POST data was sent.
@@ -224,6 +187,41 @@ class ContentFormPopulator extends FormPopulator
 				{
 					# Set the social value to 0.
 					$data['UseSocial']=0;
+				}
+
+				# Check if sub_domain POST data was sent.
+				if(isset($_POST['sub_domain']))
+				{
+					# Set the sub_domain to the SubDomain data index.
+					$data['SubDomain']=$_POST['sub_domain'];
+				}
+
+				# Check if sub_title POST data was sent.
+				if(isset($_POST['sub_title']))
+				{
+					# Set the sub_title to the SubTitle data index.
+					$data['SubTitle']=$_POST['sub_title'];
+				}
+
+				# Check if text POST data was sent.
+				if(isset($_POST['text']))
+				{
+					# Set the text to the Text data index.
+					$data['Text']=$_POST['text'];
+				}
+
+				# Check if topic POST data was sent.
+				if(isset($_POST['topic']))
+				{
+					# Set the topic to the Topic data index.
+					$data['Topic']=$_POST['topic'];
+				}
+
+				# Check if quote POST data was sent.
+				if(isset($_POST['quote']))
+				{
+					# Set the quote to the Text data index.
+					$data['Quote']=$_POST['quote'];
 				}
 				# Reset the "data" data member.
 				$this->setData($data);

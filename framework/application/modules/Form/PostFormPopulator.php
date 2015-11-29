@@ -138,8 +138,6 @@ class PostFormPopulator extends FormPopulator
 				# Set the SubContent object to a local variable.
 				$subcontent=$this->getSubContentObject();
 
-				/* Capture POST data. */
-
 				# Check if availability was passed via POST data.
 				if(isset($_POST['availability']))
 				{
@@ -232,7 +230,7 @@ class PostFormPopulator extends FormPopulator
 				}
 
 				# Check if the image option POST data was sent.
-				if(isset($_POST['image_option']))
+				if(isset($_POST['image_option']) && !empty($_POST['image_option']))
 				{
 					# Set the image option to the data array.
 					$data['ImageOption']=$_POST['image_option'];
