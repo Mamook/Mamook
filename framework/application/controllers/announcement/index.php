@@ -22,11 +22,33 @@ $display_file='';
 $subcontent=new SubContent();
 # Get the branch subcontent display and set it to a variable.
 $display_subcontent=$subcontent->displayBranchSubContent($branch);
-# Set the page title to the post's title.
-$page_title=$subcontent->getPostTitleDisplay();
-if(!empty($page_title))
+
+# Get the main content to display. The "image_link" variable is defined in data/init.php. This should ONLY display if the page is NOT displaying a single post.
+$display_main_content=$main_content->displayContent($image_link);
+
+# Check if this is a list of a specific time range.
+if(isset($_GET['year']))
 {
-	$main_content->setPageTitle($page_title);
+	$main_content->setSubTitle($_GET['year']);
+}
+
+# Check if this is a single post.
+if(isset($_GET['post']))
+{
+	# Set the page title to the post's title.
+	$page_title=$subcontent->getPostTitleDisplay();
+	if(!empty($page_title))
+	{
+		$main_content->setPageTitle($page_title);
+	}
+	# Set the page subtitle to the post's subtitle.
+	$subtitle=$subcontent->getSubTitle();
+	if(!empty($subtitle))
+	{
+		$main_content->setSubTitle($subtitle);
+	}
+	# Since this is a single post, clear the previously set content.
+	$display_main_content='';
 }
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
