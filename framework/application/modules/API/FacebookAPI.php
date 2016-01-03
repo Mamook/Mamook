@@ -79,7 +79,7 @@ class FacebookAPI
 	public function __construct()
 	{
 		# Get the Facebook API Class.
-		require_once Utility::locateFile(MODULES.'Social'.DS.'Facebook'.DS.'autoload.php');
+		require_once Utility::locateFile(MODULES.'Vendor'.DS.'Facebook'.DS.'autoload.php');
 		# Check if there is a Facebook object.
 		if(empty($this->facebook_obj) OR !is_object($this->facebook_obj))
 		{
@@ -100,6 +100,37 @@ class FacebookAPI
 
 
 	/*** public methods ***/
+
+	/**
+	 * getFeed
+	 *
+	 * Gets Facebook feeds.
+	 *
+	 * @param	$limit
+	 * @access	public
+	 */
+	public function getFeed($limit=20)
+	{
+		try
+		{
+			$response=$this->getFacebookObj()->get('/me/posts?fields=caption,created_time,id,link,name,message,picture'.(!empty($limit) ? '&limit='.$limit : ''));
+			$json_response=$response->getGraphEdge();
+			# Return the JSON Decoded response (returns an array).
+			return json_decode($json_response);
+		}
+		catch(Facebook\Exceptions\FacebookResponseException $e)
+		{
+			throw new Exception('Graph returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
+		}
+		catch(Facebook\Exceptions\FacebookSDKException $e)
+		{
+			throw new Exception('Facebook SDK returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getFeed
 
 	/**
 	 * post

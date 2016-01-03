@@ -1,7 +1,7 @@
-<?php /* public/social/index.php */
+<?php /* framework/application/controllers/social/index.php */
 
-# Get the Social Class.
-require_once Utility::locateFile(MODULES.'Social'.DS.'Social.php');
+# Get the API Class.
+require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
 
 # Create display variables.
 $display_main1='';
@@ -15,9 +15,49 @@ $display_box2='';
 $display='';
 $page_class='social';
 
-# Create a new SubContent object.
-$social=new Social();
-$social_data=$social->getSocialData();
+# Instantiate a new API object.
+$facebook_obj=new API('facebook');
+# Instantiate a new API object.
+$twitter_obj=new API('twitter');
+
+# Number of posts to display.
+$num_posts=10;
+
+# Get the Facebook feed.
+$facebook_feed=$facebook_obj->getFeed($num_posts);
+# Get the Twitter feed.
+$twitter_feed=$twitter_obj->getFeed($num_posts);
+
+# Combine the social data into a single array and sort by date.
+$social_data=array_merge($facebook_feed, $twitter_feed);
+
+# Sort the data by date.
+$social_data=$facebook_obj->sortByDate($social_data);
+
+$social_display='<ul>';
+# Loop through the passed social data.
+foreach($social_data as $data)
+{
+	# Set the social network to a variable.
+	$network=$data['network'];
+	# Check which social network was passed and set the appropriate social network url to a variable.
+	switch($data['network'])
+	{
+		case 'Facebook':
+			$url=FB_URL;
+			break;
+		case 'Twitter':
+			$url=TWITTER_URL.'statuses/';
+	}
+	$social_display.='<li>';
+	$social_display.='<article>';
+	$social_display.='Posted on '.$data['time'].' via <a href="'.$url.$data['id'].'" target="_blank">'.$network.'</a>: ';
+	$social_display.=((!empty($data['message'])) ? '<span>'.$data['message'].'</span>' : '');
+	$social_display.=((!empty($data['link'])) ? '<a href="'.$data['link'].'" title="'.((!empty($data['link_name'])) ? $data['link_name'] : $data['link']).'" target="_blank">'.((!empty($data['link_name'])) ? $data['link_name'] : $data['link']).'</a>' : '');
+	$social_display.='</article>';
+	$social_display.='</li>';
+}
+$social_display.='</ul>';
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
@@ -27,7 +67,7 @@ $display_main1.=$main_content->displayTitles();
 # Get the main content to display in main-2.
 $display_main2.=$main_content->displayContent();
 # Add social content to main-2.
-$display_main2.=$social->displaySocialFeeds($social_data);
+$display_main2.=$social_display;
 # Add any display content to main-2.
 $display_main2.=$display;
 

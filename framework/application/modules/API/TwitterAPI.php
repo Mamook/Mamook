@@ -2,12 +2,15 @@
 
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
+# TODO: Add error handling.
 
-/***
+
+/**
  * TwitterAPI
  *
- * The Twitter class accesses Twitter data info. It is a wrapper class for
- * @abraham's PHP twitteroauth Library.
+ * The Twitter class accesses Twitter data info.
+ * It is a wrapper class for @abraham's PHP twitteroauth Library.
+ *		https://github.com/abraham/twitteroauth
  */
 class TwitterAPI
 {
@@ -78,7 +81,7 @@ class TwitterAPI
 	public function __construct()
 	{
 		# Get the Twitter API Class.
-		require_once Utility::locateFile(MODULES.'Social'.DS.'Twitter'.DS.'autoload.php');
+		require_once Utility::locateFile(MODULES.'Vendor'.DS.'Twitter'.DS.'autoload.php');
 		# Check if there is a Twitter object.
 		if(empty($this->twitter_obj) OR !is_object($this->twitter_obj))
 		{
@@ -101,13 +104,44 @@ class TwitterAPI
 	/*** public methods ***/
 
 	/**
-	 * getMaxShortURL_Length
+	 * getFeed
+	 *
+	 * Gets Twitter feeds.
+	 *
+	 * @param	int $limit
+	 * @access	public
+	 */
+	public function getFeed($limit=20)
+	{
+		try
+		{
+			# Set the params and get the Twitter data.
+			$params=array('screen_name'=>TWITTER_USERNAME, 'include_rts'=>TRUE);
+			# A limit was set.
+			if(!empty($limit))
+			{
+				# Create an array to hold the limit count.
+				$count=array('count'=>$limit);
+				# Merge the limit count array into the $params array.
+				$params=array_merge($count, $params);
+			}
+			$response=$this->getTwitterObj()->get('statuses/user_timeline', $params);
+			return $response;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getFeed
+
+	/**
+	 * getMaxShortURLLength
 	 *
 	 * Returns the maximum length of t.co URLs.
 	 *
 	 * @access	public
 	 */
-	public function getMaxShortURL_Length()
+	public function getMaxShortURLLength()
 	{
 		# Send an API request to verify credentials.
 		$credentials=$this->getTwitterObj()->get('account/verify_credentials');
@@ -115,22 +149,22 @@ class TwitterAPI
 		$config=$this->getTwitterObj()->get('help/configuration');
 		# Return the longest length between the two.
 		return max($config->short_url_length_https, $config->short_url_length);
-	} #==== End -- getMaxShortURL_Length
+	} #==== End -- getMaxShortURLLength
 
 	/**
-	 * postToTwitter
+	 * post
 	 *
 	 * Posts to Twitter feed.
 	 *
 	 * @param	string $msg
 	 * @access	public
 	 */
-	public function postToTwitter($msg)
+	public function post($msg)
 	{
 		# Set the params and get the Twitter data.
 		$params=array('include_entities'=>TRUE, 'status'=>$msg);
 		return $this->sendTweet('statuses/update', $params);
-	} #==== End -- postToTwitter
+	} #==== End -- post
 
 	/*** End public methods ***/
 
