@@ -193,7 +193,9 @@ Git Flow
 	# Get Custom settings - BigTalk :)
 	require_once str_replace('public/FWE/', '', str_replace('\\', '/', ABSPATH)).'settings.php';
 
-11. Update and edit application/modules/FormMail/formmail.php as needed.
+11. If you need to make changes to the FormMail script, copy formmail.php into application/modules/Vendor/FormMail/ and edit it as needed
+	Linux Command (assumes you're in the root directory):
+		mkdir -p application/modules/Vendor/FormMail/ && cp framework/application/modules/Vendor/FormMail/formmail.php application/modules/Vendor/FormMail/formmail.php
 
 12. Edit FormMail templates as needed:
 	templates/fm/confirmation_template.php
