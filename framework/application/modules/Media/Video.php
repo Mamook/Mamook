@@ -18,7 +18,7 @@ require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
  * @dependencies		Requires "{MODULES}/Content/Language.php".
  * @dependencies		Requires "{MODULES}/FileHandler/FileHandler.php".
  * @dependencies		Requires "{MODULES}/Media/Image.php".
- * @dependencies		Requires "{MODULES}/Media/Soundcloud/Soundcloud.php".
+ * @dependencies		Requires "{MODULES}/API/YouTubeAPI.php".
  * @dependencies		Requires "{MODULES}/User/Contributor.php".
  */
 class Video extends Media
@@ -469,7 +469,7 @@ class Video extends Media
 		if(empty($this->youtube_obj) OR !is_object($this->youtube_obj))
 		{
 			# Get the YouTube Class.
-			require_once Utility::locateFile(MODULES.'Media'.DS.'YouTube.php');
+			require_once Utility::locateFile(MODULES.'API'.DS.'YouTubeAPI.php');
 
 			# Instantiate a new YouTube object.
 			$yt=YouTube::getInstance();

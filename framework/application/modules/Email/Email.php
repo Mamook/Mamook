@@ -677,7 +677,7 @@ class Email
 			# Get the Utility Class.
 			require_once UTILITY_CLASS;
 			# Get the PHPMailer class.
-			require_once Utility::locateFile(MODULES.'Email'.DS.'phpMailer'.DS.'PHPMailerAutoload.php');
+			require_once Utility::locateFile(MODULES.'Vendor'.DS.'PHPMailer'.DS.'PHPMailerAutoload.php');
 			# Instantiate a new PHPMailer object.
 			$mail=new PHPMailer;
 
@@ -902,7 +902,7 @@ class Email
 			$ZERO_IS_EMPTY;
 		try
 		{
-			require_once Utility::locateFile(MODULES.'Email'.DS.'FormMail'.DS.'formmail.php');
+			require_once Utility::locateFile(MODULES.'Vendor'.DS.'FormMail'.DS.'formmail.php');
 		}
 		catch(Exception $e)
 		{
