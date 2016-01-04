@@ -396,6 +396,12 @@ class API
 			elseif($this->getLoadedAPI()=='youtube')
 			{
 			}
+			# Everything else, returns this class.
+			else
+			{
+				# NOTE! Must be a better way to do this?
+				$api_obj=$this;
+			}
 			# Set the api to the data member.
 			$this->setAPIObj($api_obj);
 			# Return the API class object.
