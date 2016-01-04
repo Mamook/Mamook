@@ -77,13 +77,13 @@ $display_main2.=$display;
 $display_main3.=$main_content->displayQuote();
 
 /*
-** In the page template we
-** get the header
-** get the masthead
-** get the subnavbar
-** get the navbar
-** get the page view
-** get the quick registration box
-** get the footer
-*/
+ ** In the page template we
+ ** get the header
+ ** get the masthead
+ ** get the subnavbar
+ ** get the navbar
+ ** get the page view
+ ** get the quick registration box
+ ** get the footer
+ */
 require Utility::locateFile(TEMPLATES.'page.php');

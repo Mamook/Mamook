@@ -41,8 +41,8 @@ define('MODULES', APPLICATION_FOLDER.'modules'.DS);
 # Define the path to the framework modules folder. (ends with a slash)
 define('FW_MODULES', FW_APPLICATION_FOLDER.'modules'.DS);
 
-# Add MODULES and modules/Social/ (for GoogleClient) to the php include path.
-set_include_path(MODULES.PATH_SEPARATOR.DS.MODULES.'Social'.DS.FW_MODULES.PATH_SEPARATOR.FW_MODULES.'Social');
+# Add modules/Vendor/ (for GoogleClient) to the php include path.
+set_include_path(MODULES.PATH_SEPARATOR.DS.MODULES.'Vendor'.DS.FW_MODULES.PATH_SEPARATOR.FW_MODULES.'Vendor');
 
 # Define the path to the UTILITY module. If there is a custum UTILITY module, comment the next line and uncomment the one after.
 define('UTILITY_CLASS', FW_MODULES.'Utility'.DS.'Utility.php');

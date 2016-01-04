@@ -18,7 +18,7 @@ require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
  * @dependencies		Requires "{MODULES}/Content/Language.php".
  * @dependencies		Requires "{MODULES}/FileHandler/FileHandler.php".
  * @dependencies		Requires "{MODULES}/Media/Image.php".
- * @dependencies		Requires "{MODULES}/Media/Soundcloud/Soundcloud.php".
+ * @dependencies		Requires "{MODULES}/API/SoundcloudAPI.php".
  * @dependencies		Requires "{MODULES}/User/Contributor.php".
  */
 class Audio extends Media
@@ -423,8 +423,8 @@ class Audio extends Media
 		# Check if there is a Soundcloud object.
 		if(empty($this->soundcloud_obj) OR !is_object($this->soundcloud_obj))
 		{
-			# Get the Soundcloud Class.
-			require_once Utility::locateFile(MODULES.'Media'.DS.'Soundcloud'.DS.'Soundcloud.php');
+			# Get the SoundcloudAPI Class.
+			require_once Utility::locateFile(MODULES.'API'.DS.'SoundcloudAPI.php');
 
 			# Instantiate a new Soundcloud object.
 			$soundcloud_obj=Soundcloud::getInstance();

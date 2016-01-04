@@ -35,7 +35,10 @@ else
 	define('FB_APP_ID', '');
 	define('FB_APP_SECRET', '');
 }
+# FB_PAGE_ID is requred for AddThis (framework/application/js/AddThis.php).
 define('FB_PAGE_ID', '');
+# FB_URL required for /social/ page.
+define('FB_URL', '');
 # Must be a never expire token.
 #	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
 define('FB_PAGE_ACCESS_TOKEN', '');
@@ -75,7 +78,7 @@ define('GOOGLE_APPS_TALK', 'google.com/talk');
 
 # reCaptcha API keys (see reCaptcha.net)
 # Development sites.
-if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
+if(defined('DOMAIN_NAME') && (DOMAIN_NAME==DEVELOPMENT_DOMAIN))
 {
 	define('CAPTCHA_PUBLICKEY', '');
 	define('CAPTCHA_PRIVATEKEY', '');
@@ -100,8 +103,10 @@ define('SOUNDCLOUD_PERMALINK', '');
 define('SOUNDCLOUD_URL', '');
 
 # Twitter Variables
-# TWITTER_USERNAME only needed for AddThis.
+# TWITTER_USERNAME required to get tweet (getFeed) and for AddThis (framework/application/js/AddThis.php).
 define('TWITTER_USERNAME', '');
+# TWITTER_URL required for /social/ page.
+define('TWITTER_URL', '');
 define('TWITTER_CONSUMER_KEY', '');
 define('TWITTER_CONSUMER_SECRET', '');
 # Access Token.
@@ -117,22 +122,11 @@ define('VIMEO_URL', '');
 define('WEBSNAPR_DEV_KEY', '');
 
 # YouTube Variables
-# Development sites.
-if(defined('DOMAIN_NAME')&&(DOMAIN_NAME==DEVELOPMENT_DOMAIN))
-{
-	define('YOUTUBE_SESSION_TOKEN', '');
-}
-# Production sites.
-else
-{
-	define('YOUTUBE_SESSION_TOKEN', NULL);
-}
 define('YOUTUBE_CLIENT_ID', '');
 define('YOUTUBE_CLIENT_SECRET', '');
 define('YOUTUBE_DEV_KEY', '');
 define('YOUTUBE_REFRESH_TOKEN', '');
 define('YOUTUBE_USERNAME', '');
+# YOUTUBE_CHANNELID is requred for AddThis (framework/application/js/AddThis.php).
 define('YOUTUBE_CHANNELID', '');
-define('YOUTUBE_USERID', '');
-define('YOUTUBE_URL', '');
 # end YouTube Variables
