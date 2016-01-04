@@ -498,12 +498,10 @@ else
 		$display.=$display_duplicate['title'];
 		$display.=$display_duplicate['text'];
 		$display.=$display_duplicate['text_trans'];
-		$display.='<div class="empty"></div>';
 		$display.=$display_duplicate['more'];
 		$display.=$display_duplicate['edit'];
 		$display.=$display_duplicate['delete'];
 		$display.=$display_duplicate['download'];
-		$display.='<div class="empty"></div>';
 		$display.='</li>';
 	}
 	# Close the unordered list.

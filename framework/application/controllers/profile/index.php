@@ -164,7 +164,6 @@ if(!isset($_GET['publisher']) && !isset($_GET['person']))
 		$display.=$member['region'];
 		$display.=$member['country'];
 		$display.=$member['interests'];
-		$display.='<div class="empty"></div>';
 		$display.=$member['bio'];
 		$display.='</div>';
 		# Check if the person accepts emails from other users.
