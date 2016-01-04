@@ -374,12 +374,6 @@ class API
 			if($this->getLoadedAPI()=='framework')
 			{
 			}
-			# The AddThis API is loaded.
-			elseif($this->getLoadedAPI()=='addthis')
-			{
-				# Execute the displaySocial() method.
-				$this->displaySocial();
-			}
 			# The Facebook API is loaded.
 			elseif($this->getLoadedAPI()=='facebook')
 			{
@@ -627,6 +621,7 @@ class API
 	{
 		$extracted_data=array();
 		$i=0;
+		# Loop through the response data.
 		foreach($raw_data as $data)
 		{
 			# The Facebook API is loaded.

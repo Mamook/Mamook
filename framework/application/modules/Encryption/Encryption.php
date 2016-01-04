@@ -1,4 +1,4 @@
-<?php
+<?php /* framework/application/modules/Encryption/Encryption.php */
 
 /**
 * Encryption
@@ -185,4 +185,4 @@ class Encryption
 
 	/*** End public methods ***/
 
-} // End File class.
+} # End Encryption class.
