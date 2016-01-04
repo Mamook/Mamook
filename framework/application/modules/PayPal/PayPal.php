@@ -724,8 +724,8 @@ class PayPal
 			$url=$this->getPayPalURL();
 			$this->cURLToPayPal($url);
 
-			/*** Get the validation script ***/
-			/*** (check that order is Completed and Verified and enter info into Database) ***/
+			# Get the validation script
+			# (check that order is Completed and Verified and enter info into Database)
 			# Is the order VERIFIED?
 			if(strcmp($this->curl_result, "VERIFIED") !== 0)
 			{
@@ -806,8 +806,9 @@ class PayPal
 			# Find the buyer in our database.
 			$id=$this->id;
 			$getUser='SELECT `fname`, `lname` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($db->escape($id));
+			# Can't find that user!
 			if($db->query($getUser) !== 1)
-			{ # Can't find that user!
+			{
 				$this->error.="Not a registered user from our site!\n<br />";
 				# What is the subject of the error email send to the admin?
 				$this->error_subjec="Check IPN_log".$this->log_subj.", there was an error.";
@@ -1126,7 +1127,7 @@ class PayPal
 		# Set the shopping cart data.
 		$this->setShoppingCart();
 
-		$orderData=	"Log date: ".$this->datetime."<br />\n<br />\n".
+		$orderData="Log date: ".$this->datetime."<br />\n<br />\n".
 								"Item information:<br />\n".
 								"item name: ".urldecode($this->item_name)."<br />\n".
 								(($this->item_number!==NULL) ? "item number: ".$this->item_number."<br />\n" : '').
@@ -1230,8 +1231,9 @@ class PayPal
 			# Check that the product information is correct
 			# Assign Shopping Cart Item info to variables.
 			$num_cart_items=$this->num_cart_items;
+			# $i will increase each time till it equals the number of items in the cart.
 			for($i=1; $i <= $num_cart_items; $i++)
-			{ # $i will increase each time till it equals the number of items in the cart.
+			{
 				$item_name="item_name".$i;
 				$item_name=$_POST[$item_name];
 				$item_quantity="quantity".$i;
@@ -1248,15 +1250,19 @@ class PayPal
 	} #==== End -- processCart
 
 	/**
-	* processOrder
-	*
-	* Processes an order not submitted via Shopping Cart.
-	*
-	* @param	Boolean $fixed_price	TRUE is the product should have a fixed price, FALSE if the amount is dictated by the puchaser as in the case of a donation.
-	* @param	array $user_field		The key= the type of product, ie "donation", "subscription", "product". The value= update value. NULL = don't update a user.
-	* @param	string/array $email		The email address(es) to send the transaction notification to. May be a string"single_email_address" or and array of email addresses. NULL = don't send an email.
-	* @access	protected
-	*/
+	 * processOrder
+	 *
+	 * Processes an order not submitted via Shopping Cart.
+	 *
+	 * @param	boolean $fixed_price	TRUE is the product should have a fixed price,
+	 *									FALSE if the amount is dictated by the puchaser as in the case of a donation.
+	 * @param	array $user_field		The key= the type of product, ie "donation", "subscription", "product".
+	 *										The value= update value. NULL = don't update a user.
+	 * @param	string/array $email		The email address(es) to send the transaction notification to.
+	 *										May be a string"single_email_address" or and array of email addresses.
+	 *										NULL = don't send an email.
+	 * @access	protected
+	 */
 	protected function processOrder($fixed_price=TRUE, $user_field=NULL, $email=NULL)
 	{
 		# Set the Database instance to a variable.
@@ -1269,32 +1275,32 @@ class PayPal
 		$paymentgross=$this->payment_gross;
 		$item_quantity=$this->quantity;
 
-		/* Check that the product information is correct. */
-			# Get the Product class.
-			require_once Utility::locateFile(MODULES.'Product'.DS.'Product.php');
-			# Instantiate a new Product object.
-			$product=new Product();
-			# Get the product info from the `product` table and set it to variables.
-			$product->getProducts('all', 1, '`price`, `currency`', 'id', 'ASC', '`title` = '.$db->quote($db->escape($item_name)));
-			# Get the returned product from the datamember and set it to a variable.
-			$products=$product->getAllProducts();
-			# Check if there was a product returned.
-			if(empty($products))
-			{
-				/* Wrong product! */
-				# Add to the error data member.
-				$this->error.="Not what we sold ya!\n<br />";
-				# Set the subject of the error email to send to the admin
-				$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
-				# Add the error to the error log.
-				$this->makeLog();
-				# Throw an error.
-				throw new Exception($this->error_subject.' -> '.$this->error, E_RECOVERABLE_ERROR);
-				# Explicitly stop the script.
-				die();
-			}
+		# Check that the product information is correct.
+		# Get the Product class.
+		require_once Utility::locateFile(MODULES.'Product'.DS.'Product.php');
+		# Instantiate a new Product object.
+		$product=new Product();
+		# Get the product info from the `product` table and set it to variables.
+		$product->getProducts('all', 1, '`price`, `currency`', 'id', 'ASC', '`title` = '.$db->quote($db->escape($item_name)));
+		# Get the returned product from the datamember and set it to a variable.
+		$products=$product->getAllProducts();
+		# Check if there was a product returned.
+		if(empty($products))
+		{
+			# Wrong product!
+			# Add to the error data member.
+			$this->error.="Not what we sold ya!\n<br />";
+			# Set the subject of the error email to send to the admin
+			$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
+			# Add the error to the error log.
+			$this->makeLog();
+			# Throw an error.
+			throw new Exception($this->error_subject.' -> '.$this->error, E_RECOVERABLE_ERROR);
+			# Explicitly stop the script.
+			die();
+		}
 
-		/* It is the right product. */
+		# It is the right product.
 		# Loop through the returned product to get the record and set it to a variable.
 		foreach($products as $this_product)
 		{
@@ -1307,8 +1313,9 @@ class PayPal
 		if($fixed_price===TRUE)
 		{
 			# Compare the price.
+			# Wrong price!
 			if($paymentgross !== number_format(($thePrice * $item_quantity), 2, '.', ','))
-			{ # Wrong price!
+			{
 				$this->error.="Not the right price!\n<br />";
 				# What is the subject of the error email send to the admin?
 				$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
@@ -1320,8 +1327,9 @@ class PayPal
 		}
 		# The price is right.
 		# Compare the currency.
-		if($this->payment_currency !== $theCurrency)
-		{ /* Wrong currency! */
+		# Wrong currency!
+		if($this->payment_currency!==$theCurrency)
+		{
 			# Add to the error data member.
 			$this->error.="Not the right type of currency!\n<br />";
 			# Set the subject of the error email to send to the admin.
@@ -1334,7 +1342,7 @@ class PayPal
 			die();
 		}
 
-		/* The currency is correct. */
+		# The currency is correct.
 		# Put order info in the `orders` table and give the buyer appropriate privileges.
 		$this->addOrderToDB();
 		# Check if the passed user field variable is empty.

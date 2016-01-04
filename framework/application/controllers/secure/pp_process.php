@@ -1,4 +1,4 @@
-<?php /* public/secure/pp_process.php paypal processing script */
+<?php /* framework/application/controllers/secure/pp_process.php */
 
 # Get the PayPal Class.
 require_once Utility::locateFile(MODULES.'PayPal'.DS.'PayPal.php');

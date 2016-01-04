@@ -1,4 +1,4 @@
-<?php /* public/secure/PayPal.php */
+<?php /* framework/application/controllers/secure/PayPal.php */
 
 # Get the PayPal Class.
 require_once Utility::locateFile(MODULES.'PayPal'.DS.'PayPal.php');
