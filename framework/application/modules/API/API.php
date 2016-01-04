@@ -18,6 +18,7 @@ class API
 	private $image_id=NULL;
 	private $loaded_api;
 	private $message;
+	private $response=NULL;
 	private $title=NULL;
 	private $url=NULL;
 
@@ -169,6 +170,29 @@ class API
 	} #==== End -- setMessage
 
 	/**
+	 * setResponse
+	 *
+	 * Sets the data member $response.
+	 *
+	 * @param	$response
+	 * @access	private
+	 */
+	private function setResponse($response)
+	{
+		# Check if the passed value is empty.
+		if(!empty($response))
+		{
+			# Set the data member.
+			$this->response=$response;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->response=NULL;
+		}
+	} #==== End -- setResponse
+
+	/**
 	 * setTitle
 	 *
 	 * Sets the data member $title.
@@ -237,7 +261,7 @@ class API
 	 *
 	 * @access	private
 	 */
-	private function getAPIObj()
+	public function getAPIObj()
 	{
 		return $this->api_obj;
 	} #==== End -- getAPIObj
@@ -289,6 +313,18 @@ class API
 	{
 		return $this->message;
 	} #==== End -- getMessage
+
+	/**
+	 * getResponse
+	 *
+	 * Returns the data member $response.
+	 *
+	 * @access	private
+	 */
+	private function getResponse()
+	{
+		return $this->response;
+	} #==== End -- getResponse
 
 	/**
 	 * getTitle
@@ -378,6 +414,67 @@ class API
 	/*** public methods ***/
 
 	/**
+	 * displaySocial
+	 *
+	 * Displays the social buttons.
+	 *
+	 * @access	public
+	 */
+	public function displaySocial()
+	{
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
+		# Include JavaScripts in the footer. (Use the script file name before the ".php".)
+		$doc->setFooterJS('AddThis');
+		$display=
+			'<!-- AddThis Button BEGIN -->'.
+			'<div class="addthis_toolbox addthis_default_style">'.
+				'<a class="addthis_button_preferred_1"></a>'.
+				'<a class="addthis_button_preferred_2"></a>'.
+				'<a class="addthis_button_google_plusone"></a>'.
+				'<a class="addthis_button_preferred_3"></a>'.
+				'<a class="addthis_button_preferred_4"></a>'.
+				'<a class="addthis_button_compact"></a>'.
+				'<a class="addthis_counter addthis_bubble_style"></a>'.
+			'</div>'.
+			'<!-- AddThis Button END -->';
+		return $display;
+	} #==== End -- displaySocial
+
+	/**
+	 * getFeed
+	 *
+	 * Description.
+	 *
+	 * @param	int $num_posts			Optional.
+	 * @access	public
+	 */
+	public function getFeed($num_posts=20)
+	{
+		try
+		{
+			# The Facebook API is loaded.
+			if($this->getLoadedAPI()=='facebook')
+			{
+				# Send the array to the FacebookAPI class.
+				$response=$this->getAPIObj()->getFeed($num_posts);
+			}
+			# The Twitter API is loaded.
+			elseif($this->getLoadedAPI()=='twitter')
+			{
+				$response=$this->getAPIObj()->getFeed($num_posts);
+			}
+			$extracted_data=$this->extractData($response);
+			$this->setResponse($extracted_data);
+			return $this->getResponse();
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getFeed
+
+	/**
 	 * post
 	 *
 	 * Wrapper function for the API service that is loaded.
@@ -451,8 +548,8 @@ class API
 			# The Twitter API is loaded.
 			elseif($this->getLoadedAPI()=='twitter')
 			{
-				$max_short_url_length=$this->getAPIObj()->getMaxShortURL_Length();
-				$this->getAPIObj()->postToTwitter(WebUtility::truncate($message, 139-$max_short_url_length, '&hellip;', FALSE, TRUE).' '.$url);
+				$max_short_url_length=$this->getAPIObj()->getMaxShortURLLength();
+				$this->getAPIObj()->post(WebUtility::truncate($message, 139-$max_short_url_length, '&hellip;', FALSE, TRUE).' '.$url);
 			}
 			# The YouTube API is loaded.
 			elseif($this->getLoadedAPI()=='youtube')
@@ -464,6 +561,26 @@ class API
 			throw $e;
 		}
 	} #==== End -- post
+
+
+	/**
+	 * sortByDate
+	 *
+	 * Returns the array of social data sorted by date.
+	 * Wrapper function for Utility->sortByDate() method.
+	 *
+	 * @param	array $social_data		An array of values to sort
+	 * @access	public
+	 * @return	array
+	 */
+	public function sortByDate($social_data, $key='time')
+	{
+		# Instantiate a new Utility object.
+		$utility_obj=new Utility();
+		# Sort the playlist array by date.
+		$social_data=$utility_obj->sortByDate($social_data, $key);
+		return $social_data;
+	} #==== End -- sortByDate
 
 	/**
 	 * validateServerAPIKey
@@ -487,6 +604,85 @@ class API
         }
     } #==== End -- validateServerAPIKey
 
-    /*** End public methods ***/
+	/*** End public methods ***/
+
+
+
+	/*** private methods ***/
+
+	/**
+	 * extractData
+	 *
+	 * Pulls returned data out of the passed object and sets it to a usable data member array.
+	 *
+	 * @param	$raw_data
+	 * @access	private
+	 * @return	array
+	 */
+	private function extractData($raw_data)
+	{
+		$extracted_data=array();
+		$i=0;
+		# Loop through the response data.
+		foreach($raw_data as $data)
+		{
+			# The Facebook API is loaded.
+			if($this->getLoadedAPI()=='facebook')
+			{
+				# Set the id to a variable.
+				$extracted_data[$i]['id']=$data->id;
+				# Check if there was a link posted.
+				if(isset($data->link))
+				{
+					# Set the link to a variable.
+					$extracted_data[$i]['link']=$data->link;
+					# Check if a link name was passed.
+					if(isset($data->name))
+					{
+						# Set the link_name to a variable.
+						$extracted_data[$i]['link_name']=$data->name;
+					}
+					# Set the link_caption to a variable.
+					$extracted_data[$i]['link_caption']=(isset($data->caption) ? $data->caption : NULL);
+				}
+				# Set the message body to a variable.
+				$extracted_data[$i]['message']=$data->message;
+				# Set the social network name (Facebook) to the data member array.
+				$extracted_data[$i]['network']='Facebook';
+				# Check if there was a picture posted.
+				if(isset($data->picture))
+				{
+					# Set the picture to a variable.
+					$extracted_data[$i]['picture']=$data->picture;
+				}
+				# Get the post date / time and convert to unix time.
+				$time=strtotime($data->created_time->date);
+				# Format the date / time into something human readable.
+				$fb_time=date("M j, Y g:ia", $time);
+				# Set the date / time to a variable.
+				$extracted_data[$i]['time']=$fb_time;
+			}
+			# The Twitter API is loaded.
+			elseif($this->getLoadedAPI()=='twitter')
+			{
+				# Set the id to a variable.
+				$extracted_data[$i]['id']=$data->id_str;
+				# Set the message body to a variable.
+				$extracted_data[$i]['message']=$data->text;
+				# Set the social network name (Twitter) to the data member array.
+				$extracted_data[$i]['network']='Twitter';
+				# Get the post date / time and convert to unix time.
+				$time=strtotime($data->created_at);
+				# Format the date / time into something human readable.
+				$twitter_time=date("M j, Y g:ia", $time);
+				# Set the date / time to a variable.
+				$extracted_data[$i]['time']=$twitter_time;
+			}
+			$i++;
+		}
+		return $extracted_data;
+	} #==== End -- extractData
+
+    /*** End private methods ***/
 
 } # End API class.

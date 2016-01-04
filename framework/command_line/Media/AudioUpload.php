@@ -80,7 +80,7 @@ if(!empty($audio_data['FileName']))
 		if(empty($audio_data['ImageID']))
 		{
 			# Get the getID3 Class.
-			require_once Utility::locateFile(MODULES.'getID3'.DS.'getid3'.DS.'getid3.php');
+			require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
 			# Instantiate the new getID3 object.
 			$getID3=new getID3;
 

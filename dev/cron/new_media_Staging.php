@@ -150,9 +150,9 @@ if($get_new_videos>0)
 		# Update database if the video has been "processed".
 		if($video_processed===TRUE)
 		{
-			# Get the PHPMailer class.
+			# Get the Email class.
 			require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
-			# Instantiate a new PHPMailer object.
+			# Instantiate a new Email object.
 			$mail=new Email();
 
 			$mail->sendEmail($subject, $to, $body, $reply_to);
@@ -269,9 +269,9 @@ if($get_new_audio>0)
 		# Update database if the audio has been "processed".
 		if($audio_processed===TRUE)
 		{
-			# Get the PHPMailer class.
+			# Get the Email class.
 			require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
-			# Instantiate a new PHPMailer object.
+			# Instantiate a new Email object.
 			$mail=new Email();
 
 			$mail->sendEmail($subject, $to, $body, $reply_to);

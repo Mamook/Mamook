@@ -1,0 +1,12 @@
+[submodule "framework/application/modules/Vendor/Facebook"]
+	path = framework/application/modules/Vendor/Facebook
+	url = https://Draven714@github.com/facebook/facebook-php-sdk-v4.git
+[submodule "framework/application/modules/Vendor/getID3"]
+	path = framework/application/modules/Vendor/getID3
+	url = https://Draven714@github.com/JamesHeinrich/getID3.git
+[submodule "framework/application/modules/Vendor/Twitter"]
+	path = framework/application/modules/Vendor/Twitter
+	url = https://Draven714@github.com/abraham/twitteroauth.git
+[submodule "framework/application/modules/Vendor/PHPMailer"]
+	path = framework/application/modules/Vendor/PHPMailer
+	url = https://Draven714@github.com/PHPMailer/PHPMailer.git

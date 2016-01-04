@@ -79,7 +79,7 @@ DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
-# Get the PHPMailer class.
+# Get the Email class.
 require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
 # Instantiate a new Email object.
 $mail=new Email();

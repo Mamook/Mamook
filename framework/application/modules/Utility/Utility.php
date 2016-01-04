@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Utility/Utility.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -400,7 +400,7 @@ class Utility
 	 * Returns the array of social data sorted by date.
 	 *
 	 * @param	array $data_array		An array of values to sort
-	 * @param	string $key			Key to sort
+	 * @param	string $key				Key to sort
 	 * @param	string $first_key		First key in the $data_array
 	 * @param	string $look_in			The key to look for $key in (Not working yet)
 	 * @access	public
@@ -410,21 +410,17 @@ class Utility
 	{
 		# Create a callback function for usort to compare the dates.
 		$this->setKey($key);
-
 		# Sort the array by date
 		if($first_key!==NULL)
 		{
 			usort($data_array[$first_key], array($this, 'dateCompare'));
-
 			# Reverse the array the that the most recent date is first.
 			$new_data_array[$first_key]=array_reverse($data_array[$first_key]);
-
 			$data_array=$new_data_array;
 		}
 		else
 		{
 			usort($data_array, array($this, 'dateCompare'));
-
 			# Reverse the array the that the most recent date is first.
 			$data_array=array_reverse($data_array);
 		}
@@ -436,11 +432,12 @@ class Utility
 	 *
 	 * Truncates a string to the passed length. Respects html.
 	 *
-	 * @param		string 	$text	  	(The string to truncated.)
-	 * @param		int			$length   (The maximum length of the cut string.)
-	 * @param		string	$suffix   (The string to indicate the string has been truncated.)
-	 * @param		boolean	$isHTML		(True is the string contains HTML.)
-	 * @param		boolean	$exact		(True words may be cut in the middle.)
+	 * @param	string $text			The string to truncated.
+	 * @param	int $length				The maximum length of the cut string.
+	 * @param	string $suffix			The string to indicate the string has been truncated.
+	 * @param	boolean $isHTML			TRUE is the string contains HTML.
+	 * @param	boolean $exact			TRUE words may be cut in the middle.
+	 * @param	$max_br
 	 * @access	public
 	 */
 	public static function truncate($text, $length, $suffix='&hellip;', $isHTML=TRUE, $exact=FALSE, $max_br=NULL)
@@ -615,7 +612,7 @@ class Utility
 	{
 		$t1=strtotime($a[$this->getKey()]);
 		$t2=strtotime($b[$this->getKey()]);
-		return $t1 - $t2;
+		return $t1-$t2;
 	} #==== End -- dateCompare
 
 	/*** End private methods ***/

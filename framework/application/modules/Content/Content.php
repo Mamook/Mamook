@@ -1492,11 +1492,11 @@ class Content
 
 		if($use_social!==NULL)
 		{
-			# Get Social Button Class.
-			require_once Utility::locateFile(MODULES.'Social'.DS.'Social.php');
-			$social_obj=new Social();
+			# Get the API Class.
+			require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
+			$api_obj=new API('addthis');
 			# Display the social buttons.
-			$content.=$social_obj->displaySocial();
+			$content.=$api_obj->displaySocial();
 		}
 
 		return $content;

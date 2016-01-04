@@ -1284,11 +1284,11 @@ class Login extends User
 	} # ----End randomString
 
 	/**
-	 *  clearWP_Cookies
+	 * clearWP_Cookies
 	 *
-	 *  Clears the WordPress cookies
+	 * Clears the WordPress cookies
 	 *
-	 *  @access private
+	 * @access	private
 	 */
 	private function clearWP_Cookies()
 	{
@@ -1346,12 +1346,12 @@ class Login extends User
 	} # ----End clearWP_Cookies
 
 	/**
-	 *  ecodeWP_Password
+	 * ecodeWP_Password
 	 *
-	 *  Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
+	 * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
 	 *
-	 *	@param	string $password		Optional. Used only for Login->changePassword() method.
-	 *  @access private
+	 * @param	string $password		Optional. Used only for Login->changePassword() method.
+	 * @access	private
 	 */
 	private function ecodeWP_Password($wp_password=NULL)
 	{
