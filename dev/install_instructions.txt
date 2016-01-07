@@ -38,6 +38,7 @@ Git Flow
 			Commands:
 				git remote add Framework ssh://gitolite@jamtheforce.com:8022/framework
 				git pull Framework master
+				git submodule update --init --recursive
 
 			(Optional)
 				This command stops “git fetch Framework” from getting the Frameworks Git tags.
