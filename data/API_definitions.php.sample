@@ -23,13 +23,13 @@ define('BITLY_CLIENT_ID', '');
 define('BITLY_CLIENT_SECRET', '');
 
 # Facebook Variables
-# Development sites.
-if(defined('DOMAIN_NAME') && (DOMAIN_NAME==DEVELOPMENT_DOMAIN))
+# Production site.
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
 {
 	define('FB_APP_ID', '');
 	define('FB_APP_SECRET', '');
 }
-# Production sites.
+# Staging & Dev site.
 else
 {
 	define('FB_APP_ID', '');
@@ -42,22 +42,6 @@ define('FB_URL', '');
 # Must be a never expire token.
 #	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
 define('FB_PAGE_ACCESS_TOKEN', '');
-
-# Google AJAX Search API Key
-if(defined('DOMAIN_NAME'))
-{
-	# Development sites.
-	if(DOMAIN_NAME==DEVELOPMENT_DOMAIN)
-	{
-		define('GOOGLEAPIKEY', '');
-	}
-	# Production sites.
-	elseif(DOMAIN_NAME=='jamtheforce.com')
-	{
-		define('GOOGLEAPIKEY', '');
-	}
-}
-# end Google AJAX Search API Key
 
 # Google API variables
 define('GOOGLE_CLIENT_ID', '');
@@ -77,19 +61,18 @@ define('GOOGLE_APPS_SITES', 'sites.jamtheforce.com');
 define('GOOGLE_APPS_TALK', 'google.com/talk');
 
 # reCaptcha API keys (see reCaptcha.net)
-# Development sites.
-if(defined('DOMAIN_NAME') && (DOMAIN_NAME==DEVELOPMENT_DOMAIN))
+# Production site.
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
 {
 	define('CAPTCHA_PUBLICKEY', '');
 	define('CAPTCHA_PRIVATEKEY', '');
 }
-# Production sites.
+# Staging & Dev site.
 else
 {
 	define('CAPTCHA_PUBLICKEY', '');
 	define('CAPTCHA_PRIVATEKEY', '');
 }
-# end reCaptcha API keys
 
 # Soundcloud Variables
 define('SOUNDCLOUD_AUTH_URL', 'https://soundcloud.com/connect');
@@ -129,4 +112,3 @@ define('YOUTUBE_REFRESH_TOKEN', '');
 define('YOUTUBE_USERNAME', '');
 # YOUTUBE_CHANNELID is requred for AddThis (framework/application/js/AddThis.php).
 define('YOUTUBE_CHANNELID', '');
-# end YouTube Variables
