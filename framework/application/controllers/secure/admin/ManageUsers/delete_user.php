@@ -21,8 +21,6 @@ $display_box2='';
 
 $display='';
 
-$head='';
-
 if(isset($_GET['user']))
 {
 	# Instantiate a new User object.
@@ -36,9 +34,8 @@ if(isset($_GET['user']))
 	# Process the delete form if it has been submitted.
 	$form_processor->processDeleteAccount();
 	$current_username=$user->findUsername($id);
-
-	$who=$current_username."'s";
-
+	$who=$current_username.'\'s';
+	$head='<h3 class="h-3">Are you sure you want to delete '.$who.' account? (It will be permanently removed from the system)</h3>';
 	# Get the delete_user form.
 	require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_user.php');
 }

@@ -19,10 +19,9 @@ $display_box1b='';
 $display_box1c='';
 $display_box2='';
 
-$who='my';
-
 $display='';
-$head='';
+$head='<h3 class="h-3">Are you sure you want to delete this account? (It will be permanently removed from the system)</h3>';
+$who='my';
 
 # Instantiate a new User object.
 $user=new User();
