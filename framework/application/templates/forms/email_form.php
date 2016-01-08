@@ -1,4 +1,4 @@
-<?php /* templates/forms/email_form.php */
+<?php /* framework/application/templates/forms/email_form.php */
 
 # Process the certificate application form.
 $fp->processEmail($default_data);
@@ -38,6 +38,8 @@ $form_mail->addElement('hidden', array('name'=>'bad_url', 'value'=>$bad_url));
 $form_mail->addElement('hidden', array('name'=>'required', 'value'=>'realname:Name'));
 $form_mail->addElement('hidden', array('name'=>'required', 'value'=>'email:E-mail'));
 $form_mail->addElement('hidden', array('name'=>'required', 'value'=>'mesg:Message'));
+# Set the domain name for the form_email_template.txt to use.
+$form_mail->addElement('hidden', array('name'=>'domain_name', 'value'=>DOMAIN_NAME));
 $form_mail->addFormPart('<fieldset>');
 $form_mail->addFormPart('<ul>');
 $form_mail->addFormPart('<li>');
