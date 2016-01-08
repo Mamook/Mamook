@@ -64,11 +64,11 @@ class Download extends FileHandler
 		$this->checkAllowedExtension();
 		if($allowed_ext[$extension]=='')
 		{
-  		$mtype=$this->getMimeType($filename);
-  		if($mtype===FALSE)
-  		{
-  			$mtype='';
-  		}
+			$mtype=$this->getMimeType($filename);
+			if($mtype===FALSE)
+			{
+				$mtype='';
+			}
 			if($mtype=='')
 			{
 				$mtype="application/force-download";
