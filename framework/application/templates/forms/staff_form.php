@@ -58,7 +58,7 @@ else
 	# Do we need some javascripts? (Use the script video name before the ".js".)
 	$doc->setJavaScripts('uniform,bsmSelect');
 	# Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-	$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple');
+	$doc->setFooterJS('uniform-select,fileOption-submit,uniform-file,bsmSelect-multiple');
 
 	$display.='<a href="'.APPLICATION_URL.'profile/?person='.$staff_id.'" target="_blank" title="View '.$staff_obj->getStaffName().'\'s Profile" class="view">view</a>';
 	$display.='<div id="profile_form" class="form">';

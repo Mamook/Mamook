@@ -61,15 +61,17 @@ if($fp->getUpload()===TRUE)
 	$form_mail->addFormPart('<li>');
 	$form_mail->addFormPart('<label class="label" for="file">File</label>');
 	$form_mail->addElement('file', array('id'=>'file', 'name'=>'file'));
-// 		if(isset($file_name))
-// 		{
-// 			$form_mail->addFormPart('<ul>');
-// 			$form_mail->addFormPart('<li class="file-current">');
-// 			$form_mail->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&amp;t=tmp" title="Current Attachment">'.$file_name.'"</a>');
-// 			$form_mail->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
-// 			$form_mail->addFormPart('</li>');
-// 			$form_mail->addFormPart('</ul>');
-// 		}
+	/*
+	if(isset($file_name))
+	{
+		$form_mail->addFormPart('<ul>');
+		$form_mail->addFormPart('<li class="file-current">');
+		$form_mail->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&amp;t=tmp" title="Current Attachment">'.$file_name.'"</a>');
+		$form_mail->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
+		$form_mail->addFormPart('</li>');
+		$form_mail->addFormPart('</ul>');
+	}
+	*/
 	$form_mail->addFormPart('</li>');
 	# Include javascripts for styling the upload field.
 	$doc->setJavaScripts('uniform');
