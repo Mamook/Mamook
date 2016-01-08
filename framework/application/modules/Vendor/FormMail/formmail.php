@@ -5,12 +5,12 @@
  *
  */
 
-$FM_VERS = "9.07"; // script version
+$FM_VERS = "9.10"; // script version
 
 /* ex:set ts=4 sw=4 et:
  * FormMail PHP script from Tectite.com.  This script requires PHP 5 or later.
  * Versions of Tectite FormMail are available for PHP 4 (look for versions 8 and below).
- * Copyright (c) 2001-2014 Open Concepts (Vic) Pty Ltd
+ * Copyright (c) 2001-2015 Open Concepts (Vic) Pty Ltd
  * (ABN 12 130 429 248), Melbourne, Australia.
  * This script is free for all use as described in the "Copying and Use" and
  * "Warranty and Disclaimer" sections below.
@@ -179,7 +179,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) 
 //
 // Capture the current date and time, for various purposes.
 //
-date_default_timezone_set('UTC');   /* prevent notice in PHP 5.1+ */
+date_default_timezone_set('UTC'); /* prevent notice in PHP 5.1+ */
 $lNow = time();
 
 ini_set('track_errors',1); // enable $php_errormsg
@@ -367,18 +367,19 @@ class ExecEnv
 					default:
 						$m_val = false;
 						break;
-}
+				}
 			}
 		}
 		return ($m_val);
 	}
 
-    /**
-     * Return whether the session can be passed in a URL.
-     *
-     * @return bool true if the session can be passed in a URL
-     */
-	public function allowSessionURL() {
+	/**
+	 * Return whether the session can be passed in a URL.
+	 *
+	 * @return bool true if the session can be passed in a URL
+	 */
+	public function allowSessionURL()
+	{
 		$m_only_cookies = $this->getINIBool('session.use_only_cookies');
 		if ($m_only_cookies === null) {
 			$m_only_cookies = $ExecEnv->IsPHPAtLeast('5.3.0') ? true : false;
@@ -393,6 +394,7 @@ if (!$ExecEnv->IsPHPAtLeast("5.3.0")) {
 	// disable this silly setting (usually not enabled)
 	// it's also deprecated from PHP version 5.3.0
 	//
+	# FW_CUSTOM: Commenting this out since this logic is wrong.
 	//@set_magic_quotes_runtime(0);
 }
 
@@ -400,11 +402,11 @@ if (!$ExecEnv->IsPHPAtLeast("5.3.0")) {
 // We set references to the appropriate arrays to handle PHP version differences
 // Session vars are selected after we start the session.
 //
-$aServerVars = & $_SERVER;
-$aGetVars    = & $_GET;
-$aFormVars   = & $_POST;
-$aFileVars   = & $_FILES;
-$aEnvVars    = & $_ENV;
+$aServerVars = &$_SERVER;
+$aGetVars    = &$_GET;
+$aFormVars   = &$_POST;
+$aFileVars   = &$_FILES;
+$aEnvVars    = &$_ENV;
 
 $bIsGetMethod = false;
 $bHasGetData  = false;
@@ -449,15 +451,19 @@ if (isset($aServerVars['SERVER_NAME']) && $aServerVars['SERVER_NAME'] !== "") {
 $EMAIL_NAME = "^[-a-z0-9._]+"; /* the '^' is an important security feature! */
 
 /* Help: http://www.tectite.com/fmdoc/target_email.php */
+# FW_CUSTOM: We allow emails to alphanumeric, period, and underscore email address only.
 $TARGET_EMAIL = array($EMAIL_NAME.'@'.'[-a-z0-9._]+$');
 
 /* Help: http://www.tectite.com/fmdoc/def_alert.php */
+# FW_CUSTOM: Default email Alert messages get sent to.
 $DEF_ALERT = ADMIN_EMAIL;
 
 /* Help: http://www.tectite.com/fmdoc/site_domain.php */
+# FW_CUSTOM: Our full domain name (www.domain.com).
 $SITE_DOMAIN = FULL_DOMAIN; /* your website domain name */
 
 /* Help: http://www.tectite.com/fmdoc/set_real_document_root.php */
+# FW_CUSTOM: /home/yourname/public.
 $SET_REAL_DOCUMENT_ROOT = ROOT_PATH; /* overrides the value set by SetRealDocumentRoot function */
 
 //
@@ -472,6 +478,7 @@ if (isset($SET_REAL_DOCUMENT_ROOT) && $SET_REAL_DOCUMENT_ROOT !== "") {
 $CONFIG_CHECK = array("TARGET_EMAIL");
 
 /* Help: http://www.tectite.com/fmdoc/at_mangle.php */
+# FW_CUSTOM: Spam protection. nobody_form_example.com
 $AT_MANGLE = "_form_";
 
 /* Help: http://www.tectite.com/fmdoc/target_urls.php */
@@ -488,6 +495,7 @@ $BODY_LF = "\r\n"; /* the new default: use this for CR+LF */
 $FROM_USER = ""; /* the default - setting not used */
 
 /* Help: http://www.tectite.com/fmdoc/sendmail_f_option.php */
+# FW_CUSTOM: Use -f option for sendmail (sendmail -f).
 $SENDMAIL_F_OPTION      = TRUE;
 $SENDMAIL_F_OPTION_LINE = __LINE__ - 1; /* don't modify this line! */
 
@@ -501,21 +509,22 @@ $SET_SENDER_FROM_EMAIL = false;
 $INI_SET_FROM = false;
 
 /* Help: http://www.tectite.com/fmdoc/logdir.php */
+# FW_CUSTOM: Set our logs/ directory.
 $LOGDIR = LOGS.'fm'; /* directory for log files; empty string to disallow log files */
 
 /* Help: http://www.tectite.com/fmdoc/autorespondlog.php */
-$AUTORESPONDLOG = "auto_resp.log"; /* file name in $LOGDIR for the auto responder log; empty string for no auto responder log */
+$AUTORESPONDLOG = ""; /* file name in $LOGDIR for the auto responder log; empty string for no auto responder log */
 
 /* Help: http://www.tectite.com/fmdoc/csv_file_settings.php */
-$CSVDIR    = "";		/* directory for csv files; empty string to disallow csv files */
-$CSVSEP    = ",";		/* comma separator between fields (columns) */
-$CSVINTSEP = ";";		/* semicolon is the separator for fields (columns) with multiple values (checkboxes, etc.) */
-$CSVQUOTE  = '"';		/* all fields in the CSV are quoted with this character; default is double quote.  You can change it to single quote or leave it empty for no quotes. */
+$CSVDIR    = ""; /* directory for csv files; empty string to disallow csv files */
+$CSVSEP    = ","; /* comma separator between fields (columns) */
+$CSVINTSEP = ";"; /* semicolon is the separator for fields (columns) with multiple values (checkboxes, etc.) */
+$CSVQUOTE  = '"'; /* all fields in the CSV are quoted with this character; default is double quote.  You can change it to single quote or leave it empty for no quotes. */
 //$CSVQUOTE = "'";		/* use this if you want single quotes */
-$CSVOPEN = "";		    /* set to "b" to force line terminations to be kept as $CSVLINE setting below, regardless of operating
+$CSVOPEN = ""; /* set to "b" to force line terminations to be kept as $CSVLINE setting below, regardless of operating
 	                    system.  Keep as empty string and leave $CSVLINE unchanged, to get text file
 	                    terminations for your server's operating system. (Line feed on UNIX, carriage-return line feed on Windows). */
-$CSVLINE = "\n";		/* line termination for CSV files.  The default is a single line feed, which may be modified for your
+$CSVLINE = "\n"; /* line termination for CSV files.  The default is a single line feed, which may be modified for your
 						server's operating system.  If you want to change
 	                    this value, you *must* set $CSVOPEN = "b". */
 
@@ -562,6 +571,7 @@ $AUTH_USER = "";
 $AUTH_PW   = "";
 
 /* Help: http://www.tectite.com/fmdoc/form_ini_file.php */
+# FW_CUSTOM: Assign our formmail.ini config file.
 $FORM_INI_FILE = DATA_FILES.'formmail.ini';
 
 /* Help: http://www.tectite.com/fmdoc/moduledir.php */
@@ -581,13 +591,15 @@ $LIMITED_IMPORT = true; /* set to true if your database cannot handle escaped qu
 
 /* Help: http://www.tectite.com/fmdoc/valid_env.php */
 $VALID_ENV = array('HTTP_REFERER','REMOTE_HOST','REMOTE_ADDR','REMOTE_USER',
-    'HTTP_USER_AGENT'
+                   'HTTP_USER_AGENT'
 );
 
 /* Help: http://www.tectite.com/fmdoc/fileuploads.php */
+# FW_CUSTOM: Allow file attachments.
 $FILEUPLOADS = TRUE; /* set to true to allow file attachments */
 
 /* Help: http://www.tectite.com/fmdoc/max_file_upload_size.php */
+# FW_CUSTOM: Max file size.
 $MAX_FILE_UPLOAD_SIZE = 7168; /* default of 0 means that other software */
 // controls the maximum file upload size
 // (FormMail doesn't test the file size)
@@ -667,10 +679,12 @@ $FILTER_ATTRIBS = array("encode"     => "Strips,MIME=application/vnd.fmencoded,E
 );
 
 /* Help: http://www.tectite.com/fmdoc/check_for_new_version.php */
+# FW_CUSTOM: Don't check for new version of FormMail.
 $CHECK_FOR_NEW_VERSION = FALSE;
-$CHECK_DAYS            = 60;
+$CHECK_DAYS            = 30;
 
 /* Help: http://www.tectite.com/fmdoc/scratch_pad.php */
+# FW_CUSTOM: Assign FormMail temp directory.
 $SCRATCH_PAD = BASE_PATH.'tmp'.DS.'fm';
 
 /* Help: http://www.tectite.com/fmdoc/cleanup_time.php */
@@ -686,7 +700,8 @@ $PEAR_SMTP_USER = "";
 $PEAR_SMTP_PWD  = "";
 
 /* Help: http://www.tectite.com/fmdoc/alert_on_user_error.php */
-$ALERT_ON_USER_ERROR = false;
+# FW_CUSTOM: Don't alert on user error.
+$ALERT_ON_USER_ERROR = FALSE;
 
 /* Help: http://www.tectite.com/fmdoc/enable_attack_detection.php */
 $ENABLE_ATTACK_DETECTION = true;
@@ -695,6 +710,7 @@ $ENABLE_ATTACK_DETECTION = true;
 $ATTACK_DETECTION_URL = "";
 
 /* Help: http://www.tectite.com/fmdoc/alert_on_attack_detection.php */
+# FW_CUSTOM: Send alert on attacks.
 $ALERT_ON_ATTACK_DETECTION = TRUE;
 
 /* Help: http://www.tectite.com/fmdoc/attack_detection_mime.php */
@@ -708,41 +724,41 @@ $ATTACK_DETECTION_JUNK_CONSEC_CONSONANTS = 5;
 $ATTACK_DETECTION_JUNK_CONSEC_VOWELS     = 4;
 $ATTACK_DETECTION_JUNK_TRIGGER           = 2;
 $ATTACK_DETECTION_JUNK_LANG_STRIP        = array(
-	"aiia",		/* Hawaiian */
-	"aeoa",		/* palaeoanthropic */
-	"aeoe",		/* palaeoethnic */
-	"ayou",		/* layout */
-	"ayee",		/* payee */
-	"buyout",	/* buyout */
-	"clayey",	/* clayey */
-	"hooey",	/* hooey */
-	"ioau",		/* radioautograph */
-	"opoeia",	/* pharmacopoeia, onomatopoeia */
-	"ooee",		/* cooee */
-	"oyee",		/* employee */
-	"ioau",		/* radioautograph */
-	"uaia",		/* guaiac */
-	"uaya",		/* uruguayan */
-	"ueou",		/* aqueous */
-	"uiou",		/* obsequious */
-	"uoya",		/* buoyant */
-	"queue",	/* queue, queueing */
-	"earth",	/* earthquake, earthslide */
-	"cks",		/* jockstrap, backscratcher */
-	"ngth",		/* strengths, length */
-	"ndths",	/* thousandths */
-	"ght",		/* nightclub, knightsbridge */
-	"phth",		/* ophthalmology */
-	"sch",		/* rothschild */
-	"shch",		/* borshch */
-	"scr",		/* corkscrew */
-	"spr",		/* wingspread, offspring */
-	"str",		/* armstrong, songstress */
-	"sts",		/* bursts, postscript */
-	"tch",		/* catchphrase, scratchproof */
-	"thst",		/* northstar, birthstone */
-	"http",		/* https, http */
-	"html",		/* HTML, XHTML */
+	"aiia", /* Hawaiian */
+	"aeoa", /* palaeoanthropic */
+	"aeoe", /* palaeoethnic */
+	"ayou", /* layout */
+	"ayee", /* payee */
+	"buyout", /* buyout */
+	"clayey", /* clayey */
+	"hooey", /* hooey */
+	"ioau", /* radioautograph */
+	"opoeia", /* pharmacopoeia, onomatopoeia */
+	"ooee", /* cooee */
+	"oyee", /* employee */
+	"ioau", /* radioautograph */
+	"uaia", /* guaiac */
+	"uaya", /* uruguayan */
+	"ueou", /* aqueous */
+	"uiou", /* obsequious */
+	"uoya", /* buoyant */
+	"queue", /* queue, queueing */
+	"earth", /* earthquake, earthslide */
+	"cks", /* jockstrap, backscratcher */
+	"ngth", /* strengths, length */
+	"ndths", /* thousandths */
+	"ght", /* nightclub, knightsbridge */
+	"phth", /* ophthalmology */
+	"sch", /* rothschild */
+	"shch", /* borshch */
+	"scr", /* corkscrew */
+	"spr", /* wingspread, offspring */
+	"str", /* armstrong, songstress */
+	"sts", /* bursts, postscript */
+	"tch", /* catchphrase, scratchproof */
+	"thst", /* northstar, birthstone */
+	"http", /* https, http */
+	"html", /* HTML, XHTML */
 );
 $ATTACK_DETECTION_JUNK_IGNORE_FIELDS     = array();
 
@@ -788,7 +804,7 @@ $GEOIP_LIC = ""; /* default - no GeoIP */
 $ZERO_IS_EMPTY = false;
 
 /* Help: http://www.tectite.com/fmdoc/session_name.php */
-$SESSION_NAME = 'JTFFMSESH';
+$SESSION_NAME = "";
 
 /* Help: http://www.tectite.com/fmdoc/session_access.php */
 $SESSION_ACCESS = array();
@@ -825,6 +841,8 @@ $HOOK_DIR = "";
 ** TEXT_SUBS:lt:8.30:no_keep:The TEXT_SUBS configuration has
 ** been modified to be secure with new features released in this version.:
 **
+** EMAIL_NAME:lt:9.08:no_keep:The EMAIL_NAME configuration has
+** been modified to match underscores ('_') in email addresses.:
 ** END OF CONTROL
 */
 
@@ -985,203 +1003,203 @@ if (IsAjax()) {
 //      ^(\S{23,27})\s+//        $1\t\t\t\t//
 //      ^(\S{19,23})\s+//        $1\t\t\t\t\t//
 //
-define('MSG_SCRIPT_VERSION',0);			// This script requires at least PHP version...
-define('MSG_END_VERS_CHK',1);			// If you're happy...
-define('MSG_VERS_CHK',2);				// A later version of FormMail is available...
-define('MSG_CHK_FILE_ERROR',3);			// Unable to create check file...
-define('MSG_UNK_VALUE_SPEC',4);			// derive_fields: unknown value specification...
-define('MSG_INV_VALUE_SPEC',5);			// derive_fields: invalid value specification...
-define('MSG_DERIVED_INVALID',6);		// Some derive_fields specifications...
-define('MSG_INT_FORM_ERROR',7);			// Internal form error...
-define('MSG_OPTIONS_INVALID',8);		// Some mail_options settings...
-define('MSG_PLSWAIT_REDIR',9);			// Please wait while you are redirected...
-define('MSG_IFNOT_REDIR',10);			// If you are not redirected...
-define('MSG_PEAR_OBJ',11);				// Failed to create PEAR Mail object...
-define('MSG_PEAR_ERROR',12);			// PEAR Mail error...
-define('MSG_NO_FOPT_ADDR',13);			// You have specified "SendMailFOption"...
-define('MSG_MORE_INFO',14);             // More information...
-define('MSG_INFO_STOPPED',15);			// Extra alert information suppressed...
-define('MSG_FM_ALERT',16);				// FormMail alert
-define('MSG_FM_ERROR',17);				// FormMail script error
-define('MSG_FM_ERROR_LINE',18);			// The following error occurred...
-define('MSG_USERDATA_STOPPED',19);		// User data suppressed...
-define('MSG_FILTERED',20);				// This alert has been filtered...
-define('MSG_TEMPLATES',21);				// You must set either TEMPLATEDIR or TEMPLATEURL...
-define('MSG_OPEN_TEMPLATE',22);			// Failed to open template...
-define('MSG_ERROR_PROC',23);			// An error occurred while processing...
-define('MSG_ALERT_DONE',24);			// Our staff have been alerted...
-define('MSG_PLS_CONTACT',25);			// Please contact us directly...
-define('MSG_APOLOGY',26);				// We apologize for any inconvenience...
-define('MSG_ABOUT_FORMMAIL',27);		// Your form submission was processed by...
-define('MSG_PREG_FAILED',28);			// preg_match_all failed in FindCRMFields...
-define('MSG_URL_INVALID',29);			// CRM URL "$URL" is not valid...
-define('MSG_URL_OPEN',30);				// Failed to open Customer Relationship...
-define('MSG_CRM_FAILED',31);			// Failure report from CRM...
-define('MSG_CRM_FORM_ERROR',32);		// Your form submission was not...
-define('MSG_OR',33);					// "$ITEM1" or "$ITEM2"
-define('MSG_NOT_BOTH',34);				// not both "$ITEM1" and "$ITEM2"
-define('MSG_XOR',35);					// "$ITEM1" or "$ITEM2" (but not both)
-define('MSG_IS_SAME_AS',36);			// "$ITEM1" is the same as "$ITEM2"
-define('MSG_IS_NOT_SAME_AS',37);		// "$ITEM1" is not the same as "$ITEM2"
-define('MSG_REQD_OPER',38);				// Operator "$OPER" is not valid for "required"
-define('MSG_PAT_FAILED',39);			// Pattern operator "$OPER" failed: pattern...
-define('MSG_COND_OPER',40);				// Operator "$OPER" is not valid...
-define('MSG_INV_COND',41);				// Invalid "conditions" field...
-define('MSG_COND_CHARS',42);			// The conditions field "$FLD" is not valid...
-define('MSG_COND_INVALID',43);			// The conditions field "$FLD" is not valid...
-define('MSG_COND_TEST_LONG',44);		// Field "$FLD" has too many components...
-define('MSG_COND_IF_SHORT',45);			// Field "$FLD" has too few components for...
-define('MSG_COND_IF_LONG',46);			// Field "$FLD" has too many components for...
-define('MSG_COND_UNK',47);				// Field "$FLD" has an unknown command word...
-define('MSG_MISSING',48);				// Missing "$ITEM"...
-define('MSG_NEED_ARRAY',49);			// "$ITEM" must be an array...
-define('MSG_SUBM_FAILED',50);			// Your form submission has failed...
-define('MSG_FILTER_WRONG',51);			// Filter "$FILTER" is not properly...
-define('MSG_FILTER_CONNECT',52);		// Could not connect to site "$SITE"...
-define('MSG_FILTER_PARAM',53);			// Filter "$FILTER" has invalid parameter...
-define('MSG_FILTER_OPEN_FILE',54);		// Filter "$FILTER" cannot open file...
-define('MSG_FILTER_FILE_ERROR',55);		// Filter "$FILTER": read error on file...
-define('MSG_FILTER_READ_ERROR',56);		// Filter '$filter' failed: read error...
-define('MSG_FILTER_NOT_OK',57);			// Filter 'FILTER' failed...
-define('MSG_FILTER_UNK',58);			// Unknown filter...
-define('MSG_FILTER_CHDIR',59);			// Cannot chdir...
-define('MSG_FILTER_NOTFOUND',60);		// Cannot execute...
-define('MSG_FILTER_ERROR',61);			// Filter "$FILTER" failed...
-define('MSG_SPARE',62);					// this value is now spare
-define('MSG_TEMPLATE_ERRORS',63);		// Template "$NAME" caused the...
-define('MSG_TEMPLATE_FAILED',64);		// Failed to process template "$NAME"...
-define('MSG_MIME_PREAMBLE',65);			// (Your mail reader should not show this...
-define('MSG_MIME_HTML',66);				// This message has been generated by FormMail...
-define('MSG_FILE_OPEN_ERROR',67);		// Failed to open file "$NAME"...
-define('MSG_ATTACH_DATA',68);			// Internal error: AttachFile requires...
-define('MSG_PHP_HTML_TEMPLATES',69);	// HTMLTemplate option is only ...
-define('MSG_PHP_FILE_UPLOADS',70);		// For security reasons, file upload...
-define('MSG_FILE_UPLOAD',71);			// File upload attempt ignored...
-define('MSG_FILE_UPLOAD_ATTACK',72);	// Possible file upload attack...
-define('MSG_PHP_PLAIN_TEMPLATES',73);	// PlainTemplate option is only...
-define('MSG_ATTACH_NAME',74);			// filter_options: Attach must contain a name...
-define('MSG_PHP_BCC',75);				// Warning: BCC is probably not supported...
-define('MSG_CSVCOLUMNS',76);			// The "csvcolumns" setting is not...
-define('MSG_CSVFILE',77);				// The "csvfile" setting is not...
-define('MSG_TARG_EMAIL_PAT_START',78);	// Warning: Your TARGET_EMAIL pattern...
-define('MSG_TARG_EMAIL_PAT_END',79);	// Warning: Your TARGET_EMAIL pattern...
-define('MSG_CONFIG_WARN',80);			// The following potential problems...
-define('MSG_PHP_AUTORESP',81);			// Autorespond is only supported...
-define('MSG_ALERT',82);					// This is a test alert message...
-define('MSG_NO_DEF_ALERT',83);			// No DEF_ALERT value has been set....
-define('MSG_TEST_SENT',84);				// Test message sent.  Check your email.....
-define('MSG_TEST_FAILED',85);			// FAILED to send alert message...
-define('MSG_NO_DATA_PAGE',86);			// This URL is a Form submission program...
-define('MSG_REQD_ERROR',87);			// The form required some values that you...
-define('MSG_COND_ERROR',88);			// Some of the values you provided...
-define('MSG_CRM_FAILURE',89);			// The form submission did not succeed...
-define('MSG_FOPTION_WARN',90);			// Warning: You've used SendMailFOption in...
-define('MSG_NO_ACTIONS',91);			// The form has an internal error...
-define('MSG_NO_RECIP',92);				// The form has an internal error...
-define('MSG_INV_EMAIL',93);				// Invalid email addresses...
-define('MSG_FAILED_SEND',94);			// Failed to send email...
-define('MSG_ARESP_EMAIL',96);			// No "email" field was found. Autorespond...
-define('MSG_ARESP_SUBJ',97);			// Your form submission...
-define('MSG_LOG_NO_VERIMG',98);			// No VerifyImgString in session...
-define('MSG_ARESP_NO_AUTH',99);			// Failed to obtain authorization...
-define('MSG_LOG_NO_MATCH',100);			// User did not match image...
-define('MSG_ARESP_NO_MATCH',101);		// Your entry did not match...
-define('MSG_LOG_FAILED',102);			// Failed
-define('MSG_ARESP_FAILED',103);			// Autoresponder failed
-define('MSG_LOG_OK',104);				// OK
-define('MSG_THANKS_PAGE',105);			// Thanks!  We've received your....
-define('MSG_LOAD_MODULE',106);			// Cannot load module....
-define('MSG_LOAD_FMCOMPUTE',107);		// Cannot load FMCompute....
-define('MSG_REGISTER_MODULE',108);		// Cannot register module....
-define('MSG_COMP_PARSE',109);			// These parse errors occurred....
-define('MSG_COMP_REG_DATA',110);		// Failed to register data field....
-define('MSG_COMP_ALERT',111);			// The following alert messages....
-define('MSG_COMP_DEBUG',112);			// The following debug messages...
-define('MSG_COMP_EXEC',113);			// The following errors occurred....
-define('MSG_REG_FMCOMPUTE',114);		// Cannot register function...
-define('MSG_USER_ERRORS',115);			// A number of errors occurred...
-define('MSG_CALL_PARAM_COUNT',116);		// Invalid parameter count...
-define('MSG_CALL_UNK_FUNC',117);		// Unknown function...
-define('MSG_SAVE_FILE',118);			// Failed to save file....
-define('MSG_CHMOD',119);				// Failed to chmod file....
-define('MSG_VERIFY_MISSING',120);		// Image verification string missing...
-define('MSG_VERIFY_MATCH',121);			// Your entry did not match...
-define('MSG_FILE_NAMES_INVALID',122);	// Some file_names specifications...
-define('MSG_FILE_NAMES_NOT_FILE',123);	// Your file_names specification...
-define('MSG_TEMPL_ALERT',124);			// The following alert messages....
-define('MSG_TEMPL_DEBUG',125);			// The following debug messages...
-define('MSG_TEMPL_PROC',126);			// The following errors occurred....
-define('MSG_SAVE_FILE_EXISTS',127);		// Cannot save file....
-define('MSG_EMPTY_ADDRESSES',128);		// $COUNT empty addresses
-define('MSG_CALL_INVALID_PARAM',129);	// Invalid parameter....
-define('MSG_INI_PARSE_WARN',130);		// Warning: your INI
-define('MSG_INI_PARSE_ERROR',131);		// The FormMail INI...
-define('MSG_RECAPTCHA_MATCH',132);		// reCaptcha verification failed...
+define('MSG_SCRIPT_VERSION',0); // This script requires at least PHP version...
+define('MSG_END_VERS_CHK',1); // If you're happy...
+define('MSG_VERS_CHK',2); // A later version of FormMail is available...
+define('MSG_CHK_FILE_ERROR',3); // Unable to create check file...
+define('MSG_UNK_VALUE_SPEC',4); // derive_fields: unknown value specification...
+define('MSG_INV_VALUE_SPEC',5); // derive_fields: invalid value specification...
+define('MSG_DERIVED_INVALID',6); // Some derive_fields specifications...
+define('MSG_INT_FORM_ERROR',7); // Internal form error...
+define('MSG_OPTIONS_INVALID',8); // Some mail_options settings...
+define('MSG_PLSWAIT_REDIR',9); // Please wait while you are redirected...
+define('MSG_IFNOT_REDIR',10); // If you are not redirected...
+define('MSG_PEAR_OBJ',11); // Failed to create PEAR Mail object...
+define('MSG_PEAR_ERROR',12); // PEAR Mail error...
+define('MSG_NO_FOPT_ADDR',13); // You have specified "SendMailFOption"...
+define('MSG_MORE_INFO',14); // More information...
+define('MSG_INFO_STOPPED',15); // Extra alert information suppressed...
+define('MSG_FM_ALERT',16); // FormMail alert
+define('MSG_FM_ERROR',17); // FormMail script error
+define('MSG_FM_ERROR_LINE',18); // The following error occurred...
+define('MSG_USERDATA_STOPPED',19); // User data suppressed...
+define('MSG_FILTERED',20); // This alert has been filtered...
+define('MSG_TEMPLATES',21); // You must set either TEMPLATEDIR or TEMPLATEURL...
+define('MSG_OPEN_TEMPLATE',22); // Failed to open template...
+define('MSG_ERROR_PROC',23); // An error occurred while processing...
+define('MSG_ALERT_DONE',24); // Our staff have been alerted...
+define('MSG_PLS_CONTACT',25); // Please contact us directly...
+define('MSG_APOLOGY',26); // We apologize for any inconvenience...
+define('MSG_ABOUT_FORMMAIL',27); // Your form submission was processed by...
+define('MSG_PREG_FAILED',28); // preg_match_all failed in FindCRMFields...
+define('MSG_URL_INVALID',29); // CRM URL "$URL" is not valid...
+define('MSG_URL_OPEN',30); // Failed to open Customer Relationship...
+define('MSG_CRM_FAILED',31); // Failure report from CRM...
+define('MSG_CRM_FORM_ERROR',32); // Your form submission was not...
+define('MSG_OR',33); // "$ITEM1" or "$ITEM2"
+define('MSG_NOT_BOTH',34); // not both "$ITEM1" and "$ITEM2"
+define('MSG_XOR',35); // "$ITEM1" or "$ITEM2" (but not both)
+define('MSG_IS_SAME_AS',36); // "$ITEM1" is the same as "$ITEM2"
+define('MSG_IS_NOT_SAME_AS',37); // "$ITEM1" is not the same as "$ITEM2"
+define('MSG_REQD_OPER',38); // Operator "$OPER" is not valid for "required"
+define('MSG_PAT_FAILED',39); // Pattern operator "$OPER" failed: pattern...
+define('MSG_COND_OPER',40); // Operator "$OPER" is not valid...
+define('MSG_INV_COND',41); // Invalid "conditions" field...
+define('MSG_COND_CHARS',42); // The conditions field "$FLD" is not valid...
+define('MSG_COND_INVALID',43); // The conditions field "$FLD" is not valid...
+define('MSG_COND_TEST_LONG',44); // Field "$FLD" has too many components...
+define('MSG_COND_IF_SHORT',45); // Field "$FLD" has too few components for...
+define('MSG_COND_IF_LONG',46); // Field "$FLD" has too many components for...
+define('MSG_COND_UNK',47); // Field "$FLD" has an unknown command word...
+define('MSG_MISSING',48); // Missing "$ITEM"...
+define('MSG_NEED_ARRAY',49); // "$ITEM" must be an array...
+define('MSG_SUBM_FAILED',50); // Your form submission has failed...
+define('MSG_FILTER_WRONG',51); // Filter "$FILTER" is not properly...
+define('MSG_FILTER_CONNECT',52); // Could not connect to site "$SITE"...
+define('MSG_FILTER_PARAM',53); // Filter "$FILTER" has invalid parameter...
+define('MSG_FILTER_OPEN_FILE',54); // Filter "$FILTER" cannot open file...
+define('MSG_FILTER_FILE_ERROR',55); // Filter "$FILTER": read error on file...
+define('MSG_FILTER_READ_ERROR',56); // Filter '$filter' failed: read error...
+define('MSG_FILTER_NOT_OK',57); // Filter 'FILTER' failed...
+define('MSG_FILTER_UNK',58); // Unknown filter...
+define('MSG_FILTER_CHDIR',59); // Cannot chdir...
+define('MSG_FILTER_NOTFOUND',60); // Cannot execute...
+define('MSG_FILTER_ERROR',61); // Filter "$FILTER" failed...
+define('MSG_SPARE',62); // this value is now spare
+define('MSG_TEMPLATE_ERRORS',63); // Template "$NAME" caused the...
+define('MSG_TEMPLATE_FAILED',64); // Failed to process template "$NAME"...
+define('MSG_MIME_PREAMBLE',65); // (Your mail reader should not show this...
+define('MSG_MIME_HTML',66); // This message has been generated by FormMail...
+define('MSG_FILE_OPEN_ERROR',67); // Failed to open file "$NAME"...
+define('MSG_ATTACH_DATA',68); // Internal error: AttachFile requires...
+define('MSG_PHP_HTML_TEMPLATES',69); // HTMLTemplate option is only ...
+define('MSG_PHP_FILE_UPLOADS',70); // For security reasons, file upload...
+define('MSG_FILE_UPLOAD',71); // File upload attempt ignored...
+define('MSG_FILE_UPLOAD_ATTACK',72); // Possible file upload attack...
+define('MSG_PHP_PLAIN_TEMPLATES',73); // PlainTemplate option is only...
+define('MSG_ATTACH_NAME',74); // filter_options: Attach must contain a name...
+define('MSG_PHP_BCC',75); // Warning: BCC is probably not supported...
+define('MSG_CSVCOLUMNS',76); // The "csvcolumns" setting is not...
+define('MSG_CSVFILE',77); // The "csvfile" setting is not...
+define('MSG_TARG_EMAIL_PAT_START',78); // Warning: Your TARGET_EMAIL pattern...
+define('MSG_TARG_EMAIL_PAT_END',79); // Warning: Your TARGET_EMAIL pattern...
+define('MSG_CONFIG_WARN',80); // The following potential problems...
+define('MSG_PHP_AUTORESP',81); // Autorespond is only supported...
+define('MSG_ALERT',82); // This is a test alert message...
+define('MSG_NO_DEF_ALERT',83); // No DEF_ALERT value has been set....
+define('MSG_TEST_SENT',84); // Test message sent.  Check your email.....
+define('MSG_TEST_FAILED',85); // FAILED to send alert message...
+define('MSG_NO_DATA_PAGE',86); // This URL is a Form submission program...
+define('MSG_REQD_ERROR',87); // The form required some values that you...
+define('MSG_COND_ERROR',88); // Some of the values you provided...
+define('MSG_CRM_FAILURE',89); // The form submission did not succeed...
+define('MSG_FOPTION_WARN',90); // Warning: You've used SendMailFOption in...
+define('MSG_NO_ACTIONS',91); // The form has an internal error...
+define('MSG_NO_RECIP',92); // The form has an internal error...
+define('MSG_INV_EMAIL',93); // Invalid email addresses...
+define('MSG_FAILED_SEND',94); // Failed to send email...
+define('MSG_ARESP_EMAIL',96); // No "email" field was found. Autorespond...
+define('MSG_ARESP_SUBJ',97); // Your form submission...
+define('MSG_LOG_NO_VERIMG',98); // No VerifyImgString in session...
+define('MSG_ARESP_NO_AUTH',99); // Failed to obtain authorization...
+define('MSG_LOG_NO_MATCH',100); // User did not match image...
+define('MSG_ARESP_NO_MATCH',101); // Your entry did not match...
+define('MSG_LOG_FAILED',102); // Failed
+define('MSG_ARESP_FAILED',103); // Autoresponder failed
+define('MSG_LOG_OK',104); // OK
+define('MSG_THANKS_PAGE',105); // Thanks!  We've received your....
+define('MSG_LOAD_MODULE',106); // Cannot load module....
+define('MSG_LOAD_FMCOMPUTE',107); // Cannot load FMCompute....
+define('MSG_REGISTER_MODULE',108); // Cannot register module....
+define('MSG_COMP_PARSE',109); // These parse errors occurred....
+define('MSG_COMP_REG_DATA',110); // Failed to register data field....
+define('MSG_COMP_ALERT',111); // The following alert messages....
+define('MSG_COMP_DEBUG',112); // The following debug messages...
+define('MSG_COMP_EXEC',113); // The following errors occurred....
+define('MSG_REG_FMCOMPUTE',114); // Cannot register function...
+define('MSG_USER_ERRORS',115); // A number of errors occurred...
+define('MSG_CALL_PARAM_COUNT',116); // Invalid parameter count...
+define('MSG_CALL_UNK_FUNC',117); // Unknown function...
+define('MSG_SAVE_FILE',118); // Failed to save file....
+define('MSG_CHMOD',119); // Failed to chmod file....
+define('MSG_VERIFY_MISSING',120); // Image verification string missing...
+define('MSG_VERIFY_MATCH',121); // Your entry did not match...
+define('MSG_FILE_NAMES_INVALID',122); // Some file_names specifications...
+define('MSG_FILE_NAMES_NOT_FILE',123); // Your file_names specification...
+define('MSG_TEMPL_ALERT',124); // The following alert messages....
+define('MSG_TEMPL_DEBUG',125); // The following debug messages...
+define('MSG_TEMPL_PROC',126); // The following errors occurred....
+define('MSG_SAVE_FILE_EXISTS',127); // Cannot save file....
+define('MSG_EMPTY_ADDRESSES',128); // $COUNT empty addresses
+define('MSG_CALL_INVALID_PARAM',129); // Invalid parameter....
+define('MSG_INI_PARSE_WARN',130); // Warning: your INI
+define('MSG_INI_PARSE_ERROR',131); // The FormMail INI...
+define('MSG_RECAPTCHA_MATCH',132); // reCaptcha verification failed...
 
-define('MSG_AND',133);					// "$ITEM1" and "$ITEM2"
-define('MSG_NEXT_PLUS_GOOD',134);		// The form specifies both next_form and....
-define('MSG_MULTIFORM',135);			// You must set either MULTIFORMDIR or MULTIFORMURL...
-define('MSG_MULTIFORM_FAILED',136);		// Failed to process multi-page form template "$NAME"...
-define('MSG_NEED_THIS_FORM',137);		// Multi-page forms require "this_form" field...
-define('MSG_NO_PHP_SELF',138);			// PHP on the server is not providing "PHP_SELF"
-define('MSG_RETURN_URL_INVALID',139);	// Return "$URL" is not valid...
-define('MSG_GO_BACK',140);				// Cannot 'go back' if not a multi-page form...
-define('MSG_OPEN_URL',141);				// Cannot open URL...
-define('MSG_CANNOT_RETURN',142);		// Cannot return to page....
-define('MSG_ATTACK_DETECTED',143);		// Server attack detected....
-define('MSG_ATTACK_PAGE',144);			// Your form submission....
-define('MSG_ATTACK_MIME_INFO',145);		// The field "$FLD" contained...
-define('MSG_ATTACK_DUP_INFO',146);		// The fields "$FLD1" and...
-define('MSG_ATTACK_SPEC_INFO',147);		// Special field "$FLD"...
-define('MSG_NEED_SCRATCH_PAD',148);		// You need to set SCRATCH_PAD...
-define('MSG_MULTI_UPLOAD',149);			// File upload processing failed during multi-page form processing.
-define('MSG_OPEN_SCRATCH_PAD',150);		// Cannot open directory...
-define('MSG_NO_NEXT_NUM_FILE',151);		// You cannot use the %nextnum% feature...
-define('MSG_NEXT_NUM_FILE',152);		// Cannot process next number...
-define('MSG_ATTACK_MANYURL_INFO',153);	// Field "$FLD"...
+define('MSG_AND',133); // "$ITEM1" and "$ITEM2"
+define('MSG_NEXT_PLUS_GOOD',134); // The form specifies both next_form and....
+define('MSG_MULTIFORM',135); // You must set either MULTIFORMDIR or MULTIFORMURL...
+define('MSG_MULTIFORM_FAILED',136); // Failed to process multi-page form template "$NAME"...
+define('MSG_NEED_THIS_FORM',137); // Multi-page forms require "this_form" field...
+define('MSG_NO_PHP_SELF',138); // PHP on the server is not providing "PHP_SELF"
+define('MSG_RETURN_URL_INVALID',139); // Return "$URL" is not valid...
+define('MSG_GO_BACK',140); // Cannot 'go back' if not a multi-page form...
+define('MSG_OPEN_URL',141); // Cannot open URL...
+define('MSG_CANNOT_RETURN',142); // Cannot return to page....
+define('MSG_ATTACK_DETECTED',143); // Server attack detected....
+define('MSG_ATTACK_PAGE',144); // Your form submission....
+define('MSG_ATTACK_MIME_INFO',145); // The field "$FLD" contained...
+define('MSG_ATTACK_DUP_INFO',146); // The fields "$FLD1" and...
+define('MSG_ATTACK_SPEC_INFO',147); // Special field "$FLD"...
+define('MSG_NEED_SCRATCH_PAD',148); // You need to set SCRATCH_PAD...
+define('MSG_MULTI_UPLOAD',149); // File upload processing failed during multi-page form processing.
+define('MSG_OPEN_SCRATCH_PAD',150); // Cannot open directory...
+define('MSG_NO_NEXT_NUM_FILE',151); // You cannot use the %nextnum% feature...
+define('MSG_NEXT_NUM_FILE',152); // Cannot process next number...
+define('MSG_ATTACK_MANYURL_INFO',153); // Field "$FLD"...
 define('MSG_ATTACK_MANYFIELDS_INFO',154); // $NUM fields have URLs....
-define('MSG_REV_CAP',155);				// ATTACK_DETECTION_REVERSE_CAPTCHA setting....
-define('MSG_ATTACK_REV_CAP_INFO',156);	// The field "$FLD" contained...
-define('MSG_ATTACK_JUNK_INFO',157);		// The field "$FLD" contained...
-define('MSG_ARESP_EMPTY',158);			// The autoresponse...
-define('MSG_LOG_RECAPTCHA',159);		// reCaptcha process failed...
+define('MSG_REV_CAP',155); // ATTACK_DETECTION_REVERSE_CAPTCHA setting....
+define('MSG_ATTACK_REV_CAP_INFO',156); // The field "$FLD" contained...
+define('MSG_ATTACK_JUNK_INFO',157); // The field "$FLD" contained...
+define('MSG_ARESP_EMPTY',158); // The autoresponse...
+define('MSG_LOG_RECAPTCHA',159); // reCaptcha process failed...
 
-define('MSG_URL_PARSE',160);			// URL parse failed
-define('MSG_URL_SCHEME',161);			// Unsupported URL scheme...
-define('MSG_SOCKET',162);				// Socket error ...
-define('MSG_GETURL_OPEN',163);			// Open URL failed: ...
-define('MSG_RESOLVE',164);				// Cannot resolve...
+define('MSG_URL_PARSE',160); // URL parse failed
+define('MSG_URL_SCHEME',161); // Unsupported URL scheme...
+define('MSG_SOCKET',162); // Socket error ...
+define('MSG_GETURL_OPEN',163); // Open URL failed: ...
+define('MSG_RESOLVE',164); // Cannot resolve...
 
-define('MSG_FORM_OK',170);				// Form Submission Succeeded
-define('MSG_FORM_ERROR',171);			// Form Submission Error
-define('MSG_GET_DISALLOWED',172);		// GET method has...
+define('MSG_FORM_OK',170); // Form Submission Succeeded
+define('MSG_FORM_ERROR',171); // Form Submission Error
+define('MSG_GET_DISALLOWED',172); // GET method has...
 //
 // The following are PHP's file upload error messages
 //
-define('MSG_FILE_UPLOAD_ERR_UNK',180);	// Unknown error code.
-define('MSG_FILE_UPLOAD_ERR1',181);		// The uploaded file exceeds the upload_max_filesize directive in php.ini.
-define('MSG_FILE_UPLOAD_ERR2',182);		// The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form.
-define('MSG_FILE_UPLOAD_ERR3',183);		// The uploaded file was only partially uploaded.
-define('MSG_FILE_UPLOAD_ERR4',184);		// No file was uploaded.
-define('MSG_FILE_UPLOAD_ERR6',186);		// Missing a temporary folder.
-define('MSG_FILE_UPLOAD_ERR7',187);		// Failed to write file to disk.
-define('MSG_FILE_UPLOAD_ERR8',188);		// File upload stopped by extension.
-define('MSG_FILE_UPLOAD_SIZE',189);		// Uploaded file "$NAME" is too big... (not a PHP error code - internal maximum file size error)
+define('MSG_FILE_UPLOAD_ERR_UNK',180); // Unknown error code.
+define('MSG_FILE_UPLOAD_ERR1',181); // The uploaded file exceeds the upload_max_filesize directive in php.ini.
+define('MSG_FILE_UPLOAD_ERR2',182); // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form.
+define('MSG_FILE_UPLOAD_ERR3',183); // The uploaded file was only partially uploaded.
+define('MSG_FILE_UPLOAD_ERR4',184); // No file was uploaded.
+define('MSG_FILE_UPLOAD_ERR6',186); // Missing a temporary folder.
+define('MSG_FILE_UPLOAD_ERR7',187); // Failed to write file to disk.
+define('MSG_FILE_UPLOAD_ERR8',188); // File upload stopped by extension.
+define('MSG_FILE_UPLOAD_SIZE',189); // Uploaded file "$NAME" is too big... (not a PHP error code - internal maximum file size error)
 
 //
 // following are for derive_fields functions
 //
-define('MSG_DER_FUNC_ERROR',200);		// derive_fields: invalid function....
-define('MSG_DER_FUNC_SIZE_FMT',201);	// function 'size' requires....
-define('MSG_DER_FUNC_IF_FMT',202);		// function 'if' requires....
-define('MSG_DER_FUNC_NEXTNUM_FMT',203);	// function 'nextnum' requires....
-define('MSG_DER_FUNC_EXT_FMT',204);		// function 'ext' requires....
-define('MSG_DER_FUNC1_FMT',205);		// function 'FUNC' requires....
-define('MSG_DER_FUNC_SUBSTR_FMT',206);  // function 'substr' requires....
+define('MSG_DER_FUNC_ERROR',200); // derive_fields: invalid function....
+define('MSG_DER_FUNC_SIZE_FMT',201); // function 'size' requires....
+define('MSG_DER_FUNC_IF_FMT',202); // function 'if' requires....
+define('MSG_DER_FUNC_NEXTNUM_FMT',203); // function 'nextnum' requires....
+define('MSG_DER_FUNC_EXT_FMT',204); // function 'ext' requires....
+define('MSG_DER_FUNC1_FMT',205); // function 'FUNC' requires....
+define('MSG_DER_FUNC_SUBSTR_FMT',206); // function 'substr' requires....
 
-define('MSG_USER_ATTACK_JUNK',220);		// The following input ...
-define('MSG_USER_ATTACK_REV_CAP',221);	// Your input ...
-define('MSG_USER_ATTACK_DUP',222);		// You have ...
+define('MSG_USER_ATTACK_JUNK',220); // The following input ...
+define('MSG_USER_ATTACK_REV_CAP',221); // Your input ...
+define('MSG_USER_ATTACK_DUP',222); // You have ...
 define('MSG_USER_ATTACK_MANY_URLS',223); // Your input ...
 define('MSG_USER_ATTACK_MANY_URL_FIELDS',224); // Your input ...
 
@@ -2593,13 +2611,13 @@ function LoadBuiltinLanguage()
 	$aMessages[MSG_DER_FUNC1_FMT] = '"$FUNC" function requires this format: ' .
 	                                '$FUNC(fieldname)';
 
-        // MSG_DER_FUNC_SUBSTR_FMT describes the right syntax for the "substr" function
-        // Parameters:
-        //  none
-    $aMessages[MSG_DER_FUNC_SUBSTR_FMT] = '"substr" function requires this format: '.
-                                    'substr(fieldname;start) or '.
-                                    'substr(fieldname;start;length) - '.
-                                    'start and length must be numbers.';
+	// MSG_DER_FUNC_SUBSTR_FMT describes the right syntax for the "substr" function
+	// Parameters:
+	//  none
+	$aMessages[MSG_DER_FUNC_SUBSTR_FMT] = '"substr" function requires this format: ' .
+	                                      'substr(fieldname;start) or ' .
+	                                      'substr(fieldname;start;length) - ' .
+	                                      'start and length must be numbers.';
 
 	// MSG_USER_ATTACK_JUNK is a message shown to the user when a junk
 	// attack has been detected
@@ -2653,7 +2671,7 @@ function LoadBuiltinLanguage()
 if (isset($aServerVars["REQUEST_METHOD"]) && $aServerVars["REQUEST_METHOD"] === "GET") {
 	$bIsGetMethod = true;
 	if (Settings::get('ALLOW_GET_METHOD')) {
-		$aFormVars = & $_GET;
+		$aFormVars = &$_GET;
 	} elseif (count($_GET) > 0) {
 		$bHasGetData = true;
 	}
@@ -2983,6 +3001,7 @@ function ZapSession()
 }
 
 $bReverseCaptchaCompleted = false; // records whether ATTACK_DETECTION_REVERSE_CAPTCHA has been completed successfully
+# FW_CUSTOM: Commenting this out since we already start sessions.
 //session_start();
 
 //
@@ -3073,6 +3092,10 @@ $SPECIAL_FIELDS = array(
 	//
 	"recaptcha_response_field", // verification field to allow submission
 	"recaptcha_challenge_field", // challenge field
+	//
+	// reCaptcha version 2
+	//
+	"g-recaptcha-response",
 );
 
 //
@@ -3217,63 +3240,194 @@ $FILTER_ATTRIBS_LOOKUP = array();
 //
 $EMAIL_ADDRS = array();
 
-$reCaptchaProcessor = null;
-if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
-	require_once("recaptchalib.php");
+//
+// BuiltinFunctions provides additional functions that can be called via derive_fields
+//
+class   BuiltinFunctions
+{
+	private $_aFunctions;
 
-	/*
-	 * Class:       reCaptchaWrapper
-	 * Description:
-	 *  Wraps processing of reCaptcha.
-	 */
-
-	class   reCaptchaWrapper
+	function __construct()
 	{
-		var $_sPrivate; // the private key
-		var $_bDone; // true when done
-		var $_Resp; // the response from reCaptcha
-
-		/*
-		 * Method:      reCaptchaWrapper ctor
-		 * Parameters:  $s_priv     the private key
-		 * Returns:     n/a
-		 * Description:
-		 *  Initializes the wrapper ready to process reCaptcha.
-		 */
-		function    reCaptchaWrapper($s_priv)
-		{
-			$this->_sPrivate = $s_priv;
-			$this->_bDone    = false;
-		}
-
-		/*
-		 * Method:      reCaptchaWrapper::Check
-		 * Parameters:  $s_response the reCaptcha respone value
-		 *              $a_values   field values
-		 *              $s_error    returns the reCaptcha error code
-		 * Returns:     bool        true on success, otherwise false
-		 * Description:
-		 *  Performs the reCaptcha check and caches the result so it's
-		 *  only done once.
-		 */
-		function    Check($s_response,$a_values,&$s_error)
-		{
-			if (!$this->_bDone) {
-				$this->_Resp = recaptcha_check_answer($this->_sPrivate,
-				                                      $_SERVER["REMOTE_ADDR"],
-				                                      $a_values["recaptcha_challenge_field"],
-				                                      $s_response);
-			}
-			$this->_bDone = true;
-			$s_error      = "";
-			if (!$this->_Resp->is_valid) {
-				$s_error = $this->_Resp->error;
-			}
-			return ($this->_Resp->is_valid);
-		}
+		$this->_aFunctions = array();
 	}
 
-	$reCaptchaProcessor = new reCaptchaWrapper(Settings::get('RECAPTCHA_PRIVATE_KEY'));
+	/**
+	 * Adds a builtin function.
+	 *
+	 * @param string $s_name   name of the function
+	 * @param string $n_params number of parameters the function expects
+	 */
+	public function Add($s_name,$n_params)
+	{
+		$this->_aFunctions[$s_name] = array('nparams' => $n_params);
+	}
+
+	/**
+	 * Calls a builtin function.
+	 *
+	 * @param string $s_name    name of the function
+	 * @param array  $a_params  list of parameters
+	 * @param string &$s_result result of the function or error message
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
+	public function Call($s_name,$a_params,&$s_result)
+	{
+		if (!isset($this->_aFunctions[$s_name])) {
+			$s_result = "Function '$s_name' is not a builtin function";
+			return (false);
+		}
+		$a_func = $this->_aFunctions[$s_name];
+		if (count($a_params) != $a_func['nparams']) {
+			$s_result = "Function '$s_name' expects " . $a_func['nparams'] . " parameters, " . count($a_params) .
+			            " given.";
+			return (false);
+		}
+		$s_result = call_user_func_array($s_name,$a_params);
+		return (true);
+	}
+}
+
+$BuiltinFunctions = new BuiltinFunctions();
+
+$reCaptchaProcessor = null;
+if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
+	//
+	// Assume version 1 unless g-recaptcha-response is found in the form data.
+	// If we cannot load recaptchalib, then we assume it's version 2.
+	//
+	$bRecaptchaVersion = 1;
+	if (isset($aFormVars['g-recaptcha-response']) && $aFormVars['g-recaptcha-response'] != '') {
+		$bRecaptchaVersion = 2;
+	}
+	if ($bRecaptchaVersion == 1 && !include_once("recaptchalib.php")) {
+		$bRecaptchaVersion = 2;
+	}
+
+	if ($bRecaptchaVersion == 2) {
+		if (!function_exists('json_decode')) {
+			SendAlert("reCaptcha version 2 requires PHP version 5.2.0 or later",false,false);
+		}
+
+		/*
+		 * Class:       reCaptchaWrapper
+		 * Description:
+			 *  Wraps processing of reCaptcha version 2.
+		 */
+
+		class   reCaptchaWrapperV2
+		{
+			var $_sPrivate; // the private key
+			var $_bDone; // true when done
+			var $_Resp; // the response from reCaptcha
+
+			/*
+			 * Method:      reCaptchaWrapperV2 ctor
+			 * Parameters:  $s_priv     the private key
+			 * Returns:     n/a
+			 * Description:
+			 *  Initializes the wrapper ready to process reCaptcha.
+			 */
+			function    __construct($s_priv)
+			{
+				$this->_sPrivate = $s_priv;
+				$this->_bDone    = false;
+			}
+
+			/*
+			 * Method:      reCaptchaWrapper::Check
+			 * Parameters:  $s_response the reCaptcha response value
+			 *              $a_values   field values
+			 *              $s_error    returns the reCaptcha error code
+			 * Returns:     bool        true on success, otherwise false
+			 * Description:
+			 *  Performs the reCaptcha check and caches the result so it's
+			 *  only done once.
+			 */
+			function    Check($s_response,$a_values,&$s_error)
+			{
+				if (!$this->_bDone) {
+					$s_url     = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $this->_sPrivate .
+					             "&response=$s_response";
+					$recaptcha = new HTTPGet($s_url);
+					$s_resp    = $recaptcha->Read();
+					if ($s_resp === false) {
+						$s_resp = '{"success":false,"error_codes":["reCaptcha failed"]}';
+					} else {
+						$s_resp = implode('',$s_resp);
+					}
+					$this->_Resp = json_decode($s_resp,true);
+				}
+				$this->_bDone = true;
+				$s_error      = "";
+				if (!$this->_Resp['success']) {
+					$s_error = $this->_Resp->error_codes[0];
+					if (!isset($this->_Resp['error_codes']) || count($this->_Resp['error_codes']) == 0 ||
+					    !$this->_Resp['error_codes'][0]
+					) {
+						$s_error = 'verification failed';
+					}
+				}
+				return ($this->_Resp['success']);
+			}
+		}
+		$reCaptchaProcessor = new reCaptchaWrapperV2(Settings::get('RECAPTCHA_PRIVATE_KEY'));
+	} else {
+
+		/*
+		 * Class:       reCaptchaWrapper
+		 * Description:
+		 *  Wraps processing of reCaptcha version 1.
+		 */
+
+		class   reCaptchaWrapper
+		{
+			var $_sPrivate; // the private key
+			var $_bDone; // true when done
+			var $_Resp; // the response from reCaptcha
+
+			/*
+			 * Method:      reCaptchaWrapper ctor
+			 * Parameters:  $s_priv     the private key
+			 * Returns:     n/a
+			 * Description:
+			 *  Initializes the wrapper ready to process reCaptcha.
+			 */
+			function    __construct($s_priv)
+			{
+				$this->_sPrivate = $s_priv;
+				$this->_bDone    = false;
+			}
+
+			/*
+			 * Method:      reCaptchaWrapper::Check
+				 * Parameters:  $s_response the reCaptcha response value
+			 *              $a_values   field values
+			 *              $s_error    returns the reCaptcha error code
+			 * Returns:     bool        true on success, otherwise false
+			 * Description:
+			 *  Performs the reCaptcha check and caches the result so it's
+			 *  only done once.
+			 */
+			function    Check($s_response,$a_values,&$s_error)
+			{
+				if (!$this->_bDone) {
+					$this->_Resp = recaptcha_check_answer($this->_sPrivate,
+					                                      $_SERVER["REMOTE_ADDR"],
+					                                      $a_values["recaptcha_challenge_field"],
+					                                      $s_response);
+				}
+				$this->_bDone = true;
+				$s_error      = "";
+				if (!$this->_Resp->is_valid) {
+					$s_error = $this->_Resp->error;
+				}
+				return ($this->_Resp->is_valid);
+			}
+		}
+		$reCaptchaProcessor = new reCaptchaWrapper(Settings::get('RECAPTCHA_PRIVATE_KEY'));
+	}
 }
 
 /**
@@ -4821,6 +4975,49 @@ function ValueSpec($s_spec,$a_form_data,&$a_errors)
 								                     )));
 							}
 							break;
+						case "call":
+							//
+							// "call" function: calls a builtin function
+							//
+							// Example: call(name ; p1 ; p2 ; ...)
+							//
+							// tokens are:
+							//      1               (
+							//      2               the function name
+							//      3               ;
+							//      4               first parameter
+							//      5               ;
+							//      6               second parameter
+							//      ...             ...
+							//      n               )
+							//
+							if (($n_tok = count($a_toks)) < 3 ||
+							    $a_toks[1] != "(" ||
+							    $a_toks[$n_tok - 1] != ")"
+							) {
+								SendAlert(GetMessage(MSG_DER_FUNC_ERROR,
+								                     array("SPEC" => $s_spec,
+								                           "MSG"  => 'Incorrect format for call function'
+								                     )));
+							} else {
+								$b_ok        = true;
+								$s_func_name = $a_toks[2];
+								$a_params    = array();
+								if (3 < $n_tok && $a_toks[3] == ';') {
+									$a_params = CollectParams($a_toks,$n_tok,3);
+								}
+								for ($ii = 0 ; $ii < count($a_params) ; $ii++) {
+									$a_params[$ii] = GetDerivedValue($a_form_data,$a_params[$ii],$a_errors);
+								}
+								global $BuiltinFunctions;
+
+								if (!$BuiltinFunctions->Call($s_func_name,$a_params,$s_result)) {
+									SendAlert($s_result);
+								} else {
+									$s_value = $s_result;
+								}
+							}
+							break;
 						default:
 							SendAlert(GetMessage(MSG_UNK_VALUE_SPEC,
 							                     array("SPEC" => $s_spec,"MSG" => "")));
@@ -4835,6 +5032,24 @@ function ValueSpec($s_spec,$a_form_data,&$a_errors)
 			break;
 	}
 	return ($s_value);
+}
+
+//
+// Collect parameters for a builtin function call
+//
+function CollectParams($a_toks,$n_tok,$i_tok)
+{
+	$a_params = array();
+	$i_param  = 0;
+	do {
+		$i_tok++;
+		$a_params[$i_param] = '';
+		for (; $i_tok < $n_tok && $a_toks[$i_tok] != ';' && $a_toks[$i_tok] != ')' ; $i_tok++) {
+			$a_params[$i_param] .= $a_toks[$i_tok];
+		}
+		$i_param++;
+	} while ($a_toks[$i_tok] != ')');
+	return ($a_params);
 }
 
 //
@@ -5348,62 +5563,62 @@ function SetFileNames($s_name_spec,$a_order,$a_fields,$a_raw_fields,$a_all_raw_v
 	return (array($a_order,$a_fields,$a_raw_fields,$a_all_raw_values,$a_file_vars));
 }
 
-$aProcessSpecsFormData = array();
+$aProcessSpecsFormData  = array();
 $sProcessSpecsFieldName = "";
 
-    //
-    // Callback function for ProcessSpecs
-    //
+//
+// Callback function for ProcessSpecs
+//
 function    ProcessSpecsMatch($a_matches)
 {
-    global  $aProcessSpecsFormData,$sProcessSpecsFieldName;
+	global $aProcessSpecsFormData,$sProcessSpecsFieldName;
 
-        //
-        // strip % at either end
-        //
-    $s_spec = substr($a_matches[0],1,-1);
-    $a_errors = array();
-    $s_value = ValueSpec($s_spec,$aProcessSpecsFormData,$a_errors);
-    return ($s_value);
+	//
+	// strip % at either end
+	//
+	$s_spec   = substr($a_matches[0],1,-1);
+	$a_errors = array();
+	$s_value  = ValueSpec($s_spec,$aProcessSpecsFormData,$a_errors);
+	return ($s_value);
 }
 
-    //
-    // Process %...% specifications in a string.
-    // This function is used for processing options values, such as in "autorespond"
-    // and "mail_options".
-    //
+//
+// Process %...% specifications in a string.
+// This function is used for processing options values, such as in "autorespond"
+// and "mail_options".
+//
 function    ProcessSpecs($s_fld_name,$a_form_data,$s_value)
 {
-    global  $aProcessSpecsFormData,$sProcessSpecsFieldName;
+	global $aProcessSpecsFormData,$sProcessSpecsFieldName;
 
-    $aProcessSpecsFormData = $a_form_data;
-    $sProcessSpecsFieldName = $s_fld_name;
-        //
-        // un-greedy pattern match
-        // Note that this means we can't use %..% within a %if(..)%, for example.
-        //
-    $s_value = preg_replace_callback('/%.+?%/',"ProcessSpecsMatch",$s_value);
-    $aProcessSpecsFormData = array();
-    $sProcessSpecsFieldName = "";
-    return ($s_value);
+	$aProcessSpecsFormData  = $a_form_data;
+	$sProcessSpecsFieldName = $s_fld_name;
+	//
+	// un-greedy pattern match
+	// Note that this means we can't use %..% within a %if(..)%, for example.
+	//
+	$s_value                = preg_replace_callback('/%.+?%/',"ProcessSpecsMatch",$s_value);
+	$aProcessSpecsFormData  = array();
+	$sProcessSpecsFieldName = "";
+	return ($s_value);
 }
 
-    //
-    // Process a list of attributes or options.
-    // Format for each attribute/option:
-    //      name
-    // or
-    //      name=value
-    //
-    // Values can be simple values or semicolon (;) separated lists:
-    //          avalue
-    //          value1;value2;value3;...
-    //
-    // Returns attribute/options in the associative array $a_attribs.
-    // Optionally, valid attributes can be provided in $a_valid_attribs
-    // (if empty, all attributes found are considered valid).
-    // Errors are returned in $a_errors.
-    //
+//
+// Process a list of attributes or options.
+// Format for each attribute/option:
+//      name
+// or
+//      name=value
+//
+// Values can be simple values or semicolon (;) separated lists:
+//          avalue
+//          value1;value2;value3;...
+//
+// Returns attribute/options in the associative array $a_attribs.
+// Optionally, valid attributes can be provided in $a_valid_attribs
+// (if empty, all attributes found are considered valid).
+// Errors are returned in $a_errors.
+//
 function ProcessAttributeList($s_fld_name,$a_form_data,$a_list,&$a_attribs,&$a_errors,
                               $a_valid_attribs = array())
 {
@@ -5835,18 +6050,18 @@ function CheckEmailAddress($m_addr,&$s_valid,&$s_invalid,$b_check = true)
 //
 function Redirect($url,$title)
 {
-    global  $ExecEnv;
+	global $ExecEnv;
 
 	//
 	// for browsers without cookies enabled, append the Session ID
 	//
-    if ($ExecEnv->allowSessionURL()) {
-        if (session_id() !== "") {
-            $url = AddURLParams($url,session_name() . "=" . urlencode(session_id()));
-        } elseif (defined("SID")) {
-            $url = AddURLParams($url,SID);
-        }
-    }
+	if ($ExecEnv->allowSessionURL()) {
+		if (session_id() !== "") {
+			$url = AddURLParams($url,session_name() . "=" . urlencode(session_id()));
+		} elseif (defined("SID")) {
+			$url = AddURLParams($url,SID);
+		}
+	}
 
 	//FMDebug("Before redirecting, FormData = ".(isset($_SESSION["FormData"]) ? var_export($_SESSION["FormData"],true) : "NULL"));
 
@@ -5879,7 +6094,10 @@ class   JSON
 		if (is_bool($m_val)) {
 			$s_value = ($m_val) ? "true" : "false";
 		} elseif (is_string($m_val)) {
-			$s_value = '"' . addslashes($m_val) . '"';
+			//
+			// convert literal line breaks into JavaScript escape sequences
+			//
+			$s_value = '"' . str_replace(array("\r","\n"),array('\\r','\\n'),addslashes($m_val)) . '"';
 		} elseif (is_numeric($m_val)) {
 			$s_value = $m_val;
 		} elseif (is_array($m_val)) {
@@ -6267,6 +6485,14 @@ function DoMail($s_to,$s_subject,$s_mesg,$a_headers,$s_options)
 		if ($s_options !== "") {
 			return (mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers),$s_options));
 		} else {
+		/*
+			echo $s_to,'<br>',
+				$s_subject,'<br>',
+				$s_mesg,'<br>',
+				ExpandMailHeaders($a_headers);
+			exit;
+		*/
+		echo mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers));exit;
 			return (mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers)));
 		}
 	}
@@ -6313,6 +6539,9 @@ function SendCheckedMail($to,$subject,$mesg,$sender,$a_headers = array())
 	if (Settings::get('INI_SET_FROM') && !empty($sender)) {
 		ini_set('sendmail_from',$sender);
 	}
+
+	echo DoMail($to,$subject,$mesg,$a_headers,($b_f_option ? "-f$sender" : ""));
+	exit;
 
 	return (DoMail($to,$subject,$mesg,$a_headers,($b_f_option ? "-f$sender" : "")));
 }
@@ -6550,14 +6779,14 @@ function GetURL($s_url,&$s_error,$b_ret_lines = false,$n_depth = 0)
 	//
 	// open the URL with the same session as we have
 	//
-    if ($ExecEnv->allowSessionURL()) {
-        if (session_id() !== "") {
-            $s_url = AddURLParams($s_url,session_name() . "=" . urlencode(session_id()));
-        }
-        if (defined("SID")) {
-            $s_url = AddURLParams($s_url,SID);
-        }
-    }
+	if ($ExecEnv->allowSessionURL()) {
+		if (session_id() !== "") {
+			$s_url = AddURLParams($s_url,session_name() . "=" . urlencode(session_id()));
+		}
+		if (defined("SID")) {
+			$s_url = AddURLParams($s_url,SID);
+		}
+	}
 
 	$http_get = new HTTPGet($s_url);
 
@@ -8521,8 +8750,8 @@ function CheckRequired($s_reqd,$a_vars,&$s_missing,&$a_missing_list)
 	if (!Settings::isEmpty('REQUIRE_CAPTCHA')) {
 		if ($SPECIAL_VALUES["imgverify"] === "") {
 			$s_missing .= Settings::get('REQUIRE_CAPTCHA') . "\n";
-			$a_missing_list[] = Settings::get('REQUIRE_CAPTCHA');
-			$b_bad            = true;
+			$a_missing_list['imgverify'] = Settings::get('REQUIRE_CAPTCHA');
+			$b_bad                       = true;
 		}
 	}
 	return (!$b_bad);
@@ -8873,11 +9102,11 @@ function SocketFilter($filter,$a_filter_info,$m_data)
 	@   $f_sock = fsockopen($s_site,$i_port,$i_errno,$s_errstr,30);
 	if ($f_sock === false) {
 		Error("filter_connect",GetMessage(MSG_FILTER_CONNECT,array(
-			                      "FILTER" => $filter,
-			                      "SITE"   => $s_site,
-			                      "ERRNUM" => $i_errno,
-			                      "ERRSTR" => "$s_errstr (" . CheckString($php_errormsg) . ")"
-		                      )),
+			"FILTER" => $filter,
+			"SITE"   => $s_site,
+			"ERRNUM" => $i_errno,
+			"ERRSTR" => "$s_errstr (" . CheckString($php_errormsg) . ")"
+		)),
 		      false,false);
 		exit;
 	}
@@ -11043,7 +11272,7 @@ function SaveAllUploadedFiles(&$a_file_vars)
 	CleanScratchPad($s_prefix);
 
 	foreach (array_keys($a_file_vars) as $m_file_key) {
-		$a_upload = & $a_file_vars[$m_file_key];
+		$a_upload = &$a_file_vars[$m_file_key];
 		//
 		// One customer reported:
 		//  Possible file upload attack detected: name='' temp name='none'
@@ -11832,7 +12061,9 @@ function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fiel
 			return (false);
 		}
 	}
-
+echo SendCheckedMail($s_to,$SPECIAL_VALUES["subject"],$s_results,
+	                        $s_sender,$a_headers);
+	                        exit;
 	//
 	// send the mail - assumes the email addresses have already been checked
 	//
@@ -12238,9 +12469,9 @@ function MultiFormReturn($i_return_to)
 		Error("cannot_return",GetMessage(MSG_CANNOT_RETURN,
 		                                 array("TO"       => $i_return_to,
 		                                       "TOPINDEX" => (
-			                                       IsSetSession("FormIndex") ?
-				                                       GetSession("FormIndex") :
-				                                       "<undefined>")
+		                                       IsSetSession("FormIndex") ?
+			                                       GetSession("FormIndex") :
+			                                       "<undefined>")
 		                                 )),
 		      false,false);
 	}
@@ -12435,8 +12666,8 @@ function DetectMimeAttack($a_fields,&$s_attack,&$s_info,&$s_user_info)
 				$s_info   = GetMessage(MSG_ATTACK_MIME_INFO,
 				                       array("FLD"     => $s_fld,
 				                             "CONTENT" => ($i_mime !== false) ?
-						                             "mime-version" :
-						                             "content-type"
+					                             "mime-version" :
+					                             "content-type"
 				                       ),false);
 				return (true);
 			}
@@ -12904,7 +13135,8 @@ function    CheckCaptchaSubmit()
 		if (isset($reCaptchaProcessor)) {
 			$s_error = '';
 			if (!$reCaptchaProcessor->Check($SPECIAL_VALUES["imgverify"],$SPECIAL_VALUES,$s_error)) {
-				UserError("recaptcha",GetMessage(MSG_RECAPTCHA_MATCH,array("ERR" => $s_error)));
+				$s_error_mesg = GetMessage(MSG_RECAPTCHA_MATCH,array("ERR" => $s_error));
+				UserError("recaptcha",$s_error_mesg,array(),array('imgverify' => $s_error_mesg));
 			}
 		}
 		//
@@ -12928,15 +13160,15 @@ function    CheckCaptchaSubmit()
 				if (strtoupper(str_replace(" ","",$SPECIAL_VALUES["imgverify"])) !==
 				    strtoupper(GetSession("VerifyImgString"))
 				) {
-					UserError("img_verify",GetMessage(MSG_VERIFY_MATCH));
+					$s_error_mesg = GetMessage(MSG_VERIFY_MATCH);
+					UserError("img_verify",$s_error_mesg,array(),array('imgverify' => $s_error_mesg));
 				}
 			} else {
 				if (strtoupper(str_replace(" ","",$SPECIAL_VALUES["imgverify"])) !==
 				    strtoupper(GetSession("turing_string"))
 				) {
-					UserError("img_verify",GetMessage(MSG_VERIFY_MATCH) /*,
-                                "imgverify='".$SPECIAL_VALUES["imgverify"]."' ".
-                                "turing_string='".GetSession("turing_string")."'"*/);
+					$s_error_mesg = GetMessage(MSG_VERIFY_MATCH);
+					UserError("img_verify",$s_error_mesg,array(),array('imgverify' => $s_error_mesg));
 				}
 			}
 		}
@@ -14307,11 +14539,16 @@ if (!isset($SPECIAL_VALUES["recipients"]) || empty($SPECIAL_VALUES["recipients"]
 		//
 		// send the actual results
 		//
+		/*
 		if (!SendResults($aFieldOrder,$aCleanedValues,$s_valid_recipients,$s_valid_cc,
 		                 $s_valid_bcc,$aRawDataValues)
 		) {
 			Error("mail_failed",GetMessage(MSG_FAILED_SEND));
 		}
+		*/
+		echo SendResults($aFieldOrder,$aCleanedValues,$s_valid_recipients,$s_valid_cc,
+		                 $s_valid_bcc,$aRawDataValues);
+		exit;
 		//
 		// Hook system: after sending emails
 		//
