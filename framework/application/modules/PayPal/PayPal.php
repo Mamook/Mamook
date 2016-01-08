@@ -1,12 +1,12 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/PayPal/PayPal.php */
 
 /**
-* PayPal
-*
-* The PayPal Class is used to access and manipulate PayPal.
-* Find out more about available variables at: https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_Appx_websitestandard_htmlvariables
-*
-*/
+ * PayPal
+ *
+ * The PayPal Class is used to access and manipulate PayPal.
+ * Find out more about available variables at: https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_Appx_websitestandard_htmlvariables
+ *
+ */
 class PayPal
 {
 	/*** data members ***/
@@ -22,6 +22,8 @@ class PayPal
 	protected $submit;
 
 	protected $req='cmd=_notify-validate';
+	# For testing
+	//protected $test='sandbox.';
 	protected $test='';
 	protected $paypal_url;
 
@@ -115,12 +117,12 @@ class PayPal
 	/*** mutator methods ***/
 
 	/**
-	* setAction
-	*
-	* Sets the Data member $action.
-	*
-	* @param	$action (The url the PayPal button sends POST data to.)
-	* @access	public
+	 * setAction
+	 *
+	 * Sets the Data member $action.
+	 *
+	 * @param	$action					The url the PayPal button sends POST data to.
+	 * @access	public
 	*/
 	public function setAction($action)
 	{
@@ -129,13 +131,13 @@ class PayPal
 	} #==== End -- setAction
 
 	/**
-	* setCmd
-	*
-	* Sets the Data member $cmd.
-	*
-	* @param	$cmd (The type of button - _xclick, _donations, _xclick-subscriptions, _oe-gift-certificate, _cart, _s-xclick)
-	* @access	public
-	*/
+	 * setCmd
+	 *
+	 * Sets the Data member $cmd.
+	 *
+	 * @param	$cmd					The type of button - _xclick, _donations, _xclick-subscriptions, _oe-gift-certificate, _cart, _s-xclick
+	 * @access	public
+	 */
 	public function setCmd($cmd)
 	{
 		$cmd=trim($cmd);
@@ -151,13 +153,13 @@ class PayPal
 	} #==== End -- setCmd
 
 	/**
-	* setHostedButtonID
-	*
-	* Sets the Data member $hosted_button_id.
-	*
-	* @param	$hosted_button_id (The ID of the button hosted on PayPal.)
-	* @access	public
-	*/
+	 * setHostedButtonID
+	 *
+	 * Sets the Data member $hosted_button_id.
+	 *
+	 * @param	$hosted_button_id		The ID of the button hosted on PayPal.
+	 * @access	public
+	 */
 	public function setHostedButtonID($hosted_button_id)
 	{
 		$hosted_button_id=trim($hosted_button_id);
@@ -165,13 +167,13 @@ class PayPal
 	} #==== End -- setHostedButtonID
 
 	/**
-	* setCancelReturn
-	*
-	* Sets the Data member $cancel_return.
-	*
-	* @param	$cancel_return (The url to return the user to if they cancel the order process.)
-	* @access	public
-	*/
+	 * setCancelReturn
+	 *
+	 * Sets the Data member $cancel_return.
+	 *
+	 * @param	$cancel_return			The url to return the user to if they cancel the order process.
+	 * @access	public
+	 */
 	public function setCancelReturn($cancel_return)
 	{
 		# Set the Validator instance to a variable.
@@ -190,13 +192,13 @@ class PayPal
 	} #==== End -- setCancelReturn
 
 	/**
-	* setCustom
-	*
-	* Sets the Data member $custom.
-	*
-	* @param	$custom (A custom value to be passed through PayPal.)
-	* @access	public
-	*/
+	 * setCustom
+	 *
+	 * Sets the Data member $custom.
+	 *
+	 * @param	$custom					A custom value to be passed through PayPal.
+	 * @access	public
+	 */
 	public function setCustom($custom)
 	{
 		$custom=trim($custom);
@@ -204,13 +206,13 @@ class PayPal
 	} #==== End -- setCustom
 
 	/**
-	* setReturn
-	*
-	* Sets the Data member $return.
-	*
-	* @param	$return (The url to return the user to once the PayPal transaction is completed.)
-	* @access	public
-	*/
+	 * setReturn
+	 *
+	 * Sets the Data member $return.
+	 *
+	 * @param	$return					The url to return the user to once the PayPal transaction is completed.
+	 * @access	public
+	 */
 	public function setReturn($return)
 	{
 		# Set the Validator instance to a variable.
@@ -229,13 +231,13 @@ class PayPal
 	} #==== End -- setReturn
 
 	/**
-	* setShoppingURL
-	*
-	* Sets the Data member $shopping_url.
-	*
-	* @param	$shopping_url (The url to send the user to if there is a shopping cart and they click "continue shopping".)
-	* @access	public
-	*/
+	 * setShoppingURL
+	 *
+	 * Sets the Data member $shopping_url.
+	 *
+	 * @param	$shopping_url			The url to send the user to if there is a shopping cart and they click "continue shopping".
+	 * @access	public
+	 */
 	public function setShoppingURL($shopping_url)
 	{
 		# Set the Validator instance to a variable.
@@ -254,13 +256,17 @@ class PayPal
 	} #==== End -- setShoppingURL
 
 	/**
-	* setOptions
-	*
-	* Sets the Data member $options.
-	*
-	* @param	$options (A multidimensional array, the $array[0][0] being label for the select, the $array[0][1] being an array of values, and $array[0][2] being the optional price values. There may be a maximum of 7 option field names {6 with Subscribe buttons})
-	* @access	public
-	*/
+	 * setOptions
+	 *
+	 * Sets the Data member $options.
+	 *
+	 * @param	$options				A multidimensional array:
+	 *										The $array[0][0] being label for the select,
+	 *										the $array[0][1] being an array of values,
+	 *										and $array[0][2] being the optional price values.
+	 *										There may be a maximum of 7 option field names {6 with Subscribe buttons})
+	 * @access	public
+	 */
 	public function setOptions($options)
 	{
 		$options=(array)$options;
@@ -268,17 +274,17 @@ class PayPal
 	} #==== End -- setOptions
 
 	/**
-	* setSubmit
-	*
-	* Sets the Data member $submit.
-	*
-	* @param	$type (The type of submit button, ie image or subit. Default is submit.)
-	* @param	$name (The name of the submit button. Default is submit.)
-	* @param	$value (The value of the submit button. Default is "Buy Now!".)
-	* @param	$image (If the type of submit button is image, the URL to the source. Default is NULL.)
-	* @param	$image (A class for the submit button. Default is NULL.)
-	* @access	public
-	*/
+	 * setSubmit
+	 *
+	 * Sets the Data member $submit.
+	 *
+	 * @param	$type					The type of submit button, ie image or subit. Default is submit.
+	 * @param	$name					The name of the submit button. Default is submit.
+	 * @param	$value					The value of the submit button. Default is "Buy Now!".
+	 * @param	$image					If the type of submit button is image, the URL to the source. Default is NULL.
+	 * @param	$image					A class for the submit button. Default is NULL.
+	 * @access	public
+	 */
 	public function setSubmit($type='submit', $name='submit', $value='Buy Now!', $image=NULL, $class=NULL)
 	{
 		$submit['type']=$type;
@@ -290,13 +296,13 @@ class PayPal
 	} #==== End -- setSubmit
 
 	/**
-	* setPayPalURL
-	*
-	* Sets the URL to PayPal services.
-	*
-	* @param	$test (Default is empty.)
-	* @access	public
-	*/
+	 * setPayPalURL
+	 *
+	 * Sets the URL to PayPal services.
+	 *
+	 * @param	$test					Default is empty.
+	 * @access	public
+	 */
 	public function setPayPalURL($test='')
 	{
 		$test=trim($test);
@@ -305,13 +311,13 @@ class PayPal
 	} #==== End -- setPayPalURL
 
 	/**
-	* setEmailMessage
-	*
-	* Sets the Data member $email_message.
-	*
-	* @param	$email_message (The message to send via email in case of an error.)
-	* @access	public
-	*/
+	 * setEmailMessage
+	 *
+	 * Sets the Data member $email_message.
+	 *
+	 * @param	$email_message			The message to send via email in case of an error.
+	 * @access	public
+	 */
 	public function setEmailMessage($email_message)
 	{
 		$email_message=trim($email_message);
@@ -320,13 +326,13 @@ class PayPal
 	} #==== End -- setEmailMessage
 
 	/**
-	* setItemNumber
-	*
-	* Sets the Data member $item_number.
-	*
-	* @param	$item_number (The ID of the item in the Database.)
-	* @access	public
-	*/
+	 * setItemNumber
+	 *
+	 * Sets the Data member $item_number.
+	 *
+	 * @param	$item_number			The ID of the item in the Database.
+	 * @access	public
+	 */
 	public function setItemNumber($item_number)
 	{
 		$email_message=trim($item_number);
@@ -334,12 +340,12 @@ class PayPal
 	} #==== End -- setItemNumber
 
 	/**
-	* setShoppingCart
-	*
-	* Sets the Data member $shopping_cart for all the Cart Item info.
-	*
-	* @access	public
-	*/
+	 * setShoppingCart
+	 *
+	 * Sets the Data member $shopping_cart for all the Cart Item info.
+	 *
+	 * @access	public
+	 */
 	public function setShoppingCart()
 	{
 		$shopping_cart='';
@@ -392,156 +398,156 @@ class PayPal
 	/*** accessor methods ***/
 
 	/**
-	* getAction
-	*
-	* Returns the Data member $action.
-	*
-	* @access	protected
-	*/
+	 * getAction
+	 *
+	 * Returns the Data member $action.
+	 *
+	 * @access	protected
+	 */
 	protected function getAction()
 	{
 		return $this->action;
 	} #==== End -- getAction
 
 	/**
-	* getCmd
-	*
-	* Returns the Data member $cmd.
-	*
-	* @access	protected
-	*/
+	 * getCmd
+	 *
+	 * Returns the Data member $cmd.
+	 *
+	 * @access	protected
+	 */
 	protected function getCmd()
 	{
 		return $this->cmd;
 	} #==== End -- getCmd
 
 	/**
-	* getHostedButtonID
-	*
-	* Returns the Data member $hosted_button_id.
-	*
-	* @access	protected
-	*/
+	 * getHostedButtonID
+	 *
+	 * Returns the Data member $hosted_button_id.
+	 *
+	 * @access	protected
+	 */
 	protected function getHostedButtonID()
 	{
 		return $this->hosted_button_id;
 	} #==== End -- getHostedButtonID
 
 	/**
-	* getCancelReturn
-	*
-	* Returns the Data member $cancel_return.
-	*
-	* @access	protected
-	*/
+	 * getCancelReturn
+	 *
+	 * Returns the Data member $cancel_return.
+	 *
+	 * @access	protected
+	 */
 	protected function getCancelReturn()
 	{
 		return $this->cancel_return;
 	} #==== End -- getCancelReturn
 
 	/**
-	* getCustom
-	*
-	* Returns the Data member $custom.
-	*
-	* @access	protected
-	*/
+	 * getCustom
+	 *
+	 * Returns the Data member $custom.
+	 *
+	 * @access	protected
+	 */
 	protected function getCustom()
 	{
 		return $this->custom;
 	} #==== End -- getCustom
 
 	/**
-	* getReturn
-	*
-	* Returns the Data member $return.
-	*
-	* @access	protected
-	*/
+	 * getReturn
+	 *
+	 * Returns the Data member $return.
+	 *
+	 * @access	protected
+	 */
 	protected function getReturn()
 	{
 		return $this->return;
 	} #==== End -- getReturn
 
 	/**
-	* getShoppingURL
-	*
-	* Returns the Data member $shopping_url.
-	*
-	* @access	protected
-	*/
+	 * getShoppingURL
+	 *
+	 * Returns the Data member $shopping_url.
+	 *
+	 * @access	protected
+	 */
 	protected function getShoppingURL()
 	{
 		return $this->shopping_url;
 	} #==== End -- getShoppingURL
 
 	/**
-	* getOptions
-	*
-	* Returns the Data member $options.
-	*
-	* @access	protected
-	*/
+	 * getOptions
+	 *
+	 * Returns the Data member $options.
+	 *
+	 * @access	protected
+	 */
 	protected function getOptions()
 	{
 		return $this->options;
 	} #==== End -- getOptions
 
 	/**
-	* getSubmit
-	*
-	* Returns the Data member $submit.
-	*
-	* @access	protected
-	*/
+	 * getSubmit
+	 *
+	 * Returns the Data member $submit.
+	 *
+	 * @access	protected
+	 */
 	protected function getSubmit()
 	{
 		return $this->submit;
 	} #==== End -- getSubmit
 
 	/**
-	* getPayPalURL
-	*
-	* Returns the Data member $paypal_url.
-	*
-	* @access	protected
-	*/
+	 * getPayPalURL
+	 *
+	 * Returns the Data member $paypal_url.
+	 *
+	 * @access	protected
+	 */
 	protected function getPayPalURL()
 	{
 		return $this->paypal_url;
 	} #==== End -- getPayPalURL
 
 	/**
-	* getEmailMessage
-	*
-	* Returns the Data member $email_message.
-	*
-	* @access	protected
-	*/
+	 * getEmailMessage
+	 *
+	 * Returns the Data member $email_message.
+	 *
+	 * @access	protected
+	 */
 	protected function getEmailMessage()
 	{
 		return $this->email_message;
 	} #==== End -- getEmailMessage
 
 	/**
-	* getItemNumber
-	*
-	* Returns the Data member $item_number.
-	*
-	* @access	protected
-	*/
+	 * getItemNumber
+	 *
+	 * Returns the Data member $item_number.
+	 *
+	 * @access	protected
+	 */
 	protected function getItemNumber()
 	{
 		return $this->item_number;
 	} #==== End -- getItemNumber
 
 	/**
-	* getShoppingCart
-	*
-	* Returns the Data member $shopping_cart.
-	*
-	* @access	protected
-	*/
+	 * getShoppingCart
+	 *
+	 * Returns the Data member $shopping_cart.
+	 *
+	 * @access	protected
+	 */
 	protected function getShoppingCart()
 	{
 		return $this->shopping_cart;
@@ -554,12 +560,12 @@ class PayPal
 	/*** public methods ***/
 
 	/**
-	* getPayPalPOST
-	*
-	* Creates and displays a PayPal button for use on the page.
-	*
-	* @access	public
-	*/
+	 * getPayPalPOST
+	 *
+	 * Creates and displays a PayPal button for use on the page.
+	 *
+	 * @access	public
+	 */
 	public function getPayPalPOST()
 	{
 		# Is it for a shopping cart that includes options?
@@ -622,19 +628,20 @@ class PayPal
 	} #==== End -- getPayPalPOST
 
 	/**
-	* makePayPalButton
-	*
-	* Catches the POST Data from a PayPal button and creates a URL for a PayPal page.
-	*
-	* @param	$button_name
-	* @param	$method
-	* @param	$target
-	* @param	$options
-	* @param	$shopping_cart
-	* @param	$test
-	* @param	$class
-	* @access	public
-	*/
+	 * makePayPalButton
+	 *
+	 * Catches the POST Data from a PayPal button and creates a URL for a PayPal page.
+	 *
+	 * @param	$button_name			Optional.
+	 * @param	$method					Optional.
+	 * @param	$target					Optional.
+	 * @param	$options				Optional.
+	 * @param	$shopping_cart			Optional.
+	 * @param	$test					Optional.
+	 * @param	$class					Optional.
+	 * @access	public
+	 * @return	string
+	 */
 	public function makePayPalButton($button_name='paypal_button', $method='POST', $target='_top', $options=FALSE, $shopping_cart=TRUE, $test=FALSE, $class=NULL)
 	{
 		# Get the FormGenerator Class.
@@ -694,15 +701,15 @@ class PayPal
 	} #==== End -- makePayPalButton
 
 	/**
-	* processPayPal
-	*
-	* Processes a PayPal transaction recieved from PayPal.
-	*
-	* @param	$fixed_price
-	* @param	$user_field
-	* @param	$email
-	* @access	public
-	*/
+	 * processPayPal
+	 *
+	 * Processes a PayPal transaction recieved from PayPal.
+	 *
+	 * @param	$fixed_price			Optional.
+	 * @param	$user_field				Optional.
+	 * @param	$email					Optional.
+	 * @access	public
+	 */
 	public function processPayPal($fixed_price=TRUE, $user_field=NULL, $email=NULL)
 	{
 		# Set the Database instance to a variable.
@@ -716,10 +723,10 @@ class PayPal
 			$this->script=__FILE__;
 
 			/*
-			* Post back to PayPal system to validate (via cURL)
-			* postback to: https://www.paypal.com/cgi-bin/webscr (for real Paypal)
-			* Postback to: https://www.sandbox.paypal.com/cgi-bin/webscr (for testing Paypal - Sandbox)
-			*/
+			 * Post back to PayPal system to validate (via cURL)
+			 * postback to: https://www.paypal.com/cgi-bin/webscr (for real Paypal)
+			 * Postback to: https://www.sandbox.paypal.com/cgi-bin/webscr (for testing Paypal - Sandbox)
+			 */
 			$this->setPayPalURL($this->test);
 			$url=$this->getPayPalURL();
 			$this->cURLToPayPal($url);
@@ -820,12 +827,13 @@ class PayPal
 	} #==== End -- processPayPal
 
 	/**
-	* redirectToPayPal
-	*
-	* Catches PayPal Data and redirects it to the appropriate PayPal site.
-	*
-	* @access	public
-	*/
+	 * redirectToPayPal
+	 *
+	 * Catches PayPal Data and redirects it to the appropriate PayPal site.
+	 *
+	 * @param	bool $redirect			Optional.
+	 * @access	public
+	 */
 	public function redirectToPayPal($redirect=FALSE)
 	{
 		# Set the Database instance to a variable.
@@ -920,12 +928,12 @@ class PayPal
 	/*** protected methods ***/
 
 	/**
-	* addCartToDB
-	*
-	* Add the processed Shopping Cart order to the DB.
-	*
-	* @access	protected
-	*/
+	 * addCartToDB
+	 *
+	 * Add the processed Shopping Cart order to the DB.
+	 *
+	 * @access	protected
+	 */
 	protected function addCartToDB()
 	{
 		# Set the Database instance to a variable.
@@ -974,7 +982,7 @@ class PayPal
 			die();
 		}
 		# Put each item from the shopping cart order into the orders_cart_info table.
-		for ($i = 1; $i <= $this->num_cart_items; $i++)
+		for($i=1; $i<=$this->num_cart_items; $i++)
 		{
 			# $i will increase each time till it equals the number of items in the cart.
 			$itemname="item_name".$i;
@@ -1023,12 +1031,12 @@ class PayPal
 	} #==== End -- addCartToDB
 
 	/**
-	* addOrderToDB
-	*
-	* Add the processed non-Shopping Cart order to the DB.
-	*
-	* @access	protected
-	*/
+	 * addOrderToDB
+	 *
+	 * Add the processed non-Shopping Cart order to the DB.
+	 *
+	 * @access	protected
+	 */
 	protected function addOrderToDB()
 	{
 		# Set the Database instance to a variable.
@@ -1086,12 +1094,13 @@ class PayPal
 	} #==== End -- addOrderToDB
 
 	/**
-	* cURLToPayPal
-	*
-	* Uses cURL to POST back to the PayPal system to validate a transaction recieved from PayPal.
-	*
-	* @access	protected
-	*/
+	 * cURLToPayPal
+	 *
+	 * Uses cURL to POST back to the PayPal system to validate a transaction recieved from PayPal.
+	 *
+	 * @param	$url
+	 * @access	protected
+	 */
 	protected function cURLToPayPal($url)
 	{
 		$ch = curl_init();
@@ -1111,12 +1120,13 @@ class PayPal
 	} #==== End -- cURLToPayPal
 
 	/**
-	* makeLog
-	*
-	* Makes an error log.
-	*
-	* @access	protected
-	*/
+	 * makeLog
+	 *
+	 * Makes an error log.
+	 *
+	 * @param	$mail					Optional.
+	 * @access	protected
+	 */
 	protected function makeLog($mail=TRUE)
 	{
 		# Set the Document instance to a variable.
@@ -1215,12 +1225,12 @@ class PayPal
 	} #==== End -- makeLog
 
 	/**
-	* processCart
-	*
-	* Processes an order submitted via Shopping Cart.
-	*
-	* @access	protected
-	*/
+	 * processCart
+	 *
+	 * Processes an order submitted via Shopping Cart.
+	 *
+	 * @access	protected
+	 */
 	protected function processCart()
 	{
 		# For debugging
@@ -1351,7 +1361,7 @@ class PayPal
 			# Explicitly make it an array.
 			$user_field=(array)$user_field;
 			# Update the user to reflect their purchase.
-			$this->updateUserInfo($user_field);
+			static::updateUserInfo($user_field);
 		}
 		# Check if the passed email variable is empty.
 		if(!empty($email))
@@ -1364,12 +1374,12 @@ class PayPal
 	} #==== End -- processOrder
 
 	/**
-	* readPayPalPost
-	*
-	* Reads Data sent from PayPal and populates the appropriate Data members.
-	*
-	* @access	protected
-	*/
+	 * readPayPalPost
+	 *
+	 * Reads Data sent from PayPal and populates the appropriate Data members.
+	 *
+	 * @access	protected
+	 */
 	protected function readPayPalPost()
 	{
 		$this->log=LOGS.'IPN.log';
@@ -1389,7 +1399,7 @@ class PayPal
 			$this->log_subj='_test';
 		}
 
-		/* assign posted variables to local variables */
+		# assign posted variables to local variables
 		# item information variables
 		$this->item_name=$_POST['item_name'];
 		$this->item_number=((isset($_POST['item_number'])) ? $_POST['item_number'] : NULL);
@@ -1451,25 +1461,20 @@ class PayPal
 		$this->receiver_id=$_POST['receiver_id'];
 	} #==== End -- readPayPalPost
 
-	/*** End protected methods ***/
-
-
-
-	/*** private methods ***/
-
 	/**
-	* calculateNewDate
-	*
-	* Sends an email regarding the order.
-	*
-	* @param	string	$add_time	(The length of time to add to the current date. ie. 'year', 'month', or 'week')
-	* @param	string	$date			(The date to add to. If the passed date is in the past or empty, it is updated to the current date before adding time.)
-	* @access	private
-	*/
-	private function calculateNewDate($add_time='year', $date=NULL)
+	 * calculateNewDate
+	 *
+	 * Sends an email regarding the order.
+	 *
+	 * @param	string $add_time		The length of time to add to the current date.
+	 *										ie. 'year', 'month', or 'week'.
+	 * @param	string $date			The date to add to. If the passed date is in the past or empty, it is updated to the current date before adding time.
+	 * @access	protected
+	 */
+	protected function calculateNewDate($add_time='year', $date=NULL)
 	{
 		# Check if the passed date is empty or in the past.
-		if(empty($date) || $date<date('Y-m-d'))
+		if($date!==NULL || $date<date('Y-m-d'))
 		{
 			# Set the date to the current date.
 			$date=date('Y-m-d');
@@ -1495,14 +1500,21 @@ class PayPal
 		return $value;
 	} #==== End -- calculateNewDate
 
+	/*** End protected methods ***/
+
+
+
+	/*** private methods ***/
+
 	/**
-	* emailTransactionInfo
-	*
-	* Sends an email regarding the order.
-	*
-	* @param	string/array $email		The email address(es) to send the transaction notification to. May be a string"single_email_address" or and array of email addresses.
-	* @access	private
-	*/
+	 * emailTransactionInfo
+	 *
+	 * Sends an email regarding the order.
+	 *
+	 * @param	string/array $email		The email address(es) to send the transaction notification to.
+	 *										May be a string"single_email_address" or and array of email addresses.
+	 * @access	private
+	 */
 	private function emailTransactionInfo($email)
 	{
 		# Set the Document instance to a variable.
@@ -1512,10 +1524,10 @@ class PayPal
 		$subject='Important '.DOMAIN_NAME.' Info';
 		# Create the email message and set it to a variable.
 		$message="Hello,<br />\n<br />\n".
-		'There has been a purchase and/or donation at the '.DOMAIN_NAME.' website. The payment has been credited to the corresponding PayPal&trade; account. Please login at: <a href="http://www.PayPal.com/">http://www.PayPal.com/</a> to view the details.'."<br />\n<br />\n".
-		DOMAIN_NAME.' Automated Emailer :)';
+		'There has been a purchase and/or donation at the '.DOMAIN_NAME.' website. The payment has been credited to the corresponding PayPal&trade; account. Please login at: <a href="http://www.paypal.com/">http://www.paypal.com/</a> to view the details.'."<br />\n<br />\n".
+		DOMAIN_NAME.' Automated Emailer';
 
-		# loop through the email addresses.
+		# Loop through the email addresses.
 		foreach($email as $to)
 		{
 			# Send a copy of the email to this address.
@@ -1524,12 +1536,13 @@ class PayPal
 	} #==== End -- emailTransactionInfo
 
 	/**
-	* updateUserInfo
-	*
-	* Processes an order submitted via Shopping Cart.
-	*
-	* @access	private
-	*/
+	 * updateUserInfo
+	 *
+	 * Processes an order submitted via Shopping Cart.
+	 *
+	 * @param	$user_field
+	 * @access	private
+	 */
 	private function updateUserInfo($user_field)
 	{
 		# Set the Database instance to a variable.
