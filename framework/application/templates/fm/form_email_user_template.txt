@@ -1,8 +1,0 @@
-﻿Hello,
-
-$mesg
-
-==================================
-You have received this message as a registered member at the Jam The Force (http://www.jamtheforce.com).
-If you you would like to discontinue receiving these messages, simply login to you account at http://www.jamtheforce.com/secure/MyAccount/privacy.php, select/deselect the appropriate settings and then click "Update".
-
