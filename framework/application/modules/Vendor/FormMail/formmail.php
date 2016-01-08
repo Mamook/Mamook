@@ -6485,14 +6485,6 @@ function DoMail($s_to,$s_subject,$s_mesg,$a_headers,$s_options)
 		if ($s_options !== "") {
 			return (mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers),$s_options));
 		} else {
-		/*
-			echo $s_to,'<br>',
-				$s_subject,'<br>',
-				$s_mesg,'<br>',
-				ExpandMailHeaders($a_headers);
-			exit;
-		*/
-		echo mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers));exit;
 			return (mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers)));
 		}
 	}
@@ -6539,9 +6531,6 @@ function SendCheckedMail($to,$subject,$mesg,$sender,$a_headers = array())
 	if (Settings::get('INI_SET_FROM') && !empty($sender)) {
 		ini_set('sendmail_from',$sender);
 	}
-
-	echo DoMail($to,$subject,$mesg,$a_headers,($b_f_option ? "-f$sender" : ""));
-	exit;
 
 	return (DoMail($to,$subject,$mesg,$a_headers,($b_f_option ? "-f$sender" : "")));
 }
@@ -12061,9 +12050,7 @@ function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fiel
 			return (false);
 		}
 	}
-echo SendCheckedMail($s_to,$SPECIAL_VALUES["subject"],$s_results,
-	                        $s_sender,$a_headers);
-	                        exit;
+
 	//
 	// send the mail - assumes the email addresses have already been checked
 	//
@@ -14539,16 +14526,11 @@ if (!isset($SPECIAL_VALUES["recipients"]) || empty($SPECIAL_VALUES["recipients"]
 		//
 		// send the actual results
 		//
-		/*
 		if (!SendResults($aFieldOrder,$aCleanedValues,$s_valid_recipients,$s_valid_cc,
 		                 $s_valid_bcc,$aRawDataValues)
 		) {
 			Error("mail_failed",GetMessage(MSG_FAILED_SEND));
 		}
-		*/
-		echo SendResults($aFieldOrder,$aCleanedValues,$s_valid_recipients,$s_valid_cc,
-		                 $s_valid_bcc,$aRawDataValues);
-		exit;
 		//
 		// Hook system: after sending emails
 		//
