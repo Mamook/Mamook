@@ -495,11 +495,14 @@ $BODY_LF = "\r\n"; /* the new default: use this for CR+LF */
 $FROM_USER = ""; /* the default - setting not used */
 
 /* Help: http://www.tectite.com/fmdoc/sendmail_f_option.php */
-$SENDMAIL_F_OPTION      = false;
+# FW_CUSTOM: Use -f option for sendmail (sendmail -f).
+$SENDMAIL_F_OPTION      = TRUE;
 $SENDMAIL_F_OPTION_LINE = __LINE__ - 1; /* don't modify this line! */
 
 /* Help: http://www.tectite.com/fmdoc/fixed_sender.php */
-$FIXED_SENDER = "";
+# FW_CUSTOM: I noticed emails were displaying "From: site_domain <email@domain.com> via server_name".
+#	I set this to remove the "via server_name".
+$FIXED_SENDER = SMTP_USER;
 
 /* Help: http://www.tectite.com/fmdoc/set_sender_from_email.php */
 $SET_SENDER_FROM_EMAIL = false;
