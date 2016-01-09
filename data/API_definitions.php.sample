@@ -28,20 +28,23 @@ if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
 {
 	define('FB_APP_ID', '');
 	define('FB_APP_SECRET', '');
+	# Must be a never expire token.
+	#	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
+	define('FB_PAGE_ACCESS_TOKEN', '');
 }
 # Staging & Dev site.
 else
 {
 	define('FB_APP_ID', '');
 	define('FB_APP_SECRET', '');
+	# Must be a never expire token.
+	#	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
+	define('FB_PAGE_ACCESS_TOKEN', '');
 }
 # FB_PAGE_ID is requred for AddThis (framework/application/js/AddThis.php).
 define('FB_PAGE_ID', '');
 # FB_URL required for /social/ page.
 define('FB_URL', '');
-# Must be a never expire token.
-#	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
-define('FB_PAGE_ACCESS_TOKEN', '');
 
 # Google API variables
 define('GOOGLE_CLIENT_ID', '');
