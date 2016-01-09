@@ -32,7 +32,7 @@ $display.=$head;
 $form_mail=new FormGenerator('email_form', $fp->getFormAction(), 'POST', $fp->getTarget(), $fp->getUpload(), 'form-email');
 $form_mail->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
 $form_mail->addElement('hidden', array('name'=>'recipients', 'value'=>$email->getRecipients()));
-$form_mail->addElement('hidden', array('name'=>'mail_options', 'value'=>'CharSet=UTF-8,'.((isset($html_template)) ? 'HTMLTemplate='.$html_template : ((isset($plain_template)) ? 'PlainTemplate='.$plain_template : 'PlainTemplate=form_email_template.txt')).',AlwaysList'));
+$form_mail->addElement('hidden', array('name'=>'mail_options', 'value'=>'CharSet=UTF-8,'.((isset($html_template)) ? 'HTMLTemplate='.$html_template : ((isset($plain_template)) ? 'PlainTemplate='.$plain_template : 'PlainTemplate=form_email_template.txt')).',FromAddr='.preg_replace('/@/', '_form_', SMTP_USER).',FromLineStyle=QuotedNameRouteAddr,AlwaysList'));
 $form_mail->addElement('hidden', array('name'=>'good_url', 'value'=>$good_url));
 $form_mail->addElement('hidden', array('name'=>'bad_url', 'value'=>$bad_url));
 $form_mail->addElement('hidden', array('name'=>'required', 'value'=>'realname:Name'));

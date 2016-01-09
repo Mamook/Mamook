@@ -495,8 +495,7 @@ $BODY_LF = "\r\n"; /* the new default: use this for CR+LF */
 $FROM_USER = ""; /* the default - setting not used */
 
 /* Help: http://www.tectite.com/fmdoc/sendmail_f_option.php */
-# FW_CUSTOM: Use -f option for sendmail (sendmail -f).
-$SENDMAIL_F_OPTION      = TRUE;
+$SENDMAIL_F_OPTION      = false;
 $SENDMAIL_F_OPTION_LINE = __LINE__ - 1; /* don't modify this line! */
 
 /* Help: http://www.tectite.com/fmdoc/fixed_sender.php */
@@ -6482,6 +6481,14 @@ function DoMail($s_to,$s_subject,$s_mesg,$a_headers,$s_options)
 		// we'll not use it.
 		// No header line folding will be performed in version 8.22 onwards.
 		//
+		/*
+		echo $s_to,'<br>',
+			$s_subject,'<br>',
+			$s_mesg,'<br>',
+			ExpandMailHeaders($a_headers),'<br>',
+			$s_options;
+		exit;
+		*/
 		if ($s_options !== "") {
 			return (mail($s_to,$s_subject,$s_mesg,ExpandMailHeaders($a_headers),$s_options));
 		} else {
@@ -11801,7 +11808,8 @@ function    GetFilterSpec(&$s_filter,&$m_filter_list,$b_file_fields = false)
 //
 function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fields)
 {
-	global $SPECIAL_VALUES,$aFileVars;
+	# FW_CUSTOM: Added $SITE_DOMAIN
+	global $SITE_DOMAIN,$SPECIAL_VALUES,$aFileVars;
 
 	//
 	// check for a filter and how to use it
@@ -11888,7 +11896,11 @@ function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fiel
 			                                  $SPECIAL_VALUES["realname"]);
 		}
 	} elseif ($s_sender !== "") {
-		$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
+		# FW_CUSTOM: Originally, the "From" name would be what's set as the "FromAddr" field in the form (mailer.domain.com).
+		#	I changed it to use the "From Name <from_email@mailer_domain.com>".
+		//$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
+		$s_sender = $a_headers['From'] = MakeFromLine(SafeHeader(UnMangle($s_sender)),
+			                                  rtrim($SITE_DOMAIN, '/'));
 	}
 
 	/*
