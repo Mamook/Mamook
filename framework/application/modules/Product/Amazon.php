@@ -745,7 +745,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 		 */
 		public function makeCartLink()
 		{
-			$external_content=new GetExternalContent();
+			$api=new API();
 
 			$CartId=$_GET['CartId'];
 
@@ -755,7 +755,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 			else
 			{
-				$response=$external_content->fileGetContentsCurl($this->createCartRequest());
+				$response=$api->fileGetContentsCurl($this->createCartRequest());
 				$parsed_xml=simplexml_load_string($response);
 			}
 		} #==== End -- makeCartLink
@@ -928,11 +928,11 @@ if(!defined('__PHP_SHA256_NANO_'))
 			{
 				$microtime['cache read'][1]=WebUtility::getMicrotime();
 
-				# Get the GetExternalContent Class.
-				require_once Utility::locateFile(MODULES.'GetExternalContent'.DS.'GetExternalContent.php');
-				# Instantiate a new GetExternalContent object.
-				$external_content=new GetExternalContent();
-				if($response=$external_content->fileGetContentsCurl($this->createRequest($asins)))
+				# Get the API Class.
+				require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
+				# Instantiate a new API object.
+				$api=new API();
+				if($response=$api->fileGetContentsCurl($this->createRequest($asins)))
 				{
 					$cache->setFileData($response);
 					$microtime['cache write'][0]=WebUtility::getMicrotime();
