@@ -17,17 +17,20 @@ if(!defined('BASE_PATH'))
 	define('DATA_FILES', BASE_PATH.'data'.DS);
 }
 
+# Define the path to the framework folder containing the application files. (ends with a slash)
+define('FW_FOLDER', BASE_PATH.'framework'.DS);
+
 # Define the path to the folder containing the application files. (ends with a slash)
 define('APPLICATION_FOLDER', BASE_PATH.'application'.DS);
 
 # Define the path to the framework folder containing the application files. (ends with a slash)
-define('FW_APPLICATION_FOLDER', BASE_PATH.'framework'.DS.'application'.DS);
+define('FW_APPLICATION_FOLDER', FW_FOLDER.'application'.DS);
 
 # Define the path to the command_line folder. (ends with a slash)
 define('COMMAND_LINE', BASE_PATH.'command_line'.DS);
 
 # Define the path to the framework command_line folder. (ends with a slash)
-define('FW_COMMAND_LINE', BASE_PATH.'framework'.DS.'command_line'.DS);
+define('FW_COMMAND_LINE', FW_FOLDER.'command_line'.DS);
 
 # Define the path to the controllers folder. (ends with a slash)
 define('CONTROLLERS', APPLICATION_FOLDER.'controllers'.DS);
@@ -40,9 +43,6 @@ define('MODULES', APPLICATION_FOLDER.'modules'.DS);
 
 # Define the path to the framework modules folder. (ends with a slash)
 define('FW_MODULES', FW_APPLICATION_FOLDER.'modules'.DS);
-
-# Add modules/Vendor/ (for GoogleClient) to the php include path.
-set_include_path(MODULES.PATH_SEPARATOR.DS.MODULES.'Vendor'.DS.FW_MODULES.PATH_SEPARATOR.FW_MODULES.'Vendor');
 
 # Define the path to the UTILITY module. If there is a custum UTILITY module, comment the next line and uncomment the one after.
 define('UTILITY_CLASS', FW_MODULES.'Utility'.DS.'Utility.php');
@@ -99,3 +99,15 @@ define('SECURE_AUDIO_PATH', 'secure'.DS.'admin'.DS.'ManageMedia'.DS.'audio'.DS);
 
 # Define where the secure video directory is (ie. secure/admin/ManageMedia/videosFolder/) (ends with a slash)
 define('SECURE_VIDEOS_PATH', 'secure'.DS.'admin'.DS.'ManageMedia'.DS.'videos'.DS);
+
+# Define the path to the vendor directory (ends with a slash)
+define('VENDOR_FOLDER', MODULES.'vendor'.DS);
+
+# Define the path to the Framework vendor directory (ends with a slash)
+define('FW_VENDOR_FOLDER', FW_MODULES.'vendor'.DS);
+
+# Define the path to the root vendor directory (ends with a slash)
+define('ROOT_VENDOR_FOLDER', FW_FOLDER.'vendor'.DS);
+
+# Add modules/Vendor/ (for GoogleClient) to the php include path.
+set_include_path(get_include_path().PATH_SEPARATOR.MODULES.PATH_SEPARATOR.FW_MODULES.PATH_SEPARATOR.VENDOR_FOLDER.PATH_SEPARATOR.FW_VENDOR_FOLDER.PATH_SEPARATOR.ROOT_VENDOR_FOLDER);

@@ -309,10 +309,10 @@ class Utility
 	 */
 	public static function locateFile($file)
 	{
-		# Check if the is available in the client directory. If not, get it from the Framework folder.
+		# Check if the file is available in the client directory. If not, get it from the Framework folder.
 		if(file_exists($file)===FALSE)
 		{
-			$new_file_path=str_replace(BASE_PATH, BASE_PATH.'framework'.DS, $file);
+			$new_file_path=str_replace(BASE_PATH, FW_FOLDER, $file);
 			# Check if the is available in the framework directory.
 			if(file_exists($new_file_path)===FALSE)
 			{
@@ -322,6 +322,10 @@ class Utility
 					# Get the view template.
 					$new_file_path=Utility::locateFile(TEMPLATES.'view.php');
 				}
+			}
+			elseif(strpos($file, VENDOR_FOLDER)!==FALSE)
+			{
+				$new_file_path=str_replace(VENDOR_FOLDER, ROOT_VENDOR_FOLDER, $file);
 			}
 			$file=$new_file_path;
 		}
