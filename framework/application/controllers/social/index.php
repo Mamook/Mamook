@@ -34,7 +34,7 @@ $social_data=array_merge($facebook_feed, $twitter_feed);
 # Sort the data by date.
 $social_data=$facebook_obj->sortByDate($social_data);
 
-$social_display='<ul>';
+$social_display='<ul class="post">';
 # Loop through the passed social data.
 foreach($social_data as $data)
 {
@@ -51,8 +51,8 @@ foreach($social_data as $data)
 	}
 	$social_display.='<li>';
 	$social_display.='<article>';
-	$social_display.='Posted on '.$data['time'].' via <a href="'.$url.$data['id'].'" target="_blank">'.$network.'</a>: ';
-	$social_display.=((!empty($data['message'])) ? '<span>'.$data['message'].'</span>' : '');
+	$social_display.='Posted on <span class="post-date">'.$data['time'].'</span> via <a href="'.$url.$data['id'].'" target="_blank">'.$network.'</a>: ';
+	$social_display.=((!empty($data['message'])) ? '<span class="entry">'.$data['message'].'</span>' : '');
 	$social_display.=((!empty($data['link'])) ? '<a href="'.$data['link'].'" title="'.((!empty($data['link_name'])) ? $data['link_name'] : $data['link']).'" target="_blank">'.((!empty($data['link_name'])) ? $data['link_name'] : $data['link']).'</a>' : '');
 	$social_display.='</article>';
 	$social_display.='</li>';

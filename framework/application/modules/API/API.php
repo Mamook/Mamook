@@ -459,17 +459,8 @@ class API
 	{
 		try
 		{
-			# The Facebook API is loaded.
-			if($this->getLoadedAPI()=='facebook')
-			{
-				# Send the array to the FacebookAPI class.
-				$response=$this->getAPIObj()->getFeed($num_posts);
-			}
-			# The Twitter API is loaded.
-			elseif($this->getLoadedAPI()=='twitter')
-			{
-				$response=$this->getAPIObj()->getFeed($num_posts);
-			}
+			# Send the array to the appropriate class.
+			$response=$this->getAPIObj()->getFeed($num_posts);
 			$extracted_data=$this->extractData($response);
 			$this->setResponse($extracted_data);
 			return $this->getResponse();
