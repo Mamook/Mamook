@@ -7,22 +7,14 @@ $header='<!DOCTYPE html>';
 $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/fbml fb: http://ogp.me/ns/fb#" lang="'.((!isset($meta_language) || empty($meta_language)) ? 'en' : $meta_language).'">';
 	# Open the head tag.
 	$header.='<head>';
-		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
-		$header.='<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
-		# Set the viewport.
-		$header.='<meta name="viewport" content="width=device-width, initial-scale=1">';
-		# The title for each page is filled by a variable set on each page.
-		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
-		# Use a custom favicon.
-		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico">';
-		# Add a pingback link tag.
-		$header.=((isset($pingback_url) && !empty($pingback_url)) ? '<link rel="pingback" href="'.$pingback_url.'">' : '');
-		# Add a profile link tag.
-		$header.=((isset($microformat_url) && !empty($microformat_url)) ? '<link rel="profile" href="'.$microformat_url.'">' : '');
 		# Define the character set.
 		$header.='<meta charset="'.((isset($charset)) ? $charset : 'utf-8').'">';
+		# Set the IE emulation to "edge". Even though Chrome Frame has been discontinued, offer support for those who still have it installed in IE (chrome=1).
+		$header.='<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">';
 		# Define the default language. If the $meta_language variable is not set on the page, it defaults to "english".
 		$header.='<meta http-equiv="content-language" content="'.((!isset($meta_language) || empty($meta_language)) ? 'english' : $meta_language).'">';
+		# Set the viewport.
+		$header.='<meta name="viewport" content="width=device-width, initial-scale=1">';
 		# Give a description of the page. If the $meta_desc variable is not set on the page, use this default.
 		$header.='<meta name="description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'">';
 		# Set keywords for the page. If the $meta_keywords variable is not set on the page, we have none.
@@ -44,6 +36,14 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		$header.='<meta property="og:description" content="'.((!isset($meta_desc) OR empty($meta_desc)) ? 'The official website of the '.$main_content->getSiteName().'.' : $meta_desc).'">';
 		$header.='<meta property="og:locale" content="EN_US">';
 		$header.='<meta property="og:site_name" content="'.$main_content->getSiteName().'">';
+		# The title for each page is filled by a variable set on each page.
+		$header.='<title>'.strip_tags($main_content->getPageTitle()).'</title>';
+		# Use a custom favicon.
+		$header.='<link rel="shortcut icon" type="image/x-icon" href="'.THEME.'images/favicon.ico">';
+		# Add a pingback link tag.
+		$header.=((isset($pingback_url) && !empty($pingback_url)) ? '<link rel="pingback" href="'.$pingback_url.'">' : '');
+		# Add a profile link tag.
+		$header.=((isset($microformat_url) && !empty($microformat_url)) ? '<link rel="profile" href="'.$microformat_url.'">' : '');
 
 		# Add the CSS for the page.
 		$header.=$doc->addStyle();
