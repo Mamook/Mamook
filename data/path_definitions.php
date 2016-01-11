@@ -101,10 +101,10 @@ define('SECURE_AUDIO_PATH', 'secure'.DS.'admin'.DS.'ManageMedia'.DS.'audio'.DS);
 define('SECURE_VIDEOS_PATH', 'secure'.DS.'admin'.DS.'ManageMedia'.DS.'videos'.DS);
 
 # Define the path to the vendor directory (ends with a slash)
-define('VENDOR_FOLDER', MODULES.'vendor'.DS);
+define('VENDOR_FOLDER', MODULES.'Vendor'.DS);
 
 # Define the path to the Framework vendor directory (ends with a slash)
-define('FW_VENDOR_FOLDER', FW_MODULES.'vendor'.DS);
+define('FW_VENDOR_FOLDER', FW_MODULES.'Vendor'.DS);
 
 # Define the path to the root vendor directory (ends with a slash)
 define('ROOT_VENDOR_FOLDER', FW_FOLDER.'vendor'.DS);
