@@ -104,6 +104,9 @@ define('FULL_URL', FULL_DOMAIN.HERE.GET_QUERY);
 $filenamearray=explode('/', HERE);
 define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
 
+# Define the timezone.
+define('TIMEZONE', 'US/Pacific');
+
 
 
 #####################################################################################
@@ -117,6 +120,24 @@ define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
  * System variables needed by the application
  *
  */
+# Make sure PHP is using UTF-8 character encoding.
+mb_internal_encoding('UTF-8');
+
+# Set the date (and time)
+	# First, the timezone.
+	putenv('TZ='.TIMEZONE);
+	date_default_timezone_set(TIMEZONE);
+	# Y-m-d (ie: 2008-12-09)
+	define('YEAR_MM_DD', date('Y-m-d'));
+	# F d, Y (ie: December 09, 2008)
+	define('MONTH_DD_YEAR', date('F d, Y'));
+	# Y-m-d G:i:s (ie: 2008-12-09 21:09:33)
+	define('YEAR_MM_DD_TIME', date('Y-m-d G:i:s'));
+	# F d, Y - G:i:s (ie: December 09, 2008 - 21:09:33)
+	define('MONTH_DD_YEAR_TIME', date('F d, Y - G:i:s'));
+	# F d, Y - g:i:s a (T) (ie: December 09, 2008 - 9:09:33 pm (PST))
+	define('MONTH_DD_YEAR_12TIME_TZ', date('F d, Y - g:i:s a (T)'));
+
 # Make sure the utility methods are available (get the Utility Class).
 require_once UTILITY_CLASS;
 
@@ -243,9 +264,6 @@ define('MYKEY', 'ontopoftheworld');
 
 # Get the API definitions.
 require DATA_FILES.'API_definitions.php';
-
-# Define the timezone.
-define('TIMEZONE','US/Pacific');
 
 # Get the definitions of user privileges.
 require DATA_FILES.'user_privileges.php';
