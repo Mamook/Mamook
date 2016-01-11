@@ -322,10 +322,10 @@ class Utility
 					# Get the view template.
 					$new_file_path=Utility::locateFile(TEMPLATES.'view.php');
 				}
-			}
-			elseif(strpos($file, VENDOR_FOLDER)!==FALSE)
-			{
-				$new_file_path=str_replace(VENDOR_FOLDER, ROOT_VENDOR_FOLDER, $file);
+				elseif(strpos($file, VENDOR_FOLDER)!==FALSE)
+				{
+					$new_file_path=str_replace(VENDOR_FOLDER, ROOT_VENDOR_FOLDER, $file);
+				}
 			}
 			$file=$new_file_path;
 		}
