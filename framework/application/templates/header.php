@@ -76,7 +76,7 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 
 	# Close the head tag.
 	$header2='</head>';
-	$header2.='<body>';
+	$header2.='<body class="noscript'.((isset($page_class) && !empty($page_class)) ? ' '.$page_class : '').'">';
 		$header2.='<div id="distance"></div>';
-		$header2.='<div id="wrapper" class="noscript'.((isset($page_class) && !empty($page_class)) ? ' '.$page_class : '').'">';
+		$header2.='<div id="wrapper">';
 		echo $header2;
