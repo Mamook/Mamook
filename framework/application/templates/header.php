@@ -24,7 +24,7 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		# Define the designer of the page. If the $meta_designer variable is not set on the page, use this default.
 		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon Rÿser, JonRyser.com' : $meta_designer).'">';
 		# Define the copyright of the page.
-		$header.='<meta name="copyright" content="'.((!isset($copyright) OR empty($copyright)) ? 'Copyright © '.date('Y').' '.$main_content->getSiteName() : $copyright).'">';
+		$header.='<meta name="copyright" content="'.((!isset($copyright) OR empty($copyright)) ? '© '.date('Y').' '.$main_content->getSiteName() : $copyright).'">';
 		# Define the page-topic of the page. Use the page title.
 		$header.='<meta name="page-topic" content="'.((!isset($page_topic) OR empty($page_topic)) ? strip_tags($main_content->getPageTitle()) : $page_topic).'">';
 		# Facebook meta data.

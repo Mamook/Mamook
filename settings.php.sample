@@ -154,7 +154,7 @@ else
 	define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
 }
 
-if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
+if(RUN_ON_STAGING===TRUE OR RUN_ON_DEVELOPMENT===TRUE)
 {
 	# Turn Debugging on or off.
 	define('DEBUG_APP', TRUE);

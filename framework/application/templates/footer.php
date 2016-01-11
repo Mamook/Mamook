@@ -20,7 +20,7 @@ $full_address=$street.$city.((!empty($state)) ? ',' : '').$state.$zip.$phone;
 echo '<footer id="info" class="footer" role="contentinfo">',
 				'<ul class="info">',
 					'<li class="list-info-copyright">',
-						'&copy; ',date("Y"),' ',$main_content->getSiteName(),
+						((!isset($copyright) OR empty($copyright)) ? '© '.date('Y').' '.$main_content->getSiteName() : $copyright),
 					'</li>',
 					'<li class="list-info-statement">',
 					'</li>',
