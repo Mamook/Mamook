@@ -1,4 +1,4 @@
-<?php /* framework/application/js/AddThis.php */
+<?php /* framework/application/js/AddThis.php Hi Draven */
 
 $facebook_id=((defined('FB_PAGE_ID')) ? FB_PAGE_ID : '');
 $rss_id=((defined('RSS_ID')) ? RSS_ID : '');
