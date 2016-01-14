@@ -25,6 +25,8 @@ $display='<p>You may request extended privileges, authorizing you to contribute 
 
 # Instantiate a new User object.
 $user=new User();
+# Get the logged in User's ID.
+$id=$user->findUserID();
 
 # Instantiate a new FormProcessor object.
 $form_processor=new FormProcessor();

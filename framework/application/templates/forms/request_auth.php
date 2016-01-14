@@ -1,4 +1,4 @@
-<?php /* templates/forms/request_auth.php */
+<?php /* framework/application/templates/forms/request_auth.php */
 
 $display='<div id="request_auth_form" class="form">';
 # Check if the user is an admin.
