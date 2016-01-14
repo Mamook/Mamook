@@ -1137,7 +1137,10 @@ class TestLogin Extends Test
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		if($this->isLoggedIn()===TRUE) { $doc->redirect(REDIRECT_AFTER_LOGIN); }
+		if($this->isLoggedIn()===TRUE)
+		{
+			$doc->redirect(REDIRECT_AFTER_LOGIN);
+		}
 
 		# Check if the form has been submitted.
 		if(array_key_exists('_submit_check', $_POST))
@@ -1158,7 +1161,7 @@ class TestLogin Extends Test
 						$row=$db->get_row('SELECT `password`, `display`, `username` FROM '.DBPREFIX.'users WHERE `email` = '.$db->quote($db->escape($email)).' LIMIT 1');
 						if($row!==NULL)
 						{
-							require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php';
+							require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
 							$encrypt=new Encryption(MYKEY);
 							$password=$encrypt->deCodeIt($row->password);
 							# Send the confirmation email.
@@ -1444,7 +1447,7 @@ class TestLogin Extends Test
 	private function ecodeWP_Password($password)
 	{
 		# Get the PasswordHash Class.
-		require_once Utility::locateFile(MODULES.'Encryption'.DS.'PasswordHash.php');
+		require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
 		# Instantiate a PasswordHash object
 		$hasher=new PasswordHash(8, TRUE);
 		# Format the password

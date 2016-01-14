@@ -1356,7 +1356,7 @@ class Login extends User
 	private function ecodeWP_Password($wp_password=NULL)
 	{
 		# Get the PasswordHash Class.
-		require_once Utility::locateFile(MODULES.'Encryption'.DS.'PasswordHash.php');
+		require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
 		# Instantiate a PasswordHash object
 		$hasher=new PasswordHash(8, TRUE);
 		# If $password param is NOT set.

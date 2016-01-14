@@ -1,12 +1,18 @@
-[submodule "framework/application/modules/Vendor/Facebook"]
-	path = framework/application/modules/Vendor/Facebook
+[submodule "framework/vendor/Facebook"]
+	path = framework/vendor/Facebook
 	url = https://github.com/facebook/facebook-php-sdk-v4.git
-[submodule "framework/application/modules/Vendor/getID3"]
-	path = framework/application/modules/Vendor/getID3
+[submodule "framework/vendor/getID3"]
+	path = framework/vendor/getID3
 	url = https://github.com/JamesHeinrich/getID3.git
-[submodule "framework/application/modules/Vendor/Twitter"]
-	path = framework/application/modules/Vendor/Twitter
-	url = https://github.com/abraham/twitteroauth.git
-[submodule "framework/application/modules/Vendor/PHPMailer"]
-	path = framework/application/modules/Vendor/PHPMailer
+[submodule "framework/vendor/PHPMailer"]
+	path = framework/vendor/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer.git
+[submodule "framework/vendor/Twitter"]
+	path = framework/vendor/Twitter
+	url = https://github.com/abraham/twitteroauth.git
+[submodule "framework/vendor/Google"]
+	path = framework/vendor/Google
+	url = https://github.com/google/google-api-php-client.git
+[submodule "framework/vendor/ezDB"]
+	path = framework/vendor/ezDB
+	url = https://github.com/nshahzad/ezdb.git
