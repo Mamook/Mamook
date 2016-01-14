@@ -573,9 +573,9 @@ class FormProcessor
 						$message[]='You have requested to be authorized to add content to or edit '.$branch_name;
 						# Implode the message array into a string separated into list items.
 						$user_message='<ul><li>'.implode('<li></li>', $message).'</li></ul>'.'<strong>The manager(s) have been notified. You will be sent an email notifying you of the results.</strong>';
+						$doc->setError($user_message);
 					}
 				}
-				$doc->setError($user_message);
 			}
 		}
 		catch(Exception $e)
