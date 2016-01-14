@@ -9,7 +9,7 @@
 
 	# Remove the "noscript" class. If there is no JavaScript available, this class will remain.
 	$js.=
-	'$("#wrapper").removeClass("noscript");';
+	'$("body").removeClass("noscript");';
 
 	# If the user's device is mobile, add the "mobile" class.
 	$js.=
