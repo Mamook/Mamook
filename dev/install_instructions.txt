@@ -32,13 +32,13 @@ Git Flow
 				cd client_website.com
 				git init
 				git remote add Client_Website ssh://gitolite@jamtheforce.com:8022/client_website
-				git pull Client_Website master
 
 		For the development machine do the above command and then add the Framework repository.
 			Commands:
 				git remote add Framework ssh://gitolite@jamtheforce.com:8022/framework
 				git pull Framework master
 				git submodule update --init --recursive
+				git push Client_Website master
 
 			(Optional)
 				This command stops “git fetch Framework” from getting the Frameworks Git tags.
