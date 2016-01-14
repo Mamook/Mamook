@@ -732,10 +732,8 @@ class YouTube
 	 */
 	public function startYouTubeService()
 	{
-		# Get the Google Client.
-		require_once Utility::locateFile(MODULES.'Vendor'.DS.'src'.DS.'Google'.DS.'Google'.DS.'Client.php');
-		# Get the YouTube Service.
-		require_once Utility::locateFile(MODULES.'Vendor'.DS.'src'.DS.'Google'.DS.'Google'.DS.'Service'.DS.'YouTube.php');
+		# Get the Google API.
+		require_once Utility::locateFile(MODULES.'Vendor'.DS.'Google'.DS.'src'.DS.'Google'.DS.'autoload.php');
 
 		$client=new Google_Client();
 		$client->setApplicationName("API Project");
