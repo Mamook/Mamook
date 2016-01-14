@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Session/Session.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -25,13 +25,15 @@ class Session
 	/*** magic methods ***/
 
 	/**
-	* Constructor
-	*
-	* Safely calls session_start(). Also enables sessions to span sub domains. It names the session (which is necessary for session_set_cookie_params() to work. If calling this class before setting.php, $sessname (the session name) AND $cookiepath (the path for cookies) MUST be defined.
-	*
-	* @param	string
-	* @access	public
-	*/
+	 * __construct
+	 *
+	 * Safely calls session_start().
+	 * Also enables sessions to span sub domains. It names the session (which is necessary for session_set_cookie_params() to work).
+	 * If calling this class before setting.php, $sessname (the session name) AND $cookiepath (the path for cookies) MUST be defined.
+	 *
+	 * @param	string
+	 * @access	public
+	 */
 	public function __construct($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
 	{
 		# Check if a session ID was passed.
@@ -53,7 +55,7 @@ class Session
 					$life=LOGIN_LIFE_SHORT;
 				}
 			}
-			# Set the max life of the session in seconds
+			# Set the max life of the session in seconds.
 			ini_set('session.gc_maxlifetime', $life);
 
 			# If we haven't been given a session name, we will give it one.
@@ -66,15 +68,21 @@ class Session
 				{
 					# Check if the defined path is blank.
 					if(COOKIE_PATH != '')
-					{ # If the cookie path has been defined in settings.php, we'll use that path.
+					{
+						# If the cookie path has been defined in settings.php, we'll use that path.
 						$cookiepath=COOKIE_PATH;
 					}
 				}
 			}
 			session_set_cookie_params($life, $cookiepath, '.'.DOMAIN_NAME, $secure);
 
-			/* Read the current save path for the session files and append our own directory to this path. Note: In order to make that platform independent, we need to check for the file-seperator first. Now we check if the directory already has been created, if not, create one. Then we set the new path for the session files. */
-			# get the session save path
+			/*
+			 * Read the current save path for the session files and append our own directory to this path.
+			 * Note: In order to make that platform independent, we need to check for the file-seperator first.
+			 * Now we check if the directory already has been created, if not, create one.
+			 * Then we set the new path for the session files.
+			 */
+			# Get the session save path.
 			$save_path=session_save_path();
 			# Find out if our custom_session folder exists. If not, let's make it.
 			if(!is_dir(BASE_PATH.'custom_sessions'.DS.'.'))
@@ -82,7 +90,7 @@ class Session
 				mkdir(BASE_PATH.'custom_sessions', 0755);
 			}
 			# Is our custom_sessions folder the session save path? If not, let's make it so.
-			if($save_path !== BASE_PATH.'custom_sessions')
+			if($save_path!==BASE_PATH.'custom_sessions')
 			{
 				session_save_path(BASE_PATH.'custom_sessions');
 			}
@@ -96,19 +104,20 @@ class Session
 				if(defined('SESSIONS_NAME'))
 				{
 					# Check if the defined name is blank.
-					if(SESSIONS_NAME != '')
-					{ # If the session name has been defined in settings.php, we'll give the session that name.
+					if(SESSIONS_NAME!='')
+					{
+						# If the session name has been defined in settings.php, we'll give the session that name.
 						$sessname=SESSIONS_NAME;
 					}
 				}
 			}
 			$this->setSessname($sessname);
-			# Name the session
+			# Name the session.
 			session_name($this->getSessname());
 
-			# session must be started before anything
+			# Session must be started before anything.
 			session_start();
-			# set the s_set session so we can tell if session_start has been called already
+			# Set the s_set session so we can tell if session_start has been called already.
 			$_SESSION['s_set']=1;
 		}
 
@@ -123,14 +132,14 @@ class Session
 	/*** mutator methods ***/
 
 	/**
-	* setMessage
-	*
-	* Sets the data member $message. If an empty value is passed, the data member will
-	* be set with FALSE. Returns the set data member value.
-	*
-	* @param	$message
-	* @access	private
-	*/
+	 * setMessage
+	 *
+	 * Sets the data member $message. If an empty value is passed, the data member will
+	 * be set with FALSE. Returns the set data member value.
+	 *
+	 * @param	$message
+	 * @access	private
+	 */
 	private function setMessage($message)
 	{
 		# Clean it up...
@@ -148,14 +157,14 @@ class Session
 	} #==== End -- setMessage
 
 	/**
-	* setSessname
-	*
-	* Sets the data member $sessname. If an empty value is passed, the data member will
-	* be set with FALSE. Returns the set data member value.
-	*
-	* @param		$name
-	* @access		public
-	*/
+	 * setSessname
+	 *
+	 * Sets the data member $sessname. If an empty value is passed, the data member will
+	 * be set with FALSE. Returns the set data member value.
+	 *
+	 * @param		$name
+	 * @access		public
+	 */
 	public function setSessname($sessname)
 	{
 		# Clean it up...
@@ -179,24 +188,24 @@ class Session
 	/*** accessor methods ***/
 
 	/**
-	* getMessage
-	*
-	* Returns the data member $message.
-	*
-	* @access	public
-	*/
+	 * getMessage
+	 *
+	 * Returns the data member $message.
+	 *
+	 * @access	public
+	 */
 	public function getMessage()
 	{
 		return $this->message;
 	} #==== End -- getMessage
 
 	/**
-	* getSessname
-	*
-	* Returns the data member $sessname.
-	*
-	* @access	public
-	*/
+	 * getSessname
+	 *
+	 * Returns the data member $sessname.
+	 *
+	 * @access	public
+	 */
 	public function getSessname()
 	{
 		return $this->sessname;
@@ -209,13 +218,14 @@ class Session
 	/*** public methods ***/
 
 	/**
-	* checkCookies
-	*
-	* Checks to see if cookies are enabled. Returns TRUE if they are, FALSE if they aren't.
-	*
-	* @param		$js (Tell Javascript to check for cookies. Only works in conjunction with Document::addJSErrorBox(). Default is FALSE.)
-	* @access		public
-	*/
+	 * checkCookies
+	 *
+	 * Checks to see if cookies are enabled. Returns TRUE if they are, FALSE if they aren't.
+	 *
+	 * @param		$js					Tell Javascript to check for cookies. Only works in conjunction with Document::addJSErrorBox().
+	 *										Default is FALSE.
+	 * @access		public
+	 */
 	public function checkCookies($js=FALSE)
 	{
 		# Set the Document instance to a variable.
@@ -271,7 +281,7 @@ class Session
 	 *
 	 * Try PHP header redirect, then Java redirect, then try http redirect.
 	 *
-	 * @param		$keep_session_data 	(A Boolean indicating whether the $_SESSION data should be kept (TRUE) or not (FALSE).)
+	 * @param	$keep_session_data		A Boolean indicating whether the $_SESSION data should be kept (TRUE) or not (FALSE).
 	 * @access	public
 	 */
 	public function keepSessionData($keep_session_data=TRUE)
@@ -302,12 +312,12 @@ class Session
 	} #==== End -- keepSessionData
 
 	/**
-	* loseAllSessionData
-	*
-	* Unsets ALL session data.
-	*
-	* @access	public
-	*/
+	 * loseAllSessionData
+	 *
+	 * Unsets ALL session data.
+	 *
+	 * @access	public
+	 */
 	public function loseAllSessionData()
 	{
 		# Remove session data.
@@ -315,12 +325,12 @@ class Session
 	} #==== End -- loseAllSessionData
 
 	/**
-	* loseSessionData
-	*
-	* Unsets session data from the passed index.
-	*
-	* @access	public
-	*/
+	 * loseSessionData
+	 *
+	 * Unsets session data from the passed index.
+	 *
+	 * @access	public
+	 */
 	public function loseSessionData($index)
 	{
 		# Remove session data.
@@ -328,12 +338,12 @@ class Session
 	} #==== End -- loseSessionData
 
 	/**
-	* setPostLogin
-	*
-	* Sets the _post_login Session to the current page.
-	*
-	* @access	public
-	*/
+	 * setPostLogin
+	 *
+	 * Sets the _post_login Session to the current page.
+	 *
+	 * @access	public
+	 */
 	public function setPostLogin()
 	{
 		# Check if the user is viewing a page NOT to be set to the _post_login Session.
@@ -365,12 +375,12 @@ class Session
 	/*** private methods ***/
 
 	/**
-	* captureMessage
-	*
-	* Captures any messages set the SESSION.
-	*
-	* @access	private
-	*/
+	 * captureMessage
+	 *
+	 * Captures any messages set the SESSION.
+	 *
+	 * @access	private
+	 */
 	private function captureMessage()
 	{
 		# Check if the "message" index is set to the SESSION and it isn't empty.

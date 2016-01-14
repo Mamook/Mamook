@@ -602,8 +602,8 @@ class Document
 	 *
 	 * Inserts proper Internet Explorer label into CSS filename (ie turns 'path/style.css' to 'path/'.$ie_version.'.style.css').
 	 *
-	 * @param 	string		$ie_version		(The versions of Internet Explorer(comma separated values). Acceptable values are:
-	 *																	"ie", "ie11", "ie10", "ie9", "ie8", "ie7", "ie6", "ie5mac"
+	 * @param 	string $ie_version		The versions of Internet Explorer(comma separated values).
+	 *										Acceptable values are: "ie", "ie11", "ie10", "ie9", "ie8", "ie7", "ie6", "ie5mac"
 	 * @access	public
 	 */
 	public function addIEStyle($ie_versions)
@@ -712,7 +712,7 @@ class Document
 		}
 	} #==== End -- addIEStyle
 
-	/***
+	/**
 	 * findDomainFolder
 	 *
 	 * Check if URL is a sub-domain and, based off that information, returns the views folder for that subdomain.
@@ -733,7 +733,7 @@ class Document
 		return $folder;
 	} #==== End -- findDomainFolder
 
-	/***
+	/**
 	 * findMobileDevice
 	 *
 	 * Check if the user's device is mobile. If it is, return the type.
@@ -743,7 +743,7 @@ class Document
 	public function findMobileDevice()
 	{
 		# Set the current device value to a local variable.
-		$useragent=$_SERVER['HTTP_USER_AGENT'];
+		$useragent=(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
 		$is_mobile=FALSE;
 
 		# Compare the user agent to possible mobile device values. If there is a match set true, otherwise set false.
@@ -799,46 +799,47 @@ class Document
 	/**
 	 * pageExists
 	 *
-	 * Checks if an URL really leads to a valid page (as opposed to generating “404 Not Found” or some other kind of error)
+	 * Checks if an URL really leads to a valid page (as opposed to generating “404 Not Found” or some other kind of error).
 	 *
-	 * @param		string 	$url	  	(The URL to check.)
+	 * @param	string $url				The URL to check.
 	 * @access	public
 	 */
 	public function pageExists($url)
 	{
 		$parts=parse_url($url);
-		if(!$parts) return FALSE; /* the URL was seriously wrong */
+		# The URL was seriously wrong.
+		if(!$parts) return FALSE;
 
 		$curl=curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
 
-		/* set the user agent - might help, doesn't hurt */
+		# Set the user agent - might help, doesn't hurt.
 		curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
-		/* try to follow redirects */
+		# Try to follow redirects.
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
 
-		/* timeout after the specified number of seconds. assuming that this script runs
-			on a server, 20 seconds should be plenty of time to verify a valid URL.  */
+		# Timeout after the specified number of seconds. assuming that this script runs
+		#	on a server, 20 seconds should be plenty of time to verify a valid URL.
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 15);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 20);
 
-		/* don't download the page, just the header (much faster in this case) */
+		# Don't download the page, just the header (much faster in this case).
 		curl_setopt($curl, CURLOPT_NOBODY, TRUE);
 		curl_setopt($curl, CURLOPT_HEADER, TRUE);
 
-		/* handle HTTPS links */
+		# Handle HTTPS links.
 		if($parts['scheme']=='https')
 		{
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,  1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
 		}
 
-		$response = curl_exec($curl);
+		$response=curl_exec($curl);
 		curl_close($curl);
 
-		/*  get the status code from HTTP headers */
+		# Get the status code from HTTP headers.
 		if(preg_match('/HTTP\/1\.\d+\s+(\d+)/', $response, $matches))
 		{
 			$code=intval($matches[1]);
@@ -848,7 +849,7 @@ class Document
 			return FALSE;
 		}
 
-		/* see if code indicates success */
+		# See if code indicates success.
 		return (($code>=200) && ($code<400));
 	} #==== End -- pageExists
 
@@ -857,8 +858,8 @@ class Document
 	 *
 	 * Try PHP header redirect, then Java redirect, then try http redirect.
 	 *
-	 * @param		$url 		(The url to redirect to.)
-	 * @param		$delay 	(The delay in seconds before redirecting.)
+	 * @param	$url					The url to redirect to.
+	 * @param	$delay					The delay in seconds before redirecting.
 	 * @access	public
 	 */
 	public function redirect($url, $delay=0, $clear_session_data=FALSE)
@@ -867,7 +868,7 @@ class Document
 		if(!empty($url))
 		{
 			if(ob_get_level()) ob_end_clean();
-			# Begin output buffering
+			# Begin output buffering.
 			ob_start();
 			# Parse the passed url.
 			$url_parsed=parse_url($url);
