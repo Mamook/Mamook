@@ -1,12 +1,10 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/User/Login.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
-
 # Get the User Class
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-
 
 /**
  * Login
@@ -62,10 +60,10 @@ class Login extends User
 	/**
 	 * setError
 	 *
-	 *  Sets the data member $error.
+	 * Sets the data member $error.
 	 *
-	 *  @param	$error (The error string to set.)
-	 *  @access	public
+	 * @param	$error					The error string to set.
+	 * @access	public
 	 */
 	public function setError($error)
 	{
@@ -103,7 +101,7 @@ class Login extends User
 	 *
 	 * Sets the data member $post_login.
 	 *
-	 * @param	$url 		(The url to redirect the User to.)
+	 * @param	$url					The url to redirect the User to.
 	 * @access	public
 	 */
 	public function setPostLogin($url)
@@ -120,12 +118,12 @@ class Login extends User
 	} #==== End -- setPostLogin
 
 	/**
-	 *  setReCaptchaError
+	 * setReCaptchaError
 	 *
-	 *  Sets the data member $recaptcha_error.
+	 * Sets the data member $recaptcha_error.
 	 *
-	 *  @param	$error 		(The error string to set.)
-	 *  @access	protected
+	 * @param	$error					The error string to set.
+	 * @access	protected
 	 */
 	protected function setReCaptchaError($error)
 	{
@@ -134,12 +132,12 @@ class Login extends User
 	} #==== End -- setReCaptchaError
 
 	/**
-	 *  setRemember
+	 * setRemember
 	 *
-	 *  Sets the data member $remember.
+	 * Sets the data member $remember.
 	 *
-	 *  @param	$remember (TRUE to remember the login.)
-	 *  @access	public
+	 * @param	$remember				TRUE to remember the login.
+	 * @access	public
 	 */
 	public function setRemember($remember)
 	{
@@ -194,11 +192,11 @@ class Login extends User
 	} #==== End -- getEmailConf
 
 	/**
-	 *  getError
+	 * getError
 	 *
-	 *  Returns the data member $error. Returns NULL if empty or not set.
+	 * Returns the data member $error. Returns NULL if empty or not set.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function getError()
 	{
@@ -222,11 +220,11 @@ class Login extends User
 	} #==== End -- getPasswordConf
 
 	/**
-	 *  getPostLogin
+	 * getPostLogin
 	 *
-	 *  Returns the data member $post_login. Throws an error on failure.
+	 * Returns the data member $post_login. Throws an error on failure.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function getPostLogin()
 	{
@@ -234,11 +232,11 @@ class Login extends User
 	} #==== End -- getPostLogin
 
 	/**
-	 *  getReCaptchaError
+	 * getReCaptchaError
 	 *
-	 *  Returns the data member $recaptcha_error.
+	 * Returns the data member $recaptcha_error.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function getReCaptchaError()
 	{
@@ -246,11 +244,11 @@ class Login extends User
 	} #==== End -- getReCaptchaError
 
 	/**
-	 *  getRemember
+	 * getRemember
 	 *
-	 *  Returns the data member $remember.
+	 * Returns the data member $remember.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function getRemember()
 	{
@@ -276,13 +274,12 @@ class Login extends User
 	/*** public methods ***/
 
 	/**
-	 *  isLoggedIn
+	 * isLoggedIn
 	 *
-	 *  Checks if user is logged in or not. Returns TRUE if logged in, FALSE if not.
+	 * Checks if user is logged in or not. Returns TRUE if logged in, FALSE if not.
 	 *
-	 *  @param	none
-	 *  @access	public
-	 *  @return boolean		(TRUE/FALSE)
+	 * @access	public
+	 * @return	boolean
 	 */
 	public function isLoggedIn()
 	{
@@ -357,13 +354,13 @@ class Login extends User
 	} #==== End -- isLoggedIn
 
 	/**
-	 *  checkLogin
+	 * checkLogin
 	 *
-	 *  Applies restrictions to visitors based on membership and level access
-	 *  Also handles cookie based "remember me" feature
+	 * Applies restrictions to visitors based on membership and level access
+	 * Also handles cookie based "remember me" feature
 	 *
-	 *  @param	$levels (The access_level number(s) to accept - ie. '1 2 5')
-	 *  @access	public
+	 * @param	$levels					The access_level number(s) to accept - ie. '1 2 5'
+	 * @access	public
 	 */
 	public function checkLogin($levels)
 	{
@@ -398,12 +395,13 @@ class Login extends User
 	} #==== End -- checkLogin
 
 	/**
-	 *  checkAccess
+	 * checkAccess
 	 *
-	 *  Checks the user's level and compares it to the passed access levels.
+	 * Checks the user's level and compares it to the passed access levels.
 	 *
-	 *  @param	string	$access_levels (The level number(s) to accept - ie. '1 2 5')
-	 *  @access	public
+	 * @param	string $access_levels	The level number(s) to accept - ie. '1 2 5'
+	 * @param	int $id					Optional.
+	 * @access	public
 	 */
 	public function checkAccess($access_levels, $id=NULL)
 	{
@@ -448,13 +446,13 @@ class Login extends User
 	} #==== End -- checkAccess
 
 	/**
-	 *  isAdmin
+	 * isAdmin
 	 *
-	 *  Determines if the logged in user is an admin
+	 * Determines if the logged in user is an admin
 	 *
-	 *  @access	public
-	 *  @param	string $field (May be the user ID or email. NULL assumes the user is logged in.)
-	 *  @return	Boolean
+	 * @param	string $field			May be the user ID or email. NULL assumes the user is logged in.
+	 * @access	public
+	 * @return	boolean
 	 */
 	public function isAdmin($field=NULL)
 	{
@@ -512,15 +510,22 @@ class Login extends User
 	} #==== End -- checkRemember
 
 	/**
-	 *  setLoginSessions
+	 * setLoginSessions
 	 *
-	 *  Sets the login sessions.
+	 * Sets the login sessions.
 	 *
-	 *  @access	public
-	 *  @param	$user_id
-	 *  @param	$password
-	 *  @param	$remember
-	 *  @return	none
+	 * @param	$user_id
+	 * @param	$display_name
+	 * @param	$password
+	 * @param	$fname
+	 * @param	$lname
+	 * @param	$title
+	 * @param	$registered
+	 * @param	$last_login
+	 * @param	$logged_in
+	 * @param	$remember
+	 * @param	$secure
+	 * @access	public
 	 */
 	public function setLoginSessions($user_id=NULL, $display_name=NULL, $password=NULL, $fname=NULL, $lname=NULL, $title=NULL, $registered=NULL, $last_login=NULL, $logged_in=NULL, $remember=FALSE, $secure=FALSE)
 	{
@@ -581,11 +586,11 @@ class Login extends User
 	} # ----End setLoginSessions
 
 	/**
-	 *  logout
+	 * logout
 	 *
-	 *  Logs the User out.
+	 * Logs the User out.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function logout()
 	{
@@ -600,11 +605,12 @@ class Login extends User
 		# If WordPress is installed, log the user out of WordPress.
 		$this->clearWP_Cookies();
 
-		/* Uncomment the following line if you wish to remove all cookies (don't forget to comment or delete the following 2 lines if you decide to use the clearCookies method) */
+		# Uncomment the following line if you wish to remove all cookies.
+		#	Don't forget to comment or delete the following 2 lines if you decide to use the clearCookies method)
 		$this->clearCookies();
-		# setcookie('cookie_id', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
-		# setcookie('authenticate', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
-		# setcookie('ip', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
+		//setcookie('cookie_id', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
+		//setcookie('authenticate', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
+		//setcookie('ip', '', time() -KEEP_LOGGED_IN_FOR, COOKIE_PATH, ".".DOMAIN_NAME);
 
 		# Redirect the user to the default "logout" page.
 		$doc->redirect(REDIRECT_ON_LOGOUT);
@@ -612,11 +618,11 @@ class Login extends User
 	} #==== End -- logout
 
 	/**
-	 *  capturePostLogin
+	 * capturePostLogin
 	 *
-	 *  Captures post(after) login data sent from the previous page.
+	 * Captures post(after) login data sent from the previous page.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function capturePostLogin()
 	{
@@ -650,12 +656,12 @@ class Login extends User
 	} #==== End -- capturePostLogin
 
 	/**
-	 *  updateLastLogin
+	 * updateLastLogin
 	 *
-	 *  Updates the date of the User's last login in the Database.
+	 * Updates the date of the User's last login in the Database.
 	 *
-	 *  @param	$user_id (The User's ID.)
-	 *  @access	public
+	 * @param	$user_id				The User's ID.
+	 * @access	public
 	 */
 	public function updateLastLogin($user_id)
 	{
@@ -673,11 +679,11 @@ class Login extends User
 	} #==== End -- updateLastLogin
 
 	/**
-	 *  processLogin
+	 * processLogin
 	 *
-	 *  Checks if the Login has been submitted and processes it.
+	 * Checks if the Login has been submitted and processes it.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function processLogin()
 	{
@@ -736,11 +742,16 @@ class Login extends User
 						}
 						else
 						{
+							# Get user's data.
 							if($this->findUserData($username)!==FALSE)
 							{
-								$this->setLoginSessions($this->getID(), $this->getDisplayName(), $this->getPassword(), $this->getFirstName(), $this->getLastName(), $this->getTitle(), $this->getRegistered(), $this->getLastLogin(), TRUE, (isset($_POST['remember']) ? TRUE : FALSE));
-								$this->updateLastLogin($this->getID());
-								$doc->redirect((($this->getPostLogin()===NULL) ? REDIRECT_AFTER_LOGIN : (('http://'.$this->getPostLogin()==ERROR_PAGE.'404.php') ? REDIRECT_AFTER_LOGIN : 'http://'.$this->getPostLogin())));
+								# Check if user's account is active.
+								if($this->checkActive()===TRUE)
+								{
+									$this->setLoginSessions($this->getID(), $this->getDisplayName(), $this->getPassword(), $this->getFirstName(), $this->getLastName(), $this->getTitle(), $this->getRegistered(), $this->getLastLogin(), TRUE, (isset($_POST['remember']) ? TRUE : FALSE));
+									$this->updateLastLogin($this->getID());
+									$doc->redirect((($this->getPostLogin()===NULL) ? REDIRECT_AFTER_LOGIN : (('http://'.$this->getPostLogin()==ERROR_PAGE.'404.php') ? REDIRECT_AFTER_LOGIN : 'http://'.$this->getPostLogin())));
+								}
 							}
 							else
 							{
@@ -771,11 +782,11 @@ class Login extends User
 	} #==== End -- processLogin
 
 	/**
-	 *  resendActivation
+	 * resendActivation
 	 *
-	 *  Resends the activation email originally sent at registration.
+	 * Resends the activation email originally sent at registration.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function resendActivation()
 	{
@@ -873,11 +884,11 @@ class Login extends User
 	} #==== End -- resendActivation
 
 	/**
-	 *  activateAccount
+	 * activateAccount
 	 *
-	 *  Activates new user account.
+	 * Activates new user account.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function activateAccount()
 	{
@@ -979,11 +990,11 @@ class Login extends User
 	} #==== End -- activateAccount
 
 	/**
-	 *  sendAccountInfo
+	 * sendAccountInfo
 	 *
-	 *  Sends account info in an email to the user.
+	 * Sends account info in an email to the user.
 	 *
-	 *  @access	public
+	 * @access	public
 	 */
 	public function sendAccountInfo()
 	{
@@ -1069,6 +1080,7 @@ class Login extends User
 	 *
 	 * Changes the User's password.
 	 *
+	 * @param	int $id					Optional.
 	 * @access	public
 	 */
 	public function changePassword($id=NULL)
@@ -1191,12 +1203,34 @@ class Login extends User
 	/*** private methods ***/
 
 	/**
-	 *  clearCookies
+	 * checkActive
 	 *
-	 *  Clears the cookies
-	 *  Not used by default but present if needed
+	 * Check's if the user's has actviated their account.
+	 * Returns TRUE if active, FALSE if it's not, and sets an error.
 	 *
-	 *  @access private
+	 */
+	private function checkActive()
+	{
+		# If user's account is active, return TRUE.
+		if($this->getActive()==1)
+		{
+			return TRUE;
+		}
+		else
+		{
+			# User's account is not active, set an error and return FALSE.
+			$this->setError('You\'re account is not active yet. Check your email to active it.');
+			return FALSE;
+		}
+	} #==== End -- checkActive
+
+	/**
+	 * clearCookies
+	 *
+	 * Clears the cookies
+	 * Not used by default but present if needed
+	 *
+	 * @access	private
 	 */
 	private function clearCookies()
 	{
@@ -1221,7 +1255,7 @@ class Login extends User
 	 * Determines if the passed password matches the encoded password on file.
 	 * Returns FALSE if the password didn't match.
 	 *
-	 * @param	$password (The password to check.)
+	 * @param	$password				The password to check.
 	 * @access	private
 	 */
 	private function validatePassword($password)
@@ -1242,13 +1276,13 @@ class Login extends User
 	} #==== End -- validatePassword
 
 	/**
-	 *  randomString
+	 * randomString
 	 *
-	 *  Create a Random String (Useful for generating passwords or hashes.)
+	 * Create a Random String (Useful for generating passwords or hashes.)
 	 *
-	 *  @param	$type 	(The type of random string.  Options: alunum, numeric, nozero, unique)
-	 *  @param	$len		(The string length. Default is 8 characters.)
-	 *  @access public
+	 * @param	$type					The type of random string.  Options: alunum, numeric, nozero, unique
+	 * @param	$len					The string length. Default is 8 characters.
+	 * @access public
 	 */
 	public function randomString($type='alnum', $len=8)
 	{
@@ -1350,7 +1384,7 @@ class Login extends User
 	 *
 	 * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
 	 *
-	 * @param	string $password		Optional. Used only for Login->changePassword() method.
+	 * @param	string $wp_password		Optional. Used only for Login->changePassword() method.
 	 * @access	private
 	 */
 	private function ecodeWP_Password($wp_password=NULL)
