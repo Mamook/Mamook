@@ -1834,7 +1834,7 @@ class User
 			# Instantiate a new Staff object.
 			$staff=new Staff();
 			# Attempt to retrieve this User from the `staff` table.
-			$person_retrieved=$staff->getThisPerson($id);
+			$person_retrieved=$staff->getThisStaff($id);
 			# Check if the person was retrieved.
 			if($person_retrieved===TRUE)
 			{
@@ -1842,7 +1842,7 @@ class User
 				$remove_user=$staff->removeUser($id);
 			}
 
-		# DRAVEN: There is no `subscriptions` table...?
+		# NOTE BY DRAVEN: There is no `subscriptions` table...?
 		/*
 			# Get the Subscription class.
 			require Utility::locateFile(MODULES.'Product'.DS.'Subscription.php');
@@ -1873,7 +1873,7 @@ class User
 				# Instantiate a new WordPressUser object.
 				$wp=new WordPressUser();
 
-			# DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
+			# NOTE BY DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
 				# Find the User ID for "Unknown User" and set it to a variable.
 				//$unknown_id=$this->findUserID('unknown');
 				# Delete the User from the WordPress installation and reassign their posts to "Unknown User".
