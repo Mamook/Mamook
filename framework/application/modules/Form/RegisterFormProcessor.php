@@ -209,7 +209,7 @@ class RegisterFormProcessor extends FormProcessor
 							'Thank you for registering.'."<br />\n".
 							'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
 							'To activate your account, simply click on the following link:'."<br />\n<br />\n".
-							'<a href="'.REDIRECT_TO_LOGIN.'login/confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'login/confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
+							'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
 							'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
 							'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
 							try
