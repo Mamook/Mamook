@@ -1,4 +1,4 @@
-<?php /* framework/application/modules/Media/YouTubeUpload.php */
+<?php /* framework/application/command_line/Media/YouTubeUpload.php */
 
 
 # Put the keys into an array.
@@ -61,7 +61,7 @@ require UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
 require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init('mysqli');
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
@@ -93,7 +93,7 @@ if(!empty($video_data['FileName']))
 	$google_video_snippet=new Google_Service_YouTube_VideoSnippet();
 	$google_video_snippet->setTitle($video_data['Title']);
 	$google_video_snippet->setDescription($video_data['Description']);
-	$google_video_snippet->setTags(array("Center", "for", "World", "Indigenous", "Studies"));
+	$google_video_snippet->setTags(array($video_data['Category']));
 
 	# Numeric video category. See
 	# https://developers.google.com/youtube/v3/docs/videoCategories/list

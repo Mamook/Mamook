@@ -1,4 +1,4 @@
-<?php /* framework/application/modules/Media/VideoUpload.php */
+<?php /* framework/application/command_line/Media/VideoUpload.php */
 
 
 # Put the keys into an array.
@@ -61,7 +61,7 @@ require UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
 require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init('mysqli');
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
