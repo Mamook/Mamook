@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/User/WordPressUser.php */
 
 # Get the parent User class.
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
