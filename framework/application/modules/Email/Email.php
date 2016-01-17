@@ -9,11 +9,11 @@ if(!defined('BASE_PATH')) exit('No direct script access allowed');
  *
  * The Email Class is used to send email.
  *
- * @dependencies	application/modules/Database/ezdb.class.php
- *								application/modules/Validator/Validator.php
- *								data/email_definitions.php
- *								data/path_definitions.php
- *								data/user_privileges.php
+ * @dependencies	application/modules/Vendor/ezDB/ezdb.class.php
+ *					application/modules/Validator/Validator.php
+ *					data/email_definitions.php
+ *					data/path_definitions.php
+ *					data/user_privileges.php
  */
 class Email
 {

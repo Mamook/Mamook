@@ -238,7 +238,6 @@ if(!empty($video_data['FileName']))
 		$insert_json=json_encode(array('youtube_id'=>$video_id), JSON_FORCE_OBJECT);
 		# Insert the YouTube ID into the database entry.
 		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($video_data['ID']).' LIMIT 1');
-		//echo 'UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($video_data['ID']).' LIMIT 1';
 	}
 	# Edit video on YouTube.
 	if((!isset($video_data['NewVideo'])) || (isset($video_data['NewVideo']) && $video_data['NewVideo']===FALSE))
