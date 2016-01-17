@@ -1,4 +1,4 @@
-<?php /* framework/application/modules/Media/AudioUpload.php */
+<?php /* framework/application/command_line/Media/AudioUpload.php */
 
 
 # Put the keys into an array.
@@ -60,8 +60,8 @@ require DATA_FILES.'API_definitions.php';
 require UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
-require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init('mysqli');
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 

@@ -177,6 +177,8 @@ class VideoFormProcessor extends FormProcessor
 			$unique=$populator->getUnique();
 			# Set the video's publish year to a variable.
 			$year=$video_obj->getYear();
+			# Set the video's YouTube value to a variable.
+			$youtube=$populator->getYouTube();
 
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['video']) && (($_POST['video']==='Add Video') OR ($_POST['video']==='Update'))))
@@ -237,7 +239,7 @@ class VideoFormProcessor extends FormProcessor
 				{
 					# Assign $_FILES to a variable.
 					$u_video=$_FILES['video'];
-					if(((is_uploaded_file($u_video['tmp_name'])!==TRUE) OR ($u_video['error'] === UPLOAD_ERR_NO_FILE) OR ($u_video['error'] === 4)) && empty($current_video))
+					if(((is_uploaded_file($u_video['tmp_name'])!==TRUE) OR ($u_video['error']===UPLOAD_ERR_NO_FILE) OR ($u_video['error']===4)) && empty($current_video))
 					{
 						# Set an error.
 						$fv->setErrors('You must select a video file to upload.');
@@ -255,6 +257,7 @@ class VideoFormProcessor extends FormProcessor
 						{
 							try
 							{
+								# NOTE: How can we move this to a background script?
 								# Upload the video file.
 								$document_upload=$upload->uploadFile(BODEGA.'videos'.DS, array('avi', 'flv', 'mov', 'mp4', 'webm', 'wmv'), BODEGA.'videos'.DS, $clean_filename, $max_size, FALSE);
 
@@ -299,17 +302,17 @@ class VideoFormProcessor extends FormProcessor
 					# No custom thumbnail image.
 					if($uploaded_thumbnail===FALSE)
 					{
-						# Check if the YouTube credentials are available.
-						if(YOUTUBE_CLIENT_ID!=='')
+						# Check if the post should be posted on youtube.com.
+						if($youtube==='post_youtube')
 						{
 							# Get the YouTube instance. Starts the YouTubeService if it's not already started.
-							$yt=$video_obj->getYouTubeObject();
+							$youtube_obj=$video_obj->getYouTubeObject();
 							# Get the current video's YouTube from the embed code and set it to a variable.
-							$current_video=$yt->getYouTubeIdFromEmbedCode($embed_code);
+							$current_video=$youtube_obj->getYouTubeIdFromEmbedCode($embed_code);
 							# Set the YouTube ID to an array.
 							$api_array['youtube_id']=$current_video;
 							# Get video array from YouTube.
-							$video=$yt->listVideos('snippet', array('id'=>$current_video));
+							$video=$youtube_obj->listVideos('snippet', array('id'=>$current_video));
 							# Assign the video thumbnails to an array.
 							$api_array['youtube_thumbnails']=$video['items'][0]['snippet']['thumbnails']['data'];
 						}
@@ -412,23 +415,6 @@ class VideoFormProcessor extends FormProcessor
 								$cl2=new CommandLine('ffmpeg');
 								$cl2->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -f mjpeg '.IMAGES_PATH.'original'.DS.$clean_filename.'.jpg');
 								$cl2->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -f mjpeg -vf scale=320:180 '.IMAGES_PATH.$clean_filename.'.jpg');
-
-								# Insert the thumbnail image into the `images` table.
-								$insert_image='INSERT INTO `'.DBPREFIX.'images` ('.
-									'`title`, '.
-									'`image`, '.
-									'`category`, '.
-									' `contributor`'.
-									') VALUES ('.
-									$db->quote($db->escape(str_ireplace(array(DOMAIN_NAME), array('%{domain_name}'), $title))).', '.
-									$db->quote($db->escape($clean_filename.'.jpg')).',
-									\'-2-\', '.
-									$db->quote($contributor_id).
-									')';
-								# Run the sql query.
-								$db_post=$db->query($insert_image);
-								# Assign the image ID to a variable.
-								$image_id=$db->get_insert_id();
 							}
 						}
 
@@ -524,6 +510,8 @@ class VideoFormProcessor extends FormProcessor
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
+							# Tell VideoUpload.php that this is a editted video.
+							$_SESSION['form']['video']['NewVideo']=FALSE;
 						}
 						try
 						{
@@ -549,8 +537,9 @@ class VideoFormProcessor extends FormProcessor
 									}
 									elseif($video_type=='embed')
 									{
-										# Check if the YouTube credentials are available.
-										if(YOUTUBE_CLIENT_ID!=='')
+										# TODO: Can this be moved to YouTubeUpload.php?
+										# Check if the post should be posted on youtube.com.
+										if($youtube==='post_youtube')
 										{
 											# Add the video to playlists on YouTube.
 											# Create a resource id with video id and kind.
@@ -575,7 +564,7 @@ class VideoFormProcessor extends FormProcessor
 													$playlistItem=new Google_Service_YouTube_PlaylistItem();
 													$playlistItem->setSnippet($playlistItemSnippet);
 													# Execute the request and return an object containing information about the new playlistItem.
-													$playlistItemResponse=$yt->PlaylistItemsInsert('snippet,contentDetails', $playlistItem);
+													$playlistItemResponse=$youtube_obj->PlaylistItemsInsert('snippet,contentDetails', $playlistItem);
 												}
 											}
 										}
@@ -600,15 +589,12 @@ class VideoFormProcessor extends FormProcessor
 										'SessionId'=>session_id(),
 										'SessionPath'=>session_save_path());
 
-									# Check if the YouTube credentials are available.
-									if(YOUTUBE_CLIENT_ID!=='')
-									{
-										# Instantiate the new CommandLine object.
-										//$cl=new CommandLine();
-										# Run the upload script.
-										//$cl->runScript(COMMAND_LINE.'Media'.DS.'YouTubeUpload.php', $video_data);
-									}
-
+									# Instantiate the new CommandLine object.
+									$cl3=new CommandLine();
+									# Run the upload script.
+									$cl3->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'VideoUpload.php'), $video_data);
+/*
+									# TODO: Move to ConvertMedia command line script.
 									# Convert to webm.
 										# First pass.
 										$cl=new CommandLine('ffmpeg');
@@ -632,13 +618,14 @@ class VideoFormProcessor extends FormProcessor
 										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -force_key_frames "expr:gte(t,n_forced*2)" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v baseline -level 3.0 -threads 1 -codec:a libfdk_aac -b:a 128k -y '.TEMP.$clean_filename.'mp4');
 										//$cl->runScript('-y -i '.TEMP.$clean_filename.'mp4 -c:v copy -map 0 -bsf:v h264_mp4toannexb -f segment -segment_list '.AUDIO_PATH.'files'.DS.$clean_filename'.m3u8 -segment_time 2 -segment_format mpeg_ts -segment_list_type m3u8 '.AUDIO_PATH.'files'.DS.$clean_filename'.ts && \ rm -R -f '.TEMP.$clean_filename.'mp4');
 										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -hls_time 2 -hls_list_size 0 -hls_wrap 0 -start_number 0 -hls_allow_cache 1 -hls_segment_filename -hls_segment_filename \'hls_segment%03d.ts\' '.AUDIO_PATH.'files'.DS.$clean_filename.DS.'video.m3u8');
+*/
 								}
 
 								# Check if the availability allows posting to social networks.
 								if($availability==1)
 								{
 									# Check if the post should be posted on Twitter.com or Facebook.com.
-									if($twitter==='0' OR $facebook==='post')
+									if($twitter==='0' OR $facebook==='post' OR $youtube==='post_youtube')
 									{
 										# Get the API Class.
 										require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
@@ -1103,13 +1090,15 @@ class VideoFormProcessor extends FormProcessor
 					'ImageID'=>$video_obj->getImageID(),
 					'Institution'=>$institution_id,
 					'Language'=>$language_id,
+					'NewVideo'=>TRUE,
 					'Playlists'=>$video_obj->getPlaylists(),
 					'Publisher'=>$publisher_id,
 					'Title'=>$video_obj->getTitle(),
 					'Twitter'=>$populator->getTwitter(),
 					'Unique'=>$populator->getUnique(),
 					'VideoType'=>$video_obj->getVideoType(),
-					'Year'=>$video_obj->getYear()
+					'Year'=>$video_obj->getYear(),
+					'YouTube'=>$populator->getYouTube()
 				);
 		}
 		catch(Exception $e)

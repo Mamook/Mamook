@@ -30,6 +30,7 @@ class FormPopulator
 	private $to=NULL;
 	private $twitter=NULL;
 	private $unique=0;
+	private $youtube=NULL;
 
 	/*** End data members ***/
 
@@ -402,6 +403,29 @@ class FormPopulator
 		}
 	} #==== End -- setUnique
 
+	/**
+	 * setYouTube
+	 *
+	 * Sets the data member $youtube.
+	 *
+	 * @param	$value
+	 * @access	protected
+	 */
+	protected function setYouTube($value)
+	{
+		# Check if the passed value is empty.
+		if($value!==NULL)
+		{
+			# Explicitly set the data member to FALSE.
+			$this->youtube='post_youtube';
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->youtube=NULL;
+		}
+	} #==== End -- setYouTube
+
 	/*** End mutator methods ***/
 
 
@@ -611,6 +635,18 @@ class FormPopulator
 	{
 		return $this->unique;
 	} #==== End -- getUnique
+
+	/**
+	 * getYouTube
+	 *
+	 * Returns the data member $youtube.
+	 *
+	 * @access	public
+	 */
+	public function getYouTube()
+	{
+		return $this->youtube;
+	} #==== End -- getYouTube
 
 	/*** End accessor methods ***/
 

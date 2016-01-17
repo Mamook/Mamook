@@ -1,5 +1,4 @@
-<?php /* framework/application/modules/Media/YouTubeUpload.php */
-
+<?php /* framework/application/command_line/Media/YouTubeUpload.php */
 
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
@@ -18,7 +17,7 @@ if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
 if(!defined('DEVELOPMENT_DOMAIN')) define('DEVELOPMENT_DOMAIN', $passed_data['DevEnvironment']);
 # Need this for the FileHandler class and APPLICATION_URL.
 if(!defined('STAGING_DOMAIN')) define('STAGING_DOMAIN', $passed_data['StagingEnvironment']);
-# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
+# Need this for YouTube Redirect URL ($youtube_obj=$video_obj->getYouTubeObject(FULL_DOMAIN);).
 if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', DOMAIN_NAME.'/');
 # Define the url that points to our application. (ends with a slash)
 define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
@@ -60,8 +59,8 @@ require DATA_FILES.'API_definitions.php';
 require UTILITY_CLASS;
 
 # Get the DB Class needed to operate with MySQL.
-require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
-DB::init('mysqli');
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
@@ -74,9 +73,27 @@ require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 # Instantiate the new Video object.
 $video_obj=Video::getInstance();
 # Get the YouTube instance. Starts the YouTubeService if it's not already started.
-$yt=$video_obj->getYouTubeObject(FULL_DOMAIN);
+$youtube_obj=$video_obj->getYouTubeObject(FULL_DOMAIN);
 # Get Google Client
 $client=$video_obj->getGoogleClient();
+
+# Get the Validator Class.
+require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+# Since YouTube only allows one category, get the first category in the array.
+$category_name=reset($video_data['Categories']);
+# Get the Category class.
+require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
+# Instantiate a new Category object.
+$category_obj=new Category();
+# Get the category from the database.
+$category_obj->getThisCategory($category_name, FALSE);
+# Decode the `api` field in the `categories` table.
+$category_api_decoded=json_decode($category_obj->getAPI());
+if(isset($category_api_decoded->YouTube->category_id))
+{
+	# Category ID on YouTube.
+	$youtube_category_id=$category_api_decoded->YouTube->category_id;
+}
 
 # If there is a video file.
 if(!empty($video_data['FileName']))
@@ -93,14 +110,17 @@ if(!empty($video_data['FileName']))
 	$google_video_snippet=new Google_Service_YouTube_VideoSnippet();
 	$google_video_snippet->setTitle($video_data['Title']);
 	$google_video_snippet->setDescription($video_data['Description']);
-	$google_video_snippet->setTags(array("Center", "for", "World", "Indigenous", "Studies"));
+	$google_video_snippet->setTags(array($youtube_category_id));
 
 	# Numeric video category. See
 	# https://developers.google.com/youtube/v3/docs/videoCategories/list
-	# 25 = News & Politics
-	# 27 = Education
-	# 29 = Nonprofits & Activism
-	$google_video_snippet->setCategoryId($video_data['Category']);
+	# 	25 = News & Politics
+	# 	27 = Education
+	# 	29 = Nonprofits & Activism
+	if(isset($youtube_category_id))
+	{
+		$google_video_snippet->setCategoryId($youtube_category_id);
+	}
 
 	# Create a video status with privacy status. Valid statuses are "public", "private" and "unlisted".
 	$google_video_status=new Google_Service_YouTube_VideoStatus();
@@ -115,7 +135,8 @@ if(!empty($video_data['FileName']))
 	# Set video privacy.
 	$google_video_status->privacyStatus=$privacy_setting;
 
-	if(isset($video_data['InsertID']))
+	# If this is a new video (not editted).
+	if(isset($video_data['NewVideo']) && $video_data['NewVideo']===TRUE)
 	{
 		# Set the path to the video on the server.
 		$video_path=BODEGA.'videos'.DS.$video_data['FileName'];
@@ -130,7 +151,7 @@ if(!empty($video_data['FileName']))
 		$client->setDefer(TRUE);
 
 		# Create a video insert request.
-		$insert_response=$yt->insertVideo('status,snippet', $google_video);
+		$insert_response=$youtube_obj->insertVideo('status,snippet', $google_video);
 
 		# Create a MediaFileUpload object for resumable uploads.
 		$media_file_upload=new Google_Http_MediaFileUpload($client, $insert_response, 'video/*', NULL, TRUE, $chunk_size_bytes);
@@ -154,32 +175,22 @@ if(!empty($video_data['FileName']))
 		# If there is a custom thumbnail image.
 		if(!empty($video_data['ImageID']))
 		{
-			# Get the Validator Class.
-			require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
-
 			# Get the image information from the database, and set them to data members.
 			$video_obj->getThisImage($video_data['ImageID']);
-
 			# Set the Image object to a variable.
 			$image_obj=$video_obj->getImageObj();
-
 			# Set the current categories to a variable.
 			$image_categories=$image_obj->getCategories();
-
 			# Set the path to the original thumbnail on the server.
 			$original_thumbnail=IMAGES_PATH.'original'.DS.$image_obj->getImage();
-
 			# Call the API's thumbnails.set method to upload the image and associate
 			# it with the appropriate video.
-			$insert_thumbnail_response=$yt->insertThumbnail($video_id);
-
+			$insert_thumbnail_response=$youtube_obj->insertThumbnail($video_id);
 			# Create a MediaFileUpload object for resumable uploads.
 			$media_thumbnail_upload=new Google_Http_MediaFileUpload($client, $insert_thumbnail_response, 'image/jpeg', NULL, TRUE, $chunk_size_bytes);
 			$media_thumbnail_upload->setFileSize(filesize($original_thumbnail));
-
 			# Set $thumbnail_upload_status to FALSE by default.
 			$thumbnail_upload_status=FALSE;
-
 			# Read file and upload chunk by chunk
 			$thumbnail_handle=fopen($original_thumbnail, "rb");
 			while(!$thumbnail_upload_status && !feof($thumbnail_handle))
@@ -200,42 +211,39 @@ if(!empty($video_data['FileName']))
 		$resourceId->setKind('youtube#video');
 
 		# Get the YouTube playlists from the database.
-		$get_playlists=$db->get_results('SELECT `id`, `api` FROM `'.DBPREFIX.'categories` WHERE `api` IS NOT NULL');
-
-		# Loop through the new videos.
+		$get_playlists=$db->get_results('SELECT `id`, `api` FROM `'.DBPREFIX.'playlists` WHERE `api` IS NOT NULL');
+		# Loop through the playlists.
 		foreach($get_playlists as $playlists)
 		{
 			# Find the playlist in the $video_data array.
-			if(array_key_exists($playlists->id, $video_data['Categories']))
+			if(array_key_exists($playlists->id, $video_data['Playlists']))
 			{
-				# Decode the `api` field in the `categories` table.
+				# Decode the `api` field in the `playlists` table.
 				$playlist_api_decoded=json_decode($playlists->api);
-
 				# Create a snippet with resource id.
 				$playlistItemSnippet=new Google_Service_YouTube_PlaylistItemSnippet();
-				$playlistItemSnippet->setPlaylistId($playlist_api_decoded->youtube_playlist_id);
-				$playlistItemSnippet->setResourceId($resourceId);
 
+				# TODO: If YouTube->playlist_id does not exist, create playlist, and update `playlist` table.
+
+				$playlistItemSnippet->setPlaylistId($playlist_api_decoded->YouTube->playlist_id);
+				$playlistItemSnippet->setResourceId($resourceId);
 				# Create a playlist item request request with snippet.
 				$playlistItem=new Google_Service_YouTube_PlaylistItem();
 				$playlistItem->setSnippet($playlistItemSnippet);
-
 				# Execute the request and return an object containing information about the new playlistItem.
-				$playlistItemResponse=$yt->PlaylistItemsInsert('snippet,contentDetails', $playlistItem);
+				$playlistItemResponse=$youtube_obj->PlaylistItemsInsert('snippet,contentDetails', $playlistItem);
 			}
 		}
-
 		# json_encode the YouTube ID.
-		$insert_json=json_encode(array('youtube_id' => $video_id), JSON_FORCE_OBJECT);
-
+		$insert_json=json_encode(array('youtube_id'=>$video_id), JSON_FORCE_OBJECT);
 		# Insert the YouTube ID into the database entry.
-		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api` = '.$db->quote($db->escape($insert_json)).' WHERE `id` = '.$db->quote($video_data['InsertID']).' LIMIT 1');
+		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($video_data['ID']).' LIMIT 1');
 	}
 	# Edit video on YouTube.
-	elseif(isset($video_data['ID']))
+	if((!isset($video_data['NewVideo'])) || (isset($video_data['NewVideo']) && $video_data['NewVideo']===FALSE))
 	{
 		# Get new uploaded videos from the database.
-		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id` = '.$video_data['ID']);
+		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id`='.$video_data['ID']);
 
 		# Decode the `api` field.
 		$api_decoded=json_decode($video_row->api);
@@ -243,7 +251,7 @@ if(!empty($video_data['FileName']))
 		$video_yt_id=$api_decoded->youtube_id;
 
 		# Create a video list request.
-		$listResponse=$yt->listVideos('snippet,status', array('id' => $video_yt_id));
+		$listResponse=$youtube_obj->listVideos('snippet,status', array('id'=>$video_yt_id));
 		$videoList=$listResponse['items'];
 
 		# Since a unique video id is given, it will only return 1 video.
@@ -252,7 +260,10 @@ if(!empty($video_data['FileName']))
 		$videoSnippet=$video['snippet'];
 		$videoStatus=$video['status'];
 
-		$videoSnippet['categoryId']=$video_data['Category'];
+		if(isset($youtube_category_id))
+		{
+			$videoSnippet['categoryId']=$youtube_category_id;
+		}
 		$videoSnippet['description']=$video_data['Description'];
 		$videoSnippet['title']=$video_data['Title'];
 		$videoStatus['privacyStatus']=(($video_data['Availability']==1) ? "public" : "private");
@@ -275,6 +286,6 @@ if(!empty($video_data['FileName']))
 */
 
 		# Create a video update request.
-		$update_response=$yt->updateVideo('snippet,status', $video);
+		$update_response=$youtube_obj->updateVideo('snippet,status', $video);
 	}
 }

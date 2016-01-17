@@ -338,6 +338,19 @@ class VideoFormPopulator extends FormPopulator
 					# Set the year the video was first published to the data array.
 					$data['Year']=$year;
 				}
+
+				# If the YouTube POST data was sent and the value is "post_youtube" set 'post' to the data array.
+				if(isset($_POST['youtube']) && ($_POST['youtube']==='post_youtube'))
+				{
+					# Set the YouTube value to the data array as "post_youtube".
+					$data['YouTube']='post_youtube';
+				}
+				else
+				{
+					# Set the YouTube value to 0 in the data array.
+					$data['YouTube']=NULL;
+				}
+
 				# Reset the data array to the data member.
 				$this->setData($data);
 			}

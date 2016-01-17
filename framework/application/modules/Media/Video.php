@@ -640,7 +640,7 @@ class Video extends Media
 					# Check if the video is premium content or not.
 					$this_video=$this->getThisVideo($id);
 					# Check if the video was found.
-					if($this_audio===FALSE)
+					if($this_video===FALSE)
 					{
 						# Set a nice message to the session.
 						$_SESSION['message']='The video was not found.';
@@ -667,10 +667,18 @@ class Video extends Media
 
 						# Decode the `api` field.
 						$api_decoded=json_decode($this->getAPI());
-						$yt_id=$api_decoded->youtube_id;
+						if(isset($api_decoded->youtube_id))
+						{
+							$yt_id=$api_decoded->youtube_id;
+						}
 
 						# Delete the video.
-						if(($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE) && ($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE) && ($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) && ($yt->deleteVideo($yt_id)===TRUE))
+						if(
+							(is_file(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE && $file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE) ||
+							(is_file(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE && $file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE) ||
+							(is_file(BODEGA.'videos'.DS.$video_name)===TRUE && $file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) ||
+							(isset($yt_id) && $yt->deleteVideo($yt_id)===TRUE)
+						)
 						{
 							try
 							{
@@ -685,7 +693,7 @@ class Video extends Media
 							}
 							catch(ezDB_Error $ez)
 							{
-								throw new Exception('Error occured: ' . $ez->message . ', but the video file itself was deleted.<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+								throw new Exception('Error occured: '.$ez->message.', but the video file itself was deleted.<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 							}
 							catch(Exception $e)
 							{
@@ -718,7 +726,7 @@ class Video extends Media
 						}
 						catch(ezDB_Error $ez)
 						{
-							throw new Exception('Error occured: ' . $ez->message . ', but the video itself was deleted.<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+							throw new Exception('Error occured: '.$ez->message.', but the video itself was deleted.<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 						}
 						catch(Exception $e)
 						{
@@ -843,12 +851,12 @@ class Video extends Media
 					if($login->checkAccess(MAN_USERS)===TRUE)
 					{
 						# Get the Videos.
-						$this->getVideos(NULL, '*', 'id', 'DESC', ' WHERE `new` = 0');
+						$this->getVideos(NULL, '*', 'id', 'DESC');
 					}
 					else
 					{
 						# Get the Videos.
-						$this->getVideos(NULL, '*', 'id', 'DESC', ' WHERE `availability` = 1 AND `new` = 0');
+						$this->getVideos(NULL, '*', 'id', 'DESC', ' WHERE `availability`=1 AND `new`=0');
 					}
 					# Set the returned Video records to a variable.
 					$all_videos=$this->getAllVideos();

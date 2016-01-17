@@ -3,6 +3,8 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
+# Get the parent Content class.
+require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');
 
 /**
  * WordPressSubContent

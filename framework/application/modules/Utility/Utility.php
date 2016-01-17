@@ -361,9 +361,9 @@ class Utility
 	 * Retrieves the session data from the session file, parses it, and returns it as an array.
 	 *
 	 * @access	public
-	 * @param		session_id			The id of the session.
-	 * @param		session_path		The path to the session files (does NOT end with a slash.)
-	 * @return	Array						The Session array.
+	 * @param	session_id				The id of the session.
+	 * @param	session_path			The path to the session files (does NOT end with a slash.)
+	 * @return	Array					The Session array.
 	 */
 	public static function returnSessionData($session_id, $session_path)
 	{
@@ -374,7 +374,7 @@ class Utility
 			# Create a new array to hold the session.
 			$session=array();
 			# Set the initial offset to zero.
-			$offset = 0;
+			$offset=0;
 			# Loop through the session data.
 			while($offset<strlen($session_data))
 			{
@@ -384,7 +384,7 @@ class Utility
 				}
 				$pos=strpos($session_data, '|', $offset);
 				$num=$pos-$offset;
-				$varname =substr($session_data, $offset, $num);
+				$varname=substr($session_data, $offset, $num);
 				$offset+=$num+1;
 				$data=unserialize(substr($session_data, $offset));
 				$session[$varname]=$data;

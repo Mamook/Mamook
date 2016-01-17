@@ -271,6 +271,12 @@ require DATA_FILES.'user_privileges.php';
 # Create a default variable for the titles of errors.
 $alert_title='Attention:';
 
+# Create a default variable for the copyright info.
+$copyright='';
+
+# Create a default variable for the site description.
+$meta_desc='';
+
 #####################################################################################
 # DON'T EDIT BELOW THIS LINE ########################################################
 #####################################################################################
