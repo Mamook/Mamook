@@ -247,11 +247,11 @@ if(!g.initialized&&Y()){g.initialized=!0;var D=Y(),ea=D.substring(D.indexOf("/")
  *
  * @copyright (c) 2015 Jon Ryser	http://JonRyser.com
  * @author		Jon Ryser		http://JonRyser.com
- * @version		1.0.1
+ * @version		1.0.2
  */
-(function(a){a.fn.fwAlert=function(e){var d=window,g={close:"Close",draggable:!1};e&&a.extend(g,e);document.getElementById&&(d.defaultAlert=d.alert,d.alert=function(h,e){if(!(void 0===h||void 0===e)){var b=a(".overlay"),c=a("<h1>").addClass("h-1").html(h),i=a("<div>").addClass("message").html(e),f=a("<button>").addClass("button-close").attr({"aria-label":"Close "+h+" Modal",role:"button",type:"button"}).html(g.close),c=a("<section>").addClass("alertBox").append(c).append(i).append(f);0<b.length||
-(b=a("<div>").addClass("overlay").appendTo(a("body")));b.show();a("body").append(c);b=a(d).height()/2-c.outerHeight(!0)/2;console.log("topPosition: ",b);f="auto";0>b&&(b=0,f="90%",i.css({"overflow-y":"scroll",height:"98%"}));c.css({top:b+"px",left:a(d).width()/2-c.outerWidth(!0)/2+"px",height:f});g.draggable&&c.draggable&&(c.draggable({handle:".alertBox .h-1",opacity:0.4}),a(".alertBox .h-1").css({cursor:"move"}));a(".alertBox .button-close, .overlay").click(function(b){b.preventDefault();a(".alertBox, .overlay").remove()});
-a(d).keydown(function(b){("13"==b.keyCode||"32"==b.keyCode||"27"==b.keyCode)&&(a(".alertBox .button-close").click(),a(this).unbind("keydown"))})}})}})(jQuery);
+(function(a,b){a.fn.fwAlert=function(f){function i(c){if("13"==c.keyCode||"32"==c.keyCode||"27"==c.keyCode)a(".alertBox .button-close").click(),a(b).unbind(i)}var h={close:"Close",draggable:!1};f&&a.extend(h,f);b.defaultAlert=b.alert;b.alert=function(c,f){if(c||f){var d=a(".overlay"),e=a("<h1>").addClass("h-1").html(c),j=a("<div>").addClass("message").html(f),g=a("<button>").addClass("button-close").attr({"aria-label":"Close "+c+" Modal",role:"button",type:"button"}).html(h.close),e=a("<section>").addClass("alertBox").appendTo(a("body")).append(e).append(j).append(g);
+1>d.length&&(d=a("<div>").addClass("overlay").appendTo(a("body")));d.show();h.draggable&&e.draggable&&(e.draggable({handle:".alertBox .h-1",opacity:0.4}),a(".alertBox .h-1").css({cursor:"move"}));a(".alertBox .button-close, .overlay").click(function(b){b.preventDefault();a(".alertBox, .overlay").remove()});a(b).keydown(i);d=a(b).height()/2-e.outerHeight(!1)/2;g="auto";0>d&&(d=0,g="90%",j.css({"overflow-y":"scroll",height:"98%"}));e.css({top:d,left:a(b).width()/2-e.outerWidth(!1)/2,height:g})}}}})(jQuery,
+window);
 /*
  * clearInput
  *
