@@ -12,7 +12,7 @@ $video_id=NULL;
 $video_api=NULL;
 $video_author=NULL;
 $video_availability=1; # Set the default to "This site has the legal right to display" (1)
-$video_categories=25; # Set the default to "Education" (25)
+$video_categories=DEFAULT_VIDEO_CATEGORY;
 $video_contributor=$contributor->getContID();
 $video_date=date('Y-m-d'); # Set the default to todays date.
 $video_description=NULL;
@@ -31,6 +31,7 @@ $video_twitter='tweet'; # Set the default to "tweet" to Twitter.
 $video_unique=0; # Set the default to "Not Unique" (0)
 $video_video_type='file';
 $video_year=date('Y'); # Set the default year that the video was originally published to the current year.
+$video_youtube='post_youtube'; # Set the default to 'post_youtube' to post to YouTube.
 
 $max_file_size=1073741824; # Set the default max file size in bytes to "1073741824" (1GB).
 
@@ -129,5 +130,6 @@ $default_data=array(
 		'Twitter'=>$video_twitter,
 		'Unique'=>$video_unique,
 		'VideoType'=>$video_video_type,
-		'Year'=>$video_year
+		'Year'=>$video_year,
+		'YouTube'=>$video_youtube
 	);

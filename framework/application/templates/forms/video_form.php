@@ -145,7 +145,7 @@ elseif(!isset($_GET['select']))
 			$categories=array_merge($youtube_categories_flip, $categories);
 		}
 		# Set the current categories to a variable.
-		$video_categories=array_flip((array)$video_obj->getCategories());
+		$video_categories=(array)$video_obj->getCategories();
 		$category_options[]='';
 		# Loop through the categories.
 		foreach($categories as $category_name=>$category_id)
@@ -156,7 +156,7 @@ elseif(!isset($_GET['select']))
 			if(!empty($video_categories))
 			{
 				# Check if the current category is default or has been selected by the user.
-				if(in_array($category_id, $video_categories, TRUE)===TRUE)
+				if(in_array($category_name, $video_categories, TRUE)===TRUE)
 				{
 					# Set the selected category to the default.
 					$category_options['selected']=$category_name;
@@ -395,6 +395,22 @@ elseif(!isset($_GET['select']))
 				$fg->addElement('checkbox', array('name'=>'twitter', 'value'=>'tweet', 'id'=>'twitter', 'checked'=>$twitter, 'title'=>'Tweet on Twitter'));
 				$fg->addFormPart('</li>');
 			}
+		}
+		if(
+			YOUTUBE_CLIENT_ID!="" &&
+			YOUTUBE_CLIENT_SECRET!='' &&
+			YOUTUBE_DEV_KEY!='' &&
+			YOUTUBE_REFRESH_TOKEN!=''
+		)
+		{
+			$fg->addFormPart('<li>');
+			# Get whether or not the post should be posted to YouTube from the data member and set it to a variable.
+			$youtube=$populator->getYouTube();
+			# Make the YouTube value digestible to the form.
+			$youtube=(($youtube===NULL) ? '' : TRUE);
+			$fg->addFormPart('<label class="label" for="youtube">'.(!isset($_GET['video']) ? 'Post' : 'Edit').' on <span class="youtube" title="YouTube">YouTube</span></label>');
+			$fg->addElement('checkbox', array('name'=>'youtube', 'value'=>'post_youtube', 'id'=>'youtube', 'checked'=>$youtube, 'title'=>'Post on YouTube'));
+			$fg->addFormPart('</li>');
 		}
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="title"><span class="required">*</span> Title</label>');
