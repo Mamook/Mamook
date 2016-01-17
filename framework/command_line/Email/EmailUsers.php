@@ -74,7 +74,7 @@ require UTILITY_CLASS;
 require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
 
 # Get the DB Class needed to operate with MySQL.
-require_once Utility::locateFile(MODULES.'Database'.DS.'ezdb.class.php');
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
 DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
