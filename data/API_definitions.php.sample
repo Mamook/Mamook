@@ -1,6 +1,8 @@
 <?php  /* data/API_definitions.php */
 
 # Site API Variables
+define('DEFAULT_AUDIO_CATEGORY', '');
+define('DEFAULT_VIDEO_CATEGORY', '');
 define('DEFAULT_AUDIO_PLAYLIST', 'Audio');
 define('DEFAULT_VIDEO_PLAYLIST', 'Videos');
 define('FW_POPUP_HANDLE', 'fwpopup');
