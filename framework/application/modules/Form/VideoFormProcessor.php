@@ -580,7 +580,12 @@ class VideoFormProcessor extends FormProcessor
 									$_SESSION['video_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
 									$_SESSION['video_upload']['StagingEnvironment']=STAGING_DOMAIN;
 									$_SESSION['video_upload']['ConfirmationTemplate']=$confirmation_template;
-
+									# Get the Session Class
+									require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
+									# Instantiate the new Session object.
+									$session_obj=Session::getInstance();
+									# End the current session and store session data.
+									$session_obj->saveSessionFile();
 									# Create an array with video data.
 									$video_data=array(
 										'Environment'=>DOMAIN_NAME,
@@ -619,6 +624,8 @@ class VideoFormProcessor extends FormProcessor
 										//$cl->runScript('-y -i '.TEMP.$clean_filename.'mp4 -c:v copy -map 0 -bsf:v h264_mp4toannexb -f segment -segment_list '.AUDIO_PATH.'files'.DS.$clean_filename'.m3u8 -segment_time 2 -segment_format mpeg_ts -segment_list_type m3u8 '.AUDIO_PATH.'files'.DS.$clean_filename'.ts && \ rm -R -f '.TEMP.$clean_filename.'mp4');
 										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -hls_time 2 -hls_list_size 0 -hls_wrap 0 -start_number 0 -hls_allow_cache 1 -hls_segment_filename -hls_segment_filename \'hls_segment%03d.ts\' '.AUDIO_PATH.'files'.DS.$clean_filename.DS.'video.m3u8');
 */
+									# Remove the video upload session.
+									unset($_SESSION['video_upload']);
 								}
 
 								# Check if the availability allows posting to social networks.

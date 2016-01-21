@@ -338,6 +338,21 @@ class Session
 	} #==== End -- loseSessionData
 
 	/**
+	 * saveSessionFile
+	 *
+	 * End the current session and store session data.
+	 *
+	 * @access	public
+	 */
+	public function saveSessionFile()
+	{
+		# Write session data to file. Ends session.
+		session_write_close();
+		# Re-start session.
+		session_start();
+	} #==== End -- saveSessionFile
+
+	/**
 	 * setPostLogin
 	 *
 	 * Sets the _post_login Session to the current page.
