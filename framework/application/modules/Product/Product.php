@@ -2055,13 +2055,13 @@ class Product
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="'.ADMIN_URL.'ManageContent/products/?product='.$product_id.'" class="edit" title="Edit '.$product_title.'">Edit</a>';
+						$edit_content='<a href="'.ADMIN_URL.'ManageContent/products/?product='.$product_id.'" class="button-edit" title="Edit '.$product_title.'">Edit</a>';
 					}
 					# Check f there should be a delete button displayed.
 					if($delete===TRUE)
 					{
 						# Set the delete button to a variable.
-						$delete_content='<a href="'.ADMIN_URL.'ManageContent/products/?product='.$product_id.'&amp;delete" class="delete" title="Delete '.$product_title.'">Delete</a>';
+						$delete_content='<a href="'.ADMIN_URL.'ManageContent/products/?product='.$product_id.'&amp;delete" class="button-delete" title="Delete '.$product_title.'">Delete</a>';
 					}
 					# Check if this is a select list.
 					if($select==='select')
