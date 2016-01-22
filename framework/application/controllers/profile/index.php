@@ -25,7 +25,7 @@ if(isset($_GET['contributor']) && ($validator->isInt(trim($_GET['contributor']))
 	# Set the contributor's id to a variable.
 	$id=(int)$_GET['contributor'];
 	# Set `contributor` as the table to search for this person.
-	$table='contributor';
+	$table='contributors';
 }
 # Check if the GET data was "member".
 elseif(isset($_GET['member']) && ($validator->isInt(trim($_GET['member']))===TRUE))
@@ -198,7 +198,7 @@ if(!isset($_GET['publisher']) && !isset($_GET['person']))
 
 				if(isset($_GET['mail_error']) && ($_GET['mail_error']=='true'))
 				{
-					$doc->setError('<h3 class="h-3">There was an error sending you\'re email...</h3>
+					$doc->setError('<h3 class="h-3">There was an error sending your email...</h3>
 					Please make sure you entered your name and a valid email address. If it still isn\'t working, rest assured that the webmaster has received an email and will work out the issue as soon as possible. You may try again later. Thanks.');
 				}
 
