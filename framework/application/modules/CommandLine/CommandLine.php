@@ -267,7 +267,7 @@ class CommandLine
 				# Get the Logger Class.
 				require_once Utility::locateFile(MODULES.'Logger'.DS.'Logger.php');
 				# Create a new Document object, and set the log file to use.
-				$logger_obj=new Logger('cl_log_file.log');
+				$logger_obj=new Logger(COMMAND_LINE_LOG);
 				# Write exec() output to log file.
 				$logger_obj->writeLogFile($error_result);
 				# Close log file.

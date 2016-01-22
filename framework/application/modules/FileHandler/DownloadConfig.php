@@ -26,7 +26,7 @@ define('BASE_DIR', BODEGA);
 define('LOG_DOWNLOADS', TRUE);
 
 # log file name
-define('LOG_FILE','downloads.log');
+define('LOG_FILE', DOWNLOADS_LOG);
 
 # The size in bytes to chunk the file when downloading.
 define('CHUNKSIZE', 1*(1024*1024));
