@@ -1,3 +1,18 @@
+Version v2.10.1:
+ * Bumped version to 2.10.1 (Michael Delle)
+ * Contributor profile fix (Michael Delle)
+ * Add Log files to the back-end, created log file constants (Michael Delle)
+ * Updated edit and delete button classes. (Jon Ryser)
+ * Fixing Video uploads (Michael Delle)
+ * Need noscript SECOND (Jon Ryser)
+ * Fixed alert positioning. (Jon Ryser)
+ * Fixed comments (changed dependecy path to ezDB class) (Michael Delle)
+ * Video upload work (Michael Delle)
+ * Fixing database paths (Michael Delle)
+ * Adding default $copyright and $meta_desc variables (Michael Delle)
+ * Adding DB_TYPE constant (Michael Delle)
+ * Fixing Google library path (Michael Delle)
+
 Version v2.9.5:
  * Fixed delete account (Michael Delle)
  * Bumped version to 2.9.5 (Michael Delle)
