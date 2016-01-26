@@ -85,7 +85,7 @@ class ImageFormPopulator extends FormPopulator
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image_obj=new Image();
+			$image_obj=Image::getInstance();
 			# Set the Image object to the image data member for use outside of this method.
 			$this->setImageObject($image_obj);
 

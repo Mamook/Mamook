@@ -16,6 +16,7 @@ class Image extends Media
 {
 	/*** data members ***/
 
+	private static $image_obj;
 	private $all_images=array();
 	private $image=NULL;
 	private $height=NULL;
@@ -756,6 +757,22 @@ class Image extends Media
 			throw $e;
 		}
 	} #==== End -- getImages
+
+	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access	public
+	 */
+	public static function getInstance()
+	{
+		if(!self::$image_obj)
+		{
+			self::$image_obj=new Image();
+		}
+		return self::$image_obj;
+	} #==== End -- getInstance
 
 	/**
 	 * getThisImage

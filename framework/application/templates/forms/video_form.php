@@ -553,7 +553,12 @@ elseif(!isset($_GET['select']))
 		$display.=$fg->display();
 		$display.='</div>';
 	}
+	if(isset($_GET['video']))
+	{
+		# Display pages using this video. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+		$display.=$video_obj->displayMediaUsage('video');
+	}
+	# Display the videos in the `videos` table.
 	$display.=$video_obj->displayVideoFeed();
 }
-
 $display=$display_delete_form.$display;
