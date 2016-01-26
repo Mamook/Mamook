@@ -36,6 +36,7 @@ class Media
 	private $file=NULL;
 	private $file_id=NULL;
 	private $file_info_display=NULL;
+	private $file_obj=NULL;
 	private $all_images=NULL;
 	# $image_object is an object.
 	private $image_object=NULL;
@@ -641,6 +642,29 @@ class Media
 	} #==== End -- setFileInfoDisplay
 
 	/**
+	 * setFileObj
+	 *
+	 * Sets the data member $file_obj.
+	 *
+	 * @param	$object
+	 * @access	protected
+	 */
+	protected function setFileObj($object)
+	{
+		# Check if the passed value is an object.
+		if(is_object($object))
+		{
+			# Set the data member.
+			$this->file_obj=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->file_obj=NULL;
+		}
+	} #==== End -- setFileObj
+
+	/**
 	 * setAllImages
 	 *
 	 * Sets the data member $images.
@@ -659,7 +683,7 @@ class Media
 	 *
 	 * Sets the data member $image_object.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
 	protected function setImageObj($object)
@@ -1616,6 +1640,50 @@ class Media
 	} #==== End -- getAudioObject
 
 	/**
+	 * getFileObject
+	 *
+	 * Returns the data member $file_obj.
+	 *
+	 * @access	public
+	 */
+	public function getFileObject()
+	{
+		# Check if there is a File object.
+		if($this->file_obj===NULL)
+		{
+			# Get the File Class.
+			require_once Utility::locateFile(MODULES.'Media'.DS.'File.php');
+			# Instantiate a new File object.
+			$file_obj=File::getInstance();
+			# Set the File object to the data member.
+			$this->setFileObj($file_obj);
+		}
+		return $this->file_obj;
+	} #==== End -- getFileObject
+
+	/**
+	 * getImageObject
+	 *
+	 * Returns the data member $image_obj.
+	 *
+	 * @access	public
+	 */
+	public function getImageObject()
+	{
+		# Check if there is a Image object.
+		if($this->image_object===NULL)
+		{
+			# Get the Image Class.
+			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
+			# Instantiate a new Image object.
+			$image_obj=Image::getInstance();
+			# Set the Image object to the data member.
+			$this->setImageObj($image_obj);
+		}
+		return $this->image_object;
+	} #==== End -- getImageObject
+
+	/**
 	 * getVideoObject
 	 *
 	 * Returns the data member $video_obj.
@@ -1734,7 +1802,7 @@ class Media
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image=new Image();
+			$image=Image::getInstance();
 			# Get the images.
 			$image->getImages($limit, $fields, $order, $direction, $where);
 			# Set the retrieved images to a variable.
@@ -1771,7 +1839,7 @@ class Media
 			# Get the Image class.
 			require_once Utility::locateFile(MODULES.'Media'.DS.'Image.php');
 			# Instantiate a new Image object.
-			$image_obj=new Image();
+			$image_obj=Image::getInstance();
 			# Get the info for this image and set the return boolean to a variable.
 			$record_retrieved=$image_obj->getThisImage($value, $id);
 			# Set the image object to the data member.
@@ -1864,72 +1932,190 @@ class Media
 		}
 	} #==== End -- getThisPublisher
 
-	/*** End public methods ***/
-
-
-
-	/*** protected methods ***/
-
 	/**
-	 * setDataMembers
+	 * displayMediaUsage
 	 *
-	 * Sets all the data returned in a row from the various media tables to the appropriate data members.
+	 * Displays which product, subcontent, or video that is attached to the media that's being edited.
 	 *
-	 * @param		$row 		(The returned row of data from a record to set to the data members.)
-	 * @access	protected
+	 * @param	string $media_type
+	 * @access	public
 	 */
-// 	protected function setDataMembers($row)
-// 	{
-// 		try
-// 		{
-// 			/* Reset all the data members. */
-// 			$this->setID(NULL);
-// 			$this->setAuthor(NULL);
-// 			$this->setContent(NULL);
-// 			$this->setDescription(NULL);
-// 			$this->setFile(NULL);
-// 			$this->setImage(NULL);
-// 			$this->setLink(NULL);
-// 			$this->setPublisher(NULL);
-// 			$this->setTitle(NULL);
-// 			# Set media id to the data member.
-// 			$this->setID($row->id);
-//
-// 			# Set the author to the data member.
-// 			$this->setAuthor($row->author);
-// 			# Set media description to the data member.
-// 			$this->setContent($row->content);
-// 			# Set media description to the data member.
-// 			$this->setDescription($row->description);
-// 			# Check if there is a file value.
-// 			if($row->file!==NULL)
-// 			{
-// 				# Retrieve the file info from the `files` table via the file id returned in the $row data.
-// 				$this->getThisFile($row->file);
-// 			}
-// 			# Check if there is an image value.
-// 			if($row->image!==NULL)
-// 			{
-// 				# Retrieve the image info from the `images` table via the image id returned in the $row data.
-// 				$this->getThisImage($row->image);
-// 			}
-// 			# Set media link to the data member.
-// 			$this->setLink($row->link);
-// 			# Check if there is an publisher value.
-// 			if($row->publisher!==NULL)
-// 			{
-// 				# Retrieve the publisher info from the `publishers` table via the publisher id returned in the $row data.
-// 				$this->getThisPublisher($row->publisher);
-// 			}
-// 			# Set the media title to the data member.
-// 			$this->setTitle($row->title);
-// 		}
-// 		catch(Exception $e)
-// 		{
-// 			throw $e;
-// 		}
-// 	} #==== End -- setDataMembers
+	public function displayMediaUsage($media_type='image')
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Bring the Login object into scope.
+		global $login;
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
 
-	/*** End protected methods ***/
+		try
+		{
+			# Choose a media type.
+			#	Sets the field name to a variable.
+			#	Creates a variable (ex: $image_obj) and set's the object to it.
+			switch($media_type)
+			{
+				case 'audio':
+					$field_name='audio';
+					${'media_type'.'_obj'}=$this->getAudioObject();
+					break;
+				case 'file':
+					$field_name='file';
+					${'media_type'.'_obj'}=$this->getFileObject();
+					break;
+				case 'image':
+					$field_name='image';
+					${'media_type'.'_obj'}=$this->getImageObject();
+					break;
+				case 'video':
+					$field_name='video';
+					${'media_type'.'_obj'}=$this->getVideoObject();
+					break;
+			}
+
+			# If looking for an image, then search `product`, `subcontent`, and `videos` tables for the image ID.
+			#	If looking for anything other then an image, only search the `subcontent` table.
+			$sql=($media_type=='image' ?
+				'SELECT `id`, `title`, `category` AS branch, \'product_table\' AS table_name FROM `products` WHERE `'.$field_name.'`='.$this->getID().
+					' UNION ALL'.
+				' SELECT `id`, `title`, `category` AS branch, \'video_table\' AS table_name FROM `videos` WHERE `'.$field_name.'`='.$this->getID().
+					' UNION ALL'
+				:
+					'').
+				' SELECT `id`, `title`, `branch`, \'subcontent_table\' AS table_name FROM `subcontent` WHERE `'.$field_name.'`='.$this->getID();
+			$results=$db->get_results($sql);
+
+			# If results were returned (there are articles using this media).
+			if($results!==NULL)
+			{
+				# Set the default value for displaying an edit button and a delete button to FALSE.
+				$edit=FALSE;
+				$delete=FALSE;
+				# Check if the logged in User has access to editing a branch.
+				if($login->checkAccess(ALL_BRANCH_USERS)===TRUE)
+				{
+					# Set the default value for displaying an edit button and a delete button to TRUE.
+					$edit=TRUE;
+					$delete=TRUE;
+				}
+				# Start a table for the pages.
+				$table_header='<table class="table-media_usage">'.
+					# Set the table header for the title column to a variable.
+					'<th>Title</th>';
+				# Check if edit and delete buttons should be displayed.
+				if($delete===TRUE OR $edit===TRUE)
+				{
+					# Concatenate the options header to the table header.
+					$table_header.='<th>Options</th>';
+				}
+				# Creat an empty variable for the table body.
+				$table_body='';
+				# Loop through the $results array.
+				foreach($results as $row)
+				{
+					# Create empty variables for the edit and delete buttons.
+					$edit_content=NULL;
+					$delete_content=NULL;
+					$table_body.='<tr>'.
+						# Add the title markup to the $general_data variable.
+						'<td>'.$row->title.'</td>';
+
+					# Create URL.
+					$url=ADMIN_URL;
+					if($row->table_name=='product_table')
+					{
+						# Add to the URL.
+						$url.='ManageContent/products/?product=';
+					}
+					elseif($row->table_name='subcontent_table')
+					{
+						# Get the SubContent class.
+						require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');
+						# Instantiate a new SubContent object.
+						$subcontent_obj=new SubContent();
+						# Set the branches to a variable.
+						$branches=trim($row->branch, '-');
+						# Exploded the wanted branches into an array.
+						$branches=explode('-', $branches);
+						# Create a new array to hold the branch id's.
+						$branch_ids=array();
+						# Loop through the $branches array.
+						foreach($branches as $branch)
+						{
+							# Clean it up.
+							$branch=trim($branch);
+							# Check if the branch is unwanted (beginning with an "!".)
+							if(strpos($branch, '!')!==0)
+							{
+								if($validator->isInt($branch)===TRUE)
+								{
+									# Get the branch info.
+									$subcontent_obj->getThisBranch($branch);
+								}
+								else
+								{
+									# Get the branch info.
+									$subcontent_obj->getThisBranch($branch, FALSE);
+								}
+								# Get the Branch object.
+								$branch_obj=$subcontent_obj->getBranch();
+								# Set the id and name to the branch id's array.
+								$branch_ids[$branch_obj->getID()]=$branch_obj->getBranch();
+							}
+						}
+						# Set the branch id's array to the wanted_branches Data member.
+						$subcontent_obj->setWantedBranches($branch_ids);
+						# Get the correct folder name for the branch and set it to a variable.
+						$branch_folder=$subcontent_obj->getBranchFolder($branches);
+						$url.='ManageContent/'.$branch_folder.'/?edit&post=';
+					}
+					else
+					{
+						# Add to the URL.
+						$url.='ManageMedia/'.$row->table_name.'=';
+					}
+					# Add the media ID to the URL.
+					$url.=$row->id;
+
+					# Check if there should be an edit button displayed.
+					if($edit===TRUE)
+					{
+						# Set the edit button to a variable.
+						$edit_content='<a href="'.$url.'" class="button-edit" title="Edit this">Edit</a>';
+					}
+					# Check f there should be a delete button displayed.
+					if($delete===TRUE)
+					{
+						# Set the delete button to a variable.
+						$delete_content='<a href="'.$url.'&amp;delete" class="button-delete" title="Delete This">Delete</a>';
+					}
+					# Check if there should be edit or Delete buttons displayed.
+					if($delete===TRUE OR $edit===TRUE)
+					{
+						# Concatenate the button(s) to the $table_body variable wrapped in td tags.
+						$table_body.='<td>'.$edit_content.$delete_content.'</td>';
+					}
+					# Close the current tr and table.
+					$table_body.='</tr>'.
+					'</table>';
+					$display=$table_header.$table_body;
+					return $display;
+				}
+			}
+		}
+		catch(ezDB_Error $ez)
+		{
+			# Throw an exception because there was a Database connection error.
+			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			# Re-throw any caught exceptions.
+			throw $e;
+		}
+	} #==== End -- displayMediaUsage
+
+	/*** End public methods ***/
 
 } # end Media class

@@ -28,6 +28,7 @@ $display='';
 $head='';
 $audio_nav='';
 
+# Instantiate a new AudioFormProcessor object.
 $form_processor=new AudioFormProcessor();
 
 # Get the audio form template.
