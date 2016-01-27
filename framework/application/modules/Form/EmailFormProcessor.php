@@ -325,7 +325,12 @@ class EmailFormProcessor extends FormProcessor
 							'SiteName'=>Content::getInstance()->getSiteName(),
 							'Subject'=>$subject,
 							'Template'=>$template);
-
+						# Get the Session Class
+						require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
+						# Instantiate the new Session object.
+						$session_obj=Session::getInstance();
+						# End the current session and store session data.
+						$session_obj->saveSessionFile();
 						# Create an array with audio data.
 						$email_data=array(
 							'Environment'=>DOMAIN_NAME,
