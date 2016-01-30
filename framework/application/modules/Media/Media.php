@@ -2017,16 +2017,14 @@ class Media
 					# Create empty variables for the edit and delete buttons.
 					$edit_content=NULL;
 					$delete_content=NULL;
-					$table_body.='<tr>'.
-						# Add the title markup to the $general_data variable.
-						'<td>'.$row->title.'</td>';
 
 					# Create URL.
-					$url=ADMIN_URL;
+					$admin_url=ADMIN_URL;
+					$url=APPLICATION_URL;
 					if($row->table_name=='product_table')
 					{
 						# Add to the URL.
-						$url.='ManageContent/products/?product=';
+						$admin_url.='ManageContent/products/?product=';
 					}
 					elseif($row->table_name='subcontent_table')
 					{
@@ -2068,27 +2066,33 @@ class Media
 						$subcontent_obj->setWantedBranches($branch_ids);
 						# Get the correct folder name for the branch and set it to a variable.
 						$branch_folder=$subcontent_obj->getBranchFolder($branches);
-						$url.='ManageContent/'.$branch_folder.'/?edit&post=';
+						$admin_url.='ManageContent/'.$branch_folder.'/?edit&post=';
+						$url.=$branch_folder.'?post=';
 					}
 					else
 					{
 						# Add to the URL.
-						$url.='ManageMedia/'.$row->table_name.'=';
+						$admin_url.='ManageMedia/'.$row->table_name.'=';
 					}
 					# Add the media ID to the URL.
+					$admin_url.=$row->id;
 					$url.=$row->id;
+
+					$table_body.='<tr>'.
+						# Add the title markup to the $table_body variable.
+						'<td><a href="'.$url.'" title="Click to view the page" target="_blank">'.$row->title.'</a></td>';
 
 					# Check if there should be an edit button displayed.
 					if($edit===TRUE)
 					{
 						# Set the edit button to a variable.
-						$edit_content='<a href="'.$url.'" class="button-edit" title="Edit this">Edit</a>';
+						$edit_content='<a href="'.$admin_url.'" class="button-edit" title="Edit this">Edit</a>';
 					}
 					# Check f there should be a delete button displayed.
 					if($delete===TRUE)
 					{
 						# Set the delete button to a variable.
-						$delete_content='<a href="'.$url.'&amp;delete" class="button-delete" title="Delete This">Delete</a>';
+						$delete_content='<a href="'.$admin_url.'&amp;delete" class="button-delete" title="Delete This">Delete</a>';
 					}
 					# Check if there should be edit or Delete buttons displayed.
 					if($delete===TRUE OR $edit===TRUE)
