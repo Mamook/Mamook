@@ -345,6 +345,9 @@ class EmailFormProcessor extends FormProcessor
 						$cl=new CommandLine();
 						$cl->runScript(Utility::locateFile(COMMAND_LINE.'Email'.DS.'EmailUsers.php'), $email_data);
 
+						# Remove the email_users session index.
+						unset($_SESSION['email_users']);
+
 						# Set a nice message for the user in a session.
 						$_SESSION['message']='Your email has been initiated. You will receive an email at '.$sender_email.' notifying you as to the success of the mailing. Thank you!';
 						# Redirect the user to the page they were on.
