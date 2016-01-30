@@ -238,7 +238,7 @@ class CommandLine
 	 * Execute the passed command in the background. On linux errors are written to a log file.
 	 *
 	 * @access	protected
-	 * @param		command						The command to execute in the background.
+	 * @param	command					The command to execute in the background.
 	 */
 	protected function execInBackground($command)
 	{
@@ -253,9 +253,12 @@ class CommandLine
 			else
 			{
 				# Execute the script in the background Linux style. Writes errors to a log file.
-				//exec($command.' >> '.LOGS.'cl_log_file.log &', $output);
-				exec($command." 2>&1 &", $error_result);
+				exec($command.' >> '.LOGS.COMMAND_LINE_LOG.' &');
+				//exec($command." 2>&1 &", $error_result);
 			}
+			# NOTE: Doing the logging this way makes the browser hang.
+			# TODO: Use try and catch in the command line scripts instead.
+			/*
 			# If $error_result is not empty, there was an error (2>&1).
 			if(!empty($error_result))
 			{
@@ -266,13 +269,14 @@ class CommandLine
 				}
 				# Get the Logger Class.
 				require_once Utility::locateFile(MODULES.'Logger'.DS.'Logger.php');
-				# Create a new Document object, and set the log file to use.
+				# Create a new Logger object, and set the log file to use.
 				$logger_obj=new Logger(COMMAND_LINE_LOG);
 				# Write exec() output to log file.
 				$logger_obj->writeLogFile($error_result);
 				# Close log file.
 				$logger_obj->closeLogFile();
 			}
+			*/
 		}
 		catch(Exception $e)
 		{
