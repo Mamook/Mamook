@@ -16,32 +16,37 @@ function myErrorHandler($code, $msg, $file, $line)
 		}
 		else
 		{
-			#Execute PHP internal error handler
+			# Execute PHP internal error handler
 			return FALSE;
 		}
 	}
 }
 
 /**
-* ExceptionHandler
-*
-* Custom error handler code. It must be set by calling set_error_handler('myErrorHandler');. When an error occurs, this function is automatically called, and passed four arguments: the error code and message, the name of the script that generated the error, and the line number of the statement that generated the error. The function then becomes responsible for managing the error.
-*
-* @param	none
-* @access	public
+ * ExceptionHandler
+ *
+ * Custom error handler code. It must be set by calling set_error_handler('myErrorHandler');.
+ *
+ * When an error occurs, this function is automatically called, and passed four arguments:
+ *		the error code and message,
+ *		the name of the script that generated the error,
+ *		and the line number of the statement that generated the error.
+ * The function then becomes responsible for managing the error.
+ *
+ * @param	none
+ * @access	public
 */
-
 class ExceptionHandler
 {
 
 	/*** data members ***/
 
-	protected $message = 'Unknown exception';     // Exception message
-	private   $string;                            // Unknown
-	protected $code    = 0;                       // User-defined exception code
-	protected $file;                              // Source filename of exception
-	protected $line;                              // Source line of exception
-	private   $trace;                             // Unknown
+	protected $code=0;							# User-defined exception code
+	protected $file;							# Source filename of exception
+	protected $line;							# Source line of exception
+	protected $message='Unknown exception';		# Exception message
+	private $string;							# Unknown
+	private $trace;								# Unknown
 
 	/*** End data members ***/
 
@@ -78,7 +83,7 @@ class ExceptionHandler
 			{
 				if(defined('WP_FOLDER') && strpos(HERE, WP_FOLDER)!==FALSE)
 				{
-						return;
+					return;
 				}
 				if(!isset($_GET['error']))
 				{
