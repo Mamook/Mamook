@@ -33,6 +33,7 @@ class Video extends Media
 	private $google_client=NULL;
 	private $is_playlist=FALSE;
 	private $file_name=NULL;
+	private $new_video=TRUE;
 	private $thumbnail_url=NULL;
 	private $video_id=NULL;
 	private $video_type=NULL;
@@ -405,6 +406,31 @@ class Video extends Media
 	{
 		return $this->is_playlist;
 	} #==== End -- getIsPlaylist
+
+	/**
+	 * getNewVideo
+	 *
+	 * Gets the data member $new_video
+	 *
+	 * @access	public
+	 */
+	public function getNewVideo()
+	{
+		return $this->new_video;
+	} #==== End -- getNewVideo
+
+	/**
+	 * setNewVideo
+	 *
+	 * Set the data member $new_video
+	 *
+	 * @param	boolean $new_video
+	 * @access	public
+	 */
+	public function setNewVideo($new_video)
+	{
+		$this->new_video=$new_video;
+	} #==== End -- setNewVideo
 
 	/**
 	 * getThumbnailUrl
