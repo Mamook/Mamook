@@ -1,4 +1,4 @@
-<?php /* templates/branch_edit.php */
+<?php /* framework/application/templates/branch_edit.php */
 
 echo '<section id="main" class="main secure" role="main">',
 	$display_content,

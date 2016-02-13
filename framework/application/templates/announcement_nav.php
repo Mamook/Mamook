@@ -1,4 +1,4 @@
-<?php /* templates/announcement_nav.php */
+<?php /* framework/application/templates/announcement_nav.php */
 
 # Retrieve records by year.
 $years=$subcontent->returnYears('Announcement');

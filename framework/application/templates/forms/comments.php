@@ -1,4 +1,4 @@
-<?php /* templates/forms/comments.php */
+<?php /* framework/application/templates/forms/comments.php */
 
 	# Instantiate FormGenerator object.
 	$fg=new FormGenerator('comments_form', $url);

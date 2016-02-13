@@ -1,4 +1,4 @@
-<?php /* templates/forms/change_username.php */
+<?php /* framework/application/templates/forms/change_username.php */
 
 $display='<div id="change_username_form" class="form">';
 # Create and display form

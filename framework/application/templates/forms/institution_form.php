@@ -1,4 +1,4 @@
-<?php /* templates/forms/institution_form.php */
+<?php /* framework/application/templates/forms/institution_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'institution_form_defaults.php');
 $display_delete_form=$fp->processInstitution($default_data);

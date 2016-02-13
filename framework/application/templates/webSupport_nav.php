@@ -1,4 +1,4 @@
-<?php /* templates/webSupport_nav.php */
+<?php /* framework/application/templates/webSupport_nav.php */
 
 $websupport_nav='<ul class="nav-1">'.
 	'<li class="list-nav-1'.Document::addHereClass(APPLICATION_URL.'webSupport/FAQ.php', FALSE, FALSE).'">'.

@@ -1,4 +1,4 @@
-<?php /* templates/policy_nav.php */
+<?php /* framework/application/templates/policy_nav.php */
 $policy_nav='<ul class="nav-1 policy">'.
 	'<li class="list-nav-1'.Document::addHereClass(APPLICATION_URL.'policy/', TRUE, FALSE).'">'.
 		'<a href="'.APPLICATION_URL.'policy/" title="Policy Statment">Policy Statment</a>'.

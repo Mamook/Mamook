@@ -1,4 +1,4 @@
-<?php /* templates/secure_navbar.php */
+<?php /* framework/application/templates/secure_navbar.php */
 
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);

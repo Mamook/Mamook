@@ -1,4 +1,4 @@
-<?php /* templates/forms/position_form_defaults.php */
+<?php /* framework/application/templates/forms/position_form_defaults.php */
 
 # Create defaults.
 $position_description='';

@@ -1,4 +1,4 @@
-<?php /* templates/forms/product_form.php */
+<?php /* framework/application/templates/forms/product_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'product_form_defaults.php');
 $display_delete_form=$fp->processProduct($default_data);

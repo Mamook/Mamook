@@ -1,4 +1,4 @@
-<?php /* templates/breadcrumb.php */
+<?php /* framework/application/templates/breadcrumb.php */
 
 # Display the breadcrumb.
 echo '<section id="breadcrumb" class="breadcrumb">',

@@ -1,4 +1,4 @@
-<?php /* templates/forms/language_form.php */
+<?php /* framework/application/templates/forms/language_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'language_form_defaults.php');
 $display_delete_form=$fp->processLanguage($default_data);

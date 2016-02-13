@@ -1,4 +1,4 @@
-<?php /* templates/forms/delete_form.php */
+<?php /* framework/application/templates/forms/delete_form.php */
 
 if(isset($_GET['audio'])) $text_var='audio';
 if(isset($_GET['category'])) $text_var='category';

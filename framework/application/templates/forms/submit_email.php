@@ -1,4 +1,4 @@
-<?php /* templates/forms/submit_email.php */
+<?php /* framework/application/templates/forms/submit_email.php */
 
 $display='<div id="submit_email_form" class="form">';
 	# Create and display form.

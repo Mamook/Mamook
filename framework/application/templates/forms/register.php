@@ -1,4 +1,4 @@
-<?php /* templates/forms/register.php */
+<?php /* framework/application/templates/forms/register.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'register_form_defaults.php');
 $delete_form_display=$fp->processRegistration($default_data);

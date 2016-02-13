@@ -1,4 +1,4 @@
-<?php /* templates/page.php */
+<?php /* framework/application/templates/page.php */
 
 # Check if the site is in Maintenance mode. If it is, redirect to maintenance page.
 if(($main_content->getMaintenance()!==NULL) && (strstr(FULL_URL, 'maintenance')===FALSE))

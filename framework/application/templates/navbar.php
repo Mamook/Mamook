@@ -1,4 +1,4 @@
-<?php /* templates/navbar.php */
+<?php /* framework/application/templates/navbar.php */
 echo '<nav id="navbar" class="nav mainnav">',
 	'<ol class="nav-1">',
 		'<li class="list-nav-1',(($doc->removeIndex(FULL_URL)===DOMAIN_NAME.'/') ? '' : ' hover'),Document::addHereClass(APPLICATION_URL, TRUE, FALSE),'">',

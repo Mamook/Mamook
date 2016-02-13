@@ -1,4 +1,4 @@
-<?php /* templates/forms/publisher_form_defaults.php */
+<?php /* framework/application/templates/forms/publisher_form_defaults.php */
 
 # Get the Contributor Class.
 require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');

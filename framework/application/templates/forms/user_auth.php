@@ -1,4 +1,4 @@
-<?php /* templates/forms/user_auth.php */
+<?php /* framework/application/templates/forms/user_auth.php */
 
 $display_request_auth_form='<div id="request_auth_form" class="form">';
 # Create and display form.

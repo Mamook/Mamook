@@ -1,4 +1,4 @@
-<?php /* templates/forms/login.php */
+<?php /* framework/application/templates/forms/login.php */
 
 $display.='<div id="login" class="form login">';
 # Create and display form.

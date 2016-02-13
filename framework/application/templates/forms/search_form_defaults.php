@@ -1,4 +1,4 @@
-<?php /* templates/forms/search_form_defaults.php */
+<?php /* framework/application/templates/forms/search_form_defaults.php */
 
 $search_terms=NULL;
 $search_type=(isset($search_type) ? $search_type : array('all'));

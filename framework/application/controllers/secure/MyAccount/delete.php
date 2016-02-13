@@ -1,4 +1,4 @@
-<?php /* public/secure/MyAccount/delete.php */
+<?php /* framework/application/controllers/secure/MyAccount/delete.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

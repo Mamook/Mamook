@@ -1,4 +1,4 @@
-<?php /* templates/forms/publisher_form.php */
+<?php /* framework/application/templates/forms/publisher_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'publisher_form_defaults.php');
 $display_delete_form=$fp->processPublisher($default_data);

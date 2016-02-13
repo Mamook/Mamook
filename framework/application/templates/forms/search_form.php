@@ -1,4 +1,4 @@
-<?php /* templates/forms/search_form.php */
+<?php /* framework/application/templates/forms/search_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'search_form_defaults.php');
 # Process the search form.

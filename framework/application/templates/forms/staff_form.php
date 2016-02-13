@@ -1,4 +1,4 @@
-<?php /* templates/forms/staff_form.php */
+<?php /* framework/application/templates/forms/staff_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'staff_form_defaults.php');
 $display_delete_form=$form_processor->processStaff($default_data);
