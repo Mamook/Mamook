@@ -644,7 +644,7 @@ class FormProcessor
 	 *
 	 * Changes the User's password.
 	 *
-	 * @param 	string	$id (The User's ID.)
+	 * @param 	string $id				The User's ID.
 	 * @access	public
 	 */
 	public function processPassword($id=NULL)
@@ -670,8 +670,8 @@ class FormProcessor
 	 *
 	 * Updates the Privacy settings in the Database for the logged in user upon submission of the form.
 	 *
-	 * @param		array 	$branch_ids		(Each value must be the POST Data index that exactly matches the name of the field in the database to be updated.)
-	 * @param		integer	$id  					(The User's ID)
+	 * @param	array $branch_ids		Each value must be the POST Data index that exactly matches the name of the field in the database to be updated.
+	 * @param	integer $id  			The User's ID
 	 * @access	public
 	 */
 	public function processPrivacy($branch_ids, $id=NULL)
@@ -768,9 +768,17 @@ class FormProcessor
 					# Update the `privacy` field in the `contributors` table.
 					$contributor->updateContributor(array('user'=>$id), array('privacy'=>$cont_privacy));
 				}
-
-				# Update the `newsletter`, `notify`, and `questions` fields in the `users` table.
-				$user->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
+				try
+				{
+					# Update the `newsletter`, `notify`, and `questions` fields in the `users` table.
+					$user->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
+				}
+				catch(ezDB_Error $ez)
+				{
+					throw new Exception('There was an error updating the privacy settings for user ID: '.$id.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+				}
+				$_SESSION['message']='The privacy settings were successfully changed';
+				$this->redirectNoDelete();
 			}
 			catch(Exception $e)
 			{
@@ -778,40 +786,6 @@ class FormProcessor
 			}
 		}
 	} #==== End -- processPrivacy
-
-	/**
-	 * processSearch
-	 *
-	 * Checks if the search form has been submitted and processes it, returning the results of the search.
-	 *
-	 * @param		$terms (The term we're searching for.)
-	 * @param		$filter (Fields and or terms we would like exluded.)
-	 * @access	public
-	 */
-	/*
-	public function processSearch($index='searchterms', $filter=NULL, $tables=NULL, $fields=NULL, $id_names='id')
-	{
-		# Check if the search form has been submitted.
-		if(array_key_exists('_submit_check', $_POST))
-		{
-			# Get the Search class.
-			require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
-			# Instantiate a new Search object.
-			$search=new Search($tables, $fields, $id_names);
-			$tables=$search->getTables();
-			$fields=$search->getFields();
-			$id=$search->getID_Names();
-			$terms=$_POST[$index];
-			$search_results=array();
-			foreach($tables as $table)
-			{
-				$results[$table]=$search->performSearch($terms, $table, $fields[$table], $id[$table], $filter=NULL);
-				$search_results=array_merge($search_results, $results);
-			}
-			$search->setAllResults($search_results);
-		}
-	} #==== End -- processSearch
-	*/
 
 	/**
 	 * processUsername
@@ -948,9 +922,39 @@ class FormProcessor
 						$message=' but there was an error sending the confirmation email to '.$to;
 				}
 				$_SESSION['message']=$message_pre.' username was successfully changed'.$message.'.';
+				$this->redirectNoDelete();
 			}
 		}
 	} #==== End -- processUsername
+
+	/**
+	 * redirectNoDelete
+	 *
+	 * Redirects to the current page with all GET query params intact except "delete".
+	 *
+	 * @access	public
+	 */
+	public function redirectNoDelete($param_to_remove=NULL)
+	{
+		try
+		{
+			# Set the Document instance to a variable.
+			$doc=Document::getInstance();
+			$url=WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE.preg_replace('/(\&(amp;)?)?delete(=yes)?/i', '', GET_QUERY));
+			if($param_to_remove!==NULL)
+			{
+				$url=preg_replace('/(\&(amp;)?)?'.$param_to_remove.'=(\d)+/i', '', $url);
+			}
+			$url=str_replace('?&', '?', $url);
+			$url=trim($url, '?');
+			# Redirect the user.
+			$doc->redirect($url);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- redirectNoDelete
 
 	/*** End public methods ***/
 
@@ -1217,35 +1221,6 @@ class FormProcessor
 			throw $e;
 		}
 	} #==== End -- processReset
-
-	/**
-	 * redirectNoDelete
-	 *
-	 * Redirects to the current page with all GET query params intact except "delete".
-	 *
-	 * @access	protected
-	 */
-	protected function redirectNoDelete($param_to_remove=NULL)
-	{
-		try
-		{
-			# Set the Document instance to a variable.
-			$doc=Document::getInstance();
-			$url=WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE.preg_replace('/(\&(amp;)?)?delete(=yes)?/i', '', GET_QUERY));
-			if($param_to_remove!==NULL)
-			{
-				$url=preg_replace('/(\&(amp;)?)?'.$param_to_remove.'=(\d)+/i', '', $url);
-			}
-			$url=str_replace('?&', '?', $url);
-			$url=trim($url, '?');
-			# Redirect the user.
-			$doc->redirect($url);
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- redirectNoDelete
 
 	/*** End protected methods ***/
 
