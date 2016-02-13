@@ -1787,7 +1787,7 @@ class Content
 		}
 		catch(ezDB_Error $e)
 		{
-			throw new Exception('Error occured: ' . $e->message . ', code: ' . $e->code . '<br />Last query: '. $e->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: ' . $e->getMessage(). ', code: ' . $e->getCode() . '<br />Last query: '. $e->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
