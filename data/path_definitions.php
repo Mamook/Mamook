@@ -9,10 +9,8 @@ if(!defined('BASE_PATH'))
 {
 	# Define backslash or forward slash for *NIX and IIS systems.
 	define('DS', DIRECTORY_SEPARATOR);
-
 	# Attempt to determine the full-server path to the 'root' folder in order to reduce the possibility of path problems. (ends with a slash)
 	define('BASE_PATH', rtrim(realpath(dirname(__FILE__)), 'data'));
-
 	# Define the path to data. (ends with a slash)
 	define('DATA_FILES', BASE_PATH.'data'.DS);
 }
@@ -84,6 +82,12 @@ define('TEMP', BASE_PATH.'tmp'.DS);
 
 # Define where the Logs directory is (ie. /hsphere/home/user/domain.com/logsFolder/) (ends with a slash)
 define('LOGS', BASE_PATH.'logs'.DS);
+# Define the Command Line log file name.
+define('COMMAND_LINE_LOG', 'cl_log_file.log');
+# Define the Downloads log file name.
+define('DOWNLOADS_LOG', 'downloads.log');
+# Define the CHANGELOG file name.
+define('CHANGELOG', 'CHANGELOG');
 
 # Define where the public media directory is (ie. mediaFolder/) (ends with a slash)
 define('MEDIA_PATH', BASE_PATH.'public'.DS.'media'.DS);

@@ -8,30 +8,50 @@
  * Emailing values needed by the Email class.
  *
  */
-# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
-define('USE_SMTP', FALSE);
 
 # Production site.
-if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING===FALSE)
 {
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
 	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
 	define('SMTP_PORT', '587');
 	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
 	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
 }
-# Staging & Dev site.
+# Staging site.
+elseif(RUN_ON_STAGING===TRUE)
+{
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
+	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PORT', '587');
+	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
+}
+# Dev site.
 else
 {
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
 	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
-	define('SMTP_PORT', '587');
+	define('SMTP_PORT', '');
 	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
 	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
 }
 
-# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
-define('SMTP_USER', '');
-# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
-define('SMTP_PASS', '');
 # Define the email to use in the "from" field for SMTP (only needed if SMTP is set to TRUE)
 define('SMTP_FROM', SMTP_USER);
 # Define the type of security to use for SMTP (only needed if SMTP is set to TRUE. Options are 'tls', 'ssl', or '')

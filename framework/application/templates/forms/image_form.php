@@ -164,7 +164,11 @@ if(!isset($_GET['select']))
 		$display.='</div>';
 	}
 }
-
+if(isset($_GET['image']))
+{
+	# Display pages using this image. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+	$display.=$image_obj->displayMediaUsage('image');
+}
+# Display the images in the `images` table.
 $display.=$image_obj->displayImageList($select);
-
 $display=$display_delete_form.$display;

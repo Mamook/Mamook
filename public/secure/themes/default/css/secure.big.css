@@ -208,8 +208,8 @@ a:hover,
 	background:0;
 	border:0;
 }
-[class|=table] th:first-child,
-[class|=table] td:first-child {
+[class|=table]:not(.table-media_usage) th:first-child,
+[class|=table]:not(.table-media_usage) td:first-child {
 	width:56px;
 }
 [class|=table] th,

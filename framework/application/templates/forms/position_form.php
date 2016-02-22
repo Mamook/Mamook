@@ -1,4 +1,4 @@
-<?php /* templates/forms/position_form.php */
+<?php /* framework/application/templates/forms/position_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'position_form_defaults.php');
 $display_delete_form=$fp->processPosition($default_data);

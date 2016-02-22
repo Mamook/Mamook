@@ -1,4 +1,4 @@
-<?php /* templates/forms/language_form_defaults.php */
+<?php /* framework/application/templates/forms/language_form_defaults.php */
 
 # Create defaults.
 $language_id=NULL;

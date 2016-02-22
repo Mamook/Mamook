@@ -1,4 +1,4 @@
-<?php /* public/secure/MyAccount/staff_profile.php */
+<?php /* framework/application/controllers/secure/MyAccount/staff_profile.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

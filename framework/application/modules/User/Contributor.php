@@ -660,9 +660,9 @@ class Contributor extends User
 	 *
 	 * Retrieves the contributor's information from the database sets to to a display array. This method is designed to feed the displayProfile method of the parent User class.
 	 *
-	 * @param		String 	$value 	(May be the contributor id, the contributor's User ID, the contributor's email, or the contributor's first and last names - names must be in an array.)
-	 * @param		String 	$field 	(The field in the `contributors` table that $value is associated with.)
-	 * @param		Boolean $find 	(TRUE to try to find the User using the parent User methods, FALSE to not.)
+	 * @param	string $value			May be the contributor id, user ID, email, or first and last names (names must be in an array).
+	 * @param	string $field			The field in the `contributors` table that $value is associated with.
+	 * @param	boolean $find			TRUE to try to find the User using the parent User methods, FALSE to not.
 	 * @return	array
 	 * @access	public
 	 */
@@ -901,12 +901,12 @@ class Contributor extends User
 					$this->setContPrivacy($row->privacy);
 					$this->setUser($row->user);
 					# Set the User ID to a variable.
-					$user=$this->getUser();
+					$user_id=$this->getUser();
 					# Check if the User ID is empty.
-					if(!empty($user))
+					if(!empty($user_id))
 					{
 						# Get the contributor's username.
-						$username=$this->findUsername($user);
+						$username=$this->findUsername($user_id);
 						# Get the user's info.
 						$this->findUserData($username);
 					}

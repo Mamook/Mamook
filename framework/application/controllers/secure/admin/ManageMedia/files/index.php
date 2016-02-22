@@ -27,6 +27,7 @@ $display_box2='';
 $display='';
 $head='';
 
+# Instantiate a new FileFormProcessor object.
 $form_processor=new FileFormProcessor();
 
 # Get the image form template.

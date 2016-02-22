@@ -1,4 +1,4 @@
-<?php /* public/secure/MyAccount/change_username.php */
+<?php /* framework/application/controllers/secure/MyAccount/change_username.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

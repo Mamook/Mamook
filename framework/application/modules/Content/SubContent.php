@@ -2970,6 +2970,50 @@ class SubContent extends Content
 	} #==== End -- getBranches
 
 	/**
+	 * getBranchFolder
+	 *
+	 * Returns the folder name for a branch based on the best suited branch id.
+	 *
+	 * @param	array $branch_ids		The branch id's associated with the post.
+	 * @access	protected
+	 */
+	public function getBranchFolder($branch_ids)
+	{
+		try
+		{
+			# Get the common branch id.
+			$branch_id=$this->getCommonBranchID($branch_ids);
+			# Get the data for this branch.
+			$this->getThisBranch($branch_id);
+			# Set the Branch object to a variable.
+			$branch=$this->getBranch();
+			# Set the branch name to a variable.
+			$branch_name=$branch->getBranch();
+			# Check if the branch name is NOT all capital letter (an acronym).
+			if(strtoupper($branch_name)!==$branch_name)
+			{
+				# Convert the branch name to all lowercase letters.
+				$branch_name=strtolower($branch_name);
+			}
+			# Check if there are any spaces in the branch name.
+			if(strpos($branch_name, ' ')!==FALSE)
+			{
+				# Capitalize the first letter of each word in the branch name.
+				$branch_name=ucwords($branch_name);
+				# Remove any spaces in the branch name and set it as the folder name.
+				$branch_name=str_ireplace(' ', '', $branch_name);
+			}
+			# Set the branch name as the folder name.
+			$branch_folder=$branch_name;
+			return $branch_folder;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- getBranchFolder
+
+	/**
 	 * getThisBranch
 	 *
 	 * Retrieves branch info from the `branches` table in the Database for the passed id or branch name and sets it to the data member. A wrapper method for getThisBranch from the Branch class.
@@ -3840,9 +3884,10 @@ class SubContent extends Content
 	/**
 	 * getCommonBranchID
 	 *
-	 * Compares the "wanted branches", the passed ids, and a logged in User's access levels and returns the first most common id it finds. Priority is given to the "wanted branch" to User level over the passed branch id to User level relationships.
+	 * Compares the "wanted branches", the passed ids, and a logged in User's access levels and returns the first most common id it finds.
+	 * Priority is given to the "wanted branch" to User level over the passed branch id to User level relationships.
 	 *
-	 * @param		array			$branch_ids 	(The branch id's associated with the post.)
+	 * @param	array $branch_ids		The branch id's associated with the post.
 	 * @access	protected
 	 */
 	protected function getCommonBranchID($branch_ids)
@@ -3902,50 +3947,6 @@ class SubContent extends Content
 			throw $e;
 		}
 	} #==== End -- getCommonBranchID
-
-	/**
-	 * getBranchFolder
-	 *
-	 * Returns the folder name for a branch based on the best suited branch id.
-	 *
-	 * @param		array			$branch_ids 	(The branch id's associated with the post.)
-	 * @access	protected
-	 */
-	protected function getBranchFolder($branch_ids)
-	{
-		try
-		{
-			# Get the common branch id.
-			$branch_id=$this->getCommonBranchID($branch_ids);
-			# Get the data for this branch.
-			$this->getThisBranch($branch_id);
-			# Set the Branch object to a variable.
-			$branch=$this->getBranch();
-			# Set the branch name to a variable.
-			$branch_name=$branch->getBranch();
-			# Check if the branch name is NOT all capital letter (an acronym).
-			if(strtoupper($branch_name)!==$branch_name)
-			{
-				# Convert the branch name to all lowercase letters.
-				$branch_name=strtolower($branch_name);
-			}
-			# Check if there are any spaces in the branch name.
-			if(strpos($branch_name, ' ')!==FALSE)
-			{
-				# Capitalize the first letter of each word in the branch name.
-				$branch_name=ucwords($branch_name);
-				# Remove any spaces in the branch name and set it as the folder name.
-				$branch_name=str_ireplace(' ', '', $branch_name);
-			}
-			# Set the branch name as the folder name.
-			$branch_folder=$branch_name;
-			return $branch_folder;
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- getBranchFolder
 
 	/**
 	 * getPostDomain

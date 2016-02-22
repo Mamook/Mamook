@@ -504,7 +504,12 @@ elseif(!isset($_GET['select']))
 		$display.=$fg->display();
 		$display.='</div>';
 	}
+	if(isset($_GET['audio']))
+	{
+		# Display pages using this audio. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+		$display.=$audio_obj->displayMediaUsage('audio');
+	}
+	# Display the videos in the `videos` table.
 	$display.=$audio_obj->displayAudioFeed();
 }
-
 $display=$display_delete_form.$display;

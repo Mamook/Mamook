@@ -1,4 +1,4 @@
-<?php /* templates/secure_navbar.php */
+<?php /* framework/application/templates/secure_navbar.php */
 
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);
@@ -107,6 +107,17 @@ echo '<nav id="navbar" class="nav nav1">',
 					'</li>',
 					'<li class="list-nav-2', Document::addHereClass(ADMIN_URL.'ManageMedia/videos/', FALSE, FALSE), '">',
 						'<a href="', ADMIN_URL, 'ManageMedia/videos/" title="Manage Video">Videos</a>',
+					'</li>',
+				'</ul>',
+			'</li>',
+			'<li class="list-nav-1', (((strstr(FULL_URL, 'Logs/')!==FALSE)) ? '' : ' hover'), Document::addHereClass(ADMIN_URL.'Logs/', FALSE, FALSE), '">',
+			'<a href="', ADMIN_URL, 'Logs/" title="Logs">Logs</a>',
+				'<ul class="nav-2">',
+					'<li class="list-nav-2', Document::addHereClass(ADMIN_URL.'Logs/?log='.COMMAND_LINE_LOG, TRUE, FALSE), '">',
+						'<a href="', ADMIN_URL, 'Logs/?log=',COMMAND_LINE_LOG,'" title="Command Line Log">Command Line Log</a>',
+					'</li>',
+					'<li class="list-nav-2', Document::addHereClass(ADMIN_URL.'Logs/?log='.CHANGELOG, TRUE, FALSE), '">',
+						'<a href="', ADMIN_URL, 'Logs/?log=',CHANGELOG,'" title="Changelog">Changelog</a>',
 					'</li>',
 				'</ul>',
 			'</li>';

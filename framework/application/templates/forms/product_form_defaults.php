@@ -1,4 +1,4 @@
-<?php /* templates/forms/product_form_defaults.php */
+<?php /* framework/application/templates/forms/product_form_defaults.php */
 
 # Create defaults.
 $product_asin=NULL;

@@ -18,6 +18,7 @@ class File extends Media
 
 	private $all_files=array();
 	private $file=NULL;
+	private static $file_obj;
 	private $premium;
 
 	/*** End data members ***/
@@ -621,6 +622,22 @@ class File extends Media
 			throw $e;
 		}
 	} #==== End -- getFiles
+
+	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access	public
+	 */
+	public static function getInstance()
+	{
+		if(!self::$file_obj)
+		{
+			self::$file_obj=new File();
+		}
+		return self::$file_obj;
+	} #==== End -- getInstance
 
 	/**
 	 * getThisFile

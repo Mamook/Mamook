@@ -1,4 +1,4 @@
-<?php /* templates/forms/privacy.php */
+<?php /* framework/application/templates/forms/privacy.php */
 
 $person='me';
 # Check if the user was passed in the URL.

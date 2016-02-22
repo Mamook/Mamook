@@ -1,4 +1,4 @@
-<?php /* templates/forms/register_form_defaults.php */
+<?php /* framework/application/templates/forms/register_form_defaults.php */
 
 # Create defaults.
 $username=NULL;

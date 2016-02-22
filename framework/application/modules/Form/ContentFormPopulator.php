@@ -139,12 +139,22 @@ class ContentFormPopulator extends FormPopulator
 					# Set the archive value to 0.
 					$data['Archive']=0;
 				}
+				else
+				{
+					# Set the archive value to NULL in the data array.
+					$data['Archive']=NULL;
+				}
 
 				# Check if hide_title POST data was sent.
 				if(isset($_POST['hide_title']))
 				{
 					# Set the hide_title value to 0.
 					$data['HideTitle']=0;
+				}
+				else
+				{
+					# Set the hide_title value to NULL in the data array.
+					$data['HideTitle']=NULL;
 				}
 
 				# Check if image POST data was sent.
@@ -187,6 +197,11 @@ class ContentFormPopulator extends FormPopulator
 				{
 					# Set the social value to 0.
 					$data['UseSocial']=0;
+				}
+				else
+				{
+					# Set the social value to NULL in the data array.
+					$data['UseSocial']=NULL;
 				}
 
 				# Check if sub_domain POST data was sent.

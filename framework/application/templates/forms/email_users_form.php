@@ -1,4 +1,4 @@
-<?php /* templates/forms/email_users_form.php */
+<?php /* framework/application/templates/forms/email_users_form.php */
 
 # Process the certificate application form.
 $fp->processEmail($default_data);

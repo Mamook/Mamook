@@ -1,4 +1,4 @@
-<?php /* templates/footer.php */
+<?php /* framework/application/templates/footer.php */
 
 $street=$main_content->getAddress1();
 $street=((empty($street)) ? '' : '<span class="street">'.$street.'</span> ');

@@ -1,4 +1,4 @@
-<?php /* templates/forms/institution_form_defaults.php */
+<?php /* framework/application/templates/forms/institution_form_defaults.php */
 
 # Create defaults.
 $institution_id=NULL;

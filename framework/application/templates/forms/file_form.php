@@ -255,7 +255,7 @@ if(!isset($_GET['select']))
 		{
 			$fg->addFormPart('<ul>');
 			$fg->addFormPart('<li class="file-current">');
-			$fg->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($file_obj->getPremium()!==NULL) ? '&amp;t=premium' : '').'" title="Current File">'.$file_name.' - "'.$file->getTitle().'"</a>');
+			$fg->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.(($file_obj->getPremium()!==NULL) ? '&amp;t=premium' : '').'" title="Current File">'.$file_name.' - "'.$file_obj->getTitle().'"</a>');
 			$fg->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('</ul>');
@@ -308,7 +308,7 @@ if(!isset($_GET['select']))
 		# Check if this is an edit page.
 		if(isset($_GET['file']) && !isset($_GET['delete']))
 		{
-			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file->getID().'&amp;delete" class="submit-delete" title="Delete This">Delete</a>');
+			$fg->addFormPart('<a href="'.ADMIN_URL.'ManageMedia/files/?file='.$file_obj->getID().'&amp;delete" class="submit-delete" title="Delete This">Delete</a>');
 		}
 		$fg->addElement('submit', array('name'=>'file', 'value'=>'Reset'), '', NULL, 'submit-reset');
 		if(isset($_GET['add']))
@@ -385,7 +385,11 @@ if(!isset($_GET['select']))
 		$display.=$fg->display();
 	}
 }
-
+if(isset($_GET['file']))
+{
+	# Display pages using this file. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+	$display.=$file_obj->displayMediaUsage('file');
+}
+# Display the images in the `files` table.
 $display.=$file_obj->displayFileList($select);
-
 $display=$display_delete_form.$display;

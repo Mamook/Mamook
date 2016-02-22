@@ -28,6 +28,7 @@ $display='';
 $head='';
 $video_nav='';
 
+# Instantiate a new VideoFormProcessor object.
 $form_processor=new VideoFormProcessor();
 
 # Get the video form template.

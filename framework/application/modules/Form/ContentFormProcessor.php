@@ -118,8 +118,8 @@ class ContentFormProcessor extends FormProcessor
 						# Reset the value for the message action.
 						$message_action='updated';
 						# Reset the sql variable with the UPDATE sql.
-						$sql='UPDATE `'.DBPREFIX.'content` SET
-							`page_title` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($page_title))))).','.
+						$sql='UPDATE `'.DBPREFIX.'content` SET'.
+							' `page_title` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($page_title))))).','.
 							' `sub_title` = '.((empty($sub_title)) ? 'NULL' : $db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($sub_title)))))).','.
 							' `hide_title` = '.(($hide_title===NULL) ? 'NULL' : 0).','.
 							' `content` = '.$db->quote($db->escape(preg_replace("/<p>(.*?)<\/p>(\n?(\n)?)/i", "$1\n\n", str_replace("\r", '', htmlspecialchars_decode($text))))).','.

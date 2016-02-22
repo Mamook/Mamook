@@ -1,4 +1,4 @@
-<?php /* templates/header.php */
+<?php /* framework/application/templates/header.php */
 
 # Define the DOCTYPE. This site is using html5
 $header='<!DOCTYPE html>';

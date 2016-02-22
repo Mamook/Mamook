@@ -1926,7 +1926,7 @@ class User
 		try
 		{
 			# Check if the passed id is from the `contributor` table.
-			if($table=='contributor')
+			if($table=='contributors')
 			{
 				# Get the Contributor class.
 				require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
@@ -2758,7 +2758,7 @@ class User
 					# Set the data member to a variable.
 					$id=$this->getID();
 				}
-				elseif($validator->validEmail($value)===TRUE)
+				elseif($validator->validEmail($value)===TRUE && $this->getUsername()===NULL)
 				{
 					# Find the users username using the passed value as the email and set it to a variable.
 					$username=$this->findUsername($value);

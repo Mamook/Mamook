@@ -1,4 +1,4 @@
-<?php /* templates/forms/content_form.php */
+<?php /* framework/application/templates/forms/content_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'content_form_defaults.php');
 $fp->processContent($default_data);

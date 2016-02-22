@@ -1,4 +1,4 @@
-<?php /* templates/forms/email_users_form_defaults.php */
+<?php /* framework/application/templates/forms/email_users_form_defaults.php */
 
 $sender_email=NULL;
 $sender_name=NULL;

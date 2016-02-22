@@ -1,4 +1,4 @@
-<?php /* templates/forms/post_form.php */
+<?php /* framework/application/templates/forms/post_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'post_form_defaults.php');
 $delete_form_display=$fp->processPost($default_data);

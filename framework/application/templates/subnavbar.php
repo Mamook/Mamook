@@ -1,4 +1,4 @@
-<?php /* templates/subnavbar.php */
+<?php /* framework/application/templates/subnavbar.php */
 
 # Create the login link.
 $login_link='<li class="list-nav-1'.Document::addHereClass(REDIRECT_TO_LOGIN, TRUE, FALSE).'">';

@@ -1187,11 +1187,14 @@ class Login extends User
 					$sent=$doc->sendEmail($subject, $to, $body);
 					# Check if the email was successfully sent.
 					if($sent===TRUE)
-					$message=' and an email has been sent to '.$to;
+						$message=' and an email has been sent to '.$to;
 					else
-					$message=' but there was an error sending the confirmation email to '.$to;
+						$message=' but there was an error sending the confirmation email to '.$to;
 				}
 				$_SESSION['message']=$message_pre.' password was successfully changed'.$message.'.';
+				# Instantiate a new FormProcessor object.
+				$form_processor=new FormProcessor();
+				$form_processor->redirectNoDelete();
 			}
 		}
 	} #==== End -- changePassword

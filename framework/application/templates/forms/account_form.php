@@ -1,4 +1,4 @@
-<?php /* templates/forms/account_form.php */
+<?php /* framework/application/templates/forms/account_form.php */
 
 require Utility::locateFile(TEMPLATES.'forms'.DS.'account_form_defaults.php');
 $display_delete_form=$form_processor->processAccount($default_data);

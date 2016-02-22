@@ -1,4 +1,4 @@
-<?php /* templates/forms/post_form_defaults.php */
+<?php /* framework/application/templates/forms/post_form_defaults.php */
 
 # Get the Branch class.
 require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');

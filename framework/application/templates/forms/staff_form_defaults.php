@@ -1,4 +1,4 @@
-<?php /* templates/forms/account_form_defaults.php */
+<?php /* framework/application/templates/forms/account_form_defaults.php */
 
 # Create defaults.
 $staff_affiliation=NULL;

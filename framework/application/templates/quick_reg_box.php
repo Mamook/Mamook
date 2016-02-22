@@ -1,4 +1,4 @@
-<?php /* templates/quick_reg_box.php */
+<?php /* framework/application/templates/quick_reg_box.php */
 
 if(WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE.'register/'))!==WebUtility::removeIndex(FULL_URL))
 {
