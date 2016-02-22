@@ -25,7 +25,7 @@ $js.=
 
 # Instantiate "fwPopup".
 $js.=
-	'$(function(){$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:"",social_tools:null})});';
+	'$(function(){$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:"",socialTools:null})});';
 
 # Add the Google+ button to the AddThis buttons.
 $js.=
