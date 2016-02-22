@@ -1,4 +1,7 @@
-<?php
+<?php /* framework/application/modules/Form/FormValidator.php */
+
+# Make sure the script is not accessed directly.
+if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
 # Get the Validator Class
 require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
