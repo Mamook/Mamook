@@ -123,9 +123,9 @@ class Login extends User
 	 * Sets the data member $recaptcha_error.
 	 *
 	 * @param	$error					The error string to set.
-	 * @access	protected
+	 * @access	public
 	 */
-	protected function setReCaptchaError($error)
+	public function setReCaptchaError($error)
 	{
 		$error=trim($error);
 		$this->recaptcha_error=$error;
