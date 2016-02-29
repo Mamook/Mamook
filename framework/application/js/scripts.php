@@ -3,21 +3,27 @@
 # Set the Document instance to a variable.
 $doc=Document::getInstance();
 
-# Open "window load" (better than "document ready") to put all JavaScript calls inside of.
-$js=
-	'$(window).load(function(){';
+
+# Open an anoymous auto executing function to put all JavaScript calls inside of.
+$js.=
+	'(function($){';
+
+
+# Open "document ready" to put all JavaScript calls that need that inside of.
+$js.=
+	'$(function(){';
 
 # Remove the "noscript" class. If there is no JavaScript available, this class will remain.
 $js.=
 	'$("body").removeClass("noscript");';
 
-# If Javascript is enabled in the user's browser, display errors in a java created div.
-$js.=
-	$doc->addJSErrorBox();
-
 # If the user's device is mobile, add the "mobile" class.
 $js.=
 	'if(fwIsMobile)$("body").addClass("mobile");';
+
+# If Javascript is enabled in the user's browser, display errors in a java created div.
+$js.=
+	$doc->addJSErrorBox();
 
 # Execute "clearInput".
 $js.=
@@ -25,7 +31,16 @@ $js.=
 
 # Instantiate "fwPopup".
 $js.=
-	'$(function(){$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:"",socialTools:null})});';
+	'$("[rel^='.FW_POPUP_HANDLE.']").fwPopup({opacity:1,theme:""});';
+
+# Close "document ready".
+$js.=
+	'});';
+
+
+# Open "window load" to put all JavaScript calls that need that  inside of.
+$js.=
+	'$(window).load(function(){';
 
 # Add the Google+ button to the AddThis buttons.
 $js.=
@@ -42,3 +57,8 @@ $js.=
 # Close "window load".
 $js.=
 	'});';
+
+
+# Close the anoymous auto executing function.
+$js.=
+	'})(jQuery);';
