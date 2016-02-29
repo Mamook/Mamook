@@ -28,13 +28,15 @@
 
 <!-- JavaScript -->
 	<target name="concat_js">
+		<property name="js_dir" location="js"/>
 	<!-- Concatenate the header, modules, and plugins together. -->
-		<concat destfile="${buildLocation}/fwPopup.big.js">
-			<header>/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */${line.separator}${line.separator}</header>
-			<filelist dir="js">
+		<concat destfile="${buildLocation}/fwPopup.big.js" fixlastline="yes" eol="lf" append="no">
+			<header file="${js_dir}/header.js"></header>
+			<filelist dir="${js_dir}">
+				<file name="GlobalVariables.js"/>
 				<file name="fwPopup.js"/>
 			</filelist>
-			<footer>${line.separator}${line.separator}${line.separator}/////////////////${line.separator}// END fwPopup //${line.separator}/////////////////</footer>
+			<footer file="${js_dir}/footer.js"></footer>
 		</concat>
 	</target>
 
