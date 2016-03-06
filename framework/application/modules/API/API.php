@@ -778,7 +778,7 @@ class API
 					$extracted_data[$i]['link_caption']=(isset($data->caption) ? $data->caption : NULL);
 				}
 				# Set the message body to a variable.
-				$extracted_data[$i]['message']=$data->message;
+				$extracted_data[$i]['message']=(isset($data->message) ? $data->message : NULL);
 				# Set the social network name (Facebook) to the data member array.
 				$extracted_data[$i]['network']='Facebook';
 				# Check if there was a picture posted.
@@ -787,6 +787,10 @@ class API
 					# Set the picture to a variable.
 					$extracted_data[$i]['picture']=$data->picture;
 				}
+				# Set the status_type to a variable.
+				$extracted_data[$i]['status_type']=(isset($data->status_type) ? $data->status_type : NULL);
+				# Set the story to a variable.
+				$extracted_data[$i]['story']=(isset($data->story) ? $data->story : NULL);
 				# Get the post date / time and convert to unix time.
 				$time=strtotime($data->created_time->date);
 				# Format the date / time into something human readable.
