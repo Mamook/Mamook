@@ -931,8 +931,8 @@ img {
 }
 
 
-/* Pretty Photo, Alert, and Error */
-.fwpLoader,
+/* fwPopUp, Alert, and Error */
+.fwpLoading:after,
 .fwpHolder,
 .button-close,
 .alertBox{
@@ -943,16 +943,12 @@ img {
 .button-contract,
 .button-contract:hover,
 .fwpPlay,
-.fwpPause,
-.fwpArrow-previous,
-.fwpArrow-next {
+.fwpPause {
 	background:url(../images/pp-sprite.png) no-repeat;
 	cursor:pointer;
 }
 .fwpPlay,
-.fwpPause,
-.fwpArrow-previous,
-.fwpArrow-next {
+.fwpPause {
 	float:left;
 	display:block;
 	width:14px;
@@ -976,9 +972,20 @@ img {
 	margin:0;
 }
 .fwpDescription {
+	width: 100%;
+	height: auto;
 	color:#fff;
 	display:none;
 	margin:0 85px 10px 0;
+}
+.fwpSocial {
+	height: 22px;
+}
+.fwpHolder .facebook,
+.fwpHolder .twitter {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 4px;
 }
 .fwpPause {
 	background-position:-24px -78px;
@@ -992,47 +999,39 @@ img {
 .fwpPlay:hover {
 	background-position:-1px -96px;
 }
-.fwpArrow-previous {
-	background-position:0 -45px;
-}
-.fwpArrow-previous:hover {
-	background-position:0 -61px;
-}
-.fwpArrow-next {
-	background-position:-22px -45px;
-}
-.fwpArrow-next:hover {
-	background-position:-22px -61px;
-}
-.fwpLoader {
+.fwpLoading:after {
+	content:'';
 	display:block;
 	top:50%;
 	left:50%;
-	background:url(../images/loading3d.gif);
-	width:24px;
-	height:24px;
-	margin:-12px 0 0 48px;
+	background: url(../images/loading3d.gif);
+	width: 24px;
+	height: 24px;
+	margin: -12px 0 0 48px;
 }
 .fwpHolder a:focus {
-	outline:medium none;
+	outline: medium none;
 }
 .fwpHolder {
-	display:none;
-	width:100px;
-	z-index:10000;
+	display: none;
+	height: auto;
+	width: auto;
+	z-index: 10000;
 }
 .fwpContent {
-	width:40px;
+	width: 100%;
+	height: auto;
 	min-width:200px;
-	height:40px;
 }
 .fwpContainer {
-	position:relative;
-	width:100%;
+	position: relative;
+	width: 100%;
+	height: auto;
 }
 .fwpDetails {
-	float:left;
-	min-width:200px;
+	min-width: 200px;
+	width: 100%;
+	height: auto;
 	margin:10px 0 2px;
 }
 .fwpNav {
@@ -1041,23 +1040,6 @@ img {
 .fwpNav p {
 	white-space:nowrap;
 	margin:2px 4px;
-}
-.fwpHoverContainer {
-	position:absolute;
-	top:4px;
-	width:100%;
-	z-index:2000;
-}
-.fwpPrevious,
-.fwpNext {
-	background:rgba(68, 68, 68, .7);
-	padding:0 5px;
-}
-.fwpPrevious {
-	border-radius:3px 0 0 3px;
-}
-.fwpNext {
-	border-radius:0 3px 3px 0;
 }
 .button-expand,
 .button-contract {
@@ -1072,19 +1054,20 @@ img {
 	cursor:pointer;
 	z-index:20000;
 }
-#fwpFullRes {
+.fwpFullRes {
 	line-height:1 !important;
 }
-#fwpFullRes .fwpInline p {
+.fwpFullRes.fwpInline p {
 	margin:0 0 15px;
 }
 .fwpTitle {
-	display:none;
+	visibility: hidden;
+	width: 100%;
+	height: auto;
 	font-size:17px;
 	z-index:9999;
 	margin:0 0 5px 15px;
 }
-.fwpGallery,
 .fwpContent,
 .alertBox {
 	background:rgba(28, 28, 28, .85);
@@ -1092,13 +1075,6 @@ img {
 	border:1px solid #5f5f5f;
 	border-radius:16px;
 	padding:20px;
-}
-.fwpGallery {
-	position:absolute;
-	top:0;
-	left:-20px;
-	width:50px;
-	z-index:99999;
 }
 .currentTextHolder,
 .alertBox {
