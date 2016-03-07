@@ -113,7 +113,7 @@ class FacebookAPI
 	{
 		try
 		{
-			$response=$this->getFacebookObj()->get('/me/posts?fields=caption,created_time,id,link,name,message,picture'.(!empty($limit) ? '&limit='.$limit : ''));
+			$response=$this->getFacebookObj()->get('/me/posts?fields=caption,created_time,id,link,name,message,picture,status_type,story'.(!empty($limit) ? '&limit='.$limit : ''));
 			$json_response=$response->getGraphEdge();
 			# Return the JSON Decoded response (returns an array).
 			return json_decode($json_response);
