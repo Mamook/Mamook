@@ -827,11 +827,7 @@ a.button-close {
 	background-position:-31px -21px;
 }
 .button-close {
-	display:inline-block;
-  position:relative;
-  float:right;
-  right:-18px;
-  top:-6px;
+	float:right;
 	margin:0;
 }
 .fwpDescription {
