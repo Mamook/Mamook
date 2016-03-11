@@ -28,7 +28,7 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		# Define the page-topic of the page. Use the page title.
 		$header.='<meta name="page-topic" content="'.((!isset($page_topic) OR empty($page_topic)) ? strip_tags($main_content->getPageTitle()) : $page_topic).'">';
 		# Facebook meta data.
-		$header.=((defined('FB_APP_ID')) ? '<meta property="fb:app_id" content="'.FB_APP_ID.'">' : '');
+		$header.=((defined('FB_APP_ID') && FB_APP_ID!='') ? '<meta property="fb:app_id" content="'.FB_APP_ID.'">' : '');
 		$header.='<meta property="og:url" content="'.WebUtility::removeIndex(COMPLETE_URL).'">';
 		$header.='<meta property="og:type" content="website">';
 		$header.='<meta property="og:title" content="'.strip_tags($main_content->getPageTitle()).'">';
