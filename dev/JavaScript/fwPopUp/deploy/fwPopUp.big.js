@@ -1,6 +1,6 @@
-/* DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. */
+/*! DO NOT MODIFY THIS FILE! IT IS GENERATED. CHANGES SHOULD BE MADE IN THE SOURCE FILES. !*/
 
-/*
+/**
  * fwPopup
  *
  * Lightbox clone for jQuery.<br>
@@ -204,7 +204,7 @@
             /* If set to true, only the close button will close the window */
             modal: false,
             /* Value between 0 and 1 */
-            opacity: 0.80,
+            opacity: 1,
             /* Show the title. true/false */
             showTitle: true,
             /* light_rounded / dark_rounded / light_square / dark_square / facebook */
@@ -350,7 +350,7 @@
 
                     imgPreloader.onload = function () {
                         var audio = new Audio();
-                        var image = ((elementData.image) ? '<img src="' + elementData.image + '" alt="Cover for ' + description + '"/>' : '');
+                        var image = ((elementData && elementData.image) ? '<img src="' + elementData.image + '" alt="Cover for ' + description + '"/>' : '');
                         $fwPopupFullRes[0].innerHTML = markup.audio.replace(codecToken, type.codec)
                             .replace(imageToken, image)
                             .replace(mediaTypeToken, type.type)
@@ -809,8 +809,8 @@
             // Put the SRCs, TITLEs, and ALTs into variables.
             path = $initiatingElement.attr('href');
             elementData = $initiatingElement.data();
-            description = (elementData.desc) ? elementData.desc : $initiatingElement.attr('title');
-            title = (elementData.title) ? elementData.title : $initiatingElement.find('img').attr('alt');
+            description = (elementData && elementData.desc) ? elementData.desc : $initiatingElement.attr('title');
+            title = (elementData && elementData.title) ? elementData.title : $initiatingElement.find('img').attr('alt');
 
             if (fwPopupSettings.deepLinking) {
                 setHashtagHook(hookWord, elementIndex);

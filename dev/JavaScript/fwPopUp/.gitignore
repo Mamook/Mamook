@@ -7,6 +7,6 @@
 !css
 !css/*
 !deploy
-!deploy/.gitignore
+!deploy/*
 !js
 !js/*

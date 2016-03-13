@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <!-- This file is included in specific build files (ie build-deploy.xml)-->
-<project name="fwPopup :: build script">
+<project name="fwPopUp :: build script">
+
+	<property name="css_dir" location="css"/>
+	<property name="js_dir" location="js"/>
+	<property name="temp_dir" location="temp"/>
+	<property name="tool_dir" location="../../minifier"/>
 
 	<path id="yuiCompressorPaths">
-		<pathelement location="../../minifier/yuicompressor-2.4.2.jar"/>
-		<pathelement location="../../minifier/yui-compressor-ant-task-0.5.jar"/>
+		<pathelement location="${tool_dir}/yuicompressor-2.4.2.jar"/>
+		<pathelement location="${tool_dir}/yui-compressor-ant-task-0.5.jar"/>
 	</path>
 
-	<target name="init" depends="createTemp,compile_js,clean"/>
+	<target name="init" depends="createTemp,compile-css,compile-js,clean"/>
 
 	<target name="define-yui-compressor">
 		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
@@ -15,37 +20,58 @@
 		</taskdef>
 	</target>
 
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${tool_dir}/compiler.jar"/>
+
 	<target name="createTemp" depends="define-yui-compressor">
-		<mkdir dir="temp"/>
+		<mkdir dir="${temp_dir}"/>
 	</target>
 
 	<target name="clean" depends="createTemp" description="Removes the temp folder and leftover files.">
-		<delete dir="temp"/>
+		<delete dir="${temp_dir}"/>
 	</target>
-
-	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="../../minifier/compiler.jar"/>
 
 
 <!-- JavaScript -->
-	<target name="concat_js">
-		<property name="js_dir" location="js"/>
-	<!-- Concatenate the header, modules, and plugins together. -->
-		<concat destfile="${buildLocation}/fwPopup.big.js" fixlastline="yes" eol="lf" append="no">
+	<target name="concat-css" description="Concatenates all CSS files to the buildLocation directory.">
+		<concat destfile="${buildLocation}/fwPopUp.big.css" fixlastline="yes" eol="lf" append="no" overwrite="yes">
+			<header file="${css_dir}/header.css"></header>
+			<filelist dir="${css_dir}">
+				<file name="fwPopUp.Example.css"/>
+			</filelist>
+		</concat>
+	</target>
+
+	<target name="build-css" depends="concat-css" description="Concatenates CSS files to the temp directory.">
+		<concat destfile="${temp_dir}/fwPopUp.css" fixlastline="yes" eol="lf" append="no" overwrite="yes">
+			<header>@charset "UTF-8";</header>
+			<filelist dir="${css_dir}">
+				<file name="fwPopUp.Example.css"/>
+			</filelist>
+		</concat>
+	</target>
+
+	<target name="compile-css" depends="build-css,define-yui-compressor" description="Minifies the CSS file and copies it to the build location.">
+		<yui-compressor warn="true" munge="true" cssSuffix=".css" preserveAllSemiColons="false" fromDir="${temp_dir}" toDir="${buildLocation}"/>
+		<delete file="${temp_dir}/fwPopUp.css"/>
+	</target>
+
+
+<!-- JavaScript -->
+	<target name="concat-js" description="Concatenate the header, modules, and plugins together.">
+		<concat destfile="${buildLocation}/fwPopUp.big.js" fixlastline="yes" eol="lf" append="no" overwrite="yes">
 			<header file="${js_dir}/header.js"></header>
 			<filelist dir="${js_dir}">
 				<file name="GlobalVariables.js"/>
-				<file name="fwPopup.js"/>
+				<file name="fwPopUp.js"/>
 			</filelist>
 			<footer file="${js_dir}/footer.js"></footer>
 		</concat>
 	</target>
 
-
-	<!-- Minify. -->
-	<target name="compile_js" depends="concat_js">
-		<jscomp compilationLevel="simple" debug="false" output="${buildLocation}/fwPopup.js">
+	<target name="compile-js" depends="concat-js" description="Minifies the JS into the build location.">
+		<jscomp compilationLevel="simple" debug="false" output="${buildLocation}/fwPopUp.js">
 			<sources dir="${buildLocation}">
-				<file name="fwPopup.big.js"/>
+				<file name="fwPopUp.big.js"/>
 			</sources>
 		</jscomp>
 	</target>
