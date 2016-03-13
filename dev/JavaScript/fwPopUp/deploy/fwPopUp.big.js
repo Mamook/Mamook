@@ -126,7 +126,7 @@
             markupArray.push('<div class="fwpDetails">');
 
             markupArray.push('<p class="fwpDescription no_content"></p>');
-            markupArray.push('<div class="fwpSocial">' + socialToolsToken + '</div>');
+            markupArray.push('<div class="fwpSocial no_content">' + socialToolsToken + '</div>');
             markupArray.push('<a tabindex="0" class="button-close" title="Close the modal" aria-label="Close the modal">Close</a>');
 
             // Close fwpDetails
@@ -312,6 +312,10 @@
             if (fwPopupSettings.showTitle && title) {
                 $fwPopupTitle.html(decodeURI(title))
                     .removeClass('no_content');
+            }
+
+            if (markup.socialTools) {
+                $fwPopupHolder.find('.fwpSocial').removeClass('no_content');
             }
 
             // Set the description
