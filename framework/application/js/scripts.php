@@ -31,7 +31,7 @@ $js.=
 
 # Instantiate "fwPopup".
 $js.=
-	'$("[rel='.FW_POPUP_HANDLE.'],[data-fwPopup='.FW_POPUP_HANDLE.']").fwPopup('.((!empty($fwPopUp_settings)) ? $fwPopUp_settings : '{opacity:1,theme:"",socialTools:null}').');';
+	'$("[rel='.FW_POPUP_HANDLE.'],[data-fwPopup='.FW_POPUP_HANDLE.']").fwPopup('.$doc->getFwPopUpSettings().');';
 
 # Close "document ready".
 $js.=
