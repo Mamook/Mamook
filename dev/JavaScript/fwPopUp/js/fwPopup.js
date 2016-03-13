@@ -236,6 +236,8 @@
             if (markup.socialTools) {
                 markup.socialTools = markup.socialTools.replace(new RegExp(locationHrefToken, 'g'), window.location)
                     .replace(new RegExp(titleToken, 'g'), title);
+            } else {
+                markup.socialTools = '';
             }
             markup.general = markup.general.replace(socialToolsToken, markup.socialTools);
 
