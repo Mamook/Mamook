@@ -104,7 +104,7 @@ $doc->setJavaScripts('plugins');
 # If you want to remove even the defaults, pass
 # $doc->setFwPopUpSettings('{}');
 # Otherwise, set the new values like:
-# $doc->setFwPopUpSettings('{opacity:0.8,theme:"CoolTheme",socialTools:null,deepLinking:false}');
+# $doc->setFwPopUpSettings('{opacity:0.8,theme:"CoolTheme",markup:{socialTools:null},deepLinking:false}');
 $doc->setFwPopUpSettings('{}');
 # Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
 $doc->setFooterJS('scripts');
