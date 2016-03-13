@@ -935,27 +935,15 @@ img {
 .fwpLoading:after,
 .fwpHolder,
 .button-close,
-.alertBox{
+.alertBox {
 	position:absolute;
 }
 .button-expand,
 .button-expand:hover,
 .button-contract,
-.button-contract:hover,
-.fwpPlay,
-.fwpPause {
+.button-contract:hover {
 	background:url(../images/pp-sprite.png) no-repeat;
 	cursor:pointer;
-}
-.fwpPlay,
-.fwpPause {
-	float:left;
-	display:block;
-	width:14px;
-	height:15px;
-	margin-top:2px;
-	overflow:hidden;
-	text-indent:-10000px;
 }
 .button-contract:hover {
 	background-position:0 -21px;
@@ -981,23 +969,14 @@ img {
 .fwpSocial {
 	height: 22px;
 }
+.fwpSocial.no_content {
+	display:none;
+}
 .fwpHolder .facebook,
 .fwpHolder .twitter {
 	display: inline-block;
 	vertical-align: top;
 	margin-right: 4px;
-}
-.fwpPause {
-	background-position:-24px -78px;
-}
-.fwpPause:hover {
-	background-position:-24px -96px;
-}
-.fwpPlay {
-	background-position:-1px -78px;
-}
-.fwpPlay:hover {
-	background-position:-1px -96px;
 }
 .fwpLoading:after {
 	content:'';
@@ -1033,13 +1012,6 @@ img {
 	width: 100%;
 	height: auto;
 	margin:10px 0 2px;
-}
-.fwpNav {
-	margin-top:5px;
-}
-.fwpNav p {
-	white-space:nowrap;
-	margin:2px 4px;
 }
 .button-expand,
 .button-contract {

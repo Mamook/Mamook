@@ -815,6 +815,9 @@ select {
 .fwpSocial {
 	height: 22px;
 }
+.fwpSocial.no_content {
+	display: none;
+}
 .fwpHolder .facebook,
 .fwpHolder .twitter {
 	display: inline-block;
