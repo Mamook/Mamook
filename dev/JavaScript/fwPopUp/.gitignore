@@ -4,6 +4,8 @@
 !.gitignore
 !ant-build.xml
 !ant-loc-deploy.xml
+!css
+!css/*
 !deploy
 !deploy/.gitignore
 !js
