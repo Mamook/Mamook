@@ -167,7 +167,7 @@
             /* If set to true, only the close button will close the window */
             modal: false,
             /* Value between 0 and 1 */
-            opacity: 0.80,
+            opacity: 1,
             /* Show the title. true/false */
             showTitle: true,
             /* light_rounded / dark_rounded / light_square / dark_square / facebook */
