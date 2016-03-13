@@ -26,35 +26,35 @@
 	color: #fff;
 }
 
-/* fwPopUp Specific Styles */
-.fwpLoading:after,
-.fwpHolder,
-.button-close {
+/* fwPopUp Specific Styles (this is the "default" theme) */
+.default .fwpLoading:after,
+.fwpHolder.default,
+.default .button-close {
 	position: absolute;
 }
-.button-close {
+.default .button-close {
 	top: -6px;
 	right: -6px;
 	margin: 0;
 }
-.button-expand,
-.button-expand:hover,
-.button-contract,
-.button-contract:hover {
+.default .button-expand,
+.default .button-expand:hover,
+.default .button-contract,
+.default .button-contract:hover {
 	background: url(../images/pp-sprite.png) no-repeat;
 	cursor: pointer;
 }
-.button-contract:hover {
+.default .button-contract:hover {
 	background-position: 0 -21px;
 }
-.button-expand {
+.default .button-expand {
 	background-position: -31px 0;
 }
-.button-expand:hover {
+.default .button-expand:hover {
 	background-position: -31px -21px;
 }
-.button-expand,
-.button-contract {
+.default .button-expand,
+.default .button-contract {
 	display: none;
 	position: absolute;
 	bottom: 10px;
@@ -66,16 +66,16 @@
 	cursor: pointer;
 	z-index: 20000;
 }
-.fwpHolder a:focus {
+.default .fwpHolder a:focus {
 	outline: medium none;
 }
-.fwpHolder {
+.fwpHolder.default {
 	display: none;
 	height: auto;
 	width: auto;
 	z-index: 10000;
 }
-.fwpTitle {
+.default .fwpTitle {
 	visibility: hidden;
 	width: 100%;
 	height: auto;
@@ -83,12 +83,12 @@
 	z-index: 9999;
 	margin: 0 0 5px 15px;
 }
-.fwpContainer {
+.default .fwpContainer {
 	position: relative;
 	width: 100%;
 	height: auto;
 }
-.fwpContent {
+.default .fwpContent {
 	background: rgba(28, 28, 28, .85);
 	width: auto;
 	min-width: 200px;
@@ -97,35 +97,35 @@
 	border-radius: 16px;
 	padding: 20px;
 }
-.fwpFullRes {
+.default .fwpFullRes {
 	line-height: 1 !important;
 }
-.fwpFullRes.fwpInline p {
+.default .fwpFullRes.fwpInline p {
 	margin: 0 0 15px;
 }
-.fwpDetails {
+.default .fwpDetails {
 	min-width: 200px;
 	width: 100%;
 	height: auto;
 	margin: 10px 0 2px;
 }
-.fwpDescription {
+.default .fwpDescription {
 	width: 100%;
 	height: auto;
 	color: #fff;
 	display: none;
 	margin: 0 85px 10px 0;
 }
-.fwpSocial {
+.default .fwpSocial {
 	height: 22px;
 }
-.fwpHolder .facebook,
-.fwpHolder .twitter {
+.fwpHolder.default  .facebook,
+.fwpHolder.default  .twitter {
 	display: inline-block;
 	vertical-align: top;
 	margin-right: 4px;
 }
-.fwpLoading:after {
+.default .fwpLoading:after {
 	content: '';
 	display: block;
 	top: 50%;
