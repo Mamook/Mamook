@@ -17,6 +17,7 @@ class Document
 	private static $document;
 	private $error=NULL;
 	private $footer_js=array();
+	private $fwPopUp_settings='{}';
 	private $is_mobile=FALSE;
 	private $java_scripts=array();
 	private $style=array();
@@ -80,6 +81,24 @@ class Document
 			$this->footer_js[]=$script;
 		}
 	} #==== End -- setFooterJS
+
+	/**
+	 * setFwPopUpSettings
+	 *
+	 * Sets the data member $fwPopUp_settings.
+	 *
+	 * @param		$script_name (Must be the name of the script. May be an array of java scripts.)
+	 * @access	public
+	 */
+	public function setFwPopUpSettings($fwPopUp_settings)
+	{
+		# Clean it up.
+		$fwPopUp_settings=trim($fwPopUp_settings);
+		if(!empty($fwPopUp_settings))
+		{
+			$this->fwPopUp_settings=$fwPopUp_settings;
+		}
+	} #==== End -- setFwPopUpSettings
 
 	/**
 	 * setIsMobile
@@ -188,6 +207,18 @@ class Document
 	{
 		return $this->footer_js;
 	} #==== End -- getFooterJS
+
+	/**
+	 * getFwPopUpSettings
+	 *
+	 * Returns the data member $fwPopUp_settings.
+	 *
+	 * @access	protected
+	 */
+	protected function getFwPopUpSettings()
+	{
+		return $this->fwPopUp_settings;
+	} #==== End -- getFwPopUpSettings
 
 	/**
 	 * getIsMobile
