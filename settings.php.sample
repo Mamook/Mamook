@@ -277,6 +277,9 @@ $copyright='';
 # Create a default variable for the site description.
 $meta_desc='';
 
+# Create a default variable for the fwPopUp settings.
+$fw_popup_settings='';
+
 #####################################################################################
 # DON'T EDIT BELOW THIS LINE ########################################################
 #####################################################################################
