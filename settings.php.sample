@@ -278,7 +278,11 @@ $copyright='';
 $meta_desc='';
 
 # Create a default variable for the fwPopUp settings.
-$fw_popup_settings='';
+# If you want to remove even the defaults, pass
+# $fwPopUp_settings='{}';
+# Otherwise, set the new values like:
+# $fwPopUp_settings='{opacity:0.8,theme:"CoolTheme",socialTools:null,deepLinking:false}';
+$fwPopUp_settings='';
 
 #####################################################################################
 # DON'T EDIT BELOW THIS LINE ########################################################
