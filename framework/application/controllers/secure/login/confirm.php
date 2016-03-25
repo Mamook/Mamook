@@ -1,4 +1,4 @@
-<?php /* public/secure/login/confirm.php */
+<?php /* framework/application/controllers/secure/login/confirm.php */
 
 # Create display variables.
 $display_main1='';

@@ -1,4 +1,4 @@
-<?php /* public/secure/login/register/index.php */
+<?php /* framework/application/controllers/secure/login/register/index.php */
 
 if($login->isLoggedIn()===TRUE)
 {

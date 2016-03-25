@@ -182,7 +182,7 @@ define('IMAGES', (($validator->isSSL()===TRUE) ? SECURE_URL.'images/' : APPLICAT
 # The complete url with scheme. (ends with a slash ie https://secure.domain.com/)
 define('COMPLETE_URL', PROTOCAL.FULL_URL);
 
-# Define where the scripts/ directory is (ie. http://Domain.com/scripts/) (ends with a slash)
+# Define where the scripts/ directory is (ie. http://domain.com/scripts/) (ends with a slash)
 define('SCRIPTS', (($validator->isSSL()===TRUE) ? SECURE_URL.'scripts/' : APPLICATION_URL.'scripts/'));
 
 # The url that points to our public audio page (media/audio/).
@@ -202,6 +202,11 @@ define('LOGOUT_PAGE', LOGIN_PAGE.'logout/');
 
 # Where do we go for errors?
 define('ERROR_PAGE', APPLICATION_URL.'error/');
+
+# Set to TRUE if we want to login the user and redirect our users to the members page after they confirm their membership.
+define('REDIRECT_AFTER_CONFIRMATION', TRUE);
+# The page to redirect them to after confirmation.
+define('REDIRECT_PAGE_AFTER_CONFIRMATION', SECURE_URL.'MyAccount/privacy.php');
 
 # The url we redirect visitors to if the page access is restricted.
 define('REDIRECT_TO_LOGIN', LOGIN_PAGE);
@@ -246,9 +251,6 @@ define('SESSIONS_NAME', 'JTFSESSID');
 
 # By default do we check for cookies via Javascript? TRUE means "yes", FALSE means "no".
 $check_cookies=FALSE;
-
-# Set to TRUE if we want to login the user and redirect our users to the members page after they confirm their membership.
-define('REDIRECT_AFTER_CONFIRMATION', FALSE);
 
 # Set to TRUE if we let our members update their usernames, FALSE for no.
 define('ALLOW_USERNAME_CHANGE', TRUE);

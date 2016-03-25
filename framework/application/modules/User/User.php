@@ -1733,6 +1733,131 @@ class User
 	} #==== End -- countAllUsers
 
 	/**
+	 * confirmNewsletter
+	 *
+	 * Activates user's newsletter subscription.
+	 *
+	 * @access	public
+	 */
+	public function confirmNewsletter()
+	{
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if there is GET Data and that we have valid ID and random key.
+		if((strtoupper($_SERVER['REQUEST_METHOD'])=='GET') && !empty($_GET['ID']) && ($validator->isNumber($_GET['ID'])===TRUE))
+		{
+			# Set ID to a variable.
+			$id=(int)$_GET['ID'];
+			# Get user data from the DB
+			$username=$this->findUsername($id);
+			# Does this user exist?
+			if($this->findUserData($username)!==FALSE)
+			{
+				try
+				{
+					$row=$db->get_row('SELECT `user_id` FROM `'. DBPREFIX.'user_newsletter` WHERE `id`='.$db->quote($id).' AND `active` IS NULL LIMIT 1');
+				}
+				catch(Exception $ez)
+				{
+					throw new Exception('There was an error retrieving the "user_id" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
+					Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+					die;
+				}
+				# User was not found in the `user_newsletter` table.
+				if($row===NULL)
+				{
+					# Has the user opted-in?
+					if($this->getNewsletter()==0)
+					{
+						try
+						{
+							# Activate the user's into the `user_newsletter` table.
+							$db->query('UPDATE '.DBPREFIX.'`user_newsletter` SET'.
+							' `active`='.$db->quote(0).
+								' WHERE'.
+							' `user_id`='.$db->quote($id).
+								' LIMIT 1'
+							);
+							$_SESSION['message']='Congratulations! You just confirmed your newsletter subscription with '.DOMAIN_NAME.'!';
+							$doc->redirect(REDIRECT_AFTER_LOGIN);
+						}
+						catch(ezDB_Error $ez)
+						{
+							throw new Exception('There was an error confirming '.$username.'\'s newsletter subscription in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+						}
+						catch(Exception $e)
+						{
+							throw $e;
+						}
+					}
+					elseif($this->getNewsletter()===NULL)
+					{
+						$_SESSION['message']='You have not opted-in to receive the newsletter.<br>'.
+							'Go to your <a href="'.SECURE_URL.'MyAccount/privacy.php">Privacy Settings</a> page and opt-in.';
+						$doc->redirect(REDIRECT_TO_LOGIN);
+					}
+				}
+				else
+				{
+					$_SESSION['message']='You have already confirmed your newsletter subscription.';
+					$doc->redirect(DEFAULT_REDIRECT);
+				}
+			}
+			else
+			{
+				$_SESSION['message']='User not found!';
+				$doc->redirect(DEFAULT_REDIRECT);
+			}
+		}
+		else
+		{
+			$_SESSION['message']='There was an error processing your newsletter subscription. Please copy the the confirmation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
+			$doc->redirect(DEFAULT_REDIRECT);
+		}
+	} #==== End -- confirmNewsletter
+
+	/**
+	 * unsubscribeNewsletter
+	 *
+	 * Description
+	 *
+	 * @param	int $id					The user's ID.
+	 * @param	bool $redirect			Do we do a redirect?
+	 * @access	public
+	 */
+	public function unsubscribeNewsletter($id, $redirect=FALSE)
+	{
+		try
+		{
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Set the Document instance to a variable.
+			$doc=Document::getInstance();
+
+			$db->query('DELETE FROM '.DBPREFIX.'`user_newsletter` WHERE `user_id`='.$db->quote($id).' LIMIT 1');
+			# Redirect user, and give them a message.
+			if($redirect)
+			{
+				$_SESSION['message']='You have unsubscribed from the '.DOMAIN_NAME.' newsletter.';
+				$doc->redirect(DEFAULT_REDIRECT);
+			}
+		}
+		catch(ezDB_Error $ez)
+		{
+			throw new Exception('There was an error unsubscribing user '.$id.': '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- unsubscribeNewsletter
+
+	/**
 	 * createAccount
 	 *
 	 * Creates a new account in the database.
@@ -1745,8 +1870,8 @@ class User
 		{
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
-			# Bring the Document class into the scope.
-			global $doc;
+			# Set the Document instance to a variable.
+			$doc=Document::getInstance();
 			# Bring Login class into the scope.
 			global $login;
 
@@ -1909,6 +2034,7 @@ class User
 	 *
 	 * @param	int $id					The user's id
 	 * @param	string $table			The table that the id is related to.
+	 * @param	$image_link
 	 * @access	public
 	 */
 	public function displayProfile($id, $table='user', $image_link=FW_POPUP_HANDLE)
@@ -2187,6 +2313,7 @@ class User
 	 *
 	 * Retrieves the User's display name and sets it to the display_name data member.
 	 *
+	 * @param	int $id					The User's ID.
 	 * @access	public
 	 */
 	public function findDisplayName($id=NULL)
@@ -2253,8 +2380,7 @@ class User
 	 *
 	 * Retrieves the User's email and sets it to the email data member.
 	 *
-	 *
-	 * @param		int 		$id 	(The user's id)
+	 * @param	int $id					The user's ID.
 	 * @access	public
 	 */
 	public function findEmail($id=NULL)
@@ -2495,7 +2621,7 @@ class User
 	 *
 	 * Retrieves the User's password based on the passed variable. Throws an error on failure.
 	 *
-	 * @param	$field (The users Email or Username.)
+	 * @param	$field					The users Email or Username.
 	 * @access	public
 	 */
 	public function findPassword($field=NULL)
@@ -2556,7 +2682,7 @@ class User
 	 *
 	 * Retrieves the privacy settings of a given user.
 	 *
-	 * @param	  $username (The users username.)
+	 * @param	$username				The users username.
 	 * @access	public
 	 */
 	public function findPrivacySettings($username=NULL)
@@ -2595,7 +2721,8 @@ class User
 	 *
 	 * Retrieves the purchased products of a given user.
 	 *
-	 * @param		string	$field	(The user's ID or email. Empty will attempt to retrieve the data member. If the data member is empty it will try to find and use the user's ID.)
+	 * @param	string $field			The user's ID or email. Empty will attempt to retrieve the data member.
+	 *										If the data member is empty it will try to find and use the user's ID.
 	 * @access	public
 	 * @return	string
 	 */
@@ -3131,7 +3258,8 @@ class User
 	/**
 	 * getSubscriptions
 	 *
-	 * Retrieves all subscriptions for the passed user ID. A wrapper method for getSubscriptions() from the Subscription calss.
+	 * Retrieves all subscriptions for the passed user ID.
+	 * A wrapper method for getSubscriptions() from the Subscription calss.
 	 *
 	 * @access	public
 	 */

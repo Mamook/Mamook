@@ -1,4 +1,4 @@
-<?php /* public/secure/login/ResendEmail/index.php */
+<?php /* framework/application/controllers/secure/login/ResendEmail/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

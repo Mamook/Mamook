@@ -1,4 +1,4 @@
-<?php /* public/secure/login/logout/index.php */
+<?php /* framework/application/controllers/secure/login/logout/index.php */
 
 $doc->setError('You are being logged out of '.DOMAIN_NAME.'. You will be redirected shortly. Thank you.');
 

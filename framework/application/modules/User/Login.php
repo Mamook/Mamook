@@ -899,10 +899,22 @@ class Login extends User
 		# Set the Validator instance to a variable.
 		$validator=Validator::getInstance();
 
-		if($this->isLoggedIn()===TRUE) { $doc->redirect(REDIRECT_AFTER_LOGIN); }
+		if($this->isLoggedIn()===TRUE)
+		{
+			$doc->redirect(REDIRECT_AFTER_LOGIN);
+		}
 
 		# Check if there is GET Data and that we have valid ID and random key.
-		if((strtoupper($_SERVER['REQUEST_METHOD'])=='GET') && !empty($_GET['ID']) && ($validator->isNumber($_GET['ID'])==TRUE) && (isset($_GET['key']) && (strlen($_GET['key'])==32) && ($validator->isAlphanum($_GET['key'])==TRUE)))
+		if(
+			(strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
+			!empty($_GET['ID']) &&
+			($validator->isNumber($_GET['ID'])==TRUE) &&
+			(
+				isset($_GET['key']) &&
+				(strlen($_GET['key'])==32) &&
+				($validator->isAlphanum($_GET['key'])==TRUE)
+			)
+		)
 		{
 			$id=(int)$_GET['ID'];
 			# Get user data from the DB
@@ -919,7 +931,7 @@ class Login extends User
 					Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 					die;
 				}
-				if($row !== NULL)
+				if($row!==NULL)
 				{
 					# Does the random key sent match the one we have in the DB?
 					if($row->random!=$_GET['key'])
@@ -929,28 +941,28 @@ class Login extends User
 						exit;
 					}
 					# Does the user have "inactive" status (0)?
-					elseif(($this->getActive()===0))
+					elseif($this->getActive()===0)
 					{
 						try
 						{
 							# Update user status to "active" (1)
 							$update=$db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
 							# Do we send them somewhere else after confirming them?
-							if(REDIRECT_AFTER_CONFIRMATION==TRUE)
+							if(REDIRECT_AFTER_CONFIRMATION===TRUE)
 							{
 								# Log the user in.
 								$this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
-								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-								You are now signed in and ready to enjoy the site.<br />
-								Being signed in allows you to access special content and downloads!';
+								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />'.
+									'You are now signed in and ready to enjoy the site.<br />'.
+									'Being signed in allows you to access special content and downloads!';
 								$doc->redirect(REDIRECT_AFTER_LOGIN);
 							}
 							# They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
 							else
 							{
-								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-								You may now sign in and enjoy the site.<br />
-								Being signed in allows you to access special content and downloads!';
+								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />'.
+									'You may now sign in and enjoy the site.<br />'.
+									'Being signed in allows you to access special content and downloads!';
 								$doc->redirect(REDIRECT_TO_LOGIN);
 							}
 						}
@@ -965,8 +977,8 @@ class Login extends User
 					}
 					elseif($this->getActive()===1)
 					{
-						$_SESSION['message']='You have already been confirmed!<br />
-						All you need to do is sign in.';
+						$_SESSION['message']='You have already been confirmed!<br />'.
+							'All you need to do is sign in.';
 						$doc->redirect(REDIRECT_TO_LOGIN);
 					}
 				}
@@ -1003,7 +1015,10 @@ class Login extends User
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		if($this->isLoggedIn()===TRUE) { $doc->redirect(REDIRECT_AFTER_LOGIN); }
+		if($this->isLoggedIn()===TRUE)
+		{
+			$doc->redirect(REDIRECT_AFTER_LOGIN);
+		}
 
 		# Check if the form has been submitted.
 		if(array_key_exists('_submit_check', $_POST))

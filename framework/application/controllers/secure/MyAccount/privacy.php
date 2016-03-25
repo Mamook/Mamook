@@ -23,7 +23,18 @@ $display_box2='';
 $display='';
 
 # Instantiate a new User object.
-$user=new User();
+$user_obj=new User();
+
+# Confirm Newsletter subscription.
+if(isset($_GET['confirm_newsletter']) && isset($_GET['ID']))
+{
+	$user_obj->confirmNewsletter($_GET['ID']);
+}
+# Unsubscribe user from newletters.
+elseif(isset($_GET['unsubscribe']) && isset($_GET['ID']))
+{
+	$user_obj->unsubscribeNewsletter($_GET['ID']);
+}
 
 # Instantiate a new Branch object.
 $branch=new Branch();
@@ -45,7 +56,7 @@ $form_processor=new FormProcessor();
 # Process the privacy form if it has been submitted.
 $form_processor->processPrivacy($branch_ids);
 
-$user->findPrivacySettings();
+$user_obj->findPrivacySettings();
 
 # Get the privacy form.
 require Utility::locateFile(TEMPLATES.'forms'.DS.'privacy.php');

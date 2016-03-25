@@ -651,7 +651,6 @@ class FormProcessor
 	{
 		# Bring the Login object into scope.
 		global $login;
-
 		# Create global variables to use outside the method.
 		global $checked_value;
 
@@ -659,7 +658,6 @@ class FormProcessor
 		if(array_key_exists('_submit_check', $_POST))
 		{
 			$checked_value=((isset($_POST['email_password'])) ? 'checked' : '');
-
 			# Instantiate a FormValidator object
 			$updated=$login->changePassword($id);
 		}
@@ -671,18 +669,17 @@ class FormProcessor
 	 * Updates the Privacy settings in the Database for the logged in user upon submission of the form.
 	 *
 	 * @param	array $branch_ids		Each value must be the POST Data index that exactly matches the name of the field in the database to be updated.
-	 * @param	integer $id  			The User's ID
+	 * @param	int $id					The User's ID
 	 * @access	public
 	 */
 	public function processPrivacy($branch_ids, $id=NULL)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
 		# Bring the User object into scope.
-		global $user;
-
-		# Create global variables to use outside the method.
-		global $address;
+		global $user_obj;
 
 		$branch_ids=(array)$branch_ids;
 
@@ -690,7 +687,11 @@ class FormProcessor
 		if(empty($id))
 		{
 			# Find the user's ID.
-			$id=$user->findUserID();
+			$id=$user_obj->findUserID();
+			# Get user's data.
+			$user_obj->findUserData($id);
+			# Assign the user's old newsletter value.
+			$old_newsletter=$user_obj->getNewsletter();
 		}
 
 		# Create an empty array to hold the accepted branch id's.
@@ -771,7 +772,55 @@ class FormProcessor
 				try
 				{
 					# Update the `newsletter`, `notify`, and `questions` fields in the `users` table.
-					$user->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
+					$user_obj->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
+
+					# User has opted-in to receive newsletter.
+					if($newsletter==0 && $old_newsletter===NULL)
+					{
+						# Set the IP address to a variable.
+						#	findIP() passes the IP to the $validator->ipValid().
+						#	ipValid() checks if the IP is valid, and if it's an IPv4 or IPv6 address, then it sets the version number.
+						$ip=$user_obj->findIP(TRUE);
+						# Insert user into the `user_newsletter` table.
+						$db->query('INSERT INTO '.DBPREFIX.'`user_newsletter` (`user_id`, `ip`) VALUES ('.
+							$db->quote($id).
+							', '.$db->quote($db->escape($ip)).
+						')');
+
+						# Find the user's email.
+						$email=$user_obj->findEmail($id);
+						# Find the user's username.
+						$username=$user_obj->findUsername($id);
+
+						# Set email subject to a variable.
+						$subject=DOMAIN_NAME.' Newsletter Confirmation';
+						$to_address=trim($email);
+						# Set email body to a variable.
+						$message=$username.','."<br />\n<br />\n".
+						'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
+						'You have received this email because you have opted-in to receive our newsletter.'."<br />\n".
+						'If you did not opt-in to receive the '.DOMAIN_NAME.' newsletter, please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
+						'------------------------------------------------'."<br />\n".
+						' Confirmation Instructions'."<br />\n".
+						'------------------------------------------------'."<br />\n<br />\n".
+						'To activate your subscription to our newsletter, simply click on the following link:'."<br />\n<br />\n".
+						'<a href="'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'">'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'</a>'."<br />\n<br />\n".
+						'(You may need to copy and paste the link into your web browser).';
+						try
+						{
+							# Send Email to confirm subscription.
+							$doc->sendEmail($subject, $to_address, $message);
+						}
+						catch(Exception $e)
+						{
+							throw $e;
+						}
+					}
+					# Unsubscribing from newsletter.
+					else
+					{
+						$user_obj->unsubscribeNewsletter($id, FALSE);
+					}
 				}
 				catch(ezDB_Error $ez)
 				{
@@ -792,7 +841,7 @@ class FormProcessor
 	 *
 	 * Changes the User's username.
 	 *
-	 * @param 	string	$id (The User's ID.)
+	 * @param 	string $id				The User's ID.
 	 * @access	public
 	 */
 	public function processUsername($id=NULL)

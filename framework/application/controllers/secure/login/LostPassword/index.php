@@ -1,4 +1,4 @@
-<?php /* public/secure/login/LostPassword/index.php */
+<?php /* framework/application/controllers/secure/login/LostPassword/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');

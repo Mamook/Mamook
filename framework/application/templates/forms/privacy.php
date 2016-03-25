@@ -8,12 +8,12 @@ if(isset($current_username))
 }
 
 $newsletter='';
-if($user->getNewsletter()!==NULL)
+if($user_obj->getNewsletter()!==NULL)
 {
 	$newsletter='checked';
 }
 $questions='';
-if($user->getQuestions()!==NULL)
+if($user_obj->getQuestions()!==NULL)
 {
 	$questions='checked';
 }
@@ -38,7 +38,7 @@ $display='<div id="privacy_form" class="form">';
 		$notify='';
 
 		# Create a variable to hold the User's notify setting.
-		$notify_setting=$user->getNotify();
+		$notify_setting=$user_obj->getNotify();
 		# Check if the User's notify setting is empty(NULL).
 		if(!empty($notify_setting))
 		{
@@ -69,7 +69,7 @@ $display='<div id="privacy_form" class="form">';
 
 	$fg->addFormPart('<li>');
 	$fg->addElement('checkbox', array('name'=>'questions', 'checked'=>$questions, 'id'=>'questions'));
-	$fg->addFormPart('<label class="label-box" for="questions">Allow '.DOMAIN_NAME.' Users to email '.$person.' via a form on '.((isset($current_username)) ? 'his/her' : 'my').' <a href="'.APPLICATION_URL.'profile/?member='.$user->findUserID().'" title="View '.$user->findDisplayName().'\'s profile" target="_blank">profile page</a>.</label>');
+	$fg->addFormPart('<label class="label-box" for="questions">Allow '.DOMAIN_NAME.' Users to email '.$person.' via a form on '.((isset($current_username)) ? 'his/her' : 'my').' <a href="'.APPLICATION_URL.'profile/?member='.$user_obj->findUserID().'" title="View '.$user_obj->findDisplayName().'\'s profile" target="_blank">profile page</a>.</label>');
 	$fg->addFormPart('</li>');
 
 	# Get the Contributor class.
@@ -77,7 +77,7 @@ $display='<div id="privacy_form" class="form">';
 	# Instantiate a new Contributor object.
 	$contributor=new Contributor();
 	# Check if the User is a contributor.
-	if($contributor->getThisContributor($user->findUserID())===TRUE)
+	if($contributor->getThisContributor($user_obj->findUserID())===TRUE)
 	{
 		$fg->addFormPart('<li>');
 		$hide_contributor='';
