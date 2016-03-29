@@ -844,7 +844,8 @@ class PayPal
 		if(array_key_exists('_submit_check', $_REQUEST))
 		{
 			# Is this a test payment meant for the "Sandbox"?
-			if(isset($_REQUEST['test']) && ($_REQUEST['test']=='y'))
+			//if(isset($_REQUEST['test']) && ($_REQUEST['test']=='y'))
+			if(DEBUG_APP===TRUE)
 			{
 				$this->test='sandbox.';
 			}
@@ -1391,7 +1392,8 @@ class PayPal
 		}
 
 		# Check if this is for testing with the sandbox.
-		if(isset($_POST['test_ipn']) && ($_POST['test_ipn'] == 1))
+		//if(isset($_POST['test_ipn']) && ($_POST['test_ipn'] == 1))
+		if(DEBUG_APP===TRUE)
 		{
 			$this->test='sandbox.';
 			# Where do we log errors?
