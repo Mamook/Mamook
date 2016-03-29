@@ -1752,15 +1752,15 @@ class User
 		if((strtoupper($_SERVER['REQUEST_METHOD'])=='GET') && !empty($_GET['ID']) && ($validator->isNumber($_GET['ID'])===TRUE))
 		{
 			# Set ID to a variable.
-			$id=(int)$_GET['ID'];
+			$user_id=(int)$_GET['ID'];
 			# Get user data from the DB
-			$username=$this->findUsername($id);
+			$username=$this->findUsername($user_id);
 			# Does this user exist?
 			if($this->findUserData($username)!==FALSE)
 			{
 				try
 				{
-					$row=$db->get_row('SELECT `user_id` FROM `'. DBPREFIX.'user_newsletter` WHERE `id`='.$db->quote($id).' AND `active` IS NULL LIMIT 1');
+					$row=$db->get_row('SELECT `user_id` FROM `'. DBPREFIX.'user_newsletter` WHERE `user_id`='.$db->quote($user_id).' LIMIT 1');
 				}
 				catch(Exception $ez)
 				{
@@ -1771,18 +1771,27 @@ class User
 				# User was not found in the `user_newsletter` table.
 				if($row===NULL)
 				{
-					# Has the user opted-in?
-					if($this->getNewsletter()==0)
+					# Has the user opted-in, but not confirmed?
+					if((int)$this->getNewsletter()===1)
 					{
 						try
 						{
-							# Activate the user's into the `user_newsletter` table.
-							$db->query('UPDATE '.DBPREFIX.'`user_newsletter` SET'.
-							' `active`='.$db->quote(0).
+							# Activate the user's into the `users` table.
+							$db->query('UPDATE '.DBPREFIX.'`users` SET'.
+							' `newsletter`='.$db->quote(0).
 								' WHERE'.
-							' `user_id`='.$db->quote($id).
+							' `ID`='.$db->quote($user_id).
 								' LIMIT 1'
 							);
+							# Set the IP address to a variable.
+							#	findIP() passes the IP to the $validator->ipValid().
+							#	ipValid() checks if the IP is valid, and if it's an IPv4 or IPv6 address, then it sets the version number.
+							$ip=$this->findIP(TRUE);
+							# Insert user into the `user_newsletter` table.
+							$db->query('INSERT INTO '.DBPREFIX.'`user_newsletter` (`user_id`, `ip`) VALUES ('.
+								$db->quote($user_id).
+								', '.$db->quote($db->escape($ip)).
+							')');
 							$_SESSION['message']='Congratulations! You just confirmed your newsletter subscription with '.DOMAIN_NAME.'!';
 							$doc->redirect(REDIRECT_AFTER_LOGIN);
 						}
@@ -1795,11 +1804,12 @@ class User
 							throw $e;
 						}
 					}
-					elseif($this->getNewsletter()===NULL)
+					# `newsletter` field is not set to 1, so the user has not opted-in yet.
+					elseif((int)$this->getNewsletter()!==1)
 					{
 						$_SESSION['message']='You have not opted-in to receive the newsletter.<br>'.
 							'Go to your <a href="'.SECURE_URL.'MyAccount/privacy.php">Privacy Settings</a> page and opt-in.';
-						$doc->redirect(REDIRECT_TO_LOGIN);
+						$doc->redirect(REDIRECT_AFTER_LOGIN);
 					}
 				}
 				else
@@ -1830,7 +1840,7 @@ class User
 	 * @param	bool $redirect			Do we do a redirect?
 	 * @access	public
 	 */
-	public function unsubscribeNewsletter($id, $redirect=FALSE)
+	public function unsubscribeNewsletter($user_id, $redirect=FALSE)
 	{
 		try
 		{
@@ -1839,7 +1849,7 @@ class User
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
 
-			$db->query('DELETE FROM '.DBPREFIX.'`user_newsletter` WHERE `user_id`='.$db->quote($id).' LIMIT 1');
+			$db->query('DELETE FROM '.DBPREFIX.'`user_newsletter` WHERE `user_id`='.$db->quote($user_id).' LIMIT 1');
 			# Redirect user, and give them a message.
 			if($redirect)
 			{
@@ -1849,7 +1859,7 @@ class User
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('There was an error unsubscribing user '.$id.': '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('There was an error unsubscribing user '.$user_id.': '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{

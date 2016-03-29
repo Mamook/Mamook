@@ -702,11 +702,13 @@ class FormProcessor
 		{
 			try
 			{
+				# Empty variable to hold the newsletter session message.
+				$newsletter_message='';
 				# Check if the User selected 'newsletter'.
 				if(isset($_POST['newsletter']) && ($_POST['newsletter']=='on'))
 				{
-					# Set the newsletter value to 0.
-					$newsletter=0;
+					# Set the newsletter value to 1.
+					$newsletter=1;
 				}
 				else
 				{
@@ -771,22 +773,12 @@ class FormProcessor
 				}
 				try
 				{
-					# Update the `newsletter`, `notify`, and `questions` fields in the `users` table.
+					# Update the `notify`, and `questions` fields in the `users` table.
 					$user_obj->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
 
 					# User has opted-in to receive newsletter.
 					if($newsletter==0 && $old_newsletter===NULL)
 					{
-						# Set the IP address to a variable.
-						#	findIP() passes the IP to the $validator->ipValid().
-						#	ipValid() checks if the IP is valid, and if it's an IPv4 or IPv6 address, then it sets the version number.
-						$ip=$user_obj->findIP(TRUE);
-						# Insert user into the `user_newsletter` table.
-						$db->query('INSERT INTO '.DBPREFIX.'`user_newsletter` (`user_id`, `ip`) VALUES ('.
-							$db->quote($id).
-							', '.$db->quote($db->escape($ip)).
-						')');
-
 						# Find the user's email.
 						$email=$user_obj->findEmail($id);
 						# Find the user's username.
@@ -810,6 +802,7 @@ class FormProcessor
 						{
 							# Send Email to confirm subscription.
 							$doc->sendEmail($subject, $to_address, $message);
+							$newsletter_message='<br><br>You have been sent an email to confirm your newsletter subscription.';
 						}
 						catch(Exception $e)
 						{
@@ -826,7 +819,7 @@ class FormProcessor
 				{
 					throw new Exception('There was an error updating the privacy settings for user ID: '.$id.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 				}
-				$_SESSION['message']='The privacy settings were successfully changed';
+				$_SESSION['message']='The privacy settings were successfully changed.';
 				$this->redirectNoDelete();
 			}
 			catch(Exception $e)

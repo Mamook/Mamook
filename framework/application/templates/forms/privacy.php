@@ -29,6 +29,11 @@ $display='<div id="privacy_form" class="form">';
 	$fg->addFormPart('<li>');
 	$fg->addElement('checkbox',array('name'=>'newsletter', 'checked'=>$newsletter, 'id'=>'newsletter'));
 	$fg->addFormPart('<label class="label-box" for="newsletter">Send '.$person.' the '.DOMAIN_NAME.' newsletter</label>');
+	# Is the `newsletter` field set to 1 (pending)?
+	if((int)$user_obj->getNewsletter()===1)
+	{
+		$fg->addFormPart(' (pending)');
+	}
 	$fg->addFormPart('</li>');
 
 	# Loop through the branch id's.
