@@ -1215,7 +1215,10 @@ class PayPal
 			$this->email_to=ADMIN_EMAIL;
 			$do_mail=$doc->sendEmail($this->error_subject, $this->email_to, $message);
 		}
-		if($mail!==TRUE) { $message.="Not sending email.\n"; }
+		if($mail!==TRUE)
+		{
+			$message.="Not sending email.\n";
+		}
 		# write a flat file
 		# Remove the xhtml "<br />\n"
 		$message=str_replace('<br />', '', $message);
