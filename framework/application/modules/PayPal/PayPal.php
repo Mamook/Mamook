@@ -844,8 +844,7 @@ class PayPal
 		if(array_key_exists('_submit_check', $_REQUEST))
 		{
 			# Is this a test payment meant for the "Sandbox"?
-			//if(isset($_REQUEST['test']) && ($_REQUEST['test']=='y'))
-			if(DEBUG_APP===TRUE)
+			if(isset($_REQUEST['test']) && ($_REQUEST['test']=='y'))
 			{
 				$this->test='sandbox.';
 			}
@@ -1365,7 +1364,7 @@ class PayPal
 			# Explicitly make it an array.
 			$user_field=(array)$user_field;
 			# Update the user to reflect their purchase.
-			static::updateUserInfo($user_field);
+			$this->updateUserInfo($user_field);
 		}
 		# Check if the passed email variable is empty.
 		if(!empty($email))
@@ -1395,8 +1394,7 @@ class PayPal
 		}
 
 		# Check if this is for testing with the sandbox.
-		//if(isset($_POST['test_ipn']) && ($_POST['test_ipn'] == 1))
-		if(DEBUG_APP===TRUE)
+		if(isset($_POST['test_ipn']) && ($_POST['test_ipn'] == 1))
 		{
 			$this->test='sandbox.';
 			# Where do we log errors?
@@ -1546,9 +1544,9 @@ class PayPal
 	 * Processes an order submitted via Shopping Cart.
 	 *
 	 * @param	$user_field
-	 * @access	private
+	 * @access	public
 	 */
-	private function updateUserInfo($user_field)
+	public function updateUserInfo($user_field)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
