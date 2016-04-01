@@ -819,7 +819,7 @@ class FormProcessor
 				{
 					throw new Exception('There was an error updating the privacy settings for user ID: '.$id.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 				}
-				$_SESSION['message']='The privacy settings were successfully changed.';
+				$_SESSION['message']='The privacy settings were successfully changed.'.$newsletter_message;
 				$this->redirectNoDelete();
 			}
 			catch(Exception $e)
