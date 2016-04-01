@@ -777,7 +777,7 @@ class FormProcessor
 					$user_obj->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
 
 					# User has opted-in to receive newsletter.
-					if($newsletter==0 && $old_newsletter===NULL)
+					if($newsletter==1 && $old_newsletter===NULL)
 					{
 						# Find the user's email.
 						$email=$user_obj->findEmail($id);
