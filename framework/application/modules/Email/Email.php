@@ -921,11 +921,9 @@ class Email
 	 * Sends multiple an email to multiple users with a set time interval wait between emails.
 	 *
 	 * @param	array $email_data			An array of (probably POST) data about the email, ie sender address, subject, message, etc.
-	 * @param	integer $wait				The amount of time in seconds to wait between each batch of emails.
-	 * @param	integer $batch				The number of emails to send at a time.
 	 * @access	public
 	 */
-	public function sendMultipleEmails($email_data=NULL, $wait=12, $batch=50)
+	public function sendMultipleEmails($email_data=NULL)
 	{
 		try
 		{
@@ -964,6 +962,8 @@ class Email
 
 			# Set the attachment value to a variable.
 			$attachment=$this->getAttachment();
+			# Set the MAILQUEUE_BATCH_SIZE to a variable.
+			$batch=MAILQUEUE_BATCH_SIZE;
 			# Set the html value to a variable.
 			$html=$this->getIsHTML();
 			# Set the maximum acceptable file size to a variable.
@@ -1136,7 +1136,7 @@ class Email
 									if($i>=$batch)
 									{
 										# Pause for the passed amount of time.
-										sleep($wait);
+										sleep(MAILQUEUE_THROTTLE);
 										# Reset the email counter.
 										$i=1;
 									}

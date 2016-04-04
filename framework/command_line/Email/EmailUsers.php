@@ -88,5 +88,4 @@ $mail=new Email();
 $session=Utility::returnSessionData($session_id, $session_path);
 $email_data=$session['email_users'];
 
-# Send 1 email every 40 seconds so that it will send 90 emails per hour (100 is the cap).
-$mail->sendMultipleEmails($email_data, 40, 1);
+$mail->sendMultipleEmails($email_data);

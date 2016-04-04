@@ -9,6 +9,25 @@
  *
  */
 
+# Define the amount of emails you want to send per period.
+# If 0, batch processing is disabled and messages are sent out as fast as possible.
+define('MAILQUEUE_BATCH_SIZE', 1);
+
+# Define the length of one batch processing period, in seconds (3600 is an hour)
+//define('MAILQUEUE_BATCH_PERIOD', 3600);
+
+# To avoid overloading the server that sends your email, you can add a little delay
+# between messages that will spread the load of sending.
+# You will need to find a good value for your own server.
+# Value is in seconds.
+define('MAILQUEUE_THROTTLE', 40);
+
+# This will try to automatically change the delay between messages to make sure that
+# the MAILQUEUE_BATCH_SIZE (above) is spread evently over MAILQUEUE_BATCH_PERIOD, instead
+# of firing the Batch in the first few minutes of the period and then waiting for the next period.
+# This only works with mailqueue_throttle off.
+//define('MAILQUEUE_AUTOTHROTTLE', 1);
+
 # Production site.
 if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING===FALSE)
 {
