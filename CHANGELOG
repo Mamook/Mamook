@@ -1,3 +1,16 @@
+Version v2.13.8:
+ * Bumped version to 2.13.8 (Michael Delle)
+ * Create email batch and throttle constants since most hosts only allow 100 per hour (Michael Delle)
+ * Forgot to attach the newsletter_message to the Session message (Michael Delle)
+ * Bug fix (Michael Delle)
+ * Better newsletter confirmation (Michael Delle)
+ * PayPal fix (Michael Delle)
+ * code cleanup (Michael Delle)
+ * Paypal uses sandbox automatically for dev and staging (Michael Delle)
+ * Updating submodules (Michael Delle)
+ * Adding confirmation to newsletter subscription (Michael Delle)
+ * adding `user_newsletter` table (Michael Delle)
+
 Version v2.12.19:
  * Bumped version to 2.12.19 (Michael Delle)
  * Updated comment to be correct :) (Jon Ryser)
