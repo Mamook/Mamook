@@ -883,7 +883,7 @@ class User
 	 *
 	 * Sets the data member $newsletter.
 	 *
-	 * @param		$newsletter (If the User recieves the newsletter.)
+	 * @param	$newsletter				If the User recieves the newsletter.
 	 * @access	public
 	 */
 	public function setNewsletter($newsletter)
@@ -891,12 +891,8 @@ class User
 		# Check if the passed value is empty.
 		if(empty($newsletter))
 		{
-			# Check if the value is 0.
-			if($newsletter!==0 && $newsletter!=='0')
-			{
-				# Explicitly set the data member to NULL.
-				$newsletter=NULL;
-			}
+			# Explicitly set the data member to NULL.
+			$newsletter=NULL;
 		}
 		else
 		{
@@ -912,7 +908,8 @@ class User
 	 *
 	 * Sets the data member $notify.
 	 *
-	 * @param		$notify (may be an array or string of branch id's the user wishes to be notified about. If a string, the id's must be separated with a dash('-').)
+	 * @param	$notify					May be an array or string of branch id's the user wishes to be notified about.
+	 *										If a string, the id's must be separated with a dash('-').
 	 * @access	public
 	 */
 	public function setNotify($notify)
