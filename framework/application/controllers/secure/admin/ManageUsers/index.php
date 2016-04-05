@@ -142,7 +142,8 @@ else
 {
 	# Instantiate a new SearchFormProcessor object.
 	$search_form_processor=new SearchFormProcessor();
-	# Set table to search.
+	# Set the type of search to a variable.
+	#	Get's set in the search_form.php template.
 	$search_type=array('users');
 	# Set the search label.
 	$search_label='Search Users';
