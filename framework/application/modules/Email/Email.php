@@ -1067,7 +1067,7 @@ class Email
 				# Check if there is a "WHERE" statement for subscribed users or all users.
 				if(!empty($subscription_values) OR !empty($all_user_like))
 				{
-					$where.=((!empty($where)) ? ' OR ' : '').'(('.$subscription_values.((!empty($subscription_values) && !empty($all_user_like)) ? ' OR ' : '').$all_user_like.') AND `newsletter` IS NOT NULL)';
+					$where.=((!empty($where)) ? ' OR ' : '').'(('.$subscription_values.((!empty($subscription_values) && !empty($all_user_like)) ? ' OR ' : '').$all_user_like.') AND `newsletter` = 0)';
 				}
 				# Check if there should be an "AND WHERE" statement.
 				if(!empty($notify_like))
