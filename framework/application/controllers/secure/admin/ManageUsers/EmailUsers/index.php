@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageUsers/EmailUsers/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageUsers/EmailUsers/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
@@ -26,37 +26,16 @@ $display_box2='';
 $address='';
 $display='';
 $head='<h3>Please use the form below to send an email!</h3>';
-$head.='(Note that because of hosting restrictions, the maximum number of emails that can be sent in an hour is 100. This mailer will send an email once every 40 seconds to stay within that quota. Please do not use this form a second time until you have recieved the confrimation email from your previous mailing.)';
+$head.='(Note that because of hosting restrictions, the maximum number of emails that can be sent in an hour is 100. This mailer will send '.MAILQUEUE_BATCH_SIZE.' email once every '.MAILQUEUE_THROTTLE.' seconds to stay within that quota. Please do not use this form a second time until you have recieved the confrimation email from your previous mailing.)';
 $recipients=array(
-		'ALL_USERS'=>'All Users',
-		'gml_subscription'=>'GML Subscribers',
-		'fwj_subscription'=>'FWJ Subscribers',
-		'MAN_USERS'=>DOMAIN_NAME.' Managers',
-		'ALL_ADMIN_MAN'=>'All Branch Admins',
-		'ALL_BRANCH_USERS'=>'All Branch Users',
-		'ASP_ADMIN_USERS'=>'ASP Admins',
-		'ASP_USERS'=>'ASP Members',
-		'BIAFRA_ADMIN_USERS'=>'Biafra Admins',
-		'BIAFRA_USERS'=>'Biafra Members',
-		'EDP_ADMIN_USERS'=>'EDP Admins',
-		'EDP_USERS'=>'EDP Authorized Users',
-		'ESP_ADMIN_USERS'=>'ESP Admins',
-		'ESP_USERS'=>'ESP Authorized Users',
-		'FGE_ADMIN_USERS'=>'FGE Admins',
-		'FGE_USERS'=>'FGE Authorized Users',
-		'FWE_ADMIN_USERS'=>'FWE Admins',
-		'FWE_USERS'=>'FWE Authors',
-		'GML_ADMIN_USERS'=>'GML Admins',
-		'GML_USERS'=>'GML Authorized Users',
-		'CURRENT_RESEARCH_ADMIN_USERS'=>'Current Research Admins',
-		'CURRENT_RESEARCH_USERS'=>'Current Research Members',
-		'COMPLETED_RESEARCH_ADMIN_USERS'=>'Complete Research Admins',
-		'COMPLETED_RESEARCH_USERS'=>'Complete Research Members',
-		'ANNOUNCEMENT_ADMIN_USERS'=>'Announcement Admins',
-		'ANNOUNCEMENT_USERS'=>'Announcement Members',
-		'HERMES_USERS'=>'Hermes Users',
-		'GAPPS_USERS'=>'Google Apps Users'
-	);
+	'ALL_USERS'=>'All Users',
+	'MAN_USERS'=>DOMAIN_NAME.' Managers',
+	'ALL_ADMIN_MAN'=>'All Branch Admins',
+	'ALL_BRANCH_USERS'=>'All Branch Users',
+	'ANNOUNCEMENT_ADMIN_USERS'=>'Announcement Admins',
+	'ANNOUNCEMENT_USERS'=>'Announcement Members',
+	'GAPPS_USERS'=>'Google Apps Users'
+);
 
 # Instantiate a new EmailFormProcessor object.
 $fp=new EmailFormProcessor();
