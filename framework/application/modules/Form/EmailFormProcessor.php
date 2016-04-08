@@ -325,12 +325,14 @@ class EmailFormProcessor extends FormProcessor
 							'SiteName'=>Content::getInstance()->getSiteName(),
 							'Subject'=>$subject,
 							'Template'=>$template);
+						/*
 						# Get the Session Class
 						require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
 						# Instantiate the new Session object.
 						$session_obj=Session::getInstance();
 						# End the current session and store session data.
 						$session_obj->saveSessionFile();
+						*/
 						# Create an array with audio data.
 						$email_data=array(
 							'Environment'=>DOMAIN_NAME,
@@ -346,7 +348,7 @@ class EmailFormProcessor extends FormProcessor
 						$cl->runScript(Utility::locateFile(COMMAND_LINE.'Email'.DS.'EmailUsers.php'), $email_data);
 
 						# Remove the email_users session index.
-						unset($_SESSION['email_users']);
+						//unset($_SESSION['email_users']);
 
 						# Set a nice message for the user in a session.
 						$_SESSION['message']='Your email has been initiated. You will receive an email at '.$sender_email.' notifying you as to the success of the mailing. Thank you!';

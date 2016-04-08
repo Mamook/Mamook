@@ -134,3 +134,5 @@ if(!empty($audio_data['FileName']))
 		}
 	}
 }
+# Remove the video upload session.
+unset($_SESSION['audio_upload']);

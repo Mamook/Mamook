@@ -160,3 +160,5 @@ if(!empty($video_data['FileName']))
 	}
 	*/
 }
+# Remove the video upload session.
+unset($_SESSION['video_upload']);

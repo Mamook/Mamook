@@ -514,9 +514,9 @@ class AudioFormProcessor extends FormProcessor
 									$cl=new CommandLine();
 									# Set the audio form session to a new session for use in the command line.
 									$_SESSION['audio_upload']=$_SESSION['form']['audio'];
-									$_SESSION['audio_upload']['Environment']=DOMAIN_NAME;
-									$_SESSION['audio_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
-									$_SESSION['audio_upload']['StagingEnvironment']=STAGING_DOMAIN;
+									//$_SESSION['audio_upload']['Environment']=DOMAIN_NAME;
+									//$_SESSION['audio_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
+									//$_SESSION['audio_upload']['StagingEnvironment']=STAGING_DOMAIN;
 									$_SESSION['audio_upload']['ConfirmationTemplate']=$confirmation_template;
 
 									# Create an array with audio data.
