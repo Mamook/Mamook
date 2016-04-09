@@ -39,7 +39,7 @@ class User
 	protected $lname=NULL;
 	protected $mname=NULL;
 	//protected $new_position=NULL;
-	protected $newsletter;
+	protected $newsletter=NULL;
 	protected $nickname=NULL;
 	protected $notify=NULL;
 	protected $organization=NULL;
@@ -883,21 +883,35 @@ class User
 	 *
 	 * Sets the data member $newsletter.
 	 *
-	 * @param	$newsletter				If the User recieves the newsletter.
+	 * @param	int $newsletter			If the User recieves the newsletter.
+	 *										NULL=Does not reveive newsletter, 0=Receive Newsletter, 1=Pending Confirmation
 	 * @access	public
 	 */
 	public function setNewsletter($newsletter)
 	{
-		# Check if the passed value is empty.
-		if(empty($newsletter))
-		{
-			# Explicitly set the data member to NULL.
-			$newsletter=NULL;
-		}
-		else
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value is NULL.
+		if($newsletter!==NULL)
 		{
 			# Clean it up.
 			$newsletter=trim($newsletter);
+			# Check if the passed value is an integer.
+			if($validator->isInt($newsletter)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$newsletter=(int)$newsletter;
+			}
+			else
+			{
+				throw new Exception('The passed newsletter status was not a number!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$newsletter=NULL;
 		}
 		# Set the data member.
 		$this->newsletter=$newsletter;
