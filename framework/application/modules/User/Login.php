@@ -828,11 +828,11 @@ class Login extends User
 								'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
 								'You have received this email because this email address was used during registration for our site.'."<br />\n".
 								'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
-								'---------------------------'."<br />\n".
+								'------------------------------------------------'."<br />\n".
 								' Activation Instructions'."<br />\n".
-								'---------------------------'."<br />\n<br />\n".
+								'------------------------------------------------'."<br />\n<br />\n".
 								'Thank you for registering.'."<br />\n".
-								'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."\n\n".
+								'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
 								'To activate your account, simply click on the following link:'."<br />\n<br />\n".
 								'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
 								'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
