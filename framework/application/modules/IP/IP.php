@@ -145,10 +145,10 @@ class IP
 			# If this is not for a select query.
 			if($select_query===FALSE)
 			{
-				return " INET6_ATON('".$ip."')";
+				return "INET6_ATON('".$ip."')";
 			}
 			# This is for a select query.
-			return ' INET6_NTOA(`'.$ip.'`)';
+			return 'INET6_NTOA(`'.$ip.'`)';
 		}
 		# Else we assume PHP has IPv6 support and use PHP's inet_pton() to convert the IP to a binary.
 		else
@@ -159,7 +159,7 @@ class IP
 				# If IPv4 then use MySQL function.
 				if($this->getIPVersion()==4)
 				{
-					return " INET_ATON('".$ip."')";
+					return "INET_ATON('".$ip."')";
 				}
 				else
 				{
@@ -170,7 +170,7 @@ class IP
 			# NOTE: How to handle select queries for IPv6 if MySQL version is less then 5.6.3?
 			# Can a MySQL bitwise operation be used here?
 			# IPv4 Only.
-			//return ' INET_NTOA(`'.$ip.'`)';
+			//return 'INET_NTOA(`'.$ip.'`)';
 			# For IPv6 I could use PHP's inet_ntop() but we can't return it here.
 		}
 	} #=== End -- createQueryParam
@@ -195,7 +195,7 @@ class IP
 		# If the client version is 5.6.3+ use INET6_ATON.
 		if($server_version>=50603)
 		{
-			return " INET6_ATON('".$ip."')";
+			return "INET6_ATON('".$ip."')";
 		}
 		# Else we assume PHP has IPv6 support and use PHP's inet_pton() to convert the IP to a binary.
 		else
@@ -203,11 +203,11 @@ class IP
 			# If IPv4 then use MySQL function.
 			if($this->getIPVersion()==4)
 			{
-				return " INET_ATON('".$ip."')";
+				return "INET_ATON('".$ip."')";
 			}
 			else
 			{
-				# Supports IPv4 & IPv6 (if PHP has IPv6 supprot enabled).
+				# Supports IPv4 & IPv6 (if PHP has IPv6 support enabled).
 				return inet_pton($ip);
 			}
 		}
@@ -233,7 +233,7 @@ class IP
 		if($server_version>=50603)
 		{
 			# This is for a select query.
-			return ' INET6_NTOA(`'.$ip_field.'`)';
+			return 'INET6_NTOA(`'.$ip_field.'`)';
 		}
 		# Else we assume PHP has IPv6 support and use PHP's inet_ntop() to convert the binary IP to human readable string.
 		else
