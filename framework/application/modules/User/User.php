@@ -3054,8 +3054,9 @@ class User
 	 *
 	 * Retrieves the access level of a given user.
 	 *
+	 * @param	$field
 	 * @access	public
-	 * @return string
+	 * @return	string
 	 */
 	public function findUserLevel($field=NULL)
 	{
@@ -3180,8 +3181,8 @@ class User
 	 *
 	 * Retrieves User email addresses from the Database that have opted in to receiving news messages.
 	 *
-	 * @param 	$opt_in (The name of the table that the user has opted into.)
-	 * @param 	$csv (Default is TRUE to return comma sepparated values. If FALSE, will return an array.)
+	 * @param 	$opt_in					The name of the table that the user has opted into.
+	 * @param 	$csv					Default is TRUE to return comma sepparated values. If FALSE, will return an array.
 	 * @access	public
 	 */
 	public function getOptInEmails($opt_in, $csv=TRUE)
@@ -3241,7 +3242,7 @@ class User
 	 *
 	 * Retrieves the privacy settings of a given user from the `usres` table and sets the values to the data members.
 	 *
-	 * @param	  $username (The users username.)
+	 * @param	string $username		The users username.
 	 * @access	public
 	 */
 	public function getPrivacySettings($username)
@@ -3282,6 +3283,7 @@ class User
 	 * Retrieves all subscriptions for the passed user ID.
 	 * A wrapper method for getSubscriptions() from the Subscription calss.
 	 *
+	 * @param	int $user_id			The user's ID.
 	 * @access	public
 	 */
 	public function getSubscriptions($user_id=NULL)
@@ -3310,10 +3312,11 @@ class User
 	 *
 	 * Retrieves User records from the DataBase.
 	 *
-	 * @param	$limit (The LIMIT of the records.)
-	 * @param	$fields (The name of the field(s) to be retrieved.)
-	 * @param	$order (The name of the field to order the records by.)
-	 * @param	$direction (The direction to order the records.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where
 	 * @access	public
 	 */
 	public function getUsers($limit=NULL, $fields='*', $order='ID', $direction='DESC', $where='')
