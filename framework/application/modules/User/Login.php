@@ -952,6 +952,7 @@ class Login extends User
 							{
 								# Log the user in.
 								$this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
+								$this->updateLastLogin($id);
 								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />'.
 									'You are now signed in and ready to enjoy the site.<br />'.
 									'Being signed in allows you to access special content and downloads!';
