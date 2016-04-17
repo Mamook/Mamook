@@ -1801,7 +1801,7 @@ class User
 							# Insert user into the `user_newsletter` table.
 							$db->query('INSERT INTO '.DBPREFIX.'`user_newsletter` (`user_id`, `ip`) VALUES ('.
 								$db->quote($user_id).
-								', '.$db->quote($db->escape($ip)).
+								', '.$ip.
 							')');
 							$_SESSION['message']='Congratulations! You just confirmed your newsletter subscription with '.DOMAIN_NAME.'!';
 							$doc->redirect(REDIRECT_AFTER_LOGIN);
@@ -1915,7 +1915,7 @@ class User
 				', '.$db->quote($db->escape($password)).
 				', '.$db->quote($db->escape($login->randomString('alnum', 32))).
 				', '.$db->quote($db->escape(YEAR_MM_DD)).
-				', '.$db->quote($db->escape($ip)).
+				', '.$ip.
 				')');
 			# If WordPress is installed add the user the the WordPress users table.
 			if(WP_INSTALLED===TRUE)

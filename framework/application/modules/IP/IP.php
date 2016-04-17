@@ -164,7 +164,7 @@ class IP
 				else
 				{
 					# Supports IPv4 & IPv6 (if PHP has IPv6 supprot enabled).
-					return inet_pton($ip);
+					return $db->quote($db->escape(inet_pton($ip)));
 				}
 			}
 			# NOTE: How to handle select queries for IPv6 if MySQL version is less then 5.6.3?
@@ -207,8 +207,8 @@ class IP
 			}
 			else
 			{
-				# Supports IPv4 & IPv6 (if PHP has IPv6 support enabled).
-				return inet_pton($ip);
+				# Supports IPv4 & IPv6 (if PHP has IPv6 supprot enabled).
+				return $db->quote($db->escape(inet_pton($ip)));
 			}
 		}
 	} #=== End -- createInsertQueryParam
