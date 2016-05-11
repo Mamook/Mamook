@@ -24,22 +24,6 @@ class Branch
 
 
 
-	/*** magic methods ***/
-
-	/**
-	 * __construct
-	 *
-	 * @access	public
-	 */
-	public function __construct()
-	{
-		return;
-	}
-
-	/*** End magic methods ***/
-
-
-
 	/*** mutator methods ***/
 
 	/**
@@ -47,7 +31,7 @@ class Branch
 	 *
 	 * Sets the data member $all_branches.
 	 *
-	 * @param		$branches (May be an array or a string. The method makes it into an array regardless.)
+	 * @param	$branches				May be an array or a string. The method makes it into an array regardless.
 	 * @access	protected
 	 */
 	protected function setAllBranches($branches)
@@ -72,7 +56,7 @@ class Branch
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	protected
 	 */
 	protected function setID($id)
@@ -108,7 +92,7 @@ class Branch
 	 *
 	 * Sets the data member $branch.
 	 *
-	 * @param		$branch
+	 * @param	$branch
 	 * @access	protected
 	 */
 	protected function setBranch($branch)
@@ -133,7 +117,7 @@ class Branch
 	 *
 	 * Sets the data member $domain.
 	 *
-	 * @param		$domain
+	 * @param	$domain
 	 * @access	protected
 	 */
 	protected function setDomain($domain)
@@ -160,7 +144,7 @@ class Branch
 	 *
 	 * Sets the data member $where_sql.
 	 *
-	 * @param		$where_sql
+	 * @param	$where_sql
 	 * @access	protected
 	 */
 	protected function setWhereSQL($where_sql)
@@ -255,8 +239,10 @@ class Branch
 	 *
 	 * Explodes a dash sepparated list of branches and formats them for the WHERE portion of an sql query.
 	 *
-	 * @param		$branches (The names and/or id's of the branch(es) to be retrieved - may be multiple branches - separate with a dash, ie. '50-70-Archive-110'. Use a "!" to designate Branches NOT to be returned, ie. '50-!70-Archive-110')
-	 * @access	protected
+	 * @param	$branches				The names and/or id's of the branch(es) to be retrieved.
+	 *										May be multiple branches - separate with a dash, ie. '50-70-Archive-110'.
+	 *										Use a "!" to designate Branches NOT to be returned, ie. '50-!70-Archive-110'
+	 * @access	public
 	 */
 	public function createWhereSQL($branches=NULL)
 	{
@@ -328,9 +314,12 @@ class Branch
 	 * findBranchManagerEmails
 	 *
 	 * NEEDS FIXING
+	 * NOTE: Why does it need fixing? ~Draven
 	 *
-	 * @param		$branches (The names and/or id's of the branch(es) to be retrieved - may be multiple branches - separate with a dash, ie. '50-70-Archive-110'. Use a "!" to designate Branches NOT to be returned, ie. '50-!70-Archive-110', or an array.)
-	 * @access	protected
+	 * @param	$branches				The names and/or id's of the branch(es) to be retrieved.
+	 * 										May be multiple branches - separate with a dash. ie: '50-70-Archive-110'.
+	 * 										Use a "!" to designate Branches NOT to be returned, ie. '50-!70-Archive-110', or an array.
+	 * @access	public
 	 */
 	public function findBranchManagerEmails($branches=NULL)
 	{
@@ -406,12 +395,12 @@ class Branch
 	 *
 	 * Retrieves records from the `branches` table.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getBranches($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -434,7 +423,7 @@ class Branch
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->message.', code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
@@ -447,9 +436,9 @@ class Branch
 	 *
 	 * Retrieves branch info from the `branches` table in the Database for the passed id or branch name and sets it to the data member.
 	 *
-	 * @param		String	$value 	(The name or id of the branch to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @return	Boolean 				(TRUE if a record is returned, FALSE if not.)
+	 * @param	string $value			The name or id of the branch to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
+	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisBranch($value, $id=TRUE)
@@ -497,7 +486,7 @@ class Branch
 		catch(ezDB_Error $ez)
 		{
 			# Throw an exception because there was a Database connection error.
-			throw new Exception('Error occured: ' . $ez->message . '<br />Code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->message.'<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{

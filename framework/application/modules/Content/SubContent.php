@@ -215,7 +215,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $branch.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
 	protected function setBranch($object)
@@ -229,7 +229,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $branch_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	protected
 	 */
 	protected function setBranchID($id)
@@ -263,7 +263,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $record_branches.
 	 *
-	 * @param		$branches
+	 * @param	$branches
 	 * @access	public
 	 */
 	public function setRecordBranches($branches)
@@ -277,7 +277,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $wanted_branches.
 	 *
-	 * @param		$branches
+	 * @param	$branches
 	 * @access	public
 	 */
 	public function setWantedBranches($branches)
@@ -290,7 +290,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_contributors.
 	 *
-	 * @param		$contributors
+	 * @param	$contributors
 	 * @access	protected
 	 */
 	protected function setAllContributors($contributors)
@@ -304,7 +304,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $contributor.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
 	protected function setContributor($object)
@@ -318,7 +318,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $cont_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setContID($id)
@@ -352,7 +352,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $recent_cont_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setRecentContID($id)
@@ -386,7 +386,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $last_edit.
 	 *
-	 * @param		$date
+	 * @param	$date
 	 * @access	public
 	 */
 	public function setLastEdit($date)
@@ -433,7 +433,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_files.
 	 *
-	 * @param		$files
+	 * @param	$files
 	 * @access	protected
 	 */
 	protected function setAllFiles($files)
@@ -447,7 +447,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $file.
 	 *
-	 * @param		$object
+	 * @param	$object
 	 * @access	protected
 	 */
 	protected function setFile($object)
@@ -469,7 +469,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $file_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setFileID($id)
@@ -530,7 +530,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $hide.
 	 *
-	 * @param		$hide
+	 * @param	$hide
 	 * @access	public
 	 */
 	public function setHide($hide)
@@ -554,8 +554,8 @@ class SubContent extends Content
 	 * Sets the data member $id.
 	 * This is a wrapper method for setID of the parent class.
 	 *
-	 * @param		$id
-	 * @access	protected
+	 * @param	$id
+	 * @access	public
 	 */
 	public function setID($id, $class='SubContent')
 	{
@@ -568,7 +568,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $images.
 	 *
-	 * @param		$images
+	 * @param	$images
 	 * @access	protected
 	 */
 	protected function setAllImages($images)
@@ -596,7 +596,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $image_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setImageID($id)
@@ -632,7 +632,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_institutions.
 	 *
-	 * @param		$institutions
+	 * @param	$institutions
 	 * @access	protected
 	 */
 	protected function setAllInstitutions($institutions)
@@ -645,7 +645,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $institution.
 	 *
-	 * @param		$institution
+	 * @param	$institution
 	 * @access	protected
 	 */
 	protected function setInstitution($institution)
@@ -674,7 +674,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $institution_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setInstitutionID($id)
@@ -710,7 +710,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_languages.
 	 *
-	 * @param		$languages
+	 * @param	$languages
 	 * @access	protected
 	 */
 	protected function setAllLanguages($languages)
@@ -723,7 +723,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $language.
 	 *
-	 * @param		$language
+	 * @param	$language
 	 * @access	protected
 	 */
 	protected function setLanguage($language)
@@ -737,7 +737,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $language_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setLanguageID($id)
@@ -773,7 +773,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $language_iso.
 	 *
-	 * @param		$iso
+	 * @param	$iso
 	 * @access	protected
 	 */
 	protected function setLanguageISO($iso)
@@ -825,7 +825,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $more.
 	 *
-	 * @param		$more
+	 * @param	$more
 	 * @access	public
 	 */
 	public function setMore($more)
@@ -863,7 +863,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $premium.
 	 *
-	 * @param		$premium
+	 * @param	$premium
 	 * @access	public
 	 */
 	public function setPremium($premium)
@@ -880,7 +880,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_publishers.
 	 *
-	 * @param		$publishers
+	 * @param	$publishers
 	 * @access	protected
 	 */
 	protected function setAllPublishers($publishers)
@@ -893,7 +893,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $publisher.
 	 *
-	 * @param		$publisher
+	 * @param	$publisher
 	 * @access	protected
 	 */
 	protected function setPublisher($publisher)
@@ -922,7 +922,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $publisher_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setPublisherID($id)
@@ -958,7 +958,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $text_language.
 	 *
-	 * @param		string 		$text_language
+	 * @param	string $text_language
 	 * @access	public
 	 */
 	public function setTextLanguage($text_language)
@@ -971,7 +971,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $text_language_iso.
 	 *
-	 * @param		$iso
+	 * @param	$iso
 	 * @access	protected
 	 */
 	protected function setTextLanguageISO($iso)
@@ -996,7 +996,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $text_trans.
 	 *
-	 * @param		string 		$text_trans
+	 * @param	string $text_trans
 	 * @access	public
 	 */
 	public function setTextTrans($text_trans)
@@ -1030,7 +1030,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $trans_language.
 	 *
-	 * @param		string 		$trans_language
+	 * @param	string $trans_language
 	 * @access	public
 	 */
 	public function setTransLanguage($trans_language)
@@ -1043,7 +1043,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $trans_language_iso.
 	 *
-	 * @param		$iso
+	 * @param	$iso
 	 * @access	protected
 	 */
 	protected function setTransLanguageISO($iso)
@@ -1068,7 +1068,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $title.
 	 *
-	 * @param		$title
+	 * @param	$title
 	 * @access	public
 	 */
 	public function setTitle($title)
@@ -1109,7 +1109,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $user.
 	 *
-	 * @param		Integer 		$user	(The User ID)
+	 * @param	int $user				The User ID.
 	 * @access	protected
 	 */
 	protected function setUser($user)
@@ -1138,7 +1138,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $all_videos.
 	 *
-	 * @param		$videos
+	 * @param	$videos
 	 * @access	protected
 	 */
 	protected function setAllVideos($videos)
@@ -1202,7 +1202,7 @@ class SubContent extends Content
 	 *
 	 * Sets the data member $visibility.
 	 *
-	 * @param		$visibility
+	 * @param	$visibility
 	 * @access	public
 	 */
 	public function setVisibility($visibility)
@@ -1602,7 +1602,7 @@ class SubContent extends Content
 	 *
 	 * @access	public
 	 */
-	protected function getMore()
+	public function getMore()
 	{
 		return $this->more;
 	} #==== End -- getMore
@@ -1810,9 +1810,11 @@ class SubContent extends Content
 	 *
 	 * Returns the number of subcontent in the database that are marked available.
 	 *
-	 * @param		$branches (The names and/or id's of the branch(es) to be retrieved. May be multiple branches - separate with dash, ie. '50-60-Archives-110'. "!" may be used to exlude branches, ie. '50-!60-Archives-110')
-	 * @param		$limit 		(The limit of records to count.)
-	 * @param		$and_sql 	(Extra AND statements in the query.)
+	 * @param	$branches				The names and/or id's of the branch(es) to be retrieved.
+	 *										May be multiple branches - separate with dash, ie. '50-60-Archives-110'.
+	 *										"!" may be used to exlude branches, ie. '50-!60-Archives-110'
+	 * @param	int $limit				The limit of records to count.)
+	 * @param	string $and_sql			Extra AND statements in the query.
 	 * @access	public
 	 */
 	public function countAllSubContent($branches=NULL, $limit=NULL, $and_sql=NULL)
@@ -2120,9 +2122,12 @@ class SubContent extends Content
 	 *
 	 * Creates SubContent XHTML elements and sets them to an array for display.
 	 *
-	 * @param		$max_char 		(The maximum number of characters to display.)
-	 * @param		$access_level (The access levels needed for a logged in User to modify the posts - must be a space sepparated string of numbers.)
-	 * @param		$buttons 			(TRUE if other buttons should be displayed, ie "download", "more", FLASE if not.)
+	 * @param	$max_char				The maximum number of characters to display.
+	 * @param	$access_level			The access levels needed for a logged in User to modify the posts - must be a space sepparated string of numbers.
+	 * @param	boolean $buttons		TRUE if other buttons should be displayed, ie "download", "more", FLASE if not.
+	 * @param	int $min_word
+	 * @param	boolean $show_hidden
+	 * @param	$max_br
 	 * @access	public
 	 */
 	public function displaySubContent($max_char=NULL, $access_level=ADMIN_USERS, $buttons=TRUE, $min_word=3, $show_hidden=FALSE, $max_br=NULL)
@@ -2182,27 +2187,26 @@ class SubContent extends Content
 						}
 						# Create variable for the file.
 						$file=$this->getFile();
-						# Set all the file variables to NULL.
-							# Set the file's author to a variable.
-							$file_author=NULL;
-							# Set the file's availability to a variable.
-							$file_availability=NULL;
-							# Set the file's category to a variable.
-							$file_category=NULL;
-							# Set the file contributor's id to a variable.
-							$file_cont_id=NULL;
-							# Set the file's language to a variable.
-							$file_language=NULL;
-							# Set the file's location to a variable.
-							$file_location=NULL;
-							# Set the file's publisher to a variable.
-							$file_publisher=NULL;
-							# Set the file's premium status to a variable.
-							$file_premium=NULL;
-							# Set the file's title to a variable.
-							$file_title=NULL;
-							# Set the file's publish year to a variable.
-							$file_year=NULL;
+						# Set the file's author to a variable.
+						$file_author=NULL;
+						# Set the file's availability to a variable.
+						$file_availability=NULL;
+						# Set the file's category to a variable.
+						$file_category=NULL;
+						# Set the file contributor's id to a variable.
+						$file_cont_id=NULL;
+						# Set the file's language to a variable.
+						$file_language=NULL;
+						# Set the file's location to a variable.
+						$file_location=NULL;
+						# Set the file's publisher to a variable.
+						$file_publisher=NULL;
+						# Set the file's premium status to a variable.
+						$file_premium=NULL;
+						# Set the file's title to a variable.
+						$file_title=NULL;
+						# Set the file's publish year to a variable.
+						$file_year=NULL;
 						# Check if there is a File object.
 						if($file!==NULL)
 						{
@@ -2228,7 +2232,6 @@ class SubContent extends Content
 							$file_title=$file->getTitle();
 							# Set the file's publish year to a variable.
 							$file_year=$file->getYear();
-
 						}
 						# Create variable for hide.
 						$hide=$this->getHide();
@@ -2500,7 +2503,7 @@ class SubContent extends Content
 								if($login->checkAccess(ADMIN_USERS)===TRUE)
 								{
 									# Set the availability to 1(Yes, display) for this user. An admin may see anything.
-										$file_availability=1;
+									$file_availability=1;
 								}
 								# Check if the User is a managing user.
 								elseif($login->checkAccess(MAN_USERS)===TRUE)
@@ -2686,7 +2689,8 @@ class SubContent extends Content
 	/**
 	 * getAudio
 	 *
-	 * Retrieves records from the `audio` table. A wrapper method for getAudio from the Audio class.
+	 * Retrieves records from the `audio` table.
+	 * A wrapper method for getAudio from the Audio class.
 	 *
 	 * @param	int $limit				The LIMIT of the records.
 	 * @param	array $fields			The name of the field(s) to be retrieved.
@@ -2768,12 +2772,13 @@ class SubContent extends Content
 	 *
 	 * Retrieves SubContent records from the DataBase.
 	 *
-	 * @param		$branches 	(The names and/or id's of the branch(es) to be retrieved. May be multiple branches - separate with dash, ie. '50-60-Archives-110')
-	 * @param		$limit 			(The LIMIT of the records.)
-	 * @param		$fields 		(The name of the field(s) to be retrieved.)
-	 * @param		$order 			(The name of the field to order the records by.)
-	 * @param		$direction 	(The direction to order the records.)
-	 * @param		$and_sql 		(Extra AND statements in the query.)
+	 * @param	int/string $branches	The names and/or id's of the branch(es) to be retrieved.
+	 *										May be multiple branches - separate with dash, ie. '50-60-Archives-110'
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $and_sql 		Extra AND statements in the query.
 	 * @access	public
 	 */
 	public function getSubContent($branches=NULL, $limit=NULL, $fields='*', $order='date', $direction='DESC', $and_sql=NULL)
@@ -2837,7 +2842,7 @@ class SubContent extends Content
 						$branch_ids[$branch_obj->getID()]=$branch_obj->getBranch();
 					}
 				}
-				# Set the branch id's array to the wanted_branches Data member.
+				# Set the branch id's array to the wanted_branches data member.
 				$this->setWantedBranches($branch_ids);
 				return TRUE;
 			}
@@ -2859,9 +2864,9 @@ class SubContent extends Content
 	 *
 	 * Retrieves a post's info from the `subcontent` table in the Database for the passed value and related field and sets it to the data member.
 	 *
-	 * @param		String 	$value 	(The post id)
-	 * @param		String 	$field 	(The field in the `subcontent` table that $value is associated with.)
-	 * @return	Boolean 				(TRUE if a record is returned, FALSE if not.)
+	 * @param	string $value			The post ID.
+	 * @param	string $field			The field in the `subcontent` table that $value is associated with.
+	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisSubContent($value=NULL, $field='id')
@@ -2931,14 +2936,15 @@ class SubContent extends Content
 	/**
 	 * getBranches
 	 *
-	 * Retrieves records from the `branches` table. A wrapper method for getBranches from the Branch class.
+	 * Retrieves records from the `branches` table.
+	 * A wrapper method for getBranches from the Branch class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getBranches($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3016,10 +3022,11 @@ class SubContent extends Content
 	/**
 	 * getThisBranch
 	 *
-	 * Retrieves branch info from the `branches` table in the Database for the passed id or branch name and sets it to the data member. A wrapper method for getThisBranch from the Branch class.
+	 * Retrieves branch info from the `branches` table in the Database for the passed id or branch name and sets it to the data member.
+	 * A wrapper method for getThisBranch from the Branch class.
 	 *
-	 * @param		String	$value 	(The name or id of the branch to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
+	 * @param	string $value			The name or id of the branch to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisBranch($value, $id=TRUE)
@@ -3046,14 +3053,15 @@ class SubContent extends Content
 	/**
 	 * getContributors
 	 *
-	 * Retrieves records from the `contributors` table. A wrapper method for getContributors from the Contributor class.
+	 * Retrieves records from the `contributors` table.
+	 * A wrapper method for getContributors from the Contributor class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getContributors($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3087,10 +3095,13 @@ class SubContent extends Content
 	/**
 	 * getThisContributor
 	 *
-	 * Retrieves a contributor's info from the `contributors` table in the Database for the passed value and related field and sets it to the data member. A wrapper method for getThisContributor from the Contributor class.
+	 * Retrieves a contributor's info from the `contributors` table in the Database for the passed value and related field and sets it to the data member.
+	 * A wrapper method for getThisContributor from the Contributor class.
 	 *
-	 * @param		String 	$value 	(May be the contributor id, the contributor's User ID, the contributor's email, or the contributor's lirst and last names - names must be in an array.)
-	 * @param		String 	$field 	(The field in the `contributors` table that $value is associated with.)
+	 * @param	string $value 	May be the contributor ID, the contributor's User ID, the contributor's email, or the contributor's first and last names.
+	 *								Names must be in an array.
+	 * @param	string $field 	The field in the `contributors` table that $value is associated with.
+	 * @param	boolean $find
 	 * @access	public
 	 */
 	public function getThisContributor($value, $field='user', $find=TRUE)
@@ -3116,14 +3127,15 @@ class SubContent extends Content
 	/**
 	 * getFiles
 	 *
-	 * Retrieves records from the `files` table. A wrapper method for getFiles from the File class.
+	 * Retrieves records from the `files` table.
+	 * A wrapper method for getFiles from the File class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getFiles($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3157,10 +3169,11 @@ class SubContent extends Content
 	/**
 	 * getThisFile
 	 *
-	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member. A wrapper method for getThisFile from the File class.
+	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member.
+	 * A wrapper method for getThisFile from the File class.
 	 *
-	 * @param		String	$value 	(The name or id of the file to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
+	 * @param	string $value			The name or id of the file to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisFile($value, $id=TRUE)
@@ -3195,14 +3208,15 @@ class SubContent extends Content
 	/**
 	 * getImages
 	 *
-	 * Retrieves records from the `images` table. A wrapper method for getImages from the Image class.
+	 * Retrieves records from the `images` table.
+	 * A wrapper method for getImages from the Image class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getImages($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3236,10 +3250,11 @@ class SubContent extends Content
 	/**
 	 * getThisImage
 	 *
-	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member. A wrapper method for getThisImage from the Image class.
+	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.
+	 * A wrapper method for getThisImage from the Image class.
 	 *
-	 * @param		String	$value 	(The name or id of the image to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
+	 * @param	string $value			The name or id of the image to retrieve.
+	 * @param	boolean $id 			TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisImage($value, $id=TRUE)
@@ -3274,14 +3289,15 @@ class SubContent extends Content
 	/**
 	 * getInstitutions
 	 *
-	 * Retrieves records from the `institutions` table. A wrapper method for getInstitutions from the Institution class.
+	 * Retrieves records from the `institutions` table.
+	 * A wrapper method for getInstitutions from the Institution class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getInstitutions($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3315,10 +3331,11 @@ class SubContent extends Content
 	/**
 	 * getThisInstitution
 	 *
-	 * Retrieves institution info from the `institutions` table in the Database for the passed id or institution name and sets it to the data member. A wrapper method for getThisInstitution from the Institution class.
+	 * Retrieves institution info from the `institutions` table in the Database for the passed id or institution name and sets it to the data member.
+	 * A wrapper method for getThisInstitution from the Institution class.
 	 *
-	 * @param		String	$value 	(The name or id of the institution to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
+	 * @param	string $value 			The name or id of the institution to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisInstitution($value, $id=TRUE)
@@ -3344,8 +3361,6 @@ class SubContent extends Content
 			$this->setInstitutionID(NULL);
 			return FALSE;
 
-
-
 			# Set the institution id to the data member.
 			$this->setInstitutionID($institution->getID());
 			# Set the institution name to the data member.
@@ -3360,14 +3375,15 @@ class SubContent extends Content
 	/**
 	 * getLanguages
 	 *
-	 * Retrieves records from the `languages` table. A wrapper method for getLanguages from the Language class.
+	 * Retrieves records from the `languages` table.
+	 * A wrapper method for getLanguages from the Language class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getLanguages($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3401,10 +3417,11 @@ class SubContent extends Content
 	/**
 	 * getThisLanguage
 	 *
-	 * Retrieves language info from the `languages` table in the Database for the passed id or language name and sets it to the data member. A wrapper method for getThisLanguage from the Language class.
+	 * Retrieves language info from the `languages` table in the Database for the passed id or language name and sets it to the data member.
+	 * A wrapper method for getThisLanguage from the Language class.
 	 *
-	 * @param		String	$value 	(The name or id of the language to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
+	 * @param	string $value 			The name or id of the language to retrieve.
+	 * @param	boolean $id 			TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisLanguage($value, $id=TRUE)
@@ -3441,14 +3458,15 @@ class SubContent extends Content
 	/**
 	 * getPublishers
 	 *
-	 * Retrieves records from the `publishers` table. A wrapper method for getPublishers from the Publisher class.
+	 * Retrieves records from the `publishers` table.
+	 * A wrapper method for getPublishers from the Publisher class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
+	 * @param	int $limit				The LIMIT of the records.
+	 * @param	string $fields			The name of the field(s) to be retrieved.
+	 * @param	string $order			The name of the field to order the records by.
+	 * @param	string $direction		The direction to order the records.
+	 * @param	string $where			Extra AND statements in the query.
+	 * @return	boolean					TRUE if records are returned, FALSE if not.
 	 * @access	public
 	 */
 	public function getPublishers($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
@@ -3485,8 +3503,8 @@ class SubContent extends Content
 	 * Retrieves publisher info from the `publishers` table in the Database for the passed id or publisher name and sets it to the data member.
 	 * A wrapper method for getThisPublisher from the Publisher class.
 	 *
-	 * @param	String $value			The name or id of the publisher to retrieve.
-	 * @param	Boolean $id				TRUE if the passed $value is an id, FALSE if not.
+	 * @param	string $value			The name or id of the publisher to retrieve.
+	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
 	 * @access	public
 	 */
 	public function getThisPublisher($value, $id=TRUE)
@@ -3521,7 +3539,8 @@ class SubContent extends Content
 	/**
 	 * getVideos
 	 *
-	 * Retrieves records from the `videos` table. A wrapper method for getVideos from the Video class.
+	 * Retrieves records from the `videos` table.
+	 * A wrapper method for getVideos from the Video class.
 	 *
 	 * @param	int $limit				The LIMIT of the records.
 	 * @param	array $fields			The name of the field(s) to be retrieved.
@@ -3603,10 +3622,10 @@ class SubContent extends Content
 	 *
 	 * Returns the years in the database.
 	 *
-	 * @param	$project (The name of the project field in the database table to access.)
-	 * @param	$direction (The direction to ORDER BY.)
-	 * @param	$limit (The limit of records to query.)
-	 * @param	$and_sql (Extra AND statements in the query.)
+	 * @param	$branches
+	 * @param	string $direction		The direction to ORDER BY.
+	 * @param	int $limit				The limit of records to query.
+	 * @param	string $and_sql			Extra AND statements in the query.
 	 * @access	public
 	 */
 	public function returnYears($branches=NULL, $direction='DESC', $limit=NULL, $and_sql=NULL)
@@ -3649,7 +3668,7 @@ class SubContent extends Content
 	 *
 	 * Sets all the data returned in a row from the `subcontent` table to the appropriate Data members.
 	 *
-	 * @param		$row 		(The returned row of data from a record to set to the data members.)
+	 * @param	$row					The returned row of data from a record to set to the data members.
 	 * @access	public
 	 */
 	public function setDataMembers($row)
@@ -3953,7 +3972,7 @@ class SubContent extends Content
 	 *
 	 * Returns a domain for a post based on the best suited branch id.
 	 *
-	 * @param		array			$branch_ids 	(The branch id's associated with the post.)
+	 * @param	array $branch_ids		The branch id's associated with the post.
 	 * @access	protected
 	 */
 	protected function getPostDomain($branch_ids)
