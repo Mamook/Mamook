@@ -1,4 +1,4 @@
-<?php /* application/controllers/secure/admin/ManageUsers/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageUsers/index.php */
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
@@ -27,6 +27,7 @@ $display_box1a='';
 $display_box1b='';
 $display_box1c='';
 $display_box2='';
+$display_search_form='';
 
 $display='';
 $head='';
@@ -214,7 +215,7 @@ $display_main1.=$main_content->displayTitles();
 # Get the main content to display in main-2.
 $display_main2.=$main_content->displayContent();
 # Add any display content to main-2.
-$display_main2.=$display;
+$display_main2.=$display_search_form.$display;
 
 # Get the quote text to display in main-3.
 $display_main3.=$main_content->displayQuote();

@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/SearchFormProcessor.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -47,9 +47,6 @@ class SearchFormProcessor extends FormProcessor
 			# This needs to happen before populateSearchForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
 			$this->loseSessionData('search');
 
-			# Reset the form if the "reset" button was submitted.
-			//$this->processReset('search', 'search');
-
 			# Instantiate a new instance of the SearchFormPopulator class.
 			$populator=new SearchFormPopulator();
 			# Populate the form and set the Search data members for this post.
@@ -64,6 +61,8 @@ class SearchFormProcessor extends FormProcessor
 			$search_results=NULL;
 			# Set the search terms to a variable.
 			$search_terms=$search_obj->getSearchTerms();
+			# Set the search type to a variable.
+			$search_type=$search_obj->getSearchType();
 			# Set the tables to a variable.
 			$tables=$search_obj->getTables();
 
@@ -91,24 +90,25 @@ class SearchFormProcessor extends FormProcessor
 				# The post is considered "unique" and may be added to the database.
 				else
 				{
-					$search_obj->processSearch();
+					$search_obj->processSearch($search_type);
 					$results=$search_obj->getAllResults();
 					if(!empty($results))
 					{
-						$search_results=$results;
+						$_SESSION['form']['search']['AllResults']=$results;
+						# Redirect the user to the appropriate page if their post data indicates that another form is needed to add content.
+						$this->searchRedirect($search_obj->getSearchBranch());
 					}
 					else
 					{
 						# Set a nice message for the user in a session.
 						$_SESSION['message']='No results';
 						# Redirect the user to the page they were on.
-						//$this->redirectNoDelete('video');
+						$this->redirectNoDelete('search');
 					}
 				}
 			}
 			# Unset the CMS session data.
 			unset($_SESSION['form']);
-			return $search_results;
 		}
 		catch(Exception $e)
 		{
@@ -121,6 +121,44 @@ class SearchFormProcessor extends FormProcessor
 
 
 	/*** private methods ***/
+
+	/**
+	 * searchRedirect
+	 *
+	 * Redirect the user to the appropriate page if their post data indicates that another form is
+	 * needed to add content.
+	 *
+	 * @access	private
+	 */
+	private function searchRedirect($branch_id)
+	{
+		try
+		{
+			# Set the Document instance to a variable.
+			$doc=Document::getInstance();
+			# Get the Populator object and set it to a local variable.
+			$populator=$this->getPopulator();
+			# Get the Search object from the SearchFormPopulator object and set it to a variable for use in this method.
+			$search_obj=$populator->getSearchObject();
+
+			# Get the Branch class.
+			require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
+			# Instantiate a new Branch object.
+			$branch_obj=new Branch();
+			if($branch_obj->getThisBranch($search_obj->getSearchBranch()))
+			{
+				$doc->redirect(PROTOCAL.str_ireplace(array('%{domain_name}'), array(DOMAIN_NAME), $branch_obj->getDomain()).'?search');
+			}
+			else
+			{
+				$doc->redirect(APPLICATION_URL.'search/');
+			}
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- searchRedirect
 
 	/**
 	 * setSession
@@ -149,6 +187,7 @@ class SearchFormProcessor extends FormProcessor
 			$_SESSION['form']['search']=
 				array(
 					'FormURL'=>$form_url,
+					'SearchBranch'=>$search_obj->getSearchBranch(),
 					'SearchTerms'=>$search_obj->getSearchTerms(),
 					'SearchType'=>$search_obj->getSearchType()
 				);

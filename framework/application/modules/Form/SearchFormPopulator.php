@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/SearchFormPopulator.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -84,7 +84,7 @@ class SearchFormPopulator extends FormPopulator
 			# Get the Search class.
 			require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
 			# Instantiate a new Search object.
-			$search_object=new Search();
+			$search_object=Search::getInstance();
 			# Set the Search object to the search_object data member for use outside of this method.
 			$this->setSearchObject($search_object);
 
@@ -131,6 +131,13 @@ class SearchFormPopulator extends FormPopulator
 				$data=$this->getData();
 				# Set the Validator instance to a variable.
 				$validator=Validator::getInstance();
+
+				# Check if title POST data was sent.
+				if(isset($_POST['branch']))
+				{
+					# Set the search terms to the searchterms data member.
+					$data['SearchBranch']=$_POST['branch'];
+				}
 
 				# Check if title POST data was sent.
 				if(isset($_POST['searchterms']))

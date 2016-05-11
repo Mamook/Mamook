@@ -29,6 +29,9 @@ else
 		# The SubNavigation
 		require Utility::locateFile(TEMPLATES.'subnavbar.php');
 
+		# Search box
+		require Utility::locateFile(TEMPLATES.'search.php');
+
 		# Navigation bar
 		# Check if we are at an Admin page
 		if((($validator->isSSL()===TRUE) && (strpos(FULL_URL, WebUtility::removeSchemeName(LOGIN_PAGE))===FALSE)) ||

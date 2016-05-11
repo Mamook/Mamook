@@ -1,9 +1,10 @@
-<?php /* Thanks goes to Cal Henderson at iamcal.com for the great php search script example (http://www.iamcal.com/publish/articles/php/search/). */
+<?php /* framework/application/modules/Search/Search.php */
 
 /**
  * Search
  *
  * The Search Class is used to search through a field in a MYSQL database for matching (or similar) text.
+ * Thanks goes to Cal Henderson at iamcal.com for the great php search script example (http://www.iamcal.com/publish/articles/php/search/).
  *
  */
 class Search
@@ -12,8 +13,10 @@ class Search
 
 	private $all_results=NULL;
 	private $fields=NULL;
+	private static $search_obj;
+	private $search_branch=NULL;
 	private $search_terms=NULL;
-	private $search_type=NULL;
+	private $search_type;
 	private $tables=NULL;
 
 	/*** End data members ***/
@@ -48,6 +51,21 @@ class Search
 		# Set the variable.
 		$this->fields=$fields;
 	} #==== End -- setFields
+
+	/**
+	 * setSearchBranch
+	 *
+	 * Sets the data member $search_branch.
+	 *
+	 * @param	$search_branch
+	 * @access	public
+	 */
+	public function setSearchBranch($search_branch)
+	{
+		# Set the variable.
+		$this->search_branch=$search_branch;
+	} #=== End -- setSearchBranch
+
 
 	/**
 	 * setSearchTerms
@@ -122,6 +140,18 @@ class Search
 	} #==== End -- getFields
 
 	/**
+	 * getSearchBranch
+	 *
+	 * Returns the data member $search_branch.
+	 *
+	 * @access	public
+	 */
+	public function getSearchBranch()
+	{
+		return $this->search_branch;
+	} #==== End -- getSearchBranch
+
+	/**
 	 * getSearchTerms
 	 *
 	 * Returns the data member $search_terms.
@@ -164,18 +194,30 @@ class Search
 	/*** public methods ***/
 
 	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access	public
+	 */
+	public static function getInstance()
+	{
+		if(!self::$search_obj)
+		{
+			self::$search_obj=new Search();
+		}
+		return self::$search_obj;
+	} #==== End -- getInstance
+
+	/**
 	 * processSearch
 	 *
 	 * Processes search, returning the results of the search.
 	 *
-	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
-	public function processSearch($filter=NULL)
+	public function processSearch($search_type)
 	{
-		# Get the search type.
-		$search_type=$this->getSearchType();
-
 		# Loop through search types.
 		foreach($search_type as $type)
 		{
@@ -187,12 +229,20 @@ class Search
 					# Set the tables to the data member.
 					$this->setTables('users');
 					# Perform search.
-					$this->searchUsers($filter);
+					$this->searchUsers();
+					break;
+				case "subcontent":
+					# Set the fields to the data member.
+					$this->setFields(array('id','title','link','file','availability','visibility','date','premium','branch','institution','publisher','text_language','text','trans_language','text_trans','hide','image','contributor'));
+					# Set the tables to the data member.
+					$this->setTables('subcontent');
+					# Perform search.
+					$this->searchSubContent();
 					break;
 				case "all":
-					# NOTE! Search entire site.
+					# NOTE! Not finished yet.
+					# Search entire site.
 					break;
-				default;
 			}
 		}
 	} #==== End -- processSearch
@@ -227,7 +277,7 @@ class Search
 				{
 					$num_select_fields=count($fields[$table]);
 					$select_fields=implode('`, `', $fields[$table]);
-					$results[$table]=$db->get_row('SELECT `'.$select_fields.'` FROM `'.$table.'` WHERE `'.$id[$table].'` = '.$db->quote($db->escape($result_id->$id[$table])));
+					$results[$table]=$db->get_row('SELECT `'.$select_fields.'` FROM '.DBPREFIX.'`'.$table.'` WHERE `'.$id[$table].'` = '.$db->quote($db->escape($result_id->$id[$table])));
 					$display_list.='<li>';
 					for($i=0; $i<$num_select_fields; $i++)
 					{
@@ -254,36 +304,66 @@ class Search
 	 * @param	$search_terms			The term we're searching for.
 	 * @param	$table					The table we're searching in.
 	 * @param	$fields					The fields we're searching in.
-	 * @param	$id						The name of the id field in the table we are searching.
-	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @param	$branch					Optional.
 	 * @access	public
 	 */
-	public function performSearch($search_terms, $table, $fields, $filter=NULL)
+	public function performSearch($search_terms, $table, $fields, $branch=NULL)
 	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
+		try
+		{
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
 
-		# Create comma separated field string.
-		$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
-		# Create where string.
-		$where=$this->prepareWhere($search_terms, $fields, $filter);
+			# Create comma separated field string.
+			$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
+			# Create where string.
+			$where=$this->prepareWhere($search_terms, $fields, $branch);
 
-		# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
-		$sql='SELECT '.$select_fields.' FROM `'.$table.'` WHERE '.$where;
-		$search_results=$db->get_results($sql);
-		# Set results to the data member.
-		$this->setAllResults($search_results);
+			# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
+			$sql='SELECT '.$select_fields.' FROM '.DBPREFIX.'`'.$table.'` WHERE '.$where;
+			$search_results=$db->get_results($sql);
+			# Set results to the data member.
+			$this->setAllResults($search_results);
+		}
+		catch(ezDB_Error $ez)
+		{
+			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
 	} #==== End -- performSearch
+
+	/**
+	 * searchSubContent
+	 *
+	 * Searches the users table.
+	 *
+	 * @access	public
+	 */
+	public function searchSubContent()
+	{
+		# Set tables to search to a variable.
+		$tables=$this->getTables();
+		# Set fields to search to a variable.
+		$fields=$this->getFields();
+		# Set branch to search to a variable.
+		$branch=$this->getSearchBranch();
+		# Set search terms to a variable.
+		$search_terms=$this->getSearchTerms();
+		# Perform search.
+		$this->performSearch($search_terms, $tables, $fields, $branch);
+	} #==== End -- searchSubContent
 
 	/**
 	 * searchUsers
 	 *
 	 * Searches the users table.
 	 *
-	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	public
 	 */
-	public function searchUsers($filter=NULL)
+	public function searchUsers()
 	{
 		# Set tables to search to a variable.
 		$tables=$this->getTables();
@@ -292,7 +372,7 @@ class Search
 		# Set search terms to a variable.
 		$search_terms=$this->getSearchTerms();
 		# Perform search.
-		$this->performSearch($search_terms, $tables, $fields, $filter=NULL);
+		$this->performSearch($search_terms, $tables, $fields);
 	} #==== End -- processSearch
 
 	/*** End public methods ***/
@@ -947,7 +1027,7 @@ class Search
 				foreach($matches as $match)
 				{
 					return '{WHITESPACE-'.ord($match).'}';
-        }
+				}
 			},
 			$term
 		);
@@ -1053,11 +1133,11 @@ class Search
 	 * Builds and returns the "where" portion of the search query.
 	 *
 	 * @param	$terms					The term we're searching for.
-	 * @param	$fields					The fields we're searching in.
-	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @param	array $fields			The fields we're searching in.
+	 * @param	array $branch
 	 * @access	protected
 	 */
-	protected function prepareWhere($terms, $fields, $filter=NULL)
+	protected function prepareWhere($terms, $fields, $branch)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -1072,36 +1152,33 @@ class Search
 		//print_r($terms);exit;
 
 		$terms_db=$this->convertTerms2RegEx($terms);
-		$result=array();
-		if(!empty($filter))
-		{
-			# $filter="`Party` = 'yes' AND "
-			$filter=$filter.' AND ';
-		}
 
-		$parts=array();
-		/*
-		foreach($terms_db as $term_db)
-		{
-			# $parts[]="`Username` RLIKE '$term_db'";
-			foreach($fields as $field)
-			{
-				$parts[]='`'.$field.'` RLIKE '.$db->quote($term_db);
-			}
-		}
-		$parts=implode(' OR ', $parts);
-		*/
-
+		$field_parts=array();
+		$branch_parts=array();
 		$terms_db=implode('|', $terms_db);
 
 		# $parts[]="`Username` RLIKE '$term_db'";
 		foreach($fields as $field)
 		{
-			$parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);
+			$field_parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);
 		}
-		$parts=implode(' OR ', $parts);
+		$field_parts=implode(' OR ', $field_parts);
 
-		return $filter.((!empty($parts)) ? '('.$parts.')' : '');
+		if($branch!==NULL)
+		{
+			$search_branch=explode(' ', $branch);
+			if(is_array($search_branch))
+			{
+				# $branch_parts[]="`branch` LIKE '%-$branch_id-%'";
+				foreach($search_branch as $branch_id)
+				{
+					$branch_parts[]='`branch` LIKE \'%-'.$branch_id.'-%\'';
+				}
+				$branch_parts=implode(' OR ', $branch_parts);
+			}
+		}
+
+		return ((!empty($field_parts)) ? '('.$field_parts.')' : '').(!empty($branch_parts) ? (!empty($field_parts) ? ' AND ' : '').'('.$branch_parts.')' : '');
 	} #==== End -- prepareWhere
 
 	/*** End protected methods ***/
