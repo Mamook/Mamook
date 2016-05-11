@@ -279,6 +279,10 @@ $copyright='';
 # Create a default variable for the site description.
 $meta_desc='';
 
+# Set the type of search to a variable.
+#	Get's set in the search_form.php template.
+$search_type=array('subcontent');
+
 #####################################################################################
 # DON'T EDIT BELOW THIS LINE ########################################################
 #####################################################################################
