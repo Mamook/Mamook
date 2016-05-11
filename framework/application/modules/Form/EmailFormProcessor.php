@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/EmailFormProcessor.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
@@ -26,8 +26,9 @@ class EmailFormProcessor extends FormProcessor
 	 *
 	 * Adds email addresses to the FormMail.ini file.
 	 *
-	 * @param 	$emails						A string of comma separated email addresses to add to a new "Recipient".
-	 * @param 	$replace					The string in the ini file to replace.
+	 * @param 	string $value			A string of comma separated email addresses to add to a new "Recipient".
+	 * @param 	string $name
+	 * @param	bool $reset				Reset the formmail.ini file. TRUE or FALSE.
 	 * @access	public
 	 */
 	public function editFormMailIni($value, $name, $reset=FALSE)
@@ -78,7 +79,8 @@ class EmailFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted email form.
 	 *
-	 * @param	$data						An array of values tp populate the form with.
+	 * @param	array $data				An array of values tp populate the form with.
+	 * @param	array $allowed_types	An array of allowed file types.
 	 * @access	public
 	 * @return	string
 	 */
@@ -320,8 +322,6 @@ class EmailFormProcessor extends FormProcessor
 							'Recipients'=>$recipients,
 							'SenderEmail'=>$sender_email,
 							'SenderName'=>$sender_name,
-							'SessionId'=>session_id(),
-							'SessionPath'=>session_save_path(),
 							'SiteName'=>Content::getInstance()->getSiteName(),
 							'Subject'=>$subject,
 							'Template'=>$template);
