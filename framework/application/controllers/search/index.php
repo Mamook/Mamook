@@ -18,9 +18,9 @@ $display_subcontent='';
 
 # Create a new SubContent object.
 $subcontent_obj=new SubContent();
-if(isset($_SESSION['form']['search']['SearchResults']))
+if(isset($_SESSION['form']['search']['AllResults']))
 {
-	$results=$_SESSION['form']['search']['SearchResults'];
+	$results=$_SESSION['form']['search']['AllResults'];
 	$max_char=242;
 
 	# Start an unordered list of the "subcontent" class and set it to a variable.
