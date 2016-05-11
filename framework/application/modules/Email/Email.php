@@ -1021,8 +1021,6 @@ class Email
 				$where='';
 				$and_where='';
 
-				$test_array=array();
-
 				# Loop through the user levels and build the "WHERE" statement.
 				foreach($level as $user_level)
 				{
