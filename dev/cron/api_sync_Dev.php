@@ -4,7 +4,7 @@
 
 /**
  * This script runs every hour.
- * 00      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/api_sync_Dev.php
+ * 00      00      *      *      *      /opt/local/bin/php <Full Path to Cron Folder>/cron/api_sync_Dev.php
  *
  * Edit the domains from jamtheforce.com/.dev to your domain.
  *
@@ -31,7 +31,7 @@ if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 chdir(dirname(__FILE__));
 
 # Get the Path definitions.
-require '../data/path_definitions.php';
+require '../../data/path_definitions.php';
 # Get the database definitions.
 require DATA_FILES.'database_definitions.php';
 # Get the API definitions.

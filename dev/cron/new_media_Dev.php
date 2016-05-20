@@ -31,7 +31,7 @@ if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 chdir(dirname(__FILE__));
 
 # Get the Path definitions.
-require '../data/path_definitions.php';
+require '../../data/path_definitions.php';
 # Get the database definitions.
 require DATA_FILES.'database_definitions.php';
 # Get the API definitions.
