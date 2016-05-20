@@ -979,7 +979,7 @@ class Email
 			}
 			# Get the email sender's email and set it to a variable.
 			$sender_email=$this->getSenderEmail();
-			#Set the current time as the start time.
+			# Set the current time as the start time.
 			$start_time=time();
 			# Set the subject to a variable.
 			$subject=htmlentities($this->getSubject(), ENT_QUOTES, 'UTF-8', FALSE);

@@ -725,6 +725,8 @@ if(!defined('__PHP_SHA256_NANO_'))
 		 *
 		 * Generates a link to the Amazon shopping cart.
 		 *
+		 * @param	$page
+		 * @param	$identifier
 		 * @param	array $asins		An array of product ASIN's.
 		 * @access	public
 		 */
