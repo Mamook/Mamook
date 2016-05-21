@@ -5,6 +5,13 @@
 /**
  * This script runs every hour.
  * 00      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/api_sync.php
+ * -       -       -       -       -
+ * |       |       |       |       |
+ * |       |       |       |       +----- day of week (0 - 6) (Sunday=0)
+ * |       |       |       +------- month (1 - 12)
+ * |       |       +--------- day of month (1 - 31)
+ * |       +----------- hour (0 - 23)
+ * +------------- min (0 - 59)
  *
  * Edit the domains from jamtheforce.com/.dev to your domain.
  *

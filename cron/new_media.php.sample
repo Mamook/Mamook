@@ -5,6 +5,13 @@
 /**
  * This script runs every 10 minutes. Had to escape the forward slash.
  * *\/10      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/new_media.php
+ * -          -       -       -       -
+ * |          |       |       |       |
+ * |          |       |       |       +----- day of week (0 - 6) (Sunday=0)
+ * |          |       |       +------- month (1 - 12)
+ * |          |       +--------- day of month (1 - 31)
+ * |          +----------- hour (0 - 23)
+ * +------------- min (0 - 59)
  *
  * Edit the domains from jamtheforce.com/.dev to your domain.
  *
