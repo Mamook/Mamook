@@ -706,25 +706,7 @@ class Video extends Media
 							(isset($yt_id) && $yt->deleteVideo($yt_id)===TRUE)
 						)
 						{
-							try
-							{
-								# Delete the video from the `videos` table.
-								$deleted=$db->query('DELETE FROM `'.DBPREFIX.'videos` WHERE `id` = '.$db->quote($id).' LIMIT 1');
-								# Set a nice message to display to the user.
-								$_SESSION['message']='The video '.$video_name.' was successfully deleted.';
-								# Redirect the user back to the page without GET or POST data.
-								$doc->redirect($redirect);
-								# If there is no redirect, return TRUE.
-								return TRUE;
-							}
-							catch(ezDB_Error $ez)
-							{
-								throw new Exception('Error occured: '.$ez->message.', but the video file itself was deleted.<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-							}
-							catch(Exception $e)
-							{
-								throw $e;
-							}
+							$delete_video=TRUE;
 						}
 						else
 						{
@@ -738,7 +720,13 @@ class Video extends Media
 					{
 						# Set the video's name data member to a local variable.
 						$video_name=$this->getTitle();
-						# Delete the video.
+						$delete_video=TRUE;
+					}
+
+					# TODO: Add delete video section here!
+					# Delete the video.
+					if(isset($delete_video) && $delete_video==TRUE)
+					{
 						try
 						{
 							# Delete the video from the `videos` table.
