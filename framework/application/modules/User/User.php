@@ -3582,11 +3582,15 @@ class User
 		{
 			# Get all of the inactive users that are ready to be deleted.
 			$inactive_users=$this->getInactiveUsers();
-			# Loop through the inactive users.
-			foreach($inactive_users as $user_id)
+			# If there are any users ready to be deleted.
+			if($inactive_users)
 			{
-				# Delete the users.
-				$this->deleteAccount($user_id);
+				# Loop through the inactive users.
+				foreach($inactive_users as $user_id)
+				{
+					# Delete the users.
+					$this->deleteAccount($user_id);
+				}
 			}
 		}
 		catch(ezDB_Error $e)
