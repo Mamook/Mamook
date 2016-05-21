@@ -1,0 +1,273 @@
+<?php /* cron/user_delete_warning.php */
+
+/**
+ * This script runs once a day.
+ * 00      11      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/user_delete_warning.php
+ * -       -       -       -       -
+ * |       |       |       |       |
+ * |       |       |       |       +----- day of week (0 - 6) (Sunday=0)
+ * |       |       |       +------- month (1 - 12)
+ * |       |       +--------- day of month (1 - 31)
+ * |       +----------- hour (0 - 23)
+ * +------------- min (0 - 59)
+ *
+ * Edit the domains from jamtheforce.org/.dev to your domain.
+ *
+ * Use dev/cron/user_delete_warning_Dev.php if you need this for your development machine.
+ * Use dev/cron/user_delete_warning_Staging.php if you need this for your staging server.
+ */
+
+# Need this for the database insert.
+if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
+
+# Need these for database_definitions.php and email_definitions.php
+# Only need to change the RUN_ON_DEVELOPMENT definition.
+# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', TRUE);
+if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
+
+if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
+{
+	# Turn Debugging on or off.
+	define('DEBUG_APP', TRUE);
+}
+else
+{
+	# Turn Debugging on or off.
+	define('DEBUG_APP', FALSE);
+}
+
+# Define the timezone.
+define('TIMEZONE', 'US/Pacific');
+
+/*
+ *---------------------------------------------------------------
+ * SYSTEM VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables needed by the application
+ *
+ */
+# Make sure PHP is using UTF-8 character encoding.
+mb_internal_encoding('UTF-8');
+
+# Set the date (and time)
+# First, the timezone.
+putenv('TZ='.TIMEZONE);
+date_default_timezone_set(TIMEZONE);
+
+# Change the directory to where this cron script is located.
+chdir(dirname(__FILE__));
+
+# Get the Path definitions.
+require '../data/path_definitions.php';
+# Get the database definitions.
+require DATA_FILES.'database_definitions.php';
+# Get the Email definitions.
+require DATA_FILES.'email_definitions.php';
+# Get the User Privileges.
+require DATA_FILES.'user_privileges.php';
+# Get the Utility Class.
+require_once UTILITY_CLASS;
+# Get the Validator Class.
+require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+# Set the Validator instance to a variable.
+$validator_obj=Validator::getInstance();
+
+# Get the DB Class needed to operate with MySQL.
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+DB::init(DB_TYPE);
+$db=DB::get_instance();
+$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+# Get the User Class.
+require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
+# Create a new User object.
+$user_obj=new User();
+
+# Get the Email class.
+require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
+# Instantiate a new Email object.
+$email_obj=new Email();
+
+# Get users that have never logged in, or users that haven't logged in for 2 years or more,
+#	that have an expired subscription, or never had a subscription.
+# NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
+$where='WHERE (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(NOW(), INTERVAL 2 YEAR)) AND (`gml_subscription`<CURDATE() OR `gml_subscription` IS NULL) AND (`fwj_subscription`<CURDATE() OR `fwj_subscription` IS NULL)';
+$order_field='ID';
+$order_direction='ASC';
+$fields='`ID`, `display`, `email`, `lastlogin`';
+# Get the Users.
+$user_obj->getUsers(NULL, $fields, $order_field, $order_direction, $where);
+$recipients=$user_obj->getAllUsers();
+
+try
+{
+	# Delete inactive users.
+	$user_obj->deleteInactiveUser();
+
+	# Set the MAILQUEUE_BATCH_SIZE to a variable.
+	$batch=MAILQUEUE_BATCH_SIZE;
+	# Set the sender name to a variable.
+	$sender_name='The '.DOMAIN_NAME.' Web Team';
+	# Set the current time as the start time.
+	$start_time=time();
+	# Set the subject to a variable.
+	$subject='Inactive account - '.DOMAIN_NAME;
+
+	# Create empty arrays to use later.
+	$good_email=array();
+	$invalid_email=array();
+	$used_emails=array();
+
+	# Check if the query returned any results.
+	if(!empty($recipients))
+	{
+		set_time_limit(0);
+		if(count($recipients) < $batch)
+		{
+			$batch=count($recipients);
+		}
+
+		# Send emails until batch number is reached and then sleep.
+		$i=1;
+		# Loop through the recipients.
+		foreach($recipients as $row)
+		{
+			# Check if this user's email was already sent.
+			if(!in_array($row->email, $used_emails))
+			{
+				# Add this user's email to the used_emails array.
+				$used_emails[]=$row->email;
+				if($row->lastlogin=='0000-00-00')
+				{
+					# Set the message to a variable.
+					$message='You have never logged into your account at <a href="http://'.DOMAIN_NAME.'">'.DOMAIN_NAME.'</a>.';
+				}
+				else
+				{
+					# Set the message to a variable.
+					$message='You haven\'t logged into <a href="http://'.DOMAIN_NAME.'">'.DOMAIN_NAME.'</a> in over two years.';
+				}
+				$message.=' If you don\'t login in the next 7 days your account will be deleted.<br/>';
+				# Get the email template. (Creates and populates the $body variable.)
+				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
+				# Clean up the user's display name.
+				$display_name=' '.htmlentities($row->display, ENT_QUOTES, 'UTF-8', FALSE);
+				# Check if there is still a display name.
+				if(empty($display_name))
+				{
+					# Explicitly set the display name to an empty string.
+					$display_name='';
+				}
+				# Replace the first variable in the template. (Puts the display name in the salutation.)
+				$current_body=sprintf($body, $display_name.',');
+				# Validate the users email.
+				$valid_email=$validator_obj->validEmail($row->email);
+				if($valid_email===TRUE)
+				{
+					# Add the email to the good_email array.
+					$good_email[$row->display]=$row->email;
+
+					### DEBUG ###
+					if(DEBUG_APP===TRUE)
+					{
+						# Send email.
+						$email_sent=$email_obj->sendEmail($subject, ADMIN_EMAIL, $current_body);
+					}
+					else
+					{
+						# Send email.
+						$email_sent=$email_obj->sendEmail($subject, $row->email, $current_body);
+					}
+
+					# If the email was sent, then insert the user into the inactive table.
+					if($email_sent===TRUE)
+					{
+						# Get current date.
+						$current_date=new DateTime();
+						# Add 7 days to the current date. This is the date the user will be deleted.
+						$current_date->add(new DateInterval('P7D'));
+						# Set the new date to a variable.
+						$delete_date=$current_date->format('Y-m-d');
+						# Insert the user into the inactive table.
+						$db->query('INSERT INTO `'.DBPREFIX.'users_inactive` ('.
+							'`user_id`, '.
+							'`delete_date`'.
+							') VALUES ('.
+							$db->quote($row->ID).', '.
+							$db->quote($delete_date).
+							')');
+					}
+
+					# Increment the email counter by one.
+					$i++;
+					# Check if the current number of emails sent equals (or is greater than) the batch number.
+					if($i>=$batch)
+					{
+						# Pause for the passed amount of time.
+						sleep(MAILQUEUE_THROTTLE);
+						# Reset the email counter.
+						$i=1;
+					}
+				}
+				else
+				{
+					# Add the email to the invalid email list.
+					$email_obj->editInvalidEmail($row->email);
+					# Add the invalid email to the invalid_email array.
+					$invalid_email[$row->display]=$row->email;
+				}
+			}
+		}
+
+		# Set the elapsed time since the set start time to a variable.
+		$elapsed_time=Utility::getElapsedTime($start_time, time());
+		$sent_message=$message;
+		# Set the email message to a variable.
+		$message='The email you initiated to users of '.DOMAIN_NAME.' has been sent.';
+		$message.='<br/>'."\n";
+		$message.='You successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
+		$message.='<br/>'."\n";
+		$string='EMAIL REPORT:'."\n\n";
+		# Check if there were good email addresses.
+		if(!empty($good_email))
+		{
+			$string.=count($good_email).' emails successfully sent to the following users:'."\n";
+			foreach($good_email as $name=>$email_address)
+			{
+				$string.=$name.':'."\t\t".$email_address."\n";
+			}
+		}
+		# Check if there were any invaild email addresses.
+		if(!empty($invalid_email))
+		{
+			$string.="\n\n";
+			$string.=count($invalid_email).' emails were NOT sent to the following users because their email addresses were invalid:'."\n";
+			foreach($invalid_email as $name=>$email_address)
+			{
+				$string.=$name.':'."\t\t".$email_address."\n";
+			}
+		}
+		$string.="\n\n".'The message you emailed was:'."\n";
+		$string.=html_entity_decode($sent_message, ENT_QUOTES, 'UTF-8');
+		$subject='Results of your group emailing from '.DOMAIN_NAME;
+		$email_report=TEMP.date('Ymd').'EmailReport.txt';
+		# Get the confirmation email template. (Resets and populates the $body variable.)
+		require Utility::locateFile(TEMPLATES.'fm'.DS.'confirmation_template.php');
+		# Get the FileHandler class.
+		require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
+		# Instantate a new instance of FileHandler.
+		$file_handler=new FileHandler();
+		# Edit the the InvalidEmail.log file.
+		$file_handler->editFile($email_report, $string, TRUE);
+		# Replace the first variable in the template. (Puts the display name in the salutation.)
+		$body=sprintf($body, ' '.$sender_name.',');
+		# Send a confirmation email to the admin email.
+		$email_obj->sendEmail($subject, ADMIN_EMAIL, $body, SMTP_FROM, $email_report);
+	}
+}
+catch(Exception $e)
+{
+	throw $e;
+}

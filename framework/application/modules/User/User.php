@@ -1917,6 +1917,22 @@ class User
 				', '.$db->quote($db->escape(YEAR_MM_DD)).
 				', '.$ip.
 				')');
+			# Set the ID from the insert SQL query.
+			$user_id=$db->get_insert_id();
+			# Get current date.
+			$current_date=new DateTime();
+			# Add 7 days to the current date. This is the date the user will be deleted.
+			$current_date->add(new DateInterval('P7D'));
+			# Set the new date to a variable.
+			$delete_date=$current_date->format('Y-m-d');
+			# Insert the user into the inactive table.
+			$db->query('INSERT INTO `'.DBPREFIX.'users_inactive` ('.
+				'`user_id`, '.
+				'`delete_date`'.
+				') VALUES ('.
+				$db->quote($user_id).', '.
+				$db->quote($delete_date).
+				')');
 			# If WordPress is installed add the user the the WordPress users table.
 			if(WP_INSTALLED===TRUE)
 			{
@@ -2011,6 +2027,10 @@ class User
 			# Set the User ID to NULL in the `comments` table.
 			$remove_user=$comment->removeUser($id);
 
+			# Remove the user from the user_inactive table.
+			#	Checks if the user exists in the table.
+			$this->deleteInactiveUser($id);
+
 			# check if there is a WordPress installation.
 			if(WP_INSTALLED===TRUE)
 			{
@@ -2048,7 +2068,7 @@ class User
 		}
 	} #==== End -- deleteAccount
 
-	/***
+	/**
 	 * displayProfile
 	 *
 	 * Retrieves the members information from the database and displays it.
@@ -3518,11 +3538,95 @@ class User
 		}
 	} #==== End -- updateUser
 
+	/**
+	 * getInactiveUsers
+	 *
+	 * Check if the user is already in the users_inactive table.
+	 *
+	 * @param	int $user_id
+	 * @access	public
+	 */
+	public function getInactiveUsers($user_id=NULL)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
+		try
+		{
+			if($user_id!==NULL)
+			{
+				$results=$db->get_row('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
+			}
+			else
+			{
+				$results=$db->get_results('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()');
+			}
+			return $results;
+		}
+		catch(ezDB_Error $e)
+		{
+			throw new Exception('There was an error checking the users_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+		}
+	} #==== End -- getInactiveUsers
+
+	/**
+	 * deleteInactiveUsers
+	 *
+	 * Deletes the user(s) from the system.
+	 *
+	 * @access	public
+	 */
+	public function deleteInactiveUsers()
+	{
+		try
+		{
+			# Get all of the inactive users that are ready to be deleted.
+			$inactive_users=$this->getInactiveUsers();
+			# Loop through the inactive users.
+			foreach($inactive_users as $user_id)
+			{
+				# Delete the users.
+				$this->deleteAccount($user_id);
+			}
+		}
+		catch(ezDB_Error $e)
+		{
+			throw new Exception('There was an error deleting the inactive user: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+		}
+	} #==== End -- deleteInactiveUsers
+
 	/*** End public methods ***/
 
 
 
 	/*** protected methods ***/
+
+	/**
+	 * deleteInactiveUser
+	 *
+	 * Deletes the user from the user_inactive table.
+	 *
+	 * @param	int $user_id
+	 * @access	protected
+	 */
+	protected function deleteInactiveUser($user_id)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
+		try
+		{
+			# Check if the user exists in the users_inactive table.
+			if($this->getInactiveUsers($user_id))
+			{
+				$db->query('DELETE FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
+			}
+		}
+		catch(ezDB_Error $e)
+		{
+			throw new Exception('There was an error deleting the user from the user_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+		}
+	} #==== End -- deleteInactiveUser
 
 	/**
 	 * ipValid

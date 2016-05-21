@@ -750,6 +750,7 @@ class Login extends User
 								{
 									$this->setLoginSessions($this->getID(), $this->getDisplayName(), $this->getPassword(), $this->getFirstName(), $this->getLastName(), $this->getTitle(), $this->getRegistered(), $this->getLastLogin(), TRUE, (isset($_POST['remember']) ? TRUE : FALSE));
 									$this->updateLastLogin($this->getID());
+									$this->deleteInactiveUser($this->getID());
 									$doc->redirect((($this->getPostLogin()===NULL) ? REDIRECT_AFTER_LOGIN : (('http://'.$this->getPostLogin()==ERROR_PAGE.'404.php') ? REDIRECT_AFTER_LOGIN : 'http://'.$this->getPostLogin())));
 								}
 							}
