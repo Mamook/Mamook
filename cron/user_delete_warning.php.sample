@@ -182,7 +182,7 @@ try
 					}
 
 					# If the email was sent, then insert the user into the inactive table.
-					if($email_sent===TRUE)
+					if($email_sent===TRUE && !$user_obj->getInactiveUsers($row->ID))
 					{
 						# Get current date.
 						$current_date=new DateTime();
