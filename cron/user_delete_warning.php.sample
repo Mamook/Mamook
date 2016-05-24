@@ -23,7 +23,7 @@ if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
 # Need these for database_definitions.php and email_definitions.php
 # Only need to change the RUN_ON_DEVELOPMENT definition.
 # TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
-if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', TRUE);
+if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
 if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 
 if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
