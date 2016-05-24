@@ -106,10 +106,15 @@ try
 	# Delete inactive users.
 	$user_obj->deleteInactiveUsers();
 
+	# Get the site name from the content table.
+	$content_result=$db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
+
 	# Set the MAILQUEUE_BATCH_SIZE to a variable.
 	$batch=MAILQUEUE_BATCH_SIZE;
 	# Set the sender name to a variable.
 	$sender_name='The '.DOMAIN_NAME.' Web Team';
+	# Set the site name to a variable.
+	$site_name=(isset($content_result->site_name) ? $content_result->site_name : DOMAIN_NAME);
 	# Set the current time as the start time.
 	$start_time=time();
 	# Set the subject to a variable.
