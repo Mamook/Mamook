@@ -60,7 +60,7 @@ date_default_timezone_set(TIMEZONE);
 chdir(dirname(__FILE__));
 
 # Get the Path definitions.
-require '../data/path_definitions.php';
+require '../../data/path_definitions.php';
 # Get the database definitions.
 require DATA_FILES.'database_definitions.php';
 # Get the Email definitions.
