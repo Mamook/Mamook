@@ -104,7 +104,7 @@ $recipients=$user_obj->getAllUsers();
 try
 {
 	# Delete inactive users.
-	$user_obj->deleteInactiveUser();
+	$user_obj->deleteInactiveUsers();
 
 	# Set the MAILQUEUE_BATCH_SIZE to a variable.
 	$batch=MAILQUEUE_BATCH_SIZE;
