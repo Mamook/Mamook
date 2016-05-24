@@ -12,7 +12,7 @@ $search_obj=$populator->getSearchObject();
 $search_type=$search_obj->getSearchType();
 
 $branch_id='';
-if(isset($branch))
+if(isset($branch) && !is_object($branch))
 {
 	# Get the Branch class.
 	require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');

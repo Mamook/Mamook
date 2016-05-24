@@ -34,13 +34,13 @@ $form_processor=new FormProcessor();
 $form_processor->processAuthRequest();
 
 # Instantiate a new Branch object.
-$branch=new Branch();
+$branch_obj=new Branch();
 # Get all the branch id's.
-$branch->getBranches(NULL, 'id');
+$branch_obj->getBranches(NULL, 'id');
 # Create an empty array to hold the branch id's.
 $branch_ids=array();
 # Loop through the returned branch rows.
-foreach($branch->getAllBranches() as $row)
+foreach($branch_obj->getAllBranches() as $row)
 {
 	$branch_ids[]=$row->id;
 }

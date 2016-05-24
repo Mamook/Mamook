@@ -37,13 +37,13 @@ elseif(isset($_GET['unsubscribe']) && isset($_GET['ID']))
 }
 
 # Instantiate a new Branch object.
-$branch=new Branch();
+$branch_obj=new Branch();
 # Get all branch id's.
-$branch->getBranches(NULL, '`id`');
+$branch_obj->getBranches(NULL, '`id`');
 # Create an empty array to hold the branch id's.
 $branch_ids=array();
 # Set the retrieved branch rows to a variable.
-$branch_rows=$branch->getAllBranches();
+$branch_rows=$branch_obj->getAllBranches();
 # Loop through the branch rows.
 foreach($branch_rows as $row)
 {

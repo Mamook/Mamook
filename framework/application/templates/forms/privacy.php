@@ -56,18 +56,18 @@ $display='<div id="privacy_form" class="form">';
 		}
 
 		# Get the data for this branch.
-		$branch->getThisBranch($branch_num);
+		$branch_obj->getThisBranch($branch_num);
 		# Set the branch id to a variable.
-		$branch_id=$branch->getID();
+		$branch_id=$branch_obj->getID();
 		# Set the branch name to a variable.
-		$branch_name=$branch->getBranch();
+		$branch_name=$branch_obj->getBranch();
 		# Create the User privelege constant.
 		$constant=str_replace(' ', '_', strtoupper($branch_name)).'_USERS';
 		if($login->checkAccess(constant($constant))===TRUE)
 		{
 			$fg->addFormPart('<li>');
 			$fg->addElement('checkbox', array('name'=>$branch_id, 'checked'=>$notify, 'id'=>$branch_id));
-			$fg->addFormPart('<label class="label-box" for="'.$branch_id.'">Send '.$person.' <a href="http://'.$branch->getDomain().'" target="_blank">'.$branch_name.'</a> updates</label>');
+			$fg->addFormPart('<label class="label-box" for="'.$branch_id.'">Send '.$person.' <a href="http://'.$branch_obj->getDomain().'" target="_blank">'.$branch_name.'</a> updates</label>');
 			$fg->addFormPart('</li>');
 		}
 	}
