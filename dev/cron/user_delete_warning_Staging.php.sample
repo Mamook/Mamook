@@ -144,17 +144,18 @@ try
 			{
 				# Add this user's email to the used_emails array.
 				$used_emails[]=$row->email;
+				$message='You appear in our webpage log as wanting to use the '.$site_name.' site, but you';
 				if($row->lastlogin=='0000-00-00')
 				{
 					# Set the message to a variable.
-					$message='You have never logged into your account at <a href="http://'.DOMAIN_NAME.'">'.DOMAIN_NAME.'</a>.';
+					$message.=' have never';
 				}
 				else
 				{
 					# Set the message to a variable.
-					$message='You haven\'t logged into <a href="http://'.DOMAIN_NAME.'">'.DOMAIN_NAME.'</a> in over two years.';
+					$message.=' haven’t';
 				}
-				$message.=' If you don\'t login in the next 7 days your account will be deleted.<br/>';
+				$message.=' logged into your account at a href="http://'.DOMAIN_NAME.'">'.DOMAIN_NAME.'</a>. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you now that if you don’t log in to our webpage within seven (7) days from receiving this message, your account will be deleted.<br/>';
 				# Get the email template. (Creates and populates the $body variable.)
 				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
 				# Clean up the user's display name.
