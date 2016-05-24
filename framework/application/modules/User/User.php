@@ -2665,7 +2665,7 @@ class User
 	 * @param	$field					The users Email or Username.
 	 * @access	public
 	 */
-	public function findPassword($field=NULL)
+	public function findPassword($user=NULL, $field=NULL)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -2674,7 +2674,7 @@ class User
 		try
 		{
 			# Check if the passed value is empty.
-			if(empty($field))
+			if(empty($user) || ($field=='ID' || empty($field)))
 			{
 				# Set the password data member to a variable.
 				$password=$this->getPassword();
@@ -2689,13 +2689,16 @@ class User
 			else
 			{
 				# Clean the passed value and set it to a new variable.
-				$clean_field=$db->sanitize($field);
-				$search_field='username';
-				if($validator->validEmail($field)===TRUE)
+				$clean_user=$db->sanitize($user);
+				if($field=='username')
+				{
+					$search_field='username';
+				}
+				elseif($validator->validEmail($user)===TRUE)
 				{
 					$search_field='email';
 				}
-				$where='`'.$search_field.'` = '.$db->quote($db->escape($clean_field));
+				$where='`'.$search_field.'` = '.$db->quote($db->escape($clean_user));
 			}
 			# Retrieve the password from the `users` table.
 			$row=$db->get_row('SELECT `password` FROM `'.DBPREFIX.'users` WHERE '.$where.' LIMIT 1');

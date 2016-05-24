@@ -302,7 +302,7 @@ class Login extends User
 				# Get the User class.
 				$id=$this->getID();
 				# Set variables
-				$password=$this->findPassword($this->findUsername($id));
+				$password=$this->findPassword($this->findUsername($id), 'username');
 				$ip=$this->findIP();
 
 				# Let's see if we pass the validation.
@@ -735,7 +735,7 @@ class Login extends User
 					try
 					{
 						# Check if the user is in the Database
-						$this->findPassword($username);
+						$this->findPassword($username, 'username');
 						if($this->validatePassword($password)!==TRUE)
 						{
 							$this->setError('The password was incorrect.');
