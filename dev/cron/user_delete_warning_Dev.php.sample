@@ -203,17 +203,17 @@ try
 							$db->quote($row->ID).', '.
 							$db->quote($delete_date).
 							')');
-					}
 
-					# Increment the email counter by one.
-					$i++;
-					# Check if the current number of emails sent equals (or is greater than) the batch number.
-					if($i>=$batch)
-					{
-						# Pause for the passed amount of time.
-						sleep(MAILQUEUE_THROTTLE);
-						# Reset the email counter.
-						$i=1;
+						# Increment the email counter by one.
+						$i++;
+						# Check if the current number of emails sent equals (or is greater than) the batch number.
+						if($i>=$batch)
+						{
+							# Pause for the passed amount of time.
+							sleep(MAILQUEUE_THROTTLE);
+							# Reset the email counter.
+							$i=1;
+						}
 					}
 				}
 				else
