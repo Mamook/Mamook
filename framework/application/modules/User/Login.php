@@ -1141,7 +1141,7 @@ class Login extends User
 
 			$empty_password_conf=$validate->validateEmpty('confirmed_password', 'Please confirm your new password.', 6, 64);
 
-			if(($empty_password===FALSE)&&($empty_password_conf===FALSE))
+			if(($empty_password===FALSE) && ($empty_password_conf===FALSE))
 			{
 				if($password!=$password_conf)
 				{
