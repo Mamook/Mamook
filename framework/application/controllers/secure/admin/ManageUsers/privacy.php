@@ -26,22 +26,22 @@ $display='';
 if(isset($_GET['user']))
 {
 	# Instantiate a new User object.
-	$user=new User();
+	$user_obj=new User();
 	# Set the User ID to the data member; effectively cleaning it.
-	$user->setID($_GET['user']);
+	$user_obj->setID($_GET['user']);
 	# Set the data member to a variable.
-	$id=$user->getID();
-	$user->findPrivacySettings();
-	$current_username=$user->findUsername($id);
+	$id=$user_obj->getID();
+	$user_obj->findPrivacySettings();
+	$current_username=$user_obj->findUsername($id);
 
 	# Instantiate a new Branch object.
-	$branch=new Branch();
+	$branch_obj=new Branch();
 	# Get all branch id's.
-	$branch->getBranches(NULL, '`id`');
+	$branch_obj->getBranches(NULL, '`id`');
 	# Create an empty array to hold the branch id's.
 	$branch_ids=array();
 	# Set the retrieved branch rows to a variable.
-	$branch_rows=$branch->getAllBranches();
+	$branch_rows=$branch_obj->getAllBranches();
 	# Loop through the branch rows.
 	foreach($branch_rows as $row)
 	{
