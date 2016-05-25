@@ -140,6 +140,8 @@ class SearchFormProcessor extends FormProcessor
 			$populator=$this->getPopulator();
 			# Get the Search object from the SearchFormPopulator object and set it to a variable for use in this method.
 			$search_obj=$populator->getSearchObject();
+			# Set the search type to a variable.
+			$search_type=$search_obj->getSearchType();
 
 			# Get the Branch class.
 			require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
@@ -149,7 +151,7 @@ class SearchFormProcessor extends FormProcessor
 			{
 				$doc->redirect(PROTOCAL.str_ireplace(array('%{domain_name}'), array(DOMAIN_NAME), $branch_obj->getDomain()).'?search');
 			}
-			else
+			elseif(!in_array('users', $search_type))
 			{
 				$doc->redirect(APPLICATION_URL.'search/');
 			}

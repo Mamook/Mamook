@@ -154,11 +154,15 @@ else
 
 if(!isset($_GET['user']))
 {
+	# Set the Search object created in SearchFormPopulator to a variable.
+	$search_obj=$populator->getSearchObject();
+	# Set the results to a variable.
+	$results=$search_obj->getAllResults();
 	# Check if this is a search.
-	if(isset($search_results))
+	if(isset($results))
 	{
 		# Set $records to the search results to use in the foreach.
-		$records=$search_results;
+		$records=$results;
 	}
 	$display.='<table width="100%">'.
 		'<tr>'.
