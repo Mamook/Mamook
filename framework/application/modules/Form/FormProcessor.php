@@ -262,17 +262,17 @@ class FormProcessor
 		# Brign the Login object into scope.
 		global $login;
 		# Brign the User object into scope.
-		global $user;
+		global $user_obj;
 
 		$branch_ids=(array)$branch_ids;
 
 		if($id===NULL)
 		{
-			$id=$user->findUserID();
+			$id=$user_obj->findUserID();
 		}
 
 		# Get the user's access levels.
-		$levels=$user->findUserLevel($id);
+		$levels=$user_obj->findUserLevel($id);
 
 		# Get the Branch class.
 		require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
@@ -339,12 +339,12 @@ class FormProcessor
 		# Bring the content instance into scope.
 		$main_content=Content::getInstance();
 		# Bring the User object into scope.
-		global $user;
+		global $user_obj;
 
 		try
 		{
-			$username=$user->getUsername();
-			$id=$user->getID();
+			$username=$user_obj->getUsername();
+			$id=$user_obj->getID();
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST))
 			{
@@ -353,13 +353,13 @@ class FormProcessor
 				# Get the Branch class.
 				require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 				# Instantiate a new Branch object.
-				$branch=new Branch();
+				$branch_obj=new Branch();
 				# Retrieve all branches from the branches table.
-				$retrieve_branches=$branch->getBranches(NULL, '`id`, `branch`');
+				$retrieve_branches=$branch_obj->getBranches(NULL, '`id`, `branch`');
 				# Get all retrieved branches.
-				$all_branches=$branch->getAllBranches();
+				$all_branches=$branch_obj->getAllBranches();
 				# Get the user's access levels.
-				$levels=$user->findUserLevel($id);
+				$levels=$user_obj->findUserLevel($id);
 				# Format the User's levels into a string suitable for the MySQL field `level` in the User table.
 				$levels='-'.implode('-', $levels).'-';
 				# Indicate as the defaul that WordPress should NOT be updated.
@@ -466,7 +466,7 @@ class FormProcessor
 				}
 
 				# Update the database with the new levels.
-				$user->updateUser(array('ID'=>$id), array('level'=>$levels));
+				$user_obj->updateUser(array('ID'=>$id), array('level'=>$levels));
 
 				# Check if WordPress should be updated.
 				if($update_WordPress!==FALSE)
@@ -479,9 +479,9 @@ class FormProcessor
 				}
 
 				# Get the user's display name.
-				$display_name=$user->findDisplayName($id);
+				$display_name=$user_obj->findDisplayName($id);
 				# Create the branch admin email constant and set it to the $to variable.
-				$to=$user->findEmail($id);
+				$to=$user_obj->findEmail($id);
 				# Set the email subject.
 				$subject=DOMAIN_NAME.': Your authorizations have been updated.';
 
@@ -524,12 +524,12 @@ class FormProcessor
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
 		# Bring the Database object into scope.
-		global $user;
+		global $user_obj;
 
 		try
 		{
-			$username=$user->findUsername();
-			$id=$user->findUserID();
+			$username=$user_obj->findUsername();
+			$id=$user_obj->findUserID();
 			# Check if the form has been submitted.
 			if(array_key_exists('_submit_check', $_POST))
 			{
@@ -544,7 +544,7 @@ class FormProcessor
 				# Get all retrieved branches.
 				$all_branches=$branch->getAllBranches();
 				# Get the user's access levels.
-				$levels=$user->findUserLevel($id);
+				$levels=$user_obj->findUserLevel($id);
 				# Format the User's levels into a string suitable for the MySQL field `level` in the User table.
 				$levels='-'.implode('-', $levels).'-';
 				# Loop through the branch rows.
@@ -561,7 +561,7 @@ class FormProcessor
 						# Add the branch candidate number to the levels string.
 						$levels=$levels.$candiate_num.'-';
 						# Update the database with the new levels.
-						$user->updateUser(array('ID'=>$id), array('level'=>$levels));
+						$user_obj->updateUser(array('ID'=>$id), array('level'=>$levels));
 						# Create the branch admin email constant and set it to the $to variable.
 						$to=constant(str_replace(' ', '_', strtoupper($branch_name)).'_ADMIN_EMAIL');
 						# Set the email subject.

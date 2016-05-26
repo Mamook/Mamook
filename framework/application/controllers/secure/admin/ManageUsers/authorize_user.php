@@ -30,29 +30,29 @@ $head='';
 if(isset($_GET['user']))
 {
 	# Instantiate a new User object.
-	$user=new User();
+	$user_obj=new User();
 	# Set the User ID to the data member effectively cleaning it.
-	$user->setID($_GET['user']);
+	$user_obj->setID($_GET['user']);
 	# Set the data member to a variable.
-	$id=$user->getID();
+	$id=$user_obj->getID();
 
-	$current_username=$user->findUsername($id);
+	$current_username=$user_obj->findUsername($id);
 	# Instantiate a new FormProcessor object.
 	$form_processor=new FormProcessor();
 	# Process the request_auth_form.
 	$form_processor->processAuthorize();
 
 	# Instantiate a new Branch object.
-	$branch=new Branch();
+	$branch_obj=new Branch();
 	# Get all the branch id's.
-	$branch->getBranches(NULL, 'id');
+	$branch_obj->getBranches(NULL, 'id');
 	# Create an empty array to hold the branch id's.
 	$branch_ids=array();
 	# Loop through the returned branch rows.
-	foreach($branch->getAllBranches() as $row)
+	foreach($branch_obj->getAllBranches() as $row)
 	{
 		$branch_admin_level=substr_replace($row->id, 1, -1, 1);
-		if(in_array($branch_admin_level, $levels)OR($login->isAdmin()===TRUE))
+		if(in_array($branch_admin_level, $levels) OR ($login->isAdmin()===TRUE))
 		{
 			$branch_ids[]=$row->id;
 		}
