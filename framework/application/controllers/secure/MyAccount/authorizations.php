@@ -24,9 +24,9 @@ $display_box2='';
 $display='<p>You may request extended privileges, authorizing you to contribute and/or edit content for various aspects or "branches" of '.DOMAIN_NAME.'.</p>';
 
 # Instantiate a new User object.
-$user=new User();
+$user_obj=new User();
 # Get the logged in User's ID.
-$id=$user->findUserID();
+$id=$user_obj->findUserID();
 
 # Instantiate a new FormProcessor object.
 $form_processor=new FormProcessor();
