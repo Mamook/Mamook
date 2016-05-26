@@ -20,6 +20,9 @@
 # Need this for the database insert.
 if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
 
+# Define the url that points to our application. (ends with a slash)
+define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+
 # Need these for database_definitions.php and email_definitions.php
 # Only need to change the RUN_ON_DEVELOPMENT definition.
 # TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
