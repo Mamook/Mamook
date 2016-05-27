@@ -29,6 +29,19 @@ define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
 if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', TRUE);
 if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 
+# Define the timezone.
+define('TIMEZONE', 'US/Pacific');
+
+# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
+if(RUN_ON_STAGING===TRUE)
+{
+	define('SECURE_URL', APPLICATION_URL.'secure/');
+}
+else
+{
+	define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
+}
+
 if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
 {
 	# Turn Debugging on or off.
@@ -40,8 +53,11 @@ else
 	define('DEBUG_APP', FALSE);
 }
 
-# Define the timezone.
-define('TIMEZONE', 'US/Pacific');
+# The url we redirect to the login page.
+define('LOGIN_PAGE', SECURE_URL.'login/');
+
+# The url we redirect visitors to if the page access is restricted.
+define('REDIRECT_TO_LOGIN', LOGIN_PAGE);
 
 /*
  *---------------------------------------------------------------
@@ -96,8 +112,9 @@ $email_obj=new Email();
 # Get users that have never logged in, or users that haven't logged in for 2 years or more,
 #	that have an expired subscription, or never had a subscription.
 # Don't get users that are already in the `users_inactive` table.
+# Don't get users that have registered in the last 7 days.
 # NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
-$where='WHERE (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(NOW(), INTERVAL 2 YEAR)) AND (`gml_subscription`<CURDATE() OR `gml_subscription` IS NULL) AND (`fwj_subscription`<CURDATE() OR `fwj_subscription` IS NULL) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
+$where='WHERE (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`gml_subscription`<CURDATE() OR `gml_subscription` IS NULL) AND (`fwj_subscription`<CURDATE() OR `fwj_subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAYS) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
 $order_field='ID';
 $order_direction='ASC';
 $fields='`ID`, `display`, `email`, `lastlogin`';
@@ -111,14 +128,14 @@ try
 	$user_obj->deleteInactiveUsers();
 
 	# Get the site name from the content table.
-	$content_result=$db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
+	$config_result=$db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
 
 	# Set the MAILQUEUE_BATCH_SIZE to a variable.
 	$batch=MAILQUEUE_BATCH_SIZE;
 	# Set the sender name to a variable.
 	$sender_name='The '.DOMAIN_NAME.' Web Team';
 	# Set the site name to a variable.
-	$site_name=(isset($content_result->site_name) ? $content_result->site_name : DOMAIN_NAME);
+	$site_name=(isset($config_result->site_name) ? $config_result->site_name : DOMAIN_NAME);
 	# Set the current time as the start time.
 	$start_time=time();
 	# Set the subject to a variable.
@@ -153,13 +170,19 @@ try
 				{
 					# Set the message to a variable.
 					$message.=' have never';
+					# If the user has never logged in, maybe they never activated their account.
+					$activate_message='If you have not activated your account, use the <a href="'.REDIRECT_TO_LOGIN.'ResendEmail/" title="Resend my activation email">Resend my activation email</a> to have the activation link emailed to you.<br/>';
 				}
 				else
 				{
 					# Set the message to a variable.
 					$message.=' haven’t';
+					# Empty message.
+					$activate_message='';
 				}
-				$message.=' logged into your account at <a href="http://'.DOMAIN_NAME.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you now that if you don\'t log in to our webpage within seven (7) days from receiving this message, your account will be deleted.<br/>';
+				$message.=' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
+					'You may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.<br/><br/>'.
+					'If you have forgotten your username, or password then you can use <a href="'.APPLICATION_URL.'" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>'.$activate_message;
 				# Get the email template. (Creates and populates the $body variable.)
 				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
 				# Clean up the user's display name.
