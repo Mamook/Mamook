@@ -122,7 +122,7 @@ class RegisterFormProcessor extends FormProcessor
 							$unique=$login->checkUnique('email', $email);
 							if($unique===FALSE)
 							{
-								$fv->setErrors('An account using the email address "'.$email.'" already exists in the system, please choose another. Or you may use the "<a href="'.REDIRECT_TO_LOGIN.'login/LostPassword/" title="Lost passowrd">lost password</a>" feature to recover your account information.');
+								$fv->setErrors('An account using the email address "'.$email.'" already exists in the system, please choose another. Or you may use the "<a href="'.LOGIN_PAGE.'LostPassword/" title="Lost passowrd">lost password</a>" feature to recover your account information.');
 							}
 							else
 							{

@@ -53,11 +53,8 @@ else
 	define('DEBUG_APP', FALSE);
 }
 
-# The url we redirect to the login page.
+# The url to the login page.
 define('LOGIN_PAGE', SECURE_URL.'login/');
-
-# The url we redirect visitors to if the page access is restricted.
-define('REDIRECT_TO_LOGIN', LOGIN_PAGE);
 
 /*
  *---------------------------------------------------------------
@@ -171,7 +168,7 @@ try
 					# Set the message to a variable.
 					$message.=' have never';
 					# If the user has never logged in, maybe they never activated their account.
-					$activate_message='If you have not activated your account, use the <a href="'.REDIRECT_TO_LOGIN.'ResendEmail/" title="Resend my activation email">Resend my activation email</a> to have the activation link emailed to you.<br/>';
+					$activate_message='If you have not activated your account, use the <a href="'.LOGIN_PAGE.'ResendEmail/" title="Resend my activation email">Resend my activation email</a> to have the activation link emailed to you.<br/>';
 				}
 				else
 				{
@@ -181,8 +178,8 @@ try
 					$activate_message='';
 				}
 				$message.=' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
-					'You may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.<br/><br/>'.
-					'If you have forgotten your username, or password then you can use <a href="'.APPLICATION_URL.'" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>'.$activate_message;
+					'You may login at <a href="'.LOGIN_PAGE.'">'.LOGIN_PAGE.'</a>.<br/><br/>'.
+					'If you have forgotten your username, or password then you can use <a href="'.LOGIN_PAGE.'LostPassword/" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>'.$activate_message;
 				# Get the email template. (Creates and populates the $body variable.)
 				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
 				# Clean up the user's display name.
