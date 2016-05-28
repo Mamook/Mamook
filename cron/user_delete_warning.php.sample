@@ -114,7 +114,7 @@ $email_obj=new Email();
 $where='WHERE (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`gml_subscription`<CURDATE() OR `gml_subscription` IS NULL) AND (`fwj_subscription`<CURDATE() OR `fwj_subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
 $order_field='ID';
 $order_direction='ASC';
-$fields='`ID`, `display`, `email`, `lastlogin`';
+$fields='`ID`, `display`, `email`, `active`, `random`, `lastlogin`';
 # Get the Users.
 $user_obj->getUsers(NULL, $fields, $order_field, $order_direction, $where);
 $recipients=$user_obj->getAllUsers();
@@ -162,24 +162,44 @@ try
 			{
 				# Add this user's email to the used_emails array.
 				$used_emails[]=$row->email;
-				$message='You appear in our webpage log as wanting to use the '.$site_name.' site, but you';
-				if($row->lastlogin=='0000-00-00')
+				# User has not activated their account.
+				if($row->active==0)
 				{
-					# Set the message to a variable.
-					$message.=' have never';
-					# If the user has never logged in, maybe they never activated their account.
-					$activate_message='If you have not activated your account, use the <a href="'.LOGIN_PAGE.'ResendEmail/" title="Resend my activation email">Resend my activation email</a> to have the activation link emailed to you.<br/>';
+					# If they have never activated their account then give them the activation link.
+					$message='You have received this email because this email address was used during registration for our site.<br/>'.
+						'If you did not register at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>, please disregard this email. You do not need to unsubscribe or take any further action.<br/><br/>'.
+						'It appears you haven\'t activated your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>.<br/><br/>'.
+						'------------------------------------------------<br/>'.
+						' Activation Instructions<br/>'.
+						'------------------------------------------------<br/>'.
+						'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.<br/>'.
+						'To activate your account, simply click on the following link:<br/>'.
+						'<a href="'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a><br/>'.
+						'(You may need to copy and paste the link into your web browser).<br/><br/>';
 				}
 				else
 				{
-					# Set the message to a variable.
-					$message.=' haven’t';
-					# Empty message.
-					$activate_message='';
+					# Create an empty message variable.
+					$extra_message='';
+					# They have activated their account so let's tell them how to login.
+					$message='You appear in our webpage log as wanting to use the '.$site_name.' site, but you';
+					# User has never logged into their account.
+					if($row->lastlogin=='0000-00-00')
+					{
+						# Tell them they "have never" logged into their account.
+						$message.=' have never';
+					}
+					# User has logged in but it's been 2+ years since their last login.
+					else
+					{
+						# Tell the user they "haven't" logged into their account in 2+ years.
+						$message.=' haven’t';
+						$extra_message=' in over two years';
+					}
+					$message.=' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>'.$extra_message.'. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
+						'You may login at <a href="'.LOGIN_PAGE.'">'.LOGIN_PAGE.'</a>.<br/><br/>';
 				}
-				$message.=' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
-					'You may login at <a href="'.LOGIN_PAGE.'">'.LOGIN_PAGE.'</a>.<br/><br/>'.
-					'If you have forgotten your username, or password then you can use <a href="'.LOGIN_PAGE.'LostPassword/" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>'.$activate_message;
+				$message.='If you have forgotten your username, or password then you can use <a href="'.LOGIN_PAGE.'LostPassword/" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>';
 				# Get the email template. (Creates and populates the $body variable.)
 				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
 				# Clean up the user's display name.
