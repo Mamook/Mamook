@@ -836,8 +836,11 @@ class Login extends User
 								'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
 								'To activate your account, simply click on the following link:'."<br />\n<br />\n".
 								'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
-								'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
-								'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
+								'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n";
+								if(REDIRECT_AFTER_CONFIRMATION!==TRUE)
+								{
+									$message.='Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
+								}
 								try
 								{
 									$doc->sendEmail($subject, $to_address, $message);
@@ -954,6 +957,7 @@ class Login extends User
 								# Log the user in.
 								$this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
 								$this->updateLastLogin($id);
+								$this->deleteInactiveUser($id);
 								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />'.
 									'You are now signed in and ready to enjoy the site.<br />'.
 									'Being signed in allows you to access special content and downloads!';
