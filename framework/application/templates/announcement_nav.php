@@ -1,7 +1,7 @@
 <?php /* framework/application/templates/announcement_nav.php */
 
 # Retrieve records by year.
-$years=$subcontent->returnYears('Announcement');
+$years=$subcontent_obj->returnYears('Announcement');
 $year_list='';
 # Check if there were records returned.
 if($years!==NULL)
