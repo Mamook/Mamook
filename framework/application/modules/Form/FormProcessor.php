@@ -678,6 +678,8 @@ class FormProcessor
 		$db=DB::get_instance();
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
+		# Bring the content instance into scope.
+		$main_content=Content::getInstance();
 		# Bring the User object into scope.
 		global $user_obj;
 
@@ -781,6 +783,8 @@ class FormProcessor
 					{
 						# Find the user's email.
 						$email=$user_obj->findEmail($id);
+						# The the site name.
+						$site_name=$main_content->getSiteName();
 						# Find the user's username.
 						$username=$user_obj->findUsername($id);
 
@@ -797,7 +801,8 @@ class FormProcessor
 						'------------------------------------------------'."<br />\n<br />\n".
 						'To activate your subscription to our newsletter, simply click on the following link:'."<br />\n<br />\n".
 						'<a href="'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'">'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'</a>'."<br />\n<br />\n".
-						'(You may need to copy and paste the link into your web browser).';
+						'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
+						'Learn more about '.$site_name.'\'s privacy policy at <a href="'.APPLICATION_URL.'policy/" title="'.DOMAIN_NAME.' privacy policy">'.APPLICATION_URL.'policy</a>';
 						try
 						{
 							# Send Email to confirm subscription.
