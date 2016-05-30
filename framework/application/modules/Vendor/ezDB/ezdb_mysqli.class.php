@@ -294,7 +294,7 @@ class ezDB_mysqli extends ezDB_Base
 		if($result === false)
 		{
 			if($this->throw_exceptions)
-				throw new ezDB_Error($this->dbh->error, $this->dbh->errno);
+				throw new ezDB_Error($this->dbh->error, $this->dbh->errno, $this->last_query);
 
 			$this->register_error($this->dbh->error, $this->dbh->errno);
 		}

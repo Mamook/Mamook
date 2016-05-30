@@ -922,7 +922,7 @@ class ezDB_Base
 
 		if($this->cache_type == 'memcache')
 		{
-
+			// @TODO: memcache
 		}
 		elseif($this->cache_type == 'apc')
 		{
@@ -942,14 +942,9 @@ class ezDB_Base
 			$value = $ttl.PHP_EOL.serialize($result_cache);
 
 			$fp = fopen($cache_file, 'w');
-
-				flock($fp);
-
-				fwrite($fp, $value);
-
-				fclose($fp);
-
-
+			flock($fp);
+			fwrite($fp, $value);
+			fclose($fp);
 		}
 
 		return true;
@@ -970,7 +965,7 @@ class ezDB_Base
 		# Check if we want to us memcache, and whether it's available
 		if($this->cache_type == 'memcache')
 		{
-
+			// @TODO: memcache
 		}
 		elseif($this->cache_type == 'apc')
 		{
