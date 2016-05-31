@@ -123,7 +123,7 @@ $recipients=$user_obj->getAllUsers();
 try
 {
 	# Delete inactive users.
-	$user_obj->deleteInactiveUsers();
+	$deleted_users=$user_obj->deleteInactiveUsers();
 
 	# Get the site name from the content table.
 	$config_result=$db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
@@ -276,10 +276,16 @@ try
 		$elapsed_time=Utility::getElapsedTime($start_time, time());
 		$sent_message=$message;
 		# Set the email message to a variable.
-		$message='The email you initiated to users of '.DOMAIN_NAME.' has been sent.';
+		$message='';
+		if($deleted_users>0)
+		{
+			$message.='The Inactive Users cron script deleted '.$deleted_users.' users.';
+		}
 		$message.='<br/>'."\n";
-		$message.='You successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
+		$message.='The script successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
 		$message.='<br/>'."\n";
+
+		# Email report file.
 		$string='EMAIL REPORT:'."\n\n";
 		# Check if there were good email addresses.
 		if(!empty($good_email))
