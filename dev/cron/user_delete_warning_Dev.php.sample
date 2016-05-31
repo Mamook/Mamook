@@ -32,6 +32,22 @@ if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
 # Define the timezone.
 define('TIMEZONE', 'US/Pacific');
 
+/*
+ *---------------------------------------------------------------
+ * SYSTEM VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables needed by the application
+ *
+ */
+# Make sure PHP is using UTF-8 character encoding.
+mb_internal_encoding('UTF-8');
+
+# Set the date (and time)
+# First, the timezone.
+putenv('TZ='.TIMEZONE);
+date_default_timezone_set(TIMEZONE);
+
 # The url where our secure pages are. (ie. https://sub.domain.com/folder/)
 if(RUN_ON_STAGING===TRUE)
 {
@@ -56,21 +72,8 @@ else
 # The url to the login page.
 define('LOGIN_PAGE', SECURE_URL.'login/');
 
-/*
- *---------------------------------------------------------------
- * SYSTEM VARIABLES
- *---------------------------------------------------------------
- *
- * System variables needed by the application
- *
- */
-# Make sure PHP is using UTF-8 character encoding.
-mb_internal_encoding('UTF-8');
-
-# Set the date (and time)
-# First, the timezone.
-putenv('TZ='.TIMEZONE);
-date_default_timezone_set(TIMEZONE);
+# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
+define('WP_INSTALLED', FALSE);
 
 # Change the directory to where this cron script is located.
 chdir(dirname(__FILE__));
