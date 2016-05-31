@@ -282,7 +282,7 @@ try
 		$message='';
 		if($deleted_users>0)
 		{
-			$message.='The Inactive Users cron script deleted '.$deleted_users.' users.';
+			$message.='The Inactive Users cron script deleted '.$deleted_users.' users.<br/>'."\n";
 		}
 		$message.='<br/>'."\n";
 		$message.='The script successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
