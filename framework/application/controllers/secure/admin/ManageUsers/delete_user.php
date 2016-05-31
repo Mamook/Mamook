@@ -33,8 +33,8 @@ if(isset($_GET['user']))
 	$form_processor=new FormProcessor();
 	# Process the delete form if it has been submitted.
 	$form_processor->processDeleteAccount($id);
-	$current_username=$user->findUsername($id);
-	$who=$current_username.'\'s';
+	$username=$user->findUsername($id);
+	$who=$username.'\'s';
 	$head='<h3 class="h-3">Are you sure you want to delete '.$who.' account? (It will be permanently removed from the system)</h3>';
 	# Get the delete_user form.
 	require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_user.php');

@@ -293,7 +293,7 @@ class WordPressUser extends User
 	 *
 	 * Retrieves the User's WordPress ID via username. Throws an error on failure.
 	 *
-	 * @param	$username					The User's login.
+	 * @param	$username				The User's login.
 	 * @access	public
 	 */
 	public function getWP_UserID($username=NULL)
@@ -319,8 +319,14 @@ class WordPressUser extends User
 		try
 		{
 			$user=$db->get_row($query);
-			if($user) { return $user->ID; }
-			else { return NULL; }
+			if($user)
+			{
+				return $user->ID;
+			}
+			else
+			{
+				return NULL;
+			}
 		}
 		catch(ezDB_Error $ez)
 		{

@@ -603,6 +603,9 @@ class FormProcessor
 		# Bring the user object into scope.
 		global $user;
 
+		# Explicitly set user ID to NULL to get current user's ID.
+		$user->setID(NULL);
+		# Find the logged in User's ID and set it to the variable.
 		$current_user=$user->findUserID();
 		# Check if the passed User ID is empty.
 		if(empty($id))

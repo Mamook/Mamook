@@ -467,25 +467,43 @@ class Comment
 	 *
 	 * Remove's a User's from the comment data in the `comments` table.
 	 *
-	 * @param	string $user_id			The comment author's User ID.
+	 * @param	int/array $user_id		The comment author's User ID.
 	 * @access	public
-	 * @return	Boolean
+	 * @return	boolean
 	 */
 	public function removeUser($user_id)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
 
 		try
 		{
-			# Set the User ID to the data member, effectively cleaning it up.
-			$this->setUser($user_id);
-			# Reset the variable from the data member.
-			$user_id=$this->getUser();
+			# Check if the passed $user_id is an integer.
+			if($validator->isInt($user_id)===TRUE)
+			{
+				# Set the User ID to the data member, effectively cleaning it up.
+				$this->setUser($user_id);
+				# Reset the variable from the data member.
+				$user_id=$this->getUser();
+				# Create where statement.
+				$where='= '.$db->quote($user_id).' LIMIT 1';
+			}
+			# An array of users was passed into the method.
+			elseif(is_array($user_id))
+			{
+				# Create where statement.
+				$where='IN ('.implode(', ', $user_id).')';
+			}
 			# Set the `user` value to NULL for this comment author's User ID in the `comments` table.
-			$update_comments=$db->query('UPDATE `'.DBPREFIX.'comments` SET `user` = NULL WHERE `user` = '.$db->quote($user_id));
+			$update_comments=$db->query('UPDATE `'.DBPREFIX.'comments` SET `user` = NULL WHERE `user` '.$where);
 			# Check that there was a result.
-			if($update_comments>=1) { return TRUE; }
+			if($update_comments)
+			{
+				return TRUE;
+			}
+			return FALSE;
 		}
 		catch(ezDB_Error $ez)
 		{
@@ -495,7 +513,6 @@ class Comment
 		{
 			throw $e;
 		}
-		return FALSE;
 	} #==== End -- removeUser
 
 	/*** End public methods ***/

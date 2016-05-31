@@ -1962,7 +1962,8 @@ class User
 	 *
 	 * Delete's the user's account.
 	 *
-	 * @param	integer $id					The User's ID.
+	 * @param	int/array $id			The User's ID.
+	 *										Can be an array of users to delete.
 	 * @access	public
 	 */
 	public function deleteAccount($id=NULL)
@@ -1976,59 +1977,61 @@ class User
 		{
 			$id=$this->findUserID();
 		}
+		# An array of users was passed into the method.
+		elseif(is_array($id))
+		{
+			# Create where statement.
+			$where='IN ('.implode(', ', $id).')';
+		}
+		# Check if $id is an integer.
+		if($validator->isInt($id)===TRUE)
+		{
+			# Create where statement.
+			$where='= '.$db->quote($id).' LIMIT 1';
+		}
 		try
 		{
 			# Get the Contributor class.
 			require Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
 			# Instantiate a new Contributor object.
-			$contributor=new Contributor();
-			# Attempt to retrieve this User from the `contributors` table.
-			$contributor_retrieved=$contributor->getThisContributor($id);
-			# Check if the contributor was retrieved.
-			if($contributor_retrieved===TRUE)
-			{
-				# Set the User ID to NULL in the `contributors` table.
-				$remove_user=$contributor->removeUser($id);
-			}
+			$contributor_obj=new Contributor();
+			# Set the User ID to NULL in the `contributors` table.
+			$contributor_obj->removeUser($id);
 
+		# NOTE: There is no removeUser() method in the Staff class.
+		/*
 			# Get the Staff class.
 			require Utility::locateFile(MODULES.'User'.DS.'Staff.php');
 			# Instantiate a new Staff object.
-			$staff=new Staff();
-			# Attempt to retrieve this User from the `staff` table.
-			$person_retrieved=$staff->getThisStaff($id);
-			# Check if the person was retrieved.
-			if($person_retrieved===TRUE)
-			{
-				# Set the User ID to NULL in the `staff` table.
-				$remove_user=$staff->removeUser($id);
-			}
+			$staff_obj=new Staff();
+			# Set the User ID to NULL in the `staff` table.
+			$staff_obj->removeUser($id);
+		*/
 
 		# NOTE BY DRAVEN: There is no `subscriptions` table...?
 		/*
 			# Get the Subscription class.
 			require Utility::locateFile(MODULES.'Product'.DS.'Subscription.php');
 			# Instantiate a new Subscription object.
-			$subscription=new Subscription();
+			$subscription_obj=new Subscription();
 			# Attempt to retrieve this User from the `subscriptions` table.
-			$user_retrieved=$subscription->countAllSubscriptions(NULL, NULL, ' AND `user` = '.$db->quote($id));
+			$user_retrieved=$subscription_obj->countAllSubscriptions(NULL, NULL, ' AND `user` = '.$db->quote($id));
 			# Check if the User was retrieved.
 			if($user_retrieved>0)
 			{
 				# Delete the User's subscriptions from the `subscriptions` table.
-				$remove_user=$subscription->removeUser($id);
+				$subscription_obj->removeUser($id);
 			}
 		*/
 
 			# Get the Comment class.
 			require Utility::locateFile(MODULES.'Content'.DS.'Comment.php');
 			# Instantiate a new Comment object.
-			$comment=new Comment();
+			$comment_obj=new Comment();
 			# Set the User ID to NULL in the `comments` table.
-			$remove_user=$comment->removeUser($id);
+			$comment_obj->removeUser($id);
 
 			# Remove the user from the user_inactive table.
-			#	Checks if the user exists in the table.
 			$this->deleteInactiveUser($id);
 
 			# check if there is a WordPress installation.
@@ -2037,29 +2040,44 @@ class User
 				# Get the WordPressUser class.
 				require Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
 				# Instantiate a new WordPressUser object.
-				$wp=new WordPressUser();
+				$wp_obj=new WordPressUser();
 
-			# NOTE BY DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
-				# Find the User ID for "Unknown User" and set it to a variable.
-				//$unknown_id=$this->findUserID('unknown');
-				# Delete the User from the WordPress installation and reassign their posts to "Unknown User".
-				//$delete_wp_user=$wp->deleteWP_User($id, $unknown_id);
+				if($validator->isInt($id)===TRUE)
+				{
+					# NOTE BY DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
+						# Find the User ID for "Unknown User" and set it to a variable.
+						//$unknown_id=$this->findUserID('unknown');
+						# Delete the User from the WordPress installation and reassign their posts to "Unknown User".
+						//$wp_obj->deleteWP_User($id, $unknown_id);
 
-				# Get user's username.
-				$username=$this->findUsername($id);
-				# Get user's WP ID.
-				$wp_id=$wp->getWP_UserID($username);
-				# Delete the User from the WordPress installation.
-				$delete_wp_user=$wp->deleteWP_User($wp_id);
+					# Get user's username.
+					$username=$this->findUsername($id);
+					# Get user's WP ID.
+					$wp_id=$wp_obj->getWP_UserID($username);
+					# Delete the User from the WordPress installation.
+					$wp_obj->deleteWP_User($wp_id);
+				}
+				else
+				{
+					# Loop through the users.
+					foreach($id as $user_id)
+					{
+						# Get user's username.
+						$username=$this->findUsername($user_id);
+						# Get user's WP ID.
+						$wp_id=$wp_obj->getWP_UserID($username);
+						# Delete the User from the WordPress installation.
+						$wp_obj->deleteWP_User($wp_id);
+					}
+				}
 			}
 
 			# Delete from the users table.
-			$delete_user=$db->query('DELETE FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+			$delete_user=$db->query('DELETE FROM `'.DBPREFIX.'users` WHERE `ID` '.$where);
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('There was an error deleting User ID# '.$id.' from the Database: '.$ez->error.'<br />Code: '.$ez->errno.'<br />
-			Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('There was an error deleting User ID# '.$id.' from the Database: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
@@ -3562,7 +3580,7 @@ class User
 			}
 			else
 			{
-				$results=$db->get_results('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()');
+				$results=$db->get_results('SELECT `user_id` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()', ARRAY_N);
 			}
 			return $results;
 		}
@@ -3588,12 +3606,26 @@ class User
 			# If there are any users ready to be deleted.
 			if($inactive_users)
 			{
-				# Loop through the inactive users.
-				foreach($inactive_users as $user_id)
+				# If there is more then 1 result.
+				if(count($inactive_users)>1)
 				{
-					# Delete the users.
-					$this->deleteAccount($user_id);
+					# Loop through the multidimensional array.
+					foreach((array)$inactive_users as $user_id)
+					{
+						# Convert it to a single dimension.
+						$user_id_array[]=$user_id[0];
+					}
+					$user_id=$user_id_array;
 				}
+				# Only one result so let's assign only that one result to a variable.
+				else
+				{
+					$user_id=$inactive_users[0][0];
+				}
+				# Delete the users.
+				$this->deleteAccount($user_id);
+				# Return how many users were deleted.
+				return count($inactive_users);
 			}
 		}
 		catch(ezDB_Error $e)
@@ -3613,21 +3645,30 @@ class User
 	 *
 	 * Deletes the user from the user_inactive table.
 	 *
-	 * @param	int $user_id
+	 * @param	int/array $user_id
 	 * @access	protected
 	 */
 	protected function deleteInactiveUser($user_id)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
 
 		try
 		{
-			# Check if the user exists in the users_inactive table.
-			if($this->getInactiveUsers($user_id))
+			# Check if the passed $user_id is an integer.
+			if($validator->isInt($user_id)===TRUE)
 			{
-				$db->query('DELETE FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
+				$where='= '.$db->quote($user_id).' LIMIT 1';
 			}
+			# An array of users was passed into the method.
+			#	Let's create the WHERE statement.
+			elseif(is_array($user_id))
+			{
+				$where='IN ('.implode(', ', $user_id).')';
+			}
+			$db->query('DELETE FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` '.$where);
 		}
 		catch(ezDB_Error $e)
 		{

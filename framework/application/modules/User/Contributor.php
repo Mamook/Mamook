@@ -303,7 +303,7 @@ class Contributor extends User
 	 *
 	 * Sets the data member $user.
 	 *
-	 * @param		string 		$user	(The contributor's User ID)
+	 * @param	string $user			The contributor's User ID
 	 * @access	protected
 	 */
 	protected function setUser($user)
@@ -963,25 +963,44 @@ class Contributor extends User
 	 *
 	 * Remove's a User's from the contributor's data in the `contributors` table.
 	 *
-	 * @param	string $user_id			The contributor's User ID.
+	 * @param	int/array $user_id		The contributor's User ID.
+	 *										If it's an array, multiple users are being deleted.
 	 * @access	public
-	 * @return	Boolean
+	 * @return	boolean
 	 */
 	public function removeUser($user_id)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
 
 		try
 		{
-			# Set the User ID to the data member, effectively cleaning it up.
-			$this->setUser($user_id);
-			# Reset the variable from the data member.
-			$user_id=$this->getUser();
+			# Check if the passed $user_id is an integer.
+			if($validator->isInt($user_id)===TRUE)
+			{
+				# Set the User ID to the data member, effectively cleaning it up.
+				$this->setUser($user_id);
+				# Reset the variable from the data member.
+				$user_id=$this->getUser();
+				# Create where statement.
+				$where='= '.$db->quote($user_id).' LIMIT 1';
+			}
+			# An array of users was passed into the method.
+			elseif(is_array($user_id))
+			{
+				# Create where statement.
+				$where='IN ('.implode(', ', $user_id).')';
+			}
 			# Set the `user` value to NULL for this contributor in the `contributors` table.
-			$update_cont=$db->query('UPDATE `'.DBPREFIX.'contributors` SET `user` = NULL WHERE `user` = '.$db->quote($user_id).' LIMIT 1');
+			$update_cont=$db->query('UPDATE `'.DBPREFIX.'contributors` SET `user` = NULL WHERE `user` '.$where);
 			# Check that there was a result.
-			if($update_cont==1) { return TRUE; }
+			if($update_cont)
+			{
+				return TRUE;
+			}
+			return FALSE;
 		}
 		catch(ezDB_Error $e)
 		{
@@ -991,7 +1010,6 @@ class Contributor extends User
 		{
 			throw $e;
 		}
-		return FALSE;
 	} #==== End -- removeUser
 
 	/**
