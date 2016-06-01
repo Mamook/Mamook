@@ -88,6 +88,11 @@ require DATA_FILES.'email_definitions.php';
 require DATA_FILES.'user_privileges.php';
 # Get the Utility Class.
 require_once UTILITY_CLASS;
+# If WordPress is installed, get the appropriate settings.
+if(WP_INSTALLED===TRUE)
+{
+	require_once DATA_FILES.'WordPress_settings.php';
+}
 # Get the Validator Class.
 require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
 # Set the Validator instance to a variable.
