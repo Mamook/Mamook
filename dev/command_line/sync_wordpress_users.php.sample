@@ -1,0 +1,64 @@
+<?php /* dev/command_line/sync_wordpress_users.php */
+
+# This script syncs the wordpress `wp_users` and `wp_usermeta` tables with the websites `users` table.
+# The websites `users` table the master users table.
+# Any user in the `wp_users` table that is not in the `users` table will be deleted.
+
+# Need these for database_definitions.php and email_definitions.php
+# Only need to change the RUN_ON_DEVELOPMENT definition.
+# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
+if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
+
+# Define the timezone.
+define('TIMEZONE', 'US/Pacific');
+
+/*
+ *---------------------------------------------------------------
+ * SYSTEM VARIABLES
+ *---------------------------------------------------------------
+ *
+ * System variables needed by the application
+ *
+ */
+# Make sure PHP is using UTF-8 character encoding.
+mb_internal_encoding('UTF-8');
+
+# Set the date (and time)
+# First, the timezone.
+putenv('TZ='.TIMEZONE);
+date_default_timezone_set(TIMEZONE);
+
+# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
+define('WP_INSTALLED', TRUE);
+
+# Change the directory to where this cron script is located.
+chdir(dirname(__FILE__));
+
+# Get the Path definitions.
+require '../data/path_definitions.php';
+# Get the database definitions.
+require DATA_FILES.'database_definitions.php';
+# Get the Utility Class.
+require_once UTILITY_CLASS;
+# If WordPress is installed, get the appropriate settings.
+if(WP_INSTALLED===TRUE)
+{
+	require_once DATA_FILES.'WordPress_settings.php';
+}
+
+# Get the DB Class needed to operate with MySQL.
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+DB::init(DB_TYPE);
+$db=DB::get_instance();
+$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+# Get the WordPressUser Class.
+require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+# Create a new WordPressUser object.
+$wp_user_obj=new WordPressUser();
+
+# Delete users in the `wp_users` table that are no in the `users` table.
+$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `user_login` NOT IN (SELECT `username` FROM `'.DBPREFIX.'users`)');
+# Delete usermeta data for users no in the `wp_users` table.
+$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` NOT IN (SELECT `ID` FROM `'.WP_DBPREFIX.'users`)');
