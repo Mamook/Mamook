@@ -21,22 +21,6 @@ class WordPressUser extends User
 
 
 
-	/*** magic methods ***/
-
-	/**
-	 * __construct
-	 *
-	 * @access	public
-	 */
-	public function __construct()
-	{
-		return;
-	}
-
-	/*** End magic methods ***/
-
-
-
 	/*** mutator methods ***/
 
 	/**
@@ -44,7 +28,7 @@ class WordPressUser extends User
 	 *
 	 * Sets the data member $wp_id.
 	 *
-	 * @param		$wp_id 		(The User's WorpdPress ID number.)
+	 * @param	$wp_id					The User's WorpdPress ID number.
 	 * @access	public
 	 */
 	public function setWP_ID($wp_id)
@@ -82,7 +66,7 @@ class WordPressUser extends User
 	 *
 	 * Sets the data member $nickname.
 	 *
-	 * @param	$nickname (The User's nickname. This is only used in WordPress instalations.)
+	 * @param	$nickname				The User's nickname. This is only used in WordPress instalations.
 	 * @access	public
 	 */
 	public function setNickname($nickname)
@@ -145,7 +129,54 @@ class WordPressUser extends User
 
 	/*** public methods ***/
 
-/*** NEEDS FIXING ***/
+	/**
+	 * deleteWP_User
+	 *
+	 * Delete's a WordPress user via WordPRess ID. Throws an error on failure.
+	 *
+	 * @param $wp_id					The User's WordPress ID.
+	 * @access public
+	 */
+	public function deleteWP_User($wp_id)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
+		try
+		{
+			# Set the passed WordPress ID to the data member, effectively cleaning it up.
+			$this->setWP_ID($wp_id);
+			# Reset the $wp_id variable from the data member.
+			$wp_id=$this->getWP_ID();
+
+		# NOTE: Can we use the Wordpress function?
+		/*
+			$wpdb=$db;
+			# Get the WordPress user administration API.
+			require_once Utility::locateFile(WP_INSTALL_PATH.'wp-admin'.DS.'includes'.DS.'user.php');
+			# Delete user.
+			wp_delete_user($wp_id);
+		*/
+
+			# NOTE: Delete User (Does not work with Multisite installations)
+			# Delete the User from the `usermeta` table.
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` = '.$db->quote($wp_id));
+			# Delete the User from the WordPress `users` table.
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `ID` = '.$db->quote($wp_id));
+		}
+		catch(ezDB_Error $ez)
+		{
+			# Throw an exception because there was a Database connection error.
+			throw new Exception('Error occured: '.$ez->message.'<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			# Re-throw any caught exceptions.
+			throw $e;
+		}
+	} #==== End -- deleteWP_User
+
+# NOTE: Add $reassign feature.
 	/**
 	 * deleteWP_User
 	 *
@@ -155,6 +186,7 @@ class WordPressUser extends User
 #->  * @param $reassign					A User's WordPress ID to reasign this User's posts to. -> DOESN'T WORK YET!!!
 	 * @access public
 	 */
+/*
 	public function deleteWP_User($wp_id, $reassign=NULL)
 	{
 		# Set the Database instance to a variable.
@@ -184,12 +216,12 @@ class WordPressUser extends User
 					# Loop through the posts.
 					foreach($wp_posts as $post)
 					{
-#--->				# Delete the post. (THIS DOES NOTHING RIGHT NOW!!!! MUST BE IMPLEMENTED!!!!)
+#--->					# Delete the post. (THIS DOES NOTHING RIGHT NOW!!!! MUST BE IMPLEMENTED!!!!)
 						//$wp_subcontent->deleteWP_Post($post->ID);
 					}
 				}
 
-				/*** Clean links ***/
+				# NOTE: Clean links
 				# Retrieve the id's of all links owned by this User.
 				$link_ids=$db->get_results('SELECT `link_id` FROM `'.WP_DBPREFIX.'links` WHERE `link_owner` = '.$db->quote($wp_id));
 				# Check if there were records returned.
@@ -198,7 +230,7 @@ class WordPressUser extends User
 					# Loop through the link id's.
 					foreach($link_ids as $link_id)
 					{
-#--->				# Delete the link. (THIS DOES NOTHING RIGHT NOW!!!! MUST BE IMPLEMENTED!!!!)
+#--->					# Delete the link. (THIS DOES NOTHING RIGHT NOW!!!! MUST BE IMPLEMENTED!!!!)
 						//$this->deleteWP_Link($link_id);
 					}
 				}
@@ -213,7 +245,7 @@ class WordPressUser extends User
 				$db->quick_update(WP_DBPREFIX.'links', array('link_owner'=>$reassign), array('link_owner'=>$wp_id));
 			}
 
-		/*** Delete User (Does not work with Multisite installations) ***/
+			# NOTE: Delete User (Does not work with Multisite installations)
 			# Delete the User from the `usermeta` table.
 			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` = '.$db->quote($wp_id));
 			# Delete the User from the WordPress `users` table.
@@ -230,14 +262,14 @@ class WordPressUser extends User
 			throw $e;
 		}
 	} #==== End -- deleteWP_User
-/*** NEEDS FIXING ***/
+*/
 
 	/**
 	 * getWP_Nickname
 	 *
 	 * Retrieves the User's WordPress nickname via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param	$user_WP_id (The User's WordPress ID.)
+	 * @param	$user_WP_id				The User's WordPress ID.
 	 * @access	public
 	 */
 	public function getWP_Nickname($user_WP_id)
@@ -269,7 +301,7 @@ class WordPressUser extends User
 	 *
 	 * Retrieves the User's WordPress password via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param	$user_WP_id (The User's WordPress ID.)
+	 * @param	$user_WP_id				The User's WordPress ID.
 	 * @access	public
 	 */
 	public function getWP_Password($user_WP_id)
@@ -339,8 +371,8 @@ class WordPressUser extends User
 	 *
 	 * Updates the User's WordPress display name. Throws an error on failure.
 	 *
-	 * @param		$id 					(The User's WordPress ID.)
-	 * @param		$display_name (The new display name.)
+	 * @param	$id						The User's WordPress ID.
+	 * @param	$display_name			The new display name.
 	 * @access	public
 	 */
 	public function updateWP_DisplayName($id, $display_name)
@@ -364,8 +396,8 @@ class WordPressUser extends User
 	 *
 	 * Updates the User's WordPress nickname. Throws an error on failure.
 	 *
-	 * @param		$id 					(The User's WordPress ID.)
-	 * @param		$nickname 		(The new nickname.)
+	 * @param	$id 					The User's WordPress ID.
+	 * @param	$nickname				The new nickname.
 	 * @access	public
 	 */
 	public function updateWP_Nickname($id, $nickname)
@@ -389,8 +421,8 @@ class WordPressUser extends User
 	 *
 	 * Updates the User's WordPress password. Throws an error on failure.
 	 *
-	 * @param		$username (The User's WordPress username.)
-	 * @param		$password (The new password.)
+	 * @param	$username				The User's WordPress username.
+	 * @param	$password				The new password.
 	 * @access	public
 	 */
 	public function updateWP_Password($username, $password)
@@ -417,8 +449,8 @@ class WordPressUser extends User
 	 *
 	 * Updates the User's WordPress access level. Throws an error on failure.
 	 *
-	 * @param		$username:	The username to update.
-	 * @param		$new_level:	The new access  level.
+	 * @param	$username				The username to update.
+	 * @param	$new_level				The new access  level.
 	 * @access	public
 	 */
 	public function updateWP_UserAccessLevel($username, $new_level)
@@ -480,8 +512,8 @@ class WordPressUser extends User
 	 *
 	 * Updates the User's WordPress username. Throws an error on failure.
 	 *
-	 * @param		$id 					(The User's WordPress ID.)
-	 * @param		$username 		(The new username.)
+	 * @param	$id						The User's WordPress ID.
+	 * @param	$username				The new username.
 	 * @access	public
 	 */
 	public function updateWP_Username($id, $username)
