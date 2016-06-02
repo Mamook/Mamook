@@ -33,7 +33,7 @@ define('NONCE_SALT',       '');
 define('WP_FOLDER', '');
 
 # The complete path to the folder WordPress is installed in (ie wordpress/folder).
-define('WP_PATH', ROOT_PATH.DS.WP_FOLDER);
+define('WP_PATH', BASE_PATH.'public'.DS.WP_FOLDER);
 
 # The URL for the WordPress application. (no trailing slash)
 define('WP_SITEURL', APPLICATION_URL.WP_FOLDER);
