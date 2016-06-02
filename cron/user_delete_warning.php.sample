@@ -72,6 +72,9 @@ else
 # The url to the login page.
 define('LOGIN_PAGE', SECURE_URL.'login/');
 
+# Define where cookies may be active. ('/' means the entire domain)
+define('COOKIE_PATH', '/');
+
 # Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
 define('WP_INSTALLED', FALSE);
 
