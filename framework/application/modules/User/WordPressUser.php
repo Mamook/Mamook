@@ -141,13 +141,27 @@ class WordPressUser extends User
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
 
 		try
 		{
-			# Set the passed WordPress ID to the data member, effectively cleaning it up.
-			$this->setWP_ID($wp_id);
-			# Reset the $wp_id variable from the data member.
-			$wp_id=$this->getWP_ID();
+			# Check if the passed $user_id is an integer.
+			if($validator->isInt($wp_id)===TRUE)
+			{
+				# Set the passed WordPress ID to the data member, effectively cleaning it up.
+				$this->setWP_ID($wp_id);
+				# Reset the $wp_id variable from the data member.
+				$wp_id=$this->getWP_ID();
+				# Create where statement.
+				$where='= '.$db->quote($wp_id).' LIMIT 1';
+			}
+			# An array of users was passed into the method.
+			elseif(is_array($wp_id))
+			{
+				# Create where statement.
+				$where='IN ('.implode(', ', $wp_id).')';
+			}
 
 		# NOTE: Can we use the Wordpress function?
 		/*
@@ -160,14 +174,14 @@ class WordPressUser extends User
 
 			# NOTE: Delete User (Does not work with Multisite installations)
 			# Delete the User from the `usermeta` table.
-			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` = '.$db->quote($wp_id));
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` '.$where);
 			# Delete the User from the WordPress `users` table.
-			$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `ID` = '.$db->quote($wp_id));
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `ID` '.$where);
 		}
 		catch(ezDB_Error $ez)
 		{
 			# Throw an exception because there was a Database connection error.
-			throw new Exception('Error occured: '.$ez->message.'<br />Code: '.$ez->code.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{

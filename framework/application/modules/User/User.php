@@ -2060,15 +2060,17 @@ class User
 				else
 				{
 					# Loop through the users.
-					foreach($id as $user_id)
+					foreach($id as $key=>$user_id)
 					{
 						# Get user's username.
 						$username=$this->findUsername($user_id);
 						# Get user's WP ID.
 						$wp_id=$wp_obj->getWP_UserID($username);
-						# Delete the User from the WordPress installation.
-						$wp_obj->deleteWP_User($wp_id);
+						# Change the `users` ID in the $id array to the Wordpress ID.
+						$id[$key]=$wp_id;
 					}
+					# Delete the User from the WordPress installation.
+					$wp_obj->deleteWP_User($id);
 				}
 			}
 
