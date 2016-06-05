@@ -79,6 +79,10 @@ echo '<nav id="navbar" class="nav nav1">',
 				'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/EmailUsers/', FALSE, FALSE).'">'.
 					'<a href="'.ADMIN_URL.'ManageUsers/EmailUsers/" title="Email Users">Email Users</a>'.
 				'</li>' : ''),
+				(($login->checkAccess(ADMIN_USERS)===TRUE) ?
+				'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/NewsletterUsers/', FALSE, FALSE).'">'.
+					'<a href="'.ADMIN_URL.'ManageUsers/NewsletterUsers/" title="Newsletter Users">Newsletter Users</a>'.
+				'</li>' : ''),
 			(((strstr(GET_QUERY, '?user=')===FALSE) && $login->checkAccess(ADMIN_USERS)===FALSE) ? '' :
 			'</ul>'),
 		'</li>';
