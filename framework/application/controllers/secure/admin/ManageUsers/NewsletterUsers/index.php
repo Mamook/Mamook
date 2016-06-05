@@ -1,5 +1,8 @@
 <?php /* framework/application/controllers/secure/admin/ManageUsers/NewsletterUsers/index.php */
 
+# Get the PDF Class.
+require_once Utility::locateFile(MODULES.'Vendor'.DS.'PDF'.DS.'PDF.php');
+
 $login->checkLogin(ADMIN_USERS);
 
 $page_class='manageUserspage-newsletterusers';
@@ -16,6 +19,73 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
+
+# Get the users that are opted-in to receive the newsletter.
+$users_newsletter=$db->get_results('SELECT INET6_NTOA(`ip`) AS ip, `date` FROM `user_newsletter`');
+# If there are subscribers...
+if($users_newsletter)
+{
+	$display.='<a href="'.APPLICATION_URL.Utility::removeIndex(HERE).'?generate_pdf" target="_blank">Generate PDF File</a>'.
+	'<table>'.
+		'<tbody>'.
+			'<tr>'.
+				'<th>'.
+					'<strong>IP</strong>'.
+					'<strong>DATE</strong>'.
+				'</th>'.
+			'</tr>';
+			# Loop through the data.
+			foreach($users_newsletter as $user_data)
+			{
+				$display.=
+			'<tr>'.
+				'<td>'.
+					$user_data->ip.
+				'</td>'.
+				'<td>'.
+					$user_data->date.
+				'</td>'.
+			'</tr>';
+			}
+		$display.=
+		'</tbody>'.
+	'</table>';
+}
+# If there is no subscribers...
+else
+{
+	$display.='There are no subscribers';
+}
+
+# If the "Generate PDF File" link was clicked.
+if(isset($_GET['generate_pdf']))
+{
+	# Instantiate a new PDF object.
+	$pdf=new PDF();
+	# Defines an alias for the total number of pages.
+	#	It will be substituted as the document is closed.
+	$pdf->AliasNbPages();
+	# Add a PDF page.
+	$pdf->AddPage();
+	# Set the font to use for the haders in the PDF file.
+	$pdf->SetFont('Arial', 'B', 12);
+	# Table Headers.
+	$pdf->Cell(90, 12, 'IP', 1);
+	$pdf->Cell(90, 12, 'DATE', 1);
+	# Set the font to use for the table body in the PFF file.
+	$pdf->SetFont('Arial', '', 12);
+	# Loop through the data.
+	foreach($users_newsletter as $user_data)
+	{
+		# Line break.
+		$pdf->Ln();
+		# Table body data.
+		$pdf->Cell(90, 12, $user_data->ip, 1);
+		$pdf->Cell(90, 12, $user_data->date, 1);
+	}
+	# Output data to the PDF file.
+	$pdf->Output('I', DOMAIN_NAME.'_Newsletter_Subscribers.pdf');
+}
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
