@@ -315,16 +315,16 @@ class Search
 	 * @param	$table					The table we're searching in.
 	 * @param	$fields					The fields we're searching in.
 	 * @param	$branch					Optional.
-	 * @param	$filter					Optional. Fields and or terms we would like exluded.
+	 * @param	array $filter			Optional. Fields and or terms we would like exluded.
 	 * @access	public
 	 */
 	public function performSearch($search_terms, $table, $fields, $branch=NULL, $filter=NULL)
 	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+
 		try
 		{
-			# Set the Database instance to a variable.
-			$db=DB::get_instance();
-
 			# Create comma separated field string.
 			$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
 			# Create where string.
@@ -1145,7 +1145,7 @@ class Search
 	 * @param	$terms					The term we're searching for.
 	 * @param	array $fields			The fields we're searching in.
 	 * @param	array $branch
-	 * @param	$filter					Fields and or terms we would like exluded.
+	 * @param	array $filter			Fields and or terms we would like exluded.
 	 * @access	protected
 	 */
 	protected function prepareWhere($terms, $fields, $branch, $filter)
