@@ -392,7 +392,7 @@ class Search
 
 	/*** protected methods ***/
 
-/*** NEEDS MORE WORK (add more characters ie tilde n, accented e, a, o, etc) ***/
+	# NOTE: NEEDS MORE WORK (add more characters ie tilde n, accented e, a, o, etc)
 	/**
 	 * splitTerms
 	 *
@@ -1182,7 +1182,7 @@ class Search
 		# $parts[]="`Username` RLIKE '$term_db'";
 		foreach($fields as $field)
 		{
-			if(isset($filter['filter_fields']) && !in_array($field, $filter['filter_fields']))
+			if(($filter===NULL) || (isset($filter['filter_fields']) && !in_array($field, $filter['filter_fields'])))
 			{
 				$field_parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);
 			}
