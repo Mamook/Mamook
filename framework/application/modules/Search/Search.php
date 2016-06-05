@@ -239,6 +239,16 @@ class Search
 					# Perform search.
 					$this->searchSubContent();
 					break;
+				/*
+				case "videos":
+					# Set the fields to the data member.
+					$this->setFields(array('title'));
+					# Set the tables to the data member.
+					$this->setTables('videos');
+					# Perform search.
+					$this->searchVideos();
+					break;
+				*/
 				case "all":
 					# NOTE! Not finished yet.
 					# Search entire site.
@@ -305,9 +315,10 @@ class Search
 	 * @param	$table					The table we're searching in.
 	 * @param	$fields					The fields we're searching in.
 	 * @param	$branch					Optional.
+	 * @param	$filter					Optional. Fields and or terms we would like exluded.
 	 * @access	public
 	 */
-	public function performSearch($search_terms, $table, $fields, $branch=NULL)
+	public function performSearch($search_terms, $table, $fields, $branch=NULL, $filter=NULL)
 	{
 		try
 		{
@@ -317,7 +328,7 @@ class Search
 			# Create comma separated field string.
 			$select_fields='`'.rtrim(implode('`, `', $fields), ', ').'`';
 			# Create where string.
-			$where=$this->prepareWhere($search_terms, $fields, $branch);
+			$where=$this->prepareWhere($search_terms, $fields, $branch, $filter);
 
 			# $sql="SELECT `id` FROM `users` WHERE `Party` = 'yes' AND `Username` RLIKE '%Joey%' OR `fname` RLIKE '%Joey%';
 			$sql='SELECT '.$select_fields.' FROM '.DBPREFIX.'`'.$table.'` WHERE '.$where;
@@ -327,7 +338,7 @@ class Search
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
@@ -1112,7 +1123,7 @@ class Search
 		return $out;
 	} #==== End -- convertTerms2RegEx
 
-/*** NEEDS FUNCTIONALITY ***/
+	# NOTE: NEEDS FUNCTIONALITY!
 	/**
 	 * convertChars2Entities
 	 *
@@ -1125,7 +1136,6 @@ class Search
 	{
 		return $terms;
 	} #==== End -- convertChars2Entities
-/*** ***/
 
 	/**
 	 * prepareWhere
@@ -1135,9 +1145,10 @@ class Search
 	 * @param	$terms					The term we're searching for.
 	 * @param	array $fields			The fields we're searching in.
 	 * @param	array $branch
+	 * @param	$filter					Fields and or terms we would like exluded.
 	 * @access	protected
 	 */
-	protected function prepareWhere($terms, $fields, $branch)
+	protected function prepareWhere($terms, $fields, $branch, $filter)
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
@@ -1153,6 +1164,17 @@ class Search
 
 		$terms_db=$this->convertTerms2RegEx($terms);
 
+		# NOTE: Filter needs work.
+		if($filter!==NULL)
+		{
+			$filter_sql='';
+			if(isset($filter['filter_sql']))
+			{
+				# $filter="`Party` = 'yes' AND "
+				$filter_sql=$filter['filter_sql'].' AND ';
+			}
+		}
+
 		$field_parts=array();
 		$branch_parts=array();
 		$terms_db=implode('|', $terms_db);
@@ -1160,7 +1182,10 @@ class Search
 		# $parts[]="`Username` RLIKE '$term_db'";
 		foreach($fields as $field)
 		{
-			$field_parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);
+			if(isset($filter['filter_fields']) && !in_array($field, $filter['filter_fields']))
+			{
+				$field_parts[]='`'.$field.'` RLIKE '.$db->quote($terms_db);
+			}
 		}
 		$field_parts=implode(' OR ', $field_parts);
 
@@ -1178,7 +1203,7 @@ class Search
 			}
 		}
 
-		return ((!empty($field_parts)) ? '('.$field_parts.')' : '').(!empty($branch_parts) ? (!empty($field_parts) ? ' AND ' : '').'('.$branch_parts.')' : '');
+		return $filter_sql.((!empty($field_parts)) ? '('.$field_parts.')' : '').(!empty($branch_parts) ? (!empty($field_parts) ? ' AND ' : '').'('.$branch_parts.')' : '');
 	} #==== End -- prepareWhere
 
 	/*** End protected methods ***/

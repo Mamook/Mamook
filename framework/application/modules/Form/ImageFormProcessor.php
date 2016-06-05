@@ -230,17 +230,17 @@ class ImageFormProcessor extends FormProcessor
 						# Instantiate a new Search object.
 						$search=new Search();
 						# Make an array of the terms to search for (enclose multiple word strings in double quotes.)
-						$terms=array('"'.$title.'"');
-						# Create an empty variable to hold the search filter.
-						$filter=NULL;
+						$terms=$title;
+						# Don't compare with the video ID.
+						$filter=array('filter_fields'=>array('id'));
 						# Check if the id is empty.
 						if(!empty($id))
 						{
 							# Create a search filter that won't return the current record we may be editing.
-							$filter='`id` != '.$db->quote($id);
+							$filter=array_merge($filter, array('filter_sql'=>'`id` != '.$db->quote($id)));
 						}
 						# Search for duplicate records.
-						$search->performSearch($terms, 'images', $fields, $filter);
+						$search->performSearch($terms, 'images', $fields, NULL, $filter);
 						# Set any search results to a variable.
 						$duplicates=$search->getAllResults();
 						# Create an empty array for the duplicate display.
@@ -269,16 +269,14 @@ class ImageFormProcessor extends FormProcessor
 							}
 							# Explicitly set unique to 0 (not unique).
 							$populator->setUnique(0);
-							$unique=$populator->getUnique();
-							$_SESSION['form']['image']['Unique']=$unique;
 						}
 						else
 						{
 							# Explicitly set unique to 1 (unique).
 							$populator->setUnique(1);
-							$unique=$populator->getUnique();
-							$_SESSION['form']['image']['Unique']=$unique;
 						}
+						$unique=$populator->getUnique();
+						$_SESSION['form']['image']['Unique']=$unique;
 						# Set the duplicates to display to the data member for retrieval outside of the method.
 						$this->setDuplicates($dup_display);
 					}

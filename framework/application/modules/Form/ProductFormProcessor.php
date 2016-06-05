@@ -148,21 +148,21 @@ class ProductFormProcessor extends FormProcessor
 						# Get the Search class.
 						require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
 						# Make an array of fields to search in the products table in the Database.
-						$fields=array('title');
+						$fields=array('id', 'title');
 						# Instantiate a new Search object.
 						$search_obj=new Search();
 						# Make an array of the terms to search for (enclose multiple word strings in double quotes.)
-						$terms=array('"'.$title.'"');
-						# Create an empty variable to hold the search filter.
-						$filter='';
+						$terms=$title;
+						# Don't compare with the video ID.
+						$filter=array('filter_fields'=>array('id'));
 						# Check if the id is empty.
 						if(!empty($id))
 						{
 							# Create a search filter that won't return the current record we may be editing.
-							$filter='`id` != '.$db->quote($id);
+							$filter=array_merge($filter, array('filter_sql'=>'`id` != '.$db->quote($id)));
 						}
 						# Search for duplicate records.
-						$search_obj->setAllResults($search_obj->performSearch($terms, 'products', $fields, 'id', $filter));
+						$search_obj->setAllResults($search_obj->performSearch($terms, 'products', $fields, NULL, $filter));
 						# Set any search results to a variable.
 						$duplicates=$search_obj->getAllResults();
 						# Create an empty array for the duplicate display.
