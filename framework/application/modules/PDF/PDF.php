@@ -19,9 +19,9 @@ class PDF extends FPDF
 	 *
 	 * PDF page footer.
 	 *
-	 * @access protected
+	 * @access public
 	 */
-	protected function Footer()
+	public function Footer()
 	{
 		# Position at 1.5 cm from bottom
 		$this->SetY(-15);
