@@ -1,11 +1,11 @@
-<?php /* framework/application/controllers/secure/admin/ManageUsers/NewsletterUsers/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageUsers/NewsletterSubscribers/index.php */
 
 # Get the PDF Class.
 require_once Utility::locateFile(MODULES.'PDF'.DS.'PDF.php');
 
 $login->checkLogin(ADMIN_USERS);
 
-$page_class='manageUserspage-newsletterusers';
+$page_class='manageUserspage-newslettersubscribers';
 
 $login->findUserData();
 

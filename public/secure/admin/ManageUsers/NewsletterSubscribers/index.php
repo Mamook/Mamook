@@ -1,11 +1,11 @@
-<?php /* public/secure/admin/ManageUsers/NewsletterUsers/index.php */
+<?php /* public/secure/admin/ManageUsers/NewsletterSubscribers/index.php */
 
 ob_start(); # Begin output buffering
 
 try
 {
 	# Define the location of this page.
-	define('HERE_PATH', 'secure/admin/ManageUsers/NewsletterUsers/index.php');
+	define('HERE_PATH', 'secure/admin/ManageUsers/NewsletterSubscribers/index.php');
 	/*
 	** In settings we
 	** define application settings
@@ -16,7 +16,7 @@ try
 	require_once '../../../../../settings.php';
 
 	# Get the Controller.
-	require_once Utility::locateFile(CONTROLLERS.'secure'.DS.'admin'.DS.'ManageUsers'.DS.'NewsletterUsers'.DS.'index.php');
+	require_once Utility::locateFile(CONTROLLERS.'secure'.DS.'admin'.DS.'ManageUsers'.DS.'NewsletterSubscribers'.DS.'index.php');
 }
 catch(Exception $e)
 {
