@@ -80,8 +80,8 @@ echo '<nav id="navbar" class="nav nav1">',
 					'<a href="'.ADMIN_URL.'ManageUsers/EmailUsers/" title="Email Users">Email Users</a>'.
 				'</li>' : ''),
 				(($login->checkAccess(ADMIN_USERS)===TRUE) ?
-				'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/NewsletterUsers/', FALSE, FALSE).'">'.
-					'<a href="'.ADMIN_URL.'ManageUsers/NewsletterUsers/" title="Newsletter Users">Newsletter Users</a>'.
+				'<li class="list-nav-2'.Document::addHereClass(ADMIN_URL.'ManageUsers/NewsletterSubscribers/', FALSE, FALSE).'">'.
+					'<a href="'.ADMIN_URL.'ManageUsers/NewsletterSubscribers/" title="Newsletter Subscribers">Newsletter Subscribers</a>'.
 				'</li>' : ''),
 			(((strstr(GET_QUERY, '?user=')===FALSE) && $login->checkAccess(ADMIN_USERS)===FALSE) ? '' :
 			'</ul>'),
