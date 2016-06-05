@@ -1,7 +1,7 @@
 <?php /* framework/application/controllers/secure/admin/ManageUsers/NewsletterUsers/index.php */
 
 # Get the PDF Class.
-require_once Utility::locateFile(MODULES.'Vendor'.DS.'PDF'.DS.'PDF.php');
+require_once Utility::locateFile(MODULES.'PDF'.DS.'PDF.php');
 
 $login->checkLogin(ADMIN_USERS);
 
