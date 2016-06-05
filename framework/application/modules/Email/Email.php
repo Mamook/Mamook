@@ -1081,10 +1081,12 @@ class Email
 					if(!empty($recipients))
 					{
 						set_time_limit(0);
-						if(count($recipients) < $batch)
+						$recipients_count=count($recipients);
+						if($recipients_count < $batch)
 						{
-							$batch=count($recipients);
+							$batch=$recipients_count;
 						}
+						$last_key=end(array_keys($recipients));
 						$message.='<br/>';
 						# Get the email template. (Creates and populates the $body variable.)
 						require Utility::locateFile($this->getTemplate());
@@ -1092,7 +1094,7 @@ class Email
 						# Send emails until batch number is reached and then sleep.
 						$i=1;
 						# Loop through the recipients.
-						foreach($recipients as $row)
+						foreach($recipients as $key=>$row)
 						{
 							# Check if this user's email was already sent.
 							if(!in_array($row->email, $used_emails))
@@ -1131,7 +1133,8 @@ class Email
 									# Increment the email counter by one.
 									$i++;
 									# Check if the current number of emails sent equals (or is greater than) the batch number.
-									if($i>=$batch)
+									#	Don't sleep if it's the last element in the array.
+									if($i>=$batch && $key!=$last_key)
 									{
 										# Pause for the passed amount of time.
 										sleep(MAILQUEUE_THROTTLE);
