@@ -62,6 +62,8 @@ if(isset($_GET['generate_pdf']))
 {
 	# Instantiate a new PDF object.
 	$pdf=new PDF();
+	$title=DOMAIN_NAME.' Newsletter Subscribers';
+	$pdf->SetTitle($title);
 	# Defines an alias for the total number of pages.
 	#	It will be substituted as the document is closed.
 	$pdf->AliasNbPages();
