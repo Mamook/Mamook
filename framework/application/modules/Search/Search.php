@@ -1164,10 +1164,10 @@ class Search
 
 		$terms_db=$this->convertTerms2RegEx($terms);
 
+		$filter_sql='';
 		# NOTE: Filter needs work.
 		if($filter!==NULL)
 		{
-			$filter_sql='';
 			if(isset($filter['filter_sql']))
 			{
 				# $filter="`Party` = 'yes' AND "
