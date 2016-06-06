@@ -764,7 +764,7 @@ class Contributor extends User
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{

@@ -443,7 +443,7 @@ class Category
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
@@ -520,7 +520,7 @@ class Category
 		catch(ezDB_Error $ez)
 		{
 			# Throw an exception because there was a Database connection error.
-			throw new Exception('Error occured: ' . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{

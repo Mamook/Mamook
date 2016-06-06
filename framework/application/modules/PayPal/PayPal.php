@@ -765,7 +765,7 @@ class PayPal
 			catch(ezDB_Error $ez)
 			{
 				# Unable to access the orders table! This error will stop the script.
-				$this->error.="Unable to access the \"orders\" table in Database! \n<br />Error occured: " . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query;
+				$this->error.="Unable to access the \"orders\" table in Database! \n<br />Error occured: ".$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query;
 				# What is the subject of the error email send to the admin?
 				$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
 				$this->makeLog();
@@ -1084,7 +1084,7 @@ class PayPal
 		catch(ezDB_Error $ez)
 		{
 			# The orders table was not updated! This error will not stop the script.
-			$this->error.="Transaction not entered into \"orders\" in the Database! \n<br />Error occured: " . $ez->message . ', code: ' . $ez->code . '<br />Last query: '. $ez->last_query;
+			$this->error.="Transaction not entered into \"orders\" in the Database! \n<br />Error occured: ".$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query;
 			# What is the subject of the error email send to the admin?
 			$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
 			$this->makeLog();
@@ -1573,7 +1573,7 @@ class PayPal
 			catch(ezDB_Error $ez)
 			{
 				# The user's account was not updated! This error will not stop the script.
-				$this->error.="Couldn't update the \"".$field."\" field for the user with ID ".$id." in the Database! \n<br />Error occured: ".$ez->message.', code: '.$ez->code.'<br />Last query: '.$ez->last_query;
+				$this->error.="Couldn't update the \"".$field."\" field for the user with ID ".$id." in the Database! \n<br />Error occured: ".$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query;
 				# What is the subject of the error email send to the admin?
 				$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
 				# Add the error to the error log.
@@ -1586,7 +1586,7 @@ class PayPal
 		catch(Exception $e)
 		{
 			# The product field was not retrieved!
-			$this->error.="Couldn't retrieve the `product` field for the user with ID ".$id." from the Database! \n<br />Error occured: ".$ez->message ."\n<br />Code: ".$ez->code."\n<br />Last query: ".$ez->last_query;
+			$this->error.="Couldn't retrieve the `product` field for the user with ID ".$id." from the Database! \n<br />Error occured: ".$ez->error ."\n<br />Code: ".$ez->errno."\n<br />Last query: ".$ez->last_query;
 			# What is the subject of the error email send to the admin?
 			$this->error_subject="Check IPN_log".$this->log_subj.", there was an error.";
 			# Add the error to the error log.
