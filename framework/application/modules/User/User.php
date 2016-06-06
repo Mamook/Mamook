@@ -2066,14 +2066,22 @@ class User
 						$username=$this->findUsername($user_id);
 						# Get user's WP ID.
 						$wp_id=$wp_obj->getWP_UserID($username);
-						# Change the `users` ID in the $id array to the Wordpress ID.
-						$id[$key]=$wp_id;
+						# If the user exists in the Wordpress users table.
+						if($wp_id!==NULL)
+						{
+							# Change the `users` ID in the $id array to the Wordpress ID.
+							$id[$key]=$wp_id;
+						}
+						else
+						{
+							# User does not exist in Wordpress so unset the array element.
+							unset($id[$key]);
+						}
 					}
 					# Delete the User from the WordPress installation.
 					$wp_obj->deleteWP_User($id);
 				}
 			}
-
 			# Delete from the users table.
 			$delete_user=$db->query('DELETE FROM `'.DBPREFIX.'users` WHERE `ID` '.$where);
 		}
