@@ -164,7 +164,8 @@ try
 		{
 			$batch=$recipients_count;
 		}
-		$last_key=end(array_keys($recipients));
+		$recipient_array_keys=array_keys($recipients);
+		$last_key=end($recipient_array_keys);
 
 		# Send emails until batch number is reached and then sleep.
 		$i=1;
