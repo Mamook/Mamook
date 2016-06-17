@@ -545,7 +545,6 @@ class ImageFormProcessor extends FormProcessor
 								{
 									try
 									{
-										# NOTE: We should be using prepared statements.
 										# Remove the file from all `content` records.
 										$db_submit=$db->query('UPDATE '.
 											'`'.DBPREFIX.'content` '.
