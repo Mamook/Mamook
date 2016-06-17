@@ -506,8 +506,9 @@ select {
 .vis .label {
 	margin-top: 8px;
 }
+/* Is '[class^=file-]' needed here at all? I am only seeing a 'file-list' class and this rule is breaking the page layout */
 .bsm-item,
-[class^=file-] {
+[class^=file-]:not(.file-list) {
 	position: relative;
 	background: #b1def4;
 	background: -moz-linear-gradient(top, rgba(177, 222, 244, 1) 0%, rgba(58, 171, 209, 0.5) 10%, rgba(0, 153, 204, 0) 100%);
@@ -525,12 +526,12 @@ select {
 	margin: 0 0 1px 8px;
 	padding: 4px 6px;
 }
-[class^=file-] {
+[class^=file-]:not(.file-list) {
 	line-height: 1.2;
 	word-wrap: break-word;
 	margin: 0 0 0 170px;
 }
-[class^=file-]:after {
+[class^=file-]:not(.file-list):after {
 	content: '';
 	display: block;
 	clear: both;
