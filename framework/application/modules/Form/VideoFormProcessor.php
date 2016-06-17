@@ -148,7 +148,7 @@ class VideoFormProcessor extends FormProcessor
 			# Set the language id to a variable.
 			$language_id=$language_obj->getID();
 			# Set the video's playlists to a variable.
-			$playlists=$video_obj->getCategories();
+			$playlists=$video_obj->getPlaylists();
 			# Create an empty variable for the playlist id's.
 			$playlist_ids=NULL;
 			# Check if there are categories.
@@ -215,15 +215,10 @@ class VideoFormProcessor extends FormProcessor
 					$video_obj->getThisImage($image_id);
 				}
 
-				# Create an empty variable for the thumbnail name.
-				$thumbnail_file_name='';
 				if($image_id!==NULL)
 				{
 					# Get the Image object.
 					$image_obj=$video_obj->getImageObj();
-					# Set the image file name to a variable.
-					$thumbnail_file_name=$image_obj->getImage();
-
 					# Set the variable that remembers that a video has been uploaded to TRUE (in case we need to remove the video).
 					$uploaded_thumbnail=TRUE;
 				}
@@ -250,19 +245,18 @@ class VideoFormProcessor extends FormProcessor
 						# Get the Upload class.
 						require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
 						# Instantiate an Upload object.
-						$upload=new Upload($_FILES['video']);
+						$upload_obj=new Upload($_FILES['video']);
 
 						# Check if the uploaded video size is not NULL.
-						if($upload->getSize()!==NULL)
+						if($upload_obj->getSize()!==NULL)
 						{
 							try
 							{
 								# NOTE: How can we move this to a background script?
 								# Upload the video file.
-								$document_upload=$upload->uploadFile(BODEGA.'videos'.DS, array('avi', 'flv', 'mov', 'mp4', 'webm', 'wmv'), BODEGA.'videos'.DS, $clean_filename, $max_size, FALSE);
-
+								$document_upload=$upload_obj->uploadFile(BODEGA.'videos'.DS, array('avi', 'flv', 'mov', 'mp4', 'webm', 'wmv'), BODEGA.'videos'.DS, $clean_filename, $max_size, FALSE);
 								# Reset the video file's name (ie: video_file_name.mp4).
-								$new_video_name=$upload->getName();
+								$new_video_name=$upload_obj->getName();
 							}
 							catch(Exception $e)
 							{
@@ -270,12 +264,12 @@ class VideoFormProcessor extends FormProcessor
 							}
 
 							# Check for errors.
-							if($upload->checkErrors()===TRUE)
+							if($upload_obj->checkErrors()===TRUE)
 							{
 								# Remove uploaded video.
-								$upload->deleteFile(BODEGA.'videos'.DS.$new_video_name);
+								$upload_obj->deleteFile(BODEGA.'videos'.DS.$new_video_name);
 								# Get any errors.
-								$document_errors=$upload->getErrors();
+								$document_errors=$upload_obj->getErrors();
 								# Loop through the errors.
 								foreach($document_errors as $document_error)
 								{
@@ -296,8 +290,6 @@ class VideoFormProcessor extends FormProcessor
 				{
 					# Check if the embed field was empty (or less than 10 characters or more than 1024 characters long).
 					$empty_title=$fv->validateEmpty('embed_code', 'Please enter an embed code for the video.', 10, 1024);
-
-					//youtube\.com\/watch/i) || source.match(/youtu\.be/i
 
 					# No custom thumbnail image.
 					if($uploaded_thumbnail===FALSE)
@@ -334,7 +326,7 @@ class VideoFormProcessor extends FormProcessor
 					if($uploaded_document===TRUE)
 					{
 						# Remove uploaded video file.
-						$upload->deleteFile(BODEGA.'videos'.DS.$new_video_name);
+						$upload_obj->deleteFile(BODEGA.'videos'.DS.$new_video_name);
 					}
 				}
 				else
@@ -376,12 +368,14 @@ class VideoFormProcessor extends FormProcessor
 								# Set the record fields to the dup_display array.
 								$dup_display[$dup_video->getID()]=array(
 									'id'=>$dup_video->getID(),
+									'api'=>$dup_video->getAPI(),
 									'author'=>$dup_video->getAuthor(),
 									'availability'=>$dup_video->getAvailability(),
 									'contributor'=>$dup_video->getContID(),
 									'date'=>$dup_video->getDate(),
 									'description'=>$dup_video->getDescription(),
 									'file_name'=>$dup_video->getFileName(),
+									'image'=>$dup_video->getImageID(),
 									'institution'=>$dup_video->getInstitution(),
 									'language'=>$dup_video->getLanguage(),
 									'playlists'=>$dup_video->getPlaylists(),
@@ -406,16 +400,44 @@ class VideoFormProcessor extends FormProcessor
 					# Check if the video is considered unique and may be added to the Database.
 					if($unique==1)
 					{
-						# If there is no custom thumbnail image.
+						# If there is no custom thumbnail image, take a frame from inside the video to use as a thumbnail.
 						if($uploaded_thumbnail===FALSE)
 						{
 							# If this is not a video being edited and it's a file.
 							if(empty($id) && $video_type=='file')
 							{
-								# Create Thumbnails.
-								$cl2=new CommandLine('ffmpeg');
-								$cl2->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -f mjpeg '.IMAGES_PATH.'original'.DS.$clean_filename.'.jpg');
-								$cl2->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -f mjpeg -vf scale=320:180 '.IMAGES_PATH.$clean_filename.'.jpg');
+								# If the image does not already exists, create one.
+								if(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg')===FALSE)
+								{
+									# Create Thumbnails.
+									$commandline_obj_ffmpeg=new CommandLine('ffmpeg');
+									$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -frames 1 -q:v 1 '.IMAGES_PATH.'original'.DS.$clean_filename.'.jpg');
+									$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.'videos'.DS.$new_video_name.' -ss 00:00:05 -frames 1 -q:v 1 -vf scale=320:180 '.IMAGES_PATH.$clean_filename.'.jpg');
+
+									# Insert the thumbnail image into the `images` table.
+									$sql='INSERT INTO `'.DBPREFIX.'images` ('.
+										'`title`,'.
+										' `image`,'.
+										((!empty($category_ids)) ? ' `category`,' : '').
+										' `contributor`'.
+										') VALUES ('.
+										$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).', '.
+										$db->quote($db->escape($clean_filename.'.jpg')).', '.
+										((!empty($category_ids)) ? $db->quote($category_ids).', ' : '').
+										$db->quote($contributor_id).
+										')';
+									# Run the SQL query.
+									$db->query($sql);
+									# Assign the image ID to a variable.
+									$image_id=$db->get_insert_id();
+								}
+								else
+								{
+									# Search for this image.
+									$video_obj->getThisImage($clean_filename.'.jpg', FALSE);
+									# Look for file and get it's ID.
+									$image_id=$video_obj->getImageID();
+								}
 							}
 						}
 
@@ -485,6 +507,7 @@ class VideoFormProcessor extends FormProcessor
 							' '.$db->quote($language_id).','.
 							' '.$db->quote($contributor_id).
 							')';
+						$new_video=TRUE;
 
 						# Check if this is an UPDATE.
 						if(!empty($id))
@@ -511,15 +534,14 @@ class VideoFormProcessor extends FormProcessor
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
-							# Tell VideoUpload.php that this is a editted video.
-							$_SESSION['form']['video']['NewVideo']=FALSE;
+							$new_video=FALSE;
 						}
 						try
 						{
 							# Run the sql query.
 							$db_post=$db->query($sql);
 							# Check if the query was successful.
-							if(TRUE)//if($db_post>0)
+							if(TRUE)
 							{
 								# Set the ID from the insert SQL query.
 								$insert_id=$db->get_insert_id();
@@ -527,16 +549,7 @@ class VideoFormProcessor extends FormProcessor
 								# If this is a new video (not editted).
 								if(!empty($insert_id))
 								{
-									# Set the video's ID.
-									$_SESSION['form']['video']['ID']=$insert_id;
-
-									# If there is a video file.
-									if($video_type=='file')
-									{
-										# Set the File name.
-										$_SESSION['form']['video']['FileName']=$new_video_name;
-									}
-									elseif($video_type=='embed')
+									if($video_type=='embed')
 									{
 										# TODO: Can this be moved to YouTubeUpload.php?
 										# Check if the post should be posted on youtube.com.
@@ -572,46 +585,68 @@ class VideoFormProcessor extends FormProcessor
 									}
 								}
 
+								# Instantiate the new CommandLine object.
+								$commandline_obj=new CommandLine();
+
+								# Create an array with video data.
+								$video_data=array(
+									'Environment'=>DOMAIN_NAME,
+									'DevEnvironment'=>DEVELOPMENT_DOMAIN,
+									'StagingEnvironment'=>STAGING_DOMAIN,
+									//'API'=>$api,
+									'Availability'=>$availability,
+									'Categories'=>$category_ids,
+									'ContID'=>$contributor_id,
+									'Description'=>$description,
+									'FileNameNoExt'=>($insert_id>0 ? $clean_filename : ''),
+									'FileName'=>($insert_id>0 ? $new_video_name : $_SESSION['form']['video']['FileName']),
+									'ID'=>($insert_id>0 ? $insert_id : $_SESSION['form']['video']['ID']),
+									'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['video']['ImageID']),
+									'MediaType'=>'video',
+									'NewVideo'=>$new_video,
+									'Playlists'=>$playlist_ids,
+									'Title'=>$title,
+									'YouTube'=>$youtube
+								);
+
+								# NOTE: Use the API class.
+								#	Example: $api_obj->uploadMedia($video_data, 'video', array('youtube'=>$youtube, 'vimeo'=>$vimeo));
+								#	uploadMedia($media_data, $media_type='video', $service=array('youtube'=>'post_youtube'))
+								# This needs to be before 'if(!empty($new_video_name))' because YouTubeUpload.php also edits videos on YouTube.
+								# Check if the YouTube credentials are available.
+								if($youtube==='post_youtube')
+								{
+									# Run the command line script.
+									#	runScript() turns a multidimensional array into a single dimensional array and seperates the keys from the values.
+									#		ex: php ScriptName.php Key1|Key2|Key3 Value1|Value2|Value3
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'YouTubeUpload.php'), $video_data);
+								}
+
 								# Check if a new video file was uploaded.
 								if(!empty($new_video_name))
 								{
-									# Set the video form session to a new session for use in the command line.
-									$_SESSION['video_upload']=$_SESSION['form']['video'];
-									//$_SESSION['video_upload']['Environment']=DOMAIN_NAME;
-									//$_SESSION['video_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
-									//$_SESSION['video_upload']['StagingEnvironment']=STAGING_DOMAIN;
-									$_SESSION['video_upload']['ConfirmationTemplate']=$confirmation_template;
+									# NOTE: There's no point in having a VideoUpload command line script since we can't upload the video in the background.
 									/*
-									# Get the Session Class
-									require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
-									# Instantiate the new Session object.
-									$session_obj=Session::getInstance();
-									# End the current session and store session data.
-									$session_obj->saveSessionFile();
-									*/
-									# Create an array with video data.
-									$video_data=array(
-										'Environment'=>DOMAIN_NAME,
-										'DevEnvironment'=>DEVELOPMENT_DOMAIN,
-										'StagingEnvironment'=>STAGING_DOMAIN,
-										'SessionId'=>session_id(),
-										'SessionPath'=>session_save_path());
-
-									# Instantiate the new CommandLine object.
-									$cl3=new CommandLine();
 									# Run the upload script.
-									$cl3->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'VideoUpload.php'), $video_data);
-/*
-									# TODO: Move to ConvertMedia command line script.
+									#	runScript() turns a multidimensional array into a single dimensional array and seperates the keys from the values.
+									#		ex: php ScriptName.php Key1|Key2|Key3 Value1|Value2|Value3
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'VideoUpload.php'), $video_data);
+									*/
+
+									# Convert video to other file types (webm, h264 mp4, HLS).
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $video_data);
+
+									# NOTE: 2pass in background scripts does not work, and I moved them into ConvertMedia.php script.
+									/*
 									# Convert to webm.
 										# First pass.
-										$cl=new CommandLine('ffmpeg');
+										$commandline_obj_ffmpeg=new CommandLine('ffmpeg');
 										# Create an array of the ffmpeg commands.
 										$commands=array(
 											'-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libvpx -vf "scale=trunc(oh*a/2)*2:\'min(ih,480)\'" -quality good -cpu-used 0 -crf 22 -b:v 600k -qmin 10 -qmax 42 -maxrate 500k -bufsize 1000k -threads 1 -an -pass 1 -f webm -y /dev/null',
 											'-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libvpx -vf "scale=trunc(oh*a/2)*2:\'min(ih,480)\'" -quality good -cpu-used 0 -crf 22 -b:v 600k -qmin 10 -qmax 42 -maxrate 500k -bufsize 1000k -threads 1 -codec:a libvorbis -b:a 128k -pass 2 -f webm -y '.VIDEOS_PATH.'files'.DS.$clean_filename.'.webm'
 										);
-										$cl->runScript($commands);
+										$commandline_obj_ffmpeg->runScript($commands);
 
 									# Convert to h264 mp4.
 										# Create an array of the ffmpeg commands.
@@ -619,23 +654,21 @@ class VideoFormProcessor extends FormProcessor
 											'-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -vf "scale=trunc(oh*a/2)*2:\'min(ih,480)\'" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v high -level 4.2 -threads 1 -an -movflags +faststart -pass 1 -f mp4 -y /dev/null',
 											'-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -vf "scale=trunc(oh*a/2)*2:\'min(ih,480)\'" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v high -level 4.2 -threads 1 -codec:a libfdk_aac -b:a 128k -movflags +faststart -pass 2 -y '.VIDEOS_PATH.'files'.DS.$clean_filename.'.mp4'
 										);
-										$cl->runScript($commands);
+										$commandline_obj_ffmpeg->runScript($commands);
 
 									# Covert to HLS for mobile (iOS) support.
-										// First, ensure that the source file is h264:
-										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -force_key_frames "expr:gte(t,n_forced*2)" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v baseline -level 3.0 -threads 1 -codec:a libfdk_aac -b:a 128k -y '.TEMP.$clean_filename.'mp4');
-										//$cl->runScript('-y -i '.TEMP.$clean_filename.'mp4 -c:v copy -map 0 -bsf:v h264_mp4toannexb -f segment -segment_list '.AUDIO_PATH.'files'.DS.$clean_filename'.m3u8 -segment_time 2 -segment_format mpeg_ts -segment_list_type m3u8 '.AUDIO_PATH.'files'.DS.$clean_filename'.ts && \ rm -R -f '.TEMP.$clean_filename.'mp4');
-										//$cl->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -hls_time 2 -hls_list_size 0 -hls_wrap 0 -start_number 0 -hls_allow_cache 1 -hls_segment_filename -hls_segment_filename \'hls_segment%03d.ts\' '.AUDIO_PATH.'files'.DS.$clean_filename.DS.'video.m3u8');
-*/
-									# Remove the video upload session.
-									//unset($_SESSION['video_upload']);
+										# First, ensure that the source file is h264:
+										//$commandline_obj_ffmpeg->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -c:v libx264 -pix_fmt yuv420p -force_key_frames "expr:gte(t,n_forced*2)" -preset slow -crf 22 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v baseline -level 3.0 -threads 1 -codec:a libfdk_aac -b:a 128k -y '.TEMP.$clean_filename.'mp4');
+										//$commandline_obj_ffmpeg->runScript('-y -i '.TEMP.$clean_filename.'mp4 -c:v copy -map 0 -bsf:v h264_mp4toannexb -f segment -segment_list '.AUDIO_PATH.'files'.DS.$clean_filename'.m3u8 -segment_time 2 -segment_format mpeg_ts -segment_list_type m3u8 '.AUDIO_PATH.'files'.DS.$clean_filename'.ts && \ rm -R -f '.TEMP.$clean_filename.'mp4');
+										//$commandline_obj_ffmpeg->runScript('-i '.BODEGA.'videos'.DS.$new_video_name.' -hls_time 2 -hls_list_size 0 -hls_wrap 0 -start_number 0 -hls_allow_cache 1 -hls_segment_filename -hls_segment_filename \'hls_segment%03d.ts\' '.AUDIO_PATH.'files'.DS.$clean_filename.DS.'video.m3u8');
+									*/
 								}
 
 								# Check if the availability allows posting to social networks.
 								if($availability==1)
 								{
 									# Check if the post should be posted on Twitter.com or Facebook.com.
-									if($twitter==='0' OR $facebook==='post' OR $youtube==='post_youtube')
+									if($twitter==='0' OR $facebook==='post')
 									{
 										# Get the API Class.
 										require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
@@ -667,7 +700,7 @@ class VideoFormProcessor extends FormProcessor
 									}
 								}
 								# Remove the video's session.
-								unset($_SESSION['form']);
+								unset($_SESSION['form']['video']);
 								# Set a nice message for the user in a session.
 								$_SESSION['message']='Your video was successfully '.$message_action.'!';
 								# Redirect the user to the page they were on.
@@ -684,7 +717,7 @@ class VideoFormProcessor extends FormProcessor
 								if($uploaded_document===TRUE)
 								{
 									# Remove uploaded video file.
-									$upload->deleteFile(BODEGA.'videos'.DS.$new_video_name);
+									$upload_obj->deleteFile(BODEGA.'videos'.DS.$new_video_name);
 								}
 							}
 						}
@@ -694,7 +727,7 @@ class VideoFormProcessor extends FormProcessor
 							if($uploaded_document===TRUE)
 							{
 								# Remove uploaded video file.
-								$upload->deleteFile(BODEGA.'videos'.DS.$new_video_name);
+								$upload_obj->deleteFile(BODEGA.'videos'.DS.$new_video_name);
 							}
 							throw $e;
 						}
@@ -705,7 +738,7 @@ class VideoFormProcessor extends FormProcessor
 						if($uploaded_document===TRUE)
 						{
 							# Remove uploaded video file.
-							$upload->deleteFile(BODEGA.'videos'.DS.$new_video_name);
+							$upload_obj->deleteFile(BODEGA.'videos'.DS.$new_video_name);
 						}
 					}
 				}
@@ -1100,7 +1133,6 @@ class VideoFormProcessor extends FormProcessor
 					'ImageID'=>$video_obj->getImageID(),
 					'Institution'=>$institution_id,
 					'Language'=>$language_id,
-					'NewVideo'=>TRUE,
 					'Playlists'=>$video_obj->getPlaylists(),
 					'Publisher'=>$publisher_id,
 					'Title'=>$video_obj->getTitle(),

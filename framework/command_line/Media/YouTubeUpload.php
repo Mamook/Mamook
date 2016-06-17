@@ -1,4 +1,4 @@
-<?php /* framework/application/command_line/Media/YouTubeUpload.php */
+<?php /* framework/command_line/Media/YouTubeUpload.php */
 
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
@@ -6,9 +6,6 @@ $keys=explode('|', $argv[1]);
 $values=explode('|', $argv[2]);
 # Combine the keys and values arrays.
 $passed_data=array_combine($keys, $values);
-
-$session_path=$passed_data['SessionPath'];
-$session_id=$passed_data['SessionId'];
 
 # Need these for database_definitions.php and email_definitions.php
 # Need this for the Image class and APPLICATION_URL.
@@ -64,10 +61,6 @@ DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
-# Get the session data.
-$session=Utility::returnSessionData($session_id, $session_path);
-$video_data=$session['video_upload'];
-
 # Get the Video Class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 # Instantiate the new Video object.
@@ -79,24 +72,27 @@ $client=$video_obj->getGoogleClient();
 
 # Get the Validator Class.
 require_once Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
-# Since YouTube only allows one category, get the first category in the array.
-$category_name=reset($video_data['Categories']);
 # Get the Category class.
 require_once Utility::locateFile(MODULES.'Content'.DS.'Category.php');
 # Instantiate a new Category object.
 $category_obj=new Category();
+# Trim the first dash (-).
+$trimmed_categories=ltrim($passed_data['Categories'], '-');
+# Since YouTube only allows one category, get the first category.
+#	Trim off the first dash (-) then get the string until the next dash.
+$category_id=substr($trimmed_categories, 0, strpos($trimmed_categories, '-'));
 # Get the category from the database.
-$category_obj->getThisCategory($category_name, FALSE);
+$category_obj->getThisCategory($category_id);
 # Decode the `api` field in the `categories` table.
 $category_api_decoded=json_decode($category_obj->getAPI());
+# If this category is on YouTube, get YouTube's ID for this category.
 if(isset($category_api_decoded->YouTube->category_id))
 {
 	# Category ID on YouTube.
 	$youtube_category_id=$category_api_decoded->YouTube->category_id;
 }
-
-# If there is a video file.
-if(!empty($video_data['FileName']))
+# If there is a video file, not an embed code.
+if(!empty($passed_data['FileName']))
 {
 	# Specify the size of each chunk of data, in bytes. Set a higher value for
 	# reliable connection as fewer chunks lead to faster uploads. Set a lower
@@ -108,9 +104,9 @@ if(!empty($video_data['FileName']))
 	# This example sets the video's title, description, keyword tags, and
 	# video category.
 	$google_video_snippet=new Google_Service_YouTube_VideoSnippet();
-	$google_video_snippet->setTitle($video_data['Title']);
-	$google_video_snippet->setDescription($video_data['Description']);
-	$google_video_snippet->setTags(array($youtube_category_id));
+	$google_video_snippet->setTitle($passed_data['Title']);
+	$google_video_snippet->setDescription($passed_data['Description']);
+	//$google_video_snippet->setTags(array($youtube_category_id));
 
 	# Numeric video category. See
 	# https://developers.google.com/youtube/v3/docs/videoCategories/list
@@ -126,7 +122,7 @@ if(!empty($video_data['FileName']))
 	$google_video_status=new Google_Service_YouTube_VideoStatus();
 
 	# If "This site has the legal rights to display" (1).
-	if($video_data['Availability']==1) $privacy_setting='public';
+	if($passed_data['Availability']==1) $privacy_setting='public';
 	# If "This site does not yet have the lega rights to display" (0),
 	#	"Internal Document Only" (2),
 	#	"Can not distribute" (3).
@@ -136,10 +132,10 @@ if(!empty($video_data['FileName']))
 	$google_video_status->privacyStatus=$privacy_setting;
 
 	# If this is a new video (not editted).
-	if(isset($video_data['NewVideo']) && $video_data['NewVideo']===TRUE)
+	if(isset($passed_data['NewVideo']) && $passed_data['NewVideo']==TRUE)
 	{
 		# Set the path to the video on the server.
-		$video_path=BODEGA.'videos'.DS.$video_data['FileName'];
+		$video_path=BODEGA.'videos'.DS.$passed_data['FileName'];
 
 		# Associate the snippet and status objects with a new video resource.
 		$google_video=new Google_Service_YouTube_Video();
@@ -173,10 +169,10 @@ if(!empty($video_data['FileName']))
 		$video_id=$upload_status['id'];
 
 		# If there is a custom thumbnail image.
-		if(!empty($video_data['ImageID']))
+		if(!empty($passed_data['ImageID']))
 		{
 			# Get the image information from the database, and set them to data members.
-			$video_obj->getThisImage($video_data['ImageID']);
+			$video_obj->getThisImage($passed_data['ImageID']);
 			# Set the Image object to a variable.
 			$image_obj=$video_obj->getImageObj();
 			# Set the current categories to a variable.
@@ -212,11 +208,15 @@ if(!empty($video_data['FileName']))
 
 		# Get the YouTube playlists from the database.
 		$get_playlists=$db->get_results('SELECT `id`, `api` FROM `'.DBPREFIX.'playlists` WHERE `api` IS NOT NULL');
+		# Trim the dashes off the playlist string.
+		$playlists_string=trim($passed_data['Playlists'], '-');
+		# Turn the string into an array.
+		$playlists_array=explode('-', $playlists_string);
 		# Loop through the playlists.
 		foreach($get_playlists as $playlists)
 		{
-			# Find the playlist in the $video_data array.
-			if(array_key_exists($playlists->id, $video_data['Playlists']))
+			# Find the playlist in the $passed_data array.
+			if(in_array($playlists->id, $playlists_array))
 			{
 				# Decode the `api` field in the `playlists` table.
 				$playlist_api_decoded=json_decode($playlists->api);
@@ -237,13 +237,13 @@ if(!empty($video_data['FileName']))
 		# json_encode the YouTube ID.
 		$insert_json=json_encode(array('youtube_id'=>$video_id), JSON_FORCE_OBJECT);
 		# Insert the YouTube ID into the database entry.
-		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($video_data['ID']).' LIMIT 1');
+		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($passed_data['ID']).' LIMIT 1');
 	}
 	# Edit video on YouTube.
-	if((!isset($video_data['NewVideo'])) || (isset($video_data['NewVideo']) && $video_data['NewVideo']===FALSE))
+	if((!isset($passed_data['NewVideo'])) || (isset($passed_data['NewVideo']) && $passed_data['NewVideo']==FALSE))
 	{
 		# Get new uploaded videos from the database.
-		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id`='.$video_data['ID']);
+		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id`='.$passed_data['ID']);
 
 		# Decode the `api` field.
 		$api_decoded=json_decode($video_row->api);
@@ -264,9 +264,9 @@ if(!empty($video_data['FileName']))
 		{
 			$videoSnippet['categoryId']=$youtube_category_id;
 		}
-		$videoSnippet['description']=$video_data['Description'];
-		$videoSnippet['title']=$video_data['Title'];
-		$videoStatus['privacyStatus']=(($video_data['Availability']==1) ? "public" : "private");
+		$videoSnippet['description']=$passed_data['Description'];
+		$videoSnippet['title']=$passed_data['Title'];
+		$videoStatus['privacyStatus']=(($passed_data['Availability']==1) ? "public" : "private");
 
 /*
 		$tags=$videoSnippet['tags'];
