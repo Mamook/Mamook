@@ -2504,10 +2504,15 @@ class User
 	 */
 	public function findIP($for_insert_query=TRUE)
 	{
-		# find the visitor's IP address.
-		$ip=WebUtility::findIP($for_insert_query);
-		# Return the visitor's IP address.
-		return $ip;
+		# Don't find IP if this is being run in a command line script.
+		if(php_sapi_name()!='cli')
+		{
+			# find the visitor's IP address.
+			$ip=WebUtility::findIP($for_insert_query);
+			# Return the visitor's IP address.
+			return $ip;
+		}
+		return NULL;
 	} #==== End -- findIP
 
 	/**
