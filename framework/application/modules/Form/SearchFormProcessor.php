@@ -45,7 +45,8 @@ class SearchFormProcessor extends FormProcessor
 
 			# Remove any un-needed CMS session data.
 			# This needs to happen before populateSearchForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
-			$this->loseSessionData('search');
+			# NOTE: Do we need this? Commenting it out because it's unsetting form data when choosing an image in posts, videos, etc...
+			//$this->loseSessionData('search');
 
 			# Instantiate a new instance of the SearchFormPopulator class.
 			$populator=new SearchFormPopulator();
