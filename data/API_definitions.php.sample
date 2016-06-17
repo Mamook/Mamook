@@ -5,6 +5,8 @@ define('DEFAULT_AUDIO_CATEGORY', '');
 define('DEFAULT_VIDEO_CATEGORY', '');
 define('DEFAULT_AUDIO_PLAYLIST', 'Audio');
 define('DEFAULT_VIDEO_PLAYLIST', 'Videos');
+# NOTE: What's a better way to do this?
+define('DEFAULT_THUMBNAIL', 'Thumbnail.coming.soon.png');
 define('FW_POPUP_HANDLE', 'fwpopup');
 define('FW_API_KEY', '');
 

@@ -675,8 +675,8 @@ class Video extends Media
 						# If there is no redirect, return FALSE.
 						return FALSE;
 					}
-					# Set the video's categories data member to a local variable.
-					$video_cats=$this->getCategories();
+					# Create a FALSE variable.
+					$delete_video=FALSE;
 					# Set the video's name data member to a local variable.
 					$video_name=$this->getFileName();
 					# Get the FileHandler class.
@@ -693,22 +693,41 @@ class Video extends Media
 
 						# Decode the `api` field.
 						$api_decoded=json_decode($this->getAPI());
+						# If there is a YouTube ID.
 						if(isset($api_decoded->youtube_id))
 						{
+							# Set the YouTube ID to a variable.
 							$yt_id=$api_decoded->youtube_id;
 						}
 
+						# NOTE: Why doesn't this delete all the videos? Deletes either the video in BODEGA or the one if media/files/ and moves on...
 						# Delete the video.
-						if(
-							(is_file(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE && $file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.webm')===TRUE) ||
-							(is_file(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE && $file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.mp4')===TRUE) ||
-							(is_file(BODEGA.'videos'.DS.$video_name)===TRUE && $file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) ||
-							(isset($yt_id) && $yt->deleteVideo($yt_id)===TRUE)
-						)
+						/*
+						if(($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.*', TRUE)===TRUE) || ($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE) || (isset($yt_id) && $yt->deleteVideo($yt_id)===TRUE))
 						{
 							$delete_video=TRUE;
 						}
 						else
+						{
+							# Set a message to display to the user.
+							$_SESSION['message']='That was not a valid video for deletion.';
+							# Redirect the user back to the page without GET or POST data.
+							$doc->redirect($redirect);
+						}
+						*/
+						if($file_handler->deleteFile(VIDEOS_PATH.'files'.DS.$video_name_no_ext.'.*', TRUE)===TRUE)
+						{
+							$delete_video=TRUE;
+						}
+						if($file_handler->deleteFile(BODEGA.'videos'.DS.$video_name)===TRUE)
+						{
+							$delete_video=TRUE;
+						}
+						if(isset($yt_id) && $yt->deleteVideo($yt_id)===TRUE)
+						{
+							$delete_video=TRUE;
+						}
+						if($delete_video!==TRUE)
 						{
 							# Set a message to display to the user.
 							$_SESSION['message']='That was not a valid video for deletion.';
@@ -723,9 +742,8 @@ class Video extends Media
 						$delete_video=TRUE;
 					}
 
-					# TODO: Add delete video section here!
 					# Delete the video.
-					if(isset($delete_video) && $delete_video==TRUE)
+					if(isset($delete_video) && $delete_video===TRUE)
 					{
 						try
 						{
@@ -1165,7 +1183,6 @@ class Video extends Media
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
-
 		# Set the YouTube instance to a variable.
 		$yt=$this->getYouTubeObject();
 
@@ -1184,10 +1201,8 @@ class Video extends Media
 		{
 			# Get the video ID and assign it to a variable.
 			$this->setID($videos->id);
-
 			# Set the title to a variable
 			$this->setTitle($db->sanitize($videos->title));
-
 			# Decode the `api` field.
 			$api_decoded=json_decode($videos->api);
 
@@ -1196,7 +1211,6 @@ class Video extends Media
 			{
 				# Set YouTube ID
 				$this->setVideoId($api_decoded->youtube_id);
-
 				# Create video_url variable.
 				$video_url=$yt->getYoutubeUrl().$this->getVideoId();
 			}
@@ -1214,24 +1228,29 @@ class Video extends Media
 			# Create video URL.
 			$this->setVideoUrl($video_url);
 
+			# If we have thumbnails from YouTube in our database...
 			if(isset($api_decoded->youtube_thumbnails->default->url))
 			{
-				$this->setThumbnailUrl($api_decoded->youtube_thumbnails->default->url);
+				# Set the image path to a variable.
+				$image_path='';
+				# Use the YouTube thumbnail.
+				$image_url=$api_decoded->youtube_thumbnails->default->url;
 			}
 			else
 			{
 				# Set the image ID.
 				$this->setImageID($videos->image);
-
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage($this->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
+				# Set the image path to a variable.
+				$image_path=IMAGES_PATH.$image_obj->getImage();
 				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_THUMBNAIL));
 			}
+			# Set the image path to the data member.
+			$this->setThumbnailUrl($image_url);
 
 			# Set the markup to a variable
 			$display.='<tr>'.
@@ -1248,7 +1267,6 @@ class Video extends Media
 				'</td>'.
 			'</tr>';
 		}
-
 		$display.='</table>';
 
 		return $display;
@@ -1276,16 +1294,13 @@ class Video extends Media
 
 			# Decode the `api` field.
 			$api_decoded=json_decode($large_video[0]->api);
-
 			# If the youtube_id is in the `api` field then this video is on YouTube.
 			if(isset($api_decoded->youtube_id))
 			{
 				# Set the YouTube instance to a variable.
 				$yt=$this->getYouTubeObject();
-
 				# Set YouTube ID
 				$this->setVideoId($api_decoded->youtube_id);
-
 				# Create video_url variable.
 				$video_url=$yt->getYoutubeUrl().$this->getVideoId();
 			}
@@ -1296,19 +1311,18 @@ class Video extends Media
 			}
 			else
 			{
-				$video_name=$this->getFileName();
+				$video_name=$large_video[0]->file_name;
 				# Remove the file extension.
 				$video_name_no_ext=substr($video_name, 0, strrpos($video_name, '.'));
+				# NOTE: Figure out which video to serve them here when we create multiple video versions.
 				# Create video_url variable.
 				$video_url=VIDEOS_URL.'files/'.$video_name_no_ext.'.mp4';
 			}
-
-			# Set the availability.
-			$this->setAvailability($large_video[0]->availability);
-
 			# Create video URL.
 			$this->setVideoUrl($video_url);
 
+			# Set the availability.
+			$this->setAvailability($large_video[0]->availability);
 			# Set the title.
 			$this->setTitle($db->sanitize($large_video[0]->title));
 
@@ -1320,22 +1334,16 @@ class Video extends Media
 			{
 				# Set the image ID.
 				$this->setImageID($large_video[0]->image);
-
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage($this->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
 
 			# Set the description
 			$this->setDescription($db->sanitize($large_video[0]->description, 5));
-
-			# Set the thumbnail image to a local variable.
-			$thumbnail=$this->getThumbnailUrl();
 
 			# Set the markup to the display array.
 			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
