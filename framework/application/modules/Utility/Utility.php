@@ -70,6 +70,41 @@ class Utility
 	/*** public methods ***/
 
 	/**
+	 * flattenArray
+	 *
+	 * Turns a multidimensional array into a single.
+	 *
+	 * @param	array $array
+	 * @access	public
+	 * @return	array
+	 */
+	public static function flattenArray($array)
+	{
+		# Return FALSE if not an array.
+		if(!is_array($array))
+		{
+			return FALSE;
+  		}
+
+  		# Create an empty array.
+		$result=array();
+		# Loop through the array.
+		foreach($array as $key=>$value)
+		{
+			# If the element is an array, run it through the method again to make it a single.
+			if(is_array($value))
+			{
+				$result=array_merge($result, $this->flattenArray($value));
+			}
+			else
+			{
+				$result[$key]=$value;
+			}
+		}
+		return $result;
+	} #==== End -- flattenArray
+
+	/**
 	 * getElapsedTime
 	 *
 	 * Returns a string stating the elapsed time in years, months, days, weeks, hours, minutes, and seconds.
@@ -397,6 +432,56 @@ class Utility
 			throw $e;
 		}
 	} #==== End -- returnSessionData
+
+	/**
+	 * saveSessionData
+	 *
+	 * Retrieves the session data from the session file, parses it, and returns it as an array.
+	 *
+	 * @access	public
+	 */
+	public static function saveSessionData($session_data, $session_id, $session_path)
+	{
+		try
+		{
+			foreach($session_data as $data_key=>$data_value)
+			{
+
+			}
+
+			/*
+			# Create a new array to hold the session.
+			$session=array();
+			# Set the initial offset to zero.
+			$offset=0;
+			# Loop through the session data.
+			while($offset<strlen($session_data))
+			{
+				if(!strstr(substr($session_data, $offset), '|'))
+				{
+					throw new Exception('invalid data, remaining: '.substr($session_data, $offset));
+				}
+				$pos=strpos($session_data, '|', $offset);
+				$num=$pos-$offset;
+				$varname=substr($session_data, $offset, $num);
+				$offset+=$num+1;
+				$data=unserialize(substr($session_data, $offset));
+				$session[$varname]=$data;
+				$offset+=strlen(serialize($data));
+			}
+			*/
+			# Get the session data.
+			if(file_put_contents($session_path.DIRECTORY_SEPARATOR.'sess_'.$session_id, $session)===FALSE)
+			{
+				return TRUE;
+			}
+			return FALSE;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	} #==== End -- saveSessionData
 
 	/**
 	 * sortByDate

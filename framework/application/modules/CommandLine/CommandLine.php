@@ -111,8 +111,8 @@ class CommandLine
 				$current_script=trim($current_script);
 				$new_commands[]=$executable.' '.$current_script;
 			}
-			# Separate the values with ( && \).
-			$script=implode(' && \\', $new_commands);
+			# Separate the values with ( && ).
+			$script=implode(' && ', $new_commands);
 			$script=ltrim($script, $executable.' ');
 		}
 // 		if($this->getLanguage()!='ffmpeg')
@@ -185,18 +185,8 @@ class CommandLine
 			# Check if $params is set, and if it's an array.
 			if(isset($params) && is_array($params))
 			{
-				# Function to flatten multidimensional arrays.
-				function flatten(array $params)
-				{
-					# Create an empty array.
-					$new_params=array();
-					# Convert the multidimensional to a single dimensional array.
-					array_walk_recursive($params, function($a, $b) use (&$new_params) { $new_params[$b] = $a; });
-					# Return the new array.
-					return $new_params;
-				}
 				# Call the flatten function.
-				$new_params=flatten($params);
+				$new_params=UTILITY::flattenArray($params);
 
 				# Get the array keys.
 				$keys=array_keys($new_params);
