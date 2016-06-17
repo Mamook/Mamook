@@ -377,7 +377,7 @@ class YouTube
 		return $this->yt_username;
 	} #==== End -- getYouTubeUsername
 
-		/**
+	/**
 	 * getYouTubeChannelId
 	 *
 	 * Returns the data member $yt_channel_id.
@@ -432,13 +432,20 @@ class YouTube
 	{
 		# Bring $youtube_service into the scope
 		$youtube_service=$this->getYouTubeService();
-
-		$delete_response=$youtube_service->videos->delete($video_id, $optParams);
-
-		if(isset($delete_response))
+		# Check if the video still exists on YouTube.
+		$video_details=$this->videoDetails($video_id);
+		# Video exists.
+		if(!empty($video_details))
 		{
-			return FALSE;
+			# Delete the video.
+			$delete_response=$youtube_service->videos->delete($video_id, $optParams);
+			# $delete_response gets set if there was an error.
+			if(isset($delete_response))
+			{
+				return FALSE;
+			}
 		}
+		# No errors so return TRUE.
 		return TRUE;
 	} #==== End -- deleteVideo
 
@@ -500,7 +507,7 @@ class YouTube
 	 */
 	public function insertThumbnail($video_id, $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$thumbnail_set_response=$youtube_service->thumbnails->set($video_id, $optParams);
@@ -530,7 +537,7 @@ class YouTube
 	 */
 	public function insertVideo($part='status,snippet', $postBody, $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$insert_response=$youtube_service->videos->insert($part, $postBody, $optParams);
@@ -566,7 +573,7 @@ class YouTube
 	 */
 	public function listVideoCategories($part='snippet', $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$list_categories_response=$youtube_service->videoCategories->listVideoCategories($part, $optParams);
@@ -599,7 +606,7 @@ class YouTube
 	 */
 	public function listVideos($part='snippet', $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$list_response=$youtube_service->videos->listVideos($part, $optParams);
@@ -615,9 +622,9 @@ class YouTube
 	 * @param	string $part				What part of the video to get from YouTube.
 	 * @return	array
 	 */
-	public function PlaylistsListFeed($part='snippet', $optParams=array('channelId' => YOUTUBE_CHANNELID, 'maxResults' => 50))
+	public function PlaylistsListFeed($part='snippet', $optParams=array('channelId'=>YOUTUBE_CHANNELID, 'maxResults'=>50))
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$playlists=$youtube_service->playlists->listPlaylists($part, $optParams);
@@ -639,12 +646,12 @@ class YouTube
 	 * 											in the parameter value are id, snippet, and contentDetails.
 	 * @access	public
 	 */
-	public function PlaylistItems($playlist_id, $part='snippet', $playlistsItems_optParams=array('maxResults' => 50))
+	public function PlaylistItems($playlist_id, $part='snippet', $playlistsItems_optParams=array('maxResults'=>50))
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
-		$optParams=array('playlistId' => $playlist_id);
+		$optParams=array('playlistId'=>$playlist_id);
 		$optParams=array_merge($optParams, $playlistsItems_optParams);
 		$playlistsItems=$youtube_service->playlistItems->listPlaylistItems($part, $optParams);
 
@@ -674,7 +681,7 @@ class YouTube
 	 */
 	public function PlaylistItemsInsert($part='snippet', $postBody, $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
 		$playlistsItemsInsert_response=$youtube_service->playlistItems->insert($part, $postBody, $optParams);
@@ -698,24 +705,24 @@ class YouTube
 	 * 											Acceptable values are: date, rating, relevance, viewCount
 	 * @access	public
 	 */
-	public function searchYouTube($channel_id, $type=NULL, $part='snippet', $order='date', $search_optParams=array('maxResults' => 50))
+	public function searchYouTube($channel_id, $type=NULL, $part='snippet', $order='date', $search_optParams=array('maxResults'=>50))
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 
-		# Array request to sent to YouTube
-		$optParams=array('channelId' => $channel_id, 'order' => $order);
+		# Array request to sent to YouTube.
+		$optParams=array('channelId'=>$channel_id, 'order'=>$order);
 
-		# If searching for specific content
+		# If searching for specific content.
 		if($type!==NULL)
 		{
-			$type_array=array('type' => $type);
+			$type_array=array('type'=>$type);
 			$optParams=array_merge($search_optParams, $optParams, $type_array);
 		}
 
 		$optParams=array_merge($search_optParams, $optParams);
 
-		# Send array to YouTube
+		# Send array to YouTube.
 		$search=$youtube_service->search->listSearch($part, $optParams);
 
 		$new_array=$this->rebuildArray($search);
@@ -766,7 +773,7 @@ class YouTube
 	 */
 	public function updateVideo($part, $postBody, $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
 		$update_video=$youtube_service->videos->update($part, $postBody, $optParams);
 		return $update_video;
@@ -784,13 +791,18 @@ class YouTube
 	 * 										parameter value are id, snippet, contentDetails, player,
 	 * 										statistics, status, and topicDetails.
 	 * @access	public
+	 * @return	array
 	 */
 	public function videoDetails($video_id, $part='snippet', $optParams=array())
 	{
-		# Bring $youtube_service into the scope
+		# Bring $youtube_service into the scope.
 		$youtube_service=$this->getYouTubeService();
-		$video=$youtube_service->videos->listVideos($video_id, $part, $optParams);
-		$new_array=$this->rebuildArray($video, NULL, TRUE);
+		$optParams=array_merge($optParams, array('id'=>$video_id));
+		# Get the video details from YouTube.
+		$video=$youtube_service->videos->listVideos($part, $optParams);
+		# Rebuild the array to our own format.
+		$new_array=$this->rebuildArray($video, FALSE, TRUE);
+		# Return the new array.
 		return $new_array;
 	} #==== End -- videoDetails
 
@@ -801,33 +813,34 @@ class YouTube
 	/*** protected methods ***/
 
 	/**
-	* rebuildArray
-	*
-	* Changes the array output.
-	*
-	* @param	array $array				Original array
-	* @param	$is_playlist_items			Is this array PlaylistItems?
-	* @param	$is_video_details			Is this array videoDetails()?
-	* @param	$is_playlist_feed			Is this array PlaylistsListFeed()?
-	* @access	private
-	* @return	array
-	*/
-	private function rebuildArray($array, $is_playlist_items=NULL, $is_video_details=NULL, $is_playlist_feed=NULL)
+	 * rebuildArray
+	 *
+	 * Changes the array output.
+	 *
+	 * @param	array $array				Original array
+	 * @param	$is_playlist_items			Is this array PlaylistItems?
+	 * @param	$is_video_details			Is this array videoDetails()?
+	 * @param	$is_playlist_feed			Is this array PlaylistsListFeed()?
+	 * @access	private
+	 * @return	array
+	 */
+	private function rebuildArray($array, $is_playlist_items=FALSE, $is_video_details=FALSE, $is_playlist_feed=FALSE)
 	{
 		# Create a new array
 		$new_array=array();
 
+		# Loop through the array.
 		foreach($array['items'] as $items)
 		{
 			for($i=0; $i<count($array['items']); $i++)
 			{
-				if($is_playlist_items!==NULL || $is_playlist_feed!==NULL)
+				if($is_playlist_items!==FALSE || $is_playlist_feed!==FALSE)
 				{
 					$new_array[$i]['id']=$array['items'][$i]['id'];
 				}
 				else
 				{
-					$new_array[$i]['videoId']=$array['items'][$i]['id']['videoId'];
+					$new_array[$i]['videoId']=$array['items'][$i]['id'];
 				}
 				$new_array[$i]['publishedAt']=$array['items'][$i]['snippet']['publishedAt'];
 				$new_array[$i]['channelId']=$array['items'][$i]['snippet']['channelId'];
@@ -838,11 +851,11 @@ class YouTube
 				//}
 				$new_array[$i]['thumbnails']=$array['items'][$i]['snippet']['thumbnails'];
 				$new_array[$i]['channelTitle']=$array['items'][$i]['snippet']['channelTitle'];
-				if($is_video_details!==NULL)
+				if($is_video_details!==FALSE)
 				{
 					$new_array[$i]['categoryId']=$array['items'][$i]['snippet']['categoryId'];
 				}
-				if($is_playlist_items!==NULL)
+				if($is_playlist_items!==FALSE)
 				{
 					$new_array[$i]['playlistId']=$array['items'][$i]['snippet']['playlistId'];
 					$new_array[$i]['position']=$array['items'][$i]['snippet']['position'];
