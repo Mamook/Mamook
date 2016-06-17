@@ -175,12 +175,9 @@ if(!empty($passed_data['FileName']))
 			$video_obj->getThisImage($passed_data['ImageID']);
 			# Set the Image object to a variable.
 			$image_obj=$video_obj->getImageObj();
-			# Set the current categories to a variable.
-			$image_categories=$image_obj->getCategories();
 			# Set the path to the original thumbnail on the server.
 			$original_thumbnail=IMAGES_PATH.'original'.DS.$image_obj->getImage();
-			# Call the API's thumbnails.set method to upload the image and associate
-			# it with the appropriate video.
+			# Call the API's thumbnails.set method to upload the image and associate it with the appropriate video.
 			$insert_thumbnail_response=$youtube_obj->insertThumbnail($video_id);
 			# Create a MediaFileUpload object for resumable uploads.
 			$media_thumbnail_upload=new Google_Http_MediaFileUpload($client, $insert_thumbnail_response, 'image/jpeg', NULL, TRUE, $chunk_size_bytes);
@@ -287,5 +284,36 @@ if(!empty($passed_data['FileName']))
 
 		# Create a video update request.
 		$update_response=$youtube_obj->updateVideo('snippet,status', $video);
+
+		# If the image ID has been changed, then update the thumbnail on YouTube.
+		if($passed_data['OldImageID']!=$passed_data['ImageID'])
+		{
+			# Setting the defer flag to true tells the client to return a request which can be called
+			# with ->execute(); instead of making the API call immediately.
+			$client->setDefer(TRUE);
+			# Get the image information from the database, and set them to data members.
+			$video_obj->getThisImage($passed_data['ImageID']);
+			# Set the Image object to a variable.
+			$image_obj=$video_obj->getImageObj();
+			# Set the path to the original thumbnail on the server.
+			$original_thumbnail=IMAGES_PATH.'original'.DS.$image_obj->getImage();
+			# Call the API's thumbnails.set method to upload the image and associate it with the appropriate video.
+			$insert_thumbnail_response=$youtube_obj->insertThumbnail($video_yt_id);
+			# Create a MediaFileUpload object for resumable uploads.
+			$media_thumbnail_upload=new Google_Http_MediaFileUpload($client, $insert_thumbnail_response, 'image/jpeg', NULL, TRUE, $chunk_size_bytes);
+			$media_thumbnail_upload->setFileSize(filesize($original_thumbnail));
+			# Set $thumbnail_upload_status to FALSE by default.
+			$thumbnail_upload_status=FALSE;
+			# Read file and upload chunk by chunk
+			$thumbnail_handle=fopen($original_thumbnail, "rb");
+			while(!$thumbnail_upload_status && !feof($thumbnail_handle))
+			{
+				$thumbnail_chunk=fread($thumbnail_handle, $chunk_size_bytes);
+				$thumbnail_upload_status=$media_thumbnail_upload->nextChunk($thumbnail_chunk);
+			}
+			fclose($thumbnail_handle);
+			# If you want to make other calls after the file upload, set setDefer back to false
+			$client->setDefer(FALSE);
+		}
 	}
 }

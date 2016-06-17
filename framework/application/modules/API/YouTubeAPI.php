@@ -497,7 +497,7 @@ class YouTube
 	/**
 	 * insertThumbnail
 	 *
-	 * Inserts a video into playlists.
+	 * Create a request for the API's thumbnails.set method to upload the image and associate it with the appropriate video.
 	 *
      * @param	string $video_id			The video_id parameter specifies a YouTube video ID for which the
      *											custom video thumbnail is being provided.

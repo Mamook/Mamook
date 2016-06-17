@@ -127,6 +127,12 @@ class VideoFormProcessor extends FormProcessor
 			$facebook=$populator->getFacebook();
 			# Set the video's associated image id to a variable.
 			$image_id=$video_obj->getImageID();
+			# If $image_id is not NULL then this video is being editted.
+			#	We want the old image ID.
+			if($data['ImageID']!=$image_id)
+			{
+				$old_image_id=$data['ImageID'];
+			}
 			# Set the video's associated institution id to a variable.
 			$institution_name=$video_obj->getInstitution();
 			# Get the Institution class.
@@ -219,7 +225,7 @@ class VideoFormProcessor extends FormProcessor
 				{
 					# Get the Image object.
 					$image_obj=$video_obj->getImageObj();
-					# Set the variable that remembers that a video has been uploaded to TRUE (in case we need to remove the video).
+					# Set the variable that remembers that a custom thumbnail has been chosen to TRUE.
 					$uploaded_thumbnail=TRUE;
 				}
 
@@ -229,6 +235,7 @@ class VideoFormProcessor extends FormProcessor
 				$file_handler=new FileHandler();
 				# Create safe image name based on the title.
 				$clean_filename=$file_handler->cleanFilename($title);
+				# Set an empty variable.
 				$new_video_name='';
 				if(empty($id) && $video_type=='file')
 				{
@@ -525,7 +532,7 @@ class VideoFormProcessor extends FormProcessor
 								((!empty($embed_code)) ? ' `embed_code` = '.$db->quote($db->escape($embed_code)).',' : '').
 								((!empty($new_video_name)) ? ' `file_name` = '.$db->quote($db->escape($new_video_name)).',' : '').
 								' `institution` = '.$db->quote($institution_id).','.
-								' `image` = '.(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : 'NULL,').
+								($image_id!==NULL ? ' `image` = '.$db->quote($image_id).',' : '').
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($category_ids)) ? ' `category` = '.$db->quote($category_ids).',' : '').
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
@@ -593,7 +600,6 @@ class VideoFormProcessor extends FormProcessor
 									'Environment'=>DOMAIN_NAME,
 									'DevEnvironment'=>DEVELOPMENT_DOMAIN,
 									'StagingEnvironment'=>STAGING_DOMAIN,
-									//'API'=>$api,
 									'Availability'=>$availability,
 									'Categories'=>$category_ids,
 									'ContID'=>$contributor_id,
@@ -604,6 +610,7 @@ class VideoFormProcessor extends FormProcessor
 									'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['video']['ImageID']),
 									'MediaType'=>'video',
 									'NewVideo'=>$new_video,
+									'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
 									'Playlists'=>$playlist_ids,
 									'Title'=>$title,
 									'YouTube'=>$youtube
