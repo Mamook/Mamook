@@ -552,13 +552,40 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('</fieldset>');
 		$display.=$fg->display();
 		$display.='</div>';
+		if(isset($_GET['video']))
+		{
+			# Display pages using this video. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+			$display.=$video_obj->displayMediaUsage('video');
+		}
+		# Display the videos in the `videos` table.
+		$display.=$video_obj->displayVideoFeed();
 	}
-	if(isset($_GET['video']))
+	else
 	{
-		# Display pages using this video. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
-		$display.=$video_obj->displayMediaUsage('video');
+		# Set the page's sub title.
+		$sub_title='Duplicate Content';
+		# Set the sub title.
+		$main_content->setSubTitle($sub_title);
+		$display.='<h3 class="h-3">The following video(s) seem to closely resemble the video you are submitting. If you feel your video is unique and would like to continue uploading it, simply click on the "Back" button below. Conversely, you may choose to edit an existing video or click <a href="'.APPLICATION_URL.WebUtility::removeIndex(HERE).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without uploading.</h3>';
+
+		# Instantiate a new formGenerator object.
+		$fg=new formGenerator('back_button');
+		# Add a hidden input called '_submit_check' to the form.
+		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
+		# Add a hidden input called '_unique' to the form.
+		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>'1'));
+		# Add the button to the form.
+		$fg->addElement('submit', array('name'=>'video', 'value'=>'Back to the form!'), '', NULL, 'submit-back');
+		# Concatenate the "back button" to the duplicates to be displayed.
+		$display.=$fg->display();
+
+		# Convert the multidimensional array to an object.
+		$duplicates=json_decode(json_encode($duplicates));
+		# Display the results.
+		$display.=$video_obj->markupManageVideos($duplicates);
+
+		# Concatenate the Back button to the duplicates to be displayed.
+		$display.=$fg->display();
 	}
-	# Display the videos in the `videos` table.
-	$display.=$video_obj->displayVideoFeed();
 }
 $display=$display_delete_form.$display;
