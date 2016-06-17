@@ -107,8 +107,8 @@ class SearchFormProcessor extends FormProcessor
 					}
 				}
 			}
-			# Unset the CMS session data.
-			unset($_SESSION['form']);
+			# Unset the search session data.
+			unset($_SESSION['form']['search']);
 		}
 		catch(Exception $e)
 		{
