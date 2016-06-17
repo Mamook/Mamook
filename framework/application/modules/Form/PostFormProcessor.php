@@ -188,11 +188,11 @@ class PostFormProcessor extends FormProcessor
 						# Get the Search class.
 						require_once Utility::locateFile(MODULES.'Search'.DS.'Search.php');
 						# Make an array of fields to search in the Subcontent table in the Database.
-						$fields=array('id', 'title', 'link', 'file');
+						$fields=array('id', 'title');
 						# Instantiate a new Search object.
 						$search=new Search();
 						# Make an array of the terms to search for (enclose multiple word strings in double quotes.)
-						$terms=array('"'.$title.'"', '"'.$link.'"', '"'.$file_id.'"');
+						$terms=$title;
 						# Don't compare with the video ID.
 						$filter=array('filter_fields'=>array('id'));
 						# Check if the id is empty.
@@ -202,7 +202,7 @@ class PostFormProcessor extends FormProcessor
 							$filter=array_merge($filter, array('filter_sql'=>'`id` != '.$db->quote($id)));
 						}
 						# Search for duplicate records.
-						$search->setAllResults($search->performSearch($terms, 'subcontent', $fields, NULL, $filter));
+						$search->performSearch($terms, 'subcontent', $fields, NULL, $filter);
 						# Set any search results to a variable.
 						$duplicates=$search->getAllResults();
 						# Create an empty array for the duplicate display.
