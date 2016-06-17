@@ -384,7 +384,7 @@ class Search
 		$search_terms=$this->getSearchTerms();
 		# Perform search.
 		$this->performSearch($search_terms, $tables, $fields);
-	} #==== End -- processSearch
+	} #==== End -- searchUsers
 
 	/*** End public methods ***/
 

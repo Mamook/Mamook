@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/FileHandler/FileHandler.php */
 
 /**
  * FileHandler
@@ -6,7 +6,7 @@
  * The FileHandler Class is used to manipulate files and images.
  * =>Command line safe<=
  *
- * @dependencies		Requires "data/path_definitions.php".
+ * @dependencies	Requires "data/path_definitions.php".
  */
 class FileHandler
 {
@@ -15,28 +15,20 @@ class FileHandler
 	private $extension='';
 	private $max_length_filename=100;
 	private $file_size;
-
 	# The width of the image.
 	private $width='';
-
 	# The height of the image.
 	private $height='';
-
 	# The IMAGETYPE_XXX constant of the image.
 	private $imagetype='';
-
 	# The text string with the correct height="yyy" width="xxx" string that can be used directly in an IMG tag.
 	private $width_height_string='';
-
 	# The mime type of the image.
 	private $mime='';
-
 	# This will be 3 for RGB pictures and 4 for CMYK pictures.
 	private $channels='';
-
 	# The number of bits for each color.
 	private $bits='';
-
 	# The dimensions (width and height) of the image.
 	private $image_info=array();
 
@@ -60,7 +52,10 @@ class FileHandler
 		{
 			$this->extension=$extension;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setExtension
 
 	/**
@@ -68,7 +63,7 @@ class FileHandler
 	 *
 	 * Sets the data member $max_length_filename. Returns FALSE on failure.
 	 *
-	 * @param	$length (The length of the filename. It must be numeric with no decimals.)
+	 * @param	$length					The length of the filename. It must be numeric with no decimals.
 	 * @access	public
 	 */
 	public function setMaxLengthFilename($length)
@@ -77,7 +72,10 @@ class FileHandler
 		{
 			$this->max_length_filename=(int)$length;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setMaxLengthFilename
 
 	/**
@@ -105,7 +103,7 @@ class FileHandler
 	 *
 	 * Sets the data member $width. Returns FALSE on failure.
 	 *
-	 * @param	$width (Must be numeric.)
+	 * @param	$width					Must be numeric.
 	 * @access	public
 	 */
 	public function setWidth($width)
@@ -116,7 +114,10 @@ class FileHandler
 		{
 			$this->width=$width;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setWidth
 
 	/**
@@ -124,7 +125,7 @@ class FileHandler
 	 *
 	 * Sets the data member $height. Returns FALSE on failure.
 	 *
-	 * @param	$height (Must be numeric.)
+	 * @param	$height					Must be numeric.
 	 * @access	public
 	 */
 	public function setHeight($height)
@@ -135,7 +136,10 @@ class FileHandler
 		{
 			$this->height=$height;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setHeight
 
 	/**
@@ -143,7 +147,7 @@ class FileHandler
 	 *
 	 * Sets the data member $imagetype. Returns FALSE on failure.
 	 *
-	 * @param	$imagetype (Must be a IMAGETYPE_XXX constant.)
+	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant.
 	 * @access	public
 	 */
 	public function setImageType($imagetype)
@@ -153,9 +157,18 @@ class FileHandler
 		# Check if we have PHP 5.3 or higher.
 		if(strnatcmp(floatval(phpversion()),'5.3') < 0)
 		{
-			if(!defined('IMAGETYPE_UNKNOWN')) { define('IMAGETYPE_UNKNOWN',0); }
-			if(!defined('IMAGETYPE_ICO')) { define('IMAGETYPE_ICO',17); }
-			if(!defined('IMAGETYPE_COUNT')) { define('IMAGETYPE_COUNT',18); }
+			if(!defined('IMAGETYPE_UNKNOWN'))
+			{
+				define('IMAGETYPE_UNKNOWN',0);
+			}
+			if(!defined('IMAGETYPE_ICO'))
+			{
+				define('IMAGETYPE_ICO',17);
+			}
+			if(!defined('IMAGETYPE_COUNT'))
+			{
+				define('IMAGETYPE_COUNT',18);
+			}
 		}
 		# The IMAGETYPE constants.
 		$imagtype_constants=array(
@@ -184,7 +197,10 @@ class FileHandler
 		{
 			$this->imagetype=$imagetype;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setImageType
 
 	/**
@@ -199,10 +215,14 @@ class FileHandler
 	{
 		# The string should not be empty.
 		if(isset($string) && !empty($string))
-		{ # Clean it up and set the Data member.
+		{
+			# Clean it up and set the Data member.
 			$this->width_height_string=strip_tags(strtolower(trim($string)));
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setWidthHeightString
 
 	/**
@@ -223,7 +243,10 @@ class FileHandler
 		{
 			$this->mime=$mime;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setMime
 
 	/**
@@ -239,11 +262,14 @@ class FileHandler
 		# Clean it up...
 		$channels=trim($channels);
 		# $channels should equal 3 for RGB pictures and 4 for CMYK pictures.
-		if(($channels == 3) || ($channels == 4))
+		if(($channels==3) || ($channels==4))
 		{
 			$this->channels=$channels;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setChannels
 
 	/**
@@ -263,7 +289,10 @@ class FileHandler
 		{
 			$this->bits=$bits;
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- setBits
 
 	/*** End mutator methods ***/
@@ -467,8 +496,8 @@ class FileHandler
 	 * Checks the passed directory ($dir) for the passed filename ($filename).
 	 * If we find the file name, return a message. If not, return FALSE.
 	 *
-	 * @param	$dir (The directory we're searching.)
-	 * @param	$filename (The filename we're looking for.)
+	 * @param	$dir					The directory we're searching.
+	 * @param	$filename				The filename we're looking for.
 	 * @access	public
 	 */
 	public function checkFileDuplicate($dir, $filename)
@@ -478,12 +507,12 @@ class FileHandler
 		# Compare files in $dir folder to filename
 		while(($file=$dir->read())!==FALSE)
 		{
-		 if($file==$filename)
-		 {
-			 # It is TRUE, we found a duplicate of the filename. Return an error message.
-			 return 'This filename already exists. Please select another file or change the filename.';
-		 } # End if.
-		} # End while.
+			if($file==$filename)
+			{
+				# It is TRUE, we found a duplicate of the filename. Return an error message.
+				return 'This filename already exists. Please select another file or change the filename.';
+			}
+		}
 		# We didn't find a duplicate. Return FALSE (ie. Check file dupicate? False.)
 		return FALSE;
 	} #==== End -- checkFileDuplicate
@@ -494,7 +523,7 @@ class FileHandler
 	 * Checks passed filename($the_name) for length and unacceptable characters.
 	 * If the file is too long or has unacceptable characters, it returns the error. Otherwise, it returns TRUE.
 	 *
-	 * @param	$the_name (The filename we're checking)
+	 * @param	$the_name				The filename we're checking
 	 * @access	public
 	 */
 	public function checkFileName($the_name)
@@ -529,8 +558,8 @@ class FileHandler
 	 * Checks passed file($imagename) against array($allowedtypes).
 	 * If the file's extension is not in the array, it returns the error. If it is, it returns TRUE.
 	 *
-	 * @param	$imagename (The file we're checking)
-	 * @param	$allowedtypes (Array of allowed file extensions without ".")
+	 * @param	$imagename				The file we're checking.
+	 * @param	$allowedtypes			Array of allowed file extensions without "."
 	 * @access	public
 	 */
 	public function checkFileType($filename, $allowedtypes=array())
@@ -539,9 +568,10 @@ class FileHandler
 		$extension=$this->getFileExtension($filename);
 		# Check if the extension is allowed.
 		if(in_array($extension, $allowedtypes))
-		{ # It is. Return TRUE.
+		{
+			# It is. Return TRUE.
 			return TRUE;
-		} # End if.
+		}
 		# It's not. Return an error message.
 		return 'That file type is not allowed.';
 	} #==== End -- checkFileType
@@ -551,12 +581,12 @@ class FileHandler
 	 *
 	 * Creates a new image from a source image. Returns FALSE on failure.
 	 *
-	 * @param	$source (The file we're resizing. Must be a path, not URL.)
+	 * @param	$source					The file we're resizing. Must be a path, not URL.
 	 * @access	public
 	 */
 	public function createImageFromSource($source)
 	{
-		if($this->getImageType() === FALSE)
+		if($this->getImageType()===FALSE)
 		{
 			$this->getImageInfo($source);
 		}
@@ -569,9 +599,10 @@ class FileHandler
 				break;
 			# If it's a gif...
 			case IMAGETYPE_GIF:
-				if($this->isAnimatedGif($source) === TRUE)
+				if($this->isAnimatedGif($source)===TRUE)
 				{
-					/*$gifDecoder=new GIFDecoder(fread(fopen($source, "rb" ), filesize($source)));
+					/*
+					$gifDecoder=new GIFDecoder(fread(fopen($source, "rb" ), filesize($source)));
 					$i=1;
 					foreach ($gifDecoder->GIFGetFrames() as $frame)
 					{
@@ -583,7 +614,8 @@ class FileHandler
 							fwrite(fopen("frames/frame$i.gif", "wb"), $frame);
 						}
 						$i++;
-					}*/
+					}
+					*/
 				}
 				$image=@imagecreatefromgif($source);
 				break;
@@ -614,11 +646,14 @@ class FileHandler
 		if($multi_file===TRUE)
 		{
 			$delete_files=array_map('unlink', glob($source));
+			# NOTE: Just delete them, if they don't exist, why throw an error?
+			/*
 			if(empty($delete_files))
 			{
 				$filenames=implode(',', array_keys($delete_files));
 				throw new Exception('There was an error removing the files "'.$filenames.'" from the system!', E_RECOVERABLE_ERROR);
 			}
+			*/
 			return TRUE;
 		}
 		else
@@ -641,16 +676,18 @@ class FileHandler
 	 * Edits the contents of a passed file.
 	 *
 	 * @param 	$file_to_edit			The full path to the file (must include the file name.)
-	 * @param 	$content					The content to add to the file.
-	 * @param 	$reset						Indicates if the file should get erased.
-	 * @return	Boolean						The number of bytes written on success, FALSE on failure.
+	 * @param 	$content				The content to add to the file.
+	 * @param 	$reset					Indicates if the file should get erased.
+	 * @return	Boolean					The number of bytes written on success, FALSE on failure.
 	 * @access	public
 	 */
 	public function editFile($file_to_edit='', $content=NULL, $reset=FALSE)
 	{
 		# Create a variable that indicates if the file was edited. The default is FALSE.
 		$edited=FALSE;
-		# Create a variable to hold the mode to be used when opening the file. By default set the mode to be used when opening the file to "a" (Open for writing only; place the file pointer at the end of the file. If the file does not exist, attempt to create it.)
+		# Create a variable to hold the mode to be used when opening the file.
+		#	By default set the mode to be used when opening the file to "a"
+		#		(Open for writing only; place the file pointer at the end of the file. If the file does not exist, attempt to create it.)
 		$mode='a';
 		# Check if the file should be reset (erased.)
 		if($reset!==FALSE)
@@ -684,7 +721,7 @@ class FileHandler
 	 * Erases the contents of a file.
 	 *
 	 * @param 	$path_to_file			The complete path to the file to erase (including the file name.)
-	 * @return	Boolean						The number of bytes written on success, FALSE on failure.
+	 * @return	Boolean					The number of bytes written on success, FALSE on failure.
 	 * @access	public
 	 */
 	public function eraseFile($path_to_file='')
@@ -714,7 +751,7 @@ class FileHandler
 	 *
 	 * Finds the size of a file in bytes.
 	 *
-	 * @param	$file_path (The path to the file.)
+	 * @param	$file_path				The path to the file.
 	 * @access	public
 	 */
 	public function findFileSize($file_path)
@@ -728,7 +765,7 @@ class FileHandler
 	 *
 	 * Derives the mime type from a passed file($filename) and returns it. Returns FALSE on failure.
 	 *
-	 * @param	$filename (The file we're getting the mime type of.)
+	 * @param	$filename				The file we're getting the mime type of.
 	 * @access	public
 	 */
 	public function findMimeType($filename)
@@ -737,20 +774,28 @@ class FileHandler
 		{
 			# Check if the mime_content_type function is installed.
 			if(function_exists('mime_content_type'))
-			{ # It is. Use it.
+			{
+				# It is. Use it.
 				return mime_content_type($filename);
 			}
 			# Check if the finfo_open function is installed (PECL must be installed.)
 			elseif(function_exists('finfo_open'))
-			{ # It is. Use it.
+			{
+				# It is. Use it.
 				$finfo=new finfo(FILEINFO_MIME);
 				$mime_type=$finfo->buffer(file_get_contents($filename));
 				return $mime_type;
 			}
 			# We don't have a reliable way of finding the mime type. Return FALSE.
-			else { return FALSE; }
+			else
+			{
+				return FALSE;
+			}
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- findMimeType
 
 	/**
@@ -758,7 +803,7 @@ class FileHandler
 	 *
 	 * Derives the file extension from a passed file ($filename), sets the $extension data member, and returns it.
 	 *
-	 * @param	$imagename (The file we're getting the extension of.)
+	 * @param	$imagename				The file we're getting the extension of.
 	 * @access	public
 	 */
 	public function getFileExtension($filename)
@@ -785,11 +830,27 @@ class FileHandler
 	{
 		$image_types=array();
 		# Get image types supported on this build.
-		if(imagetypes() & IMG_JPG) { $image_types[]='jpg'; $image_types[]='jpeg'; }
-		if(imagetypes() & IMG_GIF) { $image_types[]='gif'; }
-		if(imagetypes() & IMG_PNG) { $image_types[]='png'; }
-		if(count($image_types) == 0) { return FALSE; }
-    else { return $image_types; }
+		if(imagetypes() & IMG_JPG)
+		{
+			$image_types[]='jpg';
+			$image_types[]='jpeg';
+		}
+		if(imagetypes() & IMG_GIF)
+		{
+			$image_types[]='gif';
+		}
+		if(imagetypes() & IMG_PNG)
+		{
+			$image_types[]='png';
+		}
+		if(count($image_types)==0)
+		{
+			return FALSE;
+		}
+    	else
+    	{
+    		return $image_types;
+    	}
 	} #==== End -- getGDSupportedImageTypes
 
 	/**
@@ -804,25 +865,30 @@ class FileHandler
 	 * bits is the number of bits for each color.
 	 * This function also sets the image_info, width, height, imagetype, width_height_string, mime, channels, and bits class data members.
 	 *
-	 * @param	$imagename (The name of the image.)
+	 * @param	$imagename				The name of the image.
 	 * @access	public
 	 */
 	public function getImageInfo($imagename)
 	{
-		# Get information about the image.
-		$this->image_info=getimagesize($imagename);
-		$this->setWidth($this->image_info[0]);
-		$this->setHeight($this->image_info[1]);
-		$this->setImageType($this->image_info[2]);
-		$this->setWidthHeightString($this->image_info[3]);
-		$this->setMime($this->image_info['mime']);
-		# Check if there is a value for 'channels' (must be a 3 for RGB or a 4 for CMYK.)
-		if(!empty($this->image_info['channels']))
+		# If the file exists.
+		if(file_exists($imagename))
 		{
-			$this->setChannels($this->image_info['channels']);
+			# Get information about the image.
+			$this->image_info=getimagesize($imagename);
+			$this->setWidth($this->image_info[0]);
+			$this->setHeight($this->image_info[1]);
+			$this->setImageType($this->image_info[2]);
+			$this->setWidthHeightString($this->image_info[3]);
+			$this->setMime($this->image_info['mime']);
+			# Check if there is a value for 'channels' (must be a 3 for RGB or a 4 for CMYK.)
+			if(!empty($this->image_info['channels']))
+			{
+				$this->setChannels($this->image_info['channels']);
+			}
+			$this->setBits($this->image_info['bits']);
+			return $this->image_info;
 		}
-		$this->setBits($this->image_info['bits']);
-		return $this->image_info;
+		return FALSE;
 	} #==== End -- getImageInfo
 
 	/**
@@ -830,8 +896,8 @@ class FileHandler
 	 *
 	 * Returns the file extension of the passed image type constant. Returns NULL on failure.
 	 *
-	 * @param	$type (The image type constant - ie IMAGE_JPG.)
-	 * @param	$dot (Whether to prepend a dot to the extension or not. Default to TRUE.)
+	 * @param	$type					The image type constant - ie IMAGE_JPG.
+	 * @param	$dot					Whether to prepend a dot to the extension or not. Default to TRUE.
 	 * @access	public
 	 */
 	public function getImageTypeExtenstion($type, $dot=TRUE)
@@ -866,7 +932,7 @@ class FileHandler
 	 *
 	 * Returns the mime type of the passed image type constant. Returns NULL on failure.
 	 *
-	 * @param	$type (The image type constant - ie IMAGE_JPG.)
+	 * @param	$type					The image type constant - ie IMAGE_JPG.
 	 * @access	public
 	 */
 	public function getImageTypeMimeType($type='')
@@ -911,7 +977,7 @@ class FileHandler
 	 *
 	 * Derives the mime type from a passed file's($filename) extension and returns it. Returns FALSE on failure.
 	 *
-	 * @param	$filename (The file we're getting the mime type of.)
+	 * @param	$filename				The file we're getting the mime type of.
 	 * @access	public
 	 */
 	public function getMimeTypeFromExtension($filename)
@@ -980,9 +1046,15 @@ class FileHandler
 			{
 				return $mime_types[$this->getExtension()];
 			}
-			else { return FALSE; }
+			else
+			{
+				return FALSE;
+			}
 		}
-		else { return FALSE; }
+		else
+		{
+			return FALSE;
+		}
 	} #==== End -- getMimeTypeFromExtension
 
 	/**
@@ -992,18 +1064,21 @@ class FileHandler
 	 * Returns TRUE if it is, FALSE if it is not.
 	 * If the passed file is not a gif, it returns NULL and sends an error message.
 	 *
-	 * @param	$gif(The file we're checking. Must be a path, not URL.)
+	 * @param	$gif					The file we're checking. Must be a path, not URL.
 	 * @access	public
 	 */
 	public function isAnimatedGif($gif)
 	{
-		if($this->getImageType() === FALSE)
+		if($this->getImageType()===FALSE)
 		{
 			$this->getImageInfo($gif);
 		}
-		if($this->getImageType() == IMAGETYPE_GIF)
+		if($this->getImageType()==IMAGETYPE_GIF)
 		{
-			if(!($fh=@fopen($gif, 'rb'))) { return FALSE; }
+			if(!($fh=@fopen($gif, 'rb')))
+			{
+				return FALSE;
+			}
 			$count=0;
 			/*
 			An animated gif contains multiple "frames", with each frame having a header made up of:
@@ -1019,8 +1094,14 @@ class FileHandler
 				$count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00\x2C#s', $chunk, $matches);
 			}
 			fclose($fh);
-			if($count > 1) { return TRUE; }
-			else { return FALSE; }
+			if($count > 1)
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
 		else
 		{
@@ -1048,7 +1129,10 @@ class FileHandler
 	public function reduceImage($source, $target, $new_width=0, $new_height=0, $quality=75, $proportional=TRUE, $output='file', $delete_original=FALSE, $use_linux_commands=FALSE)
 	{
 		# Get information about the uploaded image.
-		if($this->getImageInfo($source)===FALSE) return 'Couldn\'t get image info.';
+		if($this->getImageInfo($source)===FALSE)
+		{
+			return 'Couldn\'t get image info.';
+		}
 
 		# Make sure the image type and the extension match.
 		if($this->validateExtensionFromImageType($source)===TRUE)
@@ -1064,7 +1148,7 @@ class FileHandler
 			{
 				$resize=TRUE;
 				# If we want to maintain aspect ratio.
-				if($proportional === TRUE)
+				if($proportional===TRUE)
 				{
 					# Scale image maintaining aspect ratio.
 					$ratio=$this->getWidth()/$this->getHeight();
@@ -1073,8 +1157,9 @@ class FileHandler
 			     	$final_width=$this->getWidth()*$scale;
 					$final_height=$this->getHeight()*$scale;
 				}
+				# Don't maintain aspect ratio.
 				else
-				{ # Don't maintain aspect ratio.
+				{
 					# Set the final width and height.
 					$final_width=($new_width <= 0) ? $this->getWidth() : $new_width;
 					$final_height=($new_height <= 0) ? $this->getHeight() : $new_height;
@@ -1094,17 +1179,17 @@ class FileHandler
 					if($image_out !== FALSE)
 					{
 						# Resize the image.
-						if($this->resizeImageByType($image_in, $image_out, $this->getWidth(), $this->getHeight(), $final_width, $final_height, $this->getImageType()) === TRUE)
+						if($this->resizeImageByType($image_in, $image_out, $this->getWidth(), $this->getHeight(), $final_width, $final_height, $this->getImageType())===TRUE)
 						{
 							# Save the image.
-							if($this->saveImageAs($image_out, $target, $quality, $this->getImageType()) === TRUE)
+							if($this->saveImageAs($image_out, $target, $quality, $this->getImageType())===TRUE)
 							{
 								# Destroy our temp images.
 								imagedestroy($image_out);
 								imagedestroy($image_in);
-								if($delete_original === TRUE)
+								if($delete_original===TRUE)
 								{
-									if(unlink($source) === FALSE) return 'Couldn\'t delete the original image!';
+									if(unlink($source)===FALSE) return 'Couldn\'t delete the original image!';
 								}
 								return TRUE;
 							}
@@ -1119,7 +1204,7 @@ class FileHandler
 			else
 			{
 				# Don't resize it. Copy it to the destination folder.
-				if(copy($source, $target) === TRUE) return TRUE;
+				if(copy($source, $target)===TRUE) return TRUE;
 				else return 'Couldn\'t copy the image to the thumbnail folder!';
 			}
 		} # End if
@@ -1158,38 +1243,50 @@ class FileHandler
 	 * Saves a new image to the $target as the specified image type.
 	 * Returns TRUE on success and FALSE on failure.
 	 *
-	 * @param	$image_in (Source image link resource.)
-	 * @param	$image_out (Destination image link resource.)
-	 * @param	$old_width (Source width.)
-	 * @param	$old_height (Source height.)
-	 * @param	$final_width (Destination width.)
-	 * @param	$final_height (Destination height.)
-	 * @param	$imagetype (Must be a IMAGETYPE_XXX constant or equivalant int value. It may be left out if the $imagetype data member is already set.)
+	 * @param	$image_in				Source image link resource.
+	 * @param	$image_out				Destination image link resource.
+	 * @param	$old_width				Source width.
+	 * @param	$old_height				Source height.
+	 * @param	$final_width			Destination width.
+	 * @param	$final_height			Destination height.
+	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant or equivalant int value.
+	 *										It may be left out if the $imagetype data member is already set.
 	 * @access	public
 	 */
 	public function resizeImageByType($image_in, $image_out, $old_width, $old_height, $final_width, $final_height, $imagetype=NULL)
 	{
 		# Check if the $imagetype datamember is set.
-		if($this->getImageType() === FALSE)
-		{ # It's NOT set. Check if the imagetype was passed to the method.
+		if($this->getImageType()===FALSE)
+		{
+			# It's NOT set. Check if the imagetype was passed to the method.
 			if($imagetype === NULL)
-			{ # It WASN'T. Return an error message.
+			{
+				# It WASN'T. Return an error message.
 				trigger_error('No IMAGETYPE_XXX constant provided.', E_USER_NOTICE);
 				return FALSE;
 			}
-			else { $type=$imagetype; } # The image type was passed to the method. Use that.
+			else
+			{
+				$type=$imagetype;
+			} # The image type was passed to the method. Use that.
 		}
-		else { $type=$this->getImageType(); } # The $imagetype data member was set. Use that.
+		else
+		{
+			$type=$this->getImageType();
+		} # The $imagetype data member was set. Use that.
 		# Resize the image.
 		switch ($type)
 		{
 			# If it's a jpg...
 			case IMAGETYPE_JPEG:
-				if(imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height) === TRUE)
+				if(imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			# If it's a gif...
 			case IMAGETYPE_GIF:
@@ -1197,11 +1294,14 @@ class FileHandler
 				imagesavealpha($image_out, TRUE);
 				$transparent=imagecolorallocatealpha($image_out, 255, 255, 255, 127);
 				imagefilledrectangle($image_out, 0, 0, $final_width, $final_height, $transparent);
-				if(imagecopyresized($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height) === TRUE)
+				if(imagecopyresized($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			# If it's a png...
 			case IMAGETYPE_PNG:
@@ -1209,11 +1309,14 @@ class FileHandler
 				imagesavealpha($image_out, TRUE);
 				$transparent=imagecolorallocatealpha($image_out, 255, 255, 255, 127);
 				imagefilledrectangle($image_out, 0, 0, $final_width, $final_height, $transparent);
-				if(imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height) === TRUE)
+				if(imagecopyresampled($image_out, $image_in, 0, 0, 0, 0, $final_width, $final_height, $old_width, $old_height)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			default:
 				return FALSE;
@@ -1226,51 +1329,68 @@ class FileHandler
 	 * Saves a new image to the $target as the specified image type.
 	 * Returns TRUE on success and FALSE on failure.
 	 *
-	 * @param	$image (An image resource, returned by one of the image creation functions, such as imagecreatetruecolor().)
-	 * @param	$target (The path to save the file to. Must be a path, not a URL. If not set or NULL, the raw image stream will be outputted directly.)
-	 * @param	$quality (For jpg only: Ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file).)
-	 * @param	$imagetype (Must be a IMAGETYPE_XXX constant or equivalant int value. It may be left out if the $imagetype data member is already set.)
+	 * @param	$image					An image resource, returned by one of the image creation functions, such as imagecreatetruecolor().
+	 * @param	$target					The path to save the file to. Must be a path, not a URL. If not set or NULL, the raw image stream will be outputted directly.
+	 * @param	$quality				For jpg only: Ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file).
+	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant or equivalant int value. It may be left out if the $imagetype data member is already set.
 	 * @access	public
 	 */
 	public function saveImageAs($image, $target, $quality=75, $imagetype=NULL)
 	{
 		# Check if the $imagetype datamember is set.
-		if($this->getImageType() === FALSE)
-		{ # It's NOT set. Check if the imagetype was passed to the method.
-			if($imagetype === NULL)
-			{ # It WASN'T. Return an error message.
+		if($this->getImageType()===FALSE)
+		{
+			# It's NOT set. Check if the imagetype was passed to the method.
+			if($imagetype===NULL)
+			{
+				# It WASN'T. Return an error message.
 				trigger_error('No IMAGETYPE_XXX constant provided.', E_USER_NOTICE);
 				return FALSE;
 			}
-			else { $type=$imagetype; } # The image type was passed to the method. Use that.
+			else
+			{
+				$type=$imagetype;
+			} # The image type was passed to the method. Use that.
 		}
-		else { $type=$this->getImageType(); } # The $imagetype data member was set. Use that.
+		else
+		{
+			$type=$this->getImageType();
+		} # The $imagetype data member was set. Use that.
 		# Save the new image to the target folder.
 		switch ($type)
 		{
 			# If it's a jpg...
 			case IMAGETYPE_JPEG:
-				if(imagejpeg($image, $target, $quality) === TRUE)
+				if(imagejpeg($image, $target, $quality)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			# If it's a gif...
 			case IMAGETYPE_GIF:
-				if(imagegif($image, $target) === TRUE)
+				if(imagegif($image, $target)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			# If it's a png...
 			case IMAGETYPE_PNG:
-				if(imagepng($image, $target) === TRUE)
+				if(imagepng($image, $target)===TRUE)
 				{
 					return TRUE;
 				}
-				else { return FALSE; }
+				else
+				{
+					return FALSE;
+				}
 				break;
 			default:
 				# Not an acceptable IMAGETYPE_XXX constant. Return FALSE.
@@ -1281,8 +1401,8 @@ class FileHandler
 	/**
 	 * serveAudio
 	 *
-	 * @param	$file 		(The name of the file to serve.)
-	 * @param	$premium 	(TRUE if the file is a "premium" file, NULL if it is not..)
+	 * @param	$file					The name of the file to serve.
+	 * @param	$premium				TRUE if the file is a "premium" file, NULL if it is not..
 	 * @access	public
 	 */
 	public function serveAudio($file, $premium=NULL)
@@ -1334,7 +1454,7 @@ class FileHandler
 	 * Validates the file extension against the IMAGETYPE_XXX constant.
 	 * returns TRUE if they match, FALSE if they don't.
 	 *
-	 * @param	$source (The image file. Must be a path, not URL.)
+	 * @param	$source					The image file. Must be a path, not URL.
 	 * @access	public
 	 */
 	public function validateExtensionFromImageType($source)
@@ -1342,8 +1462,9 @@ class FileHandler
 		# Get the file extension of the image from the file name.
 		$file_ext=$this->getFileExtension($source);
 		# Check if the image type has been set.
-		if($this->getImageType() === FALSE)
-		{ # Get the image info and set the image data members.
+		if($this->getImageType()===FALSE)
+		{
+			# Get the image info and set the image data members.
 			$this->getImageInfo($source);
 		}
 		# Get the file extension of the image from the IMAGETYPE_XXX constant.
@@ -1351,7 +1472,7 @@ class FileHandler
 
 		# Make sure the image type and the extension match.
 		# jpeg image type matches the jpg extension.
-		if(($image_ext == 'jpeg') && ($file_ext == 'jpg'))
+		if(($image_ext=='jpeg') && ($file_ext=='jpg'))
 		{
 			$ext_match=TRUE;
 		}
@@ -1361,13 +1482,13 @@ class FileHandler
 			$ext_match=TRUE;
 		}
 		else
-		{ # We don't have a match.
+		{
+			# We don't have a match.
 			$ext_match=FALSE;
 		}
 		return $ext_match;
 	} #==== End -- validateExtensionFromImageType
 
 	/*** End public methods ***/
-
 
 } # End FileHandler class.

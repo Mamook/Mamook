@@ -376,12 +376,12 @@ class Media
 		}
 	} #==== End -- setContributor
 
-	/*
+	/**
 	 * setContID
 	 *
 	 * Sets the data member $cont_id.
 	 *
-	 * @param		$id
+	 * @param	$id
 	 * @access	public
 	 */
 	public function setContID($id)
