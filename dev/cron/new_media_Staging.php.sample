@@ -94,7 +94,7 @@ if($get_new_videos>0)
 		$body='';
 
 		# Check the video status.
-		$check_status=$yt->listVideos('status', array('id' => $video_yt_id));
+		$check_status=$yt->listVideos('status', array('id'=>$video_yt_id));
 
 		# Did YouTube return results?
 		if(!empty($check_status['items']))
@@ -212,7 +212,7 @@ if($get_new_audio>0)
 
 /*
 		# Check the audio status.
-		$check_status=$soundcloud_obj->listAudio('status', array('id' => $audio_sc_id));
+		$check_status=$soundcloud_obj->listAudio('status', array('id'=>$audio_sc_id));
 
 		# Did Soundcloud return results?
 		if(!empty($check_status['items']))
