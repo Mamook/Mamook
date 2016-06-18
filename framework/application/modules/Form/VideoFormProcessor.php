@@ -313,7 +313,7 @@ class VideoFormProcessor extends FormProcessor
 							# Get video array from YouTube.
 							$video=$youtube_obj->listVideos('snippet', array('id'=>$current_video));
 							# Assign the video thumbnails to an array.
-							$api_array['youtube_thumbnails']=$video['items'][0]['snippet']['thumbnails']['data'];
+							$api_array['youtube_thumbnails']=$video['modelData']['items'][0]['snippet']['thumbnails'];
 						}
 					}
 					# Set to FALSE, just in case.
@@ -711,7 +711,7 @@ class VideoFormProcessor extends FormProcessor
 								# Set a nice message for the user in a session.
 								$_SESSION['message']='Your video was successfully '.$message_action.'!';
 								# Redirect the user to the page they were on.
-								$this->redirectNoDelete('video');
+								//$this->redirectNoDelete('video');
 							}
 							else
 							{
