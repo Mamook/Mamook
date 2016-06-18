@@ -62,7 +62,7 @@ foreach($all_db_videos as $db_video)
 	# Create a video list request.
 	$video_list_response=$yt->listVideos('snippet', array('id'=>$video_api_decoded->youtube_id));
 	# If empty, then the video does not exist on YouTube.
-	if(empty($video_list_response['items']))
+	if(empty($video_list_response['modelData']['items']))
 	{
 		# Delete the video.
 		$delete_video=$db->query('DELETE FROM `'.DBPREFIX.'videos` WHERE `id` = '.$db_video->id.' LIMIT 1');
