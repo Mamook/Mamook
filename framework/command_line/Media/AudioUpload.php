@@ -1,5 +1,4 @@
-<?php /* framework/application/command_line/Media/AudioUpload.php */
-
+<?php /* framework/command_line/Media/AudioUpload.php */
 
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
@@ -8,9 +7,6 @@ $values=explode('|', $argv[2]);
 # Combine the keys and values arrays.
 $passed_data=array_combine($keys, $values);
 
-$session_path=$passed_data['SessionPath'];
-$session_id=$passed_data['SessionId'];
-
 # Need these for database_definitions.php and email_definitions.php
 # Need this for the FileHandler class and APPLICATION_URL.
 if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
@@ -18,7 +14,7 @@ if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
 if(!defined('DEVELOPMENT_DOMAIN')) define('DEVELOPMENT_DOMAIN', $passed_data['DevEnvironment']);
 # Need this for the FileHandler class and APPLICATION_URL.
 if(!defined('STAGING_DOMAIN')) define('STAGING_DOMAIN', $passed_data['StagingEnvironment']);
-# Need this for YouTube Redirect URL ($yt=$video_obj->getYouTubeObject(FULL_DOMAIN);).
+# Need this for SoundCloud Redirect URL ($soundcloud_obj=$audio_obj->getSoundCloudObject(FULL_DOMAIN);).
 if(!defined('FULL_DOMAIN')) define('FULL_DOMAIN', DOMAIN_NAME.'/');
 # Define the url that points to our application. (ends with a slash)
 define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
@@ -65,19 +61,15 @@ DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
-# Get the session data.
-$session=Utility::returnSessionData($session_id, $session_path);
-$audio_data=$session['audio_upload'];
-
 # If there is an audio file.
-if(!empty($audio_data['FileName']))
+if(!empty($passed_data['FileName']))
 {
-	if(isset($audio_data['InsertID']))
+	if(isset($passed_data['InsertID']))
 	{
 		# Set the path to the audio on the server.
-		$audio_path=BODEGA.'audio'.DS.$audio_data['FileName'];
+		$audio_path=BODEGA.'audio'.DS.$passed_data['FileName'];
 
-		if(empty($audio_data['ImageID']))
+		if(empty($passed_data['ImageID']))
 		{
 			# Get the getID3 Class.
 			require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
@@ -85,7 +77,7 @@ if(!empty($audio_data['FileName']))
 			$getID3=new getID3;
 
 			# Remove the file extension.
-			$thumbnail_no_ext=substr($audio_data['FileName'], 0, strrpos($audio_data['FileName'], '.'));
+			$thumbnail_no_ext=substr($passed_data['FileName'], 0, strrpos($passed_data['FileName'], '.'));
 
 			# Set the path to the original thumbnail on the server.
 			$original_thumbnail=IMAGES_PATH.'original'.DS.$thumbnail_no_ext.'.jpg';
@@ -117,10 +109,10 @@ if(!empty($audio_data['FileName']))
 					'`category`, '.
 					' `contributor`'.
 					') VALUES ('.
-					$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $audio_data['Title']))).', '.
+					$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $passed_data['Title']))).', '.
 					$db->quote($db->escape($thumbnail_no_ext.'.jpg')).', '.
-					$db->quote($db->escape($audio_data['Playlists'])).', '.
-					$db->quote($audio_data['ContID']).
+					$db->quote($db->escape($passed_data['Playlists'])).', '.
+					$db->quote($passed_data['ContID']).
 					')';
 				# Run the SQL query.
 				$db->query($sql);
@@ -129,10 +121,8 @@ if(!empty($audio_data['FileName']))
 				$image_id=$db->get_insert_id();
 
 				# Update the audion file to insert the image ID.
-				$db->query('UPDATE `'.DBPREFIX.'audio` SET `image` = '.$db->escape($image_id).' WHERE `id` = '.$db->quote($audio_data['InsertID']).' LIMIT 1');
+				$db->query('UPDATE `'.DBPREFIX.'audio` SET `image` = '.$db->escape($image_id).' WHERE `id` = '.$db->quote($passed_data['InsertID']).' LIMIT 1');
 			}
 		}
 	}
 }
-# Remove the video upload session.
-unset($audio_data['audio_upload']);

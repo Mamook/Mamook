@@ -90,6 +90,8 @@ class EmailFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
+			# Bring the Content class into scope.
+			global $main_content;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
@@ -310,10 +312,11 @@ class EmailFormProcessor extends FormProcessor
 						# 	Lastly, we convert the array into a string separated by a comma (,).
 						$recipients=implode(',', array_unique(explode(' ', $implode_recipients)));
 
-						# Get the Content Class.
-						require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
-						# Add the email data to a session.
-						$_SESSION['email_users']=array(
+						# Create an array with email data.
+						$email_data=array(
+							'Environment'=>DOMAIN_NAME,
+							'DevEnvironment'=>DEVELOPMENT_DOMAIN,
+							'StagingEnvironment'=>STAGING_DOMAIN,
 							'Attachment'=>$attachment,
 							'ConfirmationTemplate'=>$confirmation_template,
 							'IsHTML'=>$is_html,
@@ -322,33 +325,16 @@ class EmailFormProcessor extends FormProcessor
 							'Recipients'=>$recipients,
 							'SenderEmail'=>$sender_email,
 							'SenderName'=>$sender_name,
-							'SiteName'=>Content::getInstance()->getSiteName(),
+							'SiteName'=>$main_content->getSiteName(),
 							'Subject'=>$subject,
-							'Template'=>$template);
-						/*
-						# Get the Session Class
-						require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
-						# Instantiate the new Session object.
-						$session_obj=Session::getInstance();
-						# End the current session and store session data.
-						$session_obj->saveSessionFile();
-						*/
-						# Create an array with audio data.
-						$email_data=array(
-							'Environment'=>DOMAIN_NAME,
-							'DevEnvironment'=>DEVELOPMENT_DOMAIN,
-							'StagingEnvironment'=>STAGING_DOMAIN,
-							'SessionId'=>session_id(),
-							'SessionPath'=>session_save_path());
+							'Template'=>$template
+						);
 
 						# Get CommandLine class.
 						require_once Utility::locateFile(MODULES.'CommandLine'.DS.'CommandLine.php');
 						# Instantiate the new CommandLine object.
-						$cl=new CommandLine();
-						$cl->runScript(Utility::locateFile(COMMAND_LINE.'Email'.DS.'EmailUsers.php'), $email_data);
-
-						# Remove the email_users session index.
-						//unset($_SESSION['email_users']);
+						$commandline_obj=new CommandLine();
+						$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Email'.DS.'EmailUsers.php'), $email_data);
 
 						# Set a nice message for the user in a session.
 						$_SESSION['message']='Your email has been initiated. You will receive an email at '.$sender_email.' notifying you as to the success of the mailing. Thank you!';

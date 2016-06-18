@@ -7,9 +7,6 @@ $values=explode('|', $argv[2]);
 # Combine the keys and values arrays.
 $passed_data=array_combine($keys, $values);
 
-$session_path=$passed_data['SessionPath'];
-$session_id=$passed_data['SessionId'];
-
 # Need these for database_definitions.php and email_definitions.php
 # Need this for the FileHandler class and APPLICATION_URL.
 if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', $passed_data['Environment']);
@@ -82,10 +79,5 @@ $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 # Get the Email class.
 require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
 # Instantiate a new Email object.
-$mail=new Email();
-
-# Get the session data.
-$session=Utility::returnSessionData($session_id, $session_path);
-$email_data=$session['email_users'];
-
-$mail->sendMultipleEmails($email_data);
+$email_obj=new Email();
+$email_obj->sendMultipleEmails($passed_data);

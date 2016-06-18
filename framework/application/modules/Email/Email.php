@@ -1086,7 +1086,8 @@ class Email
 						{
 							$batch=$recipients_count;
 						}
-						$last_key=end(array_keys($recipients));
+						$recipient_array_keys=array_keys($recipients);
+						$last_key=end($recipient_array_keys);
 						$message.='<br/>';
 						# Get the email template. (Creates and populates the $body variable.)
 						require Utility::locateFile($this->getTemplate());

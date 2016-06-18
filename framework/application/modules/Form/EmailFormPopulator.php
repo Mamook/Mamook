@@ -166,8 +166,6 @@ class EmailFormPopulator extends FormPopulator
 				# Set the Email object to a variable.
 				$email=$this->getEmailObject();
 
-				/* Capture POST data. */
-
 				# Check if the cURL value was passed via POST data.
 				if(isset($_POST['cURL']))
 				{
