@@ -9,21 +9,21 @@
 # 5=Manager
 # 6=
 # 7=Google Apps User
-# 140=Announcement
-# 141=Announcement Administrator
-# 142=Announcement Authorized User
-# 143=Announcement Unauthorized User
-# 144=Announcement Candidate
-# 150=Video
-# 151=Video Administrator
-# 152=Video Authorized User
-# 153=Video Unauthorized User
-# 154=Video Candidate
-# 160=Audio
-# 161=Audio Administrator
-# 162=Audio Authorized User
-# 163=Audio Unauthorized User
-# 164=Audio Candidate
+# 50=Announcement
+# 51=Announcement Administrator
+# 52=Announcement Authorized User
+# 53=Announcement Unauthorized User
+# 54=Announcement Candidate
+# 60=Video
+# 61=Video Administrator
+# 62=Video Authorized User
+# 63=Video Unauthorized User
+# 64=Video Candidate
+# 70=Audio
+# 71=Audio Administrator
+# 72=Audio Authorized User
+# 73=Audio Unauthorized User
+# 74=Audio Candidate
   # Administrators only
 	define('ADMIN_USERS', '1');
 	# Define the email we use to contact the admin.
