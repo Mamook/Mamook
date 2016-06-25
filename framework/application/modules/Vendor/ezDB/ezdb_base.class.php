@@ -85,29 +85,29 @@ class ezDB_Error extends Exception
 class ezDB_Base
 {
 
-	public $trace            = false;  // same as $debug_all
-	public $debug_all        = false;  // same as $trace
-	public $debug_called     = false;
-	public $vardump_called   = false;
-	public $show_errors      = true;
-	public $num_queries      = 0;
-	public $last_query       = null;
-	public $error		      	 = null;
-	public $errno			  		 = null;
-	public $col_info         = null;
-	public $captured_errors  = array();
+	public $trace				= false;  // same as $debug_all
+	public $debug_all			= false;  // same as $trace
+	public $debug_called		= false;
+	public $vardump_called		= false;
+	public $show_errors			= true;
+	public $num_queries			= 0;
+	public $last_query			= null;
+	public $error				= null;
+	public $errno				= null;
+	public $col_info			= null;
+	public $captured_errors		= array();
 	public $insert_id;
 
-	public $table_prefix 		 = '';
+	public $table_prefix		= '';
 
-	protected $dbuser 			 = false;
-	protected $dbpassword    = false;
-	protected $dbname 			 = false;
-	protected $dbhost 			 = false;
+	protected $dbuser			= false;
+	protected $dbpassword		= false;
+	protected $dbname			= false;
+	protected $dbhost			= false;
 	public $result;
 
-	public $default_type 		 = OBJECT;
-	public $get_col_info 		 = false;
+	public $default_type		= OBJECT;
+	public $get_col_info		= false;
 
 	public $debug_echo_is_on = true;
 	public $throw_exceptions = true;
@@ -115,15 +115,15 @@ class ezDB_Base
 	/* These settings are handled by __set() below, but can still
 		be called as $db->cache_type = '...';, just under-go some
 		checking to make sure that they're valid */
-	protected $settings 		 = array(
-		'cache_type'	=> 'file',
+	protected $settings = array(
+		'cache_type' => 'file',
 	);
 
-	public $cache_timeout		 = 3600;		# In seconds
-	public $cache_dir        = false;	# Directory to cache to if using 'file'
-	public $cache_query      = false;
-	public $cache_inserts    = false;
-	public $use_disk_cache   = false;
+	public $cache_timeout		= 3600;		# In seconds
+	public $cache_dir			= false;	# Directory to cache to if using 'file'
+	public $cache_query			= false;
+	public $cache_inserts		= false;
+	public $use_disk_cache		= false;
 
 	protected $last_result;
 
@@ -139,15 +139,14 @@ class ezDB_Base
 	{
 		switch($name)
 		{
-		case 'cache_type':
-			$this->set_cache_type($value);
-			break;
+			case 'cache_type':
+				$this->set_cache_type($value);
+				break;
 
-		default:
-			$this->settings[$name] = $value;
-			break;
+			default:
+				$this->settings[$name] = $value;
+				break;
 		}
-
 	}
 
 	public function __get($name)
@@ -202,7 +201,6 @@ class ezDB_Base
 	 */
 	public function set_caching($bool)
 	{
-
 		if($bool === true)
 		{
 			$this->cache_query = true;
@@ -371,6 +369,17 @@ class ezDB_Base
 	}
 
 	/**
+	 * Returns the number of queries being executed.
+	 *
+	 * @access	public
+	 * @return	int
+	 */
+	public function num_queries()
+	{
+		return $this->num_queries;
+	}
+
+	/**
 	 * Get a single column/variable
 	 *
 	 * @param string $query SQL query
@@ -381,7 +390,6 @@ class ezDB_Base
 	 */
 	public function get_var($query=null,$x=0,$y=0)
 	{
-
 		// Log how the function was called
 		$this->func_call = "\$db->get_var(\"$query\",$x,$y)";
 
@@ -444,7 +452,6 @@ class ezDB_Base
 		{
 			$this->print_error(" \$db->get_row(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N");
 		}
-
 	}
 
 	/**
@@ -790,7 +797,6 @@ class ezDB_Base
 	 */
 	public function get_col($query=null,$x=0)
 	{
-
 		// If there is a query then perform it if not then use cached results..
 		if ( $query )
 		{
@@ -866,9 +872,7 @@ class ezDB_Base
 	 */
 	public function get_cols()
 	{
-
 		return $this->col_info;
-
 	}
 
 	/**
@@ -1012,7 +1016,6 @@ class ezDB_Base
 	 */
 	public function vardump($mixed='', $return=false)
 	{
-
 		// Start outup buffering
 		ob_start();
 
@@ -1046,7 +1049,6 @@ class ezDB_Base
 		$this->vardump_called = true;
 
 		return $html;
-
 	}
 
 	/**
@@ -1073,7 +1075,6 @@ class ezDB_Base
 	 */
 	public function debug($return=false)
 	{
-
 		// Start outup buffering
 		ob_start();
 
@@ -1103,13 +1104,11 @@ class ezDB_Base
 
 		if ( $this->col_info )
 		{
-
 			// =====================================================
 			// Results top rows
 
 			echo "<table cellpadding=5 cellspacing=1 bgcolor=555555>";
 			echo "<tr bgcolor=eeeeee><td nowrap valign=bottom><font color=555599 face=arial size=2><b>(row)</b></font></td>";
-
 
 			for ( $i=0; $i < count($this->col_info); $i++ )
 			{
@@ -1167,7 +1166,6 @@ class ezDB_Base
 		$this->debug_called = true;
 
 		return $html;
-
 	}
 
 	/**********************************************************************
