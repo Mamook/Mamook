@@ -127,6 +127,12 @@ class AudioFormProcessor extends FormProcessor
 			$facebook=$populator->getFacebook();
 			# Set the audio's associated image id to a variable.
 			$image_id=$audio_obj->getImageID();
+			# If $image_id is not NULL then this audio is being editted.
+			#	We want the old image ID.
+			if($data['ImageID']!=$image_id)
+			{
+				$old_image_id=$data['ImageID'];
+			}
 			# Set the audio's associated institution id to a variable.
 			$institution_name=$audio_obj->getInstitution();
 			# Get the Institution class.
@@ -148,7 +154,7 @@ class AudioFormProcessor extends FormProcessor
 			# Set the language id to a variable.
 			$language_id=$language_obj->getID();
 			# Set the audio's playlists to a variable.
-			$playlists=$audio_obj->getCategories();
+			$playlists=$audio_obj->getPlaylists();
 			# Create an empty variable for the playlist id's.
 			$playlist_ids=NULL;
 			# Check if there are categories.
@@ -213,16 +219,11 @@ class AudioFormProcessor extends FormProcessor
 					$audio_obj->getThisImage($image_id);
 				}
 
-				# Create an empty variable for the thumbnail name.
-				$thumbnail_file_name='';
 				if($image_id!==NULL)
 				{
 					# Get the Image object.
 					$image_obj=$audio_obj->getImageObj();
-					# Set the image file name to a variable.
-					$thumbnail_file_name=$image_obj->getImage();
-
-					# Set the variable that remembers that a audio has been uploaded to TRUE (in case we need to remove the audio).
+					# Set the variable that remembers that a custom thumbnail has been chosen to TRUE.
 					$uploaded_thumbnail=TRUE;
 				}
 
@@ -232,12 +233,13 @@ class AudioFormProcessor extends FormProcessor
 				$file_handler=new FileHandler();
 				# Create safe image name based on the title.
 				$clean_filename=$file_handler->cleanFilename($title);
+				# Set an empty variable.
 				$new_audio_name='';
 				if(empty($id) && $audio_type=='file')
 				{
 					# Assign $_FILES to a variable.
 					$u_audio=$_FILES['audio'];
-					if(((is_uploaded_file($u_audio['tmp_name'])!==TRUE) OR ($u_audio['error'] === UPLOAD_ERR_NO_FILE) OR ($u_audio['error'] === 4)) && empty($current_audio))
+					if(((is_uploaded_file($u_audio['tmp_name'])!==TRUE) OR ($u_audio['error']===UPLOAD_ERR_NO_FILE) OR ($u_audio['error']===4)) && empty($current_audio))
 					{
 						# Set an error.
 						$fv->setErrors('You must select an audio file to upload.');
@@ -248,18 +250,18 @@ class AudioFormProcessor extends FormProcessor
 						# Get the Upload class.
 						require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
 						# Instantiate an Upload object.
-						$upload=new Upload($_FILES['audio']);
+						$upload_obj=new Upload($_FILES['audio']);
 
 						# Check if the uploaded audio size is not NULL.
-						if($upload->getSize()!==NULL)
+						if($upload_obj->getSize()!==NULL)
 						{
 							try
 							{
+								# NOTE: How can we move this to a background script?
 								# Upload the audio file.
-								$document_upload=$upload->uploadFile(BODEGA.'audio'.DS, array('mp3', 'flac', 'm4a', 'wav', 'wma'), BODEGA.'audio'.DS, $clean_filename, $max_size, FALSE);
-
-								# Reset the audio file's name (ie: audio_file_name.mp4).
-								$new_audio_name=$upload->getName();
+								$document_upload=$upload_obj->uploadFile(BODEGA.'audio'.DS, array('mp3', 'flac', 'm4a', 'wav', 'wma'), BODEGA.'audio'.DS, $clean_filename, $max_size, FALSE);
+								# Reset the audio file's name (ie: audio_file_name.mp3).
+								$new_audio_name=$upload_obj->getName();
 							}
 							catch(Exception $e)
 							{
@@ -267,12 +269,12 @@ class AudioFormProcessor extends FormProcessor
 							}
 
 							# Check for errors.
-							if($upload->checkErrors()===TRUE)
+							if($upload_obj->checkErrors()===TRUE)
 							{
 								# Remove uploaded audio.
-								$upload->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+								$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
 								# Get any errors.
-								$document_errors=$upload->getErrors();
+								$document_errors=$upload_obj->getErrors();
 								# Loop through the errors.
 								foreach($document_errors as $document_error)
 								{
@@ -310,7 +312,7 @@ class AudioFormProcessor extends FormProcessor
 					if($uploaded_document===TRUE)
 					{
 						# Remove uploaded audio file.
-						$upload->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+						$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
 					}
 				}
 				else
@@ -325,7 +327,7 @@ class AudioFormProcessor extends FormProcessor
 						$search=new Search();
 						# Make an array of the terms to search for (enclose multiple word strings in double quotes.)
 						$terms=$title;
-						# Don't compare with the video ID.
+						# Don't compare with the audio ID.
 						$filter=array('filter_fields'=>array('id'));
 						# Check if the id is empty.
 						if(!empty($id))
@@ -334,7 +336,7 @@ class AudioFormProcessor extends FormProcessor
 							$filter=array_merge($filter, array('filter_sql'=>'`id` != '.$db->quote($id)));
 						}
 						# Search for duplicate records.
-						$search->setAllResults($search->performSearch($terms, 'audio', $fields, NULL, $filter));
+						$search->performSearch($terms, 'audio', $fields, NULL, $filter);
 						# Set any search results to a variable.
 						$duplicates=$search->getAllResults();
 						# Create an empty array for the duplicate display.
@@ -352,12 +354,14 @@ class AudioFormProcessor extends FormProcessor
 								# Set the record fields to the dup_display array.
 								$dup_display[$dup_audio->getID()]=array(
 									'id'=>$dup_audio->getID(),
+									'api'=>$dup_audio->getAPI(),
 									'author'=>$dup_audio->getAuthor(),
 									'availability'=>$dup_audio->getAvailability(),
 									'contributor'=>$dup_audio->getContID(),
 									'date'=>$dup_audio->getDate(),
 									'description'=>$dup_audio->getDescription(),
 									'file_name'=>$dup_audio->getFileName(),
+									'image'=>$dup_audio->getImageID(),
 									'institution'=>$dup_audio->getInstitution(),
 									'language'=>$dup_audio->getLanguage(),
 									'playlists'=>$dup_audio->getPlaylists(),
@@ -457,6 +461,7 @@ class AudioFormProcessor extends FormProcessor
 							' '.$db->quote($language_id).','.
 							' '.$db->quote($contributor_id).
 							')';
+						$new_media=TRUE;
 
 						# Check if this is an UPDATE.
 						if(!empty($id))
@@ -483,56 +488,53 @@ class AudioFormProcessor extends FormProcessor
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
+							$new_media=FALSE;
 						}
 						try
 						{
 							# Run the sql query.
 							$db_post=$db->query($sql);
 							# Check if the query was successful.
-							if(TRUE)//if($db_post>0)
+							if(TRUE)
 							{
 								# Set the ID from the insert SQL query.
 								$insert_id=$db->get_insert_id();
 
-								# If this is a new audio (not editted).
-								if(!empty($insert_id))
-								{
-									# Set the audio's ID.
-									$_SESSION['form']['audio']['InsertID']=$insert_id;
-
-									# If there is an audio file.
-									if($audio_type=='file')
-									{
-										# Set the File name.
-										$_SESSION['form']['audio']['FileName']=$new_audio_name;
-									}
-								}
-
 								# Check if a new audio file was uploaded.
 								if(!empty($new_audio_name))
 								{
-									# Instantiate the new CommandLine object.
-									$cl=new CommandLine();
-									# Set the audio form session to a new session for use in the command line.
-									$_SESSION['audio_upload']=$_SESSION['form']['audio'];
-									//$_SESSION['audio_upload']['Environment']=DOMAIN_NAME;
-									//$_SESSION['audio_upload']['DevEnvironment']=DEVELOPMENT_DOMAIN;
-									//$_SESSION['audio_upload']['StagingEnvironment']=STAGING_DOMAIN;
-									$_SESSION['audio_upload']['ConfirmationTemplate']=$confirmation_template;
-
 									# Create an array with audio data.
 									$audio_data=array(
 										'Environment'=>DOMAIN_NAME,
 										'DevEnvironment'=>DEVELOPMENT_DOMAIN,
 										'StagingEnvironment'=>STAGING_DOMAIN,
-										'SessionId'=>session_id(),
-										'SessionPath'=>session_save_path());
-									# Run the upload script.
-									$cl->runScript(COMMAND_LINE.'Media'.DS.'AudioUpload.php', $audio_data);
+										'Availability'=>$availability,
+										'Categories'=>$category_ids,
+										'ContID'=>$contributor_id,
+										'Description'=>$description,
+										'FileNameNoExt'=>($insert_id>0 ? $clean_filename : ''),
+										'FileName'=>($insert_id>0 ? $new_audio_name : $_SESSION['form']['audio']['FileName']),
+										'ID'=>($insert_id>0 ? $insert_id : $_SESSION['form']['audio']['ID']),
+										'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['audio']['ImageID']),
+										'MediaType'=>'audio',
+										'NewMedia'=>$new_media,
+										'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
+										'Playlists'=>$playlist_ids,
+										'Title'=>$title,
+									);
 
+									# Instantiate the new CommandLine object.
+									$commandline_obj=new CommandLine();
+									# Run the upload script.
+									$commandline_obj->runScript(COMMAND_LINE.'Media'.DS.'AudioUpload.php', $audio_data);
+
+									# Convert audio to other file types (128bit mp3).
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $video_data);
+
+									# NOTE: ConvertMedia.php script here.
 									# Convert to 128bit mp3.
-									$cl2=new CommandLine('ffmpeg');
-									$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
+									//$cl2=new CommandLine('ffmpeg');
+									//$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
 								}
 
 								# Check if the availability allows posting to social networks.
