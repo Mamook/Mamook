@@ -514,7 +514,7 @@ class VideoFormProcessor extends FormProcessor
 							' '.$db->quote($language_id).','.
 							' '.$db->quote($contributor_id).
 							')';
-						$new_video=TRUE;
+						$new_media=TRUE;
 
 						# Check if this is an UPDATE.
 						if(!empty($id))
@@ -541,7 +541,7 @@ class VideoFormProcessor extends FormProcessor
 								' `year` = '.((!empty($year)) ? ' '.$db->quote($year).'' : 'NULL').
 								' WHERE `id` = '.$db->quote($id).
 								' LIMIT 1';
-							$new_video=FALSE;
+							$new_media=FALSE;
 						}
 						try
 						{
@@ -609,7 +609,7 @@ class VideoFormProcessor extends FormProcessor
 									'ID'=>($insert_id>0 ? $insert_id : $_SESSION['form']['video']['ID']),
 									'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['video']['ImageID']),
 									'MediaType'=>'video',
-									'NewVideo'=>$new_video,
+									'NewMedia'=>$new_media,
 									'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
 									'Playlists'=>$playlist_ids,
 									'Title'=>$title,

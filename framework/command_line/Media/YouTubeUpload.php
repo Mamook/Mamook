@@ -132,7 +132,7 @@ if(!empty($passed_data['FileName']))
 	$google_video_status->privacyStatus=$privacy_setting;
 
 	# If this is a new video (not editted).
-	if(isset($passed_data['NewVideo']) && $passed_data['NewVideo']==TRUE)
+	if(isset($passed_data['NewMedia']) && $passed_data['NewMedia']==TRUE)
 	{
 		# Set the path to the video on the server.
 		$video_path=BODEGA.'videos'.DS.$passed_data['FileName'];
@@ -237,7 +237,7 @@ if(!empty($passed_data['FileName']))
 		$db->query('UPDATE `'.DBPREFIX.'videos` SET `api`='.$db->quote($db->escape($insert_json)).' WHERE `id`='.$db->quote($passed_data['ID']).' LIMIT 1');
 	}
 	# Edit video on YouTube.
-	if((!isset($passed_data['NewVideo'])) || (isset($passed_data['NewVideo']) && $passed_data['NewVideo']==FALSE))
+	if((!isset($passed_data['NewMedia'])) || (isset($passed_data['NewMedia']) && $passed_data['NewMedia']==FALSE))
 	{
 		# Get new uploaded videos from the database.
 		$video_row=$db->get_row('SELECT `api` FROM `'.DBPREFIX.'videos` WHERE `id`='.$passed_data['ID']);
