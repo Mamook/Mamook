@@ -12083,9 +12083,9 @@ function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fiel
 	} elseif ($s_sender !== "") {
 		# FW_CUSTOM: Originally, the "From" name would be what's set as the "FromAddr" field in the form (mailer.domain.com).
 		#	I changed it to use the "From Name <from_email@mailer_domain.com>".
-		$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
-		/*$s_sender = $a_headers['From'] = MakeFromLine(SafeHeader(UnMangle($s_sender)),
-			                                  rtrim($SITE_DOMAIN, '/'));*/
+		//$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
+		$s_sender = $a_headers['From'] = MakeFromLine(SafeHeader(UnMangle($s_sender)),
+			                                  rtrim($SITE_DOMAIN, '/'));
 	}
 
 	/*
