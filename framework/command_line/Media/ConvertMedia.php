@@ -45,3 +45,8 @@ if($passed_data['MediaType']=='video')
 	# Convert to h264 mp4.
 	$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.'videos'.DS.$passed_data['FileName'].' -c:v libx264 -pix_fmt yuv420p -vf "scale=trunc(oh*a/2)*2:\'min(ih,480)\'" -preset slow -crf 26 -b:v 500k -maxrate 500k -bufsize 1000k -profile:v high -level 4.2 -threads 1 -codec:a libfdk_aac -b:a 128k -movflags +faststart '.VIDEOS_PATH.'files'.DS.$passed_data['FileNameNoExt'].'.mp4');
 }
+elseif($passed_data['MediaType']=='audio')
+{
+	# Convert to 128bit mp3.
+	$commandline_obj_ffmpeg->runScript("-i ".BODEGA.'audio'.DS.$passed_data['FileName']." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$passed_data['FileNameNoExt'].".mp3");
+}
