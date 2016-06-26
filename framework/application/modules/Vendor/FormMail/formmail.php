@@ -5,7 +5,7 @@
  *
  */
 
-$FM_VERS = "9.10"; // script version
+$FM_VERS = "9.13"; // script version
 
 /* ex:set ts=4 sw=4 et:
  * FormMail PHP script from Tectite.com.  This script requires PHP 5 or later.
@@ -55,7 +55,7 @@ $FM_VERS = "9.10"; // script version
  * Quick Start
  * ~~~~~~~~~~~
  *  1. Edit this file and set TARGET_EMAIL for your requirements (near
- *      line 402 in this file - replace "yourhost\.com" with your mail server's
+ *      line 442 in this file - replace "yourhost\.com" with your mail server's
  *      name).  We also strongly recommend you set DEF_ALERT (the next
  *      configuration below TARGET_EMAIL).
  *  2. Install this file as formmail.php (or other name ending in .php)
@@ -290,14 +290,14 @@ class ExecEnv
 		if (count($a_test_version) < 3) {
 			return (false);
 		}
-		return ($this->_sPHPVersionString[0] > $a_test_version[0] || ($this->_sPHPVersionString[0] ==
-		                                                              $a_test_version[0] &&
-		                                                              ($this->_sPHPVersionString[1] >
-		                                                               $a_test_version[1] ||
-		                                                               $this->_sPHPVersionString[1] ==
-		                                                               $a_test_version[1] &&
-		                                                               $this->_sPHPVersionString[2] >=
-		                                                               $a_test_version[2])));
+		return ($this->_aPHPVersion[0] > $a_test_version[0] || ($this->_aPHPVersion[0] ==
+		                                                        $a_test_version[0] &&
+		                                                        ($this->_aPHPVersion[1] >
+		                                                         $a_test_version[1] ||
+		                                                         $this->_aPHPVersion[1] ==
+		                                                         $a_test_version[1] &&
+		                                                         $this->_aPHPVersion[2] >=
+		                                                         $a_test_version[2])));
 	}
 
 	public function GetScript()
@@ -335,12 +335,7 @@ class ExecEnv
 				Error("no_php_self",GetMessage(MSG_NO_PHP_SELF),false,false);
 			}
 		}
-		if ($b_with_qry) {
-			return ($this->_sScript . (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ?
-					'?' . $_SERVER['QUERY_STRING'] : ''));
-		} else {
-			return ($this->_sScript);
-		}
+		return ($this->_sScript);
 	}
 
 	/**
@@ -3331,10 +3326,43 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 			 * Description:
 			 *  Initializes the wrapper ready to process reCaptcha.
 			 */
-			function    __construct($s_priv)
+			function __construct($s_priv)
 			{
 				$this->_sPrivate = $s_priv;
 				$this->_bDone    = false;
+			}
+
+			/**
+			 * Try 2 ways to contact Google reCaptcha.
+			 * PHP version 5.6.2 has problems with sockets, and other versions have problems
+			 * with fopen!
+			 * @param $s_response the reCaptcha response.
+			 */
+			function _askGoogle($s_response)
+			{
+				$s_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $this->_sPrivate .
+				         "&response=$s_response";
+				if (($fp = fopen($s_url,'rb')) === false) {
+					FMDebug('Open google reCaptcha with fopen FAILED');
+					$recaptcha = new HTTPGet($s_url);
+					$s_resp    = $recaptcha->Read();
+					if ($s_resp === false) {
+						FMDebug('reCaptcha via HTTPGet socket failed');
+						$s_resp = '{"success":false,"error_codes":["reCaptcha failed"]}';
+					} else {
+						$s_resp = implode('',$s_resp);
+						FMDebug('reCaptcha via HTTPGet socket succeed: ' . $s_resp);
+					}
+				} else {
+					FMDebug('Opened google reCaptcha with fopen');
+					$s_resp = '';
+					while (!feof($fp)) {
+						$s_resp .= fread($fp,8192);
+					}
+					fclose($fp);
+					FMDebug("Response: $s_resp");
+				}
+				$this->_Resp = json_decode($s_resp,true);
 			}
 
 			/*
@@ -3347,24 +3375,16 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 			 *  Performs the reCaptcha check and caches the result so it's
 			 *  only done once.
 			 */
-			function    Check($s_response,$a_values,&$s_error)
+			function Check($s_response,$a_values,&$s_error)
 			{
 				if (!$this->_bDone) {
-					$s_url     = 'https://www.google.com/recaptcha/api/siteverify?secret=' . $this->_sPrivate .
-					             "&response=$s_response";
-					$recaptcha = new HTTPGet($s_url);
-					$s_resp    = $recaptcha->Read();
-					if ($s_resp === false) {
-						$s_resp = '{"success":false,"error_codes":["reCaptcha failed"]}';
-					} else {
-						$s_resp = implode('',$s_resp);
-					}
-					$this->_Resp = json_decode($s_resp,true);
+					$this->_askGoogle($s_response);
 				}
 				$this->_bDone = true;
 				$s_error      = "";
 				if (!$this->_Resp['success']) {
-					$s_error = $this->_Resp->error_codes[0];
+					// TODO: this code looks wrong - check!
+					$s_error = $this->_Resp['error_codes'][0];
 					if (!isset($this->_Resp['error_codes']) || count($this->_Resp['error_codes']) == 0 ||
 					    !$this->_Resp['error_codes'][0]
 					) {
@@ -3374,6 +3394,7 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 				return ($this->_Resp['success']);
 			}
 		}
+
 		$reCaptchaProcessor = new reCaptchaWrapperV2(Settings::get('RECAPTCHA_PRIVATE_KEY'));
 	} else {
 
@@ -3396,7 +3417,7 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 			 * Description:
 			 *  Initializes the wrapper ready to process reCaptcha.
 			 */
-			function    __construct($s_priv)
+			function __construct($s_priv)
 			{
 				$this->_sPrivate = $s_priv;
 				$this->_bDone    = false;
@@ -3412,7 +3433,7 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 			 *  Performs the reCaptcha check and caches the result so it's
 			 *  only done once.
 			 */
-			function    Check($s_response,$a_values,&$s_error)
+			function Check($s_response,$a_values,&$s_error)
 			{
 				if (!$this->_bDone) {
 					$this->_Resp = recaptcha_check_answer($this->_sPrivate,
@@ -3428,6 +3449,7 @@ if (Settings::get('RECAPTCHA_PRIVATE_KEY') !== "") {
 				return ($this->_Resp->is_valid);
 			}
 		}
+
 		$reCaptchaProcessor = new reCaptchaWrapper(Settings::get('RECAPTCHA_PRIVATE_KEY'));
 	}
 }
@@ -3448,7 +3470,8 @@ class EmailChecker
 	 *
 	 * @param array $a_patterns an array of email address patterns
 	 */
-	function EmailChecker($a_patterns = array())
+	# FW_CUSTOM: Changed the method from EmailChecker to __construct.
+	function __construct($a_patterns = array())
 	{
 		$this->_aAddresses      = array();
 		$this->_aTargetPatterns = $a_patterns;
@@ -3984,7 +4007,7 @@ class FieldManager
 // $s_after lists the characters after which we should fold the line.
 // $s_fold is the string to insert to fold the line.
 //
-function    LineFolding($s_str,$i_max_line,$s_before,$s_after,$s_fold)
+function LineFolding($s_str,$i_max_line,$s_before,$s_after,$s_fold)
 {
 	$i_str_len  = strlen($s_str);
 	$ii         = $i_start = 0;
@@ -4063,7 +4086,7 @@ function    LineFolding($s_str,$i_max_line,$s_before,$s_after,$s_fold)
 //
 // Set $i_max_line to -ve to skip the line folding.
 //
-function    QPEncode($s_str,$i_max_line)
+function QPEncode($s_str,$i_max_line)
 {
 	//
 	// According to RFC2045 section 6.7 point (4), we need to keep any
@@ -4087,7 +4110,7 @@ function    QPEncode($s_str,$i_max_line)
 //      [] are part of no-fold-literal
 //      () are part of comments, and should work, but don't
 //
-function    HeaderFolding($s_str,$i_max_line = RFCLINELEN,$s_before = "<",$s_after = ">;, ")
+function HeaderFolding($s_str,$i_max_line = RFCLINELEN,$s_before = "<",$s_after = ">;, ")
 {
 	return (LineFolding($s_str,$i_max_line,$s_before,$s_after,"\r\n "));
 }
@@ -4131,10 +4154,10 @@ function CheckVersion()
 		FMDebug("CheckVersion: vers=$s_version");
 		if ((float)$s_version > (float)$FM_VERS) {
 			SendAlert(GetMessage(MSG_VERS_CHK,array(
-				                                      "TECTITE" => "www.tectite.com",
-				                                      "FM_VERS" => "$FM_VERS",
-				                                      "NEWVERS" => $s_version,
-			                                      )) .
+				          "TECTITE" => "www.tectite.com",
+				          "FM_VERS" => "$FM_VERS",
+				          "NEWVERS" => $s_version,
+			          )) .
 			          "\n$s_message\n$s_stop_mesg",true,true);
 		}
 	}
@@ -4228,7 +4251,7 @@ function HTMLEntitiesArray($a_array,$b_equals_processing = false,$s_charset = NU
 // charset is provided.
 // This function overcomes this problem.
 //
-function    FixedHTMLEntities($s_str,$s_charset = NULL)
+function FixedHTMLEntities($s_str,$s_charset = NULL)
 {
 	global $sHTMLCharSet;
 
@@ -4268,7 +4291,7 @@ function URLEncodeArray($a_array)
 // with *trying* to obey the header line length rules that
 // don't seem to work with PHP, the MTA, and email clients.
 //
-function    EncodeHeaderText($s_text,$i_max_line = -1)
+function EncodeHeaderText($s_text,$i_max_line = -1)
 {
 	global $sHTMLCharSet;
 
@@ -5020,6 +5043,21 @@ function ValueSpec($s_spec,$a_form_data,&$a_errors)
 								}
 							}
 							break;
+						case "urlencode":
+							// code supplied by Jeff Shields
+							if (count($a_toks) != 4 ||
+							    $a_toks[1] != "(" ||
+							    $a_toks[3] != ")"
+							) {
+								SendAlert(GetMessage(MSG_DER_FUNC_ERROR,
+								                     array("SPEC" => $s_spec,
+								                           "MSG"  => GetMessage(MSG_DER_FUNC1_FMT,
+								                                                array("FUNC" => $a_toks[0]))
+								                     )));
+							} else {
+								$s_value = urlencode(GetFieldValue($a_toks[2],$a_form_data));
+							}
+							break;
 						default:
 							SendAlert(GetMessage(MSG_UNK_VALUE_SPEC,
 							                     array("SPEC" => $s_spec,"MSG" => "")));
@@ -5189,7 +5227,7 @@ function IsFieldSet($s_fld,$a_main_vars)
  *  file uploads are being allowed, or whether the actual upload
  *  is valid in any way).
  */
-function    IsFileField($s_fld)
+function IsFileField($s_fld)
 {
 	global $aFileVars;
 
@@ -5571,7 +5609,7 @@ $sProcessSpecsFieldName = "";
 //
 // Callback function for ProcessSpecs
 //
-function    ProcessSpecsMatch($a_matches)
+function ProcessSpecsMatch($a_matches)
 {
 	global $aProcessSpecsFormData,$sProcessSpecsFieldName;
 
@@ -5589,7 +5627,7 @@ function    ProcessSpecsMatch($a_matches)
 // This function is used for processing options values, such as in "autorespond"
 // and "mail_options".
 //
-function    ProcessSpecs($s_fld_name,$a_form_data,$s_value)
+function ProcessSpecs($s_fld_name,$a_form_data,$s_value)
 {
 	global $aProcessSpecsFormData,$sProcessSpecsFieldName;
 
@@ -6091,7 +6129,7 @@ function Redirect($url,$title)
 
 class   JSON
 {
-	function    _Format($m_val)
+	function _Format($m_val)
 	{
 		if (is_bool($m_val)) {
 			$s_value = ($m_val) ? "true" : "false";
@@ -6149,7 +6187,7 @@ class   JSON
 		return (true);
 	}
 
-	function    MakeObject($a_data)
+	function MakeObject($a_data)
 	{
 		$a_members = array();
 		foreach ($a_data as $s_key => $m_val) {
@@ -6159,7 +6197,7 @@ class   JSON
 	}
 }
 
-function    CORS_Response()
+function CORS_Response()
 {
 	header('Access-Control-Allow-Origin: *');
 	header('Access-Control-Max-Age: 36000');
@@ -6167,7 +6205,7 @@ function    CORS_Response()
 	header('Access-Control-Allow-Headers: X-Requested-With');
 }
 
-function    JSON_Result($s_result,$a_data = array())
+function JSON_Result($s_result,$a_data = array())
 {
 	global $aGetVars;
 
@@ -6290,7 +6328,7 @@ function OrderHeaders($a_headers)
 //
 // That's a lot of code, though!
 //
-function    SafeHeader($s_str)
+function SafeHeader($s_str)
 {
 	return (str_replace('"','\\"',$s_str));
 }
@@ -6298,7 +6336,7 @@ function    SafeHeader($s_str)
 //
 // makes a string safe to put as words in a header
 //
-function    SafeHeaderWords($s_str)
+function SafeHeaderWords($s_str)
 {
 	//
 	// We zap various characters and replace them with a question mark.
@@ -6313,7 +6351,7 @@ function    SafeHeaderWords($s_str)
 //
 // makes a string safe to put as a quoted string in a header
 //
-function    SafeHeaderQString($s_str)
+function SafeHeaderQString($s_str)
 {
 	return (str_replace('"','\\"',
 	                    str_replace("\\","\\\\",
@@ -6324,7 +6362,7 @@ function    SafeHeaderQString($s_str)
 //
 // makes a string safe to put in a header comment
 //
-function    SafeHeaderComment($s_str)
+function SafeHeaderComment($s_str)
 {
 	return (str_replace("(","\\(",
 	                    str_replace(")","\\)",
@@ -6336,7 +6374,7 @@ function    SafeHeaderComment($s_str)
 //
 // makes a string safe to put in a header as an email address
 //
-function    SafeHeaderEmail($s_str)
+function SafeHeaderEmail($s_str)
 {
 	//
 	// An email address is made up of local and domain parts
@@ -6484,6 +6522,7 @@ function DoMail($s_to,$s_subject,$s_mesg,$a_headers,$s_options)
 		// we'll not use it.
 		// No header line folding will be performed in version 8.22 onwards.
 		//
+		# DEBUG
 		/*
 		echo $s_to,'<br>',
 			$s_subject,'<br>',
@@ -6920,7 +6959,7 @@ function GetURL($s_url,&$s_error,$b_ret_lines = false,$n_depth = 0)
 //
 // Write to the debug log if it exists and is writable.
 //
-function    FMDebug($s_mesg)
+function FMDebug($s_mesg)
 {
 	static $fDebug = NULL;
 
@@ -6964,14 +7003,14 @@ class   NetIO
 	var $_iSysErr;
 	var $_sSysMesg;
 
-	var $nErrInit = -1; // not initialized
-	var $nErrRead = -2; // read error
-	var $nErrWrite = -3; // write error
+	var $nErrInit       = -1; // not initialized
+	var $nErrRead       = -2; // read error
+	var $nErrWrite      = -3; // write error
 	var $nErrWriteShort = -4; // failed to write all bytes
 
 	var $nErrSocket = -100; // error in socket open
 
-	function    NetIO($s_host = NULL,$i_port = NULL,$s_prefix = "")
+	function NetIO($s_host = NULL,$i_port = NULL,$s_prefix = "")
 	{
 		if (isset($s_host)) {
 			$this->_sHost = $s_host;
@@ -6985,7 +7024,7 @@ class   NetIO
 		$this->_sSysMesg     = "";
 	}
 
-	function    _SetError($i_error,$i_sys_err = 0,$s_sys_mesg = "")
+	function _SetError($i_error,$i_sys_err = 0,$s_sys_mesg = "")
 	{
 		$this->_iError   = $i_error;
 		$this->_iSysErr  = $i_sys_err;
@@ -6993,62 +7032,62 @@ class   NetIO
 		return (FALSE);
 	}
 
-	function    IsError()
+	function IsError()
 	{
 		return ($this->_iError != 0 ? TRUE : FALSE);
 	}
 
-	function    ClearError()
+	function ClearError()
 	{
 		$this->_SetError(0);
 	}
 
-	function    GetError()
+	function GetError()
 	{
 		return (array($this->_iError,$this->_iSysErr,$this->_sSysMesg));
 	}
 
-	function    SetHost($s_host)
+	function SetHost($s_host)
 	{
 		$this->_sHost = $s_host;
 	}
 
-	function    SetPort($i_port)
+	function SetPort($i_port)
 	{
 		$this->_iPort = $i_port;
 	}
 
-	function    SetConnectionTimeout($i_secs)
+	function SetConnectionTimeout($i_secs)
 	{
 		$this->_iConnTimeout = $i_secs;
 	}
 
-	function    SetPrefix($s_prefix)
+	function SetPrefix($s_prefix)
 	{
 		$this->_sPrefix = $s_prefix;
 	}
 
-	function    GetHost()
+	function GetHost()
 	{
 		return (isset($this->_sHost) ? $this->_sHost : "");
 	}
 
-	function    GetPort()
+	function GetPort()
 	{
 		return (isset($this->_iPort) ? $this->_iPort : 0);
 	}
 
-	function    GetPrefix()
+	function GetPrefix()
 	{
 		return ($this->_sPrefix);
 	}
 
-	function    GetConnectionTimeout()
+	function GetConnectionTimeout()
 	{
 		return ($this->_iConnTimeout);
 	}
 
-	function    _CacheIt()
+	function _CacheIt()
 	{
 		FMDebug("Caching " . implode(",",$this->_aIPs));
 		if (IsSetSession("FormNetIODNSCache")) {
@@ -7066,7 +7105,7 @@ class   NetIO
      * So, in the case of multi-page forms using MULTIFORMURL, we get a big speed up
      * by caching the IP address of the server.
      */
-	function    _CheckCache()
+	function _CheckCache()
 	{
 		if (!IsSetSession("FormNetIODNSCache")) {
 			return (FALSE);
@@ -7079,7 +7118,7 @@ class   NetIO
 		return (TRUE);
 	}
 
-	function    Resolve()
+	function Resolve()
 	{
 		$this->ClearError();
 		if (!isset($this->_sHost)) {
@@ -7103,7 +7142,7 @@ class   NetIO
 		return (TRUE);
 	}
 
-	function    _SSLOpen($s_ip,&$errno,&$errstr,$i_timeout)
+	function _SSLOpen($s_ip,&$errno,&$errstr,$i_timeout)
 	{
 		FMDebug("Using _SSLOpen (stream_socket_client), SNI, host=" . $this->GetHost());
 		$context = stream_context_create();
@@ -7120,7 +7159,7 @@ class   NetIO
 		                             $errno,$errstr,$i_timeout,STREAM_CLIENT_CONNECT,$context));
 	}
 
-	function    Open()
+	function Open()
 	{
 		$this->ClearError();
 		if (!isset($this->_sHost) || !isset($this->_iPort)) {
@@ -7169,7 +7208,7 @@ class   NetIO
 		return (TRUE);
 	}
 
-	function    Read()
+	function Read()
 	{
 		$this->ClearError();
 		$a_lines = array();
@@ -7180,7 +7219,7 @@ class   NetIO
 		return ($a_lines);
 	}
 
-	function    Write($s_str,$b_flush = TRUE)
+	function Write($s_str,$b_flush = TRUE)
 	{
 		$this->ClearError();
 		if (!isset($this->_fSock)) {
@@ -7200,7 +7239,7 @@ class   NetIO
 		return (TRUE);
 	}
 
-	function    Close()
+	function Close()
 	{
 		if (isset($this->_fSock)) {
 			fclose($this->_fSock);
@@ -7231,10 +7270,10 @@ class   HTTPGet extends NetIO
 
 	var $_sAgent;
 
-	var $nErrParse = -1000; // failed to parse URL
+	var $nErrParse  = -1000; // failed to parse URL
 	var $nErrScheme = -1001; // unsupported URL scheme
 
-	function    HTTPGet($s_url = "")
+	function HTTPGet($s_url = "")
 	{
 		NetIO::NetIO();
 		$this->_aURLSplit = array();
@@ -7243,7 +7282,7 @@ class   HTTPGet extends NetIO
 		}
 	}
 
-	function    _SplitURL()
+	function _SplitURL()
 	{
 		FMDebug("URL: " . $this->_sURL);
 		if (($this->_aURLSplit = parse_url($this->_sURL)) === FALSE) {
@@ -7253,19 +7292,19 @@ class   HTTPGet extends NetIO
 		return (TRUE);
 	}
 
-	function    GetURLSplit()
+	function GetURLSplit()
 	{
 		return ($this->_aURLSplit);
 	}
 
-	function    SetURL($s_url)
+	function SetURL($s_url)
 	{
 		$this->_aURLSplit = array();
 		$this->_sURL      = $s_url;
 		return ($this->_SplitURL());
 	}
 
-	function    _Init()
+	function _Init()
 	{
 		if (!isset($this->_aURLSplit["host"])) {
 			return ($this->_SetError($this->nErrInit));
@@ -7299,13 +7338,13 @@ class   HTTPGet extends NetIO
 		return (TRUE);
 	}
 
-	function    _SendRequest()
+	function _SendRequest()
 	{
 		$this->_PrepareRequest();
 		return (parent::Write($this->_sRequest));
 	}
 
-	function    _PrepareRequest($s_method = 'GET')
+	function _PrepareRequest($s_method = 'GET')
 	{
 		FMDebug("Path: " . $this->_aURLSplit["path"]);
 		if (!isset($this->_aURLSplit["path"]) || $this->_aURLSplit["path"] === "") {
@@ -7374,12 +7413,12 @@ class   HTTPGet extends NetIO
 		$this->_sRequest = $s_req;
 	}
 
-	function    _AdditionalHeaders()
+	function _AdditionalHeaders()
 	{
 		return ('');
 	}
 
-	function    _GetResponse()
+	function _GetResponse()
 	{
 		FMDebug("Reading");
 		if (($a_lines = parent::Read()) === FALSE) {
@@ -7402,12 +7441,12 @@ class   HTTPGet extends NetIO
 		return (TRUE);
 	}
 
-	function    GetResponseHeaders()
+	function GetResponseHeaders()
 	{
 		return ($this->_aRespHeaders);
 	}
 
-	function    FindHeader($s_name)
+	function FindHeader($s_name)
 	{
 		$s_name = strtolower($s_name);
 		$i_len  = strlen($s_name);
@@ -7423,7 +7462,7 @@ class   HTTPGet extends NetIO
 		return (false);
 	}
 
-	function    GetHTTPStatus()
+	function GetHTTPStatus()
 	{
 		$i_http_code = 0;
 		$s_status    = "";
@@ -7442,7 +7481,7 @@ class   HTTPGet extends NetIO
 		return (array($i_http_code,$s_status));
 	}
 
-	function    Resolve()
+	function Resolve()
 	{
 		if (!$this->_Init()) {
 			return (FALSE);
@@ -7450,7 +7489,7 @@ class   HTTPGet extends NetIO
 		return (parent::Resolve());
 	}
 
-	function    Read()
+	function Read()
 	{
 		if (!$this->_Init()) {
 			return (FALSE);
@@ -7472,19 +7511,19 @@ class   HTTPGet extends NetIO
 		return ($this->_aResponse);
 	}
 
-	function    SetAuthenticationLine($s_auth)
+	function SetAuthenticationLine($s_auth)
 	{
 		$this->_sAuthLine = $s_auth;
 	}
 
-	function    SetAuthentication($s_type,$s_user,$s_pass)
+	function SetAuthentication($s_type,$s_user,$s_pass)
 	{
 		$this->_sAuthType = $s_type;
 		$this->_sAuthUser = $s_user;
 		$this->_sAuthPass = $s_pass;
 	}
 
-	function    SetAgent($s_agent)
+	function SetAgent($s_agent)
 	{
 		$this->_sAgent = $s_agent;
 	}
@@ -7500,25 +7539,25 @@ class   HTTPPost extends HTTPGet
 {
 	var $_sPostData; /* data to POST */
 
-	function    HTTPPost($s_url = "")
+	function HTTPPost($s_url = "")
 	{
 		$this->_sPostData = '';
 		HTTPGet::HTTPGet($s_url);
 	}
 
-	function    _SendRequest()
+	function _SendRequest()
 	{
 		$this->_PrepareRequest();
 		return (NetIO::Write($this->_sRequest));
 	}
 
-	function    _PrepareRequest($s_method = 'POST')
+	function _PrepareRequest($s_method = 'POST')
 	{
 		parent::_PrepareRequest($s_method);
 		$this->_AddData();
 	}
 
-	function    _AdditionalHeaders()
+	function _AdditionalHeaders()
 	{
 		//
 		// we don't handle file uploads yet
@@ -7530,13 +7569,13 @@ class   HTTPPost extends HTTPGet
 		return (implode("\r\n",$a_hdrs));
 	}
 
-	function    _AddData()
+	function _AddData()
 	{
 		$this->_sRequest .= "\r\n"; // blank line after headers
 		$this->_sRequest .= $this->_sPostData;
 	}
 
-	function    _EncodeData($a_fields)
+	function _EncodeData($a_fields)
 	{
 		$s_data = '';
 		foreach ($a_fields as $s_name => $s_value) {
@@ -7548,7 +7587,7 @@ class   HTTPPost extends HTTPGet
 		return ($s_data);
 	}
 
-	function    Post($a_fields)
+	function Post($a_fields)
 	{
 		//
 		// we don't handle file uploads yet
@@ -8195,7 +8234,7 @@ function SetSpecialMultiField($s_name,$i_index,$m_value)
 //
 // Check if a field is part of Reverse Captcha processing.
 //
-function    IsReverseCaptchaField($s_name)
+function IsReverseCaptchaField($s_name)
 {
 	$a_rev_captcha = Settings::get('ATTACK_DETECTION_REVERSE_CAPTCHA');
 	return (isset($a_rev_captcha[$s_name]));
@@ -8756,260 +8795,401 @@ function CheckRequired($s_reqd,$a_vars,&$s_missing,&$a_missing_list)
 	return (!$b_bad);
 }
 
-//
-// Run a condition test
-//
-function RunTest($s_test,$a_vars)
+/**
+ * Class Conditions
+ * Implements "conditions" processing.
+ */
+class Conditions
 {
-	global $aAlertInfo;
+	private $_mConditions;      // the conditions to process
+	private $_sField;           // the "conditions" field being processed
+	private $_sMissing;
+	private $_aMissingList;
 
-	$s_op_chars = "&|^!=~#<>"; // these are the characters for the operators
-	$i_len      = strlen($s_test);
-	$b_ok       = true;
-	$s_mesg     = "";
-	if ($i_len <= 0)
-		//
-		// empty test - true
-		//
+	/**
+	 * @param array|string $m_conditions   the conditions to process
+	 * @param string       $s_missing      returns the message from the condition's failure
+	 * @param array        $a_missing_list appended with the field name(s) that failed
+	 */
+	function __construct($m_conditions,&$s_missing,&$a_missing_list)
 	{
-		;
-	} elseif ($s_test == "!")
-		//
-		// test asserts false
-		//
-	{
-		$b_ok = false;
-	} elseif (($i_span = strcspn($s_test,$s_op_chars)) >= $i_len)
-		//
-		// no operator - just check field presence
-		//
-	{
-		$b_ok = !TestFieldEmpty($s_test,$a_vars,$s_mesg);
-	} else {
-		//
-		// get first field name
-		//
-		$s_fld1 = trim(substr($s_test,0,$i_span));
-		//
-		// get the operator
-		//
-		$s_rem  = substr($s_test,$i_span);
-		$i_span = strspn($s_rem,$s_op_chars);
-		$s_oper = substr($s_rem,0,$i_span);
-		switch ($s_oper) {
-			case '&':
-			case '|':
-			case '^':
-			case '=':
-			case '!=':
-				//
-				// get the second field name
-				//
-				$s_fld2 = trim(substr($s_rem,$i_span));
-				$b_ok   = FieldTest($s_oper,$s_fld1,$s_fld2,$a_vars,$s_error_mesg);
-				break;
-			case '~':
-			case '!~':
-				//
-				// get the regular expression
-				//
-				$s_pat = trim(substr($s_rem,$i_span));
-				if (!TestFieldEmpty($s_fld1,$a_vars,$s_mesg)) {
-					$s_value = GetFieldValue($s_fld1,$a_vars);
-				} else {
-					$s_value = "";
-				}
-				//echo "<p>Pattern: '".htmlspecialchars($s_pat)."': count=".preg_match($s_pat,$s_value)."<br /></p>";
-				//
-				// match the regular expression
-				//
-				if (preg_match($s_pat,$s_value) > 0) {
-					$b_ok = ($s_oper == '~');
-				} else {
-					$b_ok = ($s_oper == '!~');
-				}
-				if (!$b_ok) {
-					$aAlertInfo[] = GetMessage(MSG_PAT_FAILED,array("OPER"  => $s_oper,
-					                                                "PAT"   => $s_pat,
-					                                                "VALUE" => $s_value
-					));
-				}
-				break;
-			case '#=':
-			case '#!=':
-			case '#<':
-			case '#>':
-			case '#<=':
-			case '#>=':
-				//
-				// numeric tests
-				//
-				$s_num = trim(substr($s_rem,$i_span));
-				//
-				// if this is a file field, get the size of the file for
-				// numeric tests
-				//
-				if (($s_value = GetFileSize($s_fld1)) === false) {
-					$s_value = $a_vars[$s_fld1];
-				}
-				if (strpos($s_num,'.') === false) {
-					//
-					// treat as integer
-					//
-					$m_num = (int)$s_num;
-					$m_fld = (int)$s_value;
-				} else {
-					//
-					// treat as floating point
-					//
-					$m_num = (float)$s_num;
-					$m_fld = (float)$s_value;
-				}
-				switch ($s_oper) {
-					case '#=':
-						$b_ok = ($m_fld == $m_num);
-						break;
-					case '#!=':
-						$b_ok = ($m_fld != $m_num);
-						break;
-					case '#<':
-						$b_ok = ($m_fld < $m_num);
-						break;
-					case '#>':
-						$b_ok = ($m_fld > $m_num);
-						break;
-					case '#<=':
-						$b_ok = ($m_fld <= $m_num);
-						break;
-					case '#>=':
-						$b_ok = ($m_fld >= $m_num);
-						break;
-				}
-				break;
-			default:
-				SendAlert(GetMessage(MSG_COND_OPER,array("OPER" => $s_oper)));
-				break;
-		}
+		$this->_mConditions  = $m_conditions;
+		$this->_sMissing     = &$s_missing;
+		$this->_aMissingList = &$a_missing_list;
 	}
-	return ($b_ok);
-}
 
-//
-// Check the input for condition tests.
-//
-function CheckConditions($m_conditions,$a_vars,&$s_missing,&$a_missing_list,$m_id = false)
-{
-	if (is_array($m_conditions)) {
-		//
-		// Sort the conditions by their numeric value.  This ensures
-		// conditions are executed in the right order.
-		//
-		ksort($m_conditions,SORT_NUMERIC);
-		foreach ($m_conditions as $m_key => $s_cond) {
-			if (!CheckConditions($s_cond,$a_vars,$s_missing,$a_missing_list,$m_key)) {
-				return (false);
+	/**
+	 * Run the given field logic.
+	 *
+	 * @param string $s_test a string containing the field logic to run
+	 * @param array  $a_vars the fields
+	 *
+	 * @return string|bool true if the logic evaluates to true, otherwise name of a field if the logic evaluates to false
+	 */
+	private function _runLogic($s_test,$a_vars)
+	{
+		global $aAlertInfo;
+
+		$s_op_chars = "&|^!=~#<>"; // these are the characters for the operators
+		$i_len      = strlen($s_test);
+		$b_ok       = true;
+		$s_mesg     = "";
+		$s_fld_name = "";
+		if ($i_len <= 0)
+			//
+			// empty test - true
+			//
+		{
+			;
+		} elseif ($s_test == "!")
+			//
+			// test asserts false
+			//
+		{
+			$b_ok = false;
+		} elseif (($i_span = strcspn($s_test,$s_op_chars)) >= $i_len)
+			//
+			// no operator - just check field presence
+			//
+		{
+			$s_fld_name = $s_test;
+			$b_ok       = !TestFieldEmpty($s_test,$a_vars,$s_mesg);
+		} else {
+			//
+			// get first field name
+			//
+			$s_fld_name = $s_fld1 = trim(substr($s_test,0,$i_span));
+			//
+			// get the operator
+			//
+			$s_rem  = substr($s_test,$i_span);
+			$i_span = strspn($s_rem,$s_op_chars);
+			$s_oper = substr($s_rem,0,$i_span);
+			switch ($s_oper) {
+				case '&':
+				case '|':
+				case '^':
+				case '=':
+				case '!=':
+					//
+					// get the second field name
+					//
+					$s_fld2 = trim(substr($s_rem,$i_span));
+					$b_ok   = FieldTest($s_oper,$s_fld1,$s_fld2,$a_vars,$s_error_mesg);
+					break;
+				case '~':
+				case '!~':
+					//
+					// get the regular expression
+					//
+					$s_pat = trim(substr($s_rem,$i_span));
+					if (!TestFieldEmpty($s_fld1,$a_vars,$s_mesg)) {
+						$s_value = GetFieldValue($s_fld1,$a_vars);
+					} else {
+						$s_value = "";
+					}
+					//echo "<p>Pattern: '".htmlspecialchars($s_pat)."': count=".preg_match($s_pat,$s_value)."<br /></p>";
+					//
+					// match the regular expression
+					//
+					if (preg_match($s_pat,$s_value) > 0) {
+						$b_ok = ($s_oper == '~');
+					} else {
+						$b_ok = ($s_oper == '!~');
+					}
+					if (!$b_ok) {
+						$aAlertInfo[] = GetMessage(MSG_PAT_FAILED,array("OPER"  => $s_oper,
+						                                                "PAT"   => $s_pat,
+						                                                "VALUE" => $s_value
+						));
+					}
+					break;
+				case '#=':
+				case '#!=':
+				case '#<':
+				case '#>':
+				case '#<=':
+				case '#>=':
+					//
+					// numeric tests
+					//
+					$s_num = trim(substr($s_rem,$i_span));
+					//
+					// if this is a file field, get the size of the file for
+					// numeric tests
+					//
+					if (($s_value = GetFileSize($s_fld1)) === false) {
+						$s_value = $a_vars[$s_fld1];
+					}
+					if (strpos($s_num,'.') === false) {
+						//
+						// treat as integer
+						//
+						$m_num = (int)$s_num;
+						$m_fld = (int)$s_value;
+					} else {
+						//
+						// treat as floating point
+						//
+						$m_num = (float)$s_num;
+						$m_fld = (float)$s_value;
+					}
+					switch ($s_oper) {
+						case '#=':
+							$b_ok = ($m_fld == $m_num);
+							break;
+						case '#!=':
+							$b_ok = ($m_fld != $m_num);
+							break;
+						case '#<':
+							$b_ok = ($m_fld < $m_num);
+							break;
+						case '#>':
+							$b_ok = ($m_fld > $m_num);
+							break;
+						case '#<=':
+							$b_ok = ($m_fld <= $m_num);
+							break;
+						case '#>=':
+							$b_ok = ($m_fld >= $m_num);
+							break;
+					}
+					break;
+				default:
+					SendAlert(GetMessage(MSG_COND_OPER,array("OPER" => $s_oper)));
+					break;
 			}
 		}
-		return (true);
+		return $b_ok ? true : $s_fld_name;
 	}
-	$s_fld_name = "conditions" . ($m_id === false ? "" : ($m_id + 1));
-	if (!is_string($m_conditions)) {
-		SendAlert(GetMessage(MSG_INV_COND,array("FLD" => $s_fld_name)));
-		return (true); // pass invalid conditions
-	}
-	if ($m_conditions == "") {
-		return (true);
-	} // pass empty conditions
-	$s_cond = $m_conditions;
+
 	//
-	// extract the separator characters
+	// Check the input for condition tests.
 	//
-	if (strlen($s_cond) < 2) {
-		SendAlert(GetMessage(MSG_COND_CHARS,
-		                     array("FLD" => $s_fld_name,"COND" => $s_cond)));
-		return (true); // pass invalid conditions
+	public function Check($a_vars)
+	{
+		//
+		// handle a list of conditions in an array
+		//
+		if (is_array($this->_mConditions)) {
+			//
+			// Sort the conditions by their numeric value.  This ensures
+			// conditions are executed in the right order.
+			//
+			ksort($this->_mConditions,SORT_NUMERIC);
+			foreach ($this->_mConditions as $m_key => $s_cond) {
+				if (!$this->_checkString($s_cond,$a_vars,$m_key)) {
+					return (false);
+				}
+			}
+			return (true);
+		} else {
+			//
+			// handle one set of conditions in a string
+			//
+			return $this->_checkString($this->_mConditions,$a_vars);
+		}
 	}
-	$s_list_sep     = $s_cond[0];
-	$s_int_sep      = $s_cond[1];
-	$s_full_cond    = $s_cond = substr($s_cond,2);
-	$b_bad          = false;
-	$a_list         = TrimArray(explode($s_list_sep,$s_cond));
-	$s_missing      = "";
-	$a_missing_list = array();
-	for ($ii = 0 ; $ii < count($a_list) ; $ii++) {
-		$s_cond = $a_list[$ii];
-		$i_len  = strlen($s_cond);
-		if ($i_len <= 0) {
-			continue;
+
+	/**
+	 * Test a condition represented in a string.
+	 *
+	 * @param string   $s_cond the condition
+	 * @param array    $a_vars field values
+	 * @param bool|int $m_id   ID of the condition being processed
+	 *
+	 * @return bool true if the condition passed, otherwise false
+	 */
+	private function _checkString($s_cond,$a_vars,$m_id = false)
+	{
+		$this->_sField = "conditions" . ($m_id === false ? "" : ($m_id + 1));
+		if (!is_string($s_cond)) {
+			SendAlert(GetMessage(MSG_INV_COND,array("FLD" => $this->_sField)));
+			//
+			// invalid conditions are simple "true"
+			//
+			return (true);
 		}
 		//
-		// split the condition into its internal components
+		// empty conditions are simply "true"
 		//
-		$a_components = TrimArray(explode($s_int_sep,$s_cond));
-		if (count($a_components) < 5) {
-			SendAlert(GetMessage(MSG_COND_INVALID,
-			                     array("FLD" => $s_fld_name,"COND" => $s_cond,
+		if ($s_cond == "") {
+			return (true);
+		}
+		//
+		// extract the separator characters
+		//
+		if (strlen($s_cond) < 2) {
+			SendAlert(GetMessage(MSG_COND_CHARS,
+			                     array("FLD" => $this->_sField,"COND" => $s_cond)));
+			//
+			// invalid conditions are simple "true"
+			//
+			return (true);
+		}
+		return $this->_checkString2($s_cond,$a_vars);
+	}
+
+	/**
+	 * Test a condition represented in a string.  This method is called by _checkString to do the real
+	 * work after some initial sanity checks.
+	 *
+	 * @param string $s_cond the condition
+	 * @param array  $a_vars field values
+	 *
+	 * @return bool true if the condition passed, otherwise false
+	 */
+	private function _checkString2($s_cond,$a_vars)
+	{
+
+		$s_list_sep  = $s_cond[0];
+		$s_int_sep   = $s_cond[1];
+		$s_full_cond = $s_cond = substr($s_cond,2);
+		$b_bad       = false;
+		$a_list      = TrimArray(explode($s_list_sep,$s_cond));
+		for ($ii = 0 ; $ii < count($a_list) ; $ii++) {
+			$s_curr_cond = $a_list[$ii];
+			$i_len       = strlen($s_curr_cond);
+			if ($i_len <= 0) {
+				continue;
+			}
+			//
+			// split the condition into its internal components
+			//
+			$a_components = TrimArray(explode($s_int_sep,$s_curr_cond));
+			if (count($a_components) < 5) {
+				SendAlert(GetMessage(MSG_COND_INVALID,
+				                     array("FLD" => $this->_sField,"COND" => $s_curr_cond,
+				                           "SEP" => $s_int_sep
+				                     )));
+				//
+				// the smallest condition has 5 components
+				//
+				continue;
+			}
+			//
+			// first component is ignored (it's blank)
+			//
+			$a_components = array_slice($a_components,1);
+			switch ($a_components[0]) {
+				case "TEST":
+					if (!$this->_doTest($s_curr_cond,$a_components,$a_vars,$s_list_sep)) {
+						$b_bad = true;
+					}
+					break;
+				case "IF":
+					if (!$this->_doIf($s_curr_cond,$a_components,$a_vars,$s_int_sep,$s_list_sep)) {
+						$b_bad = true;
+					}
+					break;
+				default:
+					SendAlert(GetMessage(MSG_COND_UNK,
+					                     array("FLD" => $this->_sField,"COND" => $s_curr_cond,
+					                           "CMD" => $a_components[0]
+					                     )));
+					break;
+			}
+		}
+		return (!$b_bad);
+	}
+
+	/**
+	 * Process a TEST condition.
+	 *
+	 * @param string $s_cond       the condition
+	 * @param array  $a_components components of the TEST condition
+	 * @param array  $a_vars       field values
+	 * @param string $s_list_sep   the separator for lists in the condition
+	 *
+	 * @return bool true if the condition passed, otherwise false
+	 */
+	private function _doTest($s_cond,$a_components,$a_vars,$s_list_sep)
+	{
+		//
+		// sanity check - if failed, just pass the TEST
+		//
+		if (count($a_components) > 5) {
+			SendAlert(GetMessage(MSG_COND_TEST_LONG,
+			                     array("FLD" => $this->_sField,"COND" => $s_cond,
+			                           "SEP" => $s_list_sep
+			                     )));
+			return true;
+		} elseif (($m_test_result = $this->_runLogic($a_components[1],$a_vars)) === true) {
+			return true;
+		} else {
+			$this->_recordField($m_test_result,$a_components[2]);
+			return false;
+		}
+	}
+
+	/**
+	 * Process an IF condition.
+	 *
+	 * @param string $s_cond       the condition
+	 * @param array  $a_components components of the TEST condition
+	 * @param array  $a_vars       field values
+	 * @param string $s_int_sep    the internal separator for the condition
+	 * @param string $s_list_sep   the separator for lists in the condition
+	 *
+	 * @return bool true if the condition passed, otherwise false
+	 */
+	private function _doIf($s_cond,$a_components,$a_vars,$s_int_sep,$s_list_sep)
+	{
+		//
+		// sanity checks - if failed, just pass the IF
+		//
+		if (count($a_components) < 6) {
+			SendAlert(GetMessage(MSG_COND_IF_SHORT,
+			                     array("FLD" => $this->_sField,"COND" => $s_cond,
 			                           "SEP" => $s_int_sep
 			                     )));
-			//
-			// the smallest condition has 5 components
-			//
-			continue;
+			return true;
 		}
-		//
-		// first component is ignored (it's blank)
-		//
-		$a_components = array_slice($a_components,1);
-		switch ($a_components[0]) {
-			case "TEST":
-				if (count($a_components) > 5) {
-					SendAlert(GetMessage(MSG_COND_TEST_LONG,
-					                     array("FLD" => $s_fld_name,"COND" => $s_cond,
-					                           "SEP" => $s_list_sep
-					                     )));
-					continue;
-				}
-				if (!RunTest($a_components[1],$a_vars)) {
-					$s_missing .= $a_components[2] . "\n";
-					$a_missing_list[] = $a_components[2];
-					$b_bad            = true;
-				}
-				break;
-			case "IF":
-				if (count($a_components) < 6) {
-					SendAlert(GetMessage(MSG_COND_IF_SHORT,
-					                     array("FLD" => $s_fld_name,"COND" => $s_cond,
-					                           "SEP" => $s_int_sep
-					                     )));
-					continue;
-				}
-				if (count($a_components) > 7) {
-					SendAlert(GetMessage(MSG_COND_IF_LONG,
-					                     array("FLD" => $s_fld_name,"COND" => $s_cond,
-					                           "SEP" => $s_list_sep
-					                     )));
-					continue;
-				}
-				if (RunTest($a_components[1],$a_vars)) {
-					$b_test = RunTest($a_components[2],$a_vars);
-				} else {
-					$b_test = RunTest($a_components[3],$a_vars);
-				}
-				if (!$b_test) {
-					$s_missing .= $a_components[4] . "\n";
-					$a_missing_list[] = $a_components[4];
-					$b_bad            = true;
-				}
-				break;
-			default:
-				SendAlert(GetMessage(MSG_COND_UNK,
-				                     array("FLD" => $s_fld_name,"COND" => $s_cond,
-				                           "CMD" => $a_components[0]
-				                     )));
-				break;
+		if (count($a_components) > 7) {
+			SendAlert(GetMessage(MSG_COND_IF_LONG,
+			                     array("FLD" => $this->_sField,"COND" => $s_cond,
+			                           "SEP" => $s_list_sep
+			                     )));
+			return true;
+		}
+		if (($m_test_result = $this->_runLogic($a_components[1],$a_vars)) === true) {
+			$m_test_result = $this->_runLogic($a_components[2],$a_vars);
+		} else {
+			$m_test_result = $this->_runLogic($a_components[3],$a_vars);
+		}
+		if ($m_test_result !== true) {
+			$this->_recordField($m_test_result,$a_components[4]);
+			return false;
+		} else {
+			return true;
 		}
 	}
-	return (!$b_bad);
+
+	private function _recordField($s_fld_name,$s_mesg)
+	{
+		$this->_sMissing .= $s_mesg . "\n";
+		$this->_aMissingList[$s_fld_name] = $s_mesg;
+	}
+
+}
+
+/**
+ * Original interface to processing conditions.
+ * This function is only kept for backwards compatibility with any existing hook code.
+ *
+ * @param mixed    $m_conditions   a single condition or an array of them
+ * @param array    $a_vars         field values
+ * @param string   $s_missing      returns the message from the condition's failure
+ * @param array    $a_missing_list appended with the field name(s) that failed
+ * @param bool|int $m_id           was never used - deprecated
+ *
+ * @return bool true if the condition passed, otherwise false
+ */
+function CheckConditions($m_conditions,$a_vars,&$s_missing,&$a_missing_list,$m_id = false)
+{
+	$cond = new Conditions($m_conditions,$s_missing,$a_missing_list);
+
+	return $cond->Check($a_vars,$m_id);
 }
 
 //
@@ -9393,7 +9573,7 @@ function Filter($filter,$m_data)
  * Description:
  *  Run the given files through any filter for which they are specified.
  */
-function    FilterFiles(&$a_files)
+function FilterFiles(&$a_files)
 {
 	global $SPECIAL_VALUES;
 
@@ -9446,14 +9626,16 @@ function    FilterFiles(&$a_files)
 		// read in the file
 		//
 		if (($s_data = ReadInFile($s_file_name,"upload")) === false) {
-			Error("filter_files",GetMessage(MSG_FILE_UPLOAD_ERR_UNK,array("ERRNO" => "reading $s_fld")),false,false);
+			Error("filter_files",GetMessage(MSG_FILE_UPLOAD_ERR_UNK,array("ERRNO" => "reading $s_fld")),false,
+			      false);
 		}
 		//
 		// filter and write it back out to the same file
 		//
 		$s_data = Filter($s_filter,$s_data);
 		if (!WriteOutFile($s_file_name,$s_data,"upload")) {
-			Error("filter_files",GetMessage(MSG_FILE_UPLOAD_ERR_UNK,array("ERRNO" => "writing $s_fld")),false,false);
+			Error("filter_files",GetMessage(MSG_FILE_UPLOAD_ERR_UNK,array("ERRNO" => "writing $s_fld")),false,
+			      false);
 		}
 		//
 		// update size and MIME type for this upload
@@ -9476,7 +9658,7 @@ function    FilterFiles(&$a_files)
  * Description:
  *  Reads the contents of a file into a string.
  */
-function    ReadInFile($s_file_name,$s_file_error_type,$b_text = false)
+function ReadInFile($s_file_name,$s_file_error_type,$b_text = false)
 {
 	global $php_errormsg;
 
@@ -9505,7 +9687,7 @@ function    ReadInFile($s_file_name,$s_file_error_type,$b_text = false)
  * Description:
  *  Writes the contents of a file from a string.
  */
-function    WriteOutFile($s_file_name,$s_data,$s_file_error_type,$b_text = false)
+function WriteOutFile($s_file_name,$s_data,$s_file_error_type,$b_text = false)
 {
 	global $php_errormsg;
 
@@ -9549,8 +9731,8 @@ class   CSVFormat
      * Description:
      *  Constructs the object.
      */
-	function    CSVFormat($c_sep = ',',$c_quote = '"',$c_int_sep = ';',
-	                      $s_esc_policy = "backslash",$s_clean_func = NULL)
+	function CSVFormat($c_sep = ',',$c_quote = '"',$c_int_sep = ';',
+	                   $s_esc_policy = "backslash",$s_clean_func = NULL)
 	{
 		$this->SetSep($c_sep);
 		$this->SetQuote($c_quote);
@@ -9567,7 +9749,7 @@ class   CSVFormat
      * Description:
      *  Set the escape processing policy.
      */
-	function    SetEscPolicy($s_esc_policy)
+	function SetEscPolicy($s_esc_policy)
 	{
 		switch ($s_esc_policy) {
 			default: /* should generate a warning */
@@ -9593,7 +9775,7 @@ class   CSVFormat
      * Description:
      *  Set the separator character for between fields.
      */
-	function    SetSep($c_sep)
+	function SetSep($c_sep)
 	{
 		$this->_cSep = $c_sep;
 	}
@@ -9605,7 +9787,7 @@ class   CSVFormat
      * Description:
      *  Set the quote character for quoting fields.
      */
-	function    SetQuote($c_quote)
+	function SetQuote($c_quote)
 	{
 		$this->_cQuote = $c_quote;
 	}
@@ -9617,7 +9799,7 @@ class   CSVFormat
      * Description:
      *  Set the internal separator character for inside fields.
      */
-	function    SetIntSep($c_int_sep)
+	function SetIntSep($c_int_sep)
 	{
 		$this->_cIntSep = $c_int_sep;
 	}
@@ -9629,7 +9811,7 @@ class   CSVFormat
      * Description:
      *  Set the cleaning function for fields.
      */
-	function    SetCleanFunc($s_clean_func)
+	function SetCleanFunc($s_clean_func)
 	{
 		$this->_sCleanFunc = $s_clean_func;
 	}
@@ -9642,7 +9824,7 @@ class   CSVFormat
      * Description:
      *  Escapes a field value according to the configured requirements.
      */
-	function    _Escape($m_value)
+	function _Escape($m_value)
 	{
 		switch ($this->_sEscPolicy) {
 			default: /* should generate an error */
@@ -9712,7 +9894,7 @@ class   CSVFormat
      * Description:
      *  Formats a value.
      */
-	function    _Format($s_value,$s_format = "")
+	function _Format($s_value,$s_format = "")
 	{
 		$s_value  = $this->_Escape($s_value);
 		$s_prefix = "";
@@ -9762,7 +9944,7 @@ class   CSVFormat
      * Description:
      *  Returns the column name and any format specifier.
      */
-	function    _GetColumn($s_col_spec)
+	function _GetColumn($s_col_spec)
 	{
 		$s_format = "";
 		if (($i_pos = strpos($s_col_spec,":")) !== false) {
@@ -9786,7 +9968,7 @@ class   CSVFormat
      * Description:
      *  Creates a single CSV record for a list of columns.
      */
-	function    MakeCSVRecord($a_column_list,$a_vars)
+	function MakeCSVRecord($a_column_list,$a_vars)
 	{
 		$s_rec     = "";
 		$n_columns = count($a_column_list);
@@ -9821,7 +10003,7 @@ class   CSVFormat
      * Description:
      *  Creates a heading record for the CSV data.
      */
-	function    MakeHeading($a_column_list)
+	function MakeHeading($a_column_list)
 	{
 		$s_rec     = "";
 		$n_columns = count($a_column_list);
@@ -10652,7 +10834,7 @@ function AddUserAgent($s_url)
 //
 // Try to determine if the given string is already URL-encoded
 //
-function    IsURLEncoded($s_str)
+function IsURLEncoded($s_str)
 {
 	//
 	// the only non-alphanumeric characters we'd expect
@@ -11794,7 +11976,7 @@ function GetFilterList($b_file_fields)
  *  Checks whether the form has specified to filter a list of
  *  fields of the specified type (file fields or non-file fields).
  */
-function    GetFilterSpec(&$s_filter,&$m_filter_list,$b_file_fields = false)
+function GetFilterSpec(&$s_filter,&$m_filter_list,$b_file_fields = false)
 {
 	global $SPECIAL_VALUES;
 
@@ -11901,9 +12083,9 @@ function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fiel
 	} elseif ($s_sender !== "") {
 		# FW_CUSTOM: Originally, the "From" name would be what's set as the "FromAddr" field in the form (mailer.domain.com).
 		#	I changed it to use the "From Name <from_email@mailer_domain.com>".
-		//$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
-		$s_sender = $a_headers['From'] = MakeFromLine(SafeHeader(UnMangle($s_sender)),
-			                                  rtrim($SITE_DOMAIN, '/'));
+		$s_sender = $a_headers['From'] = SafeHeader(UnMangle($s_sender));
+		/*$s_sender = $a_headers['From'] = MakeFromLine(SafeHeader(UnMangle($s_sender)),
+			                                  rtrim($SITE_DOMAIN, '/'));*/
 	}
 
 	/*
@@ -12367,7 +12549,7 @@ if (isset($aGetVars["testlang"]) && $aGetVars["testlang"] == 1) {
 // For saved files, add in the "new_name" values to the given
 // array.
 //
-function    GetSavedFileNames($a_values)
+function GetSavedFileNames($a_values)
 {
 	if (IsSetSession("FormSavedFiles")) {
 		$a_saved_files = GetSession("FormSavedFiles");
@@ -12684,7 +12866,7 @@ function DetectMimeAttack($a_fields,&$s_attack,&$s_info,&$s_user_info)
 // We replace them with a space so that the stripping
 // cannot create more junk accidentally.
 //
-function    AttackDetectionStripLang($s_data)
+function AttackDetectionStripLang($s_data)
 {
 
 	foreach (Settings::get('ATTACK_DETECTION_JUNK_LANG_STRIP') as $s_seq) {
@@ -12697,7 +12879,7 @@ function    AttackDetectionStripLang($s_data)
 // Find strings of $n_consec characters from the alphabet of $s_alpha
 // in $s_data.  Return the count of instances found.
 //
-function    AttackDetectionFindJunk($s_data,$s_alpha,$n_consec,&$a_matches)
+function AttackDetectionFindJunk($s_data,$s_alpha,$n_consec,&$a_matches)
 {
 	$s_pat = "/[" . preg_quote($s_alpha,"/") . "]{" . "$n_consec,$n_consec" . "}/";
 	if (($n_count = preg_match_all($s_pat,$s_data,$a_matches)) === false) {
@@ -12968,7 +13150,7 @@ function DetectManyURLsAttack($a_fields,&$s_attack,&$s_info,&$s_user_info)
 	return (false);
 }
 
-function    IsAjax()
+function IsAjax()
 {
 	global $SPECIAL_VALUES,$aFormVars,$aGetVars;
 
@@ -13061,7 +13243,7 @@ function DetectAttacks($a_fields)
 // Implement reverse captcha.  At least two fields must be provided.
 // At least one of the fields should have a non-empty value.
 //
-function    DetectRevCaptchaAttack($a_revcap_spec,$a_form_data,&$s_attack,&$s_info,&$s_user_info)
+function DetectRevCaptchaAttack($a_revcap_spec,$a_form_data,&$s_attack,&$s_info,&$s_user_info)
 {
 	global $bReverseCaptchaCompleted;
 
@@ -13126,7 +13308,7 @@ function    DetectRevCaptchaAttack($a_revcap_spec,$a_form_data,&$s_attack,&$s_in
 //
 // Check whether a form submission is allowed based on any Captcha provided
 //
-function    CheckCaptchaSubmit()
+function CheckCaptchaSubmit()
 {
 	global $SPECIAL_VALUES,$reCaptchaProcessor;
 
@@ -13200,7 +13382,7 @@ class   AutoResponder
 	// values of _iCaptchaType
 	//
 	var $_iFull = 1; // full captcha
-	var $_iRev = 2; // reverse captcha
+	var $_iRev  = 2; // reverse captcha
 
 	var $_iType; // type of autoresponse (template or plain)
 
@@ -13208,7 +13390,7 @@ class   AutoResponder
 	// values of _iType
 	//
 	var $_iSendTemplate = 1; // send a template
-	var $_iSendPlain = 2; // send a plain file
+	var $_iSendPlain    = 2; // send a plain file
 
 	/*
      * Method:      AutoResponder ctor
@@ -13217,7 +13399,7 @@ class   AutoResponder
      * Description:
      *  Constructs the object.
      */
-	function    AutoResponder()
+	function AutoResponder()
 	{
 		global $SPECIAL_VALUES;
 
@@ -13288,7 +13470,7 @@ class   AutoResponder
      * Description:
      *  Determines if autoresponding has been requested by the HTML.
      */
-	function    IsRequested()
+	function IsRequested()
 	{
 		return ($this->_bRequested);
 	}
@@ -13300,7 +13482,7 @@ class   AutoResponder
      * Description:
      *  Processes the autorespond.
      */
-	function    Process($b_check_only = false)
+	function Process($b_check_only = false)
 	{
 		global $SPECIAL_VALUES;
 
@@ -13343,7 +13525,7 @@ class   AutoResponder
      *  This method should only be called if autoresponse has been requested
      *  by the form (i.e. IsRequested returns true).
      */
-	function    _CheckCaptcha()
+	function _CheckCaptcha()
 	{
 		global $SPECIAL_VALUES,$bReverseCaptchaCompleted;
 		global $reCaptchaProcessor;
@@ -13433,7 +13615,7 @@ class   AutoResponder
      * Description:
      *  Sends an autoreponse using a template.
      */
-	function    _Send($b_use_template)
+	function _Send($b_use_template)
 	{
 		global $SPECIAL_VALUES;
 		//
@@ -13588,7 +13770,7 @@ class   SessionAccess
      * Description:
      *  Constructs the object.
      */
-	function    SessionAccess($a_access_list)
+	function SessionAccess($a_access_list)
 	{
 		$this->_aAccessList = $a_access_list;
 	}
@@ -13602,7 +13784,7 @@ class   SessionAccess
      * Description:
      *  Copies in the list of variables from the session to the given array.
      */
-	function    CopyIn(&$a_vars,$b_overwrite_empty)
+	function CopyIn(&$a_vars,$b_overwrite_empty)
 	{
 		//$s_db = "Session CopyIn:\n";
 		$n_copied = 0;
@@ -13634,7 +13816,7 @@ class   SessionAccess
      *  limits the fields selected from _aAccessList, otherwise all fields
      *  listed in _aAccessList are copied.
      */
-	function    CopyOut(&$a_vars,$a_fields = array())
+	function CopyOut(&$a_vars,$a_fields = array())
 	{
 		//$s_db = "Session CopyOut:\n";
 
@@ -14094,7 +14276,8 @@ if (!CheckRequired($SPECIAL_VALUES["required"],$aAllRawValues,$sMissing,$aMissin
 //
 // check complex conditions
 //
-if (!CheckConditions($SPECIAL_VALUES["conditions"],$aAllRawValues,$sMissing,$aMissingList)) {
+$fmConditions = new Conditions($SPECIAL_VALUES["conditions"],$sMissing,$aMissingList);
+if (!$fmConditions->Check($aAllRawValues)) {
 	UserError("failed_conditions",GetMessage(MSG_COND_ERROR),$sMissing,$aMissingList);
 }
 
@@ -14269,7 +14452,7 @@ if (!empty($SPECIAL_VALUES["fmcompute"])) {
      *  Intelligently merges two arrays of file definitions.
      *  If a file has been newly uploaded, its definition takes precedence.
      */
-	function    MergeFileArrays($a_new_files,$a_saved_files)
+	function MergeFileArrays($a_new_files,$a_saved_files)
 	{
 		if (isset($a_saved_files)) {
 			foreach ($a_saved_files as $s_key => $a_def) {
