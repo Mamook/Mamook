@@ -11991,10 +11991,12 @@ function GetFilterSpec(&$s_filter,&$m_filter_list,$b_file_fields = false)
 //
 // send the given results to the given email addresses
 //
-function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fields)
+# FW_CUSTOM: Added $aFileVars
+function SendResults($a_fld_order,$a_clean_fields,$s_to,$s_cc,$s_bcc,$a_raw_fields,$aFileVars)
 {
 	# FW_CUSTOM: Added $SITE_DOMAIN
-	global $SITE_DOMAIN,$SPECIAL_VALUES,$aFileVars;
+	#	Removed $aFileVars from global list.
+	global $SITE_DOMAIN,$SPECIAL_VALUES;
 
 	//
 	// check for a filter and how to use it
@@ -14724,8 +14726,9 @@ if (!isset($SPECIAL_VALUES["recipients"]) || empty($SPECIAL_VALUES["recipients"]
 		//
 		// send the actual results
 		//
+		# FW_CUSTOM: Added $aFileVars
 		if (!SendResults($aFieldOrder,$aCleanedValues,$s_valid_recipients,$s_valid_cc,
-		                 $s_valid_bcc,$aRawDataValues)
+		                 $s_valid_bcc,$aRawDataValues,$aFileVars)
 		) {
 			Error("mail_failed",GetMessage(MSG_FAILED_SEND));
 		}
