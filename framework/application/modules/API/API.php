@@ -376,6 +376,14 @@ class API
 				# NOTE! Must be a better way to do this?
 				$api_obj=$this;
 			}
+			# The AddThis API is loaded.
+			elseif($this->getLoadedAPI()=='addthis')
+			{
+				# Get the AddThisAPI Class.
+				require_once Utility::locateFile(MODULES.'API'.DS.'AddThisAPI.php');
+				# Instantiate a new AddThisAPI object.
+				$api_obj=new AddThisAPI();
+			}
 			# The Facebook API is loaded.
 			elseif($this->getLoadedAPI()=='facebook')
 			{
@@ -422,29 +430,18 @@ class API
 	/**
 	 * displaySocial
 	 *
-	 * Displays the social buttons.
+	 * Displays the default social share buttons.
+	 * NOTE: This method exists for backward compatibility. To display custom buttons,
+	 * use the AddThisAPI class via this API class as indicated in the constructor.
 	 *
 	 * @access	public
 	 */
 	public function displaySocial()
 	{
-		# Set the Document instance to a variable.
-		$doc=Document::getInstance();
-		# Include JavaScripts in the footer. (Use the script file name before the ".php".)
-		$doc->setFooterJS('AddThis');
-		$display=
-			'<!-- AddThis Button BEGIN -->'.
-			'<div class="addthis_toolbox addthis_default_style">'.
-				'<a class="addthis_button_preferred_1"></a>'.
-				'<a class="addthis_button_preferred_2"></a>'.
-				'<a class="addthis_button_google_plusone"></a>'.
-				'<a class="addthis_button_preferred_3"></a>'.
-				'<a class="addthis_button_preferred_4"></a>'.
-				'<a class="addthis_button_compact"></a>'.
-				'<a class="addthis_counter addthis_bubble_style"></a>'.
-			'</div>'.
-			'<!-- AddThis Button END -->';
-		return $display;
+		# Instantiate a new instance of the API class passing "AddThis" as the API param.
+		$addthis_api_obj=new API('AddThis');
+		# Return the default share button markup.
+		return $addthis_api_obj->getShareButtonMarkup();
 	} #==== End -- displaySocial
 
 	/**
