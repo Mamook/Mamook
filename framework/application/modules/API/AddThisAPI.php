@@ -91,13 +91,13 @@ class AddThisAPI
 	/*** public methods ***/
 
 	/**
-	 * getShareButtonMarkup
+	 * getDisplayableShareButtonMarkup
 	 *
 	 * Gets any custom AddThis share button markup and if there is none, returns the default markup.
 	 *
 	 * @access	public
 	 */
-	public function getShareButtonMarkup()
+	public function getDisplayableShareButtonMarkup()
 	{
 		try
 		{
@@ -124,7 +124,7 @@ class AddThisAPI
 		{
 			throw $e;
 		}
-	} #==== End -- getShareButtonMarkup
+	} #==== End -- getDisplayableShareButtonMarkup
 
 	/*** End public methods ***/
 

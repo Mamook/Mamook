@@ -438,10 +438,8 @@ class API
 	 */
 	public function displaySocial()
 	{
-		# Instantiate a new instance of the API class passing "AddThis" as the API param.
-		$addthis_api_obj=new API('AddThis');
 		# Return the default share button markup.
-		return $addthis_api_obj->getShareButtonMarkup();
+		return $this->getAPIObj->$addthis_api_obj->getDisplayableShareButtonMarkup();
 	} #==== End -- displaySocial
 
 	/**
