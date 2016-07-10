@@ -204,7 +204,7 @@ d(this);f[c](a.call(this,b,f[c]()))});if(d.isWindow(f)){var g=f.document.documen
  *
  * @copyright   (c) 2011 Jon Ryser  http://JonRyser.com
  * @author		Jon Ryser           http://JonRyser.com
- * @version		2.0.0
+ * @version		2.0.1
  */
 (function(e,q,y){function V(c){var e=N(),k="";if(e&&e[c]){delete e[c];for(var i in e)k+=i+(!0===e[i]?"":"="+encodeURIComponent(e[i]));y.location.hash=k;return!0}return!1}function z(c,e){var c=c.replace(/[\[]/,"\\[").replace(/[\]]/,"\\]"),k=RegExp("[\\?&]"+c+"=([^&#]*)").exec(e);return null===k?"":k[1]}function W(c){var e=N(),k={};return e&&e[c]?(k[c]=!0===e[c]?0:e[c],k):!1}function N(){for(var c=y.location.hash,c=c?c.replace(/^#/,"").split("&"):[],i={},k=0;k<c.length;k++){var q=c[k].split("=");i[q[0]]=
 decodeURIComponent(q[1])||!0}e.isEmptyObject(i)&&(i=!1);return i}function X(){return y.pageYOffset?{scrollTop:y.pageYOffset,scrollLeft:y.pageXOffset}:q.documentElement&&q.documentElement.scrollTop?{scrollTop:q.documentElement.scrollTop,scrollLeft:q.documentElement.scrollLeft}:q.body?{scrollTop:q.body.scrollTop,scrollLeft:q.body.scrollLeft}:{scrollTop:0,scrollLeft:0}}var Y=e.fwPopup={initialized:!1,version:"2.0.0"},i=e(y),G,A=i.height(),p=i.width();e.fn.fwPopup=function(c){var O,k;function ka(a){a=

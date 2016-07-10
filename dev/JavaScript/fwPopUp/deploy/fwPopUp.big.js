@@ -216,7 +216,7 @@
         hook = fwPopupSettings.hook;
         hookWord = fwPopupSettings.hookWord;
 
-        hashtagHook = getHashtagHook(hookWord);
+        hashtagHook = getHashtagHookValue(hookWord);
         if (hashtagHook) {
             initialize();
         }
@@ -799,7 +799,7 @@
          */
         function initialize(initializingElement) {
             addAccessibility();
-            hashtagHook = getHashtagHook(hookWord);
+            hashtagHook = getHashtagHookValue(hookWord);
             var $initiatingElement;
             // Check if there is a passed initializing element.
             if (!initializingElement && hashtagHook) {
@@ -951,7 +951,7 @@
      *
      * @private
      */
-    function getHashtagHook(hookWord) {
+    function getHashtagHookValue(hookWord) {
         var hashes = getHashtag();
         var hashtag = {};
         if (hashes && hashes[hookWord]) {

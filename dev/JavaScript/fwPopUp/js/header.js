@@ -9,7 +9,7 @@
  *
  * @copyright   (c) 2011 Jon Ryser  http://JonRyser.com
  * @author		Jon Ryser           http://JonRyser.com
- * @version		2.0.0
+ * @version		2.0.1
  */
 (function ($, document, window) {
     'use strict';
