@@ -31,7 +31,7 @@
 	</target>
 
 
-<!-- JavaScript -->
+<!-- CSS -->
 	<target name="concat-css" description="Concatenates all CSS files to the buildLocation directory.">
 		<concat destfile="${buildLocation}/fwPopUp.big.css" fixlastline="yes" eol="lf" append="no" overwrite="yes">
 			<header file="${css_dir}/header.css"></header>
