@@ -438,8 +438,10 @@ class API
 	 */
 	public function displaySocial()
 	{
+		# Set the AddThisAPI instance to a local variable.
+		$addthis_api_obj=$this->getAPIObj();
 		# Return the default share button markup.
-		return $this->getAPIObj->$addthis_api_obj->getDisplayableShareButtonMarkup();
+		return $addthis_api_obj->getDisplayableShareButtonMarkup();
 	} #==== End -- displaySocial
 
 	/**

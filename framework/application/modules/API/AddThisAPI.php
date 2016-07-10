@@ -120,7 +120,7 @@ class AddThisAPI
 			}
 			return $share_button_markup;
 		}
-		catch($e)
+		catch(Exception $e)
 		{
 			throw $e;
 		}
