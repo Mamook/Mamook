@@ -711,7 +711,7 @@ class VideoFormProcessor extends FormProcessor
 								# Set a nice message for the user in a session.
 								$_SESSION['message']='Your video was successfully '.$message_action.'!';
 								# Redirect the user to the page they were on.
-								//$this->redirectNoDelete('video');
+								$this->redirectNoDelete('video');
 							}
 							else
 							{
