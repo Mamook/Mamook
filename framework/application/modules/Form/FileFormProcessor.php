@@ -164,7 +164,7 @@ class FileFormProcessor extends FormProcessor
 				# Check if the title field was empty (or less than 2 characters or more than 255 characters long).
 				$empty_title=$fv->validateEmpty('location', 'Please enter a publish location for the file.', 2, 255);
 				$u_file=$_FILES['file'];
-				if(((is_uploaded_file($u_file['tmp_name'])!==TRUE) OR ($u_file['error'] === UPLOAD_ERR_NO_FILE) OR ($u_file['error'] === 4)) && empty($current_file))
+				if(((is_uploaded_file($u_file['tmp_name'])!==TRUE) OR ($u_file['error']===UPLOAD_ERR_NO_FILE) OR ($u_file['error']===4)) && empty($current_file))
 				{
 					# Set an error.
 					$fv->setErrors('You must select a file to upload.');

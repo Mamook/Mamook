@@ -20,7 +20,7 @@ $header.='<html prefix="og: http://ogp.me/ns# fog: http://www.facebook.com/2008/
 		# Set keywords for the page. If the $meta_keywords variable is not set on the page, we have none.
 		$header.=((!isset($meta_keywords) OR empty($meta_keywords)) ? '' : '<meta name="keywords" content="'.$meta_keywords.'">');
 		# Define the author of the page. If the $meta_author variable is not set on the page, use this default.
-		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon Rÿser, JonRyser.com & Michael Delle' : $meta_author).'">';
+		$header.='<meta name="author" content="'.((!isset($meta_author) OR empty($meta_author)) ? 'BigTalk Jon Rÿser, JonRyser.com & Michael Delle, michaeldelle.com' : $meta_author).'">';
 		# Define the designer of the page. If the $meta_designer variable is not set on the page, use this default.
 		$header.='<meta name="designer" content="'.((!isset($meta_designer) OR empty($meta_designer)) ? 'BigTalk Jon Rÿser, JonRyser.com' : $meta_designer).'">';
 		# Define the copyright of the page.

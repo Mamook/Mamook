@@ -398,7 +398,7 @@ class Upload
 			if($file->checkFileType($u_name, $allowed_ext)!==TRUE)
 			{
 				# Fill the error variable.
-				$this->setErrors('That file type is not accepted. Acceptable file types are: '.implode(", ", $allowed_ext).'. Though we prefer pdf :)');
+				$this->setErrors('That file type is not accepted. Acceptable file types are: '.implode(", ", $allowed_ext).'.');
 			}
 
 			# Any errors so far?
@@ -525,7 +525,7 @@ class Upload
 			if($file_handler->checkFileType($img_name, $allowed_types)!==TRUE)
 			{
 				# Fill the error variable.
-				$this->setErrors('That image type is not accepted. Acceptable file types are: '.implode(", ", $allowed_types).' :)');
+				$this->setErrors('That image type is not accepted. Acceptable file types are: '.implode(", ", $allowed_types).'.');
 			}
 
 			if($this->checkErrors()===FALSE)
@@ -595,7 +595,7 @@ class Upload
 								# Remove the copy.
 								$this->deleteFile($target_path.$new_name);
 								# Create a message and send them to the "starting" point.
-								throw new Exception('There was an error moving the resized image, "'.$new_name.'" to it\'s destination directory from the temp folder.', E_RECOVERABLE_ERROR);
+								throw new Exception('There was an error moving the resized image, '.$new_name.', to it\'s destination directory from the temp folder.', E_RECOVERABLE_ERROR);
 							}
 						}
 					}
