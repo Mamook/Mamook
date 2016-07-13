@@ -662,9 +662,9 @@ class Audio extends Media
 					}
 					else
 					{
-						# Set the video's name data member to a local variable.
+						# Set the audio's name data member to a local variable.
 						$audio_name=$this->getTitle();
-						# Delete the video.
+						# Delete the audio.
 						try
 						{
 							# Delete the audio from the `audio` table.
@@ -1223,7 +1223,8 @@ class Audio extends Media
 
 			if(isset($api_decoded->soundcloud_thumbnails->medium->url))
 			{
-				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->medium->url);
+				# Set the thumbnail to a variable.
+				$image_url=$api_decoded->soundcloud_thumbnails->medium->url;
 			}
 			/*
 			elseif(!empty($large_audio[0]->image))
@@ -1256,15 +1257,19 @@ class Audio extends Media
 				$this->getThisImage($this->getImageID());
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
+				# Set the image path to a variable.
+				$image_path=IMAGES_PATH.$image_obj->getImage();
 				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_AUDIO_THUMBNAIL));
 			}
+			# Set the image path to the data member.
+			$this->setThumbnailUrl($image_url);
 
 			# Set the description
 			$this->setDescription($db->sanitize($large_audio[0]->description, 5));
 
 			# Set the markup to the display array.
-			$display['audio']='<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
+			$display['audio']='<a class="image-link" href="'.$this->getAudioUrl().'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'"'.($this->getAvailability()==1 ? '  rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
 				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Cover for '.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.
 			'</a>';
@@ -1291,8 +1296,8 @@ class Audio extends Media
 		# Small Audio
 		$display='<div class="feed_wrapper-audio">'.
 			'<button class="arrow-prev">Previous Audio</button>'.
-		'<div class="feed_list-audio">'.
-		'<ul class="feed-audio">';
+			'<div class="feed_list-audio">'.
+				'<ul class="feed-audio">';
 
 		$playlist_param='';
 		# Check if the audio belong to a playlist.
@@ -1319,43 +1324,53 @@ class Audio extends Media
 			{
 				# Create audio URL.
 				$this->setAudioUrl(AUDIO_URL.'?'.$playlist_param.'audio='.$this->getID());
-
 				# Set the title to a variable
 				$this->setTitle($db->sanitize($audio->title));
 
 				# Decode the `api` field.
 				$api_decoded=json_decode($audio->api);
-
 				if(isset($api_decoded->soundcloud_thumbnails->default->url))
 				{
-					$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
+					# Set the thumbnail to a variable.
+					$image_url=$api_decoded->soundcloud_thumbnails->default->url;
 				}
+				/*
 				elseif(!empty($audio->image))
 				{
 					# Set the image ID.
 					$this->setImageID($audio->image);
-
 					# Get the image information from the database, and set them to data members.
 					$this->getThisImage($this->getImageID());
-
 					# Set the Image object to a variable.
 					$image_obj=$this->getImageObj();
-
 					# Set the the thumbnail to a variable.
 					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 				}
 				else
 				{
-					### Get the default thumbnail image. ###
 					# Get the image information from the database, and set them to data members.
 					$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-
 					# Set the Image object to a variable.
 					$image_obj=$this->getImageObj();
-
 					# Set the thumbnail to a variable.
 					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 				}
+				*/
+				else
+				{
+					# Set the image ID.
+					$this->setImageID($audio->image);
+					# Get the image information from the database, and set them to data members.
+					$this->getThisImage($this->getImageID());
+					# Set the Image object to a variable.
+					$image_obj=$this->getImageObj();
+					# Set the image path to a variable.
+					$image_path=IMAGES_PATH.$image_obj->getImage();
+					# Set the thumbnail to a variable.
+					$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_AUDIO_THUMBNAIL));
+				}
+				# Set the image path to the data member.
+				$this->setThumbnailUrl($image_url);
 
 				# Set the markup to a variable
 				$display.='<li>'.

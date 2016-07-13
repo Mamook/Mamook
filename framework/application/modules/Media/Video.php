@@ -1306,11 +1306,13 @@ class Video extends Media
 				# Create video_url variable.
 				$video_url=$yt->getYoutubeUrl().$this->getVideoId();
 			}
+			/*
 			elseif(isset($api_decoded->vimeo_id))
 			{
 				# Create video_url variable.
 				$video_url='vimeo_url';
 			}
+			*/
 			else
 			{
 				$video_name=$large_video[0]->file_name;
@@ -1330,7 +1332,8 @@ class Video extends Media
 
 			if(isset($api_decoded->youtube_thumbnails->medium->url))
 			{
-				$this->setThumbnailUrl($api_decoded->youtube_thumbnails->medium->url);
+				# Set the thumbnail to a variable.
+				$image_url=$api_decoded->youtube_thumbnails->medium->url;
 			}
 			else
 			{
@@ -1340,9 +1343,13 @@ class Video extends Media
 				$this->getThisImage($this->getImageID());
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
+				# Set the image path to a variable.
+				$image_path=IMAGES_PATH.$image_obj->getImage();
 				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_VIDEO_THUMBNAIL));
 			}
+			# Set the image path to the data member.
+			$this->setThumbnailUrl($image_url);
 
 			# Set the description
 			$this->setDescription($db->sanitize($large_video[0]->description, 5));
@@ -1403,31 +1410,31 @@ class Video extends Media
 			{
 				# Create video URL.
 				$this->setVideoUrl(VIDEOS_URL.'?'.$playlist_param.'video='.$this->getID());
-
 				# Set the title to a variable
 				$this->setTitle($db->sanitize($videos->title));
 
 				# Decode the `api` field.
 				$api_decoded=json_decode($videos->api);
-
 				if(isset($api_decoded->youtube_thumbnails->default->url))
 				{
-					$this->setThumbnailUrl($api_decoded->youtube_thumbnails->default->url);
+					# Set the thumbnail to a variable.
+					$image_url=$api_decoded->youtube_thumbnails->default->url;
 				}
 				else
 				{
 					# Set the image ID.
 					$this->setImageID($videos->image);
-
 					# Get the image information from the database, and set them to data members.
 					$this->getThisImage($this->getImageID());
-
 					# Set the Image object to a variable.
 					$image_obj=$this->getImageObj();
-
+					# Set the image path to a variable.
+					$image_path=IMAGES_PATH.$image_obj->getImage();
 					# Set the thumbnail to a variable.
-					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+					$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_VIDEO_THUMBNAIL));
 				}
+				# Set the image path to the data member.
+				$this->setThumbnailUrl($image_url);
 
 				# Set the markup to a variable
 				$display.='<li>'.
