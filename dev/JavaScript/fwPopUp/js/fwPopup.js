@@ -59,6 +59,7 @@
 
         /* Set default markup to local variables for ease of reading/editing. */
         var audioMarkup = '' + imageToken + '<audio controls autoplay class="audioPlayback"><source src="' + pathToken + '" type="audio/' + mediaTypeToken + '" codec="' + codecToken + '"/></audio>';
+        var videoMarkup = '' + imageToken + '<video id="videoPlayer" controls autoplay class="videoPlayback"><source src="' + pathToken + '.webm" type="video/wemb"><source src="' + pathToken + '.mp4" type="video/mp4"></video>';
         var flashMarkup = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="' + widthToken + '" height="' + heightToken + '"><param name="wmode" value="' + wmodeToken + '" /><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always" /><param name="movie" value="' + pathToken + '" /><embed src="' + pathToken + '" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="' + widthToken + '" height="' + heightToken + '" wmode="' + wmodeToken + '"></embed></object>';
         var generalMarkup = (function () {
             var markupArray = [];
@@ -162,7 +163,8 @@
                 inline: inlineMarkup,
                 quicktime: quicktimeMarkup,
                 // html or empty (false, null, '') to disable
-                socialTools: socialTools
+                socialTools: socialTools,
+                video: videoMarkup
             },
             /* If set to true, only the close button will close the window */
             modal: false,
@@ -415,6 +417,29 @@
                         .replace(new RegExp(wmodeToken, 'g'), fwPopupSettings.wmode)
                         .replace(new RegExp(pathToken, 'g'), path)
                         .replace(new RegExp(autoplayToken, 'g'), fwPopupSettings.autoPlay);
+                    break;
+
+				case 'video':
+                    imgPreloader = new Image();
+
+                    imgPreloader.onload = function () {
+                    	// NOTE: Could not get this to work.
+                    	//var video_ele = document.getElementById("videoPlayer");
+                    	//console.log(video_ele);
+                    	var image = ((elementData && elementData.image) ? '<img src="' + elementData.image + '" alt="Cover for ' + description + '"/>' : '');
+                    	// Remove the file extension from the path.
+                    	var pathToken_noExt = path.substring(0, path.lastIndexOf('.'));
+                    	$fwPopupFullRes[0].innerHTML = markup.video.replace(imageToken, image)
+                    	    .replace(new RegExp(pathToken, 'g'), pathToken_noExt);
+                    	$fwPopupFullRes.find('video').width(imgPreloader.width);
+                    	//video_ele.setAttribute('src', path);
+                    	// Required for 'older' browsers.
+                    	//video_ele.load();
+                    	// Fit item to viewport.
+                    	fwPopupDimensions = fitToViewport((imgPreloader.height+30), imgPreloader.width);
+                    	showContent();
+                    };
+                    imgPreloader.src = elementData.image;
                     break;
 
                 case 'vimeo':
@@ -720,6 +745,10 @@
                     type = { type:'ogg', codec:'vorbis' };
                 }
                 return 'audio';
+            }
+            if (source.match(/\b.(mp4)\b/i)) {
+                type = { type:'mp4' };
+                return 'video';
             }
             if (source.match(/\biframe=true\b/i)) {
                 return 'iframe';
