@@ -4,7 +4,7 @@
     var $fwPopup = $.fwPopup = {
         // Used for the deep linking to make sure not to call the same function several times.
         initialized: false,
-        version: '2.0.0'
+        version: '2.0.2'
     };
 
     var $WIN = $(window);

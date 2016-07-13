@@ -59,7 +59,7 @@
 
         /* Set default markup to local variables for ease of reading/editing. */
         var audioMarkup = '' + imageToken + '<audio controls autoplay class="audioPlayback"><source src="' + pathToken + '" type="audio/' + mediaTypeToken + '" codec="' + codecToken + '"/></audio>';
-        var videoMarkup = '' + imageToken + '<video id="videoPlayer" controls autoplay class="videoPlayback"><source src="' + pathToken + '.webm" type="video/wemb"><source src="' + pathToken + '.mp4" type="video/mp4"></video>';
+        var videoMarkup = '<video id="videoPlayer" controls autoplay class="videoPlayback"><source src="' + pathToken + '.webm" type="video/wemb"><source src="' + pathToken + '.mp4" type="video/mp4"></video>';
         var flashMarkup = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="' + widthToken + '" height="' + heightToken + '"><param name="wmode" value="' + wmodeToken + '" /><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always" /><param name="movie" value="' + pathToken + '" /><embed src="' + pathToken + '" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="' + widthToken + '" height="' + heightToken + '" wmode="' + wmodeToken + '"></embed></object>';
         var generalMarkup = (function () {
             var markupArray = [];
@@ -423,20 +423,18 @@
                     imgPreloader = new Image();
 
                     imgPreloader.onload = function () {
-                    	// NOTE: Could not get this to work.
-                    	//var video_ele = document.getElementById("videoPlayer");
+                    	// NOTE: There is no Video object for video's yet.
+                    	//var video_ele = new Video();
                     	//console.log(video_ele);
-                    	var image = ((elementData && elementData.image) ? '<img src="' + elementData.image + '" alt="Cover for ' + description + '"/>' : '');
                     	// Remove the file extension from the path.
                     	var pathToken_noExt = path.substring(0, path.lastIndexOf('.'));
-                    	$fwPopupFullRes[0].innerHTML = markup.video.replace(imageToken, image)
-                    	    .replace(new RegExp(pathToken, 'g'), pathToken_noExt);
-                    	$fwPopupFullRes.find('video').width(imgPreloader.width);
+                    	$fwPopupFullRes[0].innerHTML = markup.video.replace(new RegExp(pathToken, 'g'), pathToken_noExt);
+                    	$fwPopupFullRes.find('video').width(mediaWidth);
                     	//video_ele.setAttribute('src', path);
                     	// Required for 'older' browsers.
                     	//video_ele.load();
                     	// Fit item to viewport.
-                    	fwPopupDimensions = fitToViewport((imgPreloader.height+30), imgPreloader.width);
+                    	fwPopupDimensions = fitToViewport(mediaHeight, mediaWidth);
                     	showContent();
                     };
                     imgPreloader.src = elementData.image;
