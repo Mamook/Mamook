@@ -482,13 +482,16 @@ class Audio extends Media
 	 */
 	public function countAllAudio($playlists=NULL, $limit=NULL, $and_sql=NULL)
 	{
-		# Check if there were categories passed.
+		# NOTE: Playlist's are not required, so don't throw an error.
+		/*
+		# Check if there were playlists passed.
 		if($playlists===NULL)
 		{
 			throw new Exception('You must provide a playlist!', E_RECOVERABLE_ERROR);
 		}
 		else
 		{
+		*/
 			try
 			{
 				# Get the Playlist class.
@@ -520,7 +523,7 @@ class Audio extends Media
 			{
 				throw $e;
 			}
-		}
+		//}
 	} #==== End -- countAllAudio
 
 	/**
@@ -714,7 +717,7 @@ class Audio extends Media
 		try
 		{
 			# Count the returned files.
-			$audio_count=$this->countAllAudio('all');
+			$audio_count=$this->countAllAudio();
 			# Check if there was returned content.
 			if($audio_count>0)
 			{
@@ -1051,7 +1054,6 @@ class Audio extends Media
 	{
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
-
 		# Set the Soundcloud instance to a variable.
 		//$soundcloud_obj=$this->getSoundcloudObject();
 
@@ -1070,10 +1072,8 @@ class Audio extends Media
 		{
 			# Get the audio ID and assign it to a variable.
 			$this->setID($audio->id);
-
 			# Set the title to a variable
 			$this->setTitle($db->sanitize($audio->title));
-
 			# Decode the `api` field.
 			$api_decoded=json_decode($audio->api);
 
@@ -1082,7 +1082,6 @@ class Audio extends Media
 			{
 				# Set Soundcloud ID
 				$this->setAudioId($api_decoded->soundcloud_id);
-
 				# Create audio_url variable.
 				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
 			}
@@ -1096,44 +1095,57 @@ class Audio extends Media
 			{
 				# Remove the file extension.
 				$file_name_no_ext=substr($audio->file_name, 0, strrpos($audio->file_name, '.'));
-
 				# Create audio_url variable.
 				$audio_url=AUDIO_URL.'files'.DS.$file_name_no_ext.'.mp3';
 			}
-
 			# Create audio URL.
 			$this->setAudioUrl($audio_url);
 
+			# If we have thumbnails from SoundCloud in our database...
 			if(isset($api_decoded->soundcloud_thumbnails->default->url))
 			{
-				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->default->url);
+				# Set the image path to a variable.
+				$image_path='';
+				# Use the SoundCloud thumbnail.
+				$image_url=$api_decoded->soundcloud_thumbnails->default->url;
 			}
+			/*
 			elseif(!empty($audio->image))
 			{
 				# Set the image ID.
 				$this->setImageID($audio->image);
-
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage($this->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
 			else
 			{
-				### Get the default thumbnail image. ###
-				# Get the image information from the database, and set them to data members.
+				# Get the default thumbnail.
 				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
+			*/
+			else
+			{
+				# Set the image ID.
+				$this->setImageID($audio->image);
+				# Get the image information from the database, and set them to data members.
+				$this->getThisImage($this->getImageID());
+				# Set the Image object to a variable.
+				$image_obj=$this->getImageObj();
+				# Set the image path to a variable.
+				$image_path=IMAGES_PATH.$image_obj->getImage();
+				# Set the thumbnail to a variable.
+				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_THUMBNAIL));
+			}
+			# Set the image path to the data member.
+			$this->setThumbnailUrl($image_url);
 
 			# Set the markup to a variable
 			$display.='<tr>'.
@@ -1178,16 +1190,13 @@ class Audio extends Media
 
 			# Decode the `api` field.
 			$api_decoded=json_decode($large_audio[0]->api);
-
 			# If the soundcloud_id is in the `api` field then this audio is on Soundcloud.
 			if(isset($api_decoded->soundcloud_id))
 			{
 				# Set the Soundcloud instance to a variable.
 				$soundcloud_obj=$this->getSoundcloudObject();
-
 				# Set Soundcloud ID
 				$this->setAudioId($api_decoded->soundcloud_id);
-
 				# Create audio_url variable.
 				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
 			}
@@ -1198,18 +1207,17 @@ class Audio extends Media
 			}
 			else
 			{
+				$audio_name=$large_audio[0]->file_name;
 				# Remove the file extension.
-				$file_name_no_ext=substr($large_audio[0]->file_name, 0, strrpos($large_audio[0]->file_name, '.'));
+				$file_name_no_ext=substr($audio_name, 0, strrpos($audio_name, '.'));
 				# Create audio_url variable.
 				$audio_url=AUDIO_URL.'files'.DS.$file_name_no_ext.'.mp3';
 			}
-
-			# Set the availability.
-			$this->setAvailability($large_audio[0]->availability);
-
 			# Create audio URL.
 			$this->setAudioUrl($audio_url);
 
+			# Set the availability.
+			$this->setAvailability($large_audio[0]->availability);
 			# Set the title
 			$this->setTitle($db->sanitize($large_audio[0]->title));
 
@@ -1217,17 +1225,15 @@ class Audio extends Media
 			{
 				$this->setThumbnailUrl($api_decoded->soundcloud_thumbnails->medium->url);
 			}
+			/*
 			elseif(!empty($large_audio[0]->image))
 			{
 				# Set the image ID.
 				$this->setImageID($large_audio[0]->image);
-
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage($this->getImageID());
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
@@ -1236,10 +1242,20 @@ class Audio extends Media
 				### Get the default thumbnail image. ###
 				# Get the image information from the database, and set them to data members.
 				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-
 				# Set the Image object to a variable.
 				$image_obj=$this->getImageObj();
-
+				# Set the thumbnail to a variable.
+				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+			}
+			*/
+			else
+			{
+				# Set the image ID.
+				$this->setImageID($large_audio[0]->image);
+				# Get the image information from the database, and set them to data members.
+				$this->getThisImage($this->getImageID());
+				# Set the Image object to a variable.
+				$image_obj=$this->getImageObj();
 				# Set the thumbnail to a variable.
 				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
 			}
@@ -1247,9 +1263,7 @@ class Audio extends Media
 			# Set the description
 			$this->setDescription($db->sanitize($large_audio[0]->description, 5));
 
-			# Set the thumbnail image to a local variable.
-			$thumbnail=$this->getThumbnailUrl();
-
+			# Set the markup to the display array.
 			$display['audio']='<a class="image-link" href="'.$this->getAudioUrl().'" rel="'.FW_POPUP_HANDLE.'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'">'.
 				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Cover for '.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.

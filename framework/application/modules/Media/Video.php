@@ -544,6 +544,8 @@ class Video extends Media
 	 */
 	public function countAllVideos($playlists=NULL, $limit=NULL, $and_sql=NULL)
 	{
+		# NOTE: Playlist's are not required, so don't throw an error.
+		/*
 		# Check if there were playlists passed.
 		if($playlists===NULL)
 		{
@@ -551,6 +553,7 @@ class Video extends Media
 		}
 		else
 		{
+		*/
 			try
 			{
 				# Get the Playlist class.
@@ -582,7 +585,7 @@ class Video extends Media
 			{
 				throw $e;
 			}
-		}
+		//}
 	} #==== End -- countAllVideos
 
 	/**
@@ -1224,7 +1227,6 @@ class Video extends Media
 			{
 				$video_url=VIDEOS_URL.$videos->file_name;
 			}
-
 			# Create video URL.
 			$this->setVideoUrl($video_url);
 
@@ -1255,7 +1257,7 @@ class Video extends Media
 			# Set the markup to a variable
 			$display.='<tr>'.
 				'<td>'.
-					'<a class="image-link" href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'">'.
+					'<a class="image-link" href="'.$this->getVideoUrl().'" title="'.$this->getTitle().' on '.DOMAIN_NAME.'" rel="'.FW_POPUP_HANDLE.'" data-image="'.$this->getThumbnailUrl().'">'.
 						'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
 					'</a>'.
 				'</td>'.
@@ -1346,7 +1348,7 @@ class Video extends Media
 			$this->setDescription($db->sanitize($large_video[0]->description, 5));
 
 			# Set the markup to the display array.
-			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'"'.($this->getAvailability()==1 ? ' rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
+			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'"  data-image="'.$this->getThumbnailUrl().'"'.($this->getAvailability()==1 ? '  rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
 				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.
 			'</a>';

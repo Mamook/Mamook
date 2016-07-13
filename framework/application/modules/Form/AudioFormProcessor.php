@@ -529,7 +529,7 @@ class AudioFormProcessor extends FormProcessor
 									$commandline_obj->runScript(COMMAND_LINE.'Media'.DS.'AudioUpload.php', $audio_data);
 
 									# Convert audio to other file types (128bit mp3).
-									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $video_data);
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $audio_data);
 
 									# NOTE: ConvertMedia.php script here.
 									# Convert to 128bit mp3.

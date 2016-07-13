@@ -97,7 +97,7 @@ class Playlist extends Category
 			# If not an array, turn it into an array.
 			if(!is_array($playlists))
 			{
-				# Check if $categories equals "all".
+				# Check if $playlists equals "all".
 				if(strtolower($playlists)=='all')
 				{
 					# Chenage $playlists into an empty array.
@@ -106,7 +106,7 @@ class Playlist extends Category
 					$this->getPlaylists();
 					# Set the results to a variable.
 					$results=$this->getAllPlaylists();
-					if($results!==NULL)
+					if($results)
 					{
 						# Loop through the playlists.
 						foreach($results as $row)
