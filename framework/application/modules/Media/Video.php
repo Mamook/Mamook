@@ -1249,7 +1249,7 @@ class Video extends Media
 				# Set the image path to a variable.
 				$image_path=IMAGES_PATH.$image_obj->getImage();
 				# Set the thumbnail to a variable.
-				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_THUMBNAIL));
+				$image_url=$db->sanitize(IMAGES.(file_exists($image_path)===TRUE && $image_obj->getImage()!==NULL ? $image_obj->getImage() : DEFAULT_VIDEO_THUMBNAIL));
 			}
 			# Set the image path to the data member.
 			$this->setThumbnailUrl($image_url);
