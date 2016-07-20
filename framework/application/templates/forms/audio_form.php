@@ -52,9 +52,9 @@ elseif(!isset($_GET['select']))
 	if(empty($duplicates))
 	{
 		# Do we need some javascripts? (Use the script audio name before the ".js".)
-		$doc->setJavaScripts('uniform,bsmSelect,audio');
+		$doc->setJavaScripts('uniform,bsmSelect');
 		# Do we need some JavaScripts in the footer? (Use the script audio name before the ".php".)
-		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
+		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple,audio'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
 
 		# Set the audio name to a variable.
 		$file_name=$audio_obj->getFileName();

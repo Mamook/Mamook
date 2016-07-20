@@ -1,1 +1,0 @@
-$(function(){function b(a){a=$(a).val();$("#embed").toggle("embed"==a);$("#file").toggle("file"==a)}b($(".audio_type_radio:checked"));$(".audio_type_radio").click(function(){b(this)})});
