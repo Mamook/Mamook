@@ -1,10 +1,11 @@
 <?php /* application/js/fileOption-submit.php */
 
 # Minified version.
-$js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fileOption"),$("#imageOption"),$("#institution"),$("#language"),$("#text_language"),$("#trans_language"),$("#publisher")],a=0;a<b.length;++a)b[a].change(function(){var a=$(this).val();("add"==a||"select"==a||"remove"==a)&&c.click()})});';
+$js='(function(a){a(function(){for(var d=a("[class|=submit]").not("[value=Reset]"),c=[a("#fileOption"),a("#imageOption"),a("#institution"),a("#language"),a("#text_language"),a("#trans_language"),a("#publisher")],b=0;b<c.length;++b)c[b].change(function(){var b=a(this).val();("add"==b||"select"==b||"remove"==b)&&d.click()})})})(jQuery);';
 
-# Long version.
-/*$js='
+/* Big version.
+// Wrap the script to protect the global namespace.
+(function ($) {
 	// Wrap it all in the jQuery(document).ready method to ensure the internal variables and functions are not invasive to the page and so that this will execute after the document is loaded.
 	$(function () {
 		// Create a local variable to hold the submit button on the page.
@@ -23,9 +24,9 @@ $js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fil
 		// The clickOnChange method accepts an Array of jQuery Objects.
 		function clickOnChange(elementArray) {
 			// Loop through the jQuery Objects.
-			for (var key=0; key<elementArray.length; ++key) {
+			for (var key = 0; key<elementArray.length; ++key) {
 				// Set the current jQuery Object to a local variable.
-				var $element=elementArray[key];
+				var $element = elementArray[key];
 				// Set a funtion to the onChange event for this element.
 				$element.change(function () {
 					var value = $(this).val()
@@ -36,4 +37,6 @@ $js='$(function(){for(var c=$("[class|=submit]").not("[value=Reset]"),b=[$("#fil
 				});
 			}
 		};
-	});';*/
+	});
+})(jQuery);
+*/
