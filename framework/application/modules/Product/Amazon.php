@@ -15,6 +15,15 @@ if(!defined('__PHP_SHA256_NANO_'))
 	 */
 	class Amazon extends Product
 	{
+		/*** Class constants ***/
+
+		const REQUEST_URL=PROTOCAL.'webservices.amazon.com/onca/xml?';
+		const IMAGE_URL_PREFIX='http://ecx.';
+		const IMAGE_URL_PREFIX_SSL='https://images-na.ssl-';
+
+		/*** End Class constants ***/
+
+
 		/*** data members ***/
 
 		private $access_key;
@@ -843,7 +852,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$config['ResponseGroup']="ItemAttributes,OfferSummary,Images,EditorialReview";
 
 			$url='';
-			$url.='http://ecs.amazonaws.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId='.$this->getAccessKey().'&AssociateTag='.$this->getAssTag().'&Operation=ItemLookup&IdType=ASIN&ItemId=';
+			$url.=self::REQUEST_URL.'Service=AWSECommerceService&AWSAccessKeyId='.$this->getAccessKey().'&AssociateTag='.$this->getAssTag().'&Operation=ItemLookup&IdType=ASIN&ItemId=';
 
 			foreach($asins as $asin)
 			{
@@ -854,6 +863,27 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$url=$this->sendRequest($this->getSecretKey(), $url);
 			return $url;
 		} #==== End -- createRequest
+
+		/*
+		 * fixAmazonImageProtocal
+		 *
+		 * The image URL's from Amazonare returned as insecure URLs. This checks
+		 * the protocal and fixes the URL of the image to ensure that secure
+		 * requests are made over SSL and regular requests are made when the protocal
+		 * is http://.
+		 *
+		 * @param		String			$image_url	(The URL to check and possibly change)
+		 * @access	protected
+		 */
+		protected function fixAmazonImageProtocal($image_url)
+		{
+			# Check if the PROTOCAL is https.
+			if(PROTOCAL=='https://')
+			{
+				$image_url=str_replace(self::IMAGE_URL_PREFIX, self::IMAGE_URL_PREFIX_SSL, $image_url);
+			}
+			return $image_url;
+		} #==== End -- fixAmazonImageProtocal
 
 		/*
 		 * sendRequest
@@ -1373,9 +1403,9 @@ if(!defined('__PHP_SHA256_NANO_'))
 					# Set the product image's width to a variable.
 					$image_width=$product->$image_size->Width;
 					# Set the product image's URL to a variable.
-					$image_url=$product->$image_size->URL;
+					$image_url=$this->fixAmazonImageProtocal($product->$image_size->URL);
 					# Set the product original image's URL to a variable.
-					$image_original_url=$product->LargeImage->URL;
+					$image_original_url=$this->fixAmazonImageProtocal($product->LargeImage->URL);
 				}
 				if(isset($product->OfferSummary->LowestNewPrice->FormattedPrice))
 				{
