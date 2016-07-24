@@ -19,5 +19,4 @@ $js='(function(a){a(function(){function c(b){b=a(b).val();a("#embed").toggle("em
 		};
 	});
 })(jQuery);
-
 */
