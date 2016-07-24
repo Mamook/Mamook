@@ -10,8 +10,9 @@ $user_obj=$populator->getUserObject();
 
 # Do we need some javascripts? (Use the script video name before the ".js".)
 $doc->setJavaScripts('uniform,bsmSelect');
-# Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-$doc->setFooterJS('uniform-file,uniform-select,fileOption-submit,bsmSelect-multiple,removeCurrentItem');
+# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+# This form needs uniform-file, fileOption-submit, bsmSelect-multiple, uniform-select, and removeCurrentItem. uniform-select MUST come after bsmSelect-multiple.
+$doc->setFooterJS('uniform-file,fileOption-submit,bsmSelect-multiple,uniform-select,removeCurrentItem');
 
 $display.='<div id="profile_form" class="form">';
 # create and display form

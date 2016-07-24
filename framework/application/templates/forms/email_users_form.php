@@ -9,8 +9,9 @@ $email=$populator->getEmailObject();
 
 # Do we need some javascripts? (Use the script file name before the ".js".)
 $doc->setJavaScripts('uniform,bsmSelect');
-# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
-$doc->setFooterJS('uniform-select,uniform-file,bsmSelect-multiple');
+# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+# This form needs uniform-file, bsmSelect-multiple, and uniform-select. uniform-select MUST come after bsmSelect-multiple.
+$doc->setFooterJS('uniform-file,bsmSelect-multiple,uniform-select');
 
 $display.='<div id="email_form" class="form">';
 # Create and display form

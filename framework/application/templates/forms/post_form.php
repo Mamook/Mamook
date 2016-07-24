@@ -9,8 +9,9 @@ $populator=$fp->getPopulator();
 $sc_object=$populator->getSubContentObject();
 # Do we need some javascripts? (Use the script file name before the ".js".)
 $doc->setJavaScripts('uniform,bsmSelect');
-# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
-$doc->setFooterJS('uniform-select,fileOption-submit,bsmSelect-multiple'.((!isset($_GET['post'])) ? ',disable-social-checkboxes' : ''));
+# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+# This form needs fileOption-submit, bsmSelect-multiple, uniform-select, and (if there is the right GET data) disable-social-checkboxes. uniform-select MUST come after bsmSelect-multiple.
+$doc->setFooterJS('fileOption-submit,bsmSelect-multiple,uniform-select'.((!isset($_GET['post'])) ? ',disable-social-checkboxes' : ''));
 
 $duplicates=$fp->getDuplicates();
 

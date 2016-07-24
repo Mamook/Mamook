@@ -4,9 +4,10 @@ require Utility::locateFile(TEMPLATES.'forms'.DS.'register_form_defaults.php');
 $delete_form_display=$fp->processRegistration($default_data);
 
 # Do we need some javascripts? (Use the script content name before the ".js".)
-$doc->setJavaScripts('uniform,bsmSelect');
-# Do we need some JavaScripts in the footer? (Use the script content name before the ".php".)
-$doc->setFooterJS('uniform-select,fileOption-submit');
+$doc->setJavaScripts('uniform');
+# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+# This form needs fileOption-submit and uniform-select.
+$doc->setFooterJS('fileOption-submit,uniform-select');
 
 $display='<div id="register" class="register form">';
 # Create and display form.

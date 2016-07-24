@@ -53,8 +53,9 @@ elseif(!isset($_GET['select']))
 	{
 		# Do we need some javascripts? (Use the script audio name before the ".js".)
 		$doc->setJavaScripts('uniform,bsmSelect');
-		# Do we need some JavaScripts in the footer? (Use the script audio name before the ".php".)
-		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-audio,bsmSelect-multiple,audio'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
+		# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+		# This form needs fileOption-submit, uniform-audio, bsmSelect-multiple, uniform-select, and audio. uniform-select MUST come after bsmSelect-multiple.
+		$doc->setFooterJS('fileOption-submit,uniform-audio,bsmSelect-multiple,uniform-select,audio'.((!isset($_GET['audio'])) ? ',disable-social-checkboxes' : ''));
 
 		# Set the audio name to a variable.
 		$file_name=$audio_obj->getFileName();

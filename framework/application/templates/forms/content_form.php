@@ -13,7 +13,7 @@ if(isset($_GET['content']))
 	if(empty($display))
 	{
 		# Do we need some javascripts? (Use the script content name before the ".js".)
-		$doc->setJavaScripts('uniform,bsmSelect');
+		$doc->setJavaScripts('uniform');
 		# Do we need some JavaScripts in the footer? (Use the script content name before the ".php".)
 		$doc->setFooterJS('uniform-select,fileOption-submit');
 

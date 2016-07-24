@@ -15,8 +15,9 @@ if(empty($duplicates))
 {
 	# Do we need some javascripts? (Use the script file name before the ".js".)
 	$doc->setJavaScripts('uniform,bsmSelect,product');
-	# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
-	$doc->setFooterJS('uniform-select,fileOption-submit,uniform-file,bsmSelect-multiple');
+	# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+	# This form needs fileOption-submit, uniform-file, bsmSelect-multiple, and uniform-select. uniform-select MUST come after bsmSelect-multiple.
+	$doc->setFooterJS('fileOption-submit,uniform-file,bsmSelect-multiple,uniform-select');
 
 	# Set the default sub title of the page to "Add New Product".
 	$sub_title='Add New Product';

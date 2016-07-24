@@ -22,8 +22,9 @@ if(!isset($_GET['select']))
 	{
 		# Do we need some javascripts? (Use the script image name before the ".js".)
 		$doc->setJavaScripts('uniform,bsmSelect');
-		# Do we need some JavaScripts in the footer? (Use the script image name before the ".php".)
-		$doc->setFooterJS('uniform-select,uniform-file,bsmSelect-multiple');
+		# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+		# This form needs uniform-file, bsmSelect-multiple, and uniform-select. uniform-select MUST come after bsmSelect-multiple.
+		$doc->setFooterJS('uniform-file,bsmSelect-multiple,uniform-select');
 
 		# Set the image name to a variable.
 		$image_name=$image_obj->getImage();

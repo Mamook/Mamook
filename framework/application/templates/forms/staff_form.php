@@ -57,8 +57,9 @@ else
 {
 	# Do we need some javascripts? (Use the script video name before the ".js".)
 	$doc->setJavaScripts('uniform,bsmSelect');
-	# Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-	$doc->setFooterJS('uniform-select,fileOption-submit,uniform-file,bsmSelect-multiple');
+	# Add JavaScripts to the footer. (Use the script file name before the ".php".)
+	# This form needs fileOption-submit, uniform-file, bsmSelect-multiple, and uniform-select. uniform-select MUST come after bsmSelect-multiple.
+	$doc->setFooterJS('fileOption-submit,uniform-file,bsmSelect-multiple,uniform-select');
 
 	$display.='<a href="'.APPLICATION_URL.'profile/?person='.$staff_id.'" target="_blank" title="View '.$staff_obj->getStaffName().'\'s Profile" class="view">view</a>';
 	$display.='<div id="profile_form" class="form">';
