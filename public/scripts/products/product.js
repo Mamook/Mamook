@@ -1,1 +1,0 @@
-function checkFields(a){a=$(a).val();$("#amazon").toggle("amazon"==a);$("#external").toggle("external"==a);$("#internal").toggle("internal"==a)}$(function(){checkFields($(".product_type_radio:checked"));$(".product_type_radio").on("click",function(){checkFields(this)})});
