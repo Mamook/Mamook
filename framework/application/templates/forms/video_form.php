@@ -68,9 +68,9 @@ elseif(!isset($_GET['select']))
 	if(empty($duplicates))
 	{
 		# Do we need some javascripts? (Use the script video name before the ".js".)
-		$doc->setJavaScripts('uniform,bsmSelect,video');
+		$doc->setJavaScripts('uniform,bsmSelect');
 		# Do we need some JavaScripts in the footer? (Use the script video name before the ".php".)
-		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-video,bsmSelect-multiple'.((!isset($_GET['video'])) ? ',disable-social-checkboxes' : ''));
+		$doc->setFooterJS('uniform-select,fileOption-submit,uniform-video,bsmSelect-multiple,video'.((!isset($_GET['video'])) ? ',disable-social-checkboxes' : ''));
 
 		# Set the video name to a variable.
 		$file_name=$video_obj->getFileName();

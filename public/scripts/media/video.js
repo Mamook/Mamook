@@ -1,1 +1,0 @@
-function checkFields(a){a=$(a).val();$("#embed").toggle("embed"==a);$("#file").toggle("file"==a)}$(function(){checkFields($(".video_type_radio:checked"));$(".video_type_radio").click(function(){checkFields(this)})});
