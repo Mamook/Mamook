@@ -1,11 +1,11 @@
 <?php /* framework/application/modules/Encryption/Encryption.php */
 
 /**
-* Encryption
-*
-* The Encryption Class is used to securly encrypt.
-*
-*/
+ * Encryption
+ *
+ * The Encryption Class is used to securly encrypt.
+ *
+ */
 class Encryption
 {
 	/*** data members ***/
@@ -19,13 +19,13 @@ class Encryption
 	/*** magic methods ***/
 
 	/**
-	* Constructor
-	*
-	* Sets the data member $encryption_key.
-	*
-	* @param	$encryption_key (The string used as the key for encrypting.)
-	* @access	magic
-	*/
+	 * Constructor
+	 *
+	 * Sets the data member $encryption_key.
+	 *
+	 * @param	$encryption_key			The string used as the key for encrypting.
+	 * @access	magic
+	 */
 	public function __construct($encryption_key)
 	{
 		try
@@ -45,13 +45,13 @@ class Encryption
 	/*** mutator methods ***/
 
 	/**
-	* setEncryptionKey
-	*
-	* Sets the data member $table_old. Thows an error on failure.
-	*
-	* @param	$name (The name of the old table.)
-	* @access	protected
-	*/
+	 * setEncryptionKey
+	 *
+	 * Sets the data member $table_old. Thows an error on failure.
+	 *
+	 * @param	$name					The name of the old table.
+	 * @access	protected
+	 */
 	protected function setEncryptionKey($encryption_key)
 	{
 		if(!empty($encryption_key))
@@ -96,22 +96,22 @@ class Encryption
 	/*** public methods ***/
 
 	/**
-	* enCodeIt
-	*
-	* Securely encrypts a string.
-	*
-	* @param	$encryptable (The string to be encrypted.)
-	* @access	public
-	*/
+	 * enCodeIt
+	 *
+	 * Securely encrypts a string.
+	 *
+	 * @param	$encryptable			The string to be encrypted.
+	 * @access	public
+	 */
 	public function enCodeIt($encryptable=NULL)
 	{
-		if($encryptable != null)
+		if($encryptable!==NULL)
 		{
 			# Make an encryption resource using a cipher.
-			$td=mcrypt_module_open('rijndael-256','','ecb','');
+			$td=mcrypt_module_open('rijndael-256', '', 'ecb', '');
 
 			# Create and encryption vector based on the $td size and random.
-			$iv=mcrypt_create_iv(mcrypt_enc_get_iv_size($td),MCRYPT_RAND);
+			$iv=mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
 
 			# Get the key size and create the key.
 			$ks=mcrypt_enc_get_key_size($td);
@@ -140,16 +140,16 @@ class Encryption
 	} #==== End -- enCodeIt
 
 	/**
-	* deCodeIt
-	*
-	* De-encrypts a string securely encrypted by the enCodeIt() method.
-	*
-	* @param	$encryptable (The string to be encrypted.)
-	* @access	public
-	*/
+	 * deCodeIt
+	 *
+	 * De-encrypts a string securely encrypted by the enCodeIt() method.
+	 *
+	 * @param	$encryptable			The string to be encrypted.
+	 * @access	public
+	 */
 	public function deCodeIt($encrypted=NULL)
 	{
-		if ($encrypted != null)
+		if($encrypted!==NULL)
 		{
 			# The reverse of enCodeIt. See that function for details.
 			$encrypted=(string)base64_decode(trim($encrypted));
