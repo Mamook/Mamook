@@ -31,6 +31,8 @@ if($users_newsletter)
 			'<tr>'.
 				'<th>'.
 					'<strong>IP</strong>'.
+				'</th>'.
+				'<th>'.
 					'<strong>DATE</strong>'.
 				'</th>'.
 			'</tr>';
