@@ -386,6 +386,7 @@ class AudioFormProcessor extends FormProcessor
 					# Check if the audio is considered unique and may be added to the Database.
 					if($unique==1)
 					{
+						/*
 						# Check if there was no passed image ID.
 						if($image_id===NULL)
 						{
@@ -393,6 +394,63 @@ class AudioFormProcessor extends FormProcessor
 							$audio_obj->getThisImage('Audio Default Thumbnail', 'title');
 							# Set the returned image ID to the image_id variable.
 							$image_id=$audio_obj->getImageID();
+						}
+						*/
+
+						# If there is no custom thumbnail image, get the image from the audio file to use as a thumbnail.
+						if($uploaded_thumbnail===FALSE)
+						{
+							# If this is not a audio being edited and it's a file.
+							if(empty($id) && $audio_type=='file')
+							{
+								# If the image does not already exists, create one.
+								if(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg')===FALSE)
+								{
+									# Get the getID3 Class.
+									require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
+									# Instantiate the new getID3 object.
+									$getID3_obj=new getID3;
+									$audio_file_info=$getID3_obj->analyze(BODEGA.'audio'.DS.$new_audio_name);
+									if(isset($audio_file_info['comments']['picture'][0]))
+									{
+										# Get image data.
+										$thumbnail_data=$audio_file_info['comments']['picture'][0]['data'];
+										# Create original thumbnail image.
+										file_put_contents(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg', $thumbnail_data);
+									}
+
+									if(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg'))
+									{
+										# Resize the image and save the new image to the target folder.
+										$resize_image=$file_handler->reduceImage(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg', IMAGES_PATH.$clean_filename.'.jpg', '320', '180', '75', FALSE);
+
+										# Insert the thumbnail image into the `images` table.
+										$sql='INSERT INTO `'.DBPREFIX.'images` ('.
+											'`title`,'.
+											' `image`,'.
+											((!empty($category_ids)) ? ' `category`,' : '').
+											' `contributor`'.
+											') VALUES ('.
+											$db->quote($db->escape(str_ireplace(DOMAIN_NAME, '%{domain_name}', $title))).', '.
+											$db->quote($db->escape($clean_filename.'.jpg')).', '.
+											((!empty($category_ids)) ? $db->quote($category_ids).', ' : '').
+											$db->quote($contributor_id).
+											')';
+										# Run the SQL query.
+										$db->query($sql);
+										# Assign the image ID to a variable.
+										$image_id=$db->get_insert_id();
+									}
+								}
+								# There is already an original thumbnail.
+								else
+								{
+									# Search for this image.
+									$audio_obj->getThisImage($clean_filename.'.jpg', FALSE);
+									# Look for file and get it's ID.
+									$image_id=$audio_obj->getImageID();
+								}
+							}
 						}
 
 						# Create the default value for the message action.
@@ -479,7 +537,7 @@ class AudioFormProcessor extends FormProcessor
 								((!empty($embed_code)) ? ' `embed_code` = '.$db->quote($db->escape($embed_code)).',' : '').
 								((!empty($new_audio_name)) ? ' `file_name` = '.$db->quote($db->escape($new_audio_name)).',' : '').
 								' `institution` = '.$db->quote($institution_id).','.
-								' `image` = '.(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : 'NULL,').
+								($image_id!==NULL ? ' `image` = '.$db->quote($image_id).',' : '').
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($category_ids)) ? ' `category` = '.$db->quote($category_ids).',' : '').
 								((!empty($playlist_ids)) ? ' `playlist` = '.$db->quote($playlist_ids).',' : '').
@@ -500,38 +558,50 @@ class AudioFormProcessor extends FormProcessor
 								# Set the ID from the insert SQL query.
 								$insert_id=$db->get_insert_id();
 
+								# If this is a new audio (not editted).
+								if(!empty($insert_id))
+								{
+									# Add API stuff here.
+								}
+
+								# Instantiate the new CommandLine object.
+								$commandline_obj=new CommandLine();
+
+								# Create an array with audio data.
+								$audio_data=array(
+									'Environment'=>DOMAIN_NAME,
+									'DevEnvironment'=>DEVELOPMENT_DOMAIN,
+									'StagingEnvironment'=>STAGING_DOMAIN,
+									'Availability'=>$availability,
+									'Categories'=>$category_ids,
+									'ContID'=>$contributor_id,
+									'Description'=>$description,
+									'FileNameNoExt'=>($insert_id>0 ? $clean_filename : ''),
+									'FileName'=>($insert_id>0 ? $new_audio_name : $_SESSION['form']['audio']['FileName']),
+									'ID'=>($insert_id>0 ? $insert_id : $_SESSION['form']['audio']['ID']),
+									'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['audio']['ImageID']),
+									'MediaType'=>'audio',
+									'NewMedia'=>$new_media,
+									'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
+									'Playlists'=>$playlist_ids,
+									'Title'=>$title,
+								);
+
 								# Check if a new audio file was uploaded.
 								if(!empty($new_audio_name))
 								{
-									# Create an array with audio data.
-									$audio_data=array(
-										'Environment'=>DOMAIN_NAME,
-										'DevEnvironment'=>DEVELOPMENT_DOMAIN,
-										'StagingEnvironment'=>STAGING_DOMAIN,
-										'Availability'=>$availability,
-										'Categories'=>$category_ids,
-										'ContID'=>$contributor_id,
-										'Description'=>$description,
-										'FileNameNoExt'=>($insert_id>0 ? $clean_filename : ''),
-										'FileName'=>($insert_id>0 ? $new_audio_name : $_SESSION['form']['audio']['FileName']),
-										'ID'=>($insert_id>0 ? $insert_id : $_SESSION['form']['audio']['ID']),
-										'ImageID'=>($insert_id>0 ? $image_id : $_SESSION['form']['audio']['ImageID']),
-										'MediaType'=>'audio',
-										'NewMedia'=>$new_media,
-										'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
-										'Playlists'=>$playlist_ids,
-										'Title'=>$title,
-									);
-
-									# Instantiate the new CommandLine object.
-									$commandline_obj=new CommandLine();
+									# NOTE: There's no point in having a AudioUpload command line script since we can't upload the audio in the background.
+									/*
 									# Run the upload script.
-									$commandline_obj->runScript(COMMAND_LINE.'Media'.DS.'AudioUpload.php', $audio_data);
+									#	runScript() turns a multidimensional array into a single dimensional array and seperates the keys from the values.
+									#		ex: php ScriptName.php Key1|Key2|Key3 Value1|Value2|Value3
+									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'AudioUpload.php'), $audio_data);
+									*/
 
 									# Convert audio to other file types (128bit mp3).
 									$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $audio_data);
 
-									# NOTE: ConvertMedia.php script here.
+									# NOTE: Moved to ConvertMedia.php script.
 									# Convert to 128bit mp3.
 									//$cl2=new CommandLine('ffmpeg');
 									//$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
@@ -573,7 +643,7 @@ class AudioFormProcessor extends FormProcessor
 									}
 								}
 								# Remove the audio's session.
-								unset($_SESSION['form']);
+								unset($_SESSION['form']['audio']);
 								# Set a nice message for the user in a session.
 								$_SESSION['message']='Your audio was successfully '.$message_action.'!';
 								# Redirect the user to the page they were on.
@@ -590,7 +660,7 @@ class AudioFormProcessor extends FormProcessor
 								if($uploaded_document===TRUE)
 								{
 									# Remove uploaded audio file.
-									$upload->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+									$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
 								}
 							}
 						}
@@ -600,7 +670,7 @@ class AudioFormProcessor extends FormProcessor
 							if($uploaded_document===TRUE)
 							{
 								# Remove uploaded audio file.
-								$upload->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+								$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
 							}
 							throw $e;
 						}
@@ -611,7 +681,7 @@ class AudioFormProcessor extends FormProcessor
 						if($uploaded_document===TRUE)
 						{
 							# Remove uploaded audio file.
-							$upload->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+							$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
 						}
 					}
 				}
@@ -722,7 +792,7 @@ class AudioFormProcessor extends FormProcessor
 						# Instantiate a new SubContent object.
 						$subcontent=new SubContent();
 						# Get the info for this audio and set the return boolean to a variable.
-						$record_retrieved=$subcontent->getThisAudio($_GET['audio']);
+						$record_retrieved=$subcontent->getThisAudio($_GET['audio'], TRUE);
 						# Check if the record was actually returned.
 						if($record_retrieved===TRUE)
 						{
@@ -825,7 +895,7 @@ class AudioFormProcessor extends FormProcessor
 						return $display;
 					}
 				}
-				# Redirect the user to the default redirect location. They have no business trying to change the delete param value!
+				# Redirect the user to the default redirect location. They have no business trying to pass a non-integer as an id!
 				$doc->redirect(DEFAULT_REDIRECT);
 			}
 			return FALSE;

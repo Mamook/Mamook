@@ -9,6 +9,14 @@ $display_delete_form=$form_processor->processAudio($default_data, $max_file_size
 $populator=$form_processor->getPopulator();
 # Set the Audio object from the FormProcessor data member to a variable.
 $audio_obj=$populator->getAudioObject();
+/*
+# Check if the SoundCloud credentials are available.
+if(SOUNDCLOUD_CLIENT_ID!=='')
+{
+	# Get the SoundCloud instance. Starts the SoundCloud Service if it's not already started.
+	$soundcloud_obj=$audio_obj->getSoundCloudObject();
+}
+*/
 
 $select=TRUE;
 
@@ -411,7 +419,9 @@ elseif(!isset($_GET['select']))
 				}
 				else
 				{
-					$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					# NOTE: This audio is not in a public directory.
+					//$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					$fg->addFormPart('<span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span>');
 				}
 				$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
 				$fg->addFormPart('</li>');
@@ -504,13 +514,40 @@ elseif(!isset($_GET['select']))
 		$fg->addFormPart('</fieldset>');
 		$display.=$fg->display();
 		$display.='</div>';
+		if(isset($_GET['audio']))
+		{
+			# Display pages using this audio. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
+			$display.=$audio_obj->displayMediaUsage('audio');
+		}
+		# Display the audio in the `audio` table.
+		$display.=$audio_obj->displayAudioFeed();
 	}
-	if(isset($_GET['audio']))
+	else
 	{
-		# Display pages using this audio. Acceptable parameter is 'audio', 'file', 'image', or 'video'.
-		$display.=$audio_obj->displayMediaUsage('audio');
+		# Set the page's sub title.
+		$sub_title='Duplicate Content';
+		# Set the sub title.
+		$main_content->setSubTitle($sub_title);
+		$display.='<h3 class="h-3">The following audio seem to closely resemble the audio you are submitting. If you feel your audio is unique and would like to continue uploading it, simply click on the "Back" button below. Conversely, you may choose to edit an existing audio or click <a href="'.APPLICATION_URL.WebUtility::removeIndex(HERE).str_replace(GET_QUERY, '', GET_QUERY).'">here</a> to continue without uploading.</h3>';
+
+		# Instantiate a new formGenerator object.
+		$fg=new formGenerator('back_button');
+		# Add a hidden input called '_submit_check' to the form.
+		$fg->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
+		# Add a hidden input called '_unique' to the form.
+		$fg->addElement('hidden', array('name'=>'_unique', 'value'=>'1'));
+		# Add the button to the form.
+		$fg->addElement('submit', array('name'=>'audio', 'value'=>'Back to the form!'), '', NULL, 'submit-back');
+		# Concatenate the "back button" to the duplicates to be displayed.
+		$display.=$fg->display();
+
+		# Convert the multidimensional array to an object.
+		$duplicates=json_decode(json_encode($duplicates));
+		# Display the results.
+		$display.=$audio_obj->markupManageAudio($duplicates);
+
+		# Concatenate the Back button to the duplicates to be displayed.
+		$display.=$fg->display();
 	}
-	# Display the videos in the `videos` table.
-	$display.=$audio_obj->displayAudioFeed();
 }
 $display=$display_delete_form.$display;

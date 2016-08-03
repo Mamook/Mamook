@@ -29,7 +29,7 @@ $audio_recent_contributor_id=NULL;
 $audio_title=NULL;
 $audio_twitter='tweet'; # Set the default to "tweet" to Twitter.
 $audio_unique=0; # Set the default to "Not Unique" (0)
-$audio_type='file';
+$audio_audio_type='file';
 $audio_year=date('Y'); # Set the default year that the audio was originally published to the current year.
 
 $max_file_size=1073741824; # Set the default max file size in bytes to "1073741824" (1GB).
@@ -98,9 +98,9 @@ if(isset($_GET['audio']))
 		$audio_unique=1;
 		if(!empty($audio_file_name))
 		{
-			$audio_type='file';
+			$audio_audio_type='file';
 		}
-		else $audio_type='embed';
+		else $audio_audio_type='embed';
 		$audio_year=$audio_obj->getYear();
 	}
 }
@@ -128,6 +128,6 @@ $default_data=array(
 		'Title'=>$audio_title,
 		'Twitter'=>$audio_twitter,
 		'Unique'=>$audio_unique,
-		'AudioType'=>$audio_type,
+		'AudioType'=>$audio_audio_type,
 		'Year'=>$audio_year
 	);

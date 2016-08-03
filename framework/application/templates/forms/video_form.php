@@ -459,7 +459,7 @@ elseif(!isset($_GET['select']))
 				else
 				{
 					# NOTE: This video is not in a public directory.
-					//$fg->addFormPart('<a href="'.APPLICATION_URL.'videos/files/'.$file_name.'" title="Current Video" rel="'.FW_POPUP_HANDLE.'"><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
+					//$fg->addFormPart('<a href="'.APPLICATION_URL.'videos/files/'.$file_name.'" title="Current Video" rel="'.FW_POPUP_HANDLE.'" data-image="'.$video_obj->getThumbnailUrl().'"><img class="image" src="'.$video_obj->getThumbnailUrl().'" alt="Cover for '.$video_obj->getTitle().'"/><span>'.$file_name.' - "'.$video_obj->getTitle().'"</span></a>');
 					$fg->addFormPart('<span>'.$file_name.' - "'.$video_obj->getTitle().'"</span>');
 				}
 				$fg->addElement('hidden', array('name'=>'_video', 'value'=>$file_name));
