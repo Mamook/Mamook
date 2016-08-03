@@ -438,6 +438,7 @@ class VideoFormProcessor extends FormProcessor
 									# Assign the image ID to a variable.
 									$image_id=$db->get_insert_id();
 								}
+								# There is already an original thumbnail.
 								else
 								{
 									# Search for this image.

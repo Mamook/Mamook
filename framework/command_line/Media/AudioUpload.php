@@ -1,5 +1,8 @@
 <?php /* framework/command_line/Media/AudioUpload.php */
 
+# NOTE: This script is useless until we implement Ajax to call this script to TRULY upload a video in the background.
+
+/*
 # Put the keys into an array.
 $keys=explode('|', $argv[1]);
 # Put the values into an array.
@@ -60,6 +63,19 @@ require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php')
 DB::init(DB_TYPE);
 $db=DB::get_instance();
 $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+# Check if the SoundCloud credentials are available.
+if($passed_data['SoundCloud']==='post_soundcloud')
+{
+	# Get CommandLine class.
+	require_once Utility::locateFile(MODULES.'CommandLine'.DS.'CommandLine.php');
+	# Instantiate the new CommandLine object.
+	$commandline_obj=new CommandLine();
+	# Run the upload script.
+	#	runScript() turns a multidimensional array into a single dimensional array and seperates the keys from the values.
+	#		ex: php ScriptName.php Key1|Key2|Key3 Value1|Value2|Value3
+	$commandline_obj->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'SoundCloudUpload.php'), $passed_data);
+}
 
 # If there is an audio file.
 if(!empty($passed_data['FileName']))
@@ -126,3 +142,4 @@ if(!empty($passed_data['FileName']))
 		}
 	}
 }
+*/
