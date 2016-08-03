@@ -25,15 +25,16 @@ class Audio extends Media
 {
 	/*** data members ***/
 
-	protected static $audio_obj;
 	private $all_audio=array();
 	private $api=NULL;
 	private $audio_id=NULL;
+	private static $audio_obj;
 	private $audio_type=NULL;
 	private $audio_url=NULL;
 	private $confirmation_template=NULL;
 	private $embed_code=NULL;
 	private $file_name=NULL;
+	private $new_audio=TRUE;
 	private $is_playlist=FALSE;
 	private $soundcloud_obj=NULL;
 	private $thumbnail_url=NULL;
@@ -261,6 +262,19 @@ class Audio extends Media
 	} #==== End -- setIsPlaylist
 
 	/**
+	 * setNewAudio
+	 *
+	 * Set the data member $new_audio
+	 *
+	 * @param	boolean $new_audio
+	 * @access	public
+	 */
+	public function setNewAudio($new_audio)
+	{
+		$this->new_audio=$new_audio;
+	} #==== End -- setNewAudio
+
+	/**
 	 * setSoundcloudObject
 	 *
 	 * Set the data member $soundcloud_obj
@@ -411,6 +425,18 @@ class Audio extends Media
 	} #==== End -- getIsPlaylist
 
 	/**
+	 * getNewAudio
+	 *
+	 * Gets the data member $new_audio
+	 *
+	 * @access	public
+	 */
+	public function getNewAudio()
+	{
+		return $this->new_audio;
+	} #==== End -- getNewAudio
+
+	/**
 	 * getSoundcloudObject
 	 *
 	 * Returns the data member $soundcloud_obj.
@@ -474,56 +500,28 @@ class Audio extends Media
 	 *
 	 * Returns the number of audio files in the database.
 	 *
-	 * @param	$playlists				The id's of the playlist(s) to be retrieved.
-	 *										May be an array or dash separeted values, ie. '50-60-70-110'.
+	 * @param	$where					The WHERE statements in the query.
 	 * @param	$limit					The limit of records to count.
-	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
 	 */
-	public function countAllAudio($playlists=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllAudio($where=NULL, $limit=NULL)
 	{
-		# NOTE: Playlist's are not required, so don't throw an error.
-		/*
-		# Check if there were playlists passed.
-		if($playlists===NULL)
+		try
 		{
-			throw new Exception('You must provide a playlist!', E_RECOVERABLE_ERROR);
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Count the records.
+			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'audio`'.($where===NULL ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+			return $count;
 		}
-		else
+		catch(ezDB_Error $ez)
 		{
-		*/
-			try
-			{
-				# Get the Playlist class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
-				# Instantiate a new Playlist object.
-				$playlist_obj=Playlist::getInstance();
-				# Set the Playlist object to a data member.
-				$this->setPlaylistObject($playlist_obj);
-				# Reset the Playlist object variable with the instance from the data member.
-				$playlist_obj=$this->getPlaylistObject();
-				# Create the WHERE clause for the passed $playlists string.
-				$playlist_obj->createWhereSQL($playlists, 'playlist', FALSE);
-				# Set the newly created WHERE clause to a variable.
-				$where=($playlist_obj->getWhereSQL()!==NULL ? $playlist_obj->getWhereSQL().' AND' : '');
-				try
-				{
-					# Set the Database instance to a variable.
-					$db=DB::get_instance();
-					# Count the records.
-					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'audio` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
-					return $count;
-				}
-				catch(ezDB_Error $ez)
-				{
-					throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-				}
-			}
-			catch(Exception $e)
-			{
-				throw $e;
-			}
-		//}
+			throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
 	} #==== End -- countAllAudio
 
 	/**
@@ -616,8 +614,6 @@ class Audio extends Media
 						# If there is no redirect, return FALSE.
 						return FALSE;
 					}
-					# Set the audio's categories data member to a local variable.
-					$audio_cats=$this->getCategories();
 					# Set the audio's name data member to a local variable.
 					$audio_name=$this->getFileName();
 					# Get the FileHandler class.
@@ -716,8 +712,16 @@ class Audio extends Media
 
 		try
 		{
-			# Count the returned files.
-			$audio_count=$this->countAllAudio();
+			if($login->checkAccess(MAN_USERS)===TRUE)
+			{
+				# Count the returned files.
+				$audio_count=$this->countAllAudio();
+			}
+			else
+			{
+				# Count the returned files.
+				$audio_count=$this->countAllAudio('`availability`=1 AND `new`=0');
+			}
 			# Check if there was returned content.
 			if($audio_count>0)
 			{
@@ -750,10 +754,10 @@ class Audio extends Media
 						# If audio_id is set in the URL.
 						if($audio_id!==NULL)
 						{
-							# Loop through the audio
+							# Loop through the audio.
 							foreach($all_audio as $audio_key=>$audio)
 							{
-								# If the $audio_id does not match the audio Id set the $no_audio to TRUE
+								# If the $audio_id does not match the audio Id set the $no_audio to TRUE.
 								if($audio_id!=$audio->id)
 								{
 									$no_audio=TRUE;
@@ -762,10 +766,10 @@ class Audio extends Media
 								{
 									$no_audio=FALSE;
 
-									# Display the large audio
+									# Display the large audio.
 									$display=$this->getFirstAudio($all_audio, $audio_key);
 
-									# Remove the audio from the array
+									# Remove the audio from the array.
 									unset($all_audio[$audio_key]);
 									break;
 								}
@@ -781,12 +785,12 @@ class Audio extends Media
 					if($login->checkAccess(MAN_USERS)===TRUE)
 					{
 						# Get the Audio.
-						$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `new` = 0');
+						$this->getAudio(NULL, '*', 'id', 'DESC');
 					}
 					else
 					{
 						# Get the Audio.
-						$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `availability` = 1 AND `new` = 0');
+						$this->getAudio(NULL, '*', 'id', 'DESC', ' WHERE `availability`=1 AND `new`=0');
 					}
 					# Set the returned Audio records to a variable.
 					$all_audio=$this->getAllAudio();
@@ -820,7 +824,7 @@ class Audio extends Media
 				# If the audio doesn't exist ($no_audio=TRUE)
 				if($no_audio)
 				{
-					return $display='<div id="no_video"></div>';
+					return $display='<div class="no_video"></div>';
 				}
 
 				if(APPLICATION_URL.Utility::removeIndex(HERE)==AUDIO_URL)
@@ -830,7 +834,6 @@ class Audio extends Media
 					{
 						# Large Audio
 						$display=$this->getFirstAudio($all_audio);
-
 						# Remove the first audio from the array
 						unset($all_audio[0]);
 					}
@@ -927,13 +930,13 @@ class Audio extends Media
 		# Get large audio markup.
 		$single_audio=$this->markupLargeAudio($large_audio);
 		# Display the audio details.
-		$display='<div class="audio-lg">';
-		$display.=$single_audio['audio'];
-		$display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
-		$display.=$single_audio['description'];
-		$display.='<div>';
+		$audio_display='<div class="audio-lg">';
+		$audio_display.=$single_audio['audio'];
+		$audio_display.='<h3 class="h-3">'.$single_audio['title'].'</h3>';
+		$audio_display.=$single_audio['description'];
+		$audio_display.='<div>';
 
-		return $display;
+		return $audio_display;
 	} #==== End -- getFirstAudio
 
 	/**
@@ -989,7 +992,7 @@ class Audio extends Media
 				$value=$this->getFileName();
 			}
 			# Get the audio info from the database.
-			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `category`, `year`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `category`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($audio!==NULL)
 			{
@@ -1085,12 +1088,7 @@ class Audio extends Media
 				# Create audio_url variable.
 				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
 			}
-			# If vimeo_id is in the `api` then this audio is on Vimeo.
-			elseif(isset($api_decoded->vimeo_id))
-			{
-				$audio_url='vimeo_url';
-			}
-			# If it's not on Soundcloud or Vimeo, stream from the server.
+			# If it's not on Soundcloud, stream from the server.
 			else
 			{
 				# Remove the file extension.
@@ -1109,28 +1107,6 @@ class Audio extends Media
 				# Use the SoundCloud thumbnail.
 				$image_url=$api_decoded->soundcloud_thumbnails->default->url;
 			}
-			/*
-			elseif(!empty($audio->image))
-			{
-				# Set the image ID.
-				$this->setImageID($audio->image);
-				# Get the image information from the database, and set them to data members.
-				$this->getThisImage($this->getImageID());
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
-			else
-			{
-				# Get the default thumbnail.
-				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
-			*/
 			else
 			{
 				# Set the image ID.
@@ -1162,7 +1138,6 @@ class Audio extends Media
 				'</td>'.
 			'</tr>';
 		}
-
 		$display.='</table>';
 
 		return $display;
@@ -1200,11 +1175,6 @@ class Audio extends Media
 				# Create audio_url variable.
 				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
 			}
-			elseif(isset($api_decoded->vimeo_id))
-			{
-				# Create audio_url variable.
-				$audio_url='vimeo_url';
-			}
 			else
 			{
 				$audio_name=$large_audio[0]->file_name;
@@ -1226,29 +1196,6 @@ class Audio extends Media
 				# Set the thumbnail to a variable.
 				$image_url=$api_decoded->soundcloud_thumbnails->medium->url;
 			}
-			/*
-			elseif(!empty($large_audio[0]->image))
-			{
-				# Set the image ID.
-				$this->setImageID($large_audio[0]->image);
-				# Get the image information from the database, and set them to data members.
-				$this->getThisImage($this->getImageID());
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
-			else
-			{
-				### Get the default thumbnail image. ###
-				# Get the image information from the database, and set them to data members.
-				$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-				# Set the Image object to a variable.
-				$image_obj=$this->getImageObj();
-				# Set the thumbnail to a variable.
-				$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-			}
-			*/
 			else
 			{
 				# Set the image ID.
@@ -1293,7 +1240,7 @@ class Audio extends Media
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		# Small Audio
+		# Small Audio.
 		$display='<div class="feed_wrapper-audio">'.
 			'<button class="arrow-prev">Previous Audio</button>'.
 			'<div class="feed_list-audio">'.
@@ -1334,28 +1281,6 @@ class Audio extends Media
 					# Set the thumbnail to a variable.
 					$image_url=$api_decoded->soundcloud_thumbnails->default->url;
 				}
-				/*
-				elseif(!empty($audio->image))
-				{
-					# Set the image ID.
-					$this->setImageID($audio->image);
-					# Get the image information from the database, and set them to data members.
-					$this->getThisImage($this->getImageID());
-					# Set the Image object to a variable.
-					$image_obj=$this->getImageObj();
-					# Set the the thumbnail to a variable.
-					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-				}
-				else
-				{
-					# Get the image information from the database, and set them to data members.
-					$this->getThisImage('Audio.Default.Thumbnail.jpg', FALSE);
-					# Set the Image object to a variable.
-					$image_obj=$this->getImageObj();
-					# Set the thumbnail to a variable.
-					$this->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-				}
-				*/
 				else
 				{
 					# Set the image ID.

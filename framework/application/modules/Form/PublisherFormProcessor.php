@@ -337,11 +337,11 @@ class PublisherFormProcessor extends FormProcessor
 								# Get the Audio class.
 								require_once Utility::locateFile(MODULES.'Media'.DS.'Audio.php');
 								# Instantiate a new Audio object.
-								$audio=new Audio();
+								$audio_obj=new Audio();
 								# Count all audio records with this publisher associated.
-								$count=$audio->countAllAudio('all', NULL, 'AND `publisher` = '.$db->quote($id));
+								$count_audio=$audio_obj->countAllAudio('`publisher` = '.$db->quote($id));
 								# Check if there where records associated with the publisher.
-								if($count>0)
+								if($count_audio>0)
 								{
 									# Set the records_returned variable to TRUE.
 									$records_returned=TRUE;
@@ -373,11 +373,11 @@ class PublisherFormProcessor extends FormProcessor
 								# Get the Video class.
 								require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 								# Instantiate a new Video object.
-								$video=new Video();
+								$video_obj=new Video();
 								# Count all video records with this publisher associated.
-								$count=$video->countAllVideos('all', NULL, ' AND `publisher` = '.$db->quote($id));
+								$count_videos=$video_obj->countAllVideos('`publisher` = '.$db->quote($id));
 								# Check if there where records associated with the publisher.
-								if($count>0)
+								if($count_videos>0)
 								{
 									# Set the records_returned variable to TRUE.
 									$records_returned=TRUE;

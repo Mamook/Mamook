@@ -25,17 +25,17 @@ class Video extends Media
 {
 	/*** data members ***/
 
-	private static $video_obj;
 	private $all_videos=array();
 	private $api=NULL;
 	private $confirmation_template=NULL;
 	private $embed_code=NULL;
+	private $file_name=NULL;
 	private $google_client=NULL;
 	private $is_playlist=FALSE;
-	private $file_name=NULL;
 	private $new_video=TRUE;
 	private $thumbnail_url=NULL;
 	private $video_id=NULL;
+	private static $video_obj;
 	private $video_type=NULL;
 	private $video_url=NULL;
 	private $youtube_obj=NULL;
@@ -244,6 +244,19 @@ class Video extends Media
 	} #==== End -- setIsPlaylist
 
 	/**
+	 * setNewVideo
+	 *
+	 * Set the data member $new_video
+	 *
+	 * @param	boolean $new_video
+	 * @access	public
+	 */
+	public function setNewVideo($new_video)
+	{
+		$this->new_video=$new_video;
+	} #==== End -- setNewVideo
+
+	/**
 	 * setThumbnailUrl
 	 *
 	 * Set the data member $thumbnail_url
@@ -420,19 +433,6 @@ class Video extends Media
 	} #==== End -- getNewVideo
 
 	/**
-	 * setNewVideo
-	 *
-	 * Set the data member $new_video
-	 *
-	 * @param	boolean $new_video
-	 * @access	public
-	 */
-	public function setNewVideo($new_video)
-	{
-		$this->new_video=$new_video;
-	} #==== End -- setNewVideo
-
-	/**
 	 * getThumbnailUrl
 	 *
 	 * Gets the data member $thumbnail_url
@@ -536,56 +536,28 @@ class Video extends Media
 	 *
 	 * Returns the number of videos in the database.
 	 *
-	 * @param	$playlists				The id's of the playlist(s) to be retrieved.
-	 *										May be an array or dash separeted values, ie. '50-60-70-110'.
+	 * @param	$where					The WHERE statements in the query.
 	 * @param	$limit					The limit of records to count.
-	 * @param	$and_sql				Extra AND statements in the query.
 	 * @access	public
 	 */
-	public function countAllVideos($playlists=NULL, $limit=NULL, $and_sql=NULL)
+	public function countAllVideos($where=NULL, $limit=NULL)
 	{
-		# NOTE: Playlist's are not required, so don't throw an error.
-		/*
-		# Check if there were playlists passed.
-		if($playlists===NULL)
+		try
 		{
-			throw new Exception('You must provide a playlist!', E_RECOVERABLE_ERROR);
+			# Set the Database instance to a variable.
+			$db=DB::get_instance();
+			# Count the records.
+			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'videos`'.($where===NULL ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+			return $count;
 		}
-		else
+		catch(ezDB_Error $ez)
 		{
-		*/
-			try
-			{
-				# Get the Playlist class.
-				require_once Utility::locateFile(MODULES.'Content'.DS.'Playlist.php');
-				# Instantiate a new Playlist object.
-				$playlist_obj=Playlist::getInstance();
-				# Set the Playlist object to a data member.
-				$this->setPlaylistObject($playlist_obj);
-				# Reset the Playlist object variable with the instance from the data member.
-				$playlist_obj=$this->getPlaylistObject();
-				# Create the WHERE clause for the passed $playlists string.
-				$playlist_obj->createWhereSQL($playlists, 'playlist', FALSE);
-				# Set the newly created WHERE clause to a variable.
-				$where=($playlist_obj->getWhereSQL()!==NULL ? $playlist_obj->getWhereSQL().' AND' : '');
-				try
-				{
-					# Set the Database instance to a variable.
-					$db=DB::get_instance();
-					# Count the records.
-					$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'videos` WHERE '.$where.(($and_sql===NULL) ? '' : ' '.$and_sql).' `new` = 0'.(($limit===NULL) ? '' : ' LIMIT '.$limit));
-					return $count;
-				}
-				catch(ezDB_Error $ez)
-				{
-					throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-				}
-			}
-			catch(Exception $e)
-			{
-				throw $e;
-			}
-		//}
+			throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
 	} #==== End -- countAllVideos
 
 	/**
@@ -821,8 +793,16 @@ class Video extends Media
 
 		try
 		{
-			# Count the returned files.
-			$video_count=$this->countAllVideos('all');
+			if($login->checkAccess(MAN_USERS)===TRUE)
+			{
+				# Count the returned files.
+				$video_count=$this->countAllVideos();
+			}
+			else
+			{
+				# Count the returned files.
+				$video_count=$this->countAllVideos('`availability`=1 AND `new`=0');
+			}
 			# Check if there was returned content.
 			if($video_count>0)
 			{
@@ -855,10 +835,10 @@ class Video extends Media
 						# If video_id is set in the URL.
 						if($video_id!==NULL)
 						{
-							# Loop through the videos
+							# Loop through the videos.
 							foreach($all_videos as $video_key=>$video)
 							{
-								# If the $video_id does not match the videoId set the $no_video to TRUE
+								# If the $video_id does not match the videoId set the $no_video to TRUE.
 								if($video_id!=$video->id)
 								{
 									$no_video=TRUE;
@@ -867,10 +847,10 @@ class Video extends Media
 								{
 									$no_video=FALSE;
 
-									# Display the large video
+									# Display the large video.
 									$display=$this->getFirstVideo($all_videos, $video_key);
 
-									# Remove the video from the array
+									# Remove the video from the array.
 									unset($all_videos[$video_key]);
 									break;
 								}
@@ -1217,11 +1197,13 @@ class Video extends Media
 				# Create video_url variable.
 				$video_url=$yt->getYoutubeUrl().$this->getVideoId();
 			}
+			/*
 			# If vimeo_id is in the `api` then this video is on Vimeo.
 			elseif(isset($api_decoded->vimeo_id))
 			{
 				$video_url='vimeo_url';
 			}
+			*/
 			# If it's not on YouTube or Vimeo, stream from the server.
 			else
 			{
@@ -1355,7 +1337,7 @@ class Video extends Media
 			$this->setDescription($db->sanitize($large_video[0]->description, 5));
 
 			# Set the markup to the display array.
-			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'"  data-image="'.$this->getThumbnailUrl().'"'.($this->getAvailability()==1 ? '  rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
+			$display['video']='<a class="image-link" href="'.$this->getVideoUrl().'" title="Play '.$this->getTitle().'" data-image="'.$this->getThumbnailUrl().'"'.($this->getAvailability()==1 ? '  rel="'.FW_POPUP_HANDLE.'"' : ' target="_blank"').'>'.
 				'<img src="'.$this->getThumbnailUrl().'" class="image" alt="Poster for '.$this->getTitle().'"/>'.
 				'<span class="play-static"></span>'.
 			'</a>';
@@ -1379,11 +1361,11 @@ class Video extends Media
 		# Set the Database instance to a variable.
 		$db=DB::get_instance();
 
-		# Small Videos
+		# Small Videos.
 		$display='<div class="feed_wrapper-video">'.
 			'<button class="arrow-prev">Previous Video</button>'.
-		'<div class="feed_list-video">'.
-		'<ul class="feed-video">';
+			'<div class="feed_list-video">'.
+				'<ul class="feed-video">';
 
 		$playlist_param='';
 		# Check if the videos belong to a playlist.

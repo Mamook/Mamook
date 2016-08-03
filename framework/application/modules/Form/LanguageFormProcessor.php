@@ -319,7 +319,7 @@ class LanguageFormProcessor extends FormProcessor
 								# Instantiate a new Audio object.
 								$audio=new Audio();
 								# Count all audio records with this language associated.
-								$count=$audio->countAllAudio('all', NULL, 'AND `language` = '.$db->quote($id));
+								$count=$audio->countAllAudio('`language` = '.$db->quote($id));
 								# Check if there where records associated with the language.
 								if($count>0)
 								{
@@ -353,11 +353,11 @@ class LanguageFormProcessor extends FormProcessor
 								# Get the Video class.
 								require_once Utility::locateFile(MODULES.'Media'.DS.'Video.php');
 								# Instantiate a new Video object.
-								$video=new Video();
+								$video_obj=new Video();
 								# Count all video records with this language associated.
-								$count=$video->countAllVideos('all', NULL, 'AND `language` = '.$db->quote($id));
+								$count_videos=$video_obj->countAllVideos('`language` = '.$db->quote($id));
 								# Check if there where records associated with the language.
-								if($count>0)
+								if($count_videos>0)
 								{
 									# Set the records_returned variable to TRUE.
 									$records_returned=TRUE;
