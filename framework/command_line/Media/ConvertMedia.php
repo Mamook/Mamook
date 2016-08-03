@@ -48,5 +48,5 @@ if($passed_data['MediaType']=='video')
 elseif($passed_data['MediaType']=='audio')
 {
 	# Convert to 128bit mp3.
-	$commandline_obj_ffmpeg->runScript("-i ".BODEGA.'audio'.DS.$passed_data['FileName']." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$passed_data['FileNameNoExt'].".mp3");
+	$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.'audio'.DS.$passed_data['FileName'].' -acodec libmp3lame -ac 2 -ab 128k '.AUDIO_PATH.'files'.DS.$passed_data['FileNameNoExt'].'.mp3');
 }
