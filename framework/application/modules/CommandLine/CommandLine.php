@@ -234,6 +234,9 @@ class CommandLine
 	{
 		try
 		{
+			# Debugging.
+			//echo $command.'<br>'."\n";
+
 			# Check if this is a Windows server.
 			if($this->isWindows()===TRUE)
 			{
