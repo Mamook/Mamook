@@ -84,6 +84,8 @@ define('TEMP', BASE_PATH.'tmp'.DS);
 define('LOGS', BASE_PATH.'logs'.DS);
 # Define the Command Line log file name.
 define('COMMAND_LINE_LOG', 'cl_log_file.log');
+# Define the Cron log file name.
+define('CRON_LOG', 'cron.log');
 # Define the Downloads log file name.
 define('DOWNLOADS_LOG', 'downloads.log');
 # Define the CHANGELOG file name.
