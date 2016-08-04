@@ -1,4 +1,4 @@
-<?php
+<?php /* framework/application/modules/ExceptionHandler/ExceptionHandler.php */
 
 # Get the Utility Class.
 require_once UTILITY_CLASS;
@@ -38,7 +38,6 @@ function myErrorHandler($code, $msg, $file, $line)
 */
 class ExceptionHandler
 {
-
 	/*** data members ***/
 
 	protected $code=0;							# User-defined exception code
@@ -54,7 +53,7 @@ class ExceptionHandler
 
 	/*** magic methods ***/
 
-	public function __construct($code=NULL, $msg=NULL, $file=NULL, $line=NULL, $context=array('nothing'))
+	public function __construct($code=NULL, $msg=NULL, $file=NULL, $line=NULL, $context=array())
 	{
 		if($code!==NULL OR isset($_GET['error']))
 		{
@@ -116,7 +115,7 @@ class ExceptionHandler
 	 *
 	 * @access	public
 	 */
-	public function captureError($code=NULL, $msg=NULL, $file=NULL, $line=NULL, $context=array())
+	public function captureError($code, $msg, $file, $line, $context)
 	{
 		$agent=((isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '');
 		$context=((!empty($context)) ? $context : '');
@@ -260,16 +259,16 @@ class ExceptionHandler
 
 
 
-	/*** private methods ***/
+	/*** protected methods ***/
 
 	/**
 	 * processContext
 	 *
 	 * Loops through the context. Returns a concatenated string.
 	 *
-	 * @access	private
+	 * @access	protected
 	 */
-	private function processContext($context, $string='')
+	protected function processContext($context, $string='')
 	{
 		$separator=FALSE;
 		if(is_array($context) && !empty($context))
@@ -296,7 +295,6 @@ class ExceptionHandler
 		return $string;
 	} #==== End -- processContext
 
-	/*** End private methods ***/
-
+	/*** End protected methods ***/
 
 } #=== End ExceptionHandler class.

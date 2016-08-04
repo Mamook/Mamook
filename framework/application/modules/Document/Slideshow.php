@@ -1,4 +1,4 @@
-<?php
+<?php /* framework/application/modules/Document/Slideshow.php */
 
 class Slideshow
 {
@@ -30,7 +30,7 @@ class Slideshow
 
 	/*** mutator methods ***/
 
-		/**
+	/**
 	 * setAfterEnd
 	 *
 	 * Sets the data member $after_end.
