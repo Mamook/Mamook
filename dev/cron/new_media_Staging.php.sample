@@ -4,7 +4,7 @@
 
 /**
  * This script runs every 10 minutes. Had to escape the forward slash.
- * *\/10      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/new_media_Dev.php
+ * *\/10      00      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/dev/cron/new_media_Staging.php
  * -          -       -       -       -
  * |          |       |       |       |
  * |          |       |       |       +----- day of week (0 - 6) (Sunday=0)
@@ -79,21 +79,8 @@ try
 	# Get the Soundcloud instance. Starts the SoundcloudService if it's not already started.
 	//$soundcloud_obj=$audio_obj->getSoundcloudObject(FULL_DOMAIN);
 
-	try
-	{
-		# Get new uploaded audio and videos from the database.
-		$get_new_media=$db->get_results('SELECT `id`, `file_name`, `api`, `contributor`, \'audio\' AS media_type FROM `'.DBPREFIX.'audio` WHERE `new` IS NULL UNION SELECT `id`, `file_name`, `api`, `contributor`, \'video\' AS media_type FROM `'.DBPREFIX.'videos` WHERE `new` IS NULL');
-	}
-	catch(ezDB_Error $ez)
-	{
-		# Throw an exception because there was a Database connection error.
-		throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-	}
-	catch(Exception $e)
-	{
-		# Re-throw any caught exceptions.
-		throw $e;
-	}
+	# Get new uploaded audio and videos from the database.
+	$get_new_media=$db->get_results('SELECT `id`, `file_name`, `api`, `contributor`, \'audio\' AS media_type FROM `'.DBPREFIX.'audio` WHERE `new` IS NULL UNION SELECT `id`, `file_name`, `api`, `contributor`, \'video\' AS media_type FROM `'.DBPREFIX.'videos` WHERE `new` IS NULL');
 
 	# If there is any new media.
 	if($get_new_media>0)

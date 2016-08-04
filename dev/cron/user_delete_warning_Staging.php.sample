@@ -1,8 +1,8 @@
-<?php /* cron/user_delete_warning.php */
+<?php /* dev/cron/user_delete_warning_Staging.php.sample */
 
 /**
  * This script runs once a day.
- * 00      11      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/cron/user_delete_warning.php
+ * 00      11      *       *       *       /opt/local/bin/php <Full Path to Cron Folder>/dev/cron/user_delete_warning_Staging.php
  * -       -       -       -       -
  * |       |       |       |       |
  * |       |       |       |       +----- day of week (0 - 6) (Sunday=0)
@@ -17,122 +17,126 @@
  * Use dev/cron/user_delete_warning_Staging.php if you need this for your staging server.
  */
 
-# Need this for the database insert.
-if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
-
-# Define the url that points to our application. (ends with a slash)
-define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
-
-# Need these for database_definitions.php and email_definitions.php
-# Only need to change the RUN_ON_DEVELOPMENT definition.
-# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
-if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
-if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', TRUE);
-
-# Define the timezone.
-define('TIMEZONE', 'US/Pacific');
-
-/*
- *---------------------------------------------------------------
- * SYSTEM VARIABLES
- *---------------------------------------------------------------
- *
- * System variables needed by the application
- *
- */
-# Make sure PHP is using UTF-8 character encoding.
-mb_internal_encoding('UTF-8');
-
-# Set the date (and time)
-# First, the timezone.
-putenv('TZ='.TIMEZONE);
-date_default_timezone_set(TIMEZONE);
-
-# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
-if(RUN_ON_STAGING===TRUE)
-{
-	define('SECURE_URL', APPLICATION_URL.'secure/');
-}
-else
-{
-	define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
-}
-
-if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
-{
-	# Turn Debugging on or off.
-	define('DEBUG_APP', TRUE);
-}
-else
-{
-	# Turn Debugging on or off.
-	define('DEBUG_APP', FALSE);
-}
-
-# The url to the login page.
-define('LOGIN_PAGE', SECURE_URL.'login/');
-
-# Define where cookies may be active. ('/' means the entire domain)
-define('COOKIE_PATH', '/');
-
-# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
-define('WP_INSTALLED', FALSE);
-
 # Change the directory to where this cron script is located.
 chdir(dirname(__FILE__));
 
-# Get the Path definitions.
-require '../../data/path_definitions.php';
-# Get the database definitions.
-require DATA_FILES.'database_definitions.php';
-# Get the Email definitions.
-require DATA_FILES.'email_definitions.php';
-# Get the User Privileges.
-require DATA_FILES.'user_privileges.php';
-# Get the Utility Class.
-require_once UTILITY_CLASS;
-# If WordPress is installed, get the appropriate settings.
-if(WP_INSTALLED===TRUE)
-{
-	require_once DATA_FILES.'WordPress_settings.php';
-}
-# Get the Validator Class.
-require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
-# Set the Validator instance to a variable.
-$validator_obj=Validator::getInstance();
-
-# Get the DB Class needed to operate with MySQL.
-require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
-DB::init(DB_TYPE);
-$db=DB::get_instance();
-$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
-
-# Get the User Class.
-require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-# Create a new User object.
-$user_obj=new User();
-
-# Get the Email class.
-require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
-# Instantiate a new Email object.
-$email_obj=new Email();
-
-# Don't get users that are staff.
-# Get users that have never logged in, or users that haven't logged in for 2 years or more,
-#	that have an expired subscription, or never had a subscription.
-# Don't get users that are already in the `users_inactive` table.
-# Don't get users that have registered in the last 7 days.
-# NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
-$where='WHERE `staff_id` IS NULL AND (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`subscription`<CURDATE() OR `subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
-$order_field='ID';
-$order_direction='ASC';
-$fields='`ID`, `display`, `email`, `active`, `random`, `lastlogin`';
-# Get the Users.
-$user_obj->getUsers(NULL, $fields, $order_field, $order_direction, $where);
-$recipients=$user_obj->getAllUsers();
-
 try
 {
+	# Need this for the database insert.
+	if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
+
+	# Define the url that points to our application. (ends with a slash)
+	define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+
+	# Need these for database_definitions.php and email_definitions.php
+	# Only need to change the RUN_ON_DEVELOPMENT definition.
+	# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+	if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
+	if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', TRUE);
+
+	# Define the timezone.
+	define('TIMEZONE', 'US/Pacific');
+
+	/*
+	 *---------------------------------------------------------------
+	 * SYSTEM VARIABLES
+	 *---------------------------------------------------------------
+	 *
+	 * System variables needed by the application
+	 *
+	 */
+	# Make sure PHP is using UTF-8 character encoding.
+	mb_internal_encoding('UTF-8');
+
+	# Set the date (and time)
+	# First, the timezone.
+	putenv('TZ='.TIMEZONE);
+	date_default_timezone_set(TIMEZONE);
+
+	# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
+	if(RUN_ON_STAGING===TRUE)
+	{
+		define('SECURE_URL', APPLICATION_URL.'secure/');
+	}
+	else
+	{
+		define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
+	}
+
+	if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
+	{
+		# Turn Debugging on or off.
+		define('DEBUG_APP', TRUE);
+	}
+	else
+	{
+		# Turn Debugging on or off.
+		define('DEBUG_APP', FALSE);
+	}
+
+	# The url to the login page.
+	define('LOGIN_PAGE', SECURE_URL.'login/');
+
+	# Define where cookies may be active. ('/' means the entire domain)
+	define('COOKIE_PATH', '/');
+
+	# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
+	define('WP_INSTALLED', FALSE);
+
+	# Get the Path definitions.
+	require '../../data/path_definitions.php';
+	# Get the database definitions.
+	require DATA_FILES.'database_definitions.php';
+	# Get the Email definitions.
+	require DATA_FILES.'email_definitions.php';
+	# Get the User Privileges.
+	require DATA_FILES.'user_privileges.php';
+	# Get the Utility Class.
+	require_once UTILITY_CLASS;
+	# If WordPress is installed, get the appropriate settings.
+	if(WP_INSTALLED===TRUE)
+	{
+		require_once DATA_FILES.'WordPress_settings.php';
+	}
+
+	# Get the CommandLineException class.
+	require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'CommandLineException.php');
+
+	# Get the Validator Class.
+	require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+	# Set the Validator instance to a variable.
+	$validator_obj=Validator::getInstance();
+
+	# Get the DB Class needed to operate with MySQL.
+	require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+	DB::init(DB_TYPE);
+	$db=DB::get_instance();
+	$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+	# Get the User Class.
+	require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
+	# Create a new User object.
+	$user_obj=new User();
+
+	# Get the Email class.
+	require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
+	# Instantiate a new Email object.
+	$email_obj=new Email();
+
+	# Don't get users that are staff.
+	# Get users that have never logged in, or users that haven't logged in for 2 years or more,
+	#	that have an expired subscription, or never had a subscription.
+	# Don't get users that are already in the `users_inactive` table.
+	# Don't get users that have registered in the last 7 days.
+	# NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
+	$where='WHERE `staff_id` IS NULL AND (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`subscription`<CURDATE() OR `subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
+	$order_field='ID';
+	$order_direction='ASC';
+	$fields='`ID`, `display`, `email`, `active`, `random`, `lastlogin`';
+	# Get the Users.
+	$user_obj->getUsers(NULL, $fields, $order_field, $order_direction, $where);
+	$recipients=$user_obj->getAllUsers();
+
 	# Delete inactive users.
 	$deleted_users=$user_obj->deleteInactiveUsers();
 
@@ -296,7 +300,6 @@ try
 		{
 			$message.='The Inactive Users cron script deleted '.$deleted_users.' users.<br/>'."\n";
 		}
-		$message.='<br/>'."\n";
 		$message.='The script successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
 		$message.='<br/>'."\n";
 
@@ -341,5 +344,5 @@ try
 }
 catch(Exception $e)
 {
-	throw $e;
+	$exception=new CommandLineException($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
 }
