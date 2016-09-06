@@ -78,7 +78,11 @@ class Content
 			$this->setEmail($content->email);
 			$this->setRegistration($content->registration);
 			$this->setMaintenance($content->maintenance);
-			$this->getContent();
+			# Only find this page's content if this is not being run in a command line script.
+			if(PHP_SAPI!='cli')
+			{
+				$this->getContent();
+			}
 		}
 		catch(ezDB_Error $e)
 		{
@@ -1722,11 +1726,12 @@ class Content
 		return $sub_domain_sql;
 	} #==== End -- checkDomain
 
-	/***
+	/**
 	 * getContent
 	 *
-	 * Get content from the content table
+	 * Get content from the `content` table.
 	 *
+	 * @param	$where
 	 * @access	protected
 	 */
 	protected function getContent($where=NULL)
@@ -1787,7 +1792,7 @@ class Content
 		}
 		catch(ezDB_Error $e)
 		{
-			throw new Exception('Error occured: ' . $e->getMessage(). ', code: ' . $e->getCode() . '<br />Last query: '. $e->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$e->getMessage().', code: '.$e->getCode().'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
