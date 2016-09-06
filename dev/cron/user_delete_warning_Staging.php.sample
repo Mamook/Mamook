@@ -238,7 +238,7 @@ try
 					# Add the email to the good_email array.
 					$good_email[$row->display]=$row->email;
 
-					### DEBUG ###
+					# NOTE: DEBUGGING
 					if(DEBUG_APP===TRUE)
 					{
 						# Send email.
