@@ -3,7 +3,6 @@
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
 
-
 /**
  * FormProcessor
  *
@@ -20,34 +19,17 @@ class FormProcessor
 	private $populator=NULL;
 	private $target='_top';
 	private $upload=FALSE;
-
 	/*** End data members ***/
 
-
-
 	/*** mutator methods ***/
-
-	/**
-	 * setDuplicates
-	 *
-	 * Sets the data member $duplicates.
-	 *
-	 * @param		$duplicates (The potential duplicates returned from a duplicate search to display.)
-	 * @access	protected
-	 */
-	protected function setDuplicates($duplicates)
-	{
-		# Set the variable.
-		$this->duplicates=$duplicates;
-	} #==== End -- setDuplicates
 
 	/**
 	 * setFormAction
 	 *
 	 * Sets the data member $form_action.
 	 *
-	 * @param		$url 		(The url where to send the form-data when a form is submitted.)
-	 * @access	public
+	 * @param        $url (The url where to send the form-data when a form is submitted.)
+	 * @access    public
 	 */
 	public function setFormAction($url)
 	{
@@ -64,15 +46,15 @@ class FormProcessor
 		}
 		# Set the data member.
 		$this->form_action=$url;
-	} #==== End -- setFormAction
+	}
 
 	/**
 	 * setMaxFileSize
 	 *
 	 * Sets the data member $max_file_size.
 	 *
-	 * @param		$bytes
-	 * @access	public
+	 * @param        $bytes
+	 * @access    public
 	 */
 	public function setMaxFileSize($bytes=NULL)
 	{
@@ -95,37 +77,15 @@ class FormProcessor
 		}
 		# Set the data member to NULL.
 		$this->max_file_size=$bytes;
-	} #==== End -- setMaxFileSize
-
-	/**
-	 * setPopulator
-	 *
-	 * Sets the data member $populator.
-	 *
-	 * @param		$object
-	 * @access	protected
-	 */
-	protected function setPopulator($object)
-	{
-		# Check if the passed value is empty and an object.
-		if(!empty($object) && is_object($object))
-		{
-			$this->populator=$object;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->populator=NULL;
-		}
-	} #==== End -- setPopulator
+	}
 
 	/**
 	 * setTarget
 	 *
 	 * Sets the data member $target.
 	 *
-	 * @param		$target (The target to send the form-data when a form is submitted. ie. _top, _blank, etc)
-	 * @access	public
+	 * @param        $target (The target to send the form-data when a form is submitted. ie. _top, _blank, etc)
+	 * @access    public
 	 */
 	public function setTarget($target)
 	{
@@ -142,15 +102,15 @@ class FormProcessor
 		}
 		# Set the data member.
 		$this->target=$target;
-	} #==== End -- setTarget
+	}
 
 	/**
 	 * setUpload
 	 *
 	 * Sets the data member $upload.
 	 *
-	 * @param		Boolean		$value (Whether or not the form should allow uploads.)
-	 * @access	public
+	 * @param        Boolean $value (Whether or not the form should allow uploads.)
+	 * @access    public
 	 */
 	public function setUpload($value=FALSE)
 	{
@@ -161,106 +121,95 @@ class FormProcessor
 			$value=FALSE;
 		}
 		$this->upload=$value;
-	} #==== End -- setUpload
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
+	}
 
 	/**
 	 * getDuplicates
 	 *
 	 * Returns the data member $duplicates.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getDuplicates()
 	{
 		return $this->duplicates;
-	} #==== End -- getDuplicates
+	}
 
 	/**
 	 * getFormAction
 	 *
 	 * Returns the data member $form_action.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getFormAction()
 	{
 		return $this->form_action;
-	} #==== End -- getFormAction
+	}
+
+	/*** End mutator methods ***/
+
+	/*** accessor methods ***/
 
 	/**
 	 * getMaxFileSize
 	 *
 	 * Returns the data member $max_file_size.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getMaxFileSize()
 	{
 		return $this->max_file_size;
-	} #==== End -- getMaxFileSize
+	}
 
 	/**
 	 * getPopulator
 	 *
 	 * Returns the data member $populator.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getPopulator()
 	{
 		return $this->populator;
-	} #==== End -- getPopulator
+	}
 
 	/**
 	 * getTarget
 	 *
 	 * Returns the data member $target.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getTarget()
 	{
 		return $this->target;
-	} #==== End -- getTarget
+	}
 
 	/**
 	 * getUpload
 	 *
 	 * Returns the data member $upload.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getUpload()
 	{
 		return $this->upload;
-	} #==== End -- getUpload
-
-	/*** End accessor methods ***/
-
-
-
-	/*** public methods ***/
+	}
 
 	/**
 	 * findAuthorization
 	 *
 	 * Returns an array of the Authorizations of a User.
 	 *
-	 * @param	array $branches			An array of branches to check.
-	 * @param	integer $id				The User's ID
-	 * @access	public
-	 * @return	string
+	 * @param array $branch_ids An array of branches to check.
+	 * @param integer $id       The User's ID
+	 * @return string
 	 */
 	public function findAuthorization($branch_ids, $id=NULL)
 	{
-		# Brign the Login object into scope.
-		global $login;
 		# Brign the User object into scope.
 		global $user_obj;
 
@@ -319,25 +268,22 @@ class FormProcessor
 				$auth[$branch_num]=FALSE;
 			}
 		}
+
 		//print_r($branch_levels);exit;
 		return $auth;
-	} #==== End -- findAuthorization
+	}
 
 	/**
 	 * processAuthorize
 	 *
 	 * Authorizes a user for the selected branch access levels. Emails the user with the news.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function processAuthorize()
 	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
-		# Bring the content instance into scope.
-		$main_content=Content::getInstance();
 		# Bring the User object into scope.
 		global $user_obj;
 
@@ -349,13 +295,13 @@ class FormProcessor
 			if(array_key_exists('_submit_check', $_POST))
 			{
 				# Create an empty array to hold messages to display to the User.
-				$message=array();
+				//$message=array();
 				# Get the Branch class.
 				require_once Utility::locateFile(MODULES.'Content'.DS.'Branch.php');
 				# Instantiate a new Branch object.
 				$branch_obj=new Branch();
 				# Retrieve all branches from the branches table.
-				$retrieve_branches=$branch_obj->getBranches(NULL, '`id`, `branch`');
+				$branch_obj->getBranches(NULL, '`id`, `branch`');
 				# Get all retrieved branches.
 				$all_branches=$branch_obj->getAllBranches();
 				# Get the user's access levels.
@@ -369,9 +315,9 @@ class FormProcessor
 				{
 					# Set the branches and their id's to the branches array.
 					$branch_id=$row->id;
-					$branch_name=$row->branch;
+					//$branch_name=$row->branch;
 
-/*
+					/*
 					# Check that the POST data is set for this branch and that it holds acceptable values.
 					if(isset($_POST[$branch_id]) &&
 						(($_POST[$branch_id]=='0') OR
@@ -384,7 +330,7 @@ class FormProcessor
 					else {
 						continue;
 					}
-*/
+					*/
 
 					# Check if there was POST data sent for this branch, if the checkbox is checked (on).
 					if(isset($_POST[$branch_id]) && $_POST[$branch_id]=='on')
@@ -427,42 +373,42 @@ class FormProcessor
 						$levels=str_replace($branch_candidate, '', $levels);
 					}
 
-/*
-						# Check if there is a WordPress installation.
-						if(WP_INSTALLED===TRUE && $branch_id==90)
+					/*
+					# Check if there is a WordPress installation.
+					if(WP_INSTALLED===TRUE && $branch_id==90)
+					{
+						# Set the WordPress access level to a variable for individual processing.
+						$update_WordPress=substr_replace($branch_id, $_POST[$branch_id], -1, 1);
+					}
+
+					# Create variables holding each level of access for the current branch.
+					$branch_admin=substr_replace($branch_id, 1, -1, 1).'-';
+					$branch_user=substr_replace($branch_id, 2, -1, 1).'-';
+					$branch_unauthorized=substr_replace($branch_id, 3, -1, 1).'-';
+					$branch_candidate=substr_replace($branch_id, 4, -1, 1).'-';
+
+					$new_branch_level='';
+					# Check if the user doesn't have access to this branch.
+					if($_POST[$branch_id]!=0)
+					{
+						$new_branch_level=substr_replace($branch_id, $_POST[$branch_id], -1, 1).'-';
+					}
+
+					$levels=str_replace($branch_admin, $new_branch_level, $levels);
+					$levels=str_replace($branch_user, $new_branch_level, $levels);
+					$levels=str_replace($branch_unauthorized, $new_branch_level, $levels);
+					$levels=str_replace($branch_candidate, $new_branch_level, $levels);
+
+					# Check if there is a new_branch_level for the user.
+					if(!empty($new_branch_level))
+					{
+						# Check if the new_branch_level is in the $levels string.
+						if(strpos($levels, $new_branch_level)===FALSE)
 						{
-							# Set the WordPress access level to a variable for individual processing.
-							$update_WordPress=substr_replace($branch_id, $_POST[$branch_id], -1, 1);
+							$levels.=$new_branch_level;
 						}
-
-						# Create variables holding each level of access for the current branch.
-						$branch_admin=substr_replace($branch_id, 1, -1, 1).'-';
-						$branch_user=substr_replace($branch_id, 2, -1, 1).'-';
-						$branch_unauthorized=substr_replace($branch_id, 3, -1, 1).'-';
-						$branch_candidate=substr_replace($branch_id, 4, -1, 1).'-';
-
-						$new_branch_level='';
-						# Check if the user doesn't have access to this branch.
-						if($_POST[$branch_id]!=0)
-						{
-							$new_branch_level=substr_replace($branch_id, $_POST[$branch_id], -1, 1).'-';
-						}
-
-						$levels=str_replace($branch_admin, $new_branch_level, $levels);
-						$levels=str_replace($branch_user, $new_branch_level, $levels);
-						$levels=str_replace($branch_unauthorized, $new_branch_level, $levels);
-						$levels=str_replace($branch_candidate, $new_branch_level, $levels);
-
-						# Check if there is a new_branch_level for the user.
-						if(!empty($new_branch_level))
-						{
-							# Check if the new_branch_level is in the $levels string.
-							if(strpos($levels, $new_branch_level)===FALSE)
-							{
-								$levels.=$new_branch_level;
-							}
-						}
-*/
+					}
+					*/
 				}
 
 				# Update the database with the new levels.
@@ -506,16 +452,18 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAuthorize
+	}
+
+	/*** End accessor methods ***/
+
+	/*** public methods ***/
 
 	/**
 	 * processAuthRequest
 	 *
 	 * Emails the appropriate admin/manager of a request for authorization on an aspect of the site.
 	 *
-	 * @param	array $branches_emails	An array where the key is the POST data field ['branch number'] to check and the value is the email address to send the request to.
-	 *										The Value may be an array as well.
-	 * @access	public
+	 * @throws Exception
 	 */
 	public function processAuthRequest()
 	{
@@ -540,7 +488,7 @@ class FormProcessor
 				# Instantiate a new Branch object.
 				$branch=new Branch();
 				# Retrieve all branches from the branches table.
-				$retrieve_branches=$branch->getBranches(NULL, '`id`, `branch`');
+				$branch->getBranches(NULL, '`id`, `branch`');
 				# Get all retrieved branches.
 				$all_branches=$branch->getAllBranches();
 				# Get the user's access levels.
@@ -582,15 +530,15 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAuthRequest
+	}
 
 	/**
 	 * processDeleteAccount
 	 *
 	 * Delete's the user's account.
 	 *
-	 * @param	integer $id  				The User's ID
-	 * @access	public
+	 * @param  int $id The User's ID
+	 * @throws Exception
 	 */
 	public function processDeleteAccount($id=NULL)
 	{
@@ -640,15 +588,15 @@ class FormProcessor
 				}
 			}
 		}
-	} #==== End -- processDeleteAccount
+	}
 
 	/**
 	 * processPassword
 	 *
 	 * Changes the User's password.
 	 *
-	 * @param 	string $id				The User's ID.
-	 * @access	public
+	 * @param    string $id The User's ID.
+	 * @access    public
 	 */
 	public function processPassword($id=NULL)
 	{
@@ -662,18 +610,18 @@ class FormProcessor
 		{
 			$checked_value=((isset($_POST['email_password'])) ? 'checked' : '');
 			# Instantiate a FormValidator object
-			$updated=$login->changePassword($id);
+			$login->changePassword($id);
 		}
-	} #==== End -- processPassword
+	}
 
 	/**
 	 * processPrivacy
 	 *
 	 * Updates the Privacy settings in the Database for the logged in user upon submission of the form.
 	 *
-	 * @param	array $branch_ids		Each value must be the POST Data index that exactly matches the name of the field in the database to be updated.
-	 * @param	int $id					The User's ID
-	 * @access	public
+	 * @param array $branch_ids Each value must be the POST Data index that exactly matches the name of the field in the database to be updated.
+	 * @param int $id           The User's ID
+	 * @throws Exception
 	 */
 	public function processPrivacy($branch_ids, $id=NULL)
 	{
@@ -757,17 +705,17 @@ class FormProcessor
 				{
 					switch($_POST['cont_privacy'])
 					{
-					case 'hide':
-						# Set the contributor privacy setting to NULL(hide the contributor).
-						$cont_privacy=NULL;
-						break;
-					case 'users':
-						# Set the contributor privacy setting to 1(display to Users only).
-						$cont_privacy=1;
-						break;
-					default:
-						# Set the contributor privacy setting to 0(display to all).
-						$cont_privacy=0;
+						case 'hide':
+							# Set the contributor privacy setting to NULL(hide the contributor).
+							$cont_privacy=NULL;
+							break;
+						case 'users':
+							# Set the contributor privacy setting to 1(display to Users only).
+							$cont_privacy=1;
+							break;
+						default:
+							# Set the contributor privacy setting to 0(display to all).
+							$cont_privacy=0;
 					}
 					# Get the Contibutor class.
 					require_once Utility::locateFile(MODULES.'User'.DS.'Contributor.php');
@@ -782,7 +730,7 @@ class FormProcessor
 					$user_obj->updateUser(array('ID'=>$id), array('newsletter'=>$newsletter, 'notify'=>$notify_ids, 'questions'=>$questions));
 
 					# User has opted-in to receive newsletter.
-					if($newsletter==1 && $old_newsletter===NULL)
+					if($newsletter==1 && (isset($old_newsletter) && $old_newsletter===NULL))
 					{
 						# Find the user's email.
 						$email=$user_obj->findEmail($id);
@@ -796,16 +744,16 @@ class FormProcessor
 						$to_address=trim($email);
 						# Set email body to a variable.
 						$message=$username.','."<br />\n<br />\n".
-						'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
-						'You have received this email because you have opted-in to receive our newsletter.'."<br />\n".
-						'If you did not opt-in to receive the '.DOMAIN_NAME.' newsletter, please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
-						'------------------------------------------------'."<br />\n".
-						' Confirmation Instructions'."<br />\n".
-						'------------------------------------------------'."<br />\n<br />\n".
-						'To activate your subscription to our newsletter, simply click on the following link:'."<br />\n<br />\n".
-						'<a href="'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'">'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'</a>'."<br />\n<br />\n".
-						'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
-						'Learn more about '.$site_name.'\'s privacy policy at <a href="'.APPLICATION_URL.'policy/" title="'.DOMAIN_NAME.' privacy policy">'.APPLICATION_URL.'policy</a>';
+							'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
+							'You have received this email because you have opted-in to receive our newsletter.'."<br />\n".
+							'If you did not opt-in to receive the '.DOMAIN_NAME.' newsletter, please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
+							'------------------------------------------------'."<br />\n".
+							' Confirmation Instructions'."<br />\n".
+							'------------------------------------------------'."<br />\n<br />\n".
+							'To activate your subscription to our newsletter, simply click on the following link:'."<br />\n<br />\n".
+							'<a href="'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'">'.SECURE_URL.'MyAccount/privacy.php?confirm_newsletter&ID='.$id.'</a>'."<br />\n<br />\n".
+							'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
+							'Learn more about '.$site_name.'\'s privacy policy at <a href="'.APPLICATION_URL.'policy/" title="'.DOMAIN_NAME.' privacy policy">'.APPLICATION_URL.'policy</a>';
 						try
 						{
 							# Send Email to confirm subscription.
@@ -835,15 +783,15 @@ class FormProcessor
 				throw $e;
 			}
 		}
-	} #==== End -- processPrivacy
+	}
 
 	/**
 	 * processUsername
 	 *
 	 * Changes the User's username.
 	 *
-	 * @param 	string $id				The User's ID.
-	 * @access	public
+	 * @param    string $id The User's ID.
+	 * @throws Exception
 	 */
 	public function processUsername($id=NULL)
 	{
@@ -902,7 +850,7 @@ class FormProcessor
 			$empty_username_conf=$validate->validateEmpty('confirmed_username', 'Please confirm your new username.', 5, 64);
 
 			# Check if the username and the confirmation were not empty and that the username is unique.
-			if(($empty_username===FALSE) && ($empty_username_conf===FALSE) && ($unique!==FALSE))
+			if(($empty_username===FALSE) && ($empty_username_conf===FALSE) && (isset($unique) && $unique!==FALSE))
 			{
 				# Check if the username and the confirmation match.
 				if($username!=$username_conf)
@@ -925,18 +873,18 @@ class FormProcessor
 				# Check if there is a WordPress installation.
 				if(WP_INSTALLED===TRUE)
 				{
+					# Find the User's username and set it to a variable.
+					$current_username=$user->findUsername($id);
+					# Get the WordPressUser class.
+					require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+					# Instantiate a new WordPressUser object.
+					$wp_user=new WordPressUser();
+					# Get the WordPress User's ID.
+					$wp_id=$wp_user->getWP_UserID($current_username);
 					try
 					{
-						# Find the User's username and set it to a variable.
-						$current_username=$user->findUsername($id);
-						# Get the WordPressUser class.
-						require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
-						# Instantiate a new WordPressUser object.
-						$wp_user=new WordPressUser();
-						# Get the WordPress User's ID.
-						$wp_id=$wp_user->getWP_UserID($current_username);
 						# Update user_login
-						$update_wp_username=$wp_user->updateWP_Username($wp_id, $username);
+						$wp_user->updateWP_Username($wp_id, $username);
 					}
 					catch(ezDB_Error $ez)
 					{
@@ -950,7 +898,7 @@ class FormProcessor
 					# Create $field_value array.
 					$field_value=array('username'=>$username);
 					# Update the User's data in the `users` table.
-					$update_user=$user->updateUser($where, $field_value);
+					$user->updateUser($where, $field_value);
 				}
 				catch(ezDB_Error $ez)
 				{
@@ -967,22 +915,27 @@ class FormProcessor
 					$body.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
 					$sent=$doc->sendEmail($subject, $to, $body);
 					if($sent===TRUE)
+					{
 						$message=' and an email has been sent to '.$to;
+					}
 					else
+					{
 						$message=' but there was an error sending the confirmation email to '.$to;
+					}
 				}
 				$_SESSION['message']=$message_pre.' username was successfully changed'.$message.'.';
 				$this->redirectNoDelete();
 			}
 		}
-	} #==== End -- processUsername
+	}
 
 	/**
 	 * redirectNoDelete
 	 *
 	 * Redirects to the current page with all GET query params intact except "delete".
 	 *
-	 * @access	public
+	 * @param null $param_to_remove
+	 * @throws Exception
 	 */
 	public function redirectNoDelete($param_to_remove=NULL)
 	{
@@ -1004,11 +957,43 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- redirectNoDelete
+	}
+
+	/**
+	 * setDuplicates
+	 *
+	 * Sets the data member $duplicates.
+	 *
+	 * @param $duplicates (The potential duplicates returned from a duplicate search to display.)
+	 */
+	protected function setDuplicates($duplicates)
+	{
+		# Set the variable.
+		$this->duplicates=$duplicates;
+	}
+
+	/**
+	 * setPopulator
+	 *
+	 * Sets the data member $populator.
+	 *
+	 * @param        $object
+	 */
+	protected function setPopulator($object)
+	{
+		# Check if the passed value is empty and an object.
+		if(!empty($object) && is_object($object))
+		{
+			$this->populator=$object;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->populator=NULL;
+		}
+	}
 
 	/*** End public methods ***/
-
-
 
 	/*** protected methods ***/
 
@@ -1018,10 +1003,11 @@ class FormProcessor
 	 * Performs a check to determine if one parameter is unique in the Database.
 	 * Returns FALSE if the value is already in the Database.
 	 *
-	 * @param		$field (The field to look in.)
-	 * @param		$compared (The value to check.)
-	 * @param		$params (Any extra parameters.)
-	 * @access	protected
+	 * @param $table
+	 * @param $field         (The field to look in.)
+	 * @param $compared      (The value to check.)
+	 * @param string $params (Any extra parameters.)
+	 * @return bool
 	 */
 	protected function checkUnique($table, $field, $compared, $params='')
 	{
@@ -1031,7 +1017,7 @@ class FormProcessor
 		$check=$db->query('SELECT `'.$field.'` FROM `'.DBPREFIX.$table.'` WHERE `'.$field.'` = '.$db->quote($db->escape($compared)).$params);
 
 		return (($check==0) ? TRUE : FALSE);
-	} #==== End -- checkUnique
+	}
 
 	/**
 	 * contentRedirect
@@ -1039,7 +1025,8 @@ class FormProcessor
 	 * Redirect the user to the appropriate page if their post data indicates that another form is
 	 * needed to add content.
 	 *
-	 * @access	protected
+	 * @param $form_type
+	 * @throws Exception
 	 */
 	protected function contentRedirect($form_type)
 	{
@@ -1059,8 +1046,10 @@ class FormProcessor
 			{
 				case 'add':
 					$doc->redirect(ADMIN_URL.'ManageMedia/files/?add');
+					break;
 				case 'select':
 					$doc->redirect(ADMIN_URL.'ManageMedia/files/?select');
+					break;
 				case 'remove':
 					$_SESSION['form'][$form_type]['FileID']=NULL;
 					# Set a nice message for the user in a session.
@@ -1074,8 +1063,10 @@ class FormProcessor
 			{
 				case 'add':
 					$doc->redirect(ADMIN_URL.'ManageMedia/images/?add');
+					break;
 				case 'select':
 					$doc->redirect(ADMIN_URL.'ManageMedia/images/?select');
+					break;
 				case 'remove':
 					$_SESSION['form'][$form_type][$image_index]=NULL;
 					# Set a nice message for the user in a session.
@@ -1108,6 +1099,7 @@ class FormProcessor
 			{
 				case 'add':
 					$doc->redirect(ADMIN_URL.'ManageMedia/positions/?add');
+					break;
 				case 'remove':
 					$_SESSION['form'][$form_type]['ID']=NULL;
 					# Set a nice message for the user in a session.
@@ -1125,14 +1117,15 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- contentRedirect
+	}
 
 	/**
 	 * loseSessionData
 	 *
 	 * Gets rid of old CMS session data.
 	 *
-	 * @access	protected
+	 * @param $resource
+	 * @throws Exception
 	 */
 	protected function loseSessionData($resource)
 	{
@@ -1166,16 +1159,16 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- loseSessionData
+	}
 
 	/**
 	 * processBack
 	 *
 	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a resource.
 	 *
-	 * @param	$resource
-	 * @param	$indexes
-	 * @access	protected
+	 * @param    $resource
+	 * @param    $indexes
+	 * @throws Exception
 	 */
 	protected function processBack($resource, $indexes)
 	{
@@ -1235,14 +1228,16 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processBack
+	}
 
 	/**
 	 * processReset
 	 *
 	 * Resets the form default values if the "reset" button has been submitted.
 	 *
-	 * @access	protected
+	 * @param string $submit_button
+	 * @param null $session_index
+	 * @throws Exception
 	 */
 	protected function processReset($submit_button='post', $session_index=NULL)
 	{
@@ -1270,8 +1265,7 @@ class FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processReset
-
+	}
 	/*** End protected methods ***/
 
-} # End FormProcessor class.
+}

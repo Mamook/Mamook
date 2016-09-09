@@ -2,10 +2,13 @@
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
+# Get the PostFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'LoginFormProcessor.php');
+
 # Find out where to redirect the user to after they login.
 $login->capturePostLogin();
-# Process the login if it has been submitted.
-$login->processLogin();
+
+$fp=new LoginFormProcessor();
 
 # Create display variables.
 $display_main1='';
@@ -17,7 +20,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-$head='';
+$head='Login to '.DOMAIN_NAME;
 $page_class='loginpage';
 
 # Check if cookiews are enabled in the user's browser. This creates the variable $error. And tells Javascript to check for cookies if that is enabled.
@@ -26,7 +29,7 @@ $cookies=$session->checkCookies(TRUE);
 if($cookies===FALSE)
 {
 	$login_error=$login->getError();
-	$login_error=$no_cookie_msg.'<br />If you believe that you do in fact have cookies enabled, simply refresh this page and this error should go away.'.((!empty($error)) ? '</p><br /><p>' : '').$error.$login_error;
+	$login_error=$no_cookie_msg.'<br>If you believe that you do in fact have cookies enabled, simply refresh this page and this error should go away.'.((!empty($error)) ? '</p><br><p>' : '').$error.$login_error;
 	$login->setError($login_error);
 	if(empty($alert_title))
 	{
@@ -38,30 +41,37 @@ if($main_content->getRegistration()===NULL)
 {
 	# Instantiate form generator object
 	$register=new FormGenerator('register', REDIRECT_TO_LOGIN.'register/', 'POST', '_top', FALSE, 'form');
-	$register->addElement('hidden', array('name'=>'_submit_check', 'value'=>'1'));
-	if($login->getPostLogin() !== NULL)
+	$register->addElement('hidden', array(
+		'name'=>'_submit_check',
+		'value'=>'1'
+	));
+	if($login->getPostLogin()!==NULL)
 	{
-		$register->addElement('hidden', array('name'=>'_post_login', 'value'=>$login->getPostLogin()));
+		$register->addElement('hidden', array(
+			'name'=>'_post_login',
+			'value'=>$login->getPostLogin()
+		));
 	}
-	$register->addElement('submit', array('name'=>'pre_register', 'value'=>'Register'), '', NULL, 'submit-register');
+	$register->addElement('submit', array(
+		'name'=>'pre_register',
+		'value'=>'Register'
+	), '', NULL, 'submit-register');
+
 	$display='<div id="register" class="register">'.
 		'<h3 class="h-3">Register</h3>'.
 		'<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>'.
 		$register->display().
 		'<a href="'.REDIRECT_TO_LOGIN.'ResendEmail/" class="helper" title="Resend my activation email">Resend my activation email</a>'.
-	'</div>';
+		'</div>';
 }
 else
 {
-	$main_content->setPageTitle('Login to '.DOMAIN_NAME);
+	$main_content->setPageTitle($head);
 	$display='';
 }
 
 # Get the login form.
-require Utility::locateFile(TEMPLATES.'forms'.DS.'login.php');
-
-# Capture any errors.
-$doc->setError($login->getError());
+require Utility::locateFile(TEMPLATES.'forms'.DS.'login_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);

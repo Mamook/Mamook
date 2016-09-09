@@ -9,10 +9,11 @@ if($login->isLoggedIn()===TRUE)
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the RegisterFormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'RegisterFormProcessor.php');
-$fp=new RegisterFormProcessor();
 
 # Find out where to redirect the user to after they login.
 $login->capturePostLogin();
+
+$fp=new RegisterFormProcessor();
 
 # Create display variables.
 $display_main1='';
@@ -24,7 +25,7 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-
+$file_details='';
 $head='<p>Enter your information to register with '.DOMAIN_NAME.'. Registered users have access to free and purchaseable materials. Your information is safe with us. We will <em>never</em> share your information with 3rd parties.</p>';
 $page_class='loginpage-register';
 
@@ -42,7 +43,7 @@ if($cookies===FALSE)
 	}
 }
 
-require Utility::locateFile(TEMPLATES.'forms'.DS.'register.php');
+require Utility::locateFile(TEMPLATES.'forms'.DS.'register_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);

@@ -3,7 +3,6 @@
 # Get the parent User class.
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
 
-
 /**
  * WordPressUser
  *
@@ -12,24 +11,15 @@ require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
  */
 class WordPressUser extends User
 {
-	/*** data members ***/
-
 	protected $wp_id=NULL;
-	protected $nickname=NULL;
-
-	/*** End data members ***/
-
-
-
-	/*** mutator methods ***/
 
 	/**
 	 * setWP_ID
 	 *
 	 * Sets the data member $wp_id.
 	 *
-	 * @param	$wp_id					The User's WorpdPress ID number.
-	 * @access	public
+	 * @param    $wp_id                    The User's WorpdPress ID number.
+	 * @throws Exception
 	 */
 	public function setWP_ID($wp_id)
 	{
@@ -59,45 +49,13 @@ class WordPressUser extends User
 		}
 		# Set the data member.
 		$this->wp_id=$wp_id;
-	} #==== End -- setWP_ID
+	}
 
 	/**
-	 * setNickname
-	 *
-	 * Sets the data member $nickname.
-	 *
-	 * @param	$nickname				The User's nickname. This is only used in WordPress instalations.
-	 * @access	public
-	 */
-	public function setNickname($nickname)
-	{
-		# Check if the value is empty.
-		if(!empty($nickname))
-		{
-			# Clean it up and set the data member.
-			$nickname=trim($nickname);
-		}
-		else
-		{
-			# Explicitly make it NULL.
-			$nickname=NULL;
-		}
-		# Set the data member.
-		$this->nickname=$nickname;
-	} #==== End -- setNickname
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
-
-	/**
-	 * getWP_ID
-	 *
 	 * Returns the data member $wp_id. Throws an error on failure.
 	 *
-	 * @access	public
+	 * @return null
+	 * @throws Exception
 	 */
 	public function getWP_ID()
 	{
@@ -109,33 +67,15 @@ class WordPressUser extends User
 		{
 			throw new Exception('The User\'s WordPress ID was not set!', E_RECOVERABLE_ERROR);
 		}
-	} #==== End -- getWP_ID
-
-	/**
-	 * getNickname
-	 *
-	 * Returns the data member $nickname.
-	 *
-	 * @access	public
-	 */
-	public function getNickname()
-	{
-		return $this->nickname;
-	} #==== End -- getNickname
-
-	/*** End accessor methods ***/
-
-
-
-	/*** public methods ***/
+	}
 
 	/**
 	 * deleteWP_User
 	 *
 	 * Delete's a WordPress user via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param $wp_id					The User's WordPress ID.
-	 * @access public
+	 * @param $wp_id                    The User's WordPress ID.
+	 * @throws Exception
 	 */
 	public function deleteWP_User($wp_id)
 	{
@@ -146,6 +86,7 @@ class WordPressUser extends User
 
 		try
 		{
+			$where='';
 			# Check if the passed $user_id is an integer.
 			if($validator->isInt($wp_id)===TRUE)
 			{
@@ -154,29 +95,29 @@ class WordPressUser extends User
 				# Reset the $wp_id variable from the data member.
 				$wp_id=$this->getWP_ID();
 				# Create where statement.
-				$where='= '.$db->quote($wp_id).' LIMIT 1';
+				$where=' = '.$db->quote($wp_id).' LIMIT 1';
 			}
 			# An array of users was passed into the method.
 			elseif(is_array($wp_id))
 			{
 				# Create where statement.
-				$where='IN ('.implode(', ', $wp_id).')';
+				$where=' IN ('.implode(', ', $wp_id).')';
 			}
 
-		# NOTE: Can we use the Wordpress function?
-		/*
+			# NOTE: Can we use the Wordpress function?
+			/*
 			$wpdb=$db;
 			# Get the WordPress user administration API.
 			require_once Utility::locateFile(WP_INSTALL_PATH.'wp-admin'.DS.'includes'.DS.'user.php');
 			# Delete user.
 			wp_delete_user($wp_id);
-		*/
+			*/
 
 			# NOTE: Delete User (Does not work with Multisite installations)
 			# Delete the User from the `usermeta` table.
-			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id` '.$where);
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'usermeta` WHERE `user_id`'.$where);
 			# Delete the User from the WordPress `users` table.
-			$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `ID` '.$where);
+			$db->query('DELETE FROM `'.WP_DBPREFIX.'users` WHERE `ID`'.$where);
 		}
 		catch(ezDB_Error $ez)
 		{
@@ -188,19 +129,18 @@ class WordPressUser extends User
 			# Re-throw any caught exceptions.
 			throw $e;
 		}
-	} #==== End -- deleteWP_User
+	}
 
-# NOTE: Add $reassign feature.
+	# NOTE: Add $reassign feature.
 	/**
 	 * deleteWP_User
 	 *
 	 * Delete's a WordPress user via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param $wp_id					The User's WordPress ID.
-#->  * @param $reassign					A User's WordPress ID to reasign this User's posts to. -> DOESN'T WORK YET!!!
-	 * @access public
+	 * @param $wp_id                       The User's WordPress ID.
+	 * @param $reassign                    A User's WordPress ID to reasign this User's posts to. -> DOESN'T WORK YET!!!
 	 */
-/*
+	/*
 	public function deleteWP_User($wp_id, $reassign=NULL)
 	{
 		# Set the Database instance to a variable.
@@ -275,16 +215,17 @@ class WordPressUser extends User
 			# Re-throw any caught exceptions.
 			throw $e;
 		}
-	} #==== End -- deleteWP_User
-*/
+	}
+	*/
 
 	/**
 	 * getWP_Nickname
 	 *
 	 * Retrieves the User's WordPress nickname via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param	$user_WP_id				The User's WordPress ID.
-	 * @access	public
+	 * @param    $user_WP_id                The User's WordPress ID.
+	 * @return null
+	 * @throws ezDB_Error
 	 */
 	public function getWP_Nickname($user_WP_id)
 	{
@@ -299,6 +240,7 @@ class WordPressUser extends User
 				if($user!==NULL)
 				{
 					$this->setNickname($user->meta_value);
+
 					return $this->getNickname();
 				}
 			}
@@ -307,16 +249,18 @@ class WordPressUser extends User
 				throw new ezDB_Error($ez->error, $ez->errno);
 			}
 		}
+
 		return NULL;
-	} #==== End -- getWP_Nickname
+	}
 
 	/**
 	 * getWP_Password
 	 *
 	 * Retrieves the User's WordPress password via WordPRess ID. Throws an error on failure.
 	 *
-	 * @param	$user_WP_id				The User's WordPress ID.
-	 * @access	public
+	 * @param    $user_WP_id                The User's WordPress ID.
+	 * @return
+	 * @throws ezDB_Error
 	 */
 	public function getWP_Password($user_WP_id)
 	{
@@ -331,16 +275,19 @@ class WordPressUser extends User
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
+
 		return $user->user_pass;
-	} #==== End -- getWP_Password
+	}
 
 	/**
 	 * getWP_UserID
 	 *
 	 * Retrieves the User's WordPress ID via username. Throws an error on failure.
 	 *
-	 * @param	$username				The User's login.
-	 * @access	public
+	 * @param    $username                The User's login.
+	 * @return null
+	 * @throws Exception
+	 * @throws ezDB_Error
 	 */
 	public function getWP_UserID($username=NULL)
 	{
@@ -378,16 +325,17 @@ class WordPressUser extends User
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
-	} #==== End -- getWP_UserID
+	}
 
 	/**
 	 * updateWP_DisplayName
 	 *
 	 * Updates the User's WordPress display name. Throws an error on failure.
 	 *
-	 * @param	$id						The User's WordPress ID.
-	 * @param	$display_name			The new display name.
-	 * @access	public
+	 * @param    $id                        The User's WordPress ID.
+	 * @param    $display_name              The new display name.
+	 * @return
+	 * @throws ezDB_Error
 	 */
 	public function updateWP_DisplayName($id, $display_name)
 	{
@@ -397,22 +345,25 @@ class WordPressUser extends User
 		try
 		{
 			$update_displayname=$db->query('UPDATE `'.WP_DBPREFIX.'users` SET `display_name` = '.$db->quote($db->escape($display_name)).' WHERE `ID` = '.$db->quote($id));
+
 			return $update_displayname;
 		}
 		catch(ezDB_Error $ez)
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
-	} #==== End -- updateWP_DisplayName
+	}
 
 	/**
 	 * updateWP_Nickname
 	 *
 	 * Updates the User's WordPress nickname. Throws an error on failure.
 	 *
-	 * @param	$id 					The User's WordPress ID.
-	 * @param	$nickname				The new nickname.
-	 * @access	public
+	 * @param    $id                      The User's WordPress ID.
+	 * @param    $nickname                The new nickname.
+	 * @return
+	 * @throws ezDB_Error
+	 * @access    public
 	 */
 	public function updateWP_Nickname($id, $nickname)
 	{
@@ -422,22 +373,24 @@ class WordPressUser extends User
 		try
 		{
 			$update_nickname=$db->query('UPDATE `'.WP_DBPREFIX.'usermeta` SET `meta_value` = '.$db->quote($db->escape($nickname)).' WHERE `meta_key` = '.$db->quote($db->escape('nickname')).' AND `user_id` = '.$db->quote($id));
+
 			return $update_nickname;
 		}
 		catch(ezDB_Error $ez)
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
-	} #==== End -- updateWP_Nickname
+	}
 
 	/**
 	 * updateWP_Password
 	 *
 	 * Updates the User's WordPress password. Throws an error on failure.
 	 *
-	 * @param	$username				The User's WordPress username.
-	 * @param	$password				The new password.
-	 * @access	public
+	 * @param    $username                The User's WordPress username.
+	 * @param    $password                The new password.
+	 * @throws Exception
+	 * @throws ezDB_Error
 	 */
 	public function updateWP_Password($username, $password)
 	{
@@ -456,16 +409,16 @@ class WordPressUser extends User
 		{
 			throw $e;
 		}
-	} #==== End -- updateWP_Password
+	}
 
 	/**
 	 * updateWP_UserAccessLevel
 	 *
 	 * Updates the User's WordPress access level. Throws an error on failure.
 	 *
-	 * @param	$username				The username to update.
-	 * @param	$new_level				The new access  level.
-	 * @access	public
+	 * @param    $username                 The username to update.
+	 * @param    $new_level                The new access  level.
+	 * @throws ezDB_Error
 	 */
 	public function updateWP_UserAccessLevel($username, $new_level)
 	{
@@ -519,16 +472,16 @@ class WordPressUser extends User
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
-	} #==== End -- updateWP_Username
+	}
 
 	/**
 	 * updateWP_Username
 	 *
 	 * Updates the User's WordPress username. Throws an error on failure.
 	 *
-	 * @param	$id						The User's WordPress ID.
-	 * @param	$username				The new username.
-	 * @access	public
+	 * @param    $id                        The User's WordPress ID.
+	 * @param    $username                  The new username.
+	 * @throws ezDB_Error
 	 */
 	public function updateWP_Username($id, $username)
 	{
@@ -543,8 +496,5 @@ class WordPressUser extends User
 		{
 			throw new ezDB_Error($ez->error, $ez->errno);
 		}
-	} #==== End -- updateWP_Username
-
-	/*** End public methods ***/
-
+	}
 } # End WordPressUser class.

@@ -2,8 +2,10 @@
 
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
+# Get the PostFormProcessor Class.
+require_once Utility::locateFile(MODULES.'Form'.DS.'ResendEmailFormProcessor.php');
 
-$login->resendActivation();
+$fp=new ResendEmailFormProcessor();
 
 # Create display variables.
 $display_main1='';
@@ -15,11 +17,15 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
+$file_details='';
 $head='<p>Please enter your email address to recieve your activation email.</p>';
 $page_class='loginpage-resendEmail';
 
+require Utility::locateFile(TEMPLATES.'forms'.DS.'submit_email_form_defaults.php');
+$fp->processResendEmail($default_data);
+
 # Get the submit_email form.
-require Utility::locateFile(TEMPLATES.'forms'.DS.'submit_email.php');
+require Utility::locateFile(TEMPLATES.'forms'.DS.'submit_email_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);

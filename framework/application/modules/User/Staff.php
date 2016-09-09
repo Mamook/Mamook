@@ -1,4 +1,4 @@
-<?php
+<?php /* framework/application/modules/User/Staff.php */
 
 /**
  * Staff
@@ -8,8 +8,6 @@
  */
 class Staff
 {
-	/*** data members ***/
-
 	protected $affiliation=NULL;
 	protected $all_staff=NULL;
 	protected $archive;
@@ -27,19 +25,13 @@ class Staff
 	protected $text=NULL;
 	protected $user=NULL;
 
-	/*** End data members ***/
-
-
-
-	/*** mutator methods ***/
-
 	/**
 	 * setAffiliation
 	 *
 	 * Sets the data member $affiliation.
 	 *
-	 * @param	$affiliation			The person's affiliation.
-	 * @access	public
+	 * @param $affiliation            The person's affiliation.
+	 * @access public
 	 */
 	public function setAffiliation($affiliation)
 	{
@@ -56,40 +48,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->affiliation=NULL;
 		}
-	} #==== End -- setAffiliation
-
-	/**
-	 * setAllStaff
-	 *
-	 * Sets the data member $all_staff.
-	 *
-	 * @param	$staff					May be an array or a string. The method makes it into an array regardless.
-	 * @access	protected
-	 */
-	protected function setAllStaff($staff)
-	{
-		# Check if the passed value is empty.
-		if(!empty($staff))
-		{
-			# Explicitly make it an array.
-			$staff=(array)$staff;
-			# Set the data member.
-			$this->all_staff=$staff;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->all_staff=NULL;
-		}
-	} #==== End -- setAllStaff
+	}
 
 	/**
 	 * setArchive
 	 *
 	 * Sets the data member $archive.
 	 *
-	 * @param	$archive				The records archive status.
-	 * @access	public
+	 * @param    $archive                The records archive status.
+	 * @access    public
 	 */
 	public function setArchive($archive)
 	{
@@ -101,15 +68,15 @@ class Staff
 		}
 		# Set the data member.
 		$this->archive=$archive;
-	} #==== End -- setArchive
+	}
 
 	/**
 	 * setCredentials
 	 *
 	 * Sets the data member $credentials.
 	 *
-	 * @param	$credentials			The person's credentials.
-	 * @access	public
+	 * @param    $credentials            The person's credentials.
+	 * @access    public
 	 */
 	public function setCredentials($credentials)
 	{
@@ -126,15 +93,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->credentials=NULL;
 		}
-	} #==== End -- setCredentials
+	}
 
 	/**
 	 * setStaffFirstName
 	 *
 	 * Sets the data member $fname.
 	 *
-	 * @param	string $fname			The person's first name.
-	 * @access	public
+	 * @param    string $fname The person's first name.
+	 * @access    public
 	 */
 	public function setFirstName($fname)
 	{
@@ -151,15 +118,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->fname=NULL;
 		}
-	} #==== End -- setFirstName
+	}
 
 	/**
 	 * setID
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param	int $id					The staff id number.
-	 * @access	public
+	 * @param    int $id The staff id number.
+	 * @access    public
 	 */
 	public function setID($id)
 	{
@@ -189,15 +156,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->id=NULL;
 		}
-	} #==== End -- setID
+	}
 
 	/**
 	 * setImage
 	 *
 	 * Sets the data member $image.
 	 *
-	 * @param	$image					The person's image.
-	 * @access	public
+	 * @param    $image                    The person's image.
+	 * @access    public
 	 */
 	public function setImage($image)
 	{
@@ -212,15 +179,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->image=NULL;
 		}
-	} #==== End -- setImage
+	}
 
 	/**
 	 * setImageTitle
 	 *
 	 * Sets the data member $image_title.
 	 *
-	 * @param	string $image_title		The title of the person's image.
-	 * @access	public
+	 * @param    string $image_title The title of the person's image.
+	 * @access    public
 	 */
 	public function setImageTitle($image_title)
 	{
@@ -237,15 +204,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->image_title=NULL;
 		}
-	} #==== End -- setImageTitle
+	}
 
 	/**
 	 * setLastName
 	 *
 	 * Sets the data member $lname.
 	 *
-	 * @param	string $lname			The person's last name.
-	 * @access	public
+	 * @param    string $lname The person's last name.
+	 * @access    public
 	 */
 	public function setLastName($lname)
 	{
@@ -262,15 +229,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->lname=NULL;
 		}
-	} #==== End -- setLastName
+	}
 
 	/**
 	 * setMiddleName
 	 *
 	 * Sets the data member $mname.
 	 *
-	 * @param	string $mname			The person's middle name.
-	 * @access	public
+	 * @param    string $mname The person's middle name.
+	 * @access    public
 	 */
 	public function setMiddleName($mname)
 	{
@@ -287,15 +254,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->mname=NULL;
 		}
-	} #==== End -- setMiddleName
+	}
 
 	/**
 	 * setNewPosition
 	 *
 	 * Sets the data member $new_position.
 	 *
-	 * @param	$new_position				The person's new position.
-	 * @access	public
+	 * @param    $new_position                The person's new position.
+	 * @access    public
 	 */
 	public function setNewPosition($new_position)
 	{
@@ -310,15 +277,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->new_position=NULL;
 		}
-	} #==== End -- setNewPosition
+	}
 
 	/**
 	 * setPosition
 	 *
 	 * Sets the data member $position.
 	 *
-	 * @param	$position				The person's position.
-	 * @access	public
+	 * @param    $position                The person's position.
+	 * @access    public
 	 */
 	public function setPosition($position)
 	{
@@ -333,15 +300,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->position=NULL;
 		}
-	} #==== End -- setPosition
+	}
 
 	/**
 	 * setRegion
 	 *
 	 * Sets the data member $region.
 	 *
-	 * @param	string $region			The person's region.
-	 * @access	public
+	 * @param    string $region The person's region.
+	 * @access    public
 	 */
 	public function setRegion($region)
 	{
@@ -358,15 +325,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->region=NULL;
 		}
-	} #==== End -- setRegion
+	}
 
 	/**
 	 * setText
 	 *
 	 * Sets the data member $text.
 	 *
-	 * @param	string $text			The person's biographical text.
-	 * @access	public
+	 * @param    string $text The person's biographical text.
+	 * @access    public
 	 */
 	public function setText($text)
 	{
@@ -386,15 +353,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->text=NULL;
 		}
-	} #==== End -- setText
+	}
 
 	/**
 	 * setTitle
 	 *
 	 * Sets the data member $title.
 	 *
-	 * @param	string $title			The person's title.
-	 * @access	public
+	 * @param    string $title The person's title.
+	 * @access    public
 	 */
 	public function setTitle($title)
 	{
@@ -412,15 +379,15 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->title=NULL;
 		}
-	} #==== End -- setTitle
+	}
 
 	/**
 	 * setUser
 	 *
 	 * Sets the data member $user.
 	 *
-	 * @param	string $user			The staff's User ID
-	 * @access	public
+	 * @param    string $user The staff's User ID
+	 * @access    public
 	 */
 	public function setUser($user)
 	{
@@ -450,222 +417,210 @@ class Staff
 			# Explicitly set the data member to NULL.
 			$this->user=NULL;
 		}
-	} #==== End -- setStaffUser
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
+	}
 
 	/**
 	 * getAffiliation
 	 *
 	 * Returns the data member $affiliation.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getAffiliation()
 	{
 		return $this->affiliation;
-	} #==== End -- getAffiliation
+	}
 
 	/**
 	 * getAllStaff
 	 *
 	 * Returns the data member $all_staff.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getAllStaff()
 	{
 		return $this->all_staff;
-	} #==== End -- getAllStaff
+	}
 
 	/**
 	 * getArchive
 	 *
 	 * Returns the data member $archive.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getArchive()
 	{
 		return $this->archive;
-	} #==== End -- getArchive
+	}
 
 	/**
 	 * getCredentials
 	 *
 	 * Returns the data member $credentials.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getCredentials()
 	{
 		return $this->credentials;
-	} #==== End -- getCredentials
+	}
 
 	/**
 	 * getFirstName
 	 *
 	 * Returns the data member $fname.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getFirstName()
 	{
 		return $this->fname;
-	} #==== End -- getFirstName
+	}
 
 	/**
 	 * getID
 	 *
 	 * Returns the data member $id.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getID()
 	{
 		return $this->id;
-	} #==== End -- getID
+	}
 
 	/**
 	 * getImage
 	 *
 	 * Returns the data member $image.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getImage()
 	{
 		return $this->image;
-	} #==== End -- getImage
+	}
 
 	/**
 	 * getImageTitle
 	 *
 	 * Returns the data member $image_title.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getImageTitle()
 	{
 		return $this->image_title;
-	} #==== End -- getImageTitle
+	}
 
 	/**
 	 * getLastName
 	 *
 	 * Returns the data member $lname.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getLastName()
 	{
 		return $this->lname;
-	} #==== End -- getLastName
+	}
 
 	/**
 	 * getMiddleName
 	 *
 	 * Returns the data member $mname.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getMiddleName()
 	{
 		return $this->mname;
-	} #==== End -- getMiddleName
+	}
 
 	/**
 	 * getNewPosition
 	 *
 	 * Returns the data member $new_position.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getNewPosition()
 	{
 		return $this->new_position;
-	} #==== End -- getNewPosition
+	}
 
 	/**
 	 * getPosition
 	 *
 	 * Returns the data member $position.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getPosition()
 	{
 		return $this->position;
-	} #==== End -- getPosition
+	}
 
 	/**
 	 * getRegion
 	 *
 	 * Returns the data member $region.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getRegion()
 	{
 		return $this->region;
-	} #==== End -- getRegion
+	}
 
 	/**
 	 * getText
 	 *
 	 * Returns the data member $text.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getText()
 	{
 		return $this->text;
-	} #==== End -- getText
+	}
 
 	/**
 	 * getTitle
 	 *
 	 * Returns the data member $title.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getTitle()
 	{
 		return $this->title;
-	} #==== End -- getTitle
+	}
 
 	/**
 	 * getUser
 	 *
 	 * Returns the data member $user.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getUser()
 	{
 		return $this->user;
-	} #==== End -- getUser
-
-	/*** End accessor methods ***/
-
-
-
-	/*** public methods ***/
+	}
 
 	/**
 	 * displayStaff
 	 *
 	 * Retrieves the person's information from the database sets to to a display array.
 	 *
-	 * @param	string $value			May be the staff id, the person's User ID, the person's email, or the person's first and last names.
-	 *										Names must be in an array.
-	 * @param	boolean $label			TRUE to display HTML labeled sections, FALSE to not.
-	 * @return	array
-	 * @access	public
+	 * @param    string $value                May be the staff id, the person's User ID, the person's email, or the person's first and last names.
+	 *                                        Names must be in an array.
+	 * @param    boolean $label               TRUE to display HTML labeled sections, FALSE to not.
+	 * @return    array
+	 * @access    public
 	 */
 	public function displayStaff($value, $label=TRUE, $image_link=FW_POPUP_HANDLE)
 	{
@@ -759,26 +714,28 @@ class Staff
 					# Set the biographical text XHTML to the display content array.
 					$display_content['text']=$profile_bio;
 				}
+
 				return $display_content;
 			}
 		}
+
 		return NULL;
-	} #==== End -- displayStaff
+	}
 
 	/**
 	 * getStaff
 	 *
 	 * Retrieves records from the `staff` table.
 	 *
-	 * @param	$positions				The names and/or id's of the position(s) to be retrieved.
-	 *										May be multiple positions - separate with dash, ie. '50-60-Archives-110'
-	 * @param	$limit					The LIMIT of the records.
-	 * @param	$fields					The name of the field(s) to be retrieved.
-	 * @param	$order					The name of the field to order the records by.
-	 * @param	$direction				The direction to order the records.
-	 * @param	$and_sql				Extra AND statements in the query.
-	 * @return	boolean					TRUE if records are returned, FALSE if not.
-	 * @access	public
+	 * @param    $positions                   The names and/or id's of the position(s) to be retrieved.
+	 *                                        May be multiple positions - separate with dash, ie. '50-60-Archives-110'
+	 * @param    $limit                       The LIMIT of the records.
+	 * @param    $fields                      The name of the field(s) to be retrieved.
+	 * @param    $order                       The name of the field to order the records by.
+	 * @param    $direction                   The direction to order the records.
+	 * @param    $and_sql                     Extra AND statements in the query.
+	 * @return    boolean                    TRUE if records are returned, FALSE if not.
+	 * @access    public
 	 */
 	public function getStaff($positions=NULL, $limit=NULL, $fields='*', $order='id', $direction='ASC', $and_sql=NULL)
 	{
@@ -808,32 +765,34 @@ class Staff
 			{
 				# Set the returned records to the data member (explicitly turning it into an array.)
 				$this->setAllStaff($records);
+
 				return TRUE;
 			}
 			else
 			{
 				$this->setAllStaff(NULL);
+
 				# Return FALSE because no records were returned.
 				return FALSE;
 			}
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('Error occured: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('Error occured: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- getStaff
+	}
 
 	/**
 	 * getStaffName
 	 *
 	 * Joins the person's title, first, middle, and last names, and credentials to create a full name.
 	 *
-	 * @param	int $value				The staff's ID.
-	 * @access	public
+	 * @param    int $value The staff's ID.
+	 * @access    public
 	 */
 	public function getStaffName($value=NULL)
 	{
@@ -893,17 +852,18 @@ class Staff
 		{
 			throw $e;
 		}
+
 		return $name;
-	} #==== End -- getStaffName
+	}
 
 	/**
 	 * getThisStaff
 	 *
 	 * Retrieves a staff's info from the `staff` table in the database for the passed value and related field and sets it to the data member.
 	 *
-	 * @param	string $value			The person's staff ID.
-	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
-	 * @access	public
+	 * @param    string $value The person's staff ID.
+	 * @return    boolean                TRUE if a record is returned, FALSE if not.
+	 * @access    public
 	 */
 	public function getThisStaff($value)
 	{
@@ -934,8 +894,10 @@ class Staff
 				$this->setUser($row->user);
 				# Set the User ID to a variable.
 				$user=$this->getUser();
+
 				return TRUE;
 			}
+
 			# Return FALSE because there was no record returned.
 			return FALSE;
 		}
@@ -948,14 +910,42 @@ class Staff
 		{
 			throw $e;
 		}
-	} #==== End -- getThisStaff
+	}
+
+	/**
+	 * findUsername
+	 *
+	 * Retrieves the User's username based on the passed variable. Throws an error on failure.
+	 * A wrapper method for findUsername in the User calss.
+	 *
+	 * @param    int $value The user's ID for whome we want to get the username for.
+	 * @access    public
+	 */
+	public function findUsername($value=NULL)
+	{
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+		# Bring the Login class into scope.
+		global $login;
+
+		# Check if the passed ID is empty.
+		if($validator->isInt($value)===TRUE)
+		{
+			# Find the user's ID and set it to a variable.
+			return $login->findUsername($value);
+		}
+
+		return FALSE;
+	}
 
 	/**
 	 * findStaffID
 	 *
 	 * Retrieves the Staff's ID and sets it to the id data member. Throws an error on failure.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	/*
 	public function findStaffID()
@@ -986,35 +976,8 @@ class Staff
 		{
 			throw $e;
 		}
-	} #==== End -- findStaffID
+	}
 	*/
-
-	/**
-	 * findUsername
-	 *
-	 * Retrieves the User's username based on the passed variable. Throws an error on failure.
-	 * A wrapper method for findUsername in the User calss.
-	 *
-	 * @param	int $value				The user's ID for whome we want to get the username for.
-	 * @access	public
-	 */
-	public function findUsername($value=NULL)
-	{
-		# Set the Database instance to a variable.
-		$db=DB::get_instance();
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-		# Bring the Login class into scope.
-		global $login;
-
-		# Check if the passed ID is empty.
-		if($validator->isInt($value)===TRUE)
-		{
-			# Find the user's ID and set it to a variable.
-			return $login->findUsername($value);
-		}
-		return FALSE;
-	} #==== End -- findUsername
 
 	/*
 	 * isStaff
@@ -1060,6 +1023,7 @@ class Staff
 			{
 				return TRUE;
 			}
+
 			# Return FALSE because no records were returned.
 			return FALSE;
 		}
@@ -1071,16 +1035,16 @@ class Staff
 		{
 			throw $e;
 		}
-	} #==== End -- isStaff
+	}
 
 	/**
 	 * updateStaff
 	 *
 	 * Updates the staff's record in the database.
 	 *
-	 * @param	array $where_field		Key=the field, Value=the field value.
-	 * @param	array $field_value		Key=the field, Value=the field value.
-	 * @access	public
+	 * @param    array $where_field Key=the field, Value=the field value.
+	 * @param    array $field_value Key=the field, Value=the field value.
+	 * @access    public
 	 */
 	public function updateStaff($where_field, $field_value)
 	{
@@ -1144,13 +1108,37 @@ class Staff
 		{
 			# Update the User's data in the `users` table.
 			$update_user=$db->query('UPDATE `'.DBPREFIX.'staff` SET '.$set.' WHERE '.$where.' LIMIT 1');
+
 			return $update_user;
 		}
 		catch(ezDB_Error $ez)
 		{
 			throw new Exception('There was an error updating staff info: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
-	} #==== End -- updateStaff
+	}
 
-	/*** End public methods ***/
-} # End Staff class.
+	/**
+	 * setAllStaff
+	 *
+	 * Sets the data member $all_staff.
+	 *
+	 * @param    $staff                    May be an array or a string. The method makes it into an array regardless.
+	 * @access    protected
+	 */
+	protected function setAllStaff($staff)
+	{
+		# Check if the passed value is empty.
+		if(!empty($staff))
+		{
+			# Explicitly make it an array.
+			$staff=(array)$staff;
+			# Set the data member.
+			$this->all_staff=$staff;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->all_staff=NULL;
+		}
+	}
+}

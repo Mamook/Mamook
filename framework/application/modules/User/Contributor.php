@@ -1,10 +1,12 @@
 <?php /* Requires PHP5+ */
 
 # Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
+if(!defined('BASE_PATH'))
+{
+	exit('No direct script access allowed');
+}
 
 require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-
 
 /**
  * Contributor
@@ -27,351 +29,40 @@ class Contributor extends User
 	protected $cont_organization=NULL;
 	protected $cont_privacy;
 	protected $user=NULL;
-
 	/*** End data members ***/
 
-
-
 	/*** mutator methods ***/
-
-	/**
-	 * setAllContributors
-	 *
-	 * Sets the data member $all_contributors.
-	 *
-	 * @param	$contributors			May be an array or a string.
-	 *										The method makes it into an array regardless.
-	 * @access	protected
-	 */
-	protected function setAllContributors($contributors)
-	{
-		# Check if the passed value is empty.
-		if(!empty($contributors))
-		{
-			# Explicitly make it an array.
-			$contributors=(array)$contributors;
-			# Set the data member.
-			$this->all_contributors=$contributors;
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->all_contributors=NULL;
-		}
-	} #==== End -- setAllContributors
-
-	/**
-	 * setContID
-	 *
-	 * Sets the data member $cont_id.
-	 *
-	 * @param		$cont_id 	(The Contributor's ID number.)
-	 * @access	protected
-	 */
-	protected function setContID($cont_id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $cont_id is empty.
-		if(!empty($cont_id))
-		{
-			# Clean it up.
-			$cont_id=trim($cont_id);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($cont_id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$cont_id=(int)$cont_id;
-			}
-			else
-			{
-				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$cont_id=NULL;
-		}
-		# Set the data member
-		$this->cont_id=$cont_id;
-	} #==== End -- setContID
-
-	/**
-	 * setContFirstName
-	 *
-	 * Sets the data member $cont_fname.
-	 *
-	 * @param		$cont_fname (The contributor's first name.)
-	 * @access	protected
-	 */
-	protected function setContFirstName($cont_fname)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_fname))
-		{
-			# Set the data member.
-			$this->cont_fname=trim($cont_fname);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_fname=NULL;
-		}
-	} #==== End -- setContFirstName
-
-	/**
-	 * setContLastName
-	 *
-	 * Sets the data member $cont_lname.
-	 *
-	 * @param		$cont_lname (The contributor's last name.)
-	 * @access	protected
-	 */
-	protected function setContLastName($cont_lname)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_lname))
-		{
-			# Set the data member.
-			$this->cont_lname=trim($cont_lname);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_lname=NULL;
-		}
-	} #==== End -- setContLastName
-
-	/**
-	 * setContEmail
-	 *
-	 * Sets the data member $cont_email.
-	 *
-	 * @param		$cont_email (The contributor's Email address.)
-	 * @access	protected
-	 */
-	protected function setContEmail($cont_email)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_email))
-		{
-			# Set the data member.
-			$this->cont_email=trim($cont_email);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_email=NULL;
-		}
-	} #==== End -- setContEmail
-
-	/**
-	 * setContIP
-	 *
-	 * Sets the data member $cont_ip.
-	 *
-	 * @param		$cont_ip 	(The contributor's IP address.)
-	 * @access	protected
-	 */
-	protected function setContIP($cont_ip)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_ip))
-		{
-			# Set the data member.
-			$this->cont_ip=trim($cont_ip);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_ip=NULL;
-		}
-	} #==== End -- setContIP
-
-	/**
-	 * setContRegion
-	 *
-	 * Sets the data member $cont_region.
-	 *
-	 * @param		$cont_region (The contributor's region.)
-	 * @access	protected
-	 */
-	protected function setContRegion($cont_region)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_region))
-		{
-			# Strip slashes and decode any html entities.
-			$cont_region=html_entity_decode(stripslashes($cont_region), ENT_COMPAT, 'UTF-8');
-			# Set the data member.
-			$this->cont_region=trim($cont_region);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_region=NULL;
-		}
-	} #==== End -- setContRegion
-
-	/**
-	 * setContCountry
-	 *
-	 * Sets the data member $country.
-	 *
-	 * @param		$cont_country (The contributor's country.)
-	 * @access	protected
-	 */
-	protected function setContCountry($cont_country)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_country))
-		{
-			# Strip slashes and decode any html entities.
-			$cont_country=html_entity_decode(stripslashes($cont_country), ENT_COMPAT, 'UTF-8');
-			# Set the data member.
-			$this->cont_country=trim($cont_country);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_country=NULL;
-		}
-	} #==== End -- setContCountry
-
-	/**
-	 * setContOrganization
-	 *
-	 * Sets the data member $cont_organization.
-	 *
-	 * @param		$cont_organization (The contributor's organization.)
-	 * @access	protected
-	 */
-	protected function setContOrganization($cont_organization)
-	{
-		# Check if the passed value is empty.
-		if(!empty($cont_organization))
-		{
-			# Strip slashes and decode any html entities.
-			$cont_organization=html_entity_decode(stripslashes($cont_organization), ENT_COMPAT, 'UTF-8');
-			# Set the data member.
-			$this->cont_organization=trim($cont_organization);
-		}
-		else
-		{
-			# Explicitly set the data member to NULL.
-			$this->cont_organization=NULL;
-		}
-	} #==== End -- setContOrganization
-
-	/**
-	 * setContPrivacy
-	 *
-	 * Sets the data member $cont_privacy.
-	 *
-	 * @param		$cont_privacy (The contributor's privacy preference. Must be NULL or an integer.)
-	 * @access	protected
-	 */
-	protected function setContPrivacy($cont_privacy)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed value $cont_privacy is NULL.
-		if($cont_privacy!==NULL)
-		{
-			# Clean it up.
-			$cont_privacy=trim($cont_privacy);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($cont_privacy)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$cont_privacy=(int)$cont_privacy;
-			}
-			else
-			{
-				throw new Exception('The passed value for the contributor\'s privacy was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		# Set the data member.
-		$this->cont_privacy=$cont_privacy;
-	} #==== End -- setContPrivacy
-
-	/**
-	 * setUser
-	 *
-	 * Sets the data member $user.
-	 *
-	 * @param	string $user			The contributor's User ID
-	 * @access	protected
-	 */
-	protected function setUser($user)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the passed $user is empty.
-		if(!empty($user))
-		{
-			# Clean it up.
-			$user=trim($user);
-			# Check if the passed $id is an integer.
-			if($validator->isInt($user)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$user=(int)$user;
-			}
-			else
-			{
-				throw new Exception('The passed User ID was not an integer!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set the value to NULL.
-			$user=NULL;
-		}
-		# Set the data member
-		$this->user=$user;
-	} #==== End -- setContUser
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
 
 	/**
 	 * getAllContributors
 	 *
 	 * Returns the data member $all_contributors.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getAllContributors()
 	{
 		return $this->all_contributors;
-	} #==== End -- getAllContributors
+	}
 
 	/**
 	 * getContID
 	 *
 	 * Returns the data member $cont_id.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContID()
 	{
 		return $this->cont_id;
-	} #==== End -- getContID
+	}
 
 	/**
 	 * getContFirstName
 	 *
 	 * Returns the data member $cont_fname if the fname data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContFirstName()
 	{
@@ -383,15 +74,16 @@ class Contributor extends User
 			# Set the fname data member to the variable.
 			$fname=$this->cont_fname;
 		}
+
 		return $fname;
-	} #==== End -- getContFirstName
+	}
 
 	/**
 	 * getContLastName
 	 *
 	 * Returns the data member $cont_lname if the lname data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContLastName()
 	{
@@ -403,15 +95,16 @@ class Contributor extends User
 			# Set the lname data member to the variable.
 			$lname=$this->cont_lname;
 		}
+
 		return $lname;
-	} #==== End -- getContLastName
+	}
 
 	/**
 	 * getContEmail
 	 *
 	 * Returns the data member $cont_email if the email data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContEmail()
 	{
@@ -423,27 +116,28 @@ class Contributor extends User
 			# Set the region data member to the variable.
 			$email=$this->cont_email;
 		}
+
 		return $email;
-	} #==== End -- getContEmail
+	}
 
 	/**
 	 * getContIP
 	 *
 	 * Returns the data member $cont_ip.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContIP()
 	{
 		return $this->cont_ip;
-	} #==== End -- getContIP
+	}
 
 	/**
 	 * getContRegion
 	 *
 	 * Returns the data member $cont_region if the region data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContRegion()
 	{
@@ -455,15 +149,16 @@ class Contributor extends User
 			# Set the region data member to the variable.
 			$region=$this->cont_region;
 		}
+
 		return $region;
-	} #==== End -- getContRegion
+	}
 
 	/**
 	 * getContCountry
 	 *
 	 * Returns the data member $cont_country if the country data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContCountry()
 	{
@@ -475,15 +170,16 @@ class Contributor extends User
 			# Set the country data member to the variable.
 			$country=$this->cont_country;
 		}
+
 		return $country;
-	} #==== End -- getContCountry
+	}
 
 	/**
 	 * getContOrganization
 	 *
 	 * Returns the data member $cont_organization if the organization data member from the parent User class is NULL, otherwise it returns that.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContOrganization()
 	{
@@ -495,47 +191,47 @@ class Contributor extends User
 			# Set the organization data member to the variable.
 			$organization=$this->cont_organization;
 		}
+
 		return $organization;
-	} #==== End -- getContOrganization
+	}
 
 	/**
 	 * getContPrivacy
 	 *
 	 * Returns the data member $cont_privacy.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContPrivacy()
 	{
 		return $this->cont_privacy;
-	} #==== End -- getContPrivacy
+	}
 
 	/**
 	 * getUser
 	 *
 	 * Returns the data member $user.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getUser()
 	{
 		return $this->user;
-	} #==== End -- getUser
+	}
 
-	/*** End accessor methods ***/
+	/*** End mutator methods ***/
 
-
-
-	/*** public methods ***/
+	/*** accessor methods ***/
 
 	/**
 	 * addContributor
 	 *
 	 * Adds or updates a User's data in the `contributors` table in the Database.
 	 *
-	 * @param		string $user_id (The contributor's User ID.)
-	 * @access	public
-	 * @return	string
+	 * @param string $user_id (The contributor's User ID.)
+	 * @param bool $find
+	 * @return string
+	 * @throws Exception
 	 */
 	public function addContributor($user_id=NULL, $find=TRUE)
 	{
@@ -559,7 +255,7 @@ class Contributor extends User
 			# Try to get the contributor from the Database first by User ID.
 			$contributor=$this->getThisContributor($user_id, 'user', $find);
 			# Get the user's data.
-			$this->finduserData($user_id);
+			$this->findUserData($user_id);
 			# Check if the contributor was found by user ID.
 			if($contributor===FALSE)
 			{
@@ -591,23 +287,23 @@ class Contributor extends User
 				$privacy=0;
 				# Build the SQL query.
 				$sql='INSERT INTO `'.DBPREFIX.'contributors` ('.
-				((empty($fname)) ? '' : '`fname`, ').
-				((empty($lname)) ? '' : '`lname`, ').
-				'`email`, '.
-				'`ip`, '.
-				((empty($region)) ? '' : '`region`, ').
-				((empty($country)) ? '' : '`country`, ').
-				((empty($organization)) ? '' : '`organization`, ').
-				'`user`) VALUES ('.
-				((empty($fname)) ? '' : $db->quote($db->escape($fname)).', ').
-				((empty($lname)) ? '' : $db->quote($db->escape($lname)).', ').
-				$db->quote($db->escape($email)).', '.
-				'INET_ATON('.$db->quote($db->escape($ip)).'), '.
-				((empty($region)) ? '' : $db->quote($db->escape($region)).', ').
-				((empty($country)) ? '' : $db->quote($db->escape($country)).', ').
-				((empty($organization)) ? '' : $db->quote($db->escape($organization)).', ').
-				$db->quote($user_id).
-				')';
+					((empty($fname)) ? '' : '`fname`, ').
+					((empty($lname)) ? '' : '`lname`, ').
+					'`email`, '.
+					'`ip`, '.
+					((empty($region)) ? '' : '`region`, ').
+					((empty($country)) ? '' : '`country`, ').
+					((empty($organization)) ? '' : '`organization`, ').
+					'`user`) VALUES ('.
+					((empty($fname)) ? '' : $db->quote($db->escape($fname)).', ').
+					((empty($lname)) ? '' : $db->quote($db->escape($lname)).', ').
+					$db->quote($db->escape($email)).', '.
+					'INET_ATON('.$db->quote($db->escape($ip)).'), '.
+					((empty($region)) ? '' : $db->quote($db->escape($region)).', ').
+					((empty($country)) ? '' : $db->quote($db->escape($country)).', ').
+					((empty($organization)) ? '' : $db->quote($db->escape($organization)).', ').
+					$db->quote($user_id).
+					')';
 			}
 			else
 			{
@@ -626,23 +322,23 @@ class Contributor extends User
 				# Get the contributor's privacy setting.
 				$privacy=$this->getContPrivacy();
 				$sql='UPDATE `'.DBPREFIX.'contributors` SET '.
-				((empty($fname)) ? '' : '`fname` = '.$db->quote($db->escape($fname)).', ').
-				((empty($lname)) ? '' : '`lname` = '.$db->quote($db->escape($lname)).', ').
-				'`email` = '.$db->quote($db->escape($email)).', '.
-				'`ip` = INET_ATON('.$db->quote($db->escape($ip)).'), '.
-				((empty($region)) ? '' : '`region` = '.$db->quote($db->escape($region)).', ').
-				((empty($country)) ? '' : '`country` = '.$db->quote($db->escape($country)).', ').
-				((empty($organization)) ? '' : '`organization` = '.$db->quote($db->escape($organization)).', ').
-				'`privacy` = '.(($privacy===NULL) ? 'NULL, ' : $db->quote($privacy)).', '.
-				'`user` = '.$db->quote($user_id).
-				' WHERE '.
-				'`id` = '.$db->quote($this->getContID()).
-				' LIMIT 1';
+					((empty($fname)) ? '' : '`fname` = '.$db->quote($db->escape($fname)).', ').
+					((empty($lname)) ? '' : '`lname` = '.$db->quote($db->escape($lname)).', ').
+					'`email` = '.$db->quote($db->escape($email)).', '.
+					'`ip` = INET_ATON('.$db->quote($db->escape($ip)).'), '.
+					((empty($region)) ? '' : '`region` = '.$db->quote($db->escape($region)).', ').
+					((empty($country)) ? '' : '`country` = '.$db->quote($db->escape($country)).', ').
+					((empty($organization)) ? '' : '`organization` = '.$db->quote($db->escape($organization)).', ').
+					'`privacy` = '.(($privacy===NULL) ? 'NULL, ' : $db->quote($privacy)).', '.
+					'`user` = '.$db->quote($user_id).
+					' WHERE '.
+					'`id` = '.$db->quote($this->getContID()).
+					' LIMIT 1';
 			}
 			# Add the contributor to the `contributor` table. This will update if the contributor is already in the table.
-			$add=$db->query($sql);
+			$db->query($sql);
 			# Try to get the Contributor from the Database again to repopulate the data members.
-			$contributor=$this->getThisContributor($user_id);
+			$this->getThisContributor($user_id);
 		}
 		catch(ezDB_Error $e)
 		{
@@ -653,18 +349,18 @@ class Contributor extends User
 		{
 			throw $e;
 		}
-	} #==== End -- addContributor
+	}
 
 	/***
 	 * displayContributor
 	 *
 	 * Retrieves the contributor's information from the database sets to to a display array. This method is designed to feed the displayProfile method of the parent User class.
 	 *
-	 * @param	string $value			May be the contributor id, user ID, email, or first and last names (names must be in an array).
-	 * @param	string $field			The field in the `contributors` table that $value is associated with.
-	 * @param	boolean $find			TRUE to try to find the User using the parent User methods, FALSE to not.
-	 * @return	array
-	 * @access	public
+	 * @param    string $value May be the contributor id, user ID, email, or first and last names (names must be in an array).
+	 * @param    string $field The field in the `contributors` table that $value is associated with.
+	 * @param    boolean $find TRUE to try to find the User using the parent User methods, FALSE to not.
+	 * @return    array
+	 * @access    public
 	 */
 	public function displayContributor($value, $field='id', $find=FALSE)
 	{
@@ -728,21 +424,22 @@ class Contributor extends User
 
 			return $display_content;
 		}
+
 		return NULL;
-	} #==== End -- displayContributor
+	}
 
 	/**
 	 * getContributors
 	 *
 	 * Retrieves records from the `contributors` table.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
-	 * @access	public
+	 * @param        $limit     (The LIMIT of the records.)
+	 * @param        $fields    (The name of the field(s) to be retrieved.)
+	 * @param        $order     (The name of the field to order the records by.)
+	 * @param        $direction (The direction to order the records.)
+	 * @param        $and_sql   (Extra AND statements in the query.)
+	 * @return    Boolean (TRUE if records are returned, FALSE if not.)
+	 * @access    public
 	 */
 	public function getContributors($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -757,8 +454,10 @@ class Contributor extends User
 			{
 				# Set the returned records to the data member (explicitly turning it into an array.)
 				$this->setAllContributors($records);
+
 				return TRUE;
 			}
+
 			# Return FALSE because no records were returned.
 			return FALSE;
 		}
@@ -770,18 +469,19 @@ class Contributor extends User
 		{
 			throw $e;
 		}
-	} #==== End -- getContributors
+	}
 
 	/**
 	 * getThisContributor
 	 *
 	 * Retrieves a contributor's info from the `contributors` table in the Database for the passed value and related field and sets it to the data member.
 	 *
-	 * @param		String 	$value 	(May be the contributor id, the contributor's User ID, the contributor's email, or the contributor's first and last names - names must be in an array.)
-	 * @param		String 	$field 	(The field in the `contributors` table that $value is associated with.)
-	 * @param		Boolean $find 	(TRUE to try to find the contributor using the parent User methods, FALSE to not.)
-	 * @return	Boolean 				(TRUE if a record is returned, FALSE if not.)
-	 * @access	public
+	 * @param        String $value (May be the contributor id, the contributor's User ID, the contributor's email, or the contributor's first and last names - names must be in an
+	 *                             array.)
+	 * @param        String $field (The field in the `contributors` table that $value is associated with.)
+	 * @param        Boolean $find (TRUE to try to find the contributor using the parent User methods, FALSE to not.)
+	 * @return    Boolean                (TRUE if a record is returned, FALSE if not.)
+	 * @access    public
 	 */
 	public function getThisContributor($value=NULL, $field='user', $find=TRUE)
 	{
@@ -910,9 +610,11 @@ class Contributor extends User
 						# Get the user's info.
 						$this->findUserData($username);
 					}
+
 					return TRUE;
 				}
 			}
+
 			# Return FALSE because there was no record returned.
 			return FALSE;
 		}
@@ -924,14 +626,14 @@ class Contributor extends User
 		{
 			throw $e;
 		}
-	} #==== End -- getThisContributor
+	}
 
 	/**
 	 * getContName
 	 *
 	 * Joins the Contributor's first and last names to create a full name. If the Display Name data member is set in the parent User class it is set instead.
 	 *
-	 * @access	public
+	 * @access    public
 	 */
 	public function getContName()
 	{
@@ -955,18 +657,19 @@ class Contributor extends User
 				((!empty($lname)) ? ((!empty($fname)) ? ' ' : '').$lname : '')
 			);
 		}
+
 		return $name;
-	} #==== End -- getContName
+	}
 
 	/**
 	 * removeUser
 	 *
 	 * Remove's a User's from the contributor's data in the `contributors` table.
 	 *
-	 * @param	int/array $user_id		The contributor's User ID.
-	 *										If it's an array, multiple users are being deleted.
-	 * @access	public
-	 * @return	boolean
+	 * @param    int                          /array $user_id        The contributor's User ID.
+	 *                                        If it's an array, multiple users are being deleted.
+	 * @access    public
+	 * @return    boolean
 	 */
 	public function removeUser($user_id)
 	{
@@ -977,6 +680,7 @@ class Contributor extends User
 
 		try
 		{
+			$where='';
 			# Check if the passed $user_id is an integer.
 			if($validator->isInt($user_id)===TRUE)
 			{
@@ -1000,6 +704,7 @@ class Contributor extends User
 			{
 				return TRUE;
 			}
+
 			return FALSE;
 		}
 		catch(ezDB_Error $e)
@@ -1010,16 +715,16 @@ class Contributor extends User
 		{
 			throw $e;
 		}
-	} #==== End -- removeUser
+	}
 
 	/**
 	 * updateContributor
 	 *
 	 * Updates the contributor's record in the DataBase.
 	 *
-	 * @param		array		$where_field (Key= the field, Value= the field value.)
-	 * @param		array		$field_value (Key= the field, Value= the field value.)
-	 * @access	public
+	 * @param        array $where_field (Key= the field, Value= the field value.)
+	 * @param        array $field_value (Key= the field, Value= the field value.)
+	 * @access    public
 	 */
 	public function updateContributor($where_field, $field_value)
 	{
@@ -1091,10 +796,314 @@ class Contributor extends User
 		}
 		catch(ezDB_Error $ez)
 		{
-			throw new Exception('There was an error updating Contributor\'s info: '.$e->error.'<br />Code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+			throw new Exception('There was an error updating Contributor\'s info: '.$ez->error.'<br />Code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
-	} #==== End -- updatePerson
+	}
 
+	/**
+	 * setAllContributors
+	 *
+	 * Sets the data member $all_contributors.
+	 *
+	 * @param    $contributors                May be an array or a string.
+	 *                                        The method makes it into an array regardless.
+	 * @access    protected
+	 */
+	protected function setAllContributors($contributors)
+	{
+		# Check if the passed value is empty.
+		if(!empty($contributors))
+		{
+			# Explicitly make it an array.
+			$contributors=(array)$contributors;
+			# Set the data member.
+			$this->all_contributors=$contributors;
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->all_contributors=NULL;
+		}
+	}
+
+	/**
+	 * setContID
+	 *
+	 * Sets the data member $cont_id.
+	 *
+	 * @param        $cont_id (The Contributor's ID number.)
+	 * @access    protected
+	 */
+	protected function setContID($cont_id)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed $cont_id is empty.
+		if(!empty($cont_id))
+		{
+			# Clean it up.
+			$cont_id=trim($cont_id);
+			# Check if the passed $id is an integer.
+			if($validator->isInt($cont_id)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$cont_id=(int)$cont_id;
+			}
+			else
+			{
+				throw new Exception('The passed contributor id was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$cont_id=NULL;
+		}
+		# Set the data member
+		$this->cont_id=$cont_id;
+	}
+
+	/**
+	 * setContFirstName
+	 *
+	 * Sets the data member $cont_fname.
+	 *
+	 * @param        $cont_fname (The contributor's first name.)
+	 * @access    protected
+	 */
+	protected function setContFirstName($cont_fname)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_fname))
+		{
+			# Set the data member.
+			$this->cont_fname=trim($cont_fname);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_fname=NULL;
+		}
+	}
+
+	/**
+	 * setContLastName
+	 *
+	 * Sets the data member $cont_lname.
+	 *
+	 * @param        $cont_lname (The contributor's last name.)
+	 * @access    protected
+	 */
+	protected function setContLastName($cont_lname)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_lname))
+		{
+			# Set the data member.
+			$this->cont_lname=trim($cont_lname);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_lname=NULL;
+		}
+	}
+
+	/*** End accessor methods ***/
+
+	/*** public methods ***/
+
+	/**
+	 * setContEmail
+	 *
+	 * Sets the data member $cont_email.
+	 *
+	 * @param        $cont_email (The contributor's Email address.)
+	 * @access    protected
+	 */
+	protected function setContEmail($cont_email)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_email))
+		{
+			# Set the data member.
+			$this->cont_email=trim($cont_email);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_email=NULL;
+		}
+	}
+
+	/**
+	 * setContIP
+	 *
+	 * Sets the data member $cont_ip.
+	 *
+	 * @param        $cont_ip (The contributor's IP address.)
+	 * @access    protected
+	 */
+	protected function setContIP($cont_ip)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_ip))
+		{
+			# Set the data member.
+			$this->cont_ip=trim($cont_ip);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_ip=NULL;
+		}
+	}
+
+	/**
+	 * setContRegion
+	 *
+	 * Sets the data member $cont_region.
+	 *
+	 * @param        $cont_region (The contributor's region.)
+	 * @access    protected
+	 */
+	protected function setContRegion($cont_region)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_region))
+		{
+			# Strip slashes and decode any html entities.
+			$cont_region=html_entity_decode(stripslashes($cont_region), ENT_COMPAT, 'UTF-8');
+			# Set the data member.
+			$this->cont_region=trim($cont_region);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_region=NULL;
+		}
+	}
+
+	/**
+	 * setContCountry
+	 *
+	 * Sets the data member $country.
+	 *
+	 * @param        $cont_country (The contributor's country.)
+	 * @access    protected
+	 */
+	protected function setContCountry($cont_country)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_country))
+		{
+			# Strip slashes and decode any html entities.
+			$cont_country=html_entity_decode(stripslashes($cont_country), ENT_COMPAT, 'UTF-8');
+			# Set the data member.
+			$this->cont_country=trim($cont_country);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_country=NULL;
+		}
+	}
+
+	/**
+	 * setContOrganization
+	 *
+	 * Sets the data member $cont_organization.
+	 *
+	 * @param        $cont_organization (The contributor's organization.)
+	 * @access    protected
+	 */
+	protected function setContOrganization($cont_organization)
+	{
+		# Check if the passed value is empty.
+		if(!empty($cont_organization))
+		{
+			# Strip slashes and decode any html entities.
+			$cont_organization=html_entity_decode(stripslashes($cont_organization), ENT_COMPAT, 'UTF-8');
+			# Set the data member.
+			$this->cont_organization=trim($cont_organization);
+		}
+		else
+		{
+			# Explicitly set the data member to NULL.
+			$this->cont_organization=NULL;
+		}
+	}
+
+	/**
+	 * setContPrivacy
+	 *
+	 * Sets the data member $cont_privacy.
+	 *
+	 * @param        $cont_privacy (The contributor's privacy preference. Must be NULL or an integer.)
+	 * @access    protected
+	 */
+	protected function setContPrivacy($cont_privacy)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed value $cont_privacy is NULL.
+		if($cont_privacy!==NULL)
+		{
+			# Clean it up.
+			$cont_privacy=trim($cont_privacy);
+			# Check if the passed $id is an integer.
+			if($validator->isInt($cont_privacy)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$cont_privacy=(int)$cont_privacy;
+			}
+			else
+			{
+				throw new Exception('The passed value for the contributor\'s privacy was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		# Set the data member.
+		$this->cont_privacy=$cont_privacy;
+	}
+
+	/**
+	 * setUser
+	 *
+	 * Sets the data member $user.
+	 *
+	 * @param    string $user The contributor's User ID
+	 * @access    protected
+	 */
+	protected function setUser($user)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed $user is empty.
+		if(!empty($user))
+		{
+			# Clean it up.
+			$user=trim($user);
+			# Check if the passed $id is an integer.
+			if($validator->isInt($user)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$user=(int)$user;
+			}
+			else
+			{
+				throw new Exception('The passed User ID was not an integer!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set the value to NULL.
+			$user=NULL;
+		}
+		# Set the data member
+		$this->user=$user;
+	}
 	/*** End public methods ***/
-
-} # End Contributor class.
+}

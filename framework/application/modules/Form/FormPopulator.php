@@ -3,7 +3,6 @@
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
 
-
 /**
  * FormPopulator
  *
@@ -11,6 +10,7 @@ require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
  */
 class FormPopulator
 {
+	protected $form_url=array();
 	/*** data members ***/
 
 	private $category_option=NULL;
@@ -18,7 +18,6 @@ class FormPopulator
 	private $date=NULL;
 	private $facebook=NULL;
 	private $file_option=NULL;
-	protected $form_url=array();
 	private $image_option=NULL;
 	private $institution_option=NULL;
 	private $language_option=NULL;
@@ -31,20 +30,299 @@ class FormPopulator
 	private $twitter=NULL;
 	private $unique=0;
 	private $youtube=NULL;
-
 	/*** End data members ***/
 
-
-
 	/*** mutator methods ***/
+
+	/**
+	 * getCurrentURL
+	 *
+	 * Returns the current URL.
+	 */
+	public static function getCurrentURL()
+	{
+		try
+		{
+			return WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE.str_ireplace(array('&amp;delete', '&delete'), '', GET_QUERY));
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	}
+
+	/**
+	 * setFormURL
+	 *
+	 * Sets the data member $form_url.
+	 *
+	 * @param    $url                    The complete url where the form is.
+	 */
+	public function setFormURL($url)
+	{
+		# Check if the passed value is an array.
+		if(!is_array($url))
+		{
+			# Type cast the passed value as an array.
+			$url=(array)$url;
+		}
+		# Set the data member.
+		$this->form_url=$url;
+	}
+
+	/**
+	 * setUnique
+	 *
+	 * Sets the data member $unique.
+	 *
+	 * @param int $value                  Whether or not the form item is unique or not.
+	 *                                    1 => it is unique, 0 => it is NOT unique.
+	 * @throws Exception
+	 */
+	public function setUnique($value)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the passed $value is an integer.
+		if($validator->isInt($value)===TRUE)
+		{
+			# Set the data member explicitly making it an integer.
+			$this->unique=(int)$value;
+		}
+		else
+		{
+			throw new Exception('The passed "unique" value was not an integer!', E_RECOVERABLE_ERROR);
+		}
+	}
+
+	/**
+	 * getCategoryOption
+	 *
+	 * Returns the data member $category_option.
+	 *
+	 * @access    public
+	 */
+	public function getCategoryOption()
+	{
+		return $this->category_option;
+	}
+
+	/**
+	 * getData
+	 *
+	 * Returns the data member $data.
+	 *
+	 * @access    public
+	 */
+	public function getData()
+	{
+		return $this->data;
+	}
+
+	/**
+	 * getDate
+	 *
+	 * Returns the data member $date.
+	 *
+	 * @access    public
+	 */
+	public function getDate()
+	{
+		return $this->date;
+	}
+
+	/**
+	 * getFacebook
+	 *
+	 * Returns the data member $facebook.
+	 *
+	 * @access    public
+	 */
+	public function getFacebook()
+	{
+		return $this->facebook;
+	}
+
+	/**
+	 * getFileOption
+	 *
+	 * Returns the data member $file_option.
+	 *
+	 * @access    public
+	 */
+	public function getFileOption()
+	{
+		return $this->file_option;
+	}
+
+	/**
+	 * getFormURL
+	 *
+	 * Returns the data member $form_url.
+	 *
+	 * @access    public
+	 */
+	public function getFormURL()
+	{
+		return $this->form_url;
+	}
+
+	/**
+	 * getImageOption
+	 *
+	 * Returns the data member $image_option.
+	 *
+	 * @access    public
+	 */
+	public function getImageOption()
+	{
+		return $this->image_option;
+	}
+
+	/**
+	 * getInstitutionOption
+	 *
+	 * Returns the data member $institution_option.
+	 *
+	 * @access    public
+	 */
+	public function getInstitutionOption()
+	{
+		return $this->institution_option;
+	}
+
+	/**
+	 * getLanguageOption
+	 *
+	 * Returns the data member $language_option.
+	 *
+	 * @access    public
+	 */
+	public function getLanguageOption()
+	{
+		return $this->language_option;
+	}
+
+	/**
+	 * getPlaylistOption
+	 *
+	 * Returns the data member $playlist_option.
+	 *
+	 * @access    public
+	 */
+	public function getPlaylistOption()
+	{
+		return $this->playlist_option;
+	}
+
+	/**
+	 * getPositionOption
+	 *
+	 * Returns the data member $position_option.
+	 *
+	 * @access    public
+	 */
+	public function getPositionOption()
+	{
+		return $this->position_option;
+	}
+
+	/**
+	 * getPremiumChange
+	 *
+	 * Returns the data member $premium_change.
+	 *
+	 * @access    public
+	 */
+	public function getPremiumChange()
+	{
+		return $this->premium_change;
+	}
+
+	/**
+	 * getPublisherOption
+	 *
+	 * Returns the data member $publisher_option.
+	 *
+	 * @access    public
+	 */
+	public function getPublisherOption()
+	{
+		return $this->publisher_option;
+	}
+
+	/**
+	 * getStaffOption
+	 *
+	 * Returns the data member $staff_option.
+	 *
+	 * @access    public
+	 */
+	public function getStaffOption()
+	{
+		return $this->staff_option;
+	}
+
+	/**
+	 * getTo
+	 *
+	 * Returns the data member $to.
+	 *
+	 * @access    public
+	 */
+	public function getTo()
+	{
+		return $this->to;
+	}
+
+	/*** End mutator methods ***/
+
+	/*** accessor methods ***/
+
+	/**
+	 * getTwitter
+	 *
+	 * Returns the data member $twitter.
+	 *
+	 * @access    public
+	 */
+	public function getTwitter()
+	{
+		return $this->twitter;
+	}
+
+	/**
+	 * getUnique
+	 *
+	 * Returns the data member $unique.
+	 *
+	 * @access    public
+	 */
+	public function getUnique()
+	{
+		return $this->unique;
+	}
+
+	/**
+	 * getYouTube
+	 *
+	 * Returns the data member $youtube.
+	 *
+	 * @access    public
+	 */
+	public function getYouTube()
+	{
+		return $this->youtube;
+	}
 
 	/***
 	 * setCategoryOption
 	 *
 	 * Sets the data member $category_option
 	 *
-	 * @param	$category_option
-	 * @access	protected
+	 * @param    $category_option
+	 * @access    protected
 	 */
 	protected function setCategoryOption($category_option)
 	{
@@ -56,15 +334,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->category_option=$category_option;
-	} #==== End -- setCategoryOption
+	}
 
 	/**
 	 * setData
 	 *
 	 * Sets the data member $data.
 	 *
-	 * @param	$data_array
-	 * @access	protected
+	 * @param    $data_array
+	 * @access    protected
 	 */
 	protected function setData($data_array)
 	{
@@ -78,15 +356,15 @@ class FormPopulator
 			# Explicitly set the data member to an empty array.
 			$this->data=array();
 		}
-	} #==== End -- setData
+	}
 
 	/**
 	 * setDate
 	 *
 	 * Sets the data member $date.
 	 *
-	 * @param	$date
-	 * @access	protected
+	 * @param    $date
+	 * @access    protected
 	 */
 	protected function setDate($date)
 	{
@@ -105,15 +383,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->date=$date;
-	} #==== End -- setDate
+	}
 
 	/**
 	 * setFacebook
 	 *
 	 * Sets the data member $facebook.
 	 *
-	 * @param	$value
-	 * @access	protected
+	 * @param    $value
+	 * @access    protected
 	 */
 	protected function setFacebook($value)
 	{
@@ -128,15 +406,15 @@ class FormPopulator
 			# Explicitly set the data member to NULL.
 			$this->facebook=NULL;
 		}
-	} #==== End -- setFacebook
+	}
 
 	/***
 	 * setFileOption
 	 *
 	 * Sets the data member $file_option
 	 *
-	 * @param	$file_option
-	 * @access	protected
+	 * @param    $file_option
+	 * @access    protected
 	 */
 	protected function setFileOption($file_option)
 	{
@@ -148,35 +426,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->file_option=$file_option;
-	} #==== End -- setFileOption
-
-	/**
-	 * setFormURL
-	 *
-	 * Sets the data member $form_url.
-	 *
-	 * @param	$url					The complete url where the form is.
-	 * @access	public
-	 */
-	public function setFormURL($url)
-	{
-		# Check if the passed value is an array.
-		if(!is_array($url))
-		{
-			# Type cast the passed value as an array.
-			$url=(array)$url;
-		}
-		# Set the data member.
-		$this->form_url=$url;
-	} #==== End -- setFormURL
+	}
 
 	/***
 	 * setImageOption
 	 *
 	 * Sets the data member $image_option
 	 *
-	 * @param	$image_option
-	 * @access	protected
+	 * @param    $image_option
+	 * @access    protected
 	 */
 	protected function setImageOption($image_option)
 	{
@@ -188,15 +446,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->image_option=$image_option;
-	} #==== End -- setImageOption
+	}
 
 	/***
 	 * setInstitutionOption
 	 *
 	 * Sets the data member $institution_option
 	 *
-	 * @param	$institution_option
-	 * @access	protected
+	 * @param    $institution_option
+	 * @access    protected
 	 */
 	protected function setInstitutionOption($institution_option)
 	{
@@ -208,15 +466,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->institution_option=$institution_option;
-	} #==== End -- setInstitutionOption
+	}
 
 	/***
 	 * setLanguageOption
 	 *
 	 * Sets the data member $language_option
 	 *
-	 * @param	$language_option
-	 * @access	protected
+	 * @param    $language_option
+	 * @access    protected
 	 */
 	protected function setLanguageOption($language_option)
 	{
@@ -228,15 +486,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->language_option=$language_option;
-	} #==== End -- setLanguageOption
+	}
 
 	/***
 	 * setPlaylistOption
 	 *
 	 * Sets the data member $playlist_option
 	 *
-	 * @param	$playlist_option
-	 * @access	protected
+	 * @param    $playlist_option
+	 * @access    protected
 	 */
 	protected function setPlaylistOption($playlist_option)
 	{
@@ -248,15 +506,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->playlist_option=$playlist_option;
-	} #==== End -- setPlaylistOption
+	}
 
 	/***
 	 * setPositionOption
 	 *
 	 * Sets the data member $position_option
 	 *
-	 * @param	$position_option
-	 * @access	protected
+	 * @param    $position_option
+	 * @access    protected
 	 */
 	protected function setPositionOption($position_option)
 	{
@@ -268,15 +526,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->position_option=$position_option;
-	} #==== End -- setPositionOption
+	}
 
 	/**
 	 * setPremiumChange
 	 *
 	 * Sets the data member $premium_change.
 	 *
-	 * @param	$premium_change			TRUE if the premium status changed, FALSE if not.
-	 * @access	protected
+	 * @param    $premium_change            TRUE if the premium status changed, FALSE if not.
+	 * @access    protected
 	 */
 	protected function setPremiumChange($premium_change)
 	{
@@ -293,15 +551,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->premium_change=$premium_change;
-	} #==== End -- setPremiumChange
+	}
 
 	/***
 	 * setPublisherOption
 	 *
 	 * Sets the data member $publisher_option
 	 *
-	 * @param	$publisher_option
-	 * @access	protected
+	 * @param    $publisher_option
+	 * @access    protected
 	 */
 	protected function setPublisherOption($publisher_option)
 	{
@@ -313,15 +571,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->publisher_option=$publisher_option;
-	} #==== End -- setPublisherOption
+	}
 
 	/***
 	 * setStaffOption
 	 *
 	 * Sets the data member $staff_option
 	 *
-	 * @param	$staff_option
-	 * @access	protected
+	 * @param    $staff_option
+	 * @access    protected
 	 */
 	protected function setStaffOption($staff_option)
 	{
@@ -333,15 +591,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->staff_option=$staff_option;
-	} #==== End -- setStaffOption
+	}
 
 	/**
 	 * setTo
 	 *
 	 * Sets the data member $to.
 	 *
-	 * @param	array $array
-	 * @access	protected
+	 * @param    array $array
+	 * @access    protected
 	 */
 	protected function setTo($array)
 	{
@@ -353,15 +611,15 @@ class FormPopulator
 		}
 		# Set the data member.
 		$this->to=$array;
-	} #==== End -- setTo
+	}
 
 	/**
 	 * setTwitter
 	 *
 	 * Sets the data member $twitter.
 	 *
-	 * @param	$value
-	 * @access	protected
+	 * @param    $value
+	 * @access    protected
 	 */
 	protected function setTwitter($value)
 	{
@@ -376,40 +634,19 @@ class FormPopulator
 			# Explicitly set the data member to NULL.
 			$this->twitter=NULL;
 		}
-	} #==== End -- setTwitter
+	}
 
-	/**
-	 * setUnique
-	 *
-	 * Sets the data member $unique.
-	 *
-	 * @param	Integer $value			Whether or not the form item is unique or not. 1 => it is unique, 0 => it is NOT unique.
-	 * @access	public
-	 */
-	public function setUnique($value)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
+	/*** End accessor methods ***/
 
-		# Check if the passed $value is an integer.
-		if($validator->isInt($value)===TRUE)
-		{
-			# Set the data member explicitly making it an integer.
-			$this->unique=(int)$value;
-		}
-		else
-		{
-			throw new Exception('The passed "unique" value was not an integer!', E_RECOVERABLE_ERROR);
-		}
-	} #==== End -- setUnique
+	/*** public methods ***/
 
 	/**
 	 * setYouTube
 	 *
 	 * Sets the data member $youtube.
 	 *
-	 * @param	$value
-	 * @access	protected
+	 * @param    $value
+	 * @access    protected
 	 */
 	protected function setYouTube($value)
 	{
@@ -424,258 +661,9 @@ class FormPopulator
 			# Explicitly set the data member to NULL.
 			$this->youtube=NULL;
 		}
-	} #==== End -- setYouTube
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
-
-	/**
-	 * getCategoryOption
-	 *
-	 * Returns the data member $category_option.
-	 *
-	 * @access	public
-	 */
-	public function getCategoryOption()
-	{
-		return $this->category_option;
-	} #==== End -- getCategoryOption
-
-	/**
-	 * getData
-	 *
-	 * Returns the data member $data.
-	 *
-	 * @access	public
-	 */
-	public function getData()
-	{
-		return $this->data;
-	} #==== End -- getData
-
-	/**
-	 * getDate
-	 *
-	 * Returns the data member $date.
-	 *
-	 * @access	public
-	 */
-	public function getDate()
-	{
-		return $this->date;
-	} #==== End -- getDate
-
-	/**
-	 * getFacebook
-	 *
-	 * Returns the data member $facebook.
-	 *
-	 * @access	public
-	 */
-	public function getFacebook()
-	{
-		return $this->facebook;
-	} #==== End -- getFacebook
-
-	/**
-	 * getFileOption
-	 *
-	 * Returns the data member $file_option.
-	 *
-	 * @access	public
-	 */
-	public function getFileOption()
-	{
-		return $this->file_option;
-	} #==== End -- getFileOption
-
-	/**
-	 * getFormURL
-	 *
-	 * Returns the data member $form_url.
-	 *
-	 * @access	public
-	 */
-	public function getFormURL()
-	{
-		return $this->form_url;
-	} #==== End -- getFormURL
-
-	/**
-	 * getImageOption
-	 *
-	 * Returns the data member $image_option.
-	 *
-	 * @access	public
-	 */
-	public function getImageOption()
-	{
-		return $this->image_option;
-	} #==== End -- getImageOption
-
-	/**
-	 * getInstitutionOption
-	 *
-	 * Returns the data member $institution_option.
-	 *
-	 * @access	public
-	 */
-	public function getInstitutionOption()
-	{
-		return $this->institution_option;
-	} #==== End -- getInstitutionOption
-
-	/**
-	 * getLanguageOption
-	 *
-	 * Returns the data member $language_option.
-	 *
-	 * @access	public
-	 */
-	public function getLanguageOption()
-	{
-		return $this->language_option;
-	} #==== End -- getLanguageOption
-
-	/**
-	 * getPlaylistOption
-	 *
-	 * Returns the data member $playlist_option.
-	 *
-	 * @access	public
-	 */
-	public function getPlaylistOption()
-	{
-		return $this->playlist_option;
-	} #==== End -- getPlaylistOption
-
-	/**
-	 * getPositionOption
-	 *
-	 * Returns the data member $position_option.
-	 *
-	 * @access	public
-	 */
-	public function getPositionOption()
-	{
-		return $this->position_option;
-	} #==== End -- getPositionOption
-
-	/**
-	 * getPremiumChange
-	 *
-	 * Returns the data member $premium_change.
-	 *
-	 * @access	public
-	 */
-	public function getPremiumChange()
-	{
-		return $this->premium_change;
-	} #==== End -- getPremiumChange
-
-	/**
-	 * getPublisherOption
-	 *
-	 * Returns the data member $publisher_option.
-	 *
-	 * @access	public
-	 */
-	public function getPublisherOption()
-	{
-		return $this->publisher_option;
-	} #==== End -- getPublisherOption
-
-	/**
-	 * getStaffOption
-	 *
-	 * Returns the data member $staff_option.
-	 *
-	 * @access	public
-	 */
-	public function getStaffOption()
-	{
-		return $this->staff_option;
-	} #==== End -- getStaffOption
-
-	/**
-	 * getTo
-	 *
-	 * Returns the data member $to.
-	 *
-	 * @access	public
-	 */
-	public function getTo()
-	{
-		return $this->to;
-	} #==== End -- getTo
-
-	/**
-	 * getTwitter
-	 *
-	 * Returns the data member $twitter.
-	 *
-	 * @access	public
-	 */
-	public function getTwitter()
-	{
-		return $this->twitter;
-	} #==== End -- getTwitter
-
-	/**
-	 * getUnique
-	 *
-	 * Returns the data member $unique.
-	 *
-	 * @access	public
-	 */
-	public function getUnique()
-	{
-		return $this->unique;
-	} #==== End -- getUnique
-
-	/**
-	 * getYouTube
-	 *
-	 * Returns the data member $youtube.
-	 *
-	 * @access	public
-	 */
-	public function getYouTube()
-	{
-		return $this->youtube;
-	} #==== End -- getYouTube
-
-	/*** End accessor methods ***/
-
-
-
-	/*** public methods ***/
-
-	/**
-	 * getCurrentURL
-	 *
-	 * Returns the current URL.
-	 *
-	 * @access	public
-	 */
-	public static function getCurrentURL()
-	{
-		try
-		{
-			return WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE.str_ireplace(array('&amp;delete','&delete'), '', GET_QUERY));
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- getCurrentURL
+	}
 
 	/*** End public methods ***/
-
-
 
 	/*** protected methods ***/
 
@@ -684,9 +672,10 @@ class FormPopulator
 	 *
 	 * Populate the data members with the values in the data array.
 	 *
-	 * @access	protected
+	 * @access    protected
 	 *
-	 * @param	$class_instance			The instance of the secondary class.
+	 * @param    $class_instance            The instance of the secondary class.
+	 * @throws Exception
 	 */
 	protected function setDataToDataMembers($class_instance)
 	{
@@ -714,7 +703,7 @@ class FormPopulator
 		{
 			throw $e;
 		}
-	} #==== End -- setDataToDataMembers
+	}
 
 	/**
 	 * setSessionDataToDataArray
@@ -722,9 +711,10 @@ class FormPopulator
 	 * Checks for data in SESSION. If there is and the current URL matches the post form URL
 	 * in the SESSION, it sets the SESSION data to the data array data member.
 	 *
-	 * @access	protected
+	 * @access    protected
 	 *
-	 * @param	$index					The key of the SESSION in question.
+	 * @param    $index                    The key of the SESSION in question.
+	 * @throws Exception
 	 */
 	protected function setSessionDataToDataArray($index)
 	{
@@ -751,8 +741,7 @@ class FormPopulator
 		{
 			throw $e;
 		}
-	} #==== End -- setSessionDataToDataArray
-
+	}
 	/*** End protected methods ***/
 
 } # End FormPopulator class.

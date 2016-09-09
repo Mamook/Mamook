@@ -1,4 +1,4 @@
-<?php /* Requires PHP5+ */
+<?php /* application/modules/Form/LoginFormPopulator.php */
 
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH'))
@@ -10,44 +10,31 @@ if(!defined('BASE_PATH'))
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormPopulator.php');
 
 /**
- * RegisterFormPopulator
+ * LoginFormPopulator
  *
- * The RegisterFormPopulator Class is used populate register forms.
+ * The LoginFormPopulator Class is used populate Login forms.
  *
  */
-class RegisterFormPopulator extends FormPopulator
+class LoginFormPopulator extends FormPopulator
 {
 	/*** data members ***/
 
-	private $email_conf=NULL;
-	private $password_conf=NULL;
+	private $remember=NULL;
 	private $user_object=NULL;
 	/*** End data members ***/
 
 	/*** mutator methods ***/
 
 	/**
-	 * getEmailConf
+	 * getRemember
 	 *
-	 * Returns the data member $email_conf.
-	 *
-	 * @access    public
-	 */
-	public function getEmailConf()
-	{
-		return $this->email_conf;
-	}
-
-	/**
-	 * getPasswordConf
-	 *
-	 * Returns the data member $password_conf.
+	 * Returns the data member $remember.
 	 *
 	 * @access    public
 	 */
-	public function getPasswordConf()
+	public function getRemember()
 	{
-		return $this->password_conf;
+		return $this->remember;
 	}
 
 	/**
@@ -67,29 +54,29 @@ class RegisterFormPopulator extends FormPopulator
 	/*** accessor methods ***/
 
 	/**
-	 * populateRegisterForm
+	 * populateLoginForm
 	 *
-	 * Populates a register form.
+	 * Populates a Login form with content from the login table in the Databse using the id passed via GET data.
 	 *
-	 * @param    $data                    An array of values to populate the form with.
-	 * @access    public
+	 * @param array $data An array of values to populate the form with.
+	 * @throws Exception
 	 */
-	public function populateRegisterForm($data=array())
+	public function populateLoginForm($data=array())
 	{
-		# Get the User class.
-		require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-		# Instantiate a new User object.
-		$user=new User();
-		# Set the Login object to the data member.
-		$this->setUserObject($user);
-
 		try
 		{
+			# Get the User class.
+			require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
+			# Instantiate a new User object.
+			$user=new User();
+			# Set the User object to the data member.
+			$this->setUserObject($user);
+
 			# Set the passed data array to the data member.
 			$this->setData($data);
 
 			# Process any Login data held in SESSION and set it to the data data member. This overwrites any passed data.
-			$this->setSessionDataToDataArray('register');
+			$this->setSessionDataToDataArray('login');
 			# Remove any "account" sessions.
 			unset($_SESSION['form']['account']);
 			# Remove any "audio" sessions.
@@ -106,8 +93,8 @@ class RegisterFormPopulator extends FormPopulator
 			unset($_SESSION['form']['institution']);
 			# Remove any "language" sessions.
 			unset($_SESSION['form']['language']);
-			# Remove any "login" sessions.
-			unset($_SESSION['form']['login']);
+			# Remove any "lost_password" sessions.
+			unset($_SESSION['form']['lost_password']);
 			# Remove any "post" sessions.
 			unset($_SESSION['form']['post']);
 			# Remove any "product" sessions.
@@ -127,7 +114,7 @@ class RegisterFormPopulator extends FormPopulator
 			$this->setPostDataToDataArray();
 
 			# Populate the data members with defaults, passed values, or data saved in SESSION.
-			$this->setDataToDataMembers($user);
+			$this->setDataToDataMembers($this->getUserObject());
 		}
 		catch(Exception $e)
 		{
@@ -135,54 +122,24 @@ class RegisterFormPopulator extends FormPopulator
 		}
 	}
 
-	/**
-	 * setEmailConf
+	/***
+	 * setRemember
 	 *
-	 * Sets the data member $email_conf.
+	 * Sets the data member $remember
 	 *
-	 * @param    $email_conf            The User's email.
+	 * @param        $remember
 	 * @access    protected
 	 */
-	protected function setEmailConf($email_conf)
+	protected function setRemember($remember)
 	{
-		# Check if the value is empty.
-		if(!empty($email_conf))
+		# Check if the passed value is empty or doesn't exactly match one of the script options.
+		if(empty($remember) OR ($remember!=='remember'))
 		{
-			# Clean it up and set the data member.
-			$email_conf=trim($email_conf);
-		}
-		else
-		{
-			# Explicitly set it to NULL.
-			$email_conf=NULL;
+			# Explicitly set the value to NULL.
+			$remember=NULL;
 		}
 		# Set the data member.
-		$this->email_conf=$email_conf;
-	}
-
-	/**
-	 * setPasswordConf
-	 *
-	 * Sets the data member $password_conf.
-	 *
-	 * @param    $password_conf            The User's password.
-	 * @access    protected
-	 */
-	protected function setPasswordConf($password_conf)
-	{
-		# Check if the value is empty.
-		if(!empty($password_conf))
-		{
-			# Clean it up and set the data member.
-			$password_conf=trim($password_conf);
-		}
-		else
-		{
-			# Explicitly set it to NULL.
-			$password_conf=NULL;
-		}
-		# Set the data member.
-		$this->password_conf=$password_conf;
+		$this->remember=$remember;
 	}
 
 	/*** End accessor methods ***/
@@ -216,8 +173,8 @@ class RegisterFormPopulator extends FormPopulator
 	/**
 	 * setPostDataToDataArray
 	 *
-	 * If there are new post data values from POST data, they are set to the appropriate data
-	 * member (PostFormPopulator or SubContent).
+	 * If there are new Login data values from POST data, they are set to the appropriate data
+	 * member (LoginFormPopulator or User).
 	 *
 	 * @access    private
 	 */
@@ -229,48 +186,28 @@ class RegisterFormPopulator extends FormPopulator
 			$db=DB::get_instance();
 
 			# Check if the form has been submitted.
-			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['register']) && ($_POST['register']==='Register')))
+			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['login']) && ($_POST['login']=='Login')))
 			{
-				# Set the Validator instance to a variable.
-				$validator=Validator::getInstance();
-				# Set the data array to a local variable.
 				$data=$this->getData();
 
-				# Check if there was POST data sent.
-				if(isset($_POST['email']))
+				# Check if username POST data was sent.
+				if(isset($_POST['password']))
 				{
-					# Clean it up and set it to the data array index.
-					$data['Email']=$db->sanitize($_POST['email'], 2);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['email_conf']))
-				{
-					# Clean it up and set it to the data array index.
-					$data['EmailConf']=$db->sanitize($_POST['email_conf'], 2);
-				}
-
-				# Check if there was POST data sent.
-				if(isset($_POST['password']) && !empty($_POST['password']))
-				{
-					# If WordPress is installed add the user the the WordPress users table.
-					if(WP_INSTALLED===TRUE)
-					{
-						$data['WPPassword']=trim($_POST['password']);
-					}
+					# Set the password to the Image data member.
 					$data['Password']=trim($_POST['password']);
 				}
 
-				# Check if there was POST data sent.
-				if(isset($_POST['password_conf']) && !empty($_POST['password_conf']))
+				# Check if remember POST data was sent.
+				if(isset($_POST['remember']) && ($_POST['remember']=='remember'))
 				{
-					$data['PasswordConf']=$_POST['password_conf'];
+					# Set the remember value to the Image data member.
+					$data['Remember']='remember';
 				}
 
-				# Check if there was POST data sent.
+				# Check if username POST data was sent.
 				if(isset($_POST['username']))
 				{
-					# Clean it up and set it to the data array index.
+					# Set the username to the Image data member.
 					$data['Username']=$db->sanitize($_POST['username'], 2);
 				}
 

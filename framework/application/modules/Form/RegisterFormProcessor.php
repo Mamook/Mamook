@@ -1,18 +1,17 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/RegisterFormProcessor.php */
 
 # Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
-
+if(!defined('BASE_PATH'))
+{
+	exit('No direct script access allowed');
+}
 
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
-
 # Get the RegisterFormPopulator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'RegisterFormPopulator.php');
-
 
 /**
  * RegisterFormProcessor
@@ -29,9 +28,10 @@ class RegisterFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted Post.
 	 *
-	 * @param	$data					An array of values tp populate the form with.
-	 * @access	public
-	 * @return	string
+	 * @param array $data An array of values tp populate the form with.
+	 * @return string
+	 * @throws Exception
+	 * @access public
 	 */
 	public function processRegistration($data=array())
 	{
@@ -39,18 +39,21 @@ class RegisterFormProcessor extends FormProcessor
 		{
 			# Bring the alert-title variable into scope.
 			global $alert_title;
-			# Bring the login object into scope.
-			global $login;
 			# Set the Database instance to a variable.
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
-			# Bring the content instance into scope.
-			$main_content=Content::getInstance();
-			# Set the Validator instance to a variable.
-			$validator=Validator::getInstance();
+			# Set the Session instance to a variable.
+			$session=Session::getInstance();
 			# Get the PostFormPopulator Class.
 			require_once Utility::locateFile(MODULES.'Form'.DS.'RegisterFormPopulator.php');
+
+			# Remove any un-needed CMS session data.
+			# This needs to happen before populateLoginForm is called but AFTER the Populator has been included so that the getCurrentURL method will be available.
+			$this->loseSessionData('Register');
+
+			# Reset the form if the "reset" button was submitted.
+			$this->processReset('submit');
 
 			# Instantiate a new instance of RegisterFormPopulator.
 			$populator=new RegisterFormPopulator();
@@ -59,42 +62,42 @@ class RegisterFormProcessor extends FormProcessor
 			# Set the Populator object to the data member.
 			$this->setPopulator($populator);
 
-			# Set the email to a variable.
-			$email=$login->getEmail();
-			# Set the email_conf to a variable.
-			$email_conf=$login->getEmail();
-			# Set the password to a variable.
-			$password=$login->getPassword();
-			# Set the password_conf to a variable.
-			$password_conf=$login->getPasswordConf();
-			# Set the username to a variable.
-			$username=$login->getUsername();
-
 			# Check if the form has been submitted and the submit button was the "Post" button.
 			if(array_key_exists('_submit_check', $_POST) && (isset($_POST['register']) && ($_POST['register']==='Register')))
 			{
+				# Get the User object from the LoginFormPopulator and set it to a local variable.
+				$user_object=$populator->getUserObject();
+
+				# Set the email to a variable.
+				$email=$user_object->getEmail();
+				# Set the email_conf to a variable.
+				$email_conf=$populator->getEmailConf();
+				# Set the password to a variable.
+				$password=$user_object->getPassword();
+				# Set the password_conf to a variable.
+				$password_conf=$populator->getPasswordConf();
+				# Set the username to a variable.
+				$username=$user_object->getUsername();
+
 				# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
 				$this->setSession();
 
 				# If the form has been submitted, we don't need some previous data. Unset the post login session data.
-				unset($_SESSION['_post_login']);
+				$session->loseSessionData('_post_login');
 
-				# Get the FormValidator Class.
-				require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
 				# Instantiate a FormValidator object
 				$fv=new FormValidator();
-
-				$empty_username=$fv->validateEmpty('username','Please enter a username that is at least 5 characters long.', 5, 64);
-				$empty_email=$fv->validateEmpty('email','Please enter your email address.', 4, 100);
-				$empty_email_conf=$fv->validateEmpty('email_conf','Please confirm your email address.', 4, 100);
-				$empty_password=$fv->validateEmpty('password','Please enter a password that is at least 6 characters and contains at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>', 6, 64);
-				$empty_password_conf=$fv->validateEmpty('password_conf','Please confirm your password.', 6, 64);
+				$empty_username=$fv->validateEmpty('username', 'Please enter a username that is at least 5 characters long.', 5, 64);
+				$empty_email=$fv->validateEmpty('email', 'Please enter your email address.', 4, 100);
+				$empty_email_conf=$fv->validateEmpty('email_conf', 'Please confirm your email address.', 4, 100);
+				$empty_password=$fv->validateEmpty('password', 'Please enter a password that is at least 6 characters and contains at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>', 6, 64);
+				$empty_password_conf=$fv->validateEmpty('password_conf', 'Please confirm your password.', 6, 64);
 
 				# If username is not empty.
 				if($empty_username===FALSE)
 				{
 					# Check if the username is unique.
-					$unique=$login->checkUnique('username', $username);
+					$unique=$user_object->checkUnique('username', $username);
 					# Username is not unique.
 					if($unique===FALSE)
 					{
@@ -111,15 +114,13 @@ class RegisterFormProcessor extends FormProcessor
 					{
 						# Set an error.
 						$fv->setErrors('Please enter your email address.');
-						# Unset the email data.
-						unset($_POST['email']);
 					}
 					else
 					{
 						$real=$fv->validateEmail('email', 'Please enter a valid email address.', TRUE);
 						if($real===TRUE)
 						{
-							$unique=$login->checkUnique('email', $email);
+							$unique=$user_object->checkUnique('email', $email);
 							if($unique===FALSE)
 							{
 								$fv->setErrors('An account using the email address "'.$email.'" already exists in the system, please choose another. Or you may use the "<a href="'.LOGIN_PAGE.'LostPassword/" title="Lost passowrd">lost password</a>" feature to recover your account information.');
@@ -135,10 +136,6 @@ class RegisterFormProcessor extends FormProcessor
 								}
 							}
 						}
-						else
-						{
-							unset($_POST['email']);
-						}
 					}
 				}
 
@@ -147,7 +144,7 @@ class RegisterFormProcessor extends FormProcessor
 					$alphanumeric=$fv->validateAlphanum('password', 'Your password must be made up of letters and at least 1 number.');
 					if($alphanumeric===TRUE)
 					{
-						if($empty_email_conf===FALSE)
+						if($empty_password_conf===FALSE)
 						{
 							if($password!=$password_conf)
 							{
@@ -163,7 +160,7 @@ class RegisterFormProcessor extends FormProcessor
 						$valid_recaptcha=$fv->reCaptchaCheckAnswer(CAPTCHA_PRIVATEKEY, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"], '', 'You must correctly enter the squiggly characters in the box to complete your registration. Make sure they are correct. There is a "help" button in the little red box.');
 						if($valid_recaptcha===FALSE)
 						{
-							$login->setReCaptchaError($fv->getReCaptchaError());
+							$fv->setErrors($fv->getReCaptchaError());
 						}
 					}
 					else
@@ -182,11 +179,19 @@ class RegisterFormProcessor extends FormProcessor
 					# Set the error message to the Document object data member so that it me be displayed on the page.
 					$doc->setError($error);
 				}
-				# The post is considered "unique" and may be added to the database.
+				# There are no errors, the user may be added to the database.
 				else
 				{
+					# Get the Encryption Class.
+					require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
+					# Instantiate a new Encryption object.
+					$encrypt=new Encryption(MYKEY);
+
+					$encrypted_password=$encrypt->enCodeIt($password);
+					$user_object->setPassword($encrypted_password);
+
 					# Insert a new account into the database.
-					$login->createAccount();
+					$user_object->createAccount();
 
 					try
 					{
@@ -194,24 +199,24 @@ class RegisterFormProcessor extends FormProcessor
 						if($row!==NULL)
 						{
 							# Make sure the post login info is sent to the login page. Set it in a session.
-							$_SESSION['_post_login']=$login->getPostLogin();
+							$session->setPostLogin($user_object->getPostLogin());
 							# Set email subject to a variable.
 							$subject="Activation email from ".DOMAIN_NAME;
 							$to_address=trim($email);
 							# Set email body to a variable.
 							$message=$username.','."<br />\n<br />\n".
-							'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
-							'You have received this email because this email address was used during registration for our site.'."<br />\n".
-							'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
-							'------------------------------------------------'."<br />\n".
-							' Activation Instructions'."<br />\n".
-							'------------------------------------------------'."<br />\n<br />\n".
-							'Thank you for registering.'."<br />\n".
-							'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
-							'To activate your account, simply click on the following link:'."<br />\n<br />\n".
-							'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
-							'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
-							'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
+								'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
+								'You have received this email because this email address was used during registration for our site.'."<br />\n".
+								'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
+								'------------------------------------------------'."<br />\n".
+								' Activation Instructions'."<br />\n".
+								'------------------------------------------------'."<br />\n<br />\n".
+								'Thank you for registering.'."<br />\n".
+								'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".
+								'To activate your account, simply click on the following link:'."<br />\n<br />\n".
+								'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".
+								'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".
+								'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
 							try
 							{
 								$doc->sendEmail($subject, $to_address, $message);
@@ -231,84 +236,59 @@ class RegisterFormProcessor extends FormProcessor
 					}
 				}
 			}
+
 			return NULL;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- processRegistration
+	}
 
 	/*** End public methods ***/
 
-
-
 	/*** private methods ***/
-
-	/**
-	 * processRegisterBack
-	 *
-	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a file.
-	 *
-	 * @access	private
-	 */
-	private function processRegisterBack()
-	{
-		try
-		{
-			# Create an array of possible indexes. These are forms that can send the user to get an institution.
-			$indexes=array(
-				'register'
-			);
-			# Set the resource value.
-			$resource='register';
-			$this->processBack($resource, $indexes);
-		}
-		catch(Exception $e)
-		{
-			throw $e;
-		}
-	} #==== End -- processRegisterBack
 
 	/**
 	 * setSession
 	 *
 	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
 	 *
-	 * @access	private
+	 * @access    private
 	 */
 	private function setSession()
 	{
-		global $login;
-
 		try
 		{
 			# Get the Populator object and set it to a local variable.
 			$populator=$this->getPopulator();
+			# Get the User object and set it to a local variable.
+			$user_object=$populator->getUserObject();
 
 			# Set the form URL's to a variable.
 			$form_url=$populator->getFormURL();
 			# Set the current URL to a variable.
 			$current_url=FormPopulator::getCurrentURL();
 			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
-			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
+			if(!in_array($current_url, $form_url))
+			{
+				$form_url[]=$current_url;
+			}
 
-			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
+			# Create a session that holds all the POST data (it will be destroyed if it is not needed.) DO NOT SET THE PASSWORD TO THE SESSION DATA.
 			$_SESSION['form']['register']=
 				array(
 					'FormURL'=>$form_url,
-					'Username'=>$login->getUsername(),
-					'Email'=>$login->getEmail(),
-					'EmailConf'=>$login->getEmailConf(),
-					'Password'=>$login->getPassword(),
+					'Username'=>$user_object->getUsername(),
+					'Email'=>$user_object->getEmail(),
+					'EmailConf'=>$populator->getEmailConf()
 				);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- setSession
-
+	}
 	/*** End private methods ***/
 
-} # End RegisterFormProcessor class.
+}
