@@ -334,7 +334,7 @@ try
 		require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
 		# Instantate a new instance of FileHandler.
 		$file_handler=new FileHandler();
-		# Edit the the InvalidEmail.log file.
+		# Edit the InvalidEmail.log file.
 		$file_handler->editFile($email_report, $string, TRUE);
 		# Replace the first variable in the template. (Puts the display name in the salutation.)
 		$body=sprintf($body, ' '.$sender_name.',');

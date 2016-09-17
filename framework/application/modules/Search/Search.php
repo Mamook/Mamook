@@ -11,194 +11,19 @@ class Search
 {
 	/*** data members ***/
 
+	private static $search_obj;
 	private $all_results=NULL;
 	private $fields=NULL;
-	private static $search_obj;
 	private $search_branch=NULL;
 	private $search_terms=NULL;
 	private $search_type;
 	private $tables=NULL;
-
 	/*** End data members ***/
-
 
 	/*** mutator methods ***/
 
 	/**
-	 * setAllResults
-	 *
-	 * Sets the data member $all_results.
-	 *
-	 * @param	$all_results			The results or the search.
-	 * @access	public
-	 */
-	public function setAllResults($all_results)
-	{
-		# Set the variable.
-		$this->all_results=$all_results;
-	} #==== End -- setAllResults
-
-	/**
-	 * setFields
-	 *
-	 * Sets the data member $fields.
-	 *
-	 * @param	$fields					An array of the fields to search.
-	 * @access	public
-	 */
-	public function setFields($fields)
-	{
-		# Set the variable.
-		$this->fields=$fields;
-	} #==== End -- setFields
-
-	/**
-	 * setSearchBranch
-	 *
-	 * Sets the data member $search_branch.
-	 *
-	 * @param	$search_branch
-	 * @access	public
-	 */
-	public function setSearchBranch($search_branch)
-	{
-		# Set the variable.
-		$this->search_branch=$search_branch;
-	} #=== End -- setSearchBranch
-
-
-	/**
-	 * setSearchTerms
-	 *
-	 * Sets the data member $search_terms.
-	 *
-	 * @param	$search_terms
-	 * @access	public
-	 */
-	public function setSearchTerms($search_terms)
-	{
-		# Set the variable.
-		$this->search_terms=$search_terms;
-	} #=== End -- setSearchTerms
-
-	/**
-	 * setSearchType
-	 *
-	 * Sets the data member $search_type.
-	 *
-	 * @param	$search_type				An array of the type of search.
-	 * @access	public
-	 */
-	public function setSearchType($search_type)
-	{
-		# Set the variable.
-		$this->search_type=$search_type;
-	} #==== End -- setSearchType
-
-	/**
-	 * setTables
-	 *
-	 * Sets the data member $tables.
-	 *
-	 * @param	$tables					An array of the tables to search.
-	 * @access	public
-	 */
-	public function setTables($tables)
-	{
-		# Set the variable.
-		$this->tables=$tables;
-	} #==== End -- setTables
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
-
-	/**
-	 * getAllResults
-	 *
-	 * Returns the data member $all_results.
-	 *
-	 * @access	public
-	 */
-	public function getAllResults()
-	{
-		return $this->all_results;
-	} #==== End -- getAllResults
-
-	/**
-	 * getFields
-	 *
-	 * Returns the data member $fields.
-	 *
-	 * @access	protected
-	 */
-	protected function getFields()
-	{
-		return $this->fields;
-	} #==== End -- getFields
-
-	/**
-	 * getSearchBranch
-	 *
-	 * Returns the data member $search_branch.
-	 *
-	 * @access	public
-	 */
-	public function getSearchBranch()
-	{
-		return $this->search_branch;
-	} #==== End -- getSearchBranch
-
-	/**
-	 * getSearchTerms
-	 *
-	 * Returns the data member $search_terms.
-	 *
-	 * @access	public
-	 */
-	public function getSearchTerms()
-	{
-		return $this->search_terms;
-	} #==== End -- getSearchTerms
-
-	/**
-	 * getSearchType
-	 *
-	 * Returns the data member $search_type.
-	 *
-	 * @access	public
-	 */
-	public function getSearchType()
-	{
-		return $this->search_type;
-	} #==== End -- getSearchType
-
-	/**
-	 * getTables
-	 *
-	 * Returns the data member $tables.
-	 *
-	 * @access	protected
-	 */
-	public function getTables()
-	{
-		return $this->tables;
-	} #==== End -- getTables
-
-	/*** End accessor methods ***/
-
-
-
-	/*** public methods ***/
-
-	/**
-	 * getInstance
-	 *
 	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
 	 */
 	public static function getInstance()
 	{
@@ -206,15 +31,155 @@ class Search
 		{
 			self::$search_obj=new Search();
 		}
+
 		return self::$search_obj;
-	} #==== End -- getInstance
+	}
 
 	/**
-	 * processSearch
+	 * Replaces any whitespace or comma in the string ($term) with a holder token.
+	 * Returns the transformed string.
 	 *
+	 * @param string $term The string we're escaping
+	 * @return mixed
+	 */
+	protected static function change2Token($term)
+	{
+		# Replace any whitespace ( ) with a holder token (ie. {WHITESPACE-1}).
+		$term=preg_replace_callback(
+			"/(\s)/",
+			function($matches)
+			{
+				foreach($matches as $match)
+				{
+					return '{WHITESPACE-'.ord($match).'}';
+				}
+			},
+			$term
+		);
+		# Replace any comma (,) with a holder token ({COMMA}).
+		$term=preg_replace("/,/", "{COMMA}", $term);
+
+		return $term;
+	}
+
+	/**
+	 * Sets the data member $all_results.
+	 *
+	 * @param array $all_results The results or the search.
+	 */
+	public function setAllResults($all_results)
+	{
+		# Set the variable.
+		$this->all_results=$all_results;
+	}
+
+	/**
+	 * Sets the data member $fields.
+	 *
+	 * @param array $fields An array of the fields to search.
+	 */
+	public function setFields($fields)
+	{
+		# Set the variable.
+		$this->fields=$fields;
+	}
+
+	/**
+	 * Sets the data member $search_branch.
+	 *
+	 * @param string $search_branch
+	 */
+	public function setSearchBranch($search_branch)
+	{
+		# Set the variable.
+		$this->search_branch=$search_branch;
+	}
+
+	/**
+	 * Sets the data member $search_terms.
+	 *
+	 * @param string $search_terms
+	 */
+	public function setSearchTerms($search_terms)
+	{
+		# Set the variable.
+		$this->search_terms=$search_terms;
+	}
+
+	/*** End mutator methods ***/
+
+	/*** accessor methods ***/
+
+	/**
+	 * Sets the data member $search_type.
+	 *
+	 * @param string $search_type An array of the type of search.
+	 */
+	public function setSearchType($search_type)
+	{
+		# Set the variable.
+		$this->search_type=$search_type;
+	}
+
+	/**
+	 * Sets the data member $tables.
+	 *
+	 * @param string $tables An array of the tables to search.
+	 */
+	public function setTables($tables)
+	{
+		# Set the variable.
+		$this->tables=$tables;
+	}
+
+	/**
+	 * Returns the data member $all_results.
+	 */
+	public function getAllResults()
+	{
+		return $this->all_results;
+	}
+
+	/**
+	 * Returns the data member $search_branch.
+	 */
+	public function getSearchBranch()
+	{
+		return $this->search_branch;
+	}
+
+	/**
+	 * Returns the data member $search_terms.
+	 */
+	public function getSearchTerms()
+	{
+		return $this->search_terms;
+	}
+
+	/**
+	 * Returns the data member $search_type.
+	 */
+	public function getSearchType()
+	{
+		return $this->search_type;
+	}
+
+	/*** End accessor methods ***/
+
+	/*** public methods ***/
+
+	/**
+	 * Returns the data member $tables.
+	 */
+	public function getTables()
+	{
+		return $this->tables;
+	}
+
+	/**
 	 * Processes search, returning the results of the search.
 	 *
-	 * @access	public
+	 * @param array $search_type
 	 */
 	public function processSearch($search_type)
 	{
@@ -225,7 +190,7 @@ class Search
 			{
 				case "users":
 					# Set the fields to the data member.
-					$this->setFields(array('ID','display','username','title','fname','lname','email'));
+					$this->setFields(array('ID', 'display', 'username', 'title', 'fname', 'lname', 'email'));
 					# Set the tables to the data member.
 					$this->setTables('users');
 					# Perform search.
@@ -233,7 +198,7 @@ class Search
 					break;
 				case "subcontent":
 					# Set the fields to the data member.
-					$this->setFields(array('id','title','link','file','availability','visibility','date','premium','branch','institution','publisher','text_language','text','trans_language','text_trans','hide','image','contributor'));
+					$this->setFields(array('id', 'title', 'link', 'file', 'availability', 'visibility', 'date', 'premium', 'branch', 'institution', 'publisher', 'text_language', 'text', 'trans_language', 'text_trans', 'hide', 'image', 'contributor'));
 					# Set the tables to the data member.
 					$this->setTables('subcontent');
 					# Perform search.
@@ -255,16 +220,14 @@ class Search
 					break;
 			}
 		}
-	} #==== End -- processSearch
+	}
 
 	/**
 	 * displayResults
 	 *
 	 * Displays the results of the search.
 	 *
-	 * @param	$terms					The term we're searching for.
-	 * @param	$filter					Fields and or terms we would like exluded.
-	 * @access	public
+	 * @param string $filter Fields and or terms we would like exluded.
 	 */
 	/*
 	public function displayResults($fields, $display_field)
@@ -303,20 +266,18 @@ class Search
 		$display_results.=$display_list;
 		$display_results.='</ul>';
 		return $display_search_results;
-	} #==== End -- displayResults
+	}
 	*/
 
 	/**
-	 * performSearch
-	 *
 	 * Returns the results of the search
 	 *
-	 * @param	$search_terms			The term we're searching for.
-	 * @param	$table					The table we're searching in.
-	 * @param	$fields					The fields we're searching in.
-	 * @param	$branch					Optional.
-	 * @param	array $filter			Optional. Fields and or terms we would like exluded.
-	 * @access	public
+	 * @param mixed $search_terms The term we're searching for.
+	 * @param string $table       The table we're searching in.
+	 * @param string $fields      The fields we're searching in.
+	 * @param string $branch      Optional.
+	 * @param array $filter       Optional. Fields and or terms we would like exluded.
+	 * @throws Exception
 	 */
 	public function performSearch($search_terms, $table, $fields, $branch=NULL, $filter=NULL)
 	{
@@ -344,14 +305,10 @@ class Search
 		{
 			throw $e;
 		}
-	} #==== End -- performSearch
+	}
 
 	/**
-	 * searchSubContent
-	 *
 	 * Searches the users table.
-	 *
-	 * @access	public
 	 */
 	public function searchSubContent()
 	{
@@ -365,14 +322,10 @@ class Search
 		$search_terms=$this->getSearchTerms();
 		# Perform search.
 		$this->performSearch($search_terms, $tables, $fields, $branch);
-	} #==== End -- searchSubContent
+	}
 
 	/**
-	 * searchUsers
-	 *
 	 * Searches the users table.
-	 *
-	 * @access	public
 	 */
 	public function searchUsers()
 	{
@@ -384,26 +337,35 @@ class Search
 		$search_terms=$this->getSearchTerms();
 		# Perform search.
 		$this->performSearch($search_terms, $tables, $fields);
-	} #==== End -- searchUsers
+	}
 
 	/*** End public methods ***/
 
-
-
 	/*** protected methods ***/
 
-	# NOTE: NEEDS MORE WORK (add more characters ie tilde n, accented e, a, o, etc)
 	/**
-	 * splitTerms
+	 * getFields
 	 *
+	 * Returns the data member $fields.
+	 *
+	 * @access    protected
+	 */
+	protected function getFields()
+	{
+		return $this->fields;
+	}
+
+	/**
 	 * Splits the string ($terms) and puts each searchable term into an array.
 	 * Returns an array of search terms based on the string ($terms).
 	 *
-	 * @param	$terms					The string splitting
-	 * @access	protected
+	 * @param array $terms The string splitting
+	 * @return array
 	 */
 	protected function splitTerms($terms)
 	{
+		# TODO: NEEDS MORE WORK (add more characters ie tilde n, accented e, a, o, etc)
+
 		# Explicitly make $terms an array.
 		$terms=(array)$terms;
 
@@ -420,7 +382,7 @@ class Search
 		# Create a variable to hold the reg ex pattern that finds all pair of double quotes (").
 		$pattern='/\"(.*?)\"/';
 		# Create a variable to hold the method call that replaces any whitespaces or commas with a holder token.
-		$replacement="Search::change2Token('\$1')";
+		//$replacement="Search::change2Token('\$1')";
 		# Find all pair of double quotes (") and pass their contents to the change2Token() method for processing.
 		$terms=preg_replace_callback(
 			$pattern,
@@ -1015,52 +977,23 @@ class Search
 				}
 			}
 		}
+
 		return $out;
-	} #==== End -- splitTerms
-/*** ***/
+	}
 
 	/**
-	 * change2Token
-	 *
-	 * Replaces any whitespace or comma in the string ($term) with a holder token.
-	 * Returns the transformed string.
-	 *
-	 * @param	$string					The string we're escaping
-	 * @access	protected
-	 */
-	protected static function change2Token($term)
-	{
-		# Replace any whitespace ( ) with a holder token (ie. {WHITESPACE-1}).
-		$term=preg_replace_callback(
-			"/(\s)/",
-			function($matches)
-			{
-				foreach($matches as $match)
-				{
-					return '{WHITESPACE-'.ord($match).'}';
-				}
-			},
-			$term
-		);
-		# Replace any comma (,) with a holder token ({COMMA}).
-		$term=preg_replace("/,/", "{COMMA}", $term);
-
-		return $term;
-	} #==== End -- change2Token
-
-	/**
-	 * emphasizeTerms
-	 *
 	 * Emphasize the search terms in the returned results search.
 	 *
-	 * @param	$terms					The terms to search for.
-	 * @param	$content				The returned content in which to emphasize terms.
-	 * @access	protected
+	 * @param array $terms    The terms to search for.
+	 * @param string $content The returned content in which to emphasize terms.
+	 * @return mixed
 	 */
 	protected function emphasizeTerms($terms, $content)
 	{
 		# Create an array of all search terms.
 		$a_terms=$this->splitTerms($terms);
+		$r_terms=array();
+		$s_terms=array();
 
 		# Loop through all search terms and surround them with a <span> with a css class.
 		foreach($a_terms as $term)
@@ -1080,31 +1013,27 @@ class Search
 		$content=preg_replace($s_terms, $r_terms, $content);
 
 		return $content;
-	} #==== End -- emphasizeTerms
+	}
 
 	/**
-	 * searchEscapeMetaChars
-	 *
 	 * Escapes the string ($string) in-case some of the characters in the search term contain a MySQL regular expression meta-character.
 	 * Returns the escaped string.
 	 *
-	 * @param	$string					The string we're escaping
-	 * @access	protected
+	 * @param string $string The string we're escaping
+	 * @return mixed
 	 */
 	protected function escapeMetaChars($string)
 	{
 		# Insert a slash before each meta-character that MySQL uses.
 		return preg_replace("/([.\[\]*^\$])/", '\\\$1', $string);
-	} #==== End -- searchEscapeMetaChars
+	}
 
 	/**
-	 * convertTerms2RegEx
-	 *
 	 * Turns an array of search terms ($terms) into a list of regular expressions suitable for MYSQL.
 	 * Returns an array of regular expressions suitable for MYSQL.
 	 *
-	 * @param	$terms					The array of search terms
-	 * @access	protected
+	 * @param array $terms The array of search terms
+	 * @return array
 	 */
 	protected function convertTerms2RegEx($terms)
 	{
@@ -1120,33 +1049,31 @@ class Search
 			//$out[]='[[:<:]]'.addslashes($this->escapeMetaChars($term)).'[[:>:]]';
 			//$out[]='%'.addslashes($this->escapeMetaChars($term)).'%';
 		}
-		return $out;
-	} #==== End -- convertTerms2RegEx
 
-	# NOTE: NEEDS FUNCTIONALITY!
+		return $out;
+	}
+
 	/**
-	 * convertChars2Entities
-	 *
 	 * Converts any special characters to html entities.
 	 *
-	 * @param	$terms					The array of search terms
-	 * @access	protected
+	 * @param array $terms The array of search terms
+	 * @return array
 	 */
 	protected function convertChars2Entities($terms)
 	{
+		# TODO: NEEDS FUNCTIONALITY!
+
 		return $terms;
-	} #==== End -- convertChars2Entities
+	}
 
 	/**
-	 * prepareWhere
-	 *
 	 * Builds and returns the "where" portion of the search query.
 	 *
-	 * @param	$terms					The term we're searching for.
-	 * @param	array $fields			The fields we're searching in.
-	 * @param	array $branch
-	 * @param	array $filter			Fields and or terms we would like exluded.
-	 * @access	protected
+	 * @param array $terms  The term we're searching for.
+	 * @param array $fields The fields we're searching in.
+	 * @param array $branch
+	 * @param array $filter Fields and or terms we would like exluded.
+	 * @return string
 	 */
 	protected function prepareWhere($terms, $fields, $branch, $filter)
 	{
@@ -1155,17 +1082,17 @@ class Search
 
 		$terms=$this->splitTerms($terms);
 		//$terms=iconv('UTF-8', 'ASCII//TRANSLIT', $terms);
-/*
+		/*
 		$terms=strtr(utf8_decode($terms),
-            utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
-            'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy');
-*/
+			utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
+			'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy');
+		*/
 		//print_r($terms);exit;
 
 		$terms_db=$this->convertTerms2RegEx($terms);
 
 		$filter_sql='';
-		# NOTE: Filter needs work.
+		# TODO: Filter needs work.
 		if($filter!==NULL)
 		{
 			if(isset($filter['filter_sql']))
@@ -1204,8 +1131,6 @@ class Search
 		}
 
 		return $filter_sql.((!empty($field_parts)) ? '('.$field_parts.')' : '').(!empty($branch_parts) ? (!empty($field_parts) ? ' AND ' : '').'('.$branch_parts.')' : '');
-	} #==== End -- prepareWhere
-
+	}
 	/*** End protected methods ***/
-
-} # End Search class.
+}

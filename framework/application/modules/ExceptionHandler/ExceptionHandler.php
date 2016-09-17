@@ -3,6 +3,13 @@
 # Get the Utility Class.
 require_once UTILITY_CLASS;
 
+/**
+ * @param $code
+ * @param $msg
+ * @param $file
+ * @param $line
+ * @return bool
+ */
 function myErrorHandler($code, $msg, $file, $line)
 {
 	$error=new ExceptionHandler($code, $msg, $file, $line);
@@ -20,39 +27,49 @@ function myErrorHandler($code, $msg, $file, $line)
 			return FALSE;
 		}
 	}
+
+	return FALSE;
 }
 
 /**
- * ExceptionHandler
+ * Class ExceptionHandler
  *
  * Custom error handler code. It must be set by calling set_error_handler('myErrorHandler');.
  *
  * When an error occurs, this function is automatically called, and passed four arguments:
- *		the error code and message,
- *		the name of the script that generated the error,
- *		and the line number of the statement that generated the error.
+ *        the error code and message,
+ *        the name of the script that generated the error,
+ *        and the line number of the statement that generated the error.
  * The function then becomes responsible for managing the error.
  *
- * @param	none
- * @access	public
-*/
+ * @param none
+ */
 class ExceptionHandler
 {
 	/*** data members ***/
 
-	protected $code=0;							# User-defined exception code
-	protected $file;							# Source filename of exception
-	protected $line;							# Source line of exception
-	protected $message='Unknown exception';		# Exception message
-	private $string;							# Unknown
-	private $trace;								# Unknown
+	protected $code=0;                          # User-defined exception code
+	protected $file;                            # Source filename of exception
+	protected $line;                            # Source line of exception
+	protected $message='Unknown exception';     # Exception message
+	private $string;                            # Unknown
+	private $trace;                             # Unknown
 
-	/*** End data members ***/
+	/*** End -- data members ***/
 
 
 
 	/*** magic methods ***/
 
+	/**
+	 * ExceptionHandler constructor.
+	 *
+	 * @param null $code
+	 * @param null $msg
+	 * @param null $file
+	 * @param null $line
+	 * @param array $context
+	 */
 	public function __construct($code=NULL, $msg=NULL, $file=NULL, $line=NULL, $context=array())
 	{
 		if($code!==NULL OR isset($_GET['error']))
@@ -82,11 +99,12 @@ class ExceptionHandler
 			{
 				if(defined('WP_FOLDER') && strpos(HERE, WP_FOLDER)!==FALSE)
 				{
-					return;
+					return FALSE;
 				}
 				if(!isset($_GET['error']))
 				{
 					$doc->redirect(ERROR_PAGE.'?error&code='.$code.'&msg='.$msg.((isset($_SERVER['HTTP_REFERER'])) ? '&referer='.Utility::removeIndex($_SERVER['HTTP_REFERER']) : '').'&file='.Utility::removeIndex($file).((isset($_SERVER['HTTP_USER_AGENT'])) ? '&agent='.$_SERVER['HTTP_USER_AGENT'] : '').'&file='.Utility::removeIndex($file).'&line='.$line.'&time='.$time.'&url='.Utility::removeIndex(FULL_URL).'&context='.urlencode(serialize($context)));
+
 					# Don't execute PHP internal error handler
 					return TRUE;
 				}
@@ -95,12 +113,14 @@ class ExceptionHandler
 			if($redirect===TRUE)
 			{
 				$doc->redirect(ERROR_PAGE);
+
 				# Don't execute PHP internal error handler
 				return TRUE;
 			}
 		}
+
 		return FALSE;
-	} #==== End -- __construct
+	}
 
 	/*** End magic methods ***/
 
@@ -109,11 +129,14 @@ class ExceptionHandler
 	/*** public methods ***/
 
 	/**
-	 * captureError
-	 *
 	 * Captures an error sent via GET Data, converts it to html and sets it to $doc-setError()
 	 *
-	 * @access	public
+	 * @param $code
+	 * @param $msg
+	 * @param $file
+	 * @param $line
+	 * @param $context
+	 * @return array
 	 */
 	public function captureError($code, $msg, $file, $line, $context)
 	{
@@ -122,7 +145,7 @@ class ExceptionHandler
 		$redirect=FALSE;
 		$referer=((isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '');
 		$send_an_email=TRUE;
-		$set_error=FALSE;
+		//$set_error=FALSE;
 		$time=MONTH_DD_YEAR_TIME;
 
 		if(isset($_GET['error']))
@@ -252,8 +275,9 @@ class ExceptionHandler
 				$body=$header.$body.$body2;
 				break;
 		}
+
 		return ['body'=>$body, 'redirect'=>$redirect, 'send_an_email'=>$send_an_email];
-	} #==== End -- captureError
+	}
 
 	/*** End public methods ***/
 
@@ -262,11 +286,11 @@ class ExceptionHandler
 	/*** protected methods ***/
 
 	/**
-	 * processContext
-	 *
 	 * Loops through the context. Returns a concatenated string.
 	 *
-	 * @access	protected
+	 * @param $context
+	 * @param string $string
+	 * @return string
 	 */
 	protected function processContext($context, $string='')
 	{
@@ -292,9 +316,9 @@ class ExceptionHandler
 			$separator=TRUE;
 		}
 		$string.=(($separator===TRUE) ? '<hr style="background:red;margin:4px 0;height:1px" />' : '');
+
 		return $string;
-	} #==== End -- processContext
+	}
 
 	/*** End protected methods ***/
-
-} #=== End ExceptionHandler class.
+}

@@ -7,6 +7,15 @@ class CommandLineException extends ExceptionHandler
 {
 	/*** magic methods ***/
 
+	/**
+	 * CommandLineException constructor.
+	 *
+	 * @param int $code
+	 * @param null $msg
+	 * @param null $file
+	 * @param null $line
+	 * @param array $context
+	 */
 	public function __construct($code=0, $msg=NULL, $file=NULL, $line=NULL, $context=array())
 	{
 		if($code!==NULL)
@@ -46,22 +55,20 @@ class CommandLineException extends ExceptionHandler
 	/*** public methods ***/
 
 	/**
-	 * captureError
-	 *
 	 * Captures an error sent via GET Data, converts it to html and sets it to $doc-setError()
 	 *
-	 * @param	$code
-	 * @param	$msg
-	 * @param	$file
-	 * @param	$line
-	 * @param	$context
-	 * @access	public
+	 * @param $code
+	 * @param $msg
+	 * @param $file
+	 * @param $line
+	 * @param $context
+	 * @return array
 	 */
 	public function captureError($code, $msg, $file, $line, $context)
 	{
 		$context=((!empty($context)) ? $context : '');
 		$send_an_email=TRUE;
-		$set_error=FALSE;
+		//$set_error=FALSE;
 
 		$header='<h3>Error details for debugging:</h3><br />';
 		$body='<span style="color:red;">';
@@ -165,9 +172,9 @@ class CommandLineException extends ExceptionHandler
 				$body=$header.$body.$body2;
 				break;
 		}
+
 		return ['body'=>$body, 'send_an_email'=>$send_an_email];
-	} #==== End -- captureError
+	}
 
 	/*** End public methods ***/
-
-} #=== End CommandLineException class.
+}

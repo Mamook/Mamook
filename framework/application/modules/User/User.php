@@ -55,18 +55,18 @@ class User
 	protected $website=NULL;
 	protected $wp_password=NULL;
 	protected $zipcode=NULL;
+
 	/*** End data members ***/
+
+
 
 	/*** mutator methods ***/
 
 	/**
-	 * setActive
-	 *
 	 * Sets the data member $active.
 	 *
-	 * @param    $active (Account status. 0=Not Activated, 1=Activated, 2=Suspended.)
+	 * @param mixed $active Account status. 0=Not Activated, 1=Activated, 2=Suspended.
 	 * @throws Exception
-	 * @access    public
 	 */
 	public function setActive($active)
 	{
@@ -99,12 +99,9 @@ class User
 	}
 
 	/**
-	 * setAddress
-	 *
 	 * Sets the data member $address.
 	 *
-	 * @param    $address (The User's address.)
-	 * @access    public
+	 * @param string $address The User's address.
 	 */
 	public function setAddress($address)
 	{
@@ -124,12 +121,9 @@ class User
 	}
 
 	/**
-	 * setAddress2
-	 *
 	 * Sets the data member $address2.
 	 *
-	 * @param    $address2 (The User's address2.)
-	 * @access    public
+	 * @param string $address2 The User's address2.
 	 */
 	public function setAddress2($address2)
 	{
@@ -149,12 +143,9 @@ class User
 	}
 
 	/**
-	 * setAllSubscriptions
-	 *
 	 * Sets the data member $all_subscriptions.
 	 *
-	 * @param        array $subscriptions (The User's subscriptions.)
-	 * @access    public
+	 * @param array $subscriptions The User's subscriptions.
 	 */
 	public function setAllSubscriptions($subscriptions)
 	{
@@ -174,12 +165,9 @@ class User
 	}
 
 	/**
-	 * setBio
-	 *
 	 * Sets the data member $bio.
 	 *
-	 * @param    $bio (The User's biographical information.)
-	 * @access    public
+	 * @param string $bio The User's biographical information.
 	 */
 	public function setBio($bio)
 	{
@@ -209,12 +197,9 @@ class User
 	}
 
 	/**
-	 * setCity
-	 *
 	 * Sets the data member $city.
 	 *
-	 * @param        $city (The User's city.)
-	 * @access    public
+	 * @param string $city The User's city.
 	 */
 	public function setCity($city)
 	{
@@ -234,12 +219,9 @@ class User
 	}
 
 	/**
-	 * setCountry
-	 *
 	 * Sets the data member $country.
 	 *
-	 * @param    $country (The User's country.)
-	 * @access    public
+	 * @param string $country The User's country.
 	 */
 	public function setCountry($country)
 	{
@@ -259,12 +241,9 @@ class User
 	}
 
 	/**
-	 * setCV
-	 *
 	 * Sets the data member $cv.
 	 *
-	 * @param        $cv (The User's cv file.)
-	 * @access    public
+	 * @param  string $cv The User's cv file.
 	 */
 	public function setCV($cv)
 	{
@@ -288,8 +267,7 @@ class User
 	 *
 	 * Sets the data member $display_name.
 	 *
-	 * @param    $display_name (The User's display name.)
-	 * @access    public
+	 * @param string $display_name The User's display name.
 	 */
 	public function setDisplayName($display_name)
 	{
@@ -309,12 +287,9 @@ class User
 	}
 
 	/**
-	 * setEmail
-	 *
 	 * Sets the data member $email.
 	 *
-	 * @param        $email (The User's Email address.)
-	 * @access    public
+	 * @param string $email The User's Email address.
 	 */
 	public function setEmail($email)
 	{
@@ -334,12 +309,9 @@ class User
 	}
 
 	/**
-	 * setFirstName
-	 *
 	 * Sets the data member $first_name.
 	 *
-	 * @param    $first_name (The User's first name.)
-	 * @access    public
+	 * @param string $first_name The User's first name.
 	 */
 	public function setFirstName($first_name)
 	{
@@ -363,9 +335,8 @@ class User
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param $id            The User's ID number.
+	 * @param int $id The User's ID number.
 	 * @throws Exception
-	 * @access public
 	 */
 	public function setID($id)
 	{
@@ -398,12 +369,9 @@ class User
 	}
 
 	/**
-	 * setImg
-	 *
 	 * Sets the data member $img.
 	 *
-	 * @param    string $img The User's avatar image
-	 * @access    public
+	 * @param string $img The User's avatar image
 	 */
 	public function setImg($img)
 	{
@@ -414,12 +382,9 @@ class User
 	}
 
 	/**
-	 * setImgTitle
-	 *
 	 * Sets the data member $img_title.
 	 *
-	 * @param    string $img_title The title of the User's image
-	 * @access    public
+	 * @param string $img_title The title of the User's image
 	 */
 	public function setImgTitle($img_title)
 	{
@@ -439,13 +404,9 @@ class User
 	}
 
 	/**
-	 * setInterests
-	 *
 	 * Sets the data member $interests.
 	 *
-	 * @param $interests
-	 * @internal  param string $img (The User's interests.)
-	 * @access    public
+	 * @param string $interests The User's interests.
 	 */
 	public function setInterests($interests)
 	{
@@ -475,12 +436,9 @@ class User
 	}
 
 	/**
-	 * setLastLogin
-	 *
 	 * Sets the data member $last_login.
 	 *
-	 * @param    $last_login (The date the user last logged in.)
-	 * @access    public
+	 * @param string $last_login The date the user last logged in.
 	 */
 	public function setLastLogin($last_login)
 	{
@@ -495,12 +453,9 @@ class User
 	}
 
 	/**
-	 * setLastName
-	 *
 	 * Sets the data member $last_name.
 	 *
-	 * @param    $last_name (The User's last name.)
-	 * @access    public
+	 * @param string $last_name The User's last name.
 	 */
 	public function setLastName($last_name)
 	{
@@ -524,8 +479,7 @@ class User
 	 *
 	 * Sets the data member $newsletter.
 	 *
-	 * @param        $newsletter (If the User recieves the newsletter.)
-	 * @access    public
+	 * @param int $newsletter If the User recieves the newsletter.
 	 */
 	public function setNewsletter($newsletter)
 	{
@@ -549,12 +503,9 @@ class User
 	}
 
 	/**
-	 * setNickname
-	 *
 	 * Sets the data member $nickname.
 	 *
-	 * @param    $nickname (The User's nickname. This is only used in WordPress instalations.)
-	 * @access    public
+	 * @param string $nickname The User's nickname. This is only used in WordPress instalations.
 	 */
 	public function setNickname($nickname)
 	{
@@ -574,13 +525,10 @@ class User
 	}
 
 	/**
-	 * setNotify
-	 *
 	 * Sets the data member $notify.
 	 *
-	 * @param        $notify (may be an array or string of branch id's the user wishes to be notified about. If a
-	 *                       string, the id's must be separated with a dash('-').)
-	 * @access    public
+	 * @param string $notify May be an array or string of branch id's the user wishes to be notified about.
+	 *                       If a string, the id's must be separated with a dash('-').
 	 */
 	public function setNotify($notify)
 	{
@@ -606,12 +554,9 @@ class User
 	}
 
 	/**
-	 * setOrganization
-	 *
 	 * Sets the data member $organization.
 	 *
-	 * @param        $organization (The User's organization.)
-	 * @access    public
+	 * @param string $organization The User's organization.
 	 */
 	public function setOrganization($organization)
 	{
@@ -633,12 +578,9 @@ class User
 	}
 
 	/**
-	 * setPassword
-	 *
 	 * Sets the data member $password.
 	 *
-	 * @param    $password (The User's password.)
-	 * @access    public
+	 * @param string $password The User's password.
 	 */
 	public function setPassword($password)
 	{
@@ -658,12 +600,9 @@ class User
 	}
 
 	/**
-	 * setPhone
-	 *
 	 * Sets the data member $phone.
 	 *
-	 * @param        $phone (The User's phone number.)
-	 * @access    public
+	 * @param string $phone The User's phone number.
 	 */
 	public function setPhone($phone)
 	{
@@ -683,12 +622,9 @@ class User
 	}
 
 	/**
-	 * setPostLogin
-	 *
 	 * Sets the data member $post_login.
 	 *
-	 * @param    $url                    The url to redirect the User to.
-	 * @access    public
+	 * @param string $url The url to redirect the User to.
 	 */
 	public function setPostLogin($url)
 	{
@@ -704,12 +640,9 @@ class User
 	}
 
 	/**
-	 * setProduct
-	 *
 	 * Sets the data member $product.
 	 *
-	 * @param        $product (The User's subscriptions.)
-	 * @access    public
+	 * @param string $product The User's subscriptions.
 	 */
 	public function setProduct($product)
 	{
@@ -729,12 +662,9 @@ class User
 	}
 
 	/**
-	 * setQuestions
-	 *
 	 * Sets the data member $questions.
 	 *
-	 * @param        $questions (0 if the User will accept emails from other users, NULL if not.)
-	 * @access    public
+	 * @param int $questions 0 if the User will accept emails from other users, NULL if not.
 	 */
 	public function setQuestions($questions)
 	{
@@ -749,12 +679,9 @@ class User
 	}
 
 	/**
-	 * setRandom
-	 *
 	 * Sets the data member $random.
 	 *
-	 * @param        $random (A random generated value.)
-	 * @access    public
+	 * @param string $random A random generated value.
 	 */
 	public function setRandom($random)
 	{
@@ -774,12 +701,9 @@ class User
 	}
 
 	/**
-	 * setRegion
-	 *
 	 * Sets the data member $region.
 	 *
-	 * @param        $region (The User's region.)
-	 * @access    public
+	 * @param string $region The User's region.
 	 */
 	public function setRegion($region)
 	{
@@ -799,12 +723,9 @@ class User
 	}
 
 	/**
-	 * setRegistered
-	 *
 	 * Sets the data member $registered.
 	 *
-	 * @param    $registered (The date the user registered.)
-	 * @access    public
+	 * @param string $registered The date the user registered.
 	 */
 	public function setRegistered($registered)
 	{
@@ -819,12 +740,9 @@ class User
 	}
 
 	/**
-	 * setState
-	 *
 	 * Sets the data member $state.
 	 *
-	 * @param    $state (The User's state.)
-	 * @access    public
+	 * @param string $state The User's state.
 	 */
 	public function setState($state)
 	{
@@ -844,12 +762,9 @@ class User
 	}
 
 	/**
-	 * setTitle
-	 *
 	 * Sets the data member $title.
 	 *
-	 * @param    $title (The User's title.)
-	 * @access    public
+	 * @param string $title The User's title.
 	 */
 	public function setTitle($title)
 	{
@@ -869,12 +784,9 @@ class User
 	}
 
 	/**
-	 * setUserLevel
-	 *
 	 * Sets the data member $level.
 	 *
-	 * @param level (The User's access level.)
-	 * @access public
+	 * @param string $level The User's access level.
 	 */
 	public function setUserLevel($level)
 	{
@@ -900,12 +812,9 @@ class User
 	}
 
 	/**
-	 * setUsername
-	 *
 	 * Sets the data member $username.
 	 *
-	 * @param    $username (The User's username.)
-	 * @access    public
+	 * @param string $username The User's username.
 	 */
 	public function setUsername($username)
 	{
@@ -925,12 +834,9 @@ class User
 	}
 
 	/**
-	 * setWebsite
-	 *
 	 * Sets the data member $website.
 	 *
-	 * @param        $website (The User's website.)
-	 * @access    public
+	 * @param string $website The User's website.
 	 */
 	public function setWebsite($website)
 	{
@@ -958,12 +864,9 @@ class User
 	}
 
 	/**
-	 * setWPPassword
-	 *
 	 * Sets the data member $wp_password.
 	 *
-	 * @param    $wp_password            The User's encoded password.
-	 * @access    public
+	 * @param string $wp_password The User's encoded password.
 	 */
 	public function setWPPassword($wp_password)
 	{
@@ -983,12 +886,9 @@ class User
 	}
 
 	/**
-	 * setZipcode
-	 *
 	 * Sets the data member $zipcode.
 	 *
-	 * @param    $zipcode (The User's zipcode.)
-	 * @access    public
+	 * @param string $zipcode The User's zipcode.
 	 */
 	public function setZipcode($zipcode)
 	{
@@ -1008,11 +908,8 @@ class User
 	}
 
 	/**
-	 * getActive
-	 *
-	 * Returns the data member $active. Throws an error on failure.
-	 *
-	 * @access    public
+	 * Returns the data member $active.
+	 * Throws an error on failure.
 	 */
 	public function getActive()
 	{
@@ -1020,11 +917,7 @@ class User
 	}
 
 	/**
-	 * getAddress
-	 *
 	 * Returns the data member $address.
-	 *
-	 * @access    public
 	 */
 	public function getAddress()
 	{
@@ -1032,11 +925,7 @@ class User
 	}
 
 	/**
-	 * getAddress2
-	 *
 	 * Returns the data member $address2.
-	 *
-	 * @access    public
 	 */
 	public function getAddress2()
 	{
@@ -1045,14 +934,12 @@ class User
 
 	/*** End mutator methods ***/
 
+
+
 	/*** accessor methods ***/
 
 	/**
-	 * getAllSubscriptions
-	 *
 	 * Returns the data member $all_subscriptions.
-	 *
-	 * @access    public
 	 */
 	public function getAllSubscriptions()
 	{
@@ -1060,11 +947,7 @@ class User
 	}
 
 	/**
-	 * getAllUsers
-	 *
 	 * Returns the data member $all_users.
-	 *
-	 * @access    public
 	 */
 	public function getAllUsers()
 	{
@@ -1072,11 +955,7 @@ class User
 	}
 
 	/**
-	 * getBio
-	 *
 	 * Returns the data member $bio.
-	 *
-	 * @access    public
 	 */
 	public function getBio()
 	{
@@ -1084,11 +963,7 @@ class User
 	}
 
 	/**
-	 * getCity
-	 *
 	 * Returns the data member $city.
-	 *
-	 * @access    public
 	 */
 	public function getCity()
 	{
@@ -1096,11 +971,7 @@ class User
 	}
 
 	/**
-	 * getCountry
-	 *
 	 * Returns the data member $country.
-	 *
-	 * @access    public
 	 */
 	public function getCountry()
 	{
@@ -1108,11 +979,7 @@ class User
 	}
 
 	/**
-	 * getCV
-	 *
 	 * Returns the data member $cv.
-	 *
-	 * @access    public
 	 */
 	public function getCV()
 	{
@@ -1120,11 +987,7 @@ class User
 	}
 
 	/**
-	 * getDisplayName
-	 *
 	 * Returns the data member $display_name.
-	 *
-	 * @access    public
 	 */
 	public function getDisplayName()
 	{
@@ -1132,11 +995,7 @@ class User
 	}
 
 	/**
-	 * getEmail
-	 *
 	 * Returns the data member $email.
-	 *
-	 * @access    public
 	 */
 	public function getEmail()
 	{
@@ -1144,11 +1003,7 @@ class User
 	}
 
 	/**
-	 * getFirstName
-	 *
 	 * Returns the data member $first_name.
-	 *
-	 * @access    public
 	 */
 	public function getFirstName()
 	{
@@ -1156,11 +1011,7 @@ class User
 	}
 
 	/**
-	 * getID
-	 *
 	 * Returns the data member $id.
-	 *
-	 * @access    public
 	 */
 	public function getID()
 	{
@@ -1168,11 +1019,7 @@ class User
 	}
 
 	/**
-	 * getImg
-	 *
 	 * Returns the data member $img.
-	 *
-	 * @access    public
 	 */
 	public function getImg()
 	{
@@ -1180,11 +1027,7 @@ class User
 	}
 
 	/**
-	 * getImgTitle
-	 *
 	 * Returns the data member $img_title.
-	 *
-	 * @access    public
 	 */
 	public function getImgTitle()
 	{
@@ -1192,11 +1035,7 @@ class User
 	}
 
 	/**
-	 * getInterests
-	 *
 	 * Returns the data member $interests.
-	 *
-	 * @access    public
 	 */
 	public function getInterests()
 	{
@@ -1204,11 +1043,7 @@ class User
 	}
 
 	/**
-	 * getIP
-	 *
 	 * Returns the data member $ip.
-	 *
-	 * @access    public
 	 */
 	public function getIP()
 	{
@@ -1216,11 +1051,7 @@ class User
 	}
 
 	/**
-	 * getLastLogin
-	 *
 	 * Returns the data member $last_login. Throws an error on failure.
-	 *
-	 * @access    public
 	 */
 	public function getLastLogin()
 	{
@@ -1234,11 +1065,7 @@ class User
 	}
 
 	/**
-	 * getLastName
-	 *
 	 * Returns the data member $last_name. Throws an error on failure.
-	 *
-	 * @access    public
 	 */
 	public function getLastName()
 	{
@@ -1246,11 +1073,7 @@ class User
 	}
 
 	/**
-	 * getNewsletter
-	 *
 	 * Returns the data member $newsletter.
-	 *
-	 * @access    public
 	 */
 	public function getNewsletter()
 	{
@@ -1258,11 +1081,7 @@ class User
 	}
 
 	/**
-	 * getNickname
-	 *
 	 * Returns the data member $nickname.
-	 *
-	 * @access    public
 	 */
 	public function getNickname()
 	{
@@ -1270,11 +1089,7 @@ class User
 	}
 
 	/**
-	 * getNotify
-	 *
 	 * Returns the data member $notify.
-	 *
-	 * @access    public
 	 */
 	public function getNotify()
 	{
@@ -1282,11 +1097,7 @@ class User
 	}
 
 	/**
-	 * getOrganization
-	 *
 	 * Returns the data member $organization.
-	 *
-	 * @access    public
 	 */
 	public function getOrganization()
 	{
@@ -1294,11 +1105,7 @@ class User
 	}
 
 	/**
-	 * getPassword
-	 *
 	 * Returns the data member $password
-	 *
-	 * @access    public
 	 */
 	public function getPassword()
 	{
@@ -1306,11 +1113,7 @@ class User
 	}
 
 	/**
-	 * getPhone
-	 *
 	 * Returns the data member $phone.
-	 *
-	 * @access    public
 	 */
 	public function getPhone()
 	{
@@ -1318,11 +1121,7 @@ class User
 	}
 
 	/**
-	 * getPostLogin
-	 *
 	 * Returns the data member $post_login. Throws an error on failure.
-	 *
-	 * @access    public
 	 */
 	public function getPostLogin()
 	{
@@ -1330,11 +1129,7 @@ class User
 	}
 
 	/**
-	 * getProduct
-	 *
 	 * Returns the data member $product.
-	 *
-	 * @access    public
 	 */
 	public function getProduct()
 	{
@@ -1342,11 +1137,7 @@ class User
 	}
 
 	/**
-	 * getQuestions
-	 *
 	 * Returns the data member $questions.
-	 *
-	 * @access    public
 	 */
 	public function getQuestions()
 	{
@@ -1354,11 +1145,7 @@ class User
 	}
 
 	/**
-	 * getRegion
-	 *
 	 * Returns the data member $region.
-	 *
-	 * @access    public
 	 */
 	public function getRegion()
 	{
@@ -1366,11 +1153,7 @@ class User
 	}
 
 	/**
-	 * getRegistered
-	 *
 	 * Returns the data member $registered. Throws an error on failure.
-	 *
-	 * @access    public
 	 */
 	public function getRegistered()
 	{
@@ -1385,11 +1168,7 @@ class User
 	}
 
 	/**
-	 * getStaffID
-	 *
 	 * Returns the data member $staff_id.
-	 *
-	 * @access    public
 	 */
 	public function getStaffID()
 	{
@@ -1397,11 +1176,7 @@ class User
 	}
 
 	/**
-	 * getState
-	 *
 	 * Returns the data member $state.
-	 *
-	 * @access    public
 	 */
 	public function getState()
 	{
@@ -1409,11 +1184,7 @@ class User
 	}
 
 	/**
-	 * getTitle
-	 *
 	 * Returns the data member $title.
-	 *
-	 * @access    public
 	 */
 	public function getTitle()
 	{
@@ -1421,11 +1192,7 @@ class User
 	}
 
 	/**
-	 * getUserLevel
-	 *
 	 * Returns the data member $level.
-	 *
-	 * @access    public
 	 */
 	public function getUserLevel()
 	{
@@ -1433,11 +1200,7 @@ class User
 	}
 
 	/**
-	 * getUsername
-	 *
 	 * Returns the data member $username.
-	 *
-	 * @access    public
 	 */
 	public function getUsername()
 	{
@@ -1445,11 +1208,7 @@ class User
 	}
 
 	/**
-	 * getWebsite
-	 *
 	 * Returns the data member $website.
-	 *
-	 * @access    public
 	 */
 	public function getWebsite()
 	{
@@ -1457,11 +1216,7 @@ class User
 	}
 
 	/**
-	 * getWPPassword
-	 *
 	 * Returns the data member $wp_password.
-	 *
-	 * @access    public
 	 */
 	public function getWPPassword()
 	{
@@ -1469,11 +1224,7 @@ class User
 	}
 
 	/**
-	 * getZipcode
-	 *
 	 * Returns the data member $zipcode.
-	 *
-	 * @access    public
 	 */
 	public function getZipcode()
 	{
@@ -1481,11 +1232,7 @@ class User
 	}
 
 	/**
-	 * capturePostLogin
-	 *
 	 * Captures post(after) login data sent from the previous page.
-	 *
-	 * @access    public
 	 */
 	public function capturePostLogin()
 	{
@@ -1524,15 +1271,12 @@ class User
 	}
 
 	/**
-	 * checkAccess
-	 *
 	 * Checks the user's level and compares it to the passed access levels.
 	 *
-	 * @param    string $access_levels The level number(s) to accept - ie. '1 2 5'
-	 * @param    int $id               Optional.
+	 * @param string $access_levels The level number(s) to accept - ie. '1 2 5'
+	 * @param int $id               Optional.
 	 * @return bool
 	 * @throws Exception
-	 * @access    public
 	 */
 	public function checkAccess($access_levels, $id=NULL)
 	{
@@ -1583,8 +1327,7 @@ class User
 	 * Applies restrictions to visitors based on membership and level access
 	 * Also handles cookie based "remember me" feature
 	 *
-	 * @param    $levels                    The access_level number(s) to accept - ie. '1 2 5'
-	 * @access    public
+	 * @param string $levels The access_level number(s) to accept - ie. '1 2 5'
 	 */
 	public function checkLogin($levels)
 	{
@@ -1623,15 +1366,12 @@ class User
 	/*** public methods ***/
 
 	/**
-	 * checkUnique
-	 *
 	 * Performs a check to determine if one parameter is unique in the Database.
 	 * Returns FALSE if the value is already in the Database.
 	 *
-	 * @param        $field    (The field to look in.)
-	 * @param        $compared (The value to check.)
-	 * @param        $params   (Any extra parameters.)
-	 * @access    public
+	 * @param string $field    The field to look in.
+	 * @param string $compared The value to check.
+	 * @param string $params   Any extra parameters.
 	 * @return bool
 	 */
 	public function checkUnique($field, $compared, $params='')
@@ -1645,13 +1385,10 @@ class User
 	}
 
 	/**
-	 * clearCookies
-	 *
 	 * Clears the cookies
 	 * Not used by default but present if needed
-	 * MOVE TO WEBUTILITIES
 	 *
-	 * @access    private
+	 * TODO: MOVE TO WEBUTILITIES
 	 */
 	public function clearCookies()
 	{
@@ -1671,14 +1408,10 @@ class User
 	}
 
 	/**
-	 * countAllUsers
-	 *
 	 * Returns the number of users in the database.
 	 *
-	 * @param    $and_sql (Extra AND statements in the query.)
-	 * @return
+	 * @param string $and_sql Extra AND statements in the query.
 	 * @throws Exception
-	 * @access    public
 	 */
 	public function countUsers($and_sql=NULL)
 	{
@@ -1702,14 +1435,10 @@ class User
 		{
 			throw $e;
 		}
-	} #==== End -- getAllUsers
+	}
 
 	/**
-	 * confirmNewsletter
-	 *
 	 * Activates user's newsletter subscription.
-	 *
-	 * @access    public
 	 */
 	public function confirmNewsletter()
 	{
@@ -1803,12 +1532,10 @@ class User
 	}
 
 	/**
-	 * unsubscribeNewsletter
-	 *
 	 * Description
 	 *
-	 * @param $user_id                        The user's ID.
-	 * @param bool $redirect                  Do we do a redirect?
+	 * @param int $user_id   The user's ID.
+	 * @param bool $redirect Do we do a redirect?
 	 * @throws Exception
 	 */
 	public function unsubscribeNewsletter($user_id, $redirect=FALSE)
@@ -1836,18 +1563,14 @@ class User
 		{
 			throw $e;
 		}
-	} #==== End -- getNickname
+	}
 
 	/*** End accessor methods ***/
 
 	/*** public methods ***/
 
 	/**
-	 * createAccount
-	 *
 	 * Creates a new account in the database.
-	 *
-	 * @access    public
 	 */
 	public function createAccount()
 	{
@@ -1896,12 +1619,8 @@ class User
 	}
 
 	/**
-	 * createWP_User
-	 *
-	 * Creates a WordPress user in the WordPress Database tables. Assumes a user was just created in the main users
-	 * table.
-	 *
-	 * @access    public
+	 * Creates a WordPress user in the WordPress Database tables.
+	 * Assumes a user was just created in the main users table.
 	 */
 	public function createWP_User()
 	{
@@ -1951,16 +1670,14 @@ class User
 		{
 			throw new Exception('There was an error inserting the new WordPress usermeta info for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
 		}
-	} # ----End clearCookies
+	}
 
 	/**
-	 * deleteAccount
-	 *
 	 * Delete's the user's account.
 	 *
-	 * @param int                             /array $id                The User's ID.
-	 *                                        Can be an array of users to delete.
-	 * @access public
+	 * @param mixed $id                The User's ID.
+	 *                                 Can be an array of users to delete.
+	 * @throws Exception
 	 */
 	public function deleteAccount($id=NULL)
 	{
@@ -2097,14 +1814,12 @@ class User
 	}
 
 	/**
-	 * displayProfile
-	 *
 	 * Retrieves the members information from the database and displays it.
 	 *
-	 * @param    int $id       The user's id
-	 * @param    string $table The table that the id is related to.
+	 * @param int $id       The user's id
+	 * @param string $table The table that the id is related to.
 	 * @param string $image_link
-	 * @return array|null
+	 * @return mixed
 	 * @throws Exception
 	 */
 	public function displayProfile($id, $table='user', $image_link=FW_POPUP_HANDLE)
@@ -2394,12 +2109,11 @@ class User
 	}
 
 	/**
-	 * findDisplayName
-	 *
 	 * Retrieves the User's display name and sets it to the display_name data member.
 	 *
-	 * @param    int $id The User's ID.
-	 * @access    public
+	 * @param int $id The User's ID.
+	 * @return null
+	 * @throws Exception
 	 */
 	public function findDisplayName($id=NULL)
 	{
@@ -2462,12 +2176,11 @@ class User
 	}
 
 	/**
-	 * findEmail
-	 *
 	 * Retrieves the User's email and sets it to the email data member.
 	 *
-	 * @param    int $id The user's ID.
-	 * @access    public
+	 * @param int $id The user's ID.
+	 * @return null
+	 * @throws Exception
 	 */
 	public function findEmail($id=NULL)
 	{
@@ -2510,11 +2223,7 @@ class User
 	}
 
 	/**
-	 * findFirstName
-	 *
 	 * Retrieves the User's first name and sets it to the first_name data member.
-	 *
-	 * @access    public
 	 */
 	public function findFirstName()
 	{
@@ -2562,15 +2271,12 @@ class User
 	}
 
 	/**
-	 * findIP
-	 *
 	 * A wrapper method for findIP() from the WebUtility calss.
 	 *
 	 * Returns the IP of the visitor.
 	 *
-	 * @param    bool $for_insert_query Convert IP addresss to binary for database.
-	 * @access    public
-	 * @return    string
+	 * @param bool $for_insert_query Convert IP addresss to binary for database.
+	 * @return string
 	 */
 	public function findIP($for_insert_query=TRUE)
 	{
@@ -2582,11 +2288,7 @@ class User
 	}
 
 	/**
-	 * findLastLogin
-	 *
 	 * Retrieves the date of the User's last login and sets it to the last_login data member.
-	 *
-	 * @access    public
 	 */
 	public function findLastLogin()
 	{
@@ -2605,11 +2307,7 @@ class User
 	}
 
 	/**
-	 * findLastName
-	 *
 	 * Retrieves the User's last name and sets it to the last_name data member.
-	 *
-	 * @access    public
 	 */
 	public function findLastName()
 	{
@@ -2657,11 +2355,7 @@ class User
 	}
 
 	/**
-	 * findTitle
-	 *
 	 * Retrieves the User's title and sets it to the title data member.
-	 *
-	 * @access    public
 	 */
 	public function findTitle()
 	{
@@ -2709,12 +2403,10 @@ class User
 	}
 
 	/**
-	 * findPassword
-	 *
 	 * Retrieves the User's password based on the passed variable. Throws an error on failure.
 	 *
 	 * @param null $user
-	 * @param $field                    The users Email or Username.
+	 * @param string $field The users Email or Username.
 	 * @return bool
 	 * @throws Exception
 	 */
@@ -2777,12 +2469,11 @@ class User
 	}
 
 	/**
-	 * findPrivacySettings
-	 *
 	 * Retrieves the privacy settings of a given user.
 	 *
-	 * @param      $username (The users username.)
-	 * @access    public
+	 * @param string $username The users username.
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function findPrivacySettings($username=NULL)
 	{
@@ -2817,14 +2508,12 @@ class User
 	}
 
 	/**
-	 * findProduct
-	 *
 	 * Retrieves the purchased products of a given user.
 	 *
-	 * @param    string $field                The user's ID or email. Empty will attempt to retrieve the data member.
+	 * @param string $field                   The user's ID or email. Empty will attempt to retrieve the data member.
 	 *                                        If the data member is empty it will try to find and use the user's ID.
-	 * @access    public
-	 * @return    string
+	 * @return string
+	 * @throws Exception
 	 */
 	public function findProduct($field=NULL)
 	{
@@ -2876,11 +2565,7 @@ class User
 	}
 
 	/**
-	 * findRegistered
-	 *
 	 * Retrieves the date the User registered and sets it to the registered data member.
-	 *
-	 * @access    public
 	 */
 	public function findRegistered()
 	{
@@ -2899,13 +2584,12 @@ class User
 	}
 
 	/**
-	 * findStaffID
-	 *
 	 * Retrieves the staff ID from the `user` table.
 	 *
-	 * @param    $value                       The user's ID.
-	 *                                        If NULL, then the method gets the logged in user's ID.
-	 * @access    public
+	 * @param int $value                       The user's ID.
+	 *                                         If NULL, then the method gets the logged in user's ID.
+	 * @return null
+	 * @throws Exception
 	 */
 	public function findStaffID($value=NULL)
 	{
@@ -2955,8 +2639,6 @@ class User
 	}
 
 	/**
-	 * findUserData
-	 *
 	 * Retrieves the data of a given user.
 	 *
 	 * @param string $value The user's username or id.
@@ -3069,12 +2751,11 @@ class User
 	}
 
 	/**
-	 * findUserID
-	 *
 	 * Retrieves the User's ID and sets it to the id data member. Throws an error on failure.
 	 *
-	 * @param    string $username Optional - The user's username.
-	 * @access    public
+	 * @param string $username Optional - The user's username.
+	 * @return null
+	 * @throws Exception
 	 */
 	public function findUserID($username=NULL)
 	{
@@ -3135,13 +2816,11 @@ class User
 	}
 
 	/**
-	 * findUserLevel
-	 *
 	 * Retrieves the access level of a given user.
 	 *
-	 * @param    $field
-	 * @access    public
+	 * @param string $field
 	 * @return string
+	 * @throws Exception
 	 */
 	public function findUserLevel($field=NULL)
 	{
@@ -3193,12 +2872,10 @@ class User
 	}
 
 	/**
-	 * findUsername
-	 *
 	 * Retrieves the User's username based on the passed variable. Throws an error on failure.
 	 *
-	 * @param    $field                    The users Email or id.
-	 * @access    public
+	 * @param string $field The users Email or id.
+	 * @return null
 	 */
 	public function findUsername($field=NULL)
 	{
@@ -3264,13 +2941,12 @@ class User
 	}
 
 	/**
-	 * getOptInEmails()
-	 *
 	 * Retrieves User email addresses from the Database that have opted in to receiving news messages.
 	 *
-	 * @param    $opt_in                    The name of the table that the user has opted into.
-	 * @param    $csv                       Default is TRUE to return comma sepparated values. If FALSE, will return an array.
-	 * @access    public
+	 * @param string $opt_in   The name of the table that the user has opted into.
+	 * @param bool|string $csv Default is TRUE to return comma sepparated values. If FALSE, will return an array.
+	 * @return array|string
+	 * @throws Exception
 	 */
 	public function getOptInEmails($opt_in, $csv=TRUE)
 	{
@@ -3325,12 +3001,11 @@ class User
 	}
 
 	/**
-	 * getPrivacySettings
-	 *
 	 * Retrieves the privacy settings of a given user from the `usres` table and sets the values to the data members.
 	 *
-	 * @param    string $username The users username.
-	 * @access    public
+	 * @param string $username The users username.
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function getPrivacySettings($username)
 	{
@@ -3367,13 +3042,11 @@ class User
 	}
 
 	/**
-	 * getSubscriptions
-	 *
 	 * Retrieves all subscriptions for the passed user ID.
 	 * A wrapper method for getSubscriptions() from the Subscription calss.
 	 *
-	 * @param    int $user_id The user's ID.
-	 * @access    public
+	 * @param int $user_id The user's ID.
+	 * @return null
 	 */
 	public function getSubscriptions($user_id=NULL)
 	{
@@ -3398,16 +3071,14 @@ class User
 	}
 
 	/**
-	 * getUsers
-	 *
 	 * Retrieves User records from the DataBase.
 	 *
-	 * @param    int $limit        The LIMIT of the records.
-	 * @param    string $fields    The name of the field(s) to be retrieved.
-	 * @param    string $order     The name of the field to order the records by.
-	 * @param    string $direction The direction to order the records.
-	 * @param    string $where
-	 * @access    public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where
+	 * @throws Exception
 	 */
 	public function getUsers($limit=NULL, $fields='*', $order='ID', $direction='DESC', $where='')
 	{
@@ -3430,13 +3101,10 @@ class User
 	}
 
 	/**
-	 * isAdmin
-	 *
 	 * Determines if the logged in user is an admin
 	 *
-	 * @param    string $field May be the user ID or email. NULL assumes the user is logged in.
-	 * @access    public
-	 * @return    boolean
+	 * @param string $field May be the user ID or email. NULL assumes the user is logged in.
+	 * @return boolean
 	 */
 	public function isAdmin($field=NULL)
 	{
@@ -3464,12 +3132,10 @@ class User
 	}
 
 	/**
-	 * isLoggedIn
-	 *
 	 * Checks if user is logged in or not. Returns TRUE if logged in, FALSE if not.
 	 *
-	 * @access    public
-	 * @return    boolean
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function isLoggedIn()
 	{
@@ -3547,15 +3213,12 @@ class User
 	}
 
 	/**
-	 * isStaff
-	 *
 	 * Will try to determine if the logged in user is staff or not.
 	 * A wrapper method for the isStaff method from the Staff class.
 	 *
-	 * @param    int $value                   The user's ID.
+	 * @param int $value                      The user's ID.
 	 *                                        If NULL, then the method gets the logged in user's ID.
-	 * @access    public
-	 * @return    boolean
+	 * @return boolean
 	 */
 	public function isStaff($value=NULL)
 	{
@@ -3594,11 +3257,7 @@ class User
 	}
 
 	/**
-	 * logout
-	 *
 	 * Logs the User out.
-	 *
-	 * @access    public
 	 */
 	public function logout()
 	{
@@ -3626,14 +3285,11 @@ class User
 	}
 
 	/**
-	 * processAuthRequest
-	 *
 	 * Emails the appropriate admin/manager of a request for authorization on an aspect of the site.
 	 *
-	 * @param    array $fields                An array where the key is the POST Data field to check and the value is
+	 * @param array $fields                   An array where the key is the POST Data field to check and the value is
 	 *                                        the email address to send the request to. The Value may be an array as
 	 *                                        well.
-	 * @access    public
 	 */
 	public function processAuthRequest($fields)
 	{
@@ -3673,10 +3329,9 @@ class User
 	}
 
 	/**
-	 * randomString
-	 *
 	 * Create a Random String (Useful for generating passwords or hashes.)
-	 * MOVE TO UTILITIES
+	 *
+	 * TODO: MOVE TO UTILITIES
 	 *
 	 * @param string $type The type of random string.  Options: alunum, numeric, nozero, unique
 	 * @param int $len     The string length. Default is 8 characters.
@@ -3766,12 +3421,11 @@ class User
 	}
 
 	/**
-	 * sendActivationEmail
-	 *
 	 * Sends account info in an email to the user.
 	 *
-	 * @param        String $email
-	 * @access    public
+	 * @param string $email
+	 * @param bool $new_account
+	 * @throws Exception
 	 */
 	public function sendActivationEmail($email, $new_account=FALSE)
 	{
@@ -3811,19 +3465,17 @@ class User
 	}
 
 	/**
-	 * setLoginSessions
-	 *
 	 * Sets the login sessions.
 	 *
-	 * @param    $user_id
-	 * @param    $display_name
-	 * @param    $password
-	 * @param    $fname
-	 * @param    $lname
-	 * @param    $title
-	 * @param    $registered
-	 * @param    $last_login
-	 * @param    $logged_in
+	 * @param int $user_id
+	 * @param string $display_name
+	 * @param string $password
+	 * @param string $fname
+	 * @param string $lname
+	 * @param string $title
+	 * @param string $registered
+	 * @param string $last_login
+	 * @param bool $logged_in
 	 * @param bool $remember
 	 * @param bool $secure
 	 * @throws Exception
@@ -3886,13 +3538,12 @@ class User
 	}
 
 	/**
-	 * updateUser
-	 *
 	 * Updates the User's record in the DataBase.
 	 *
-	 * @param    array $where_field Key= the field, Value= the field value.
-	 * @param    array $field_value Key= the field, Value= the field value.
-	 * @access    public
+	 * @param array $where_field Key= the field, Value= the field value.
+	 * @param array $field_value Key= the field, Value= the field value.
+	 * @return
+	 * @throws Exception
 	 */
 	public function updateUser($where_field, $field_value)
 	{
@@ -3974,12 +3625,11 @@ class User
 	}
 
 	/**
-	 * getInactiveUsers
-	 *
 	 * Check if the user is already in the users_inactive table.
 	 *
-	 * @param    int $user_id
-	 * @access    public
+	 * @param int $user_id
+	 * @return
+	 * @throws Exception
 	 */
 	public function getInactiveUsers($user_id=NULL)
 	{
@@ -4006,11 +3656,7 @@ class User
 	}
 
 	/**
-	 * deleteInactiveUsers
-	 *
 	 * Deletes the user(s) from the system.
-	 *
-	 * @access    public
 	 */
 	public function deleteInactiveUsers()
 	{
@@ -4024,6 +3670,7 @@ class User
 				# If there is more then 1 result.
 				if(count($inactive_users)>1)
 				{
+					$user_id_array=array();
 					# Loop through the multidimensional array.
 					foreach((array)$inactive_users as $user_id)
 					{
@@ -4051,12 +3698,9 @@ class User
 	}
 
 	/**
-	 * setAllUsers
-	 *
 	 * Sets the data member $all_users.
 	 *
-	 * @param    $all_users
-	 * @access    protected
+	 * @param array $all_users
 	 */
 	protected function setAllUsers($all_users)
 	{
@@ -4064,12 +3708,9 @@ class User
 	}
 
 	/**
-	 * setIP
-	 *
 	 * Sets the data member $ip.
 	 *
-	 * @param    $ip
-	 * @access    protected
+	 * @param string $ip
 	 */
 	protected function setIP($ip)
 	{
@@ -4089,13 +3730,10 @@ class User
 	}
 
 	/**
-	 * deleteInactiveUser
-	 *
 	 * Deletes the user from the user_inactive table.
 	 *
-	 * @param    int /array $user_id
+	 * @param int /array $user_id
 	 * @throws Exception
-	 * @access    protected
 	 */
 	protected function deleteInactiveUser($user_id)
 	{
@@ -4126,16 +3764,13 @@ class User
 		{
 			throw new Exception('There was an error deleting the user from the user_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
 		}
-	} #==== End -- deleteInactiveUser
+	}
 
 	/**
-	 * setStaffID
-	 *
 	 * Sets the data member $staff_id.
 	 *
-	 * @param    $staff_id                The User's Staff ID number.
+	 * @param int $staff_id The User's Staff ID number.
 	 * @throws Exception
-	 * @access    protected
 	 */
 	protected function setStaffID($staff_id)
 	{
@@ -4165,17 +3800,14 @@ class User
 		}
 		# Set the data member.
 		$this->staff_id=$staff_id;
-	} # ----End sendActivationEmail
+	}
 
 	/**
-	 * ipValid
-	 *
 	 * Will try to determine if a given ip is valid or not.
 	 * A wrapper method for the ipValid method from the Validator class.
 	 *
-	 * @access    protected
-	 * @param    $ips                    The IP address to validate
-	 * @return    bool
+	 * @param string $ips The IP address to validate
+	 * @return bool
 	 */
 	protected function ipValid($ips)
 	{
@@ -4196,12 +3828,9 @@ class User
 	/*** private methods ***/
 
 	/**
-	 * clearWP_Cookies
-	 *
 	 * Clears the WordPress cookies
-	 * MOVE TO WEBUTILITIES
 	 *
-	 * @access    private
+	 * TODO: MOVE TO WEBUTILITIES
 	 */
 	private function clearWP_Cookies()
 	{
@@ -4259,12 +3888,10 @@ class User
 	}
 
 	/**
-	 * ecodeWP_Password
-	 *
 	 * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
 	 *
-	 * @param    string $wp_password Optional. Used only for Login->changePassword() method.
-	 * @access    private
+	 * @param string $wp_password Optional. Used only for Login->changePassword() method.
+	 * @return null
 	 */
 	private function ecodeWP_Password($wp_password=NULL)
 	{

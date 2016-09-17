@@ -1,26 +1,27 @@
 <?php /* Requires PHP5+ */
 
 # Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
-
+if(!defined('BASE_PATH'))
+{
+	exit('No direct script access allowed');
+}
 
 /**
  * Email
  *
  * The Email Class is used to send email.
  *
- * @dependencies	application/modules/Vendor/ezDB/ezdb.class.php
- *					application/modules/Validator/Validator.php
- *					data/email_definitions.php
- *					data/path_definitions.php
- *					data/user_privileges.php
+ * @dependencies    application/modules/Vendor/ezDB/ezdb.class.php
+ *                    application/modules/Validator/Validator.php
+ *                    data/email_definitions.php
+ *                    data/path_definitions.php
+ *                    data/user_privileges.php
  */
 class Email
 {
 	/*** data members ***/
 
 	private static $email;
-
 	private $allowed_types=NULL;
 	private $attachment=NULL;
 	private $confirmation_template=NULL;
@@ -43,12 +44,22 @@ class Email
 	/*** mutator methods ***/
 
 	/**
-	 * setAllowedTypes
-	 *
+	 * Gets the singleton instance of this class.
+	 */
+	public static function getInstance()
+	{
+		if(!self::$email)
+		{
+			self::$email=new Email();
+		}
+
+		return self::$email;
+	}
+
+	/**
 	 * Sets the data member $allowed_types.
 	 *
-	 * @param		array		$types
-	 * @access	public
+	 * @param array $types
 	 */
 	public function setAllowedTypes($types)
 	{
@@ -60,15 +71,12 @@ class Email
 		}
 		# Set the data member.
 		$this->allowed_types=$types;
-	} #==== End -- setAllowedTypes
+	}
 
 	/**
-	 * setAttachment
-	 *
 	 * Sets the data member $attachment.
 	 *
-	 * @param		$path
-	 * @access	public
+	 * @param $path
 	 */
 	public function setAttachment($path)
 	{
@@ -89,15 +97,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->attachment=NULL;
 		}
-	} #==== End -- setAttachment
+	}
 
 	/**
-	 * setConfirmationTemplate
-	 *
 	 * Sets the data member $confirmation_template.
 	 *
-	 * @param	$path
-	 * @access	public
+	 * @param $path
 	 */
 	public function setConfirmationTemplate($path)
 	{
@@ -120,15 +125,12 @@ class Email
 		}
 		# Set the data member.
 		$this->confirmation_template=$path;
-	} #==== End -- setConfirmationTemplate
+	}
 
 	/**
-	 * setDisplay
-	 *
 	 * Sets the data member $display.
 	 *
-	 * @param		$display
-	 * @access	public
+	 * @param $display
 	 */
 	public function setDisplay($display)
 	{
@@ -145,15 +147,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->display=NULL;
 		}
-	} #==== End -- setDisplay
+	}
 
 	/**
-	 * setEmailPage
-	 *
 	 * Sets the data member $email_page.
 	 *
-	 * @param	string $email_page
-	 * @access	public
+	 * @param string $email_page
 	 */
 	public function setEmailPage($email_page)
 	{
@@ -170,15 +169,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->email_page=NULL;
 		}
-	} #==== End -- setEmailPage
+	}
 
 	/**
-	 * setIsHTML
-	 *
 	 * Sets the data member $is_html.
 	 *
-	 * @param		string	$boolean (Either "yes2yes"->TRUE or "no.means.no"->FALSE)
-	 * @access	public
+	 * @param string $boolean Either "yes2yes"->TRUE or "no.means.no"->FALSE
 	 */
 	public function setIsHTML($boolean)
 	{
@@ -190,15 +186,12 @@ class Email
 		}
 		# Explicitly set the data member to TRUE.
 		$this->is_html='yes2yes';
-	} #==== End -- setIsHTML
+	}
 
 	/**
-	 * setMaxFileSize
-	 *
 	 * Sets the data member $max_file_size.
 	 *
-	 * @param		$bytes		(The maximum allowed size of the file in bytes.
-	 * @access	public
+	 * @param int $bytes The maximum allowed size of the file in bytes.
 	 */
 	public function setMaxFileSize($bytes)
 	{
@@ -221,15 +214,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->max_file_size=NULL;
 		}
-	} #==== End -- setMaxFileSize
+	}
 
 	/**
-	 * setMessage
-	 *
 	 * Sets the data member $message.
 	 *
-	 * @param		$message
-	 * @access	public
+	 * @param $message
 	 */
 	public function setMessage($message, $html=FALSE)
 	{
@@ -254,16 +244,13 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->message=NULL;
 		}
-	} #==== End -- setMessage
+	}
 
 	/**
-	 * setRecipients
-	 *
 	 * Sets the data member $recipients.
 	 *
-	 * @param	$recipients
-	 * @param	$csv						Whether to set the values as a comma separated string.
-	 * @access	public
+	 * @param string $recipients
+	 * @param boolean $csv Whether to set the values as a comma separated string.
 	 */
 	public function setRecipients($recipients, $csv=TRUE)
 	{
@@ -285,15 +272,12 @@ class Email
 			# Explicitly set the data member to an empty array.
 			$this->recipients=NULL;
 		}
-	} #==== End -- setRecipients
+	}
 
 	/**
-	 * setSenderEmail
-	 *
 	 * Sets the data member $sender_email.
 	 *
-	 * @param		$email
-	 * @access	public
+	 * @param $email
 	 */
 	public function setSenderEmail($email)
 	{
@@ -312,15 +296,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->sender_email=NULL;
 		}
-	} #==== End -- setSenderEmail
+	}
 
 	/**
-	 * setSenderName
-	 *
 	 * Sets the data member $sender_name.
 	 *
-	 * @param		$realname
-	 * @access	public
+	 * @param $realname
 	 */
 	public function setSenderName($realname)
 	{
@@ -339,15 +320,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->sender_name=NULL;
 		}
-	} #==== End -- setSenderName
+	}
 
 	/**
-	 * setSiteName
-	 *
 	 * Sets the data member $site_name.
 	 *
-	 * @param		$site_name
-	 * @access	public
+	 * @param $site_name
 	 */
 	public function setSiteName($site_name)
 	{
@@ -359,22 +337,19 @@ class Email
 			# Clean it up.
 			$site_name=$db->sanitize($site_name);
 			# Set the data member.
-			$this->sender_name=$site_name;
+			$this->site_name=$site_name;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->sender_name=NULL;
+			$this->site_name=NULL;
 		}
-	} #==== End -- setSiteName
+	}
 
 	/**
-	 * setSubject
-	 *
 	 * Sets the data member $subject.
 	 *
-	 * @param		$subject
-	 * @access	public
+	 * @param $subject
 	 */
 	public function setSubject($subject)
 	{
@@ -393,15 +368,12 @@ class Email
 			# Explicitly set the data member to NULL.
 			$this->subject=NULL;
 		}
-	} #==== End -- setSubject
+	}
 
 	/**
-	 * setTemplate
-	 *
 	 * Sets the data member $template.
 	 *
-	 * @param	$path
-	 * @access	public
+	 * @param $path
 	 */
 	public function setTemplate($path)
 	{
@@ -424,7 +396,7 @@ class Email
 		}
 		# Set the data member.
 		$this->template=$path;
-	} #==== End -- setTemplate
+	}
 
 	/*** End mutator methods ***/
 
@@ -433,172 +405,116 @@ class Email
 	/*** accessor methods ***/
 
 	/**
-	 * getAllowedTypes
-	 *
 	 * Returns the data member $allowed_types.
-	 *
-	 * @access	public
 	 */
 	public function getAllowedTypes()
 	{
 		return $this->allowed_types;
-	} #==== End -- getAllowedTypes
+	}
 
 	/**
-	 * getAttachment
-	 *
 	 * Returns the data member $attachment.
-	 *
-	 * @access	public
 	 */
 	public function getAttachment()
 	{
 		return $this->attachment;
-	} #==== End -- getAttachment
+	}
 
 	/**
-	 * getConfirmationTemplate
-	 *
 	 * Returns the data member $confirmation_template.
-	 *
-	 * @access	public
 	 */
 	public function getConfirmationTemplate()
 	{
 		return $this->confirmation_template;
-	} #==== End -- getConfirmationTemplate
+	}
 
 	/**
-	 * getDisplay
-	 *
 	 * Returns the data member $display.
-	 *
-	 * @access	public
 	 */
 	public function getDisplay()
 	{
 		return $this->display;
-	} #==== End -- getDisplay
+	}
 
 	/**
-	 * getEmailPage
-	 *
 	 * Returns the data member $email_page.
-	 *
-	 * @access	public
 	 */
 	public function getEmailPage()
 	{
 		return $this->email_page;
-	} #==== End -- getEmailPage
+	}
 
 	/**
-	 * getIsHTML
-	 *
 	 * Returns the data member $is_html.
-	 *
-	 * @access	public
 	 */
 	public function getIsHTML()
 	{
 		return $this->is_html;
-	} #==== End -- getIsHTML
+	}
 
 	/**
-	 * getMaxFileSize
-	 *
 	 * Returns the data member $max_file_size.
-	 *
-	 * @access	public
 	 */
 	public function getMaxFileSize()
 	{
 		return $this->max_file_size;
-	} #==== End -- getMaxFileSize
+	}
 
 	/**
-	 * getMessage
-	 *
 	 * Returns the data member $message.
-	 *
-	 * @access	public
 	 */
 	public function getMessage()
 	{
 		return $this->message;
-	} #==== End -- getMessage
+	}
 
 	/**
-	 * getRecipients
-	 *
 	 * Returns the data member $recipients.
-	 *
-	 * @access	public
 	 */
 	public function getRecipients()
 	{
 		return $this->recipients;
-	} #==== End -- getRecipients
+	}
 
 	/**
-	 * getSenderEmail
-	 *
 	 * Returns the data member $sender_email.
-	 *
-	 * @access	public
 	 */
 	public function getSenderEmail()
 	{
 		return $this->sender_email;
-	} #==== End -- getSenderEmail
+	}
 
 	/**
-	 * getSenderName
-	 *
 	 * Returns the data member $sender_name.
-	 *
-	 * @access	public
 	 */
 	public function getSenderName()
 	{
 		return $this->sender_name;
-	} #==== End -- getSenderName
+	}
 
 	/**
-	 * getSiteName
-	 *
 	 * Returns the data member $site_name.
-	 *
-	 * @access	public
 	 */
 	public function getSiteName()
 	{
 		return $this->site_name;
-	} #==== End -- getSiteName
+	}
 
 	/**
-	 * getSubject
-	 *
 	 * Returns the data member $subject.
-	 *
-	 * @access	public
 	 */
 	public function getSubject()
 	{
 		return $this->subject;
-	} #==== End -- getSubject
+	}
 
 	/**
-	 * getTemplate
-	 *
 	 * Returns the data member $template.
-	 *
-	 * @access	public
 	 */
 	public function getTemplate()
 	{
 		return $this->template;
-	} #==== End -- getTemplate
+	}
 
 	/*** End accessor methods ***/
 
@@ -607,14 +523,11 @@ class Email
 	/*** public methods ***/
 
 	/**
-	 * editInvalidEmail
-	 *
 	 * Adds email addresses to the InvalidEmail.log file.
 	 *
-	 * @param 	$emails						A tring of comma separated email addresses to add to a new "Recipient".
-	 * @param 	$replace					The string in the ini file to replace.
-	 * @return	Boolean						The number of bytes written on success, FALSE on failure.
-	 * @access	public
+	 * @param mixed $email A string of comma separated email addresses to add to a new "Recipient".
+	 * @param bool $reset  Indicates if the file should get erased.
+	 * @return bool The number of bytes written on success, FALSE on failure.
 	 */
 	public function editInvalidEmail($email=NULL, $reset=FALSE)
 	{
@@ -634,41 +547,26 @@ class Email
 		{
 			# Create a string with the email addresses.
 			$string='ERROR :: '.date("Y-m-d")."\n";
-			$string.="\t".'"'.$email.'" was to be written to "'.$file_to_edit.'". That is not acceptable data.';
+			$string.="\t".'"'.$email.'" is not acceptable data.';
 		}
+
 		# Edit the the InvalidEmail.log file.
 		return $file_handler->editFile(LOGS.'InvalidEmail.log', $string, $reset);
-	} #==== End -- editInvalidEmail
-
-	/**
-	 * getInstance
-	 *
-	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
-	 */
-	public static function getInstance()
-	{
-		if(!self::$email)
-		{
-			self::$email=new Email();
-		}
-		return self::$email;
-	} #==== End -- getInstance
+	}
 
 	/**
 	 * sendEmail
 	 *
 	 * Handles all emailing from one place.
 	 *
-	 * @param	string $subject
-	 * @param	string $to
-	 * @param	string $body
-	 * @param	string $reply_to		Optional
-	 * @param	array $attachment		Optional
-	 * @param	string $is_html			Optional
-	 * @return	boolean					TRUE/FALSE
-	 * @access	public
+	 * @param string $subject
+	 * @param string $to
+	 * @param string $body
+	 * @param string $reply_to     Optional
+	 * @param array $attachment    Optional
+	 * @param bool|string $is_html Optional
+	 * @return bool TRUE/FALSE
+	 * @throws Exception
 	 */
 	public function sendEmail($subject, $to, $body, $reply_to=SMTP_FROM, $attachment=NULL, $is_html=MAIL_IS_HTML)
 	{
@@ -718,6 +616,7 @@ class Email
 					# Spit that bug out.
 					throw new Exception($mail->ErrorInfo, E_RECOVERABLE_ERROR);
 				}
+
 				return FALSE;
 			}
 			else
@@ -733,14 +632,11 @@ class Email
 		{
 			throw $e;
 		}
-	} #==== End -- sendEmail
+	}
 
 	/**
-	 * sendFormEmail
-	 *
 	 * Executes the Tectite FormMail script. (See Tectite.com for more on the script.)
 	 *
-	 * @access	public
 	 */
 	public function sendFormEmail()
 	{
@@ -913,15 +809,13 @@ class Email
 		{
 			throw $e;
 		}
-	} #==== End -- sendFormEmail
+	}
 
 	/**
-	 * sendMultipleEmails
-	 *
 	 * Sends multiple an email to multiple users with a set time interval wait between emails.
 	 *
-	 * @param	array $email_data			An array of (probably POST) data about the email, ie sender address, subject, message, etc.
-	 * @access	public
+	 * @param array $email_data An array of (probably POST) data about the email, ie sender address, subject, message, etc.
+	 * @throws Exception
 	 */
 	public function sendMultipleEmails($email_data=NULL)
 	{
@@ -937,7 +831,7 @@ class Email
 			# Set the passed email data to the appropriate data member.
 			$this->setEmailData($email_data);
 
-		/*
+			/*
 			# Check if there was an attachment.
 			if($email_data['file']!=0)
 			{
@@ -958,12 +852,13 @@ class Email
 			$subject=htmlentities($email_data['subject'], ENT_QUOTES, 'UTF-8', FALSE);
 			# Set the "to" array to a variable.
 			$to=((!is_array($email_data['to'])) ? unserialize($email_data['to']) : $email_data['to']);
-		*/
+			*/
 
 			# Set the attachment value to a variable.
 			$attachment=$this->getAttachment();
 			# Set the MAILQUEUE_BATCH_SIZE to a variable.
 			$batch=MAILQUEUE_BATCH_SIZE;
+			$body='';
 			# Set the html value to a variable.
 			$html=$this->getIsHTML();
 			# Set the maximum acceptable file size to a variable.
@@ -992,7 +887,7 @@ class Email
 			# Explode the ALL_USERS constant string into an array.
 			$all_users=explode(' ', ALL_USERS);
 
-		/*
+			/*
 			# Unserialize the to data is it is not an array already.
 			$to=((!is_array($to)) ? unserialize($to) : $to);
 
@@ -1006,7 +901,7 @@ class Email
 			$_SESSION['MAX_FILE_SIZE']=$max_size;
 			$_SESSION['realname']=$sender_name;
 			$sesh_id=session_id();
-		*/
+			*/
 			# Check if there is a message, a subject, and recipients.
 			if(!empty($message) && !empty($to) && !empty($subject))
 			{
@@ -1082,7 +977,7 @@ class Email
 					{
 						set_time_limit(0);
 						$recipients_count=count($recipients);
-						if($recipients_count < $batch)
+						if($recipients_count<$batch)
 						{
 							$batch=$recipients_count;
 						}
@@ -1211,7 +1106,7 @@ class Email
 		{
 			throw $e;
 		}
-	} #==== End -- sendMultipleEmails
+	}
 
 	/*** End public methods ***/
 
@@ -1220,12 +1115,10 @@ class Email
 	/*** protected methods ***/
 
 	/**
-	 * setEmailData
-	 *
 	 * Sets received email data to the appropriate data member.
 	 *
-	 * @param	array $data
-	 * @access	protected
+	 * @param array $data
+	 * @throws Exception
 	 */
 	protected function setEmailData($data=NULL)
 	{
@@ -1277,8 +1170,7 @@ class Email
 		{
 			throw $e;
 		}
-	} #==== End -- setEmailData
+	}
 
 	/*** End protected methods ***/
-
-} #=== End Email class.
+}
