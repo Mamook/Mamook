@@ -1,0 +1,252 @@
+<?php /* dev/cron/branch_update_notifier_Dev.php */
+
+# TODO: Remove duplicate `subcontent` from the $user->subcontent array.
+
+/**
+ * This script runs every Sunday at 5:00am.
+ * 00      05      *       *       7       /opt/local/bin/php <Full Path to Cron Folder>/dev/cron/branch_update_notifier_Dev.php
+ * -       -       -       -       -
+ * |       |       |       |       |
+ * |       |       |       |       +----- day of week (0 - 6) (Sunday=0)
+ * |       |       |       +------- month (1 - 12)
+ * |       |       +--------- day of month (1 - 31)
+ * |       +----------- hour (0 - 23)
+ * +------------- min (0 - 59)
+ *
+ * Use dev/branch_update_notifier_Dev.php if you need this for your development machine.
+ * Use dev/branch_update_notifier_Staging.php if you need this for your staging server.
+ */
+
+# Change the directory to where this cron script is located.
+chdir(dirname(__FILE__));
+
+try
+{
+	# Need this for the database insert.
+	if(!defined('DOMAIN_NAME'))
+	{
+		define('DOMAIN_NAME', 'jamtheforce.com');
+	}
+
+	# Define the url that points to our application. (ends with a slash)
+	define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+
+	# Need these for database_definitions.php and email_definitions.php
+	# Only need to change the RUN_ON_DEVELOPMENT definition.
+	# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+	if(!defined('RUN_ON_DEVELOPMENT'))
+	{
+		define('RUN_ON_DEVELOPMENT', TRUE);
+	}
+	if(!defined('RUN_ON_STAGING'))
+	{
+		define('RUN_ON_STAGING', FALSE);
+	}
+
+	# Define the timezone.
+	define('TIMEZONE', 'US/Pacific');
+
+	/*
+	 *---------------------------------------------------------------
+	 * SYSTEM VARIABLES
+	 *---------------------------------------------------------------
+	 *
+	 * System variables needed by the application
+	 *
+	 */
+	# Make sure PHP is using UTF-8 character encoding.
+	mb_internal_encoding('UTF-8');
+
+	# Set the date (and time)
+	# First, the timezone.
+	putenv('TZ='.TIMEZONE);
+	date_default_timezone_set(TIMEZONE);
+
+	# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
+	if(RUN_ON_STAGING===TRUE)
+	{
+		define('SECURE_URL', APPLICATION_URL.'secure/');
+	}
+	else
+	{
+		define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
+	}
+
+	if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
+	{
+		# Turn Debugging on or off.
+		define('DEBUG_APP', TRUE);
+	}
+	else
+	{
+		# Turn Debugging on or off.
+		define('DEBUG_APP', FALSE);
+	}
+
+	# Get the Path definitions.
+	require '../../data/path_definitions.php';
+	# Get the database definitions.
+	require DATA_FILES.'database_definitions.php';
+	# Get the Email definitions.
+	require DATA_FILES.'email_definitions.php';
+	# Get the Email definitions.
+	require DATA_FILES.'user_privileges.php';
+	# Get the Utility Class.
+	require_once UTILITY_CLASS;
+	# Get the CommandLineException class.
+	require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'CommandLineException.php');
+
+	# Get the DB Class needed to operate with MySQL.
+	require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+	DB::init(DB_TYPE);
+	$db=DB::get_instance();
+	$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+	# Get the Email class.
+	require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
+	# Instantiate a new Email object.
+	$email_obj=new Email();
+
+	# Get the Validator Class.
+	require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+
+	# Get current date.
+	$datetime_obj=new DateTime();
+	# Format the current date.
+	$today=$datetime_obj->format('Y-m-d');
+
+	# Subtract 7 days from the current date.
+	$datetime_obj->sub(new DateInterval('P7D'));
+	# Format the past date.
+	$one_week_ago=$datetime_obj->format('Y-m-d');
+
+	//$all_subcontent=$subcontent_obj->getAllSubContent();
+	//$sql='SELECT `sc`.`id`, `sc`.`title`, `sc`.`date`, `b`.`branch`, `b`.`domain` FROM `'.DBPREFIX.'subcontent` AS sc'.
+	//' INNER JOIN `'.DBPREFIX.'branches` AS b ON SUBSTRING_INDEX(TRIM(BOTH \'-\' FROM `sc`.`branch`), \'-\', 1)=`b`.`id`'.
+	$sql='SELECT `sc`.`id`, `sc`.`title`, `sc`.`date`, `sc`.`branch` FROM `'.DBPREFIX.'subcontent` AS sc'.
+		' WHERE `sc`.`date` >= \''.$one_week_ago.'\''.
+		' ORDER BY `sc`.`date` DESC';
+	//SELECT `sc`.`title`, `sc`.`date`, `b`.`branch`, `b`.`domain` FROM `subcontent` AS sc INNER JOIN `branches` AS b ON SUBSTRING_INDEX(TRIM(BOTH '-' FROM `sc`.`branch`), '-', 1)=`b`.`id` WHERE `sc`.`date` >= '2016-08-01' ORDER BY `sc`.`date` DESC
+	$all_subcontent=$db->get_results($sql);
+
+	/*
+	$subcontent=array();
+	foreach($all_subcontent as $new_subcontent)
+	{
+		//$subcontent[]=explode('-', trim($new_subcontent->branch, '-'));
+		$subcontent[$new_subcontent->branch][]=array(
+			'id'=>$new_subcontent->id,
+			'title'=>$new_subcontent->title,
+			'date'=>$new_subcontent->date,
+			'domain'=>$new_subcontent->domain
+		);
+	}
+	print_r($subcontent);exit;
+	*/
+
+	# If there was content posted in the last week...
+	if(!empty($all_subcontent))
+	{
+		$branch_sql='SELECT `id`, `branch`, `domain` FROM `branches`';
+		$all_branches=$db->get_results($branch_sql);
+
+		$branches=array();
+		foreach($all_branches as $branch)
+		{
+			$branches[$branch->id]=$branch;
+		}
+
+		/**
+		 * @param $branch_content
+		 * @param $subcontent
+		 */
+		function indexSubcontent(&$branch_content, $subcontent)
+		{
+			$branches=explode('-', trim($subcontent->branch, '-'));
+			foreach($branches as $branch)
+			{
+				if(empty($branch_content[$branch]))
+				{
+					$branch_content[$branch]=array();
+				}
+
+				$branch_content[$branch][]=$subcontent;
+			}
+		}
+
+		$branch_content=array();
+		foreach($all_subcontent as $subcontent)
+		{
+			indexSubcontent($branch_content, $subcontent);
+		}
+
+		//$users_sql='SELECT `u`.`email`, `u`.`notify`, `b`.`branch` FROM `'.DBPREFIX.'users` AS u'.
+		//' INNER JOIN `'.DBPREFIX.'branches` AS b ON SUBSTRING_INDEX(TRIM(BOTH \'-\' FROM `u`.`notify`), \'-\', 1)=`b`.`id`'.
+		$users_sql='SELECT `u`.`email`, `u`.`notify` FROM `'.DBPREFIX.'users` AS u'.
+			' WHERE `u`.`notify` IS NOT NULL';
+		$users=$db->get_results($users_sql);
+
+		/**
+		 * @param $user
+		 * @param $subcontent
+		 */
+		function userJoin(&$user, $branch_content)
+		{
+			$notifications=explode('-', trim($user->notify, '-'));
+			foreach($notifications as $n)
+			{
+				if(array_key_exists($n, $branch_content))
+				{
+					$user->subcontent[$n]=$branch_content[$n];
+				}
+			}
+		}
+
+		foreach($users as $user)
+		{
+			userJoin($user, $branch_content);
+		}
+
+		$subject=DOMAIN_NAME.' News: '.$one_week_ago.' to '.$today;
+		# Loop through the users.
+		foreach($users as $user)
+		{
+			$body='';
+			if(isset($user->subcontent))
+			{
+				$body.='Click the title to read more.<br /><br />';
+				# Loop through the new array.
+				foreach($user->subcontent as $subcontent_key=>$subcontent_value)
+				{
+					$body.='The following news was posted on '.$branches[$subcontent_key]->branch.'<br />';
+					$body.='<ul>';
+					foreach($subcontent_value as $subcontent)
+					{
+						$body.='<li>';
+						$body.=$subcontent->date.'<br />';
+						$body.='<a href="http://'.str_ireplace(array('%{domain_name}'), array(DOMAIN_NAME), $branches[$subcontent_key]->domain).'?post='.$subcontent->id.'"">'.$subcontent->title.'</a><br />';
+						$body.='</li>';
+					}
+					$body.='</ul><br />';
+				}
+				$body.='* This email was sent to you because you have opted in to receive emails from '.DOMAIN_NAME.' News. If you would prefer not to receive these emails in the future, simply go to your privacy settings at <a href="'.SECURE_URL.'MyAccount/privacy.php">'.SECURE_URL.'MyAccount/privacy.php</a>, deselect "Send me "branch" updates" and click "Update".';
+				# TODO: Use sendMultipleEmails().
+				# NOTE: DEBUGGING
+				if(DEBUG_APP===TRUE)
+				{
+					# Send email.
+					$email_obj->sendEmail($subject, ADMIN_EMAIL, $body);
+				}
+				else
+				{
+					# Send email.
+					$email_obj->sendEmail($subject, $user->email, $body);
+				}
+			}
+		}
+	}
+}
+catch(Exception $e)
+{
+	$exception=new CommandLineException($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
+}
