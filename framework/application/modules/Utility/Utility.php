@@ -74,9 +74,9 @@ class Utility
 	 *
 	 * Turns a multidimensional array into a single.
 	 *
-	 * @param	array $array
-	 * @access	public
-	 * @return	array
+	 * @param    array $array
+	 * @access    public
+	 * @return array|bool
 	 */
 	public static function flattenArray($array)
 	{
@@ -94,7 +94,7 @@ class Utility
 			# If the element is an array, run it through the method again to make it a single.
 			if(is_array($value))
 			{
-				$result=array_merge($result, $this->flattenArray($value));
+				$result=array_merge($result, self::flattenArray($value));
 			}
 			else
 			{
@@ -109,10 +109,10 @@ class Utility
 	 *
 	 * Returns a string stating the elapsed time in years, months, days, weeks, hours, minutes, and seconds.
 	 *
-	 * @access	public
-	 * @param	start_time				The unix timestamp of the start time.
-	 * @param	end_time				The unix timestamp of the end time.
-	 * @return	String					ie. 2 years, 1 week, 0 days, 4 hours, 1 minute, and 58 seconds.
+	 * @param int $start_time The unix timestamp of the start time.
+	 * @param int $end_time   The unix timestamp of the end time.
+	 * @return string ie. 2 years, 1 week, 0 days, 4 hours, 1 minute, and 58 seconds.
+	 * @throws Exception
 	 */
 	public static function getElapsedTime($start_time, $end_time)
 	{
@@ -339,8 +339,8 @@ class Utility
 	 *
 	 * Checks if the file is located in the client directory. If not, it changes the path to point to the framework folder.
 	 *
-	 * @param	string $file			The path to the file.
-	 * @access	public
+	 * @param    string $file The path to the file.
+	 * @return mixed|string
 	 */
 	public static function locateFile($file)
 	{
@@ -373,8 +373,8 @@ class Utility
 	 *
 	 * Removes "index.php" from the passed URL.
 	 *
-	 * @param 	$url 		(The URL to check.)
-	 * @access	public
+	 * @param string $url The URL to check.
+	 * @return mixed|string
 	 */
 	public static function removeIndex($url)
 	{
@@ -395,10 +395,10 @@ class Utility
 	 *
 	 * Retrieves the session data from the session file, parses it, and returns it as an array.
 	 *
-	 * @access	public
-	 * @param	session_id				The id of the session.
-	 * @param	session_path			The path to the session files (does NOT end with a slash.)
-	 * @return	Array					The Session array.
+	 * @param string $session_id   The id of the session.
+	 * @param string $session_path The path to the session files (does NOT end with a slash.)
+	 * @return array The Session array.
+	 * @throws Exception
 	 */
 	public static function returnSessionData($session_id, $session_path)
 	{
@@ -444,6 +444,8 @@ class Utility
 	{
 		try
 		{
+			$session=array();
+
 			foreach($session_data as $data_key=>$data_value)
 			{
 
@@ -470,6 +472,7 @@ class Utility
 				$offset+=strlen(serialize($data));
 			}
 			*/
+
 			# Get the session data.
 			if(file_put_contents($session_path.DIRECTORY_SEPARATOR.'sess_'.$session_id, $session)===FALSE)
 			{
@@ -521,13 +524,13 @@ class Utility
 	 *
 	 * Truncates a string to the passed length. Respects html.
 	 *
-	 * @param	string $text			The string to truncated.
-	 * @param	int $length				The maximum length of the cut string.
-	 * @param	string $suffix			The string to indicate the string has been truncated.
-	 * @param	boolean $isHTML			TRUE is the string contains HTML.
-	 * @param	boolean $exact			TRUE words may be cut in the middle.
-	 * @param	$max_br
-	 * @access	public
+	 * @param    string $text    The string to truncated.
+	 * @param    int $length     The maximum length of the cut string.
+	 * @param    string $suffix  The string to indicate the string has been truncated.
+	 * @param    boolean $isHTML TRUE is the string contains HTML.
+	 * @param    boolean $exact  TRUE words may be cut in the middle.
+	 * @param    $max_br
+	 * @return string
 	 */
 	public static function truncate($text, $length, $suffix='&hellip;', $isHTML=TRUE, $exact=FALSE, $max_br=NULL)
 	{
@@ -695,7 +698,6 @@ class Utility
 	 * Returns the array of social data sorted by date.
 	 *
 	 * @access	private
-	 * @return	array
 	 */
 	private function dateCompare($a, $b)
 	{
