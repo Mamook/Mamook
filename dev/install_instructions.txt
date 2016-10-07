@@ -9,91 +9,19 @@ FFMPEG
 These also need to be installed for developers:
 Git Flow
 
-
-1. Create your RSA key, and email the public key (your_username.pub), along with your IP address (so it can be added to the server) to Michael Delle (dravenlon@gmail.com):
-	Command:
-		ssh-keygen -t rsa -C “your_username”
-
-	You may need to add it to your SSH agent using ssh-add:
-		Command:
-			ssh-add ~/.ssh/your_username (or wherever your key is located)
-
-2. Repository (client_website is replaced with the clients name, this is just an example):
-	2a. Create Repository:
-		Client repositories must be made by a lead developer.
-
-	2b. Create local repositories:
-		After the repository has been created add it to your development machine and to the host.
-
-		Create local repository on the host’s server:
-
-			Commands:
-				mkdir client_website.com
-				cd client_website.com
-				git init
-				git remote add Client_Website ssh://gitolite@jamtheforce.com:8022/client_website
-
-		For the development machine do the above command and then add the Framework repository.
-			Commands:
-				git remote add Framework ssh://gitolite@jamtheforce.com:8022/framework
-				git pull Framework master
-				git submodule update --init --recursive
-				git push Client_Website master
-
-			(Optional)
-				This command stops “git fetch Framework” from getting the Frameworks Git tags.
-				This is mandatory if the client wants to version their website because it will conflict with Git Flow Hooks.
-			Command:
-				git config remote.Framework.tagopt --no-tags
-
-	2c. Install Git Flow Hooks & Enable Git Flow:
-		What does Git Flow Hooks do?
-			Prevent direct commits to the master branch.
-			Prevent merge marker commits.
-			Automatically bump versions when starting a release or hotfix. Versions are generated, written to file and committed.
-			Automatically specify tag messages.
-
-		Install Git Flow Hooks:
-			Clone this repository somewhere on your disk.
-			For the rest of this, use command line git and not a GUI like Tower.
-			Command:
-				git clone git@github.com:jaspernbrouwer/git-flow-hooks.git
-
-			Whenever your read /path/to/git-flow-hooks, replace it with the actual path to your clone/working copy.
-
-			OS X:
-				OS X doesn't support sort -V, which is used to sort git tags by version number, which in turn is needed to correctly bump versions.
-				On OS X you can install coreutils (using MacPorts or Homebrew).
-				Optionally, you can use the configuration option VERSION_SORT to point to a different command. See Configuration below.
-
-		Configuration
-			Copy the file /path/to/git-flow-hooks/modules/git-flow-hooks-config.sh.dist to .git/git-flow-hooks-config.sh and change whatever you like. This is completely optional.
-
-		Activate Git Flow & Git Flow Hooks:
-			Initialize git-flow.
-			Command:
-				git flow init
-
-			It will ask you some questions, the last will be Hooks and filters directory?, which you can answer with /path/to/git-flow-hooks.
-			If you've already initialized git-flow, you can still set/change the path manually.
-
-			You can use "--global" so Git always uses this directory for Git Flow Hooks.
-			Command:
-				git config [--global] gitflow.path.hooks /path/to/git-flow-hooks
-
-3. Make a copy of the configuration & cron files:
-	settings.php.sample						-> settings.php
-	cron/api_sync.php.sample				-> cron/api_sync.php
-	cron/new_media.php.sample				-> cron/new_media.php
+1. Make a copy of the configuration & cron files:
+	settings.php.sample				-> settings.php
+	cron/api_sync.php.sample			-> cron/api_sync.php
+	cron/new_media.php.sample			-> cron/new_media.php
 	data/API_definitions.php.sample			-> data/API_definitions.php
-	data/database_definitions.php.sample	-> data/database_definitions.php
+	data/database_definitions.php.sample		-> data/database_definitions.php
 	data/email_definitions.php.sample		-> data/email_definitions.php
-	data/formmail.ini.sample				-> data/formmail.ini
-	data/init.php.sample					-> data/init.php
+	data/formmail.ini.sample			-> data/formmail.ini
+	data/init.php.sample				-> data/init.php
 	data/user_privileges.php.sample			-> data/user_privileges.php
 
 	If you want WordPress integration:
-	data/WordPress_settings.php.sample		-> data/WordPress_settings.php
+		data/WordPress_settings.php.sample		-> data/WordPress_settings.php
 
 	Command (assumes you're in the root folder):
 		cp settings.php.sample settings.php && cp cron/api_sync.php.sample cron/api_sync.php && cp cron/new_media.php.sample cron/new_media.php && cp data/API_definitions.php.sample data/API_definitions.php && cp data/database_definitions.php.sample data/database_definitions.php && cp data/email_definitions.php.sample data/email_definitions.php && cp data/formmail.ini.sample data/formmail.ini && cp data/init.php.sample data/init.php && cp data/user_privileges.php.sample data/user_privileges.php
@@ -102,7 +30,7 @@ Git Flow
 	Command (assumes you're in the root folder):
 		cp data/WordPress_settings.php.sample data/WordPress_settings.php
 
-4. Make sure the following folders are readable and writable (777):
+2. Make sure the following folders are readable and writable (777):
 	bodega/
 	cache/
 	custom_sessions/
@@ -117,7 +45,7 @@ Git Flow
 	Command (assumes you're in the root folder):
 		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ data/formmail.ini logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
 
-5. Edit root->settings.php:
+3. Edit root->settings.php:
 	Search for each constant (string in capital letters).
 
 	a. DEVELOPMENT_DOMAIN - Enter the development domain name.
@@ -129,7 +57,7 @@ Git Flow
 	f. WP_INSTALLED - Change to TRUE for Wordpress integration.
 	g. MYKEY - Change the encryption key.
 
-6. Edit the following files (mandatory):
+4. Edit the following files (mandatory):
 	a. data/database_definitions.php
 	b. data/formmail.ini
 		Change webmaster email address
@@ -142,15 +70,15 @@ Git Flow
 			Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
 			Line 33-61 - edit as needed.
 
-7. Edit the following files (optional):
+5. Edit the following files (optional):
 	a. data/API_definitions.php
 	b. data/email_definitions.php
 
-8. Edit root->
+6. Edit root->
 	a. Line 87 & 92 - enter primary cascading style sheet name and any "always load" style sheets.
 	b. Line 96 & 99 - enter any "always load" javascripts.
 
-9. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
+7. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
 	/**
 	 * @since 0.71
 	 */
@@ -182,7 +110,7 @@ Git Flow
 	if(!defined('ARRAY_N'))
 	define( 'ARRAY_N', 'ARRAY_N' );
 
-10. In path_to_WordPress_installation/wp-load.php, after line 20, add:
+8. In path_to_WordPress_installation/wp-load.php, after line 20, add:
 
 	# Define the location of this page. - BigTalk :)
 	if(!defined('HERE_PATH'))
@@ -194,24 +122,22 @@ Git Flow
 	# Get Custom settings - BigTalk :)
 	require_once str_replace('public/FWE/', '', str_replace('\\', '/', ABSPATH)).'settings.php';
 
-11. If you need to make changes to the FormMail script, copy formmail.php into application/modules/Vendor/FormMail/ and edit it as needed
+9. If you need to make changes to the FormMail script, copy formmail.php into application/modules/Vendor/FormMail/ and edit it as needed
 	Linux Command (assumes you're in the root directory):
 		mkdir -p application/modules/Vendor/FormMail/ && cp framework/application/modules/Vendor/FormMail/formmail.php application/modules/Vendor/FormMail/formmail.php
 
-12. Edit FormMail templates as needed:
+10. Edit FormMail templates as needed:
 	templates/fm/confirmation_template.php
 	templates/fm/email_template.php
 	templates/fm/email_users_template.php
 	templates/fm/form_email_template.txt
 	templates/fm/form_email_user_template.txt
 
-13. Create a MySQL Database and import dev/sql/import_db.sql
+11. Create a MySQL Database and import dev/sql/import_db.sql
 
-14. Create new favicon.
+12. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
 
-15. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
-
-16. FFMPEG needs to be installed on the server for Audio & Video.
+13. FFMPEG needs to be installed on the server for Audio & Video.
 	A.	Make the needed directories (in root of user directory $HOME)
 		1.	mkdir tmp
 		2.	mkdir src
