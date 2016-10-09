@@ -6,6 +6,7 @@ if(!defined('BASE_PATH'))
 	exit('No direct script access allowed');
 }
 
+
 /**
  * Session
  *
@@ -14,12 +15,15 @@ if(!defined('BASE_PATH'))
  */
 class Session
 {
-	private static $session;
 	/*** data members ***/
 
 	private $message=FALSE;
+	private static $session;
 	private $sessname=FALSE;
+
 	/*** End data members ***/
+
+
 
 	/*** magic methods ***/
 
@@ -30,8 +34,8 @@ class Session
 	 * Also enables sessions to span sub domains. It names the session (which is necessary for session_set_cookie_params() to work).
 	 * If calling this class before setting.php, $sessname (the session name) AND $cookiepath (the path for cookies) MUST be defined.
 	 *
-	 * @param    string
-	 * @access    public
+	 * @param	string
+	 * @access	public
 	 */
 	public function __construct($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
 	{
@@ -49,7 +53,7 @@ class Session
 			if(defined('LOGIN_LIFE_SHORT'))
 			{
 				# Check if the defined life is blank.
-				if(LOGIN_LIFE_SHORT!='')
+				if(LOGIN_LIFE_SHORT != '')
 				{
 					$life=LOGIN_LIFE_SHORT;
 				}
@@ -66,7 +70,7 @@ class Session
 				if(defined('COOKIE_PATH'))
 				{
 					# Check if the defined path is blank.
-					if(COOKIE_PATH!='')
+					if(COOKIE_PATH != '')
 					{
 						# If the cookie path has been defined in settings.php, we'll use that path.
 						$cookiepath=COOKIE_PATH;
@@ -122,28 +126,38 @@ class Session
 
 		# Capture any messages set before this page was loaded.
 		$this->captureMessage();
-	}
+	} #==== End -- __construct
 
 	/*** End magic methods ***/
+
+
 
 	/*** mutator methods ***/
 
 	/**
-	 * getInstance
+	 * setMessage
 	 *
-	 * Gets the singleton instance of this class.
+	 * Sets the data member $message. If an empty value is passed, the data member will
+	 * be set with FALSE. Returns the set data member value.
 	 *
-	 * @access    public
+	 * @param	$message
+	 * @access	private
 	 */
-	public static function getInstance($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
+	private function setMessage($message)
 	{
-		if(!self::$session)
+		# Clean it up...
+		$message=trim($message);
+		# Check if the passed value is now empty.
+		if(empty($message))
 		{
-			self::$session=new Session($sessname, $cookiepath, $secure, $sesh_id);
+			# Explicitly set the data member to false.
+			$message=FALSE;
 		}
-
-		return self::$session;
-	}
+		# Set the data member.
+		$this->message=$message;
+		# Return the data member after it has gone through the get method.
+		return $this->getMessage();
+	} #==== End -- setMessage
 
 	/**
 	 * setSessname
@@ -151,8 +165,8 @@ class Session
 	 * Sets the data member $sessname. If an empty value is passed, the data member will
 	 * be set with FALSE. Returns the set data member value.
 	 *
-	 * @param $sessname
-	 * @return bool
+	 * @param		$name
+	 * @access		public
 	 */
 	public function setSessname($sessname)
 	{
@@ -166,12 +180,13 @@ class Session
 		}
 		# Set the data member.
 		$this->sessname=$sessname;
-
 		# Return the data member after it has gone through the get method.
 		return $this->getSessname();
-	}
+	} #==== End -- setSessname
 
 	/*** End mutator methods ***/
+
+
 
 	/*** accessor methods ***/
 
@@ -180,26 +195,28 @@ class Session
 	 *
 	 * Returns the data member $message.
 	 *
-	 * @access    public
+	 * @access	public
 	 */
 	public function getMessage()
 	{
 		return $this->message;
-	}
+	} #==== End -- getMessage
 
 	/**
 	 * getSessname
 	 *
 	 * Returns the data member $sessname.
 	 *
-	 * @access    public
+	 * @access	public
 	 */
 	public function getSessname()
 	{
 		return $this->sessname;
-	}
+	} #==== End -- getSessname
 
 	/*** End accessor methods ***/
+
+
 
 	/*** public methods ***/
 
@@ -208,10 +225,11 @@ class Session
 	 *
 	 * Checks to see if cookies are enabled. Returns TRUE if they are, FALSE if they aren't.
 	 *
-	 * @access public
-	 * @return bool
+	 * @param		$js					Tell Javascript to check for cookies. Only works in conjunction with Document::addJSErrorBox().
+	 *										Default is FALSE.
+	 * @access		public
 	 */
-	public function checkCookies()
+	public function checkCookies($js=FALSE)
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
@@ -243,7 +261,23 @@ class Session
 				return FALSE;
 			}
 		}
-	}
+	} #==== End -- checkCookies
+
+	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access	public
+	 */
+	public static function getInstance($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
+	{
+		if(!self::$session)
+		{
+			self::$session=new Session($sessname, $cookiepath, $secure, $sesh_id);
+		}
+		return self::$session;
+	} #==== End -- getInstance
 
 	/**
 	 * keepSessionData
@@ -252,9 +286,8 @@ class Session
 	 * If FALSE, all $_SESSION data is cleared. If TRUE, the data is kept and the current message
 	 * is set to the 'message' index of the $_SESSION array.
 	 *
-	 * @param $keep_session_data        A Boolean indicating whether the $_SESSION data should be kept (TRUE) or not (FALSE).
-	 * @access public
-	 * @return bool
+	 * @param	$keep_session_data		A Boolean indicating whether the $_SESSION data should be kept (TRUE) or not (FALSE).
+	 * @access	public
 	 */
 	public function keepSessionData($keep_session_data=TRUE)
 	{
@@ -262,13 +295,13 @@ class Session
 		if($keep_session_data!==TRUE)
 		{
 			# Loop through the SESSION.
-			foreach($_SESSION as $index=>$value)
+			foreach($_SESSION as $index->$value)
 			{
 				# Check if the current index is NOT "s_set". This is the index that keeps the current session active.
 				if($index!=='s_set')
 				{
 					# Unset the SESSION data for the current index.
-					$this->loseSessionData($index);
+					$session->loseSessionData($index);
 				}
 			}
 		}
@@ -280,16 +313,15 @@ class Session
 				$_SESSION['message']=$current_message;
 			}
 		}
-
 		return $keep_session_data;
-	}
+	} #==== End -- keepSessionData
 
 	/**
 	 * loseAllSessionData
 	 *
 	 * Unsets ALL session data.
 	 *
-	 * @access    public
+	 * @access	public
 	 */
 	public function loseAllSessionData()
 	{
@@ -297,27 +329,27 @@ class Session
 		unset($_SESSION);
 		# Destroy what's left.
 		session_destroy();
-	}
+	} #==== End -- loseAllSessionData
 
 	/**
 	 * loseSessionData
 	 *
 	 * Unsets session data from the passed index.
 	 *
-	 * @access    public
+	 * @access	public
 	 */
 	public function loseSessionData($index)
 	{
-		# Remove session data.
-		unset($_SESSION[$index]);
-	}
+			# Remove session data.
+			unset($_SESSION[$index]);
+	} #==== End -- loseSessionData
 
 	/**
 	 * saveSessionFile
 	 *
 	 * End the current session and store session data.
 	 *
-	 * @access    public
+	 * @access	public
 	 */
 	public function saveSessionFile()
 	{
@@ -325,14 +357,15 @@ class Session
 		session_write_close();
 		# Re-start session.
 		session_start();
-	}
+	} #==== End -- saveSessionFile
 
 	/**
 	 * setPostLogin
 	 *
 	 * Sets the _post_login Session to the current page.
 	 *
-	 * @param $post_login (Used to force a post_login URL. Default is the value in the REDIRECT_AFTER_LOGIN constant)
+	 * @param		$post_login		(Used to force a post_login URL. Default is the value in the REDIRECT_AFTER_LOGIN constant)
+	 * @access	public
 	 */
 	public function setPostLogin($post_login=REDIRECT_AFTER_LOGIN)
 	{
@@ -347,54 +380,34 @@ class Session
 				(strpos(WebUtility::removeIndex(FULL_URL), WebUtility::removeSchemeName(LOGIN_PAGE.'ResendEmail/'))===FALSE) &&
 				(strpos(WebUtility::removeIndex(FULL_URL), WebUtility::removeSchemeName(WebUtility::removeIndex(LOGIN_PAGE)))===FALSE) &&
 				(strpos(WebUtility::removeIndex(FULL_URL), WebUtility::removeIndex(WebUtility::removeSchemeName(DOWNLOADS)))===FALSE) &&
-				(strpos(WebUtility::removeIndex(FULL_URL), WebUtility::removeSchemeName(WebUtility::removeIndex(PAYPAL_URL)))===FALSE)
-			)
+				(strpos(WebUtility::removeIndex(FULL_URL), WebUtility::removeSchemeName(WebUtility::removeIndex(PAYPAL_URL)))===FALSE))
 			{
+
 				# Set the page to a variable.
-				$post_login=WebUtility::removeIndex(FULL_DOMAIN.HERE).GET_QUERY;
+				$post_login=WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE).GET_QUERY;
+			}
+			elseif(isset($_SESSION['_post_login']) && !empty($_SESSION['_post_login']))
+			{
+				$post_login=$_SESSION['_post_login'];
 			}
 		}
 
 		# Set the Session.
 		$_SESSION['_post_login']=$post_login;
-	}
+	} #==== End -- setPostLogin
 
 	/*** End public methods ***/
 
+
+
 	/*** private methods ***/
-
-	/**
-	 * setMessage
-	 *
-	 * Sets the data member $message. If an empty value is passed, the data member will
-	 * be set with FALSE. Returns the set data member value.
-	 *
-	 * @param $message
-	 * @return bool
-	 */
-	private function setMessage($message)
-	{
-		# Clean it up...
-		$message=trim($message);
-		# Check if the passed value is now empty.
-		if(empty($message))
-		{
-			# Explicitly set the data member to false.
-			$message=FALSE;
-		}
-		# Set the data member.
-		$this->message=$message;
-
-		# Return the data member after it has gone through the get method.
-		return $this->getMessage();
-	}
 
 	/**
 	 * captureMessage
 	 *
 	 * Captures any messages set the SESSION.
 	 *
-	 * @access    private
+	 * @access	private
 	 */
 	private function captureMessage()
 	{
@@ -406,6 +419,8 @@ class Session
 			# Clear the message
 			unset($_SESSION['message']);
 		}
-	}
+	} #==== End -- captureMessage
+
 	/*** End private methods ***/
-}
+
+} #==== End Session class.
