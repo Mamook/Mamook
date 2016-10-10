@@ -1,5 +1,5 @@
 # Mamook
-An out-of-date framework that needs to be modernized :)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 # About
 This framework was created 8+ years ago and has been worked on ever since. It runs several websites but at this time I'll only share one: http://www.michaeldelle.com
