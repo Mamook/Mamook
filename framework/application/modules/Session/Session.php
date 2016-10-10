@@ -129,20 +129,28 @@ class Session
 	/*** mutator methods ***/
 
 	/**
-	 * getInstance
+	 * setMessage
 	 *
-	 * Gets the singleton instance of this class.
+	 * Sets the data member $message. If an empty value is passed, the data member will
+	 * be set with FALSE. Returns the set data member value.
 	 *
-	 * @access    public
+	 * @param		$message
+	 * @access	private
 	 */
-	public static function getInstance($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
+	private function setMessage($message)
 	{
-		if(!self::$session)
+		# Clean it up...
+		$message=trim($message);
+		# Check if the passed value is now empty.
+		if(empty($message))
 		{
-			self::$session=new Session($sessname, $cookiepath, $secure, $sesh_id);
+			# Explicitly set the data member to false.
+			$message=FALSE;
 		}
-
-		return self::$session;
+		# Set the data member.
+		$this->message=$message;
+		# Return the data member after it has gone through the get method.
+		return $this->getMessage();
 	}
 
 	/**
@@ -208,10 +216,12 @@ class Session
 	 *
 	 * Checks to see if cookies are enabled. Returns TRUE if they are, FALSE if they aren't.
 	 *
+	 * @param		$js			Tell Javascript to check for cookies. Only works in conjunction with Document::addJSErrorBox().
+	 *									Default is FALSE. (This property is still here to support backward compatibility in calls)
 	 * @access public
 	 * @return bool
 	 */
-	public function checkCookies()
+	public function checkCookies($js=FALSE)
 	{
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
@@ -243,6 +253,23 @@ class Session
 				return FALSE;
 			}
 		}
+	}
+
+	/**
+	 * getInstance
+	 *
+	 * Gets the singleton instance of this class.
+	 *
+	 * @access    public
+	 */
+	public static function getInstance($sessname=NULL, $cookiepath=NULL, $secure=FALSE, $sesh_id=NULL)
+	{
+		if(!self::$session)
+		{
+			self::$session=new Session($sessname, $cookiepath, $secure, $sesh_id);
+		}
+
+		return self::$session;
 	}
 
 	/**
@@ -351,7 +378,11 @@ class Session
 			)
 			{
 				# Set the page to a variable.
-				$post_login=WebUtility::removeIndex(FULL_DOMAIN.HERE).GET_QUERY;
+				$post_login=WebUtility::removeIndex(PROTOCAL.FULL_DOMAIN.HERE).GET_QUERY;
+			}
+			elseif(isset($_SESSION['_post_login']) && !empty($_SESSION['_post_login']))
+			{
+				$post_login=$_SESSION['_post_login'];
 			}
 		}
 
@@ -362,32 +393,6 @@ class Session
 	/*** End public methods ***/
 
 	/*** private methods ***/
-
-	/**
-	 * setMessage
-	 *
-	 * Sets the data member $message. If an empty value is passed, the data member will
-	 * be set with FALSE. Returns the set data member value.
-	 *
-	 * @param $message
-	 * @return bool
-	 */
-	private function setMessage($message)
-	{
-		# Clean it up...
-		$message=trim($message);
-		# Check if the passed value is now empty.
-		if(empty($message))
-		{
-			# Explicitly set the data member to false.
-			$message=FALSE;
-		}
-		# Set the data member.
-		$this->message=$message;
-
-		# Return the data member after it has gone through the get method.
-		return $this->getMessage();
-	}
 
 	/**
 	 * captureMessage
