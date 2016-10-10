@@ -1,6 +1,7 @@
 # Ignore these file(s)
 # Global
 *.DS_Store
+*.idea
 
 # Bodega
 bodega/**
