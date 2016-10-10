@@ -1,4 +1,4 @@
-# TheFramework
+# Mamook
 An out-of-date framework that needs to be modernized :)
 
 # About
