@@ -34,3 +34,6 @@ tmp/**
 
 # Cache
 !cache/screenshots
+/vendor/
+
+.env
