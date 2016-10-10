@@ -1,3 +1,10 @@
+Version v3.0.0
+ * Added Composer
+ * Added Composer Autoloader
+ * Added Composer.json
+ * Added PHPUnit
+ * Added Config folder
+
 Version v2.18.0:
  * Bumped version to 2.18.0 (Michael Delle)
  * Update YouTube's thumbnail (Michael Delle)

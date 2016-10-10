@@ -1,6 +1,7 @@
 # Ignore these file(s)
 # Global
 *.DS_Store
+.idea/
 
 # Bodega
 bodega/**
@@ -34,3 +35,6 @@ tmp/**
 
 # Cache
 !cache/screenshots
+/vendor/
+
+.env
