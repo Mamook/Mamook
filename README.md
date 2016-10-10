@@ -9,3 +9,7 @@ There's only two of us working on this framework so it has fallen very behind cu
 [**ToDo**] (https://github.com/Draven714/TheFramework/wiki/ToDo)
 
 [**Install Instructions**] (https://github.com/Draven714/TheFramework/blob/master/dev/install_instructions.txt)
+
+# License
+
+The Mamook framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
