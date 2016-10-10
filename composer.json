@@ -1,36 +1,45 @@
 {
-    "name": "mamook/framework",
-    "description": "mvc style php framework",
-    "type": "framework",
-    "require-dev": {
-        "phpunit/phpunit": "^5.6"
-    },
-    "license": "mit",
+    "name": "mamook/mamook",
+    "description": "PHP Framework/CMS",
+    "type": "project",
+    "license": "MIT",
     "minimum-stability": "stable",
     "require": {
-        "symfony/yaml": "^3.1",
-        "symfony/console": "^3.1",
-        "league/route": "^2.0",
-        "monolog/monolog": "^1.21",
-        "doctrine/orm": "^2.5",
-        "nesbot/carbon": "^1.21",
-        "vlucas/phpdotenv": "^2.4",
-        "ramsey/uuid": "^3.5",
-        "guzzlehttp/guzzle": "~5.3|~6.0"
+        "php": ">=5.6.24",
+        "ext-mbstring": "*",
+        "league/route": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Mamook\\Framework\\": "src/"
-        }
+            "Mamook\\": [
+              "framework/application/modules/", "application/modules/"
+            ]
+        },
+        "files": [
+          "settings.php",
+          "routes.php"
+        ]
+    },
+    "require-dev": {
+      "phpunit/phpunit": "^5.6"
     },
     "autoload-dev": {
         "psr-4": {
-            "Mamook\\Framework\\Tests\\": "tests/"
+            "Mamook\\Test\\": "tests/"
         }
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r \"copy('.env.example', '.env');\""
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "pre-update-cmd": [
+            "php -r \"file_exists('settings.php') || copy('settings.php.sample', 'settings.php');\"",
+            "php -r \"file_exists('data/API_definitions.php') || copy('data/API_definitions.php.sample', 'data/API_definitions.php');\"",
+            "php -r \"file_exists('data/database_definitions.php') || copy('data/database_definitions.php.sample', 'data/database_definitions.php');\"",
+            "php -r \"file_exists('data/email_definitions.php') || copy('data/email_definitions.php.sample', 'data/email_definitions.php');\"",
+            "php -r \"file_exists('data/formmail.ini') || copy('data/formmail.ini.sample', 'data/formmail.ini');\"",
+            "php -r \"file_exists('data/init.php') || copy('data/init.php.sample', 'data/init.php');\"",
+            "php -r \"file_exists('data/user_privileges.php') || copy('data/user_privileges.php.sample', 'data/user_privileges.php');\""
         ]
     }
 }
