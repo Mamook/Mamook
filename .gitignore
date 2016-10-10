@@ -1,7 +1,12 @@
 # Ignore these file(s)
 # Global
 *.DS_Store
+
+# Root
+.env
 .idea/
+composer.lock
+/vendor
 
 # Bodega
 bodega/**
@@ -35,6 +40,3 @@ tmp/**
 
 # Cache
 !cache/screenshots
-/vendor/
-
-.env
