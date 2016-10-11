@@ -29,10 +29,8 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
         "pre-update-cmd": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "php -r \"file_exists('settings.php') || copy('settings.php.sample', 'settings.php');\"",
             "php -r \"file_exists('data/API_definitions.php') || copy('data/API_definitions.php.sample', 'data/API_definitions.php');\"",
             "php -r \"file_exists('data/database_definitions.php') || copy('data/database_definitions.php.sample', 'data/database_definitions.php');\"",
