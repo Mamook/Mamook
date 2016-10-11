@@ -32,19 +32,58 @@ require DATA_FILES.'path_definitions.php';
 # Define the complete path to the root of the domain we are at (ie. /hsphere/home/user/domain.com) (does't end in a slash)
 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT']);
 
-# Extrapolate the domain name (ie. sub.domain.com)
-$fulldomain=$_SERVER['SERVER_NAME'];
-# Force lowercase.
-$fulldomain=strtolower($fulldomain);
-# Define the full domain name (ie. sub.domain.com/)-(ends with a slash)
-define('FULL_DOMAIN', $fulldomain.'/');
+# Only find this page's content if this is not being run in a command line script.
+if(PHP_SAPI!='cli')
+{
+    # Extrapolate the domain name (ie. sub.domain.com)
+    $fulldomain=$_SERVER['SERVER_NAME'];
+    # Force lowercase.
+    $fulldomain=strtolower($fulldomain);
+    # Define the full domain name (ie. sub.domain.com/)-(ends with a slash)
+    define('FULL_DOMAIN', $fulldomain.'/');
 
-# Create array and fill with sub-domains (ie. www., admin., www.admin.)
-$dn_prefixes=array('www.');
-# Remove sub domain.
-$domain=str_replace($dn_prefixes, '', $fulldomain);
-# The domain name that we use (ie. domain.com) (does not end with a slash)
-define('DOMAIN_NAME', $domain);
+    # Create array and fill with sub-domains (ie. www., admin., www.admin.)
+    $dn_prefixes=array('www.');
+    # Remove sub domain.
+    $domain=str_replace($dn_prefixes, '', $fulldomain);
+    # The domain name that we use (ie. domain.com) (does not end with a slash)
+    define('DOMAIN_NAME', $domain);
+
+    # Define the url that points to our application. (ends with a slash)
+    define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+
+    # Extrapolate the sub-domain we are at (ie. store)
+    $subdomain=preg_replace('/^(?:([^\.]+)\.)?'.DOMAIN_NAME.'$/', '\1', $fulldomain);
+    # Define the sub-domain we are at  (ie. store).
+    define('SUB_DOMAIN', $subdomain);
+
+    # Define the rest of the URL where we are at. (ie. folder/file.php)
+    define('HERE', ltrim($_SERVER['PHP_SELF'], '/'));
+
+    # Check if there is a GET query attached to the url we are at and define it as a constant.
+    define('GET_QUERY', ((!empty($_SERVER['QUERY_STRING'])) ? '?'.$_SERVER['QUERY_STRING'] : ''));
+
+    # Define the complete URL where we are at. (ie subdomain.example.com/file.php?data=1)
+    define('FULL_URL', FULL_DOMAIN.HERE.GET_QUERY);
+
+    # Define the name of the page we are at (ie. file.php)
+    $filenamearray=explode('/', HERE);
+    define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
+
+    # Define SECURE_HERE as the rest of the URL when we are at a secure connection. (ie. folder/file.php)
+    define('SECURE_HERE', substr(HERE, 7));
+
+    # The complete url with scheme. (ends with a slash ie https://secure.domain.com/)
+    define('COMPLETE_URL', PROTOCAL.FULL_URL);
+}
+else
+{
+    # The domain name that we use (ie. domain.com) (does not end with a slash)
+    define('DOMAIN_NAME', 'jamtheforce.com');
+
+    # Define the url that points to our application. (ends with a slash)
+    define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+}
 
 # The domain name of the developement application. (doesn't end with a slash)
 define('DEVELOPMENT_DOMAIN', 'jamtheforce.dev');
@@ -80,29 +119,8 @@ else
 	define('RUN_ON_STAGING', FALSE);
 }
 
-# Define the url that points to our application. (ends with a slash)
-define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
-
 # The url to the downloads folder. (ends with a slash)
 define('DOWNLOADS', APPLICATION_URL.'download/');
-
-# Extrapolate the sub-domain we are at (ie. store)
-$subdomain=preg_replace('/^(?:([^\.]+)\.)?'.DOMAIN_NAME.'$/', '\1', $fulldomain);
-# Define the sub-domain we are at  (ie. store).
-define('SUB_DOMAIN', $subdomain);
-
-# Define the rest of the URL where we are at. (ie. folder/file.php)
-define('HERE', ltrim($_SERVER['PHP_SELF'], '/'));
-
-# Check if there is a GET query attached to the url we are at and define it as a constant.
-define('GET_QUERY', ((!empty($_SERVER['QUERY_STRING'])) ? '?'.$_SERVER['QUERY_STRING'] : ''));
-
-# Define the complete URL where we are at. (ie subdomain.example.com/file.php?data=1)
-define('FULL_URL', FULL_DOMAIN.HERE.GET_QUERY);
-
-# Define the name of the page we are at (ie. file.php)
-$filenamearray=explode('/', HERE);
-define('CURRENT_PAGE', $filenamearray[count($filenamearray)-1]);
 
 # Define the timezone.
 define('TIMEZONE', 'US/Pacific');
@@ -165,9 +183,6 @@ else
 	define('DEBUG_APP', FALSE);
 }
 
-# Define SECURE_HERE as the rest of the URL when we are at a secure connection. (ie. folder/file.php)
-define('SECURE_HERE', substr(HERE, 7));
-
 # The port the server is using for ssl. (default is 443)
 define('SECURE_PORT', '443');
 
@@ -178,9 +193,6 @@ $validator=Validator::getInstance();
 
 # The url to the ssl secure images folder. (ends with a slash)
 define('IMAGES', (($validator->isSSL()===TRUE) ? SECURE_URL.'images/' : APPLICATION_URL.'images/'));
-
-# The complete url with scheme. (ends with a slash ie https://secure.domain.com/)
-define('COMPLETE_URL', PROTOCAL.FULL_URL);
 
 # Define where the scripts/ directory is (ie. http://domain.com/scripts/) (ends with a slash)
 define('SCRIPTS', (($validator->isSSL()===TRUE) ? SECURE_URL.'scripts/' : APPLICATION_URL.'scripts/'));
