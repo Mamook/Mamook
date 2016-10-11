@@ -3,25 +3,22 @@ language: php
 php:
   - 5.5
   - 5.6
-  - 7.0
-  - 7.1
 
 services:
   - mysql
 
 dist: trusty
 
-sudo: required
+sudo: false
 
-env:
-  matrix:
-    - DB=mysql db_dsn='mysql://root@0.0.0.0/mamook_test'
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 before_install:
-  - mysql -e "create database IF NOT EXISTS mamook_test;" -uroot
+  - sudo apt-get -y install mysql-server;
+  - mysql -u root -e 'CREATE DATABASE mamook_test;';
 
 before_script:
   - composer install --prefer-dist --no-interaction
-
-notifications:
-  email: false
