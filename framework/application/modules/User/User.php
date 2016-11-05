@@ -165,6 +165,16 @@ class User
 	}
 
 	/**
+	 * Sets the data member $all_users.
+	 *
+	 * @param array $all_users
+	 */
+	protected function setAllUsers($all_users)
+	{
+		$this->all_users=$all_users;
+	}
+
+	/**
 	 * Sets the data member $bio.
 	 *
 	 * @param string $bio The User's biographical information.
@@ -433,6 +443,28 @@ class User
 		}
 		# Set the data member.
 		$this->interests=$interests;
+	}
+
+	/**
+	 * Sets the data member $ip.
+	 *
+	 * @param string $ip
+	 */
+	protected function setIP($ip)
+	{
+		# Check if the passed value is empty.
+		if(!empty($ip))
+		{
+			# Clean it up.
+			$ip=trim($ip);
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$ip=NULL;
+		}
+		# Set the data member.
+		$this->ip=$ip;
 	}
 
 	/**
@@ -740,6 +772,42 @@ class User
 	}
 
 	/**
+	 * Sets the data member $staff_id.
+	 *
+	 * @param int $staff_id The User's Staff ID number.
+	 * @throws Exception
+	 */
+	protected function setStaffID($staff_id)
+	{
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		# Check if the value is empty.
+		if(!empty($staff_id))
+		{
+			# Clean it up.
+			$staff_id=trim($staff_id);
+			# Make sure the staff id is an integer.
+			if($validator->isInt($staff_id)===TRUE)
+			{
+				# Explicitly make it an integer.
+				$staff_id=(int)$staff_id;
+			}
+			else
+			{
+				throw new Exception('The staff id passed was not a number!', E_RECOVERABLE_ERROR);
+			}
+		}
+		else
+		{
+			# Explicitly set it to NULL.
+			$staff_id=NULL;
+		}
+		# Set the data member.
+		$this->staff_id=$staff_id;
+	}
+
+	/**
 	 * Sets the data member $state.
 	 *
 	 * @param string $state The User's state.
@@ -907,6 +975,12 @@ class User
 		$this->zipcode=$zipcode;
 	}
 
+	/*** End mutator methods ***/
+
+
+
+	/*** accessor methods ***/
+
 	/**
 	 * Returns the data member $active.
 	 * Throws an error on failure.
@@ -931,12 +1005,6 @@ class User
 	{
 		return $this->address2;
 	}
-
-	/*** End mutator methods ***/
-
-
-
-	/*** accessor methods ***/
 
 	/**
 	 * Returns the data member $all_subscriptions.
@@ -1231,6 +1299,12 @@ class User
 		return $this->zipcode;
 	}
 
+	/*** End accessor methods ***/
+
+
+
+	/*** public methods ***/
+
 	/**
 	 * Captures post(after) login data sent from the previous page.
 	 */
@@ -1360,10 +1434,6 @@ class User
 			$doc->redirect(REDIRECT_AFTER_LOGIN);
 		}
 	}
-
-	/*** End accessor methods ***/
-
-	/*** public methods ***/
 
 	/**
 	 * Performs a check to determine if one parameter is unique in the Database.
@@ -3346,7 +3416,8 @@ class User
 			case 'nozero':
 				switch($type)
 				{
-					case 'alnum'    :
+					default:
+					case 'alnum':
 						$pool='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 						break;
 					case 'numeric':
@@ -3368,6 +3439,121 @@ class User
 			case 'unique':
 				return md5(uniqid(mt_rand()));
 				break;
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Activates new user account.
+	 */
+	public function activateAccount()
+	{
+		# Set the Document instance to a variable.
+		$doc=Document::getInstance();
+		# Set the Database instance to a variable.
+		$db=DB::get_instance();
+		# Set the Validator instance to a variable.
+		$validator=Validator::getInstance();
+
+		if($this->isLoggedIn()===TRUE)
+		{
+			$doc->redirect(REDIRECT_AFTER_LOGIN);
+		}
+
+		# Check if there is GET Data and that we have valid ID and random key.
+		if(
+			(strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
+			!empty($_GET['ID']) &&
+			($validator->isNumber($_GET['ID'])==TRUE) &&
+			(
+				isset($_GET['key']) &&
+				(strlen($_GET['key'])==32) &&
+				($validator->isAlphanum($_GET['key'])==TRUE)
+			)
+		)
+		{
+			$id=(int)$_GET['ID'];
+			# Get user data from the DB
+			$username=$this->findUsername($id);
+			if($this->findUserData($username)!==FALSE)
+			{
+				try
+				{
+					$row=$db->get_row('SELECT `random` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+				}
+				catch(ezDB_Error $ez)
+				{
+					throw new Exception('There was an error retrieving the "random" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
+					Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+				}
+				if($row!==NULL)
+				{
+					# Does the random key sent match the one we have in the DB?
+					if($row->random!=$_GET['key'])
+					{
+						$validator->setError('The confirmation key that was generated for this account does not match with the one entered!');
+						$doc->redirect(DEFAULT_REDIRECT);
+						exit;
+					}
+					# Does the user have "inactive" status (0)?
+					elseif(($this->getActive()===0))
+					{
+						try
+						{
+							# Update user status to "active" (1)
+							$db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+							# Do we send them somewhere else after confirming them?
+							if(REDIRECT_AFTER_CONFIRMATION==TRUE)
+							{
+								# Log the user in.
+								$this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
+								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+								You are now signed in and ready to enjoy the site.<br />
+								Being signed in allows you to access special content and downloads!';
+								$doc->redirect(REDIRECT_AFTER_LOGIN);
+							}
+							# They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
+							else
+							{
+								$_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+								You may now sign in and enjoy the site.<br />
+								Being signed in allows you to access special content and downloads!';
+								$doc->redirect(REDIRECT_TO_LOGIN);
+							}
+						}
+						catch(ezDB_Error $ez)
+						{
+							throw new Exception('There was an error activating '.$username.'\'s account in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+						}
+						catch(Exception $e)
+						{
+							throw $e;
+						}
+					}
+					elseif($this->getActive()===1)
+					{
+						$_SESSION['message']='You have already been confirmed!<br />
+						All you need to do is sign in.';
+						$doc->redirect(REDIRECT_TO_LOGIN);
+					}
+				}
+				else
+				{
+					$_SESSION['message']='User not found!';
+					$doc->redirect(DEFAULT_REDIRECT);
+				}
+			}
+			else
+			{
+				$_SESSION['message']='User not found!';
+				$doc->redirect(DEFAULT_REDIRECT);
+			}
+		}
+		else
+		{
+			$_SESSION['message']='There was an error processing your activation. Please copy the the activation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
+			$doc->redirect(DEFAULT_REDIRECT);
 		}
 	}
 
@@ -3697,37 +3883,11 @@ class User
 		}
 	}
 
-	/**
-	 * Sets the data member $all_users.
-	 *
-	 * @param array $all_users
-	 */
-	protected function setAllUsers($all_users)
-	{
-		$this->all_users=$all_users;
-	}
+	/*** End public methods ***/
 
-	/**
-	 * Sets the data member $ip.
-	 *
-	 * @param string $ip
-	 */
-	protected function setIP($ip)
-	{
-		# Check if the passed value is empty.
-		if(!empty($ip))
-		{
-			# Clean it up.
-			$ip=trim($ip);
-		}
-		else
-		{
-			# Explicitly set it to NULL.
-			$ip=NULL;
-		}
-		# Set the data member.
-		$this->ip=$ip;
-	}
+
+
+	/*** protected methods ***/
 
 	/**
 	 * Deletes the user from the user_inactive table.
@@ -3767,42 +3927,6 @@ class User
 	}
 
 	/**
-	 * Sets the data member $staff_id.
-	 *
-	 * @param int $staff_id The User's Staff ID number.
-	 * @throws Exception
-	 */
-	protected function setStaffID($staff_id)
-	{
-		# Set the Validator instance to a variable.
-		$validator=Validator::getInstance();
-
-		# Check if the value is empty.
-		if(!empty($staff_id))
-		{
-			# Clean it up.
-			$staff_id=trim($staff_id);
-			# Make sure the staff id is an integer.
-			if($validator->isInt($staff_id)===TRUE)
-			{
-				# Explicitly make it an integer.
-				$staff_id=(int)$staff_id;
-			}
-			else
-			{
-				throw new Exception('The staff id passed was not a number!', E_RECOVERABLE_ERROR);
-			}
-		}
-		else
-		{
-			# Explicitly set it to NULL.
-			$staff_id=NULL;
-		}
-		# Set the data member.
-		$this->staff_id=$staff_id;
-	}
-
-	/**
 	 * Will try to determine if a given ip is valid or not.
 	 * A wrapper method for the ipValid method from the Validator class.
 	 *
@@ -3824,6 +3948,8 @@ class User
 	}
 
 	/*** End protected methods ***/
+
+
 
 	/*** private methods ***/
 
@@ -3913,5 +4039,6 @@ class User
 		# Return the password (for backwards compatibility).
 		return $this->getWPPassword();
 	}
-	/*** End protected methods ***/
+
+	/*** End private methods ***/
 }
