@@ -1,7 +1,10 @@
 <?php /* framework/application/modules/API/FacebookAPI.php */
 
 # Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
+if(!defined('BASE_PATH'))
+{
+	exit('No direct script access allowed');
+}
 
 /**
  * FacebookAPI
@@ -22,12 +25,9 @@ class FacebookAPI
 	/*** mutator methods ***/
 
 	/**
-	 * setFacebookObj
-	 *
 	 * Sets the data member $facebook_obj.
 	 *
-	 * @param	obj $facebook_obj
-	 * @access	public
+	 * @param    object $facebook_obj
 	 */
 	public function setFacebookObj($facebook_obj)
 	{
@@ -42,7 +42,7 @@ class FacebookAPI
 			# Explicitly set the data member to NULL.
 			$this->facebook_obj=NULL;
 		}
-	} #==== End -- setFacebookObj
+	}
 
 	/*** End mutator methods ***/
 
@@ -51,16 +51,12 @@ class FacebookAPI
 	/*** accessor methods ***/
 
 	/**
-	 * getFacebookObj
-	 *
 	 * Returns the data member $facebook_obj.
-	 *
-	 * @access	private
 	 */
 	private function getFacebookObj()
 	{
 		return $this->facebook_obj;
-	} #==== End -- getFacebookObj
+	}
 
 	/*** End accessor methods ***/
 
@@ -69,12 +65,7 @@ class FacebookAPI
 	/*** magic methods ***/
 
 	/**
-	 * __contruct
-	 *
 	 * Loads the Facebook PHP library and instantiates it.
-	 *
-	 * @access	public
-	 * @return	object
 	 */
 	public function __construct()
 	{
@@ -92,8 +83,9 @@ class FacebookAPI
 			]);
 			$this->setFacebookObj($facebook_obj);
 		}
+
 		return $this->getFacebookObj();
-	} #==== End -- __construct
+	}
 
 	/*** End magic methods ***/
 
@@ -102,12 +94,11 @@ class FacebookAPI
 	/*** public methods ***/
 
 	/**
-	 * getFeed
-	 *
 	 * Gets Facebook feeds.
 	 *
-	 * @param	$limit
-	 * @access	public
+	 * @param int $limit
+	 * @return array|mixed|object
+	 * @throws Exception
 	 */
 	public function getFeed($limit=20)
 	{
@@ -115,6 +106,7 @@ class FacebookAPI
 		{
 			$response=$this->getFacebookObj()->get('/me/posts?fields=caption,created_time,id,link,name,message,picture,status_type,story'.(!empty($limit) ? '&limit='.$limit : ''));
 			$json_response=$response->getGraphEdge();
+
 			# Return the JSON Decoded response (returns an array).
 			return json_decode($json_response);
 		}
@@ -130,21 +122,19 @@ class FacebookAPI
 		{
 			throw $e;
 		}
-	} #==== End -- getFeed
+	}
 
 	/**
-	 * post
-	 *
 	 * Wrapper function for the Facebook API.
 	 * Posts content to Facebook.
 	 *
-	 * @param	array $data				Array of data to post on Facebook.
-	 *										Example:
-	 * 											$data=array(
-	 *												'link'=>'http://www.example.com',
-	 *												'message'=>'User provided message',
-	 *											);
-	 * @access	public
+	 * @param    array $data                          Array of data to post on Facebook.
+	 *                                                Example:
+	 *                                                $data=array(
+	 *                                                'link'=>'http://www.example.com',
+	 *                                                'message'=>'User provided message',
+	 *                                                );
+	 * @throws Exception
 	 */
 	public function post($data)
 	{
@@ -164,8 +154,7 @@ class FacebookAPI
 		{
 			throw $e;
 		}
-	} #==== End -- post
+	}
 
 	/*** End public methods ***/
-
-} #=== End FacebookAPI class.
+}
