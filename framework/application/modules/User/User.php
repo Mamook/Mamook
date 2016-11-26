@@ -1818,53 +1818,53 @@ class User
             $this->deleteInactiveUser($id);
 
             # check if there is a WordPress installation.
-            if(WP_INSTALLED===TRUE)
-            {
-                # Get the WordPressUser class.
-                require Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
-                # Instantiate a new WordPressUser object.
-                $wp_obj=new WordPressUser();
-
-                if($validator->isInt($id)===TRUE)
-                {
-                    # NOTE BY DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
-                    # Find the User ID for "Unknown User" and set it to a variable.
-                    //$unknown_id=$this->findUserID('unknown');
-                    # Delete the User from the WordPress installation and reassign their posts to "Unknown User".
-                    //$wp_obj->deleteWP_User($id, $unknown_id);
-
-                    # Get user's username.
-                    $username=$this->findUsername($id);
-                    # Get user's WP ID.
-                    $wp_id=$wp_obj->getWP_UserID($username);
-                    # Delete the User from the WordPress installation.
-                    $wp_obj->deleteWP_User($wp_id);
-                }
-                else
-                {
-                    # Loop through the users.
-                    foreach($id as $key=>$user_id)
-                    {
-                        # Get user's username.
-                        $username=$this->findUsername($user_id);
-                        # Get user's WP ID.
-                        $wp_id=$wp_obj->getWP_UserID($username);
-                        # If the user exists in the Wordpress users table.
-                        if($wp_id!==NULL)
-                        {
-                            # Change the `users` ID in the $id array to the Wordpress ID.
-                            $id[$key]=$wp_id;
-                        }
-                        else
-                        {
-                            # User does not exist in Wordpress so unset the array element.
-                            unset($id[$key]);
-                        }
-                    }
-                    # Delete the User from the WordPress installation.
-                    $wp_obj->deleteWP_User($id);
-                }
-            }
+//             if(WP_INSTALLED===TRUE)
+//             {
+//                 # Get the WordPressUser class.
+//                 require Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+//                 # Instantiate a new WordPressUser object.
+//                 $wp_obj=new WordPressUser();
+//
+//                 if($validator->isInt($id)===TRUE)
+//                 {
+//                     # NOTE BY DRAVEN: Why reassign? If the user is not found then their display name should be "Unknown User".
+//                     # Find the User ID for "Unknown User" and set it to a variable.
+//                     //$unknown_id=$this->findUserID('unknown');
+//                     # Delete the User from the WordPress installation and reassign their posts to "Unknown User".
+//                     //$wp_obj->deleteWP_User($id, $unknown_id);
+//
+//                     # Get user's username.
+//                     $username=$this->findUsername($id);
+//                     # Get user's WP ID.
+//                     $wp_id=$wp_obj->getWP_UserID($username);
+//                     # Delete the User from the WordPress installation.
+//                     $wp_obj->deleteWP_User($wp_id);
+//                 }
+//                 else
+//                 {
+//                     # Loop through the users.
+//                     foreach($id as $key=>$user_id)
+//                     {
+//                         # Get user's username.
+//                         $username=$this->findUsername($user_id);
+//                         # Get user's WP ID.
+//                         $wp_id=$wp_obj->getWP_UserID($username);
+//                         # If the user exists in the Wordpress users table.
+//                         if($wp_id!==NULL)
+//                         {
+//                             # Change the `users` ID in the $id array to the Wordpress ID.
+//                             $id[$key]=$wp_id;
+//                         }
+//                         else
+//                         {
+//                             # User does not exist in Wordpress so unset the array element.
+//                             unset($id[$key]);
+//                         }
+//                     }
+//                     # Delete the User from the WordPress installation.
+//                     $wp_obj->deleteWP_User($id);
+//                 }
+//             }
 
             if(isset($where))
             {
