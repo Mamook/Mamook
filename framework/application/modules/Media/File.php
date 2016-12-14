@@ -340,7 +340,7 @@ class File extends Media
 		try
 		{
 			# Set a default variable for the "WHERE" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
-			$where_statement=NULL;
+			$where_statement='`availability` = 1';
 			# Check if the logged in User is a Managing User.
 			if($login->checkAccess(MAN_USERS)===TRUE)
 			{
@@ -351,7 +351,7 @@ class File extends Media
 			if($login->checkAccess(ADMIN_USERS)===TRUE)
 			{
 				# Set a variable for the "WHERE" portion of the sql statement.
-				$where_statement='`availability` = 1';
+				$where_statement='(`availability` = 0 || `availability` = 1 || `availability` = 2 || `availability` = 3)';
 			}
 			# Count the returned files.
 			$content_count=$this->countAllFiles(NULL, $where_statement);
