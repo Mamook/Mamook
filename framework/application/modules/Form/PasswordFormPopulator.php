@@ -199,7 +199,6 @@ class PasswordFormPopulator extends FormPopulator
                     # Clean it up and set it to the data array index.
                     $data['PasswordConfirmed']=$db->sanitize($_POST['password_confirmed']);
                 }
-
                 # Check if there was POST data sent.
                 if(isset($_POST['email_password']) && $_POST['email_password']=='checked')
                 {

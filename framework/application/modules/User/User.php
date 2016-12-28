@@ -3528,6 +3528,7 @@ class User
             # Set the Database instance to a variable.
             $db=DB::get_instance();
             $email=$db->sanitize($email, 2);
+
             $row=$db->get_row('SELECT `password`, `display`, `username` FROM '.DBPREFIX.'users WHERE `email` = '.$db->quote($db->escape($email)).' LIMIT 1');
             if($row!==NULL)
             {
@@ -3535,10 +3536,9 @@ class User
                 $encrypt=new Encryption(MYKEY);
                 $password=$encrypt->deCodeIt($row->password);
                 $email_type='activation';
-                $redirect=TRUE;
+                $redirect=REDIRECT_TO_LOGIN;
                 # Send the confirmation email.
                 $subject="Important email from ".DOMAIN_NAME;
-                $to_address=trim($_POST['email']);
                 $message=$row->display.','."<br />\n<br />\n".
                     'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
                     'You have received this email because this email address was used during registration for our site.'."<br />\n".
@@ -3551,7 +3551,7 @@ class User
                 {
                     $message.='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
                     $email_type='password';
-                    $redirect=FALSE;;
+                    $redirect=REDIRECT_AFTER_LOGIN;
                 }
                 else
                 {
@@ -3563,22 +3563,14 @@ class User
                 $message.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
                 try
                 {
-                    $doc->sendEmail($subject, $to_address, $message);
+                    $doc->sendEmail($subject, $email, $message);
                 }
                 catch(Exception $e)
                 {
                     $session_message='I couldn\'t send the '.$email_type.' email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
                 }
-                # Check if there is already a sessioin message.
-                if(isset($_SESSION['message']))
-                {
-                    $session_message=$_SESSION['message'].'<br />'.$session_message;
-                }
                 $_SESSION['message']=$session_message;
-                if($redirect===TRUE)
-                {
-                    $doc->redirect(REDIRECT_TO_LOGIN);
-                }
+                $doc->redirect($redirect);
             }
             else
             {
@@ -3613,12 +3605,11 @@ class User
             {
                 # Set email subject to a variable.
                 $subject="Activation email from ".DOMAIN_NAME;
-                $to_address=trim($email);
                 # Set email body to a variable.
                 $message=$row->username.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'------------------------------------------------'."<br />\n".' Activation Instructions'."<br />\n".'------------------------------------------------'."<br />\n<br />\n".'Thank you for registering.'."<br />\n".'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".'To activate your account, simply click on the following link:'."<br />\n<br />\n".'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
                 try
                 {
-                    $doc->sendEmail($subject, $to_address, $message);
+                    $doc->sendEmail($subject, $email, $message);
                     $_SESSION['message']=(($new_account!==FALSE) ? 'Account created. ' : '').'Please check your email for details on how to activate it. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there. After your account is activated, you may sign in to the '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
                 }
                 catch(Exception $e)
@@ -3733,7 +3724,6 @@ class User
         }
         # Get the Username.
         $username=$this->findUsername($id);
-
         # If WordPress is installed add the user the the WordPress users table.
         if(WP_INSTALLED===TRUE)
         {

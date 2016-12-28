@@ -59,7 +59,7 @@ class WordPressUser extends User
      *
      * @param string $wp_password The User's encoded password.
      */
-    public function setWPPassword($wp_password)
+    public function setWP_Password($wp_password)
     {
         # Check if the value is empty.
         if(!empty($wp_password))
@@ -101,7 +101,7 @@ class WordPressUser extends User
     /**
      * Returns the data member $wp_password.
      */
-    public function getWPPassword()
+    public function getWP_Password()
     {
         return $this->wp_password;
     }
@@ -109,6 +109,60 @@ class WordPressUser extends User
     /*** End accessor methods ***/
 
     /*** public methods ***/
+
+    /**
+     * Clears the WordPress cookies
+     */
+    public function clearWP_Cookies()
+    {
+        # Unset cookies
+        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
+        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
+        setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(LOGGED_IN_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(LOGGED_IN_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
+
+        # Old cookies
+        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
+
+        # Even older cookies
+        setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(USER_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(PASS_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(USER_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
+        setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
+        setcookie(PASS_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
+
+        # Settings and Test Cookies
+        setcookie('wp-settings-1', '', time()-LOGIN_LIFE);
+        setcookie('wp-settings-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
+        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
+        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
+        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie('settings', '', time()-LOGIN_LIFE);
+        setcookie('settings', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
+        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
+        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
+        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
+        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
+    }
 
     /**
      * Creates a WordPress user in the WordPress Database tables.
@@ -132,7 +186,7 @@ class WordPressUser extends User
 		# Unencrypt the password so that it may be re-encrypted for WordPress.
 		$unencrypted_password=$encrypt->deCodeIt($encrypted_password);
         # Format the password and set it to a local variable.
-        $wp_password=$this->encodeWP_Password($unencrypted_password));
+        $wp_password=$this->encodeWP_Password($unencrypted_password);
 
         try
         {
@@ -315,6 +369,27 @@ class WordPressUser extends User
     */
 
     /**
+     * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
+     *
+     * @param   string  $wp_password The password to encode.
+     * @return  null
+     */
+    public function encodeWP_Password($wp_password)
+    {
+        # Get the PasswordHash Class.
+        require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
+        # Instantiate a PasswordHash object
+        $hasher=new PasswordHash(8, TRUE);
+        # Format the password.
+        $wp_password=$hasher->HashPassword($wp_password);
+        # Set the formatted password.
+        $this->setWP_Password($wp_password);
+
+        # Return the password (for backwards compatibility).
+        return $this->getWP_Password();
+    }
+
+    /**
      * Retrieves the User's WordPress nickname via WordPRess ID. Throws an error on failure.
      *
      * @param    $user_WP_id                The User's WordPress ID.
@@ -354,7 +429,7 @@ class WordPressUser extends User
      * @return
      * @throws ezDB_Error
      */
-    public function getWP_Password($user_WP_id)
+    public function retrieveWP_Password($user_WP_id)
     {
         # Set the Database instance to a variable.
         $db=DB::get_instance();
@@ -579,83 +654,4 @@ class WordPressUser extends User
     }
 
     /*** End public methods ***/
-
-    /*** private methods ***/
-
-    /**
-     * Clears the WordPress cookies
-     */
-    private function clearWP_Cookies()
-    {
-        # Unset cookies
-        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-        setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(LOGGED_IN_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(LOGGED_IN_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-        # Old cookies
-        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-        # Even older cookies
-        setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(USER_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(PASS_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(USER_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-        setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-        setcookie(PASS_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-        # Settings and Test Cookies
-        setcookie('wp-settings-1', '', time()-LOGIN_LIFE);
-        setcookie('wp-settings-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-        setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie('settings', '', time()-LOGIN_LIFE);
-        setcookie('settings', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-        setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-    }
-
-    /**
-     * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
-     *
-     * @param   string  $wp_password The password to encode.
-     * @return  null
-     */
-    private function encodeWP_Password($wp_password)
-    {
-        # Get the PasswordHash Class.
-        require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
-        # Instantiate a PasswordHash object
-        $hasher=new PasswordHash(8, TRUE);
-        # Format the password.
-        $wp_password=$hasher->HashPassword($wp_password);
-        # Set the formatted password.
-        $this->setWPPassword($wp_password);
-
-        # Return the password (for backwards compatibility).
-        return $this->getWPPassword();
-    }
-
-    /*** End private methods ***/
 }

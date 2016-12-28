@@ -90,7 +90,7 @@ class PasswordFormProcessor extends FormProcessor
                 # Validate that the password and password confirmation matches.
                 if(($empty_password===FALSE)&&($empty_password_conf===FALSE))
                 {
-                    if($password!=$password_conf)
+                    if($password!=$password_confirmed)
                     {
                         $fv->setErrors('The passwords you entered did not match. Please try again.');
                     }
@@ -111,11 +111,15 @@ class PasswordFormProcessor extends FormProcessor
                     # Update the User's password.
                     $login->updatePassword($id, $password);
 
+                    $session_message='You password has been updated.';
+                    $_SESSION['message']=$session_message;
+
                     # Check if the USer wanted the password emailed to them.
                     if($email_password=='checked')
                     {
                         $user_obj->sendAccountInfo($email, TRUE);
                     }
+                    $doc->redirect(REDIRECT_AFTER_LOGIN);
                 }
             }
             return NULL;
