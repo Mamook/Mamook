@@ -58,8 +58,6 @@ class User
 
     /*** End data members ***/
 
-
-
     /*** mutator methods ***/
 
     /**
@@ -977,8 +975,6 @@ class User
 
     /*** End mutator methods ***/
 
-
-
     /*** accessor methods ***/
 
     /**
@@ -1300,8 +1296,6 @@ class User
     }
 
     /*** End accessor methods ***/
-
-
 
     /*** public methods ***/
 
@@ -3618,8 +3612,14 @@ class User
                 # Send the confirmation email.
                 $subject="Important email from ".DOMAIN_NAME;
                 $to_address=trim($_POST['email']);
-                $message=$row->display.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'---------------------------'."<br />\n".'Account Info'."<br />\n".'---------------------------'."<br />\n<br />\n".;
-                $session_message='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there.'
+                $message=$row->display.','."<br />\n<br />\n".
+                    'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
+                    'You have received this email because this email address was used during registration for our site.'."<br />\n".
+                    'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
+                    '---------------------------'."<br />\n".
+                    'Account Info'."<br />\n".
+                    '---------------------------'."<br />\n<br />\n";
+                $session_message='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there.';
                 if($updated_password!==NULL)
                 {
                     $message.='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
@@ -3628,7 +3628,9 @@ class User
                 }
                 else
                 {
-                    $message.='You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r";
+                    $message.='You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".
+                        'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".
+                        'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r";
                     $session_message=$session_message.' After your account is activated, you may sign in to '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
                 }
                 $message.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
@@ -3962,8 +3964,6 @@ class User
 
     /*** End public methods ***/
 
-
-
     /*** protected methods ***/
 
     /**
@@ -4025,8 +4025,6 @@ class User
     }
 
     /*** End protected methods ***/
-
-
 
     /*** private methods ***/
 
@@ -4118,4 +4116,4 @@ class User
     }
 
     /*** End private methods ***/
-//}
+}
