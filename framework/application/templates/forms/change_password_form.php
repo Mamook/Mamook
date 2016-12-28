@@ -16,11 +16,13 @@ if(empty($email_password_label))
 
 $email_password_value='off';
 # Check if the "email password" was checked before.
-if($fp->email_password=='checked')
+$email_password_checked=$fp->getEmailPassword();
+if($email_password_checked=='checked')
 {
-    $email_password_value=$fp->email_password;
+    $email_password_value=$email_password_checked;
 }
 
+var_dump('hi');exit;
 $display.='<div id="change_password_form" class="form">';
 $display.=$head;
 # Create and display form
