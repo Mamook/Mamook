@@ -16,7 +16,7 @@ if(empty($email_password_label))
 
 $email_password_value='off';
 # Check if the "email password" was checked before.
-$email_password_checked=$fp->getEmailPassword();
+$email_password_checked=$populator->getEmailPassword();
 if($email_password_checked=='checked')
 {
     $email_password_value=$email_password_checked;
@@ -39,7 +39,7 @@ $fg->addFormPart('<label class="label" for="password_confirmed">Confirm Password
 $fg->addElement('password', array('name'=>'password_confirmed', 'id'=>'password_confirmed'));
 $fg->addFormPart('</li>');
 $fg->addFormPart('<li>');
-$fg->addElement('checkbox', array('name'=>'email_password', 'checked'=>$fp->email_password, 'value'=>$email_password_value, 'id'=>'email_password'));
+$fg->addElement('checkbox', array('name'=>'email_password', 'checked'=>$email_password_checked, 'value'=>$email_password_value, 'id'=>'email_password'));
 $fg->addFormPart('<label class="label-box" for="email_password">'.$email_password_label.'</label>');
 $fg->addFormPart('</li>');
 $fg->addFormPart('</fieldset>');
