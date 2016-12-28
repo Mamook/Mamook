@@ -1640,6 +1640,126 @@ class User
     /*** public methods ***/
 
     /**
+     * changePassword
+     *
+     * Changes the User's password.
+     *
+     * @access    public
+     */
+    public function changePassword($id=NULL)
+    {
+        # Set the Document instance to a variable.
+        $doc=Document::getInstance();
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+
+        # Check if the form has been submitted.
+        if(array_key_exists('_submit_check', $_POST))
+        {
+            # Check if the user's ID was passed.
+            if(!empty($id))
+            {
+                $user=new User();
+                $user->setID($id);
+                $id=$user->getID();
+                $message_pre='The';
+            }
+            else
+            {
+                $id=$this->findUserID();
+                $message_pre='Your';
+            }
+            # Get the FormValidator Class.
+            require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
+            # Instantiate a FormValidator object
+            $validate=new FormValidator();
+
+            # Clean the POST Data.
+            $password=trim($_POST['password']);
+            $password_conf=trim($_POST['confirmed_password']);
+
+            $empty_password=$validate->validateEmpty('password', 'Please enter a password that is at least 6 characters long and contain at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>', 6, 64);
+
+            if($empty_password===FALSE)
+            {
+                $acceptable_password=$validate->validateAlphanum('password', 'Your new password must be at least 6 characters long and contain at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>');
+            }
+
+            $empty_password_conf=$validate->validateEmpty('confirmed_password', 'Please confirm your new password.', 6, 64);
+
+            if(($empty_password===FALSE)&&($empty_password_conf===FALSE))
+            {
+                if($password!=$password_conf)
+                {
+                    $validate->setErrors('The passwords you entered did not match. Please try again.');
+                }
+            }
+
+            # Check for errors.
+            if($validate->checkErrors()===TRUE)
+            {
+                # Display errors
+                $error='<h3 class="h-3">Resubmit the form after correcting the following errors:</h3>';
+                $error.=$validate->displayErrors();
+                $doc->setError($error);
+            }
+            else
+            {
+                # If WordPress is installed add the user the the WordPress users table.
+                if(WP_INSTALLED===TRUE)
+                {
+                    # Format the password
+                    $wp_password=$this->ecodeWP_Password($password);
+                    $username=$this->findUsername($id);
+                    try
+                    {
+                        # Get the WordPressUser class.
+                        require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+                        # Instantiate a new WordPressUser object.
+                        $wp_user=new WordPressUser();
+                        # Update the WordPress password.
+                        $wp_user->updateWP_Password($username, $wp_password);
+                    }
+                    catch(ezDB_Error $ez)
+                    {
+                        throw new Exception('There was an error updating the WordPress password for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                    }
+                }
+                # Get the Encryption Class.
+                require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
+                # Instantiate a new Encryption object.
+                $encrypt=new Encryption(MYKEY);
+                $encrypted_password=$encrypt->enCodeIt($password);
+                try
+                {
+                    $update_password=$db->query('UPDATE `'.DBPREFIX.'users` SET `password` = '.$db->quote($db->escape($encrypted_password)).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+                }
+                catch(ezDB_Error $ez)
+                {
+                    throw new Exception('There was an error updating the password for user: '.$username.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                }
+                # Create an empty variable to hold any extra text to include in the message to the User.
+                $message='';
+                if(isset($_POST['email_password'])&&($_POST['email_password']=='on'))
+                {
+                    $to=$this->findEmail($id);
+                    $to=htmlspecialchars_decode($to, ENT_QUOTES);
+                    $subject='Important information about your '.DOMAIN_NAME.' account.';
+                    $body='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
+                    $body.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
+                    $sent=$doc->sendEmail($subject, $to, $body);
+                    # Check if the email was successfully sent.
+                    if($sent===TRUE)
+                    $message=' and an email has been sent to '.$to;
+                    else
+                    $message=' but there was an error sending the confirmation email to '.$to;
+                }
+                $_SESSION['message']=$message_pre.' password was successfully changed'.$message.'.';
+            }
+        }
+    }
+
+    /**
      * Creates a new account in the database.
      */
     public function createAccount()
@@ -4016,7 +4136,7 @@ class User
     /**
      * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
      *
-     * @param string $wp_password Optional. Used only for Login->changePassword() method.
+     * @param string $wp_password Optional. Used only for User->changePassword() method.
      * @return null
      */
     private function ecodeWP_Password($wp_password=NULL)
@@ -4041,4 +4161,4 @@ class User
     }
 
     /*** End private methods ***/
-}
+//}
