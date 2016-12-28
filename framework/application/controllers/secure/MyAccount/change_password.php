@@ -3,12 +3,16 @@
 # Get the FormGenerator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
 # Get the FormProcessor Class.
-require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
+require_once Utility::locateFile(MODULES.'Form'.DS.'PasswordFormProcessor.php');
 
 # Check if the User is logged in.
 $login->checkLogin(ALL_USERS);
 
 $page_class='myaccount-changepassword';
+
+$login->findUserData();
+
+$fp=new PasswordFormProcessor();
 
 # Create display variables.
 $display_main1='';
@@ -20,20 +24,12 @@ $display_box1c='';
 $display_box2='';
 
 $display='';
-
-# Create a variable with the label for the email option.
-$email_password='Email me my password';
-
-# Instantiate a new User object.
-$user=new User();
-
-# Instantiate a new FormProcessor object.
-$form_processor=new FormProcessor();
-# Process the password form.
-$form_processor->processPassword();
+$head='';
+# Create a variable for the label for the email password option. If this is an empty string, the default sting in the form will be used.
+$email_password_label='';
 
 # Get the change password form.
-require Utility::locateFile(TEMPLATES.'forms'.DS.'change_password.php');
+require Utility::locateFile(TEMPLATES.'forms'.DS.'change_password_form.php');
 
 # Get the main image to display in main-1. The "image_link" variable is defined in data/init.php.
 $display_main1.=$main_content->displayImage($image_link);
@@ -49,13 +45,13 @@ $display_main2.=$display;
 $display_main3.=$main_content->displayQuote();
 
 /*
-** In the page template we
-** get the header
-** get the masthead
-** get the subnavbar
-** get the navbar
-** get the page view
-** get the quick registration box
-** get the footer
-*/
+ * In the page template we
+ * get the header
+ * get the masthead
+ * get the subnavbar
+ * get the navbar
+ * get the page view
+ * get the quick registration box
+ * get the footer
+ */
 require Utility::locateFile(TEMPLATES.'page.php');

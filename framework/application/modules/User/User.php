@@ -1458,130 +1458,6 @@ class User
     }
 
     /**
-     * changePassword
-     *
-     * Changes the User's password.
-     *
-     * @access    public
-     */
-    public function changePassword($id=NULL)
-    {
-        # Set the Document instance to a variable.
-        $doc=Document::getInstance();
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-
-        # Check if the form has been submitted.
-        if(array_key_exists('_submit_check', $_POST))
-        {
-            # Check if the user's ID was passed.
-            if(!empty($id))
-            {
-                $user=new User();
-                $user->setID($id);
-                $id=$user->getID();
-                $message_pre='The';
-            }
-            else
-            {
-                $id=$this->findUserID();
-                $message_pre='Your';
-            }
-            # Get the FormValidator Class.
-            require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-            # Instantiate a FormValidator object
-            $validate=new FormValidator();
-
-            # Clean the POST Data.
-            $password=trim($_POST['password']);
-            $password_conf=trim($_POST['confirmed_password']);
-
-            $empty_password=$validate->validateEmpty('password', 'Please enter a password that is at least 6 characters long and contain at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>', 6, 64);
-
-            if($empty_password===FALSE)
-            {
-                $acceptable_password=$validate->validateAlphanum('password', 'Your new password must be at least 6 characters long and contain at least one number as well as letters. It is good practice to use a mix of CAPITAL and lowercase letters with at least 1 number and/or special characters (ie. !,@,#,$,%,^,&, etc.). For assistance creating a password you may go to: <a href="http://strongpasswordgenerator.com/" target="_blank">StrongPasswordGenerator.com</a>');
-            }
-
-            $empty_password_conf=$validate->validateEmpty('confirmed_password', 'Please confirm your new password.', 6, 64);
-
-            if(($empty_password===FALSE)&&($empty_password_conf===FALSE))
-            {
-                if($password!=$password_conf)
-                {
-                    $validate->setErrors('The passwords you entered did not match. Please try again.');
-                }
-            }
-
-            # Check for errors.
-            if($validate->checkErrors()===TRUE)
-            {
-                # Display errors
-                $error='<h3 class="h-3">Resubmit the form after correcting the following errors:</h3>';
-                $error.=$validate->displayErrors();
-                $doc->setError($error);
-            }
-            else
-            {
-                # If WordPress is installed add the user the the WordPress users table.
-                if(WP_INSTALLED===TRUE)
-                {
-                    # Format the password
-                    $wp_password=$this->encodeWP_Password($password);
-                    $username=$this->findUsername($id);
-                    try
-                    {
-                        # Get the WordPressUser class.
-                        require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
-                        # Instantiate a new WordPressUser object.
-                        $wp_user=new WordPressUser();
-                        # Update the WordPress password.
-                        $wp_user->updateWP_Password($username, $wp_password);
-                    }
-                    catch(ezDB_Error $ez)
-                    {
-                        throw new Exception('There was an error updating the WordPress password for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                    }
-                }
-                # Get the Encryption Class.
-                require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
-                # Instantiate a new Encryption object.
-                $encrypt=new Encryption(MYKEY);
-                $encrypted_password=$encrypt->enCodeIt($password);
-                try
-                {
-                    $update_password=$db->query('UPDATE `'.DBPREFIX.'users` SET `password` = '.$db->quote($db->escape($encrypted_password)).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
-                }
-                catch(ezDB_Error $ez)
-                {
-                    throw new Exception('There was an error updating the password for user: '.$username.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                }
-                # Create an empty variable to hold any extra text to include in the message to the User.
-                $message='';
-                if(isset($_POST['email_password'])&&($_POST['email_password']=='on'))
-                {
-                    $to=$this->findEmail($id);
-                    $to=htmlspecialchars_decode($to, ENT_QUOTES);
-                    $subject='Important information about your '.DOMAIN_NAME.' account.';
-                    $body='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
-                    $body.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
-                    $sent=$doc->sendEmail($subject, $to, $body);
-                    # Check if the email was successfully sent.
-                    if($sent===TRUE)
-                    {
-                        $message=' and an email has been sent to '.$to;
-                    }
-                    else
-                    {
-                        $message=' but there was an error sending the confirmation email to '.$to;
-                    }
-                }
-                $_SESSION['message']=$message_pre.' password was successfully changed'.$message.'.';
-            }
-        }
-    }
-
-    /**
      * Checks the user's level and compares it to the passed access levels.
      *
      * @param string $access_levels The level number(s) to accept - ie. '1 2 5'
@@ -3722,7 +3598,7 @@ class User
      * @param $email
      * @throws Exception
      */
-    public function sendAccountInfo($email)
+    public function sendAccountInfo($email, $updated_password=NULL)
     {
         try
         {
@@ -3730,7 +3606,6 @@ class User
             $doc=Document::getInstance();
             # Set the Database instance to a variable.
             $db=DB::get_instance();
-
             $email=$db->sanitize($email, 2);
             $row=$db->get_row('SELECT `password`, `display`, `username` FROM '.DBPREFIX.'users WHERE `email` = '.$db->quote($db->escape($email)).' LIMIT 1');
             if($row!==NULL)
@@ -3738,30 +3613,52 @@ class User
                 require_once Utility::locateFile(MODULES.'Encryption/Encryption.php');
                 $encrypt=new Encryption(MYKEY);
                 $password=$encrypt->deCodeIt($row->password);
+                $email_type='activation';
+                $redirect=TRUE;
                 # Send the confirmation email.
                 $subject="Important email from ".DOMAIN_NAME;
                 $to_address=trim($_POST['email']);
-                $message=$row->display.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'---------------------------'."<br />\n".' Account Info'."<br />\n".'---------------------------'."<br />\n<br />\n".'You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r".'You may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
+                $message=$row->display.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'---------------------------'."<br />\n".'Account Info'."<br />\n".'---------------------------'."<br />\n<br />\n".;
+                $session_message='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there.'
+                if($updated_password!==NULL)
+                {
+                    $message.='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
+                    $email_type='password';
+                    $redirect=FALSE;;
+                }
+                else
+                {
+                    $message.='You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r";
+                    $session_message=$session_message.' After your account is activated, you may sign in to '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
+                }
+                $message.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
                 try
                 {
                     $doc->sendEmail($subject, $to_address, $message);
-                    $_SESSION['message']='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there. After your account is activated, you may sign in to '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
-                    $doc->redirect(REDIRECT_TO_LOGIN);
                 }
                 catch(Exception $e)
                 {
-                    $_SESSION['message']='I couldn\'t send the activation email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
+                    $session_message='I couldn\'t send the '.$email_type.' email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
+                }
+                # Check if there is already a sessioin message.
+                if(isset($_SESSION['message']))
+                {
+                    $session_message=$_SESSION['message'].'<br />'.$session_message;
+                }
+                $_SESSION['message']=$session_message;
+                if($redirect===TRUE)
+                {
                     $doc->redirect(REDIRECT_TO_LOGIN);
                 }
             }
             else
             {
-                $doc->setError('The user was not found. Please check the email address you entered.');
+                $doc->setError('When trying to send account info to the user with the email address "'.$email.'", the user was not found! Please check the email address you entered.');
             }
         }
         catch(ezDB_Error $ez)
         {
-            throw new Exception('There was an error retrieving the "random" field for the user with the email address"'.$email.'" from the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+            throw new Exception('There was an error sending account info to the user with the email address "'.$email.'": '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3879,6 +3776,66 @@ class User
             setcookie('cookie_id', $user_id, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
             setcookie('authenticate', $authenticate, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
             setcookie('user_ip', $ip, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
+        }
+    }
+
+    /**
+     * Changes the User's password.
+     *
+     * @access    public
+     */
+    public function updatePassword($id=NULL, $password)
+    {
+        # Set the Document instance to a variable.
+        $doc=Document::getInstance();
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+
+        # Check if the user's ID was passed.
+        if(!empty($id))
+        {
+            $user=new User();
+            $user->setID($id);
+            $id=$user->getID();
+        }
+        else
+        {
+            $id=$this->getID();
+        }
+        # Get the Username.
+        $username=$this->findUsername($id);
+
+        # If WordPress is installed add the user the the WordPress users table.
+        if(WP_INSTALLED===TRUE)
+        {
+            try
+            {
+                # Get the WordPressUser class.
+                require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+                # Instantiate a new WordPressUser object.
+                $wp_user=new WordPressUser();
+                # Format the password
+                $wp_password=$this->encodeWP_Password($password);
+                # Update the WordPress password.
+                $wp_user->updateWP_Password($username, $wp_password);
+            }
+            catch(ezDB_Error $ez)
+            {
+                throw new Exception('There was an error updating the WordPress password for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+            }
+        }
+        # Get the Encryption Class.
+        require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
+        # Instantiate a new Encryption object.
+        $encrypt=new Encryption(MYKEY);
+        $encrypted_password=$encrypt->enCodeIt($password);
+        try
+        {
+            $update_password=$db->query('UPDATE `'.DBPREFIX.'users` SET `password` = '.$db->quote($db->escape($encrypted_password)).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+        }
+        catch(ezDB_Error $ez)
+        {
+            throw new Exception('There was an error updating the password for user: '.$username.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
