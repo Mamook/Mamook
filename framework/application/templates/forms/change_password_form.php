@@ -22,7 +22,6 @@ if($email_password_checked=='checked')
     $email_password_value=$email_password_checked;
 }
 
-var_dump('hi');exit;
 $display.='<div id="change_password_form" class="form">';
 $display.=$head;
 # Create and display form
