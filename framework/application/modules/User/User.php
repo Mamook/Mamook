@@ -53,12 +53,9 @@ class User
     protected $title=NULL;
     protected $username=NULL;
     protected $website=NULL;
-    protected $wp_password=NULL;
     protected $zipcode=NULL;
 
     /*** End data members ***/
-
-
 
     /*** mutator methods ***/
 
@@ -932,28 +929,6 @@ class User
     }
 
     /**
-     * Sets the data member $wp_password.
-     *
-     * @param string $wp_password The User's encoded password.
-     */
-    public function setWPPassword($wp_password)
-    {
-        # Check if the value is empty.
-        if(!empty($wp_password))
-        {
-            # Clean it up and set the data member.
-            $wp_password=trim($wp_password);
-        }
-        else
-        {
-            # Explicitly set it to NULL.
-            $wp_password=NULL;
-        }
-        # Set the data member.
-        $this->wp_password=$wp_password;
-    }
-
-    /**
      * Sets the data member $zipcode.
      *
      * @param string $zipcode The User's zipcode.
@@ -976,8 +951,6 @@ class User
     }
 
     /*** End mutator methods ***/
-
-
 
     /*** accessor methods ***/
 
@@ -1284,14 +1257,6 @@ class User
     }
 
     /**
-     * Returns the data member $wp_password.
-     */
-    public function getWPPassword()
-    {
-        return $this->wp_password;
-    }
-
-    /**
      * Returns the data member $zipcode.
      */
     public function getZipcode()
@@ -1301,9 +1266,120 @@ class User
 
     /*** End accessor methods ***/
 
-
-
     /*** public methods ***/
+
+    /**
+     * Activates new user account.
+     */
+    public function activateAccount()
+    {
+        # Set the Document instance to a variable.
+        $doc=Document::getInstance();
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+        # Set the Validator instance to a variable.
+        $validator=Validator::getInstance();
+
+        if($this->isLoggedIn()===TRUE)
+        {
+            $doc->redirect(REDIRECT_AFTER_LOGIN);
+        }
+
+        # Check if there is GET Data and that we have valid ID and random key.
+        if(
+            (strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
+            !empty($_GET['ID']) &&
+            ($validator->isNumber($_GET['ID'])==TRUE) &&
+            (
+                isset($_GET['key']) &&
+                (strlen($_GET['key'])==32) &&
+                ($validator->isAlphanum($_GET['key'])==TRUE)
+            )
+        )
+        {
+            $id=(int)$_GET['ID'];
+            # Get user data from the DB
+            $username=$this->findUsername($id);
+            if($this->findUserData($username)!==FALSE)
+            {
+                try
+                {
+                    $row=$db->get_row('SELECT `random` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+                }
+                catch(ezDB_Error $ez)
+                {
+                    throw new Exception('There was an error retrieving the "random" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
+                    Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                }
+                if($row!==NULL)
+                {
+                    # Does the random key sent match the one we have in the DB?
+                    if($row->random!=$_GET['key'])
+                    {
+                        $validator->setError('The confirmation key that was generated for this account does not match with the one entered!');
+                        $doc->redirect(DEFAULT_REDIRECT);
+                        exit;
+                    }
+                    # Does the user have "inactive" status (0)?
+                    elseif(($this->getActive()===0))
+                    {
+                        try
+                        {
+                            # Update user status to "active" (1)
+                            $db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+                            # Do we send them somewhere else after confirming them?
+                            if(REDIRECT_AFTER_CONFIRMATION==TRUE)
+                            {
+                                # Log the user in.
+                                $this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
+                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+                                You are now signed in and ready to enjoy the site.<br />
+                                Being signed in allows you to access special content and downloads!';
+                                $doc->redirect(REDIRECT_AFTER_LOGIN);
+                            }
+                            # They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
+                            else
+                            {
+                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+                                You may now sign in and enjoy the site.<br />
+                                Being signed in allows you to access special content and downloads!';
+                                $doc->redirect(REDIRECT_TO_LOGIN);
+                            }
+                        }
+                        catch(ezDB_Error $ez)
+                        {
+                            throw new Exception('There was an error activating '.$username.'\'s account in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                        }
+                        catch(Exception $e)
+                        {
+                            throw $e;
+                        }
+                    }
+                    elseif($this->getActive()===1)
+                    {
+                        $_SESSION['message']='You have already been confirmed!<br />
+                        All you need to do is sign in.';
+                        $doc->redirect(REDIRECT_TO_LOGIN);
+                    }
+                }
+                else
+                {
+                    $_SESSION['message']='User not found!';
+                    $doc->redirect(DEFAULT_REDIRECT);
+                }
+            }
+            else
+            {
+                $_SESSION['message']='User not found!';
+                $doc->redirect(DEFAULT_REDIRECT);
+            }
+        }
+        else
+        {
+            $_SESSION['message']='There was an error processing your activation. Please copy the the activation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
+            $doc->redirect(DEFAULT_REDIRECT);
+        }
+    }
 
     /**
      * Captures post(after) login data sent from the previous page.
@@ -1602,44 +1678,6 @@ class User
     }
 
     /**
-     * Description
-     *
-     * @param int $user_id   The user's ID.
-     * @param bool $redirect Do we do a redirect?
-     * @throws Exception
-     */
-    public function unsubscribeNewsletter($user_id, $redirect=FALSE)
-    {
-        try
-        {
-            # Set the Database instance to a variable.
-            $db=DB::get_instance();
-            # Set the Document instance to a variable.
-            $doc=Document::getInstance();
-
-            $db->query('DELETE FROM `'.DBPREFIX.'user_newsletter` WHERE `user_id`='.$db->quote($user_id).' LIMIT 1');
-            # Redirect user, and give them a message.
-            if($redirect)
-            {
-                $_SESSION['message']='You have unsubscribed from the '.DOMAIN_NAME.' newsletter.';
-                $doc->redirect(DEFAULT_REDIRECT);
-            }
-        }
-        catch(ezDB_Error $ez)
-        {
-            throw new Exception('There was an error unsubscribing user '.$user_id.': '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
-    }
-
-    /*** End accessor methods ***/
-
-    /*** public methods ***/
-
-    /**
      * Creates a new account in the database.
      */
     public function createAccount()
@@ -1667,8 +1705,12 @@ class User
             # If WordPress is installed add the user the the WordPress users table.
             if(WP_INSTALLED===TRUE)
             {
-                # Get the wordpress password.
-                $this->createWP_User();
+                # Get the WordPressUser class.
+                require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+                # Instantiate a new WordPressUser object.
+                $wp_user=new WordPressUser();
+                # Create a WordPress user account.
+                $wp_user->createWP_User($this);
             }
             # Account was not created. Return error.
             if($insert_user<=0)
@@ -1685,60 +1727,6 @@ class User
         catch(Exception $e)
         {
             throw $e;
-        }
-    }
-
-    /**
-     * Creates a WordPress user in the WordPress Database tables.
-     * Assumes a user was just created in the main users table.
-     */
-    public function createWP_User()
-    {
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-
-        # Format the password
-        $this->ecodeWP_Password();
-
-        # Get the username.
-        $username=$this->getUsername();
-        # Get the email address.
-        $email=$this->getEmail();
-        # Get the password.
-        $wp_password=$this->getWPPassword();
-
-        try
-        {
-            $db->query('INSERT INTO `'.WP_DBPREFIX.'users` (`user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES ('.$db->quote($db->escape($username)).', '.$db->quote($db->escape($wp_password)).', '.$db->quote($db->escape($username)).', '.$db->quote($db->escape($email)).', '.$db->quote($db->escape('')).', '.$db->quote($db->escape(YEAR_MM_DD_TIME)).', '.$db->quote($db->escape('')).', '.$db->quote($db->escape('0')).', '.$db->quote($db->escape($username)).')');
-        }
-        catch(ezDB_Error $ez)
-        {
-            throw new Exception('There was an error inserting the new WordPress user info for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-        }
-        $row=$db->get_row('SELECT `ID` FROM `'.WP_DBPREFIX.'users` WHERE `user_login` = '.$db->quote($db->escape($username)).' LIMIT 1');
-
-        $wp_user_id=$row->ID;
-        $meta_data=array(
-            WP_DBPREFIX.'user_level'=>0,
-            WP_DBPREFIX.'capabilities'=>'a:1:{s:10:"subscriber";b:1;}',
-            'nickname'=>$username,
-            'rich_editing'=>'true',
-            'comment_shortcuts'=>'false',
-            'admin_color'=>'fresh',
-            'use_ssl'=>0,
-            's2_excerpt'=>'excerpt',
-            's2_format'=>'text'
-        );
-        try
-        {
-            foreach($meta_data as $meta_key=>$meta_value)
-            {
-                $insert_user_meta=$db->query('INSERT INTO `'.WP_DBPREFIX.'usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES ('.$db->quote($wp_user_id).', '.$db->quote($db->escape($meta_key)).', '.$db->quote($db->escape($meta_value)).')');
-            }
-        }
-        catch(ezDB_Error $ez)
-        {
-            throw new Exception('There was an error inserting the new WordPress usermeta info for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -1880,6 +1868,48 @@ class User
         {
             # Re-throw any caught exceptions.
             throw $e;
+        }
+    }
+
+    /**
+     * Deletes the user(s) from the system.
+     */
+    public function deleteInactiveUsers()
+    {
+        try
+        {
+            # Get all of the inactive users that are ready to be deleted.
+            $inactive_users=$this->getInactiveUsers();
+            # If there are any users ready to be deleted.
+            if($inactive_users)
+            {
+                # If there is more then 1 result.
+                if(count($inactive_users)>1)
+                {
+                    $user_id_array=array();
+                    # Loop through the multidimensional array.
+                    foreach((array)$inactive_users as $user_id)
+                    {
+                        # Convert it to a single dimension.
+                        $user_id_array[]=$user_id[0];
+                    }
+                    $user_id=$user_id_array;
+                }
+                # Only one result so let's assign only that one result to a variable.
+                else
+                {
+                    $user_id=$inactive_users[0][0];
+                }
+                # Delete the users.
+                $this->deleteAccount($user_id);
+
+                # Return how many users were deleted.
+                return count($inactive_users);
+            }
+        }
+        catch(ezDB_Error $e)
+        {
+            throw new Exception('There was an error deleting the inactive user: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3011,6 +3041,37 @@ class User
     }
 
     /**
+     * Check if the user is already in the users_inactive table.
+     *
+     * @param int $user_id
+     * @return
+     * @throws Exception
+     */
+    public function getInactiveUsers($user_id=NULL)
+    {
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+
+        try
+        {
+            if($user_id!==NULL)
+            {
+                $results=$db->get_row('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
+            }
+            else
+            {
+                $results=$db->get_results('SELECT `user_id` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()', ARRAY_N);
+            }
+
+            return $results;
+        }
+        catch(ezDB_Error $e)
+        {
+            throw new Exception('There was an error checking the users_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+        }
+    }
+
+    /**
      * Retrieves User email addresses from the Database that have opted in to receiving news messages.
      *
      * @param string $opt_in   The name of the table that the user has opted into.
@@ -3339,8 +3400,16 @@ class User
         # Unset the sessions (all of them - array given)
         $session->loseAllSessionData();
 
-        # If WordPress is installed, log the user out of WordPress.
-        $this->clearWP_Cookies();
+        # If WordPress is installed, clear the cookies.
+        if(WP_INSTALLED===TRUE)
+        {
+            # Get the WordPressUser class.
+            require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+            # Instantiate a new WordPressUser object.
+            $wp_user=new WordPressUser();
+            # If WordPress is installed, log the user out of WordPress.
+            $wp_user->clearWP_Cookies();
+        }
 
         # Uncomment the following line if you wish to remove all cookies.
         #    Don't forget to comment or delete the following 2 lines if you decide to use the clearCookies method)
@@ -3445,125 +3514,12 @@ class User
     }
 
     /**
-     * Activates new user account.
-     */
-    public function activateAccount()
-    {
-        # Set the Document instance to a variable.
-        $doc=Document::getInstance();
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-        # Set the Validator instance to a variable.
-        $validator=Validator::getInstance();
-
-        if($this->isLoggedIn()===TRUE)
-        {
-            $doc->redirect(REDIRECT_AFTER_LOGIN);
-        }
-
-        # Check if there is GET Data and that we have valid ID and random key.
-        if(
-            (strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
-            !empty($_GET['ID']) &&
-            ($validator->isNumber($_GET['ID'])==TRUE) &&
-            (
-                isset($_GET['key']) &&
-                (strlen($_GET['key'])==32) &&
-                ($validator->isAlphanum($_GET['key'])==TRUE)
-            )
-        )
-        {
-            $id=(int)$_GET['ID'];
-            # Get user data from the DB
-            $username=$this->findUsername($id);
-            if($this->findUserData($username)!==FALSE)
-            {
-                try
-                {
-                    $row=$db->get_row('SELECT `random` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
-                }
-                catch(ezDB_Error $ez)
-                {
-                    throw new Exception('There was an error retrieving the "random" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
-                    Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                }
-                if($row!==NULL)
-                {
-                    # Does the random key sent match the one we have in the DB?
-                    if($row->random!=$_GET['key'])
-                    {
-                        $validator->setError('The confirmation key that was generated for this account does not match with the one entered!');
-                        $doc->redirect(DEFAULT_REDIRECT);
-                        exit;
-                    }
-                    # Does the user have "inactive" status (0)?
-                    elseif(($this->getActive()===0))
-                    {
-                        try
-                        {
-                            # Update user status to "active" (1)
-                            $db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
-                            # Do we send them somewhere else after confirming them?
-                            if(REDIRECT_AFTER_CONFIRMATION==TRUE)
-                            {
-                                # Log the user in.
-                                $this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
-                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-                                You are now signed in and ready to enjoy the site.<br />
-                                Being signed in allows you to access special content and downloads!';
-                                $doc->redirect(REDIRECT_AFTER_LOGIN);
-                            }
-                            # They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
-                            else
-                            {
-                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-                                You may now sign in and enjoy the site.<br />
-                                Being signed in allows you to access special content and downloads!';
-                                $doc->redirect(REDIRECT_TO_LOGIN);
-                            }
-                        }
-                        catch(ezDB_Error $ez)
-                        {
-                            throw new Exception('There was an error activating '.$username.'\'s account in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                        }
-                        catch(Exception $e)
-                        {
-                            throw $e;
-                        }
-                    }
-                    elseif($this->getActive()===1)
-                    {
-                        $_SESSION['message']='You have already been confirmed!<br />
-                        All you need to do is sign in.';
-                        $doc->redirect(REDIRECT_TO_LOGIN);
-                    }
-                }
-                else
-                {
-                    $_SESSION['message']='User not found!';
-                    $doc->redirect(DEFAULT_REDIRECT);
-                }
-            }
-            else
-            {
-                $_SESSION['message']='User not found!';
-                $doc->redirect(DEFAULT_REDIRECT);
-            }
-        }
-        else
-        {
-            $_SESSION['message']='There was an error processing your activation. Please copy the the activation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
-            $doc->redirect(DEFAULT_REDIRECT);
-        }
-    }
-
-    /**
      * Sends account info in an email to the user.
      *
      * @param $email
      * @throws Exception
      */
-    public function sendAccountInfo($email)
+    public function sendAccountInfo($email, $updated_password=NULL)
     {
         try
         {
@@ -3571,38 +3527,59 @@ class User
             $doc=Document::getInstance();
             # Set the Database instance to a variable.
             $db=DB::get_instance();
-
             $email=$db->sanitize($email, 2);
+
             $row=$db->get_row('SELECT `password`, `display`, `username` FROM '.DBPREFIX.'users WHERE `email` = '.$db->quote($db->escape($email)).' LIMIT 1');
             if($row!==NULL)
             {
                 require_once Utility::locateFile(MODULES.'Encryption/Encryption.php');
                 $encrypt=new Encryption(MYKEY);
                 $password=$encrypt->deCodeIt($row->password);
+                $email_type='activation';
+                $redirect=REDIRECT_TO_LOGIN;
                 # Send the confirmation email.
                 $subject="Important email from ".DOMAIN_NAME;
-                $to_address=trim($_POST['email']);
-                $message=$row->display.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'---------------------------'."<br />\n".' Account Info'."<br />\n".'---------------------------'."<br />\n<br />\n".'You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r".'You may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
+                $message=$row->display.','."<br />\n<br />\n".
+                    'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".
+                    'You have received this email because this email address was used during registration for our site.'."<br />\n".
+                    'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".
+                    '---------------------------'."<br />\n".
+                    'Account Info'."<br />\n".
+                    '---------------------------'."<br />\n<br />\n";
+                $session_message='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there.';
+                if($updated_password!==NULL)
+                {
+                    $message.='Per your request, your password has been changed to: '.$password.''."<br />\n<br />\n";
+                    $email_type='password';
+                    $redirect=REDIRECT_AFTER_LOGIN;
+                }
+                else
+                {
+                    $message.='You or someone at this email address has requested your password for <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n".
+                        'Your username is: <strong>'.$row->username.'</strong>'."<br />\n\r".
+                        'Your password is: <strong>'.$password.'</strong>'."<br />\n\r<br />\n\r";
+                    $session_message=$session_message.' After your account is activated, you may sign in to '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
+                }
+                $message.='You may log in to your account at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>'."<br />\n";
                 try
                 {
-                    $doc->sendEmail($subject, $to_address, $message);
-                    $_SESSION['message']='Account info sent. Please check your email for details. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there. After your account is activated, you may sign in to '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
-                    $doc->redirect(REDIRECT_TO_LOGIN);
+                    $doc->sendEmail($subject, $email, $message);
                 }
                 catch(Exception $e)
                 {
-                    $_SESSION['message']='I couldn\'t send the activation email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
-                    $doc->redirect(REDIRECT_TO_LOGIN);
+                    $session_message='I couldn\'t send the '.$email_type.' email. Please contact the admin at: <a href="mailto:'.ADMIN_EMAIL.'">'.ADMIN_EMAIL.'</a>';
                 }
+                $_SESSION['message']=$session_message;
+                $doc->redirect($redirect);
             }
             else
             {
-                $doc->setError('The user was not found. Please check the email address you entered.');
+                $doc->setError('When trying to send account info to the user with the email address "'.$email.'", the user was not found! Please check the email address you entered.');
             }
         }
         catch(ezDB_Error $ez)
         {
-            throw new Exception('There was an error retrieving the "random" field for the user with the email address"'.$email.'" from the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+            throw new Exception('There was an error sending account info to the user with the email address "'.$email.'": '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3628,12 +3605,11 @@ class User
             {
                 # Set email subject to a variable.
                 $subject="Activation email from ".DOMAIN_NAME;
-                $to_address=trim($email);
                 # Set email body to a variable.
                 $message=$row->username.','."<br />\n<br />\n".'This email has been sent from <a href="'.APPLICATION_URL.'">'.DOMAIN_NAME.'</a>.'."<br />\n<br />\n".'You have received this email because this email address was used during registration for our site.'."<br />\n".'If you did not register at '.DOMAIN_NAME.', please disregard this email. You do not need to unsubscribe or take any further action.'."<br />\n<br />\n".'------------------------------------------------'."<br />\n".' Activation Instructions'."<br />\n".'------------------------------------------------'."<br />\n<br />\n".'Thank you for registering.'."<br />\n".'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.'."<br />\n<br />\n".'To activate your account, simply click on the following link:'."<br />\n<br />\n".'<a href="'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.REDIRECT_TO_LOGIN.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a>'."<br />\n<br />\n".'(You may need to copy and paste the link into your web browser).'."<br />\n<br />\n".'Once you confirm your status, you may login at <a href="'.REDIRECT_TO_LOGIN.'">'.REDIRECT_TO_LOGIN.'</a>.';
                 try
                 {
-                    $doc->sendEmail($subject, $to_address, $message);
+                    $doc->sendEmail($subject, $email, $message);
                     $_SESSION['message']=(($new_account!==FALSE) ? 'Account created. ' : '').'Please check your email for details on how to activate it. The email may not arrive instantly in your email inbox. Please give it some time. Please make sure to check your "junk mail" folder in case the email gets routed there. After your account is activated, you may sign in to the '.DOMAIN_NAME.'. Once signed in, you will be able to access special features and download content.';
                 }
                 catch(Exception $e)
@@ -3720,6 +3696,65 @@ class User
             setcookie('cookie_id', $user_id, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
             setcookie('authenticate', $authenticate, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
             setcookie('user_ip', $ip, LOGIN_LIFE, COOKIE_PATH, '.'.DOMAIN_NAME);
+        }
+    }
+
+    /**
+     * Changes the User's password.
+     *
+     * @access    public
+     */
+    public function updatePassword($id=NULL, $password)
+    {
+        # Set the Document instance to a variable.
+        $doc=Document::getInstance();
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+
+        # Check if the user's ID was passed.
+        if(!empty($id))
+        {
+            $user=new User();
+            $user->setID($id);
+            $id=$user->getID();
+        }
+        else
+        {
+            $id=$this->getID();
+        }
+        # Get the Username.
+        $username=$this->findUsername($id);
+        # If WordPress is installed add the user the the WordPress users table.
+        if(WP_INSTALLED===TRUE)
+        {
+            try
+            {
+                # Get the WordPressUser class.
+                require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+                # Instantiate a new WordPressUser object.
+                $wp_user=new WordPressUser();
+                # Format the password
+                $wp_password=$wp_user->encodeWP_Password($password);
+                # Update the WordPress password.
+                $wp_user->updateWP_Password($username, $wp_password);
+            }
+            catch(ezDB_Error $ez)
+            {
+                throw new Exception('There was an error updating the WordPress password for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+            }
+        }
+        # Get the Encryption Class.
+        require_once Utility::locateFile(MODULES.'Encryption'.DS.'Encryption.php');
+        # Instantiate a new Encryption object.
+        $encrypt=new Encryption(MYKEY);
+        $encrypted_password=$encrypt->enCodeIt($password);
+        try
+        {
+            $update_password=$db->query('UPDATE `'.DBPREFIX.'users` SET `password` = '.$db->quote($db->escape($encrypted_password)).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+        }
+        catch(ezDB_Error $ez)
+        {
+            throw new Exception('There was an error updating the password for user: '.$username.' in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3811,81 +3846,40 @@ class User
     }
 
     /**
-     * Check if the user is already in the users_inactive table.
+     * Description
      *
-     * @param int $user_id
-     * @return
+     * @param int $user_id   The user's ID.
+     * @param bool $redirect Do we do a redirect?
      * @throws Exception
      */
-    public function getInactiveUsers($user_id=NULL)
-    {
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-
-        try
-        {
-            if($user_id!==NULL)
-            {
-                $results=$db->get_row('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
-            }
-            else
-            {
-                $results=$db->get_results('SELECT `user_id` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()', ARRAY_N);
-            }
-
-            return $results;
-        }
-        catch(ezDB_Error $e)
-        {
-            throw new Exception('There was an error checking the users_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
-        }
-    }
-
-    /**
-     * Deletes the user(s) from the system.
-     */
-    public function deleteInactiveUsers()
+    public function unsubscribeNewsletter($user_id, $redirect=FALSE)
     {
         try
         {
-            # Get all of the inactive users that are ready to be deleted.
-            $inactive_users=$this->getInactiveUsers();
-            # If there are any users ready to be deleted.
-            if($inactive_users)
-            {
-                # If there is more then 1 result.
-                if(count($inactive_users)>1)
-                {
-                    $user_id_array=array();
-                    # Loop through the multidimensional array.
-                    foreach((array)$inactive_users as $user_id)
-                    {
-                        # Convert it to a single dimension.
-                        $user_id_array[]=$user_id[0];
-                    }
-                    $user_id=$user_id_array;
-                }
-                # Only one result so let's assign only that one result to a variable.
-                else
-                {
-                    $user_id=$inactive_users[0][0];
-                }
-                # Delete the users.
-                $this->deleteAccount($user_id);
+            # Set the Database instance to a variable.
+            $db=DB::get_instance();
+            # Set the Document instance to a variable.
+            $doc=Document::getInstance();
 
-                # Return how many users were deleted.
-                return count($inactive_users);
+            $db->query('DELETE FROM `'.DBPREFIX.'user_newsletter` WHERE `user_id`='.$db->quote($user_id).' LIMIT 1');
+            # Redirect user, and give them a message.
+            if($redirect)
+            {
+                $_SESSION['message']='You have unsubscribed from the '.DOMAIN_NAME.' newsletter.';
+                $doc->redirect(DEFAULT_REDIRECT);
             }
         }
-        catch(ezDB_Error $e)
+        catch(ezDB_Error $ez)
         {
-            throw new Exception('There was an error deleting the inactive user: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+            throw new Exception('There was an error unsubscribing user '.$user_id.': '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+        }
+        catch(Exception $e)
+        {
+            throw $e;
         }
     }
 
     /*** End public methods ***/
-
-
 
     /*** protected methods ***/
 
@@ -3948,97 +3942,4 @@ class User
     }
 
     /*** End protected methods ***/
-
-
-
-    /*** private methods ***/
-
-    /**
-     * Clears the WordPress cookies
-     *
-     * TODO: MOVE TO WEBUTILITIES
-     */
-    private function clearWP_Cookies()
-    {
-        # If WordPress is installed, clear the cookies.
-        if(WP_INSTALLED===TRUE)
-        {
-            # Unset cookies
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(LOGGED_IN_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(LOGGED_IN_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Old cookies
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Even older cookies
-            setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(USER_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(PASS_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(USER_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(PASS_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Settings and Test Cookies
-            setcookie('wp-settings-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('settings', '', time()-LOGIN_LIFE);
-            setcookie('settings', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-        }
-    }
-
-    /**
-     * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
-     *
-     * @param string $wp_password Optional. Used only for Login->changePassword() method.
-     * @return null
-     */
-    private function ecodeWP_Password($wp_password=NULL)
-    {
-        # Get the PasswordHash Class.
-        require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
-        # Instantiate a PasswordHash object
-        $hasher=new PasswordHash(8, TRUE);
-        # If $password param is NOT set.
-        if($wp_password===NULL)
-        {
-            # Get the Wordpress password.
-            $wp_password=$this->getWPPassword();
-        }
-        # Format the password.
-        $wp_password=$hasher->HashPassword($wp_password);
-        # Set the formatted password.
-        $this->setWPPassword($wp_password);
-
-        # Return the password (for backwards compatibility).
-        return $this->getWPPassword();
-    }
-
-    /*** End private methods ***/
 }

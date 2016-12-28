@@ -1,4 +1,4 @@
-<?php /* public/secure/admin/ManageContent/announcement/index.php */
+<?php /* framework/application/controllers/secure/admin/ManageContent/announcement/index.php */
 
 # Get the SubContent Class.
 require_once Utility::locateFile(MODULES.'Content'.DS.'SubContent.php');

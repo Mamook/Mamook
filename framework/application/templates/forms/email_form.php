@@ -8,19 +8,19 @@ $populator=$fp->getPopulator();
 $email_obj=$populator->getEmailObject();
 if(isset($_GET['mail']))
 {
-	$recipients=trim(strip_tags($_GET['mail']));
-	$fp->setFormAction(APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients);
-	$good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients.'&success';
-	$bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients.'&mail_error';
+    $recipients=trim(strip_tags($_GET['mail']));
+    $fp->setFormAction(APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients);
+    $good_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients.'&success';
+    $bad_url=APPLICATION_URL.WebUtility::removeIndex(HERE).'?mail='.$recipients.'&mail_error';
 }
 elseif(isset($_GET['member']) || isset($_GET['contributor']))
 {
-	# Get the recipients from the Email class that was instantiated in the Populator.
-	$recipients=$email_obj->getRecipients();
+    # Get the recipients from the Email class that was instantiated in the Populator.
+    $recipients=$email_obj->getRecipients();
 }
 else
 {
-	$recipients=$recipients;
+    $recipients=$recipients;
 }
 # Set the email recipient(s). (See data/formmail.ini)
 $email_obj->setRecipients($recipients);
@@ -56,26 +56,26 @@ $form_mail->addElement('text', array('id'=>'subject', 'name'=>'subject', 'value'
 $form_mail->addFormPart('</li>');
 if($fp->getUpload()===TRUE)
 {
-	$max_file_size=$fp->getMaxFileSize();
-	$form_mail->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>((!empty($max_file_size)) ? $max_file_size : 5242880)));
-	$form_mail->addFormPart('<li>');
-	$form_mail->addFormPart('<label class="label" for="file">File</label>');
-	$form_mail->addElement('file', array('id'=>'file', 'name'=>'file'));
-	/*
-	if(isset($file_name))
-	{
-		$form_mail->addFormPart('<ul>');
-		$form_mail->addFormPart('<li class="file-current">');
-		$form_mail->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&amp;t=tmp" title="Current Attachment">'.$file_name.'"</a>');
-		$form_mail->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
-		$form_mail->addFormPart('</li>');
-		$form_mail->addFormPart('</ul>');
-	}
-	*/
-	$form_mail->addFormPart('</li>');
-	# Include javascripts for styling the upload field.
-	$doc->setJavaScripts('uniform');
-	$doc->setFooterJS('uniform-file');
+    $max_file_size=$fp->getMaxFileSize();
+    $form_mail->addElement('hidden', array('name'=>'MAX_FILE_SIZE', 'value'=>((!empty($max_file_size)) ? $max_file_size : 5242880)));
+    $form_mail->addFormPart('<li>');
+    $form_mail->addFormPart('<label class="label" for="file">File</label>');
+    $form_mail->addElement('file', array('id'=>'file', 'name'=>'file'));
+    /*
+    if(isset($file_name))
+    {
+        $form_mail->addFormPart('<ul>');
+        $form_mail->addFormPart('<li class="file-current">');
+        $form_mail->addFormPart('<a href="'.APPLICATION_URL.'download/?f='.$file_name.'&amp;t=tmp" title="Current Attachment">'.$file_name.'"</a>');
+        $form_mail->addElement('hidden', array('name'=>'_file', 'value'=>$file_name));
+        $form_mail->addFormPart('</li>');
+        $form_mail->addFormPart('</ul>');
+    }
+    */
+    $form_mail->addFormPart('</li>');
+    # Include javascripts for styling the upload field.
+    $doc->setJavaScripts('uniform');
+    $doc->setFooterJS('uniform-file');
 }
 $form_mail->addFormPart('<li>');
 $form_mail->addFormPart('<label class="label msg" for="mesg">Message</label>');

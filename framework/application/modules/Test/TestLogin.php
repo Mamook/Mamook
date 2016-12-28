@@ -1247,7 +1247,7 @@ class TestLogin Extends Test
 	// 		if(WP_INSTALLED===TRUE)
 	// 		{
 	// 			# Format the password
-	// 			$wp_password=$this->ecodeWP_Password($password);
+	// 			$wp_password=$this->encodeWP_Password($password);
 	// 			$username=$this->findUsername($id);
 	// 			try
 	// 			{
@@ -1438,13 +1438,13 @@ class TestLogin Extends Test
 	} # ----End clearWP_Cookies
 
 	/**
-	* ecodeWP_Password
+	* encodeWP_Password
 	*
 	* Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
 	*
 	* @access private
 	*/
-	private function ecodeWP_Password($password)
+	private function encodeWP_Password($password)
 	{
 		# Get the PasswordHash Class.
 		require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
@@ -1453,7 +1453,7 @@ class TestLogin Extends Test
 		# Format the password
 		$wp_password=$hasher->HashPassword(trim($password));
 		return $wp_password;
-	} # ----End ecodeWP_Password
+	} # ----End encodeWP_Password
 
 	/**
 	 * createWP_User
@@ -1469,7 +1469,7 @@ class TestLogin Extends Test
 		$db=DB::get_instance();
 
 		# Format the password
-		$wp_password=$this->ecodeWP_Password($password);
+		$wp_password=$this->encodeWP_Password($password);
 		# Get the username.
 		$username=$this->getUsername();
 		# Get the email address.
