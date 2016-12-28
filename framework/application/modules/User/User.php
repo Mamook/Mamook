@@ -53,7 +53,6 @@ class User
     protected $title=NULL;
     protected $username=NULL;
     protected $website=NULL;
-    protected $wp_password=NULL;
     protected $zipcode=NULL;
 
     /*** End data members ***/
@@ -930,28 +929,6 @@ class User
     }
 
     /**
-     * Sets the data member $wp_password.
-     *
-     * @param string $wp_password The User's encoded password.
-     */
-    public function setWPPassword($wp_password)
-    {
-        # Check if the value is empty.
-        if(!empty($wp_password))
-        {
-            # Clean it up and set the data member.
-            $wp_password=trim($wp_password);
-        }
-        else
-        {
-            # Explicitly set it to NULL.
-            $wp_password=NULL;
-        }
-        # Set the data member.
-        $this->wp_password=$wp_password;
-    }
-
-    /**
      * Sets the data member $zipcode.
      *
      * @param string $zipcode The User's zipcode.
@@ -1277,14 +1254,6 @@ class User
     public function getWebsite()
     {
         return $this->website;
-    }
-
-    /**
-     * Returns the data member $wp_password.
-     */
-    public function getWPPassword()
-    {
-        return $this->wp_password;
     }
 
     /**
@@ -1736,8 +1705,12 @@ class User
             # If WordPress is installed add the user the the WordPress users table.
             if(WP_INSTALLED===TRUE)
             {
-                # Get the wordpress password.
-                $this->createWP_User();
+                # Get the WordPressUser class.
+                require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+                # Instantiate a new WordPressUser object.
+                $wp_user=new WordPressUser();
+                # Create a WordPress user account.
+                $wp_user->createWP_User($this);
             }
             # Account was not created. Return error.
             if($insert_user<=0)
@@ -1754,60 +1727,6 @@ class User
         catch(Exception $e)
         {
             throw $e;
-        }
-    }
-
-    /**
-     * Creates a WordPress user in the WordPress Database tables.
-     * Assumes a user was just created in the main users table.
-     */
-    public function createWP_User()
-    {
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-
-        # Format the password
-        $this->encodeWP_Password();
-
-        # Get the username.
-        $username=$this->getUsername();
-        # Get the email address.
-        $email=$this->getEmail();
-        # Get the password.
-        $wp_password=$this->getWPPassword();
-
-        try
-        {
-            $db->query('INSERT INTO `'.WP_DBPREFIX.'users` (`user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES ('.$db->quote($db->escape($username)).', '.$db->quote($db->escape($wp_password)).', '.$db->quote($db->escape($username)).', '.$db->quote($db->escape($email)).', '.$db->quote($db->escape('')).', '.$db->quote($db->escape(YEAR_MM_DD_TIME)).', '.$db->quote($db->escape('')).', '.$db->quote($db->escape('0')).', '.$db->quote($db->escape($username)).')');
-        }
-        catch(ezDB_Error $ez)
-        {
-            throw new Exception('There was an error inserting the new WordPress user info for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-        }
-        $row=$db->get_row('SELECT `ID` FROM `'.WP_DBPREFIX.'users` WHERE `user_login` = '.$db->quote($db->escape($username)).' LIMIT 1');
-
-        $wp_user_id=$row->ID;
-        $meta_data=array(
-            WP_DBPREFIX.'user_level'=>0,
-            WP_DBPREFIX.'capabilities'=>'a:1:{s:10:"subscriber";b:1;}',
-            'nickname'=>$username,
-            'rich_editing'=>'true',
-            'comment_shortcuts'=>'false',
-            'admin_color'=>'fresh',
-            'use_ssl'=>0,
-            's2_excerpt'=>'excerpt',
-            's2_format'=>'text'
-        );
-        try
-        {
-            foreach($meta_data as $meta_key=>$meta_value)
-            {
-                $insert_user_meta=$db->query('INSERT INTO `'.WP_DBPREFIX.'usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES ('.$db->quote($wp_user_id).', '.$db->quote($db->escape($meta_key)).', '.$db->quote($db->escape($meta_value)).')');
-            }
-        }
-        catch(ezDB_Error $ez)
-        {
-            throw new Exception('There was an error inserting the new WordPress usermeta info for "'.$username.'" into the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3481,8 +3400,16 @@ class User
         # Unset the sessions (all of them - array given)
         $session->loseAllSessionData();
 
-        # If WordPress is installed, log the user out of WordPress.
-        $this->clearWP_Cookies();
+        # If WordPress is installed, clear the cookies.
+        if(WP_INSTALLED===TRUE)
+        {
+            # Get the WordPressUser class.
+            require_once Utility::locateFile(MODULES.'User'.DS.'WordPressUser.php');
+            # Instantiate a new WordPressUser object.
+            $wp_user=new WordPressUser();
+            # If WordPress is installed, log the user out of WordPress.
+            $wp_user->clearWP_Cookies();
+        }
 
         # Uncomment the following line if you wish to remove all cookies.
         #    Don't forget to comment or delete the following 2 lines if you decide to use the clearCookies method)
@@ -3817,7 +3744,7 @@ class User
                 # Instantiate a new WordPressUser object.
                 $wp_user=new WordPressUser();
                 # Format the password
-                $wp_password=$this->encodeWP_Password($password);
+                $wp_password=$wp_user->encodeWP_Password($password);
                 # Update the WordPress password.
                 $wp_user->updateWP_Password($username, $wp_password);
             }
@@ -4025,95 +3952,4 @@ class User
     }
 
     /*** End protected methods ***/
-
-    /*** private methods ***/
-
-    /**
-     * Clears the WordPress cookies
-     *
-     * TODO: MOVE TO WEBUTILITIES
-     */
-    private function clearWP_Cookies()
-    {
-        # If WordPress is installed, clear the cookies.
-        if(WP_INSTALLED===TRUE)
-        {
-            # Unset cookies
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN);
-            setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(LOGGED_IN_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(LOGGED_IN_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(LOGGED_IN_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Old cookies
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(SECURE_AUTH_COOKIE, '', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Even older cookies
-            setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(USER_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(PASS_COOKIE, ' ', time()-31536000, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie(USER_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(USER_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie(PASS_COOKIE, '', time()-LOGIN_LIFE);
-            setcookie(PASS_COOKIE, ' ', time()-31536000, SITECOOKIEPATH, COOKIE_DOMAIN);
-
-            # Settings and Test Cookies
-            setcookie('wp-settings-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE);
-            setcookie('wp-settings-time-1', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-            setcookie('settings', '', time()-LOGIN_LIFE);
-            setcookie('settings', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, SITECOOKIEPATH, COOKIE_DOMAIN);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE);
-            setcookie('wordpress_test_cookie', '', time()-LOGIN_LIFE, COOKIEPATH, COOKIE_DOMAIN);
-        }
-    }
-
-    /**
-     * Encodes a password for WordPress. A wrapper method for HashPassword from the PasswordHash class.
-     *
-     * @param string $wp_password Optional. Used only for User->changePassword() method.
-     * @return null
-     */
-    private function encodeWP_Password($wp_password=NULL)
-    {
-        # Get the PasswordHash Class.
-        require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
-        # Instantiate a PasswordHash object
-        $hasher=new PasswordHash(8, TRUE);
-        # If $password param is NOT set.
-        if($wp_password===NULL)
-        {
-            # Get the Wordpress password.
-            $wp_password=$this->getWPPassword();
-        }
-        # Format the password.
-        $wp_password=$hasher->HashPassword($wp_password);
-        # Set the formatted password.
-        $this->setWPPassword($wp_password);
-
-        # Return the password (for backwards compatibility).
-        return $this->getWPPassword();
-    }
-
-    /*** End private methods ***/
 }
