@@ -1527,7 +1527,7 @@ class User
                 if(WP_INSTALLED===TRUE)
                 {
                     # Format the password
-                    $wp_password=$this->ecodeWP_Password($password);
+                    $wp_password=$this->encodeWP_Password($password);
                     $username=$this->findUsername($id);
                     try
                     {
@@ -1897,7 +1897,7 @@ class User
         $db=DB::get_instance();
 
         # Format the password
-        $this->ecodeWP_Password();
+        $this->encodeWP_Password();
 
         # Get the username.
         $username=$this->getUsername();
@@ -4139,7 +4139,7 @@ class User
      * @param string $wp_password Optional. Used only for User->changePassword() method.
      * @return null
      */
-    private function ecodeWP_Password($wp_password=NULL)
+    private function encodeWP_Password($wp_password=NULL)
     {
         # Get the PasswordHash Class.
         require_once Utility::locateFile(MODULES.'Vendor'.DS.'PasswordHash'.DS.'PasswordHash.php');
