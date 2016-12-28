@@ -1306,6 +1306,119 @@ class User
     /*** public methods ***/
 
     /**
+     * Activates new user account.
+     */
+    public function activateAccount()
+    {
+        # Set the Document instance to a variable.
+        $doc=Document::getInstance();
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+        # Set the Validator instance to a variable.
+        $validator=Validator::getInstance();
+
+        if($this->isLoggedIn()===TRUE)
+        {
+            $doc->redirect(REDIRECT_AFTER_LOGIN);
+        }
+
+        # Check if there is GET Data and that we have valid ID and random key.
+        if(
+            (strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
+            !empty($_GET['ID']) &&
+            ($validator->isNumber($_GET['ID'])==TRUE) &&
+            (
+                isset($_GET['key']) &&
+                (strlen($_GET['key'])==32) &&
+                ($validator->isAlphanum($_GET['key'])==TRUE)
+            )
+        )
+        {
+            $id=(int)$_GET['ID'];
+            # Get user data from the DB
+            $username=$this->findUsername($id);
+            if($this->findUserData($username)!==FALSE)
+            {
+                try
+                {
+                    $row=$db->get_row('SELECT `random` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+                }
+                catch(ezDB_Error $ez)
+                {
+                    throw new Exception('There was an error retrieving the "random" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
+                    Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                }
+                if($row!==NULL)
+                {
+                    # Does the random key sent match the one we have in the DB?
+                    if($row->random!=$_GET['key'])
+                    {
+                        $validator->setError('The confirmation key that was generated for this account does not match with the one entered!');
+                        $doc->redirect(DEFAULT_REDIRECT);
+                        exit;
+                    }
+                    # Does the user have "inactive" status (0)?
+                    elseif(($this->getActive()===0))
+                    {
+                        try
+                        {
+                            # Update user status to "active" (1)
+                            $db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
+                            # Do we send them somewhere else after confirming them?
+                            if(REDIRECT_AFTER_CONFIRMATION==TRUE)
+                            {
+                                # Log the user in.
+                                $this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
+                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+                                You are now signed in and ready to enjoy the site.<br />
+                                Being signed in allows you to access special content and downloads!';
+                                $doc->redirect(REDIRECT_AFTER_LOGIN);
+                            }
+                            # They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
+                            else
+                            {
+                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
+                                You may now sign in and enjoy the site.<br />
+                                Being signed in allows you to access special content and downloads!';
+                                $doc->redirect(REDIRECT_TO_LOGIN);
+                            }
+                        }
+                        catch(ezDB_Error $ez)
+                        {
+                            throw new Exception('There was an error activating '.$username.'\'s account in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
+                        }
+                        catch(Exception $e)
+                        {
+                            throw $e;
+                        }
+                    }
+                    elseif($this->getActive()===1)
+                    {
+                        $_SESSION['message']='You have already been confirmed!<br />
+                        All you need to do is sign in.';
+                        $doc->redirect(REDIRECT_TO_LOGIN);
+                    }
+                }
+                else
+                {
+                    $_SESSION['message']='User not found!';
+                    $doc->redirect(DEFAULT_REDIRECT);
+                }
+            }
+            else
+            {
+                $_SESSION['message']='User not found!';
+                $doc->redirect(DEFAULT_REDIRECT);
+            }
+        }
+        else
+        {
+            $_SESSION['message']='There was an error processing your activation. Please copy the the activation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
+            $doc->redirect(DEFAULT_REDIRECT);
+        }
+    }
+
+    /**
      * Captures post(after) login data sent from the previous page.
      */
     public function capturePostLogin()
@@ -2000,6 +2113,48 @@ class User
         {
             # Re-throw any caught exceptions.
             throw $e;
+        }
+    }
+
+    /**
+     * Deletes the user(s) from the system.
+     */
+    public function deleteInactiveUsers()
+    {
+        try
+        {
+            # Get all of the inactive users that are ready to be deleted.
+            $inactive_users=$this->getInactiveUsers();
+            # If there are any users ready to be deleted.
+            if($inactive_users)
+            {
+                # If there is more then 1 result.
+                if(count($inactive_users)>1)
+                {
+                    $user_id_array=array();
+                    # Loop through the multidimensional array.
+                    foreach((array)$inactive_users as $user_id)
+                    {
+                        # Convert it to a single dimension.
+                        $user_id_array[]=$user_id[0];
+                    }
+                    $user_id=$user_id_array;
+                }
+                # Only one result so let's assign only that one result to a variable.
+                else
+                {
+                    $user_id=$inactive_users[0][0];
+                }
+                # Delete the users.
+                $this->deleteAccount($user_id);
+
+                # Return how many users were deleted.
+                return count($inactive_users);
+            }
+        }
+        catch(ezDB_Error $e)
+        {
+            throw new Exception('There was an error deleting the inactive user: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
@@ -3131,6 +3286,37 @@ class User
     }
 
     /**
+     * Check if the user is already in the users_inactive table.
+     *
+     * @param int $user_id
+     * @return
+     * @throws Exception
+     */
+    public function getInactiveUsers($user_id=NULL)
+    {
+        # Set the Database instance to a variable.
+        $db=DB::get_instance();
+
+        try
+        {
+            if($user_id!==NULL)
+            {
+                $results=$db->get_row('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
+            }
+            else
+            {
+                $results=$db->get_results('SELECT `user_id` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()', ARRAY_N);
+            }
+
+            return $results;
+        }
+        catch(ezDB_Error $e)
+        {
+            throw new Exception('There was an error checking the users_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
+        }
+    }
+
+    /**
      * Retrieves User email addresses from the Database that have opted in to receiving news messages.
      *
      * @param string $opt_in   The name of the table that the user has opted into.
@@ -3565,119 +3751,6 @@ class User
     }
 
     /**
-     * Activates new user account.
-     */
-    public function activateAccount()
-    {
-        # Set the Document instance to a variable.
-        $doc=Document::getInstance();
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-        # Set the Validator instance to a variable.
-        $validator=Validator::getInstance();
-
-        if($this->isLoggedIn()===TRUE)
-        {
-            $doc->redirect(REDIRECT_AFTER_LOGIN);
-        }
-
-        # Check if there is GET Data and that we have valid ID and random key.
-        if(
-            (strtoupper($_SERVER['REQUEST_METHOD'])=='GET') &&
-            !empty($_GET['ID']) &&
-            ($validator->isNumber($_GET['ID'])==TRUE) &&
-            (
-                isset($_GET['key']) &&
-                (strlen($_GET['key'])==32) &&
-                ($validator->isAlphanum($_GET['key'])==TRUE)
-            )
-        )
-        {
-            $id=(int)$_GET['ID'];
-            # Get user data from the DB
-            $username=$this->findUsername($id);
-            if($this->findUserData($username)!==FALSE)
-            {
-                try
-                {
-                    $row=$db->get_row('SELECT `random` FROM `'.DBPREFIX.'users` WHERE `ID` = '.$db->quote($id).' LIMIT 1');
-                }
-                catch(ezDB_Error $ez)
-                {
-                    throw new Exception('There was an error retrieving the "random" field for '.$username.' from the Database: '.$ez->error.', code: '.$ez->errno.'<br />
-                    Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                }
-                if($row!==NULL)
-                {
-                    # Does the random key sent match the one we have in the DB?
-                    if($row->random!=$_GET['key'])
-                    {
-                        $validator->setError('The confirmation key that was generated for this account does not match with the one entered!');
-                        $doc->redirect(DEFAULT_REDIRECT);
-                        exit;
-                    }
-                    # Does the user have "inactive" status (0)?
-                    elseif(($this->getActive()===0))
-                    {
-                        try
-                        {
-                            # Update user status to "active" (1)
-                            $db->query('UPDATE `'.DBPREFIX.'users` SET `active` = '.$db->quote(1).' WHERE `ID` = '.$db->quote($id).' LIMIT 1');
-                            # Do we send them somewhere else after confirming them?
-                            if(REDIRECT_AFTER_CONFIRMATION==TRUE)
-                            {
-                                # Log the user in.
-                                $this->setLoginSessions($id, $this->findDisplayName(), $this->findPassword(), $this->findFirstName(), $this->findLastName(), $this->findTitle(), $this->findRegistered(), $this->findLastLogin(), TRUE);
-                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-                                You are now signed in and ready to enjoy the site.<br />
-                                Being signed in allows you to access special content and downloads!';
-                                $doc->redirect(REDIRECT_AFTER_LOGIN);
-                            }
-                            # They're not logging in and redirecting to some type of member's page, let's give them a nice message and send them to the login page.
-                            else
-                            {
-                                $_SESSION['message']='Congratulations! You just confirmed your registration with '.DOMAIN_NAME.'!<br />
-                                You may now sign in and enjoy the site.<br />
-                                Being signed in allows you to access special content and downloads!';
-                                $doc->redirect(REDIRECT_TO_LOGIN);
-                            }
-                        }
-                        catch(ezDB_Error $ez)
-                        {
-                            throw new Exception('There was an error activating '.$username.'\'s account in the Database: '.$ez->error.', code: '.$ez->errno.'<br />Last query: '.$ez->last_query, E_RECOVERABLE_ERROR);
-                        }
-                        catch(Exception $e)
-                        {
-                            throw $e;
-                        }
-                    }
-                    elseif($this->getActive()===1)
-                    {
-                        $_SESSION['message']='You have already been confirmed!<br />
-                        All you need to do is sign in.';
-                        $doc->redirect(REDIRECT_TO_LOGIN);
-                    }
-                }
-                else
-                {
-                    $_SESSION['message']='User not found!';
-                    $doc->redirect(DEFAULT_REDIRECT);
-                }
-            }
-            else
-            {
-                $_SESSION['message']='User not found!';
-                $doc->redirect(DEFAULT_REDIRECT);
-            }
-        }
-        else
-        {
-            $_SESSION['message']='There was an error processing your activation. Please copy the the activation link that was sent to you in your email and paste it into your browser if clicking on the link isn\'t working. If you are still having issues, write to the <a href="'.APPLICATION_URL.'webSupport/" title="Write to webSupport.">webmaster by clicking here</a>. Please give details as to what you are seeing (or not seeing) and any errors that may be displayed.';
-            $doc->redirect(DEFAULT_REDIRECT);
-        }
-    }
-
-    /**
      * Sends account info in an email to the user.
      *
      * @param $email
@@ -3927,79 +4000,6 @@ class User
         catch(Exception $e)
         {
             throw $e;
-        }
-    }
-
-    /**
-     * Check if the user is already in the users_inactive table.
-     *
-     * @param int $user_id
-     * @return
-     * @throws Exception
-     */
-    public function getInactiveUsers($user_id=NULL)
-    {
-        # Set the Database instance to a variable.
-        $db=DB::get_instance();
-
-        try
-        {
-            if($user_id!==NULL)
-            {
-                $results=$db->get_row('SELECT `user_id`, `delete_date` FROM `'.DBPREFIX.'users_inactive` WHERE `user_id` = '.$db->quote($user_id).' LIMIT 1');
-            }
-            else
-            {
-                $results=$db->get_results('SELECT `user_id` FROM `'.DBPREFIX.'users_inactive` WHERE `delete_date` <= CURDATE()', ARRAY_N);
-            }
-
-            return $results;
-        }
-        catch(ezDB_Error $e)
-        {
-            throw new Exception('There was an error checking the users_inactive table: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
-        }
-    }
-
-    /**
-     * Deletes the user(s) from the system.
-     */
-    public function deleteInactiveUsers()
-    {
-        try
-        {
-            # Get all of the inactive users that are ready to be deleted.
-            $inactive_users=$this->getInactiveUsers();
-            # If there are any users ready to be deleted.
-            if($inactive_users)
-            {
-                # If there is more then 1 result.
-                if(count($inactive_users)>1)
-                {
-                    $user_id_array=array();
-                    # Loop through the multidimensional array.
-                    foreach((array)$inactive_users as $user_id)
-                    {
-                        # Convert it to a single dimension.
-                        $user_id_array[]=$user_id[0];
-                    }
-                    $user_id=$user_id_array;
-                }
-                # Only one result so let's assign only that one result to a variable.
-                else
-                {
-                    $user_id=$inactive_users[0][0];
-                }
-                # Delete the users.
-                $this->deleteAccount($user_id);
-
-                # Return how many users were deleted.
-                return count($inactive_users);
-            }
-        }
-        catch(ezDB_Error $e)
-        {
-            throw new Exception('There was an error deleting the inactive user: '.$e->error.', code: '.$e->errno.'<br />Last query: '.$e->last_query, E_RECOVERABLE_ERROR);
         }
     }
 
