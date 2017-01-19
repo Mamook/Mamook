@@ -253,11 +253,6 @@ class RegisterFormPopulator extends FormPopulator
 				# Check if there was POST data sent.
 				if(isset($_POST['password']) && !empty($_POST['password']))
 				{
-					# If WordPress is installed add the user the the WordPress users table.
-					if(WP_INSTALLED===TRUE)
-					{
-						$data['WPPassword']=trim($_POST['password']);
-					}
 					$data['Password']=trim($_POST['password']);
 				}
 

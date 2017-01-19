@@ -7,8 +7,6 @@ if(!defined('BASE_PATH'))
 }
 
 /**
- * User
- *
  * The User class is used to access and manipulate data in the `users` table.
  *
  */
