@@ -57,7 +57,7 @@ if(isset($_GET['file']))
 				$file_categories.=$key.'-';
 			}
 		}
-		$file_categories=$file_categories;
+		//$file_categories=$file_categories;
 		$file_contributor=$file_obj->getContID();
 		$file_date=$file_obj->getDate();
 		$file_file_name=$file_obj->getFile();

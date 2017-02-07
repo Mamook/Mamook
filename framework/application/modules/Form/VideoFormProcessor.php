@@ -116,7 +116,7 @@ class VideoFormProcessor extends FormProcessor
 				$category_ids='-'.implode('-', $categories).'-';
 			}
 			# Set the confirmation email template to a variable.
-			$confirmation_template=$video_obj->getConfirmationTemplate();
+			//$confirmation_template=$video_obj->getConfirmationTemplate();
 			# Set the video contributor's id to a variable.
 			$contributor_id=$video_obj->getContID();
 			# Set the video's posting date to a variable.
