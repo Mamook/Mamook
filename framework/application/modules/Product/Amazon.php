@@ -7,7 +7,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 {
 	define('__PHP_SHA256_NANO_', true);
 
-	/*
+	/**
 	 * Amazon
 	 *
 	 * The Amazon Class is used access and maintain the Amazon specific data in the `product` table in the database and interface with the Amazon.com API. For more information on accessing Amazon.com, see http://aws.amazon.com/
@@ -43,10 +43,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** magic methods ***/
 
-		/*
-		 * __construct
+		/**
+		 * Amazon constructor.
 		 *
-		 * @access	public
+		 * @param $access_key
+		 * @param $ass_tag
+		 * @param $secret_key
 		 */
 		public function __construct($access_key, $ass_tag, $secret_key)
 		{
@@ -61,20 +63,19 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** mutator methods ***/
 
-		/*
+		/**
 		 * setAccessKey
 		 *
 		 * Sets the data member $access_key
 		 *
-		 * @param		$access_key
-		 * @access	private
+		 * @param string $access_key
 		 */
 		private function setAccessKey($access_key)
 		{
 			$this->access_key=$access_key;
 		} #==== End -- setAccessKey
 
-		/*
+		/**
 		 * setAssTag
 		 *
 		 * Sets the data member $ass_tag
@@ -87,13 +88,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->ass_tag=$ass_tag;
 		} #==== End -- setAssTag
 
-		/*
+		/**
 		 * setDetailedPageURL
 		 *
 		 * Sets the data member $detailed_page_url.
 		 *
 		 * @param		$detailed_page_url
-		 * @access	protected
 		 */
 		protected function setDetailedPageURL($detailed_page_url)
 		{
@@ -112,13 +112,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setDetailedPageURL
 
-		/*
+		/**
 		 * setEditorialReview
 		 *
 		 * Sets the data member $editorial_review.
 		 *
 		 * @param		$editorial_review
-		 * @access	protected
 		 */
 		protected function setEditorialReview($editorial_review)
 		{
@@ -137,13 +136,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setEditorialReview
 
-		/*
+		/**
 		 * setImageHeight
 		 *
 		 * Sets the data member $image_height.
 		 *
 		 * @param		$image_height
-		 * @access	protected
 		 */
 		protected function setImageHeight($image_height)
 		{
@@ -162,13 +160,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageHeight
 
-		/*
+		/**
 		 * setImageWidth
 		 *
 		 * Sets the data member $image_width.
 		 *
 		 * @param		$image_width
-		 * @access	protected
 		 */
 		protected function setImageWidth($image_width)
 		{
@@ -187,13 +184,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageWidth
 
-		/*
+		/**
 		 * setImageURL
 		 *
 		 * Sets the data member $image_url.
 		 *
 		 * @param		$image_url
-		 * @access	protected
 		 */
 		protected function setImageURL($image_url)
 		{
@@ -212,13 +208,12 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageURL
 
-		/*
+		/**
 		 * setImageOriginalURL
 		 *
 		 * Sets the data member $image_original_url.
 		 *
 		 * @param		$original_url
-		 * @access	protected
 		 */
 		protected function setImageOriginalURL($original_url)
 		{
@@ -237,26 +232,24 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- setImageOriginalURL
 
-		/*
+		/**
 		 * setParsedXML
 		 *
 		 * Sets the data member $parsed_xml
 		 *
 		 * @param		$parsed_xml
-		 * @access	private
 		 */
 		private function setParsedXML($parsed_xml)
 		{
 			$this->parsed_xml=$parsed_xml;
 		} #==== End -- setParsedXML
 
-		/*
+		/**
 		 * setSecretKey
 		 *
 		 * Sets the data member $secret_key
 		 *
 		 * @param		$secret_key
-		 * @access	private
 		 */
 		private function setSecretKey($secret_key)
 		{
@@ -269,120 +262,100 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** accessor methods ***/
 
-		/*
+		/**
 		 * getAccessKey
 		 *
 		 * Returns the data member $access_key.
-		 *
-		 * @access	protected
 		 */
 		protected function getAccessKey()
 		{
 			return $this->access_key;
 		} #==== End -- getAccessKey
 
-		/*
+		/**
 		 * getAssTag
 		 *
 		 * Returns the data member $ass_tag.
-		 *
-		 * @access	protected
 		 */
 		protected function getAssTag()
 		{
 			return $this->ass_tag;
 		} #==== End -- getAssTag
 
-		/*
+		/**
 		 * getDetailedPageURL
 		 *
 		 * Returns the data member $detailed_page_url.
-		 *
-		 * @access	protected
 		 */
 		protected function getDetailedPageURL()
 		{
 			return $this->detailed_page_url;
 		} #==== End -- getDetailedPageURL
 
-		/*
+		/**
 		 * getEditorialReview
 		 *
 		 * Returns the data member $editorial_review.
-		 *
-		 * @access	protected
 		 */
 		protected function getEditorialReview()
 		{
 			return $this->editorial_review;
 		} #==== End -- getEditorialReview
 
-		/*
+		/**
 		 * getImageHeight
 		 *
 		 * Returns the data member $image_height.
-		 *
-		 * @access	protected
 		 */
 		protected function getImageHeight()
 		{
 			return $this->image_height;
 		} #==== End -- getImageHeight
 
-		/*
+		/**
 		 * getImageWidth
 		 *
 		 * Returns the data member $image_width.
-		 *
-		 * @access	protected
 		 */
 		protected function getImageWidth()
 		{
 			return $this->image_width;
 		} #==== End -- getImageWidth
 
-		/*
+		/**
 		 * getImageURL
 		 *
 		 * Returns the data member $image_url.
-		 *
-		 * @access	protected
 		 */
 		protected function getImageURL()
 		{
 			return $this->image_url;
 		} #==== End -- getImageURL
 
-		/*
+		/**
 		 * getImageOriginalURL
 		 *
 		 * Returns the data member $image_original_url.
-		 *
-		 * @access	protected
 		 */
 		protected function getImageOriginalURL()
 		{
 			return $this->image_original_url;
 		} #==== End -- getImageOriginalURL
 
-		/*
+		/**
 		 * getParsedXML
 		 *
 		 * Returns the data member $parsed_xml.
-		 *
-		 * @access	protected
 		 */
 		protected function getParsedXML()
 		{
 			return $this->parsed_xml;
 		} #==== End -- getParsedXML
 
-		/*
+		/**
 		 * getSecretKey
 		 *
 		 * Returns the data member $secret_key.
-		 *
-		 * @access	protected
 		 */
 		protected function getSecretKey()
 		{
@@ -395,42 +368,45 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** public methods ***/
 
-		/*
+		/**
 		 * displayAmazonProduct
 		 *
 		 * Creates Amazon product XHTML elements and sets them to an array for display.
 		 *
-		 * @param	array $asins		An array of product ASIN's.
-		 * @param	$page
-		 * @param	$identifier
-		 * @param $option				An Array of various options for displaying Products. The available options are:
-		 *												"image_size" => What size of image should be called from Amazon for Amazon products. the default is
-		 *																				"MediumImage". The possible values are:
-		 *																				"LargeImage"
-		 *																				"MediumImage"
-		 *																				"SmallImage"
-		 *																				"SwatchImage"
-		 *																				"ThumbnailImage"
-		 *																				"TinyImage"
-		 *												"max_char" => The maximum number of characters to display in product descriptions. The default is NULL
-		 *																			(unlimited).
-		 *												"access_level" => The access levels needed for a logged in User to modify the products - must be a
-		 *																					space sepparated string of numbers. The default is ADMIN_USERS.
-		 *												"labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is
-		 *																		TRUE.
-		 *												"title_class" => The class for the title container. Default is "title".
-		 *												"title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to. If
-		 *																				the title should link to the details page, simply pass the value "default". Default is
-		 *																				"default".
-		 *												"title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag. If it WILL be,
-		 *																							pass the text to be used in the "title" attribute for the link. To use the product
-		 *																							title, "{PRODUCT_TITLE}", simply pass the value "default". The default is "default".
-		 * @access	public
+		 * @param array $asins       An array of product ASIN's.
+		 * @param string $page
+		 * @param string $identifier
+		 * @param array $options     An Array of various options for displaying Products. The available options are:
+		 *                               "image_size" => What size of image should be called from Amazon for Amazon products.
+		 *                                                   The default is "MediumImage".
+		 *                                   The possible values are:
+		 *                                   "LargeImage"
+		 *                                   "MediumImage"
+		 *                                   "SmallImage"
+		 *                                   "SwatchImage"
+		 *                                   "ThumbnailImage"
+		 *                                   "TinyImage"
+		 *                                "max_char" => The maximum number of characters to display in product descriptions. The default is NULL (unlimited).
+		 *                                "access_level" => The access levels needed for a logged in User to modify the products - must be a space sepparated string of numbers.
+		 *                                                      The default is ADMIN_USERS.
+		 *                                "labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is TRUE.
+		 *                                "title_class" => The class for the title container. Default is "title".
+		 *                                "title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to.
+		 *                                                    If the title should link to the details page, simply pass the value "default".
+		 *                                                    Default is "default".
+		 *                                "title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag.
+		 *                                                          If it WILL be, pass the text to be used in the "title" attribute for the link.
+		 *                                                          To use the product title, "{PRODUCT_TITLE}", simply pass the value "default".
+		 *                                                          The default is "default".
+		 * @return array|bool
+		 * @throws Exception
 		 */
 		public function displayAmazonProduct($asins, $page, $identifier, $options=array())
 		{
 			# Bring the Login object into scope.
 			global $login;
+
+			//print_r($asins);exit;
 
 			try
 			{
@@ -719,8 +695,10 @@ if(!defined('__PHP_SHA256_NANO_'))
 							}
 						}
 					}
+
 					return $display_product;
 				}
+
 				return FALSE;
 			}
 			catch(Exception $e)
@@ -729,15 +707,14 @@ if(!defined('__PHP_SHA256_NANO_'))
 			}
 		} #==== End -- displayAmazonProduct
 
-		/*
+		/**
 		 * getAmazonProduct
 		 *
 		 * Generates a link to the Amazon shopping cart.
 		 *
-		 * @param	$page
-		 * @param	$identifier
-		 * @param	array $asins		An array of product ASIN's.
-		 * @access	public
+		 * @param string $page
+		 * @param string $identifier
+		 * @param array $asins		An array of product ASIN's.
 		 */
 		public function getAmazonProduct($page, $identifier, $asins)
 		{
@@ -747,12 +724,10 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$this->setParsedXML(simplexml_load_string($response));
 		} #==== End -- getAmazonProduct
 
-		/*
+		/**
 		 * makeCartLink
 		 *
 		 * Generates a link to the Amazon shopping cart.
-		 *
-		 * @access	public
 		 */
 		public function makeCartLink()
 		{
@@ -777,14 +752,14 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** protected methods ***/
 
-		/*
+		/**
 		 * createImageMarkup
 		 *
 		 * Creates and returns HTML markup for the "image" of a product.
 		 *
-		 * @param		$image					The image URL of the product. A String.
-		 * @param		$image_options	The markup options. An array.
-		 * @access	protected
+		 * @param string $image        The image URL of the product.
+		 * @param array $image_options The markup options.
+		 * @return mixed|null|string
 		 */
 		protected function createImageMarkup($image, $image_options)
 		{
@@ -822,7 +797,11 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return NULL;
 		} #==== End -- createImageMarkup
 
-/*** THIS MAY NEED SOME FIXING ***/
+		# TODO: Fix and implement createCartRequest() and CartAdd().
+
+		/**
+		 * @param $CartId
+		 */
 		protected function createCartRequest($CartId)
 		{
 			$url='';
@@ -830,22 +809,19 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 			$url=$this->sendRequest($this->getSecretKey(), $url);
 		} #==== End -- createCartRequest
-/*** THIS MAY NEED SOME FIXING ***/
 
-/*** THIS NEEDS IMPLEMENTATION ***/
 		protected function CartAdd()
 		{
 
 		} #==== End -- CartAdd
-/*** THIS NEEDS IMPLEMENTATION ***/
 
-		/*
+		/**
 		 * createRequest
 		 *
 		 * Creates the request link for Amazon API
 		 *
-		 * @param		array			$asins	(An array of product ASIN's.)
-		 * @access	protected
+		 * @param array $asins An array of product ASIN's.
+		 * @return array|string
 		 */
 		protected function createRequest($asins)
 		{
@@ -864,7 +840,7 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $url;
 		} #==== End -- createRequest
 
-		/*
+		/**
 		 * fixAmazonImageProtocal
 		 *
 		 * The image URL's from Amazonare returned as insecure URLs. This checks
@@ -872,8 +848,8 @@ if(!defined('__PHP_SHA256_NANO_'))
 		 * requests are made over SSL and regular requests are made when the protocal
 		 * is http://.
 		 *
-		 * @param		String			$image_url	(The URL to check and possibly change)
-		 * @access	protected
+		 * @param string $image_url The URL to check and possibly change
+		 * @return mixed|string
 		 */
 		protected function fixAmazonImageProtocal($image_url)
 		{
@@ -885,16 +861,16 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $image_url;
 		} #==== End -- fixAmazonImageProtocal
 
-		/*
+		/**
 		 * sendRequest
 		 *
 		 * Sends a request to the Amazon API
 		 *
-		 * @param	$secretKey			Secret encryption key
-		 * @param	$request			Requested URL
-		 * @param	$accessKeyID		Public encryption key
-		 * @param	$version			Version of Amazon API
-		 * @access	protected
+		 * @param string $secretKey   Secret encryption key
+		 * @param string $request     Requested URL
+		 * @param string $accessKeyID Public encryption key
+		 * @param string $version     Version of Amazon API
+		 * @return array|string
 		 */
 		protected function sendRequest($secretKey, $request, $accessKeyID="", $version="2010-06-01")
 		{
@@ -927,15 +903,16 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $request;
 		} #==== End -- sendRequest
 
-		/*
+		/**
 		 * createCache
 		 *
 		 * Makes the cache directory and file, creates and sends the request to Amazon, sets the response to the cache, and returns the response.
 		 *
-		 * @param	array $asins		An array of product ASIN's.
-		 * @param	string $page		Get's the $page parameter in the URL.
-		 * @param	string $unique
-		 * @access	protected
+		 * @param string $page Get's the $page parameter in the URL.
+		 * @param string $unique
+		 * @param array $asins An array of product ASIN's.
+		 * @return False|mixed
+		 * @throws Exception
 		 */
 		protected function createCache($page, $unique, $asins)
 		{
@@ -982,13 +959,13 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $response;
 		} #==== End -- createCache
 
-		/*
+		/**
 		 * charPad
 		 *
 		 * Do the SHA-256 Padding routine (make input a multiple of 512 bits)
 		 *
-		 * @param	string $str
-		 * @access	protected
+		 * @param string $str
+		 * @return string
 		 */
 		protected function charPad($str)
 		{
@@ -1018,15 +995,15 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** bitwise and custom methods as defined in FIPS180-2 Standard ***/
 
-		/*
+		/**
 		 * addMod2N
 		 *
 		 * Z = (X + Y) mod 2^32
 		 *
-		 * @param	$x
-		 * @param	$y
-		 * @param	$n
-		 * @access	protected
+		 * @param int $x
+		 * @param int $y
+		 * @param int $n
+		 * @return int
 		 */
 		protected function addMod2N($x, $y, $n=4294967296)
 		{
@@ -1057,14 +1034,14 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return (int)$r;
 		} #==== End -- addMod2N
 
-		/*
+		/**
 		 * SHR
 		 *
 		 * Logical bitwise right shift (PHP default is arithmetic shift)
 		 *
-		 * @param	$x
-		 * @param	$n
-		 * @access	protected
+		 * @param int $x
+		 * @param int $n
+		 * @return int
 		 */
 		protected function SHR($x, $n)
 		{
@@ -1087,36 +1064,69 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return (int)$x >> (int)$n;
 		} #==== End -- SHR
 
+		/**
+		 * @param $x
+		 * @param $n
+		 * @return int
+		 */
 		protected function ROTR($x, $n)
 		{
 			return (int)($this->SHR($x, $n) | ($x << (32-$n)));
 		} #==== End -- ROTR
 
+		/**
+		 * @param $x
+		 * @param $y
+		 * @param $z
+		 * @return int
+		 */
 		protected function Ch($x, $y, $z)
 		{
 			return ($x & $y) ^ ((~$x) & $z);
 		} #==== End -- Ch
 
+		/**
+		 * @param $x
+		 * @param $y
+		 * @param $z
+		 * @return int
+		 */
 		protected function Maj($x, $y, $z)
 		{
 			return ($x & $y) ^ ($x & $z) ^ ($y & $z);
 		} #==== End -- Maj
 
+		/**
+		 * @param $x
+		 * @return int
+		 */
 		protected function Sigma0($x)
 		{
 			return (int) ($this->ROTR($x, 2)^$this->ROTR($x, 13)^$this->ROTR($x, 22));
 		} #==== End -- Sigma0
 
+		/**
+		 * @param $x
+		 * @return int
+		 */
 		protected function Sigma1($x)
 		{
 			return (int) ($this->ROTR($x, 6)^$this->ROTR($x, 11)^$this->ROTR($x, 25));
 		} #==== End -- Sigma1
 
+		/**
+		 * @param $x
+		 * @return int
+		 */
 		protected function sigma_0($x)
 		{
 			return (int) ($this->ROTR($x, 7)^$this->ROTR($x, 18)^$this->SHR($x, 3));
 		} #==== End -- sigma_0
 
+		/**
+		 * @param $x
+		 * @return int
+		 */
 		protected function sigma_1($x)
 		{
 			return (int) ($this->ROTR($x, 17)^$this->ROTR($x, 19)^$this->SHR($x, 10));
@@ -1127,16 +1137,17 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** custom methods to provide PHP support ***/
 
-		/*
+		/**
 		 * intSplit
 		 *
 		 * Split a byte-string into integer array values.
 		 *
-		 * @param	$input (The byte-string.)
-		 * @access	protected
+		 * @param string $input The byte-string.
+		 * @return array|bool|int
 		 */
 		protected function intSplit($input)
 		{
+			$result=array();
 			$l = strlen($input);
 
 			if($l <= 0)        		# right...
@@ -1158,8 +1169,14 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $result;
 		} #==== End -- intSplit
 
+		/**
+		 * @param $string
+		 * @param int $split_length
+		 * @return array|bool
+		 */
 		protected function strSplit($string, $split_length = 1)
 		{
+			$result=array();
 			$sign = (($split_length < 0) ? -1 : 1);
 			$strlen = strlen($string);
 			$split_length = abs($split_length);
@@ -1197,26 +1214,30 @@ if(!defined('__PHP_SHA256_NANO_'))
 			return $result;
 		} #==== End -- strSplit
 
-		/*
+		/**
 		 * sha256
 		 *
 		 * Note:
 		 * PHP Strings are limitd to (2^31)-1, so it is not worth it to
 		 * check for input strings > 2^64 as the FIPS180-2 defines.
 		 *
-		 * @param	$ig_func
-		 * @param	$str
-		 * @access	protected
+		 * @param string $str
+		 * @param boolean $ig_func
+		 * @return string
 		 */
-		protected function sha256($str, $ig_func = false)
+		protected function sha256($str, $ig_func=FALSE)
 		{
 			unset($binStr);			# binary representation of input string
 			unset($hexStr);			# 256-bit message digest in readable hex format
 
-			# check for php 5.1.2's internal sha256 function, ignore if ig_func is true
-			if($ig_func == false)
+			# Check for php 5.1.2's internal sha256 function, ignore if ig_func is true
+			if($ig_func==FALSE)
+			{
 				if(function_exists("hash"))
-					return hash("sha256", $str, false);
+				{
+					return hash("sha256", $str, FALSE);
+				}
+			}
 
 			/*
 			 * Use PHP Implementation of SHA-256 if no other library is available
@@ -1243,13 +1264,13 @@ if(!defined('__PHP_SHA256_NANO_'))
 				(int)0x748f82ee, (int)0x78a5636f, (int)0x84c87814, (int)0x8cc70208,
 				(int)0x90befffa, (int)0xa4506ceb, (int)0xbef9a3f7, (int)0xc67178f2);
 
-			// Pre-processing: Padding the string
+			# Pre-processing: Padding the string
 			$binStr=$this->charPad($str);
 
-			// Parsing the Padded Message (Break into N 512-bit blocks)
+			# Parsing the Padded Message (Break into N 512-bit blocks)
 			$M=$this->strSplit($binStr, 64);
 
-			// Set the initial hash values
+			# Set the initial hash values
 			$h[0] = (int)0x6a09e667;
 			$h[1] = (int)0xbb67ae85;
 			$h[2] = (int)0x3c6ef372;
@@ -1259,13 +1280,13 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$h[6] = (int)0x1f83d9ab;
 			$h[7] = (int)0x5be0cd19;
 
-			// loop through message blocks and compute hash. ( For i=1 to N : )
-			for ($i = 0; $i < count($M); $i++)
+			# loop through message blocks and compute hash. ( For i=1 to N : )
+			for($i = 0; $i < count($M); $i++)
 			{
-				// Break input block into 16 32-bit words (message schedule prep)
+				# Break input block into 16 32-bit words (message schedule prep)
 				$MI=$this->intSplit($M[$i]);
 
-				// Initialize working variables
+				# Initialize working variables
 				$_a = (int)$h[0];
 				$_b = (int)$h[1];
 				$_c = (int)$h[2];
@@ -1280,8 +1301,8 @@ if(!defined('__PHP_SHA256_NANO_'))
 				unset($_T2);
 				$W = array();
 
-				// Compute the hash and update
-				for ($t = 0; $t < 16; $t++)
+				# Compute the hash and update
+				for($t = 0; $t < 16; $t++)
 				{
 					# Prepare the first 16 message schedule values as we loop
 					$W[$t] = $MI[$t];
@@ -1295,13 +1316,13 @@ if(!defined('__PHP_SHA256_NANO_'))
 					$_d = $_c; $_c = $_b; $_b = $_a; $_a = $this->addMod2N($_T1, $_T2);
 				}
 
-				for (; $t < 64; $t++)
+				for(; $t < 64; $t++)
 				{
 					# Continue building the message schedule as we loop
-					$_s0 = $W[($t+1)&0x0F];
-					$_s0 = $sh->sigma_0($_s0);
-					$_s1 = $W[($t+14)&0x0F];
-					$_s1 = $sh->sigma_1($_s1);
+					$_s0=$W[($t+1)&0x0F];
+					$_s0=$this->sigma_0($_s0);
+					$_s1=$W[($t+14)&0x0F];
+					$_s1=$this->sigma_1($_s1);
 
 					$W[$t&0xF] = $this->addMod2N($this->addMod2N($this->addMod2N($W[$t&0xF], $_s0), $_s1), $W[($t+9)&0x0F]);
 
@@ -1314,21 +1335,28 @@ if(!defined('__PHP_SHA256_NANO_'))
 					$_d = $_c; $_c = $_b; $_b = $_a; $_a = $this->addMod2N($_T1, $_T2);
 				}
 
-				$h[0] = $this->addMod2N($h[0], $_a);
-				$h[1] = $this->addMod2N($h[1], $_b);
-				$h[2] = $this->addMod2N($h[2], $_c);
-				$h[3] = $this->addMod2N($h[3], $_d);
-				$h[4] = $this->addMod2N($h[4], $_e);
-				$h[5] = $this->addMod2N($h[5], $_f);
-				$h[6] = $this->addMod2N($h[6], $_g);
-				$h[7] = $this->addMod2N($h[7], $_h);
+				$h[0]=$this->addMod2N($h[0], $_a);
+				$h[1]=$this->addMod2N($h[1], $_b);
+				$h[2]=$this->addMod2N($h[2], $_c);
+				$h[3]=$this->addMod2N($h[3], $_d);
+				$h[4]=$this->addMod2N($h[4], $_e);
+				$h[5]=$this->addMod2N($h[5], $_f);
+				$h[6]=$this->addMod2N($h[6], $_g);
+				$h[7]=$this->addMod2N($h[7], $_h);
 			}
 
 			# Convert the 32-bit words into human readable hexadecimal format.
 			$hexStr = sprintf("%08x%08x%08x%08x%08x%08x%08x%08x", $h[0], $h[1], $h[2], $h[3], $h[4], $h[5], $h[6], $h[7]);
+
 			return $hexStr;
 		} #==== End -- sha256
 
+		/**
+		 * @param $key
+		 * @param $data
+		 * @param string $hashfunc
+		 * @return string
+		 */
 		protected function hmac($key, $data, $hashfunc='sha256')
 		{
 			$blocksize=64;
@@ -1337,20 +1365,21 @@ if(!defined('__PHP_SHA256_NANO_'))
 			$key=str_pad($key, $blocksize, chr(0x00));
 			$ipad=str_repeat(chr(0x36), $blocksize);
 			$opad=str_repeat(chr(0x5c), $blocksize);
-			$hmac = pack('H*', self::$hashfunc(($key^$opad) . pack('H*', self::$hashfunc(($key^$ipad) . $data))));
+			$hmac=pack('H*', self::$hashfunc(($key^$opad) . pack('H*', self::$hashfunc(($key^$ipad) . $data))));
+
 			return $hmac;
 		} #==== End -- hmac
 
 		/*** End custom methods to provide PHP support ***/
 
-		/*
+		/**
 		 * setDataMembers
 		 *
 		 * Sets all the data returned from the parsed xml to the appropriate Data members.
 		 *
-		 * @param	$product
-		 * @param	$image_size
-		 * @access	public
+		 * @param object $product
+		 * @param int $image_size
+		 * @throws Exception
 		 */
 		public function setAmazonDataMembers($product, $image_size)
 		{
@@ -1475,6 +1504,6 @@ if(!defined('__PHP_SHA256_NANO_'))
 
 		/*** End protected methods ***/
 
-	} # end Amazon class
+	}
 
 } # end if defined

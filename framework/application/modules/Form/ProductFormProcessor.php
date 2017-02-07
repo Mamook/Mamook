@@ -1,15 +1,15 @@
-<?php /* Requires PHP5+ */
+<?php /* framework/application/modules/Form/ProductFormProcessor.php */
 
 # Make sure the script is not accessed directly.
-if(!defined('BASE_PATH')) exit('No direct script access allowed');
-
+if(!defined('BASE_PATH'))
+{
+	exit('No direct script access allowed');
+}
 
 # Get the FormValidator Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormValidator.php');
-
 # Get the FormProcessor Class.
 require_once Utility::locateFile(MODULES.'Form'.DS.'FormProcessor.php');
-
 
 /**
  * ProductFormProcessor
@@ -26,8 +26,9 @@ class ProductFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted product for upload, edit, or deletion.
 	 *
-	 * @param	$data					An array of values tp populate the form with.
-	 * @access	public
+	 * @param array $data An array of values tp populate the form with.
+	 * @return null
+	 * @throws Exception
 	 */
 	public function processProduct($data=array())
 	{
@@ -39,8 +40,6 @@ class ProductFormProcessor extends FormProcessor
 			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
-			# Bring the content instance into scope.
-			$main_content=Content::getInstance();
 			# Get the ProductFormPopulator Class.
 			require_once Utility::locateFile(MODULES.'Form'.DS.'ProductFormPopulator.php');
 
@@ -107,10 +106,6 @@ class ProductFormProcessor extends FormProcessor
 			$publisher_id=$product_obj->getPublisher();
 			# Set the product's purchase link to a variable.
 			$purchase_link=$product_obj->getPurchaseLink();
-			# Set the site name to a variable.
-			$site_name=$main_content->getSiteName();
-			# Set the product's sort by to a variable.
-			$sort_by=$product_obj->getSortBy();
 			# Set the product's title to a variable.
 			$title=$product_obj->getTitle();
 			# Set the product's unique status to a variable.
@@ -128,7 +123,7 @@ class ProductFormProcessor extends FormProcessor
 				# Instantiate FormValidator object
 				$fv=new FormValidator();
 				# Check if the title field was empty (or less than 2 characters or more than 255 characters long).
-				$empty_name=$fv->validateEmpty('title', 'Please enter a name for the product.', 2, 255);
+				$fv->validateEmpty('title', 'Please enter a name for the product.', 2, 255);
 
 				# Check for errors to display so that the script won't go further.
 				if($fv->checkErrors()===TRUE)
@@ -295,6 +290,7 @@ class ProductFormProcessor extends FormProcessor
 					}
 				}
 			}
+
 			return NULL;
 		}
 		catch(ezDB_Error $ez)
@@ -305,7 +301,7 @@ class ProductFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processProduct
+	}
 
 	/*** End public methods ***/
 
@@ -316,9 +312,8 @@ class ProductFormProcessor extends FormProcessor
 	/**
 	 * processProductBack
 	 *
-	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a product.
-	 *
-	 * @access	private
+	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a
+	 * product.
 	 */
 	private function processProductBack()
 	{
@@ -345,26 +340,18 @@ class ProductFormProcessor extends FormProcessor
 	/**
 	 * processProductDelete
 	 *
-	 * Removes a product from the `product` table and the system. A wrapper method for the deleteProduct method in the Product class.
-	 *
-	 * @access	private
+	 * Removes a product from the `product` table and the system.
+	 * A wrapper method for the deleteProduct method in the Product class.
 	 */
 	private function processProductDelete()
 	{
 		try
 		{
-			# Bring the Login object into scope.
-			global $login;
-			# Set the Database instance to a variable.
-			$db=DB::get_instance();
 			# Set the Document instance to a variable.
 			$doc=Document::getInstance();
 			# Set the Validator instance to a variable.
 			$validator=Validator::getInstance();
 
-			# Explicitly set the delete variable to FALSE; the POST will NOT be deleted.
-			$delete=FALSE;
-			$access=TRUE;
 			# Check if the product's id was passed via GET data and that GET data indicates this is a delete.
 			if(isset($_GET['product']) && isset($_GET['delete']))
 			{
@@ -421,34 +408,32 @@ class ProductFormProcessor extends FormProcessor
 					}
 					else
 					{
+						$display='';
 						# Create a delete form for this product and request confirmation from the user with the appropriate warnings.
 						require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_form.php');
+
 						return $display;
 					}
 				}
 				# Redirect the user to the default redirect location. They have no business trying to pass a non-integer as an id!
 				$doc->redirect(DEFAULT_REDIRECT);
 			}
+
 			return FALSE;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- processProductDelete
+	}
 
 	/**
 	 * processProductSelect
 	 *
 	 * Processes a submitted form selecting a product to add to a post.
-	 *
-	 * @access	private
-	 * @return	string
 	 */
 	private function processProductSelect()
 	{
-		# Bring the alert-title variable into scope.
-		global $alert_title;
 		# Set the Document instance to a variable.
 		$doc=Document::getInstance();
 
@@ -472,8 +457,6 @@ class ProductFormProcessor extends FormProcessor
 					$product_obj->setID($product_id);
 					# Set the product name to the Product data member.
 					$product_obj->setTitle($product_title);
-					# Set the product's id to a variable.
-					$product_id=$product_obj->getID();
 					# Set the product's title to a variable.
 					$product_title=$product_obj->getTitle();
 					# Redirect the User back to the form that sent them to fetch a product.
@@ -488,15 +471,13 @@ class ProductFormProcessor extends FormProcessor
 				}
 			}
 		}
-	} #==== End -- processProductSelect
+	}
 
 	/**
 	 * redirectProduct
 	 *
-	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User
-	 * to this form to aquire a product.
-	 *
-	 * @access	private
+	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User to this
+	 * form to aquire a product.
 	 */
 	private function redirectProduct($product_name, $action, $default_message=TRUE)
 	{
@@ -510,8 +491,6 @@ class ProductFormProcessor extends FormProcessor
 			$product_obj=$populator_obj->getProductObject();
 			# Get the data for the new product.
 			$product_obj->getThisProduct($product_name, FALSE);
-			# Get the new product's id.
-			$product_id=$product_obj->getID();
 			# Remove the product session.
 			unset($_SESSION['form']['product']);
 			# Check if the default message should be sent.
@@ -537,14 +516,12 @@ class ProductFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- redirectProduct
+	}
 
 	/**
 	 * setSession
 	 *
 	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
-	 *
-	 * @access	private
 	 */
 	private function setSession()
 	{
@@ -560,7 +537,10 @@ class ProductFormProcessor extends FormProcessor
 			# Set the current URL to a variable.
 			$current_url=FormPopulator::getCurrentURL();
 			# Check if the current URL is already in the form_url array. If not, add the current URL to the form_url array.
-			if(!in_array($current_url, $form_url)) $form_url[]=$current_url;
+			if(!in_array($current_url, $form_url))
+			{
+				$form_url[]=$current_url;
+			}
 
 			# Create a session that holds all the POST data (it will be destroyed if it is not needed.)
 			$_SESSION['form']['product']=
@@ -588,8 +568,7 @@ class ProductFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- setSession
+	}
 
 	/*** End private methods ***/
-
-} # End ProductFormProcessor class.
+}

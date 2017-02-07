@@ -318,9 +318,8 @@ class Category
 	 *
 	 * Explodes a dash sepparated list of categories and formats them for the WHERE portion of an sql query.
 	 *
-	 * @param	$categories				The names and/or id's of the category(ies) to be retrieved - may be multiple categories - separate with a dash, ie. '50-70-Archive-110'.
-	 *										Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110')
-	 * @access	protected
+	 * @param string $categories The names and/or id's of the category(ies) to be retrieved - may be multiple categories - separate with a dash, ie. '50-70-Archive-110'.
+	 *								Use a "!" to designate Categories NOT to be returned, ie. '50-!70-Archive-110')
 	 */
 	public function createWhereSQL($categories=NULL, $field_name='name')
 	{

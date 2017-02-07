@@ -30,8 +30,7 @@ class ProductFormPopulator extends FormPopulator
 	 *
 	 * Sets the data member $product_object.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setProductObject($object)
 	{
@@ -43,7 +42,7 @@ class ProductFormPopulator extends FormPopulator
 		}
 		# Set the data member.
 		$this->product_object=$object;
-	} #==== End -- setProductObject
+	}
 
 	/*** End mutator methods ***/
 
@@ -55,8 +54,6 @@ class ProductFormPopulator extends FormPopulator
 	 * getProductObject
 	 *
 	 * Returns the data member $product_object.
-	 *
-	 * @access	public
 	 */
 	public function getProductObject()
 	{
@@ -74,8 +71,6 @@ class ProductFormPopulator extends FormPopulator
 	 *
 	 * Populates a product form with the default data passed in, which is in turn overwritten by session data, which
 	 * in turn is overwritten by POST data.
-	 *
-	 * @access	public
 	 */
 	public function populateProductForm($data=array())
 	{
@@ -104,7 +99,7 @@ class ProductFormPopulator extends FormPopulator
 		{
 			throw $e;
 		}
-	} #==== End -- populateProductForm
+	}
 
 	/*** End public methods ***/
 
@@ -117,8 +112,6 @@ class ProductFormPopulator extends FormPopulator
 	 *
 	 * If there are new post data values from POST data, they are set to the appropriate data
 	 * member (PublisherFormPopulator or SubContent).
-	 *
-	 * @access	private
 	 */
 	private function setPostDataToDataArray()
 	{
@@ -268,8 +261,7 @@ class ProductFormPopulator extends FormPopulator
 		{
 			throw $e;
 		}
-	} #==== End -- setPostDataToDataArray
+	}
 
 	/*** End private methods ***/
-
-} # End ProductFormPopulator class.
+}

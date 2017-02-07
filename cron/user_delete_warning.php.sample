@@ -22,327 +22,336 @@ chdir(dirname(__FILE__));
 
 try
 {
-	# Need this for the database insert.
-	if(!defined('DOMAIN_NAME')) define('DOMAIN_NAME', 'jamtheforce.com');
+    # Need this for the database insert.
+    if(!defined('DOMAIN_NAME'))
+    {
+        define('DOMAIN_NAME', 'jamtheforce.com');
+    }
 
-	# Define the url that points to our application. (ends with a slash)
-	define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
+    # Define the url that points to our application. (ends with a slash)
+    define('APPLICATION_URL', 'http://'.DOMAIN_NAME.'/');
 
-	# Need these for database_definitions.php and email_definitions.php
-	# Only need to change the RUN_ON_DEVELOPMENT definition.
-	# TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
-	if(!defined('RUN_ON_DEVELOPMENT')) define('RUN_ON_DEVELOPMENT', FALSE);
-	if(!defined('RUN_ON_STAGING')) define('RUN_ON_STAGING', FALSE);
+    # Need these for database_definitions.php and email_definitions.php
+    # Only need to change the RUN_ON_DEVELOPMENT definition.
+    # TRUE if you want this script to work on your Development machine, FALSE for Staging and Production.
+    if(!defined('RUN_ON_DEVELOPMENT'))
+    {
+        define('RUN_ON_DEVELOPMENT', false);
+    }
+    if(!defined('RUN_ON_STAGING'))
+    {
+        define('RUN_ON_STAGING', false);
+    }
 
-	# Define the timezone.
-	define('TIMEZONE', 'US/Pacific');
+    # Define the timezone.
+    define('TIMEZONE', 'US/Pacific');
 
-	/*
-	 *---------------------------------------------------------------
-	 * SYSTEM VARIABLES
-	 *---------------------------------------------------------------
-	 *
-	 * System variables needed by the application
-	 *
-	 */
-	# Make sure PHP is using UTF-8 character encoding.
-	mb_internal_encoding('UTF-8');
+    /*
+     *---------------------------------------------------------------
+     * SYSTEM VARIABLES
+     *---------------------------------------------------------------
+     *
+     * System variables needed by the application
+     *
+     */
+    # Make sure PHP is using UTF-8 character encoding.
+    mb_internal_encoding('UTF-8');
 
-	# Set the date (and time)
-	# First, the timezone.
-	putenv('TZ='.TIMEZONE);
-	date_default_timezone_set(TIMEZONE);
+    # Set the date (and time)
+    # First, the timezone.
+    putenv('TZ='.TIMEZONE);
+    date_default_timezone_set(TIMEZONE);
 
-	# The url where our secure pages are. (ie. https://sub.domain.com/folder/)
-	if(RUN_ON_STAGING===TRUE)
-	{
-		define('SECURE_URL', APPLICATION_URL.'secure/');
-	}
-	else
-	{
-		define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
-	}
+    # The url where our secure pages are. (ie. https://sub.domain.com/folder/)
+    if(RUN_ON_STAGING === true)
+    {
+        define('SECURE_URL', APPLICATION_URL.'secure/');
+    }
+    else
+    {
+        define('SECURE_URL', 'http://'.DOMAIN_NAME.'/secure/');
+    }
 
-	if(RUN_ON_STAGING===TRUE || RUN_ON_DEVELOPMENT===TRUE)
-	{
-		# Turn Debugging on or off.
-		define('DEBUG_APP', TRUE);
-	}
-	else
-	{
-		# Turn Debugging on or off.
-		define('DEBUG_APP', FALSE);
-	}
+    if(RUN_ON_STAGING === true || RUN_ON_DEVELOPMENT === true)
+    {
+        # Turn Debugging on or off.
+        define('DEBUG_APP', true);
+    }
+    else
+    {
+        # Turn Debugging on or off.
+        define('DEBUG_APP', false);
+    }
 
-	# The url to the login page.
-	define('LOGIN_PAGE', SECURE_URL.'login/');
+    # The url to the login page.
+    define('LOGIN_PAGE', SECURE_URL.'login/');
 
-	# Define where cookies may be active. ('/' means the entire domain)
-	define('COOKIE_PATH', '/');
+    # Define where cookies may be active. ('/' means the entire domain)
+    define('COOKIE_PATH', '/');
 
-	# Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
-	define('WP_INSTALLED', FALSE);
+    # Is there an installation of WordPress in the site? TRUE for yes, FALSE for no.
+    define('WP_INSTALLED', false);
 
-	# Get the Path definitions.
-	require '../data/path_definitions.php';
-	# Get the database definitions.
-	require DATA_FILES.'database_definitions.php';
-	# Get the Email definitions.
-	require DATA_FILES.'email_definitions.php';
-	# Get the User Privileges.
-	require DATA_FILES.'user_privileges.php';
-	# Get the Utility Class.
-	require_once UTILITY_CLASS;
-	# If WordPress is installed, get the appropriate settings.
-	if(WP_INSTALLED===TRUE)
-	{
-		require_once DATA_FILES.'WordPress_settings.php';
-	}
+    # Get the Path definitions.
+    require '../data/path_definitions.php';
+    # Get the database definitions.
+    require DATA_FILES.'database_definitions.php';
+    # Get the Email definitions.
+    require DATA_FILES.'email_definitions.php';
+    # Get the User Privileges.
+    require DATA_FILES.'user_privileges.php';
+    # Get the Utility Class.
+    require_once UTILITY_CLASS;
+    # If WordPress is installed, get the appropriate settings.
+    if(WP_INSTALLED === true)
+    {
+        require_once DATA_FILES.'WordPress_settings.php';
+    }
 
-	# Get the CommandLineException class.
-	require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'CommandLineException.php');
+    # Get the CommandLineException class.
+    require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'CommandLineException.php');
 
-	# Get the Validator Class.
-	require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
-	# Set the Validator instance to a variable.
-	$validator_obj=Validator::getInstance();
+    # Get the Validator Class.
+    require Utility::locateFile(MODULES.'Validator'.DS.'Validator.php');
+    # Set the Validator instance to a variable.
+    $validator_obj = Validator::getInstance();
 
-	# Get the DB Class needed to operate with MySQL.
-	require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
-	DB::init(DB_TYPE);
-	$db=DB::get_instance();
-	$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+    # Get the DB Class needed to operate with MySQL.
+    require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
+    DB::init(DB_TYPE);
+    $db = DB::get_instance();
+    $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
 
-	# Get the User Class.
-	require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-	# Create a new User object.
-	$user_obj=new User();
+    # Get the User Class.
+    require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
+    # Create a new User object.
+    $user_obj = new User();
 
-	# Get the Email class.
-	require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
-	# Instantiate a new Email object.
-	$email_obj=new Email();
+    # Get the Email class.
+    require_once Utility::locateFile(MODULES.'Email'.DS.'Email.php');
+    # Instantiate a new Email object.
+    $email_obj = new Email();
 
-	# Don't get users that are staff.
-	# Get users that have never logged in, or users that haven't logged in for 2 years or more,
-	#	that have an expired subscription, or never had a subscription.
-	# Don't get users that are already in the `users_inactive` table.
-	# Don't get users that have registered in the last 7 days.
-	# NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
-	$where='WHERE `staff_id` IS NULL AND (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`subscription`<CURDATE() OR `subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
-	$order_field='ID';
-	$order_direction='ASC';
-	$fields='`ID`, `display`, `email`, `active`, `random`, `lastlogin`';
-	# Get the Users.
-	$user_obj->getUsers(NULL, $fields, $order_field, $order_direction, $where);
-	$recipients=$user_obj->getAllUsers();
+    # Don't get users that are staff.
+    # Get users that have never logged in, or users that haven't logged in for 2 years or more,
+    #	that have an expired subscription, or never had a subscription.
+    # Don't get users that are already in the `users_inactive` table.
+    # Don't get users that have registered in the last 7 days.
+    # NOTE: Should we check for accounts that have been activated but the user has never logged in? I don't see the point...
+    $where = 'WHERE `staff_id` IS NULL AND (`lastlogin`=\'0000-00-00\' OR `lastlogin`<=DATE_SUB(CURDATE(), INTERVAL 2 YEAR)) AND (`subscription`<CURDATE() OR `subscription` IS NULL) AND `registered`<=DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND `ID` NOT IN (SELECT `user_id` FROM '.DBPREFIX.'`users_inactive`)';
+    $order_field = 'ID';
+    $order_direction = 'ASC';
+    $fields = '`ID`, `display`, `email`, `active`, `random`, `lastlogin`';
+    # Get the Users.
+    $user_obj->getUsers(null, $fields, $order_field, $order_direction, $where);
+    $recipients = $user_obj->getAllUsers();
 
-	# Delete inactive users.
-	$deleted_users=$user_obj->deleteInactiveUsers();
+    # Delete inactive users.
+    $deleted_users = $user_obj->deleteInactiveUsers();
 
-	# Get the site name from the content table.
-	$config_result=$db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
+    # Get the site name from the content table.
+    $config_result = $db->get_row('SELECT `site_name` FROM `'.DBPREFIX.'config` LIMIT 1');
 
-	# Set the MAILQUEUE_BATCH_SIZE to a variable.
-	$batch=MAILQUEUE_BATCH_SIZE;
-	# Set the sender name to a variable.
-	$sender_name='The '.DOMAIN_NAME.' Web Team';
-	# Set the site name to a variable.
-	$site_name=(isset($config_result->site_name) ? $config_result->site_name : DOMAIN_NAME);
-	# Set the current time as the start time.
-	$start_time=time();
-	# Set the subject to a variable.
-	$subject='Inactive account - '.DOMAIN_NAME;
+    # Set the MAILQUEUE_BATCH_SIZE to a variable.
+    $batch = MAILQUEUE_BATCH_SIZE;
+    # Set the sender name to a variable.
+    $sender_name = 'The '.DOMAIN_NAME.' Web Team';
+    # Set the site name to a variable.
+    $site_name = (isset($config_result->site_name) ? $config_result->site_name : DOMAIN_NAME);
+    # Set the current time as the start time.
+    $start_time = time();
+    # Set the subject to a variable.
+    $subject = 'Inactive account - '.DOMAIN_NAME;
 
-	# Create empty arrays to use later.
-	$good_email=array();
-	$invalid_email=array();
-	$used_emails=array();
+    # Create empty arrays to use later.
+    $good_email = array();
+    $invalid_email = array();
+    $used_emails = array();
 
-	# Check if the query returned any results.
-	if(!empty($recipients))
-	{
-		set_time_limit(0);
-		$recipients_count=count($recipients);
-		if($recipients_count < $batch)
-		{
-			$batch=$recipients_count;
-		}
-		$recipient_array_keys=array_keys($recipients);
-		$last_key=end($recipient_array_keys);
+    # Check if the query returned any results.
+    if(!empty($recipients))
+    {
+        set_time_limit(0);
+        $recipients_count = count($recipients);
+        if($recipients_count < $batch)
+        {
+            $batch = $recipients_count;
+        }
+        $recipient_array_keys = array_keys($recipients);
+        $last_key = end($recipient_array_keys);
 
-		# Send emails until batch number is reached and then sleep.
-		$i=1;
-		# Loop through the recipients.
-		foreach($recipients as $key=>$row)
-		{
-			# Check if this user's email was already sent.
-			if(!in_array($row->email, $used_emails))
-			{
-				# Add this user's email to the used_emails array.
-				$used_emails[]=$row->email;
-				# User has not activated their account.
-				if($row->active==0)
-				{
-					# If they have never activated their account then give them the activation link.
-					$message='You have received this email because this email address was used during registration for our site.<br/>'.
-						'If you did not register at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>, please disregard this email. You do not need to unsubscribe or take any further action.<br/><br/>'.
-						'It appears you haven\'t activated your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>.<br/><br/>'.
-						'------------------------------------------------<br/>'.
-						' Activation Instructions<br/>'.
-						'------------------------------------------------<br/>'.
-						'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.<br/>'.
-						'To activate your account, simply click on the following link:<br/>'.
-						'<a href="'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a><br/>'.
-						'(You may need to copy and paste the link into your web browser).<br/><br/>';
-				}
-				else
-				{
-					# Create an empty message variable.
-					$extra_message='';
-					# They have activated their account so let's tell them how to login.
-					$message='You appear in our webpage log as wanting to use the '.$site_name.' site, but you';
-					# User has never logged into their account.
-					if($row->lastlogin=='0000-00-00')
-					{
-						# Tell them they "have never" logged into their account.
-						$message.=' have never';
-					}
-					# User has logged in but it's been 2+ years since their last login.
-					else
-					{
-						# Tell the user they "haven't" logged into their account in 2+ years.
-						$message.=' haven’t';
-						$extra_message=' in over two years';
-					}
-					$message.=' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>'.$extra_message.'. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
-						'You may login at <a href="'.LOGIN_PAGE.'">'.LOGIN_PAGE.'</a>.<br/><br/>';
-				}
-				$message.='If you have forgotten your username, or password then you can use <a href="'.LOGIN_PAGE.'LostPassword/" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>';
-				# Get the email template. (Creates and populates the $body variable.)
-				require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
-				# Clean up the user's display name.
-				$display_name=' '.htmlentities($row->display, ENT_QUOTES, 'UTF-8', FALSE);
-				# Check if there is still a display name.
-				if(empty($display_name))
-				{
-					# Explicitly set the display name to an empty string.
-					$display_name='';
-				}
-				# Replace the first variable in the template. (Puts the display name in the salutation.)
-				$current_body=sprintf($body, $display_name.',');
-				# Validate the users email.
-				$valid_email=$validator_obj->validEmail($row->email);
-				if($valid_email===TRUE)
-				{
-					# Add the email to the good_email array.
-					$good_email[$row->display]=$row->email;
+        # Send emails until batch number is reached and then sleep.
+        $i = 1;
+        # Loop through the recipients.
+        foreach($recipients as $key => $row)
+        {
+            # Check if this user's email was already sent.
+            if(!in_array($row->email, $used_emails))
+            {
+                # Add this user's email to the used_emails array.
+                $used_emails[] = $row->email;
+                # User has not activated their account.
+                if($row->active == 0)
+                {
+                    # If they have never activated their account then give them the activation link.
+                    $message = 'You have received this email because this email address was used during registration for our site.<br/>'.
+                        'If you did not register at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>, please disregard this email. You do not need to unsubscribe or take any further action.<br/><br/>'.
+                        'It appears you haven\'t activated your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>.<br/><br/>'.
+                        '------------------------------------------------<br/>'.
+                        ' Activation Instructions<br/>'.
+                        '------------------------------------------------<br/>'.
+                        'We require that you "validate" your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse.<br/>'.
+                        'To activate your account, simply click on the following link:<br/>'.
+                        '<a href="'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'">'.LOGIN_PAGE.'confirm.php?ID='.$row->ID.'&key='.$row->random.'</a><br/>'.
+                        '(You may need to copy and paste the link into your web browser).<br/><br/>';
+                }
+                else
+                {
+                    # Create an empty message variable.
+                    $extra_message = '';
+                    # They have activated their account so let's tell them how to login.
+                    $message = 'You appear in our webpage log as wanting to use the '.$site_name.' site, but you';
+                    # User has never logged into their account.
+                    if($row->lastlogin == '0000-00-00')
+                    {
+                        # Tell them they "have never" logged into their account.
+                        $message .= ' have never';
+                    }
+                    # User has logged in but it's been 2+ years since their last login.
+                    else
+                    {
+                        # Tell the user they "haven't" logged into their account in 2+ years.
+                        $message .= ' haven’t';
+                        $extra_message = ' in over two years';
+                    }
+                    $message .= ' logged into your account at <a href="'.APPLICATION_URL.'" title="'.$site_name.'">'.DOMAIN_NAME.'</a>'.$extra_message.'. We think you will benefit from using our website, and we will be happy to have you, but to help clean up our logs we advise you to log into our webpage within seven (7) days from receiving this message, or your account will be deleted.<br/><br/>'.
+                        'You may login at <a href="'.LOGIN_PAGE.'">'.LOGIN_PAGE.'</a>.<br/><br/>';
+                }
+                $message .= 'If you have forgotten your username, or password then you can use <a href="'.LOGIN_PAGE.'LostPassword/" title="Lost Password">Lost Password</a> page to have them sent to you.<br/>';
+                # Get the email template. (Creates and populates the $body variable.)
+                require Utility::locateFile(TEMPLATES.'fm'.DS.'email_template_html.php');
+                # Clean up the user's display name.
+                $display_name = ' '.htmlentities($row->display, ENT_QUOTES, 'UTF-8', false);
+                # Check if there is still a display name.
+                if(empty($display_name))
+                {
+                    # Explicitly set the display name to an empty string.
+                    $display_name = '';
+                }
+                # Replace the first variable in the template. (Puts the display name in the salutation.)
+                $current_body = sprintf($body, $display_name.',');
+                # Validate the users email.
+                $valid_email = $validator_obj->validEmail($row->email);
+                if($valid_email === true)
+                {
+                    # Add the email to the good_email array.
+                    $good_email[$row->display] = $row->email;
 
-					# NOTE: DEBUGGING
-					if(DEBUG_APP===TRUE)
-					{
-						# Send email.
-						$email_sent=$email_obj->sendEmail($subject, ADMIN_EMAIL, $current_body);
-					}
-					else
-					{
-						# Send email.
-						$email_sent=$email_obj->sendEmail($subject, $row->email, $current_body);
-					}
+                    # NOTE: DEBUGGING
+                    if(DEBUG_APP === true)
+                    {
+                        # Send email.
+                        $email_sent = $email_obj->sendEmail($subject, ADMIN_EMAIL, $current_body);
+                    }
+                    else
+                    {
+                        # Send email.
+                        $email_sent = $email_obj->sendEmail($subject, $row->email, $current_body);
+                    }
 
-					# If the email was sent, then insert the user into the inactive table.
-					if($email_sent===TRUE && !$user_obj->getInactiveUsers($row->ID))
-					{
-						# Get current date.
-						$current_date=new DateTime();
-						# Add 7 days to the current date. This is the date the user will be deleted.
-						$current_date->add(new DateInterval('P7D'));
-						# Set the new date to a variable.
-						$delete_date=$current_date->format('Y-m-d');
-						# Insert the user into the inactive table.
-						$db->query('INSERT INTO `'.DBPREFIX.'users_inactive` ('.
-							'`user_id`, '.
-							'`delete_date`'.
-							') VALUES ('.
-							$db->quote($row->ID).', '.
-							$db->quote($delete_date).
-							')');
+                    # If the email was sent, then insert the user into the inactive table.
+                    if($email_sent === true && !$user_obj->getInactiveUsers($row->ID))
+                    {
+                        # Get current date.
+                        $current_date = new DateTime();
+                        # Add 7 days to the current date. This is the date the user will be deleted.
+                        $current_date->add(new DateInterval('P7D'));
+                        # Set the new date to a variable.
+                        $delete_date = $current_date->format('Y-m-d');
+                        # Insert the user into the inactive table.
+                        $db->query('INSERT INTO `'.DBPREFIX.'users_inactive` ('.
+                            '`user_id`, '.
+                            '`delete_date`'.
+                            ') VALUES ('.
+                            $db->quote($row->ID).', '.
+                            $db->quote($delete_date).
+                            ')');
 
-						# Increment the email counter by one.
-						$i++;
-						# Check if the current number of emails sent equals (or is greater than) the batch number.
-						#	Don't sleep if it's the last element in the array.
-						if($i>=$batch && $key!=$last_key)
-						{
-							# Pause for the passed amount of time.
-							sleep(MAILQUEUE_THROTTLE);
-							# Reset the email counter.
-							$i=1;
-						}
-					}
-				}
-				else
-				{
-					# Add the email to the invalid email list.
-					$email_obj->editInvalidEmail($row->email);
-					# Add the invalid email to the invalid_email array.
-					$invalid_email[$row->display]=$row->email;
-				}
-			}
-		}
+                        # Increment the email counter by one.
+                        $i++;
+                        # Check if the current number of emails sent equals (or is greater than) the batch number.
+                        #	Don't sleep if it's the last element in the array.
+                        if($i >= $batch && $key != $last_key)
+                        {
+                            # Pause for the passed amount of time.
+                            sleep(MAILQUEUE_THROTTLE);
+                            # Reset the email counter.
+                            $i = 1;
+                        }
+                    }
+                }
+                else
+                {
+                    # Add the email to the invalid email list.
+                    $email_obj->editInvalidEmail($row->email);
+                    # Add the invalid email to the invalid_email array.
+                    $invalid_email[$row->display] = $row->email;
+                }
+            }
+        }
 
-		# Set the elapsed time since the set start time to a variable.
-		$elapsed_time=Utility::getElapsedTime($start_time, time());
-		$sent_message=$message;
-		# Set the email message to a variable.
-		$message='';
-		if($deleted_users>0)
-		{
-			$message.='The Inactive Users cron script deleted '.$deleted_users.' users.<br/>'."\n";
-		}
-		$message.='The script successfully emailed '.count($good_email).' users.'.((count($invalid_email)>0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
-		$message.='<br/>'."\n";
+        # Set the elapsed time since the set start time to a variable.
+        $elapsed_time = Utility::getElapsedTime($start_time, time());
+        $sent_message = $message;
+        # Set the email message to a variable.
+        $message = '';
+        if($deleted_users > 0)
+        {
+            $message .= 'The Inactive Users cron script deleted '.$deleted_users.' users.<br/>'."\n";
+        }
+        $message .= 'The script successfully emailed '.count($good_email).' users.'.((count($invalid_email) > 0) ? ' '.count($invalid_email).' users were not emailed as their email addresses were invalid.' : '').' It took a total of '.$elapsed_time.' to send all of the emails. For more details, please see the attached email report.';
+        $message .= '<br/>'."\n";
 
-		# Email report file.
-		$string='EMAIL REPORT:'."\n\n";
-		# Check if there were good email addresses.
-		if(!empty($good_email))
-		{
-			$string.=count($good_email).' emails successfully sent to the following users:'."\n";
-			foreach($good_email as $name=>$email_address)
-			{
-				$string.=$name.':'."\t\t".$email_address."\n";
-			}
-		}
-		# Check if there were any invaild email addresses.
-		if(!empty($invalid_email))
-		{
-			$string.="\n\n";
-			$string.=count($invalid_email).' emails were NOT sent to the following users because their email addresses were invalid:'."\n";
-			foreach($invalid_email as $name=>$email_address)
-			{
-				$string.=$name.':'."\t\t".$email_address."\n";
-			}
-		}
-		$string.="\n\n".'The message you emailed was:'."\n";
-		$string.=html_entity_decode($sent_message, ENT_QUOTES, 'UTF-8');
-		$subject='Results of your group emailing from '.DOMAIN_NAME;
-		$email_report=TEMP.date('Ymd').'EmailReport.txt';
-		# Get the confirmation email template. (Resets and populates the $body variable.)
-		require Utility::locateFile(TEMPLATES.'fm'.DS.'confirmation_template.php');
-		# Get the FileHandler class.
-		require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
-		# Instantate a new instance of FileHandler.
-		$file_handler=new FileHandler();
-		# Edit the InvalidEmail.log file.
-		$file_handler->editFile($email_report, $string, TRUE);
-		# Replace the first variable in the template. (Puts the display name in the salutation.)
-		$body=sprintf($body, ' '.$sender_name.',');
-		# Send a confirmation email to the admin email.
-		$email_obj->sendEmail($subject, ADMIN_EMAIL, $body, SMTP_FROM, $email_report);
-	}
+        # Email report file.
+        $string = 'EMAIL REPORT:'."\n\n";
+        # Check if there were good email addresses.
+        if(!empty($good_email))
+        {
+            $string .= count($good_email).' emails successfully sent to the following users:'."\n";
+            foreach($good_email as $name => $email_address)
+            {
+                $string .= $name.':'."\t\t".$email_address."\n";
+            }
+        }
+        # Check if there were any invaild email addresses.
+        if(!empty($invalid_email))
+        {
+            $string .= "\n\n";
+            $string .= count($invalid_email).' emails were NOT sent to the following users because their email addresses were invalid:'."\n";
+            foreach($invalid_email as $name => $email_address)
+            {
+                $string .= $name.':'."\t\t".$email_address."\n";
+            }
+        }
+        $string .= "\n\n".'The message you emailed was:'."\n";
+        $string .= html_entity_decode($sent_message, ENT_QUOTES, 'UTF-8');
+        $subject = 'Results of your group emailing from '.DOMAIN_NAME;
+        $email_report = TEMP.date('Ymd').'EmailReport.txt';
+        # Get the confirmation email template. (Resets and populates the $body variable.)
+        require Utility::locateFile(TEMPLATES.'fm'.DS.'confirmation_template.php');
+        # Get the FileHandler class.
+        require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
+        # Instantate a new instance of FileHandler.
+        $file_handler = new FileHandler();
+        # Edit the InvalidEmail.log file.
+        $file_handler->editFile($email_report, $string, true);
+        # Replace the first variable in the template. (Puts the display name in the salutation.)
+        $body = sprintf($body, ' '.$sender_name.',');
+        # Send a confirmation email to the admin email.
+        $email_obj->sendEmail($subject, ADMIN_EMAIL, $body, SMTP_FROM, $email_report);
+    }
 }
 catch(Exception $e)
 {
-	$exception=new CommandLineException($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
+    $exception = new CommandLineException($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
 }

@@ -56,7 +56,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $form_url.
 	 *
-	 * @param    $url                    The complete url where the form is.
+	 * @param string $url                    The complete url where the form is.
 	 */
 	public function setFormURL($url)
 	{
@@ -100,8 +100,6 @@ class FormPopulator
 	 * getCategoryOption
 	 *
 	 * Returns the data member $category_option.
-	 *
-	 * @access    public
 	 */
 	public function getCategoryOption()
 	{
@@ -112,8 +110,6 @@ class FormPopulator
 	 * getData
 	 *
 	 * Returns the data member $data.
-	 *
-	 * @access    public
 	 */
 	public function getData()
 	{
@@ -136,8 +132,6 @@ class FormPopulator
 	 * getFacebook
 	 *
 	 * Returns the data member $facebook.
-	 *
-	 * @access    public
 	 */
 	public function getFacebook()
 	{
@@ -148,8 +142,6 @@ class FormPopulator
 	 * getFileOption
 	 *
 	 * Returns the data member $file_option.
-	 *
-	 * @access    public
 	 */
 	public function getFileOption()
 	{
@@ -160,8 +152,6 @@ class FormPopulator
 	 * getFormURL
 	 *
 	 * Returns the data member $form_url.
-	 *
-	 * @access    public
 	 */
 	public function getFormURL()
 	{
@@ -172,8 +162,6 @@ class FormPopulator
 	 * getImageOption
 	 *
 	 * Returns the data member $image_option.
-	 *
-	 * @access    public
 	 */
 	public function getImageOption()
 	{
@@ -184,8 +172,6 @@ class FormPopulator
 	 * getInstitutionOption
 	 *
 	 * Returns the data member $institution_option.
-	 *
-	 * @access    public
 	 */
 	public function getInstitutionOption()
 	{
@@ -196,8 +182,6 @@ class FormPopulator
 	 * getLanguageOption
 	 *
 	 * Returns the data member $language_option.
-	 *
-	 * @access    public
 	 */
 	public function getLanguageOption()
 	{
@@ -208,8 +192,6 @@ class FormPopulator
 	 * getPlaylistOption
 	 *
 	 * Returns the data member $playlist_option.
-	 *
-	 * @access    public
 	 */
 	public function getPlaylistOption()
 	{
@@ -220,8 +202,6 @@ class FormPopulator
 	 * getPositionOption
 	 *
 	 * Returns the data member $position_option.
-	 *
-	 * @access    public
 	 */
 	public function getPositionOption()
 	{
@@ -232,8 +212,6 @@ class FormPopulator
 	 * getPremiumChange
 	 *
 	 * Returns the data member $premium_change.
-	 *
-	 * @access    public
 	 */
 	public function getPremiumChange()
 	{
@@ -244,8 +222,6 @@ class FormPopulator
 	 * getPublisherOption
 	 *
 	 * Returns the data member $publisher_option.
-	 *
-	 * @access    public
 	 */
 	public function getPublisherOption()
 	{
@@ -256,8 +232,6 @@ class FormPopulator
 	 * getStaffOption
 	 *
 	 * Returns the data member $staff_option.
-	 *
-	 * @access    public
 	 */
 	public function getStaffOption()
 	{
@@ -268,8 +242,6 @@ class FormPopulator
 	 * getTo
 	 *
 	 * Returns the data member $to.
-	 *
-	 * @access    public
 	 */
 	public function getTo()
 	{
@@ -278,14 +250,14 @@ class FormPopulator
 
 	/*** End mutator methods ***/
 
+
+
 	/*** accessor methods ***/
 
 	/**
 	 * getTwitter
 	 *
 	 * Returns the data member $twitter.
-	 *
-	 * @access    public
 	 */
 	public function getTwitter()
 	{
@@ -296,8 +268,6 @@ class FormPopulator
 	 * getUnique
 	 *
 	 * Returns the data member $unique.
-	 *
-	 * @access    public
 	 */
 	public function getUnique()
 	{
@@ -308,8 +278,6 @@ class FormPopulator
 	 * getYouTube
 	 *
 	 * Returns the data member $youtube.
-	 *
-	 * @access    public
 	 */
 	public function getYouTube()
 	{
@@ -321,8 +289,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $category_option
 	 *
-	 * @param    $category_option
-	 * @access    protected
+	 * @param string $category_option
 	 */
 	protected function setCategoryOption($category_option)
 	{
@@ -341,8 +308,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $data.
 	 *
-	 * @param    $data_array
-	 * @access    protected
+	 * @param array $data_array
 	 */
 	protected function setData($data_array)
 	{
@@ -363,8 +329,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $date.
 	 *
-	 * @param    $date
-	 * @access    protected
+	 * @param string $date
 	 */
 	protected function setDate($date)
 	{
@@ -390,8 +355,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $facebook.
 	 *
-	 * @param    $value
-	 * @access    protected
+	 * @param string $value
 	 */
 	protected function setFacebook($value)
 	{
@@ -408,13 +372,12 @@ class FormPopulator
 		}
 	}
 
-	/***
+	/**
 	 * setFileOption
 	 *
 	 * Sets the data member $file_option
 	 *
-	 * @param    $file_option
-	 * @access    protected
+	 * @param string $file_option
 	 */
 	protected function setFileOption($file_option)
 	{
@@ -428,13 +391,12 @@ class FormPopulator
 		$this->file_option=$file_option;
 	}
 
-	/***
+	/**
 	 * setImageOption
 	 *
 	 * Sets the data member $image_option
 	 *
-	 * @param    $image_option
-	 * @access    protected
+	 * @param string $image_option
 	 */
 	protected function setImageOption($image_option)
 	{
@@ -448,13 +410,12 @@ class FormPopulator
 		$this->image_option=$image_option;
 	}
 
-	/***
+	/**
 	 * setInstitutionOption
 	 *
 	 * Sets the data member $institution_option
 	 *
-	 * @param    $institution_option
-	 * @access    protected
+	 * @param string $institution_option
 	 */
 	protected function setInstitutionOption($institution_option)
 	{
@@ -468,13 +429,12 @@ class FormPopulator
 		$this->institution_option=$institution_option;
 	}
 
-	/***
+	/**
 	 * setLanguageOption
 	 *
 	 * Sets the data member $language_option
 	 *
-	 * @param    $language_option
-	 * @access    protected
+	 * @param string $language_option
 	 */
 	protected function setLanguageOption($language_option)
 	{
@@ -488,13 +448,12 @@ class FormPopulator
 		$this->language_option=$language_option;
 	}
 
-	/***
+	/**
 	 * setPlaylistOption
 	 *
 	 * Sets the data member $playlist_option
 	 *
-	 * @param    $playlist_option
-	 * @access    protected
+	 * @param string $playlist_option
 	 */
 	protected function setPlaylistOption($playlist_option)
 	{
@@ -508,13 +467,12 @@ class FormPopulator
 		$this->playlist_option=$playlist_option;
 	}
 
-	/***
+	/**
 	 * setPositionOption
 	 *
 	 * Sets the data member $position_option
 	 *
-	 * @param    $position_option
-	 * @access    protected
+	 * @param string $position_option
 	 */
 	protected function setPositionOption($position_option)
 	{
@@ -533,8 +491,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $premium_change.
 	 *
-	 * @param    $premium_change            TRUE if the premium status changed, FALSE if not.
-	 * @access    protected
+	 * @param string $premium_change            TRUE if the premium status changed, FALSE if not.
 	 */
 	protected function setPremiumChange($premium_change)
 	{
@@ -553,13 +510,12 @@ class FormPopulator
 		$this->premium_change=$premium_change;
 	}
 
-	/***
+	/**
 	 * setPublisherOption
 	 *
 	 * Sets the data member $publisher_option
 	 *
-	 * @param    $publisher_option
-	 * @access    protected
+	 * @param string $publisher_option
 	 */
 	protected function setPublisherOption($publisher_option)
 	{
@@ -573,13 +529,12 @@ class FormPopulator
 		$this->publisher_option=$publisher_option;
 	}
 
-	/***
+	/**
 	 * setStaffOption
 	 *
 	 * Sets the data member $staff_option
 	 *
-	 * @param    $staff_option
-	 * @access    protected
+	 * @param string $staff_option
 	 */
 	protected function setStaffOption($staff_option)
 	{
@@ -598,8 +553,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $to.
 	 *
-	 * @param    array $array
-	 * @access    protected
+	 * @param array $array
 	 */
 	protected function setTo($array)
 	{
@@ -618,8 +572,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $twitter.
 	 *
-	 * @param    $value
-	 * @access    protected
+	 * @param mixed $value
 	 */
 	protected function setTwitter($value)
 	{
@@ -638,6 +591,8 @@ class FormPopulator
 
 	/*** End accessor methods ***/
 
+
+
 	/*** public methods ***/
 
 	/**
@@ -645,8 +600,7 @@ class FormPopulator
 	 *
 	 * Sets the data member $youtube.
 	 *
-	 * @param    $value
-	 * @access    protected
+	 * @param string $value
 	 */
 	protected function setYouTube($value)
 	{
@@ -665,6 +619,8 @@ class FormPopulator
 
 	/*** End public methods ***/
 
+
+
 	/*** protected methods ***/
 
 	/**
@@ -672,9 +628,7 @@ class FormPopulator
 	 *
 	 * Populate the data members with the values in the data array.
 	 *
-	 * @access    protected
-	 *
-	 * @param    $class_instance            The instance of the secondary class.
+	 * @param object $class_instance            The instance of the secondary class.
 	 * @throws Exception
 	 */
 	protected function setDataToDataMembers($class_instance)
@@ -711,9 +665,7 @@ class FormPopulator
 	 * Checks for data in SESSION. If there is and the current URL matches the post form URL
 	 * in the SESSION, it sets the SESSION data to the data array data member.
 	 *
-	 * @access    protected
-	 *
-	 * @param    $index                    The key of the SESSION in question.
+	 * @param string $index                    The key of the SESSION in question.
 	 * @throws Exception
 	 */
 	protected function setSessionDataToDataArray($index)
