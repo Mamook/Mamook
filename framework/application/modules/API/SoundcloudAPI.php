@@ -363,22 +363,14 @@ class Soundcloud extends Services_Soundcloud
 		return $audio;
 	} #==== End -- audioDetails
 
-	/*** End public methods ***/
-
-
-
-	/*** protected methods ***/
-
 	/**
 	 * startSoundcloudService
 	 *
 	 * Set the data member $soundcloud_service
-	 *
-	 * @access	protected
 	 */
-	protected function startSoundcloudService()
+	public function startSoundcloudService()
 	{
-		$sc = new Services_Soundcloud(
+		$sc=new Services_Soundcloud(
 			$this->getSoundcloudClientId(),
 			$this->getSoundcloudClientSecret(),
 			$this->getSoundcloudRedirectUri()
@@ -386,6 +378,12 @@ class Soundcloud extends Services_Soundcloud
 
 		return $sc;
 	} #==== End -- startSoundcloudService
+
+	/*** End public methods ***/
+
+
+
+	/*** protected methods ***/
 
 	/**
 	 * sortByDate

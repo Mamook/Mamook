@@ -52,13 +52,12 @@ class Cache
 	 * The constructor for the class. Sets the $file_data, $unique_name, $ext, $cache_time, and
 	 * $cache_dir data members.
 	 *
-	 * @param		$data							The cacheable data. Default is NULL.
-	 * @param		$unique_name			The unique portion of the cache file name. Default is empty.
-	 * @param		$cache_extension	The extension portion of the cache file name. Default is "cache".
-	 * @param		$cache_time				The amount of time in seconds to keep the cache file. Default is
-	 * 3600
-	 * @param		$cache_dir				The name of the directory where the cache file resides.
-	 * @access	public
+	 * @param string $data            The cacheable data. Default is NULL.
+	 * @param string $unique_name     The unique portion of the cache file name. Default is empty.
+	 * @param string $cache_extension The extension portion of the cache file name. Default is "cache".
+	 * @param int $cache_time         The amount of time in seconds to keep the cache file.
+	 *                                    Default is 3600
+	 * @param string $cache_dir       The name of the directory where the cache file resides.
 	 */
 	public function __construct($data=NULL, $unique_name='', $cache_extension='cache', $cache_time=3600, $cache_dir=CACHE)
 	{
@@ -172,8 +171,7 @@ class Cache
 	 *
 	 * Sets the data member $file_data.
 	 *
-	 * @param		$data		The data to be cached. Must be a string.
-	 * @access	public
+	 * @param string $data The data to be cached. Must be a string.
 	 */
 	public function setFileData($data)
 	{
@@ -358,10 +356,9 @@ class Cache
 	 *
 	 * Returns the contents of the cache file that matches the passed name and directory.
 	 *
-	 * @param		$unique_name	The unique portion of the cache file name.
-	 * @param		$cache_dir		The name of the directory where the cache file resides.
-	 * @access	public
-	 * @return	False on failure. The file contents on success as a string.
+	 * @param string $unique_name	The unique portion of the cache file name.
+	 * @param string $cache_dir		The name of the directory where the cache file resides.
+	 * @return bool                 False on failure. The file contents on success as a string.
 	 */
 	public function retrieveCacheContents($unique_name, $cache_dir=NULL)
 	{
@@ -424,8 +421,7 @@ class Cache
 	 *
 	 * Looks through the cach directory and removes any expired cache files.
 	 *
-	 * @param		string		$cache_dir 	The name of the directory.
-	 * @access	protected
+	 * @param string $cache_dir 	The name of the directory.
 	 */
 	protected function cleanCache($cache_dir=NULL)
 	{
@@ -463,7 +459,7 @@ class Cache
 							if(!empty($expiration)&&$this->getTimeNow()>=$expiration)
 							{
 								# Remove the file.
-								unlink($cachedir.$file_name);
+								unlink($cache_dir.$file_name);
 							}
 						}
 					}
@@ -479,8 +475,8 @@ class Cache
 	 *
 	 * Makes the cache directory if it doesn't already exist then makes sure it is writable.
 	 *
-	 * @param		string		$cache_dir 	The name of the directory.
-	 * @access	protected
+	 * @param string $cache_dir The name of the directory.
+	 * @throws Exception
 	 */
 	protected function createCacheDir($cache_dir=NULL)
 	{
@@ -510,8 +506,8 @@ class Cache
 	 * Gets the file's expiration time from it's name. The cache file name will look like
 	 * 39284756.unique.name.extension
 	 *
-	 * @param		$file_name	The name of the cache file. Must be a string.
-	 * @access	protected
+	 * @param string $file_name The name of the cache file. Must be a string.
+	 * @return mixed
 	 */
 	protected function extrapolateExpiry($file_name=NULL)
 	{
@@ -531,8 +527,6 @@ class Cache
 	 *
 	 * Generates the cache file's name and sets it to the $cache_name data member. The cache file name
 	 * will look like 39284756.unique.name.extension
-	 *
-	 * @access	protected
 	 */
 	protected function generateFileName()
 	{
@@ -550,8 +544,6 @@ class Cache
 	 * makeCacheFile
 	 *
 	 * Creates the actual cache file and saves the data to it.
-	 *
-	 * @access	protected
 	 */
 	protected function makeCacheFile()
 	{

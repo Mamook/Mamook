@@ -411,10 +411,10 @@ class Document
 	 *
 	 * Adds the "here" css class if we are already at the page that the link sends us to.
 	 *
-	 * @param 	$link					The link to check
-	 * @param	$exact_match
-	 * @param	$add_attribute			Adds 'class="'
-	 * @access	public
+	 * @param string $link                     The link to check
+	 * @param bool $exact_match
+	 * @param bool $add_attribute            Adds 'class="'
+	 * @return string
 	 */
 	public static function addHereClass($link, $exact_match=FALSE, $add_attribute=TRUE)
 	{
@@ -889,9 +889,10 @@ class Document
 	 *
 	 * Try PHP header redirect, then Java redirect, then try http redirect.
 	 *
-	 * @param	$url					The url to redirect to.
-	 * @param	$delay					The delay in seconds before redirecting.
-	 * @access	public
+	 * @param string $url The url to redirect to.
+	 * @param int $delay  The delay in seconds before redirecting.
+	 * @param bool $clear_session_data
+	 * @return bool
 	 */
 	public function redirect($url, $delay=0, $clear_session_data=FALSE)
 	{
