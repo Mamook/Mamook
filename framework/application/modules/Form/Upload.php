@@ -14,11 +14,13 @@ class Upload
 
 	/*** End data members ***/
 
-
-
 	/*** magic methods ***/
 
-	# Constructor
+	/**
+	 * Upload constructor.
+	 *
+	 * @param $file
+	 */
 	public function __construct($file)
 	{
 		# If there was an uploaded file, we process it.
@@ -29,6 +31,8 @@ class Upload
 			$this->setTempName($file['tmp_name']);
 			$this->setType($file['type']);
 			$this->setSize($file['size']);
+
+			return TRUE;
 		}
 		else
 		{
@@ -236,20 +240,23 @@ class Upload
 	 *
 	 * Uploads a user's File.
 	 *
-	 * @param	$source_path			The path to the folder where we will keep the file.
-	 * @param	$allowed_ext			The acceptable file types.
-	 * @param	$target_path			The complete path to where the copy will be stored.
-	 * @param	$new_name				The name to be given to the uploaded file.
-	 * @param	$max_size				The maximum allowed size of the uploaded file.
-	 * @param	$resize					TRUE to resize the uploaded image, FALSE to leave it alone.
-	 * @param	$max_width				The maximum width of the resized image.
-	 * @param	$max_height				The maximum width of the resized image.
-	 * @param	$quality				The quality of the resized image.
-	 * @return	bool
-	 * @access	public
+	 * @param string $source_path The path to the folder where we will keep the file.
+	 * @param array $allowed_ext  The acceptable file types.
+	 * @param string $target_path The complete path to where the copy will be stored.
+	 * @param string $new_name    The name to be given to the uploaded file.
+	 * @param int $max_size       The maximum allowed size of the uploaded file.
+	 * @param bool $resize        TRUE to resize the uploaded image, FALSE to leave it alone.
+	 * @param int $max_width      The maximum width of the resized image.
+	 * @param int $max_height     The maximum width of the resized image.
+	 * @param int $quality        The quality of the resized image.
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function uploadFile($source_path, $allowed_ext, $target_path, $new_name=NULL, $max_size=7340032, $resize=TRUE, $max_width=120, $max_height=90, $quality=75)
 	{
+		# Create an empty variable that indicates whether the file was uploaded or not. Default is FALSE.
+		$uploaded=FALSE;
+
 		if($this->checkErrors()===FALSE)
 		{
 			# Get Image class.
@@ -259,15 +266,12 @@ class Upload
 
 			# Create variables for file related data members.
 			$name=$this->getName();
-			$temp_name=$this->getTempName();
-			$type=$this->getType();
-			$size=$this->getSize();
+			//$temp_name=$this->getTempName();
+			//$type=$this->getType();
+			//$size=$this->getSize();
 			$ext=$file->getFileExtension($name);
 			# Set the extension to the ext data member.
 			$this->setExt($ext);
-
-			# Create an empty variable that indicates whether the file was uploaded or not. Default is FALSE.
-			$uploaded=FALSE;
 
 			# Create an empty variable that assumes the file is not an image.
 			$image=FALSE;
@@ -275,7 +279,7 @@ class Upload
 			$doc_ext=array();
 
 			# Create a variable that assumes there is no GD library support.
-			$image_ext=FALSE;
+			//$image_ext=FALSE;
 
 			# Loop through allowed extensions.
 			foreach($allowed_ext as $extension)
@@ -328,19 +332,18 @@ class Upload
 			}
 		}
 		return $uploaded;
-	} #==== End -- uploadFile
+	}
 
 	/**
 	 * uploadDoc
 	 *
 	 * Uploads a user's Document.
 	 *
-	 * @param	$source_path			The path to the folder where we will keep the document.
-	 * @param	$allowed_ext			The acceptable file types.
-	 * @param	$new_name				The name to be given to the uploaded document.
-	 * @param	$max_size				The maximum allowed size of the uploaded document.
-	 * @return	bool
-	 * @access	public
+	 * @param string $source_path The path to the folder where we will keep the document.
+	 * @param array $allowed_ext  The acceptable file types.
+	 * @param string $new_name    The name to be given to the uploaded document.
+	 * @param int $max_size       The maximum allowed size of the uploaded document.
+	 * @return bool
 	 */
 	public function uploadDoc($source_path, $allowed_ext, $new_name=NULL, $max_size=7340032)
 	{
@@ -354,7 +357,7 @@ class Upload
 			# Create variables for file related data members.
 			$u_name=$this->getName();
 			$u_temp_name=$this->getTempName();
-			$u_type=$this->getType();
+			//$u_type=$this->getType();
 			$u_size=$this->getSize();
 
 			if(empty($new_name))
@@ -425,21 +428,21 @@ class Upload
 	 *
 	 * Uploads and resizes an image.
 	 *
-	 * @param	$source_path				The path to the folder where we will keep the original file.
-	 * @param	$target_path				The complete path to where the copy will be stored.
-	 * @param	$new_name					The name to be given to the uploaded image.
-	 * @param	$max_size					The maximum allowed size of the uploaded file.
-	 * @param	$resize_target				TRUE to resize the uploaded image, FALSE to leave it alone.
-	 * @param	$max_width					The maximum width of the resized image.
-	 * @param	$max_height					The maximum width of the resized image.
-	 * @param	$quality					The quality of the resized image.
-	 * @param	$resize_source				TRUE to resize the original image, FALSE to leave it alone.
-	 * @param	$max_source_width			The maximum width of the resized original image.
-	 * @param	$max_source_height			The maximum width of the resized original image.
-	 * @param	$source_quality				The quality of the resized original image.
-	 * @param	$proportional				TRUE if this image should proportional size, FALSE if you want the image $max_width x $max_height.
-	 * @return	bool
-	 * @access	public
+	 * @param string $source_path    The path to the folder where we will keep the original file.
+	 * @param string $target_path    The complete path to where the copy will be stored.
+	 * @param string $new_name       The name to be given to the uploaded image.
+	 * @param int $max_size          The maximum allowed size of the uploaded file.
+	 * @param bool $resize_target    TRUE to resize the uploaded image, FALSE to leave it alone.
+	 * @param int $max_width         The maximum width of the resized image.
+	 * @param int $max_height        The maximum width of the resized image.
+	 * @param int $quality           The quality of the resized image.
+	 * @param bool $resize_source    TRUE to resize the original image, FALSE to leave it alone.
+	 * @param int $max_source_width  The maximum width of the resized original image.
+	 * @param int $max_source_height The maximum width of the resized original image.
+	 * @param int $source_quality    The quality of the resized original image.
+	 * @param bool $proportional     TRUE if this image should proportional size, FALSE if you want the image $max_width x $max_height.
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function uploadImage($source_path, $target_path, $new_name=NULL, $max_size=7340032, $resize_target=TRUE, $max_width=120, $max_height=90, $quality=75, $resize_source=FALSE, $max_source_width=800, $max_source_height=800, $source_quality=100, $proportional=TRUE)
 	{
@@ -454,7 +457,7 @@ class Upload
 			# Create variables for file related data members.
 			$img_name=$this->getName();
 			$img_temp_name=$this->getTempName();
-			$img_type=$this->getType();
+			//$img_type=$this->getType();
 			$img_size=$this->getSize();
 
 			# What file types will we accept?
@@ -485,9 +488,9 @@ class Upload
 			}
 
 			# Set the path to the original file.
-			$source=$source_path.$new_name;
+			//$source=$source_path.$new_name;
 			# Set the path to the copy.
-			$target=$target_path.$new_name;
+			//$target=$target_path.$new_name;
 
 			# Set the maximum length of a filename.
 			$file_handler->setMaxLengthFilename(255);
@@ -608,14 +611,12 @@ class Upload
 	} #==== End -- uploadImage
 
 	/**
-	 * deleteFile
-	 *
 	 * Removes the passed file from the system. A wrapper method for the deleteFile method of the FileHandler class.
 	 *
-	 * @param	string $source				The complete path to the file. (ie: /home/user/bodega/file.jpg)
-	 * @param	boolean $multi_file			TRUE if $source has a wildcard to delete multiple files (ie: /home/user/bodega/file-*.jpg).
-	 * @return	boolean						Returns TRUE on success. Returns FALSE if the passed source is not a fvalid file. Throws an exception on failure.
-	 * @access	public
+	 * @param string $source   The complete path to the file. (ie: /home/user/bodega/file.jpg)
+	 * @param bool $multi_file TRUE if $source has a wildcard to delete multiple files (ie: /home/user/bodega/file-*.jpg).
+	 * @return bool            TRUE on success. FALSE if the passed source is not a fvalid file.
+	 * @throws Exception
 	 */
 	public function deleteFile($source, $multi_file=FALSE)
 	{
@@ -636,13 +637,18 @@ class Upload
 		}
 	} #==== End -- deleteFile
 
-	# check for errors
+	/**
+	 * check for errors
+	 *
+	 * @return bool
+	 */
 	public function checkErrors()
 	{
 		if(count($this->getErrors())>0)
 		{
 			return TRUE;
 		}
+
 		return FALSE;
 	} #==== End -- checkErrors
 

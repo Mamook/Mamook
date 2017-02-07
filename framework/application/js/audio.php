@@ -3,9 +3,10 @@
 $js='(function(a){a(function(){function c(b){b=a(b).val();a("#embed").toggle("embed"==b);a("#file").toggle("file"==b)}c(a(".audio_type_radio:checked"));a(".audio_type_radio").click(function(){c(this)})})})(jQuery);';
 
 
-/* Big version
+/*
+// Big version
 // Wrap the script to protect the global namespace.
-(function ($) {
+$js="(function ($) {
 	// Wait for document ready.
 	$(function () {
 		checkFields($('.audio_type_radio:checked'));
@@ -18,5 +19,5 @@ $js='(function(a){a(function(){function c(b){b=a(b).val();a("#embed").toggle("em
 			$('#file').toggle(value == 'file');
 		};
 	});
-})(jQuery);
+})(jQuery);";
 */

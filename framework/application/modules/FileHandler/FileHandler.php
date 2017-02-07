@@ -43,14 +43,16 @@ class FileHandler
 	 *
 	 * Sets the data member $extension. Returns FALSE on failure.
 	 *
-	 * @param	$extension
-	 * @access	public
+	 * @param string $extension
+	 * @return bool
 	 */
 	public function setExtension($extension)
 	{
 		if(isset($extension) && !empty($extension))
 		{
 			$this->extension=$extension;
+
+			return TRUE;
 		}
 		else
 		{
@@ -63,14 +65,16 @@ class FileHandler
 	 *
 	 * Sets the data member $max_length_filename. Returns FALSE on failure.
 	 *
-	 * @param	$length					The length of the filename. It must be numeric with no decimals.
-	 * @access	public
+	 * @param int $length The length of the filename. It must be numeric with no decimals.
+	 * @return bool
 	 */
 	public function setMaxLengthFilename($length)
 	{
 		if(isset($length) && !empty($length) && preg_match('/^[0-9]{1,}$/', $length))
 		{
 			$this->max_length_filename=(int)$length;
+
+			return TRUE;
 		}
 		else
 		{
@@ -83,8 +87,8 @@ class FileHandler
 	 *
 	 * Sets the data member $file_size. Throws an exception on failure.
 	 *
-	 * @param	$file_size
-	 * @access	public
+	 * @param int $file_size
+	 * @throws Exception
 	 */
 	public function setFileSize($file_size)
 	{
@@ -103,8 +107,8 @@ class FileHandler
 	 *
 	 * Sets the data member $width. Returns FALSE on failure.
 	 *
-	 * @param	$width					Must be numeric.
-	 * @access	public
+	 * @param int $width Must be numeric.
+	 * @return bool
 	 */
 	public function setWidth($width)
 	{
@@ -113,6 +117,8 @@ class FileHandler
 		if(!empty($width) && is_numeric($width))
 		{
 			$this->width=$width;
+
+			return TRUE;
 		}
 		else
 		{
@@ -125,8 +131,8 @@ class FileHandler
 	 *
 	 * Sets the data member $height. Returns FALSE on failure.
 	 *
-	 * @param	$height					Must be numeric.
-	 * @access	public
+	 * @param int $height Must be numeric.
+	 * @return bool
 	 */
 	public function setHeight($height)
 	{
@@ -135,6 +141,8 @@ class FileHandler
 		if(!empty($height) && is_numeric($height))
 		{
 			$this->height=$height;
+
+			return TRUE;
 		}
 		else
 		{
@@ -147,8 +155,8 @@ class FileHandler
 	 *
 	 * Sets the data member $imagetype. Returns FALSE on failure.
 	 *
-	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant.
-	 * @access	public
+	 * @param @const $imagetype                Must be a IMAGETYPE_XXX constant.
+	 * @return bool
 	 */
 	public function setImageType($imagetype)
 	{
@@ -196,6 +204,8 @@ class FileHandler
 		if(in_array($imagetype, $imagtype_constants) || in_array($imagetype, $imagtype_values))
 		{
 			$this->imagetype=$imagetype;
+
+			return TRUE;
 		}
 		else
 		{
@@ -208,8 +218,8 @@ class FileHandler
 	 *
 	 * Sets the data member $width_height_string. Returns FALSE on failure.
 	 *
-	 * @param	$string
-	 * @access	public
+	 * @param string $string
+	 * @return bool
 	 */
 	public function setWidthHeightString($string)
 	{
@@ -218,6 +228,8 @@ class FileHandler
 		{
 			# Clean it up and set the Data member.
 			$this->width_height_string=strip_tags(strtolower(trim($string)));
+
+			return TRUE;
 		}
 		else
 		{
@@ -230,8 +242,8 @@ class FileHandler
 	 *
 	 * Sets the data member $mime. Returns FALSE on failure.
 	 *
-	 * @param	$mime
-	 * @access	public
+	 * @param string $mime
+	 * @return bool
 	 */
 	public function setMime($mime)
 	{
@@ -242,6 +254,8 @@ class FileHandler
 		if(in_array($mime, $mimetype_values))
 		{
 			$this->mime=$mime;
+
+			return TRUE;
 		}
 		else
 		{
@@ -254,8 +268,8 @@ class FileHandler
 	 *
 	 * Sets the data member $channels. Returns FALSE on failure.
 	 *
-	 * @param	$channels
-	 * @access	public
+	 * @param int $channels
+	 * @return bool
 	 */
 	public function setChannels($channels)
 	{
@@ -265,6 +279,8 @@ class FileHandler
 		if(($channels==3) || ($channels==4))
 		{
 			$this->channels=$channels;
+
+			return TRUE;
 		}
 		else
 		{
@@ -277,8 +293,8 @@ class FileHandler
 	 *
 	 * Sets the data member $bits. Returns FALSE on failure.
 	 *
-	 * @param	$bits
-	 * @access	public
+	 * @param int $bits
+	 * @return bool
 	 */
 	public function setBits($bits)
 	{
@@ -288,6 +304,8 @@ class FileHandler
 		if(!empty($bits) && is_numeric($bits))
 		{
 			$this->bits=$bits;
+
+			return TRUE;
 		}
 		else
 		{
@@ -305,8 +323,6 @@ class FileHandler
 	 * getExtension
 	 *
 	 * Returns the data member $extension. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getExtension()
 	{
@@ -324,8 +340,6 @@ class FileHandler
 	 * getMaxLengthFilename
 	 *
 	 * Returns the data member $max_length_filename. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getMaxLengthFilename()
 	{
@@ -355,8 +369,6 @@ class FileHandler
 	 * getWidth
 	 *
 	 * Returns the data member $width. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getWidth()
 	{
@@ -374,8 +386,6 @@ class FileHandler
 	 * getHeight
 	 *
 	 * Returns the data member $height. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getHeight()
 	{
@@ -393,8 +403,6 @@ class FileHandler
 	 * getImageType
 	 *
 	 * Returns the data member $imagetype. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getImageType()
 	{
@@ -412,8 +420,6 @@ class FileHandler
 	 * getWidthHeightString
 	 *
 	 * Returns the data member $width_height_string. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getWidthHeightString()
 	{
@@ -431,8 +437,6 @@ class FileHandler
 	 * getMime
 	 *
 	 * Returns the data member $mime. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getMime()
 	{
@@ -450,8 +454,6 @@ class FileHandler
 	 * getChannels
 	 *
 	 * Returns the data member $channels. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getChannels()
 	{
@@ -469,8 +471,6 @@ class FileHandler
 	 * getBits
 	 *
 	 * Returns the data member $bits. Returns FALSE on failure.
-	 *
-	 * @access	public
 	 */
 	public function getBits()
 	{
@@ -496,9 +496,9 @@ class FileHandler
 	 * Checks the passed directory ($dir) for the passed filename ($filename).
 	 * If we find the file name, return a message. If not, return FALSE.
 	 *
-	 * @param	$dir					The directory we're searching.
-	 * @param	$filename				The filename we're looking for.
-	 * @access	public
+	 * @param string $dir      The directory we're searching.
+	 * @param string $filename The filename we're looking for.
+	 * @return bool|string
 	 */
 	public function checkFileDuplicate($dir, $filename)
 	{
@@ -523,8 +523,8 @@ class FileHandler
 	 * Checks passed filename($the_name) for length and unacceptable characters.
 	 * If the file is too long or has unacceptable characters, it returns the error. Otherwise, it returns TRUE.
 	 *
-	 * @param	$the_name				The filename we're checking
-	 * @access	public
+	 * @param string $the_name The filename we're checking
+	 * @return bool|string
 	 */
 	public function checkFileName($the_name)
 	{
@@ -558,9 +558,9 @@ class FileHandler
 	 * Checks passed file($imagename) against array($allowedtypes).
 	 * If the file's extension is not in the array, it returns the error. If it is, it returns TRUE.
 	 *
-	 * @param	$imagename				The file we're checking.
-	 * @param	$allowedtypes			Array of allowed file extensions without "."
-	 * @access	public
+	 * @param string $filename   The file we're checking.
+	 * @param array $allowedtypes Array of allowed file extensions without "."
+	 * @return bool|string
 	 */
 	public function checkFileType($filename, $allowedtypes=array())
 	{
@@ -581,8 +581,8 @@ class FileHandler
 	 *
 	 * Creates a new image from a source image. Returns FALSE on failure.
 	 *
-	 * @param	$source					The file we're resizing. Must be a path, not URL.
-	 * @access	public
+	 * @param string $source The file we're resizing. Must be a path, not URL.
+	 * @return bool|resource
 	 */
 	public function createImageFromSource($source)
 	{
@@ -591,7 +591,7 @@ class FileHandler
 			$this->getImageInfo($source);
 		}
 		# Open a temp of the source image.
-		switch ($this->getImageType()) # Assumes that image info has already been set to Data members.
+		switch($this->getImageType()) # Assumes that image info has already been set to Data members.
 		{
 			# If it's a jpg...
 			case IMAGETYPE_JPEG:
@@ -636,10 +636,10 @@ class FileHandler
 	 *
 	 * Removes the passed file from the system.
 	 *
-	 * @param	string $source				The complete path to the file. (ie: /home/user/bodega/file.jpg)
-	 * @param	boolean $multi_file			TRUE if $source has a wildcard to delete multiple files (ie: /home/user/bodega/file-*.jpg).
-	 * @return	boolean						Returns TRUE on success. Returns FALSE if the passed source is not a fvalid file. Throws an exception on failure.
-	 * @access	public
+	 * @param string $source   The complete path to the file. (ie: /home/user/bodega/file.jpg)
+	 * @param bool $multi_file TRUE if $source has a wildcard to delete multiple files (ie: /home/user/bodega/file-*.jpg).
+	 * @return bool Returns TRUE on success. Returns FALSE if the passed source is not a fvalid file. Throws an exception on failure.
+	 * @throws Exception
 	 */
 	public function deleteFile($source, $multi_file=FALSE)
 	{
@@ -675,11 +675,10 @@ class FileHandler
 	 *
 	 * Edits the contents of a passed file.
 	 *
-	 * @param 	$file_to_edit			The full path to the file (must include the file name.)
-	 * @param 	$content				The content to add to the file.
-	 * @param 	$reset					Indicates if the file should get erased.
-	 * @return	Boolean					The number of bytes written on success, FALSE on failure.
-	 * @access	public
+	 * @param string $file_to_edit			The full path to the file (must include the file name.)
+	 * @param string $content				The content to add to the file.
+	 * @param bool $reset					Indicates if the file should get erased.
+	 * @return boolean					The number of bytes written on success, FALSE on failure.
 	 */
 	public function editFile($file_to_edit='', $content=NULL, $reset=FALSE)
 	{
@@ -720,9 +719,8 @@ class FileHandler
 	 *
 	 * Erases the contents of a file.
 	 *
-	 * @param 	$path_to_file			The complete path to the file to erase (including the file name.)
-	 * @return	Boolean					The number of bytes written on success, FALSE on failure.
-	 * @access	public
+	 * @param string $path_to_file			The complete path to the file to erase (including the file name.)
+	 * @return boolean					The number of bytes written on success, FALSE on failure.
 	 */
 	public function eraseFile($path_to_file='')
 	{
@@ -751,8 +749,7 @@ class FileHandler
 	 *
 	 * Finds the size of a file in bytes.
 	 *
-	 * @param	$file_path				The path to the file.
-	 * @access	public
+	 * @param string $file_path				The path to the file.
 	 */
 	public function findFileSize($file_path)
 	{
@@ -765,8 +762,8 @@ class FileHandler
 	 *
 	 * Derives the mime type from a passed file($filename) and returns it. Returns FALSE on failure.
 	 *
-	 * @param	$filename				The file we're getting the mime type of.
-	 * @access	public
+	 * @param string $filename The file we're getting the mime type of.
+	 * @return bool|string
 	 */
 	public function findMimeType($filename)
 	{
@@ -803,8 +800,8 @@ class FileHandler
 	 *
 	 * Derives the file extension from a passed file ($filename), sets the $extension data member, and returns it.
 	 *
-	 * @param	$imagename				The file we're getting the extension of.
-	 * @access	public
+	 * @param string $filename The file we're getting the extension of.
+	 * @return bool|string
 	 */
 	public function getFileExtension($filename)
 	{
@@ -823,8 +820,6 @@ class FileHandler
 	 * Returns the image types (ie. 'jpg', 'jpeg', 'gif' etc) supported by the version of GD linked into the current PHP installation as an array.
 	 * Returns FALSE if there no GD image support.
 	 * (This method ignores IMG_WBMP and IMG_XPM.)
-	 *
-	 * @access	public
 	 */
 	public function getGDSupportedImageTypes()
 	{
@@ -865,8 +860,8 @@ class FileHandler
 	 * bits is the number of bits for each color.
 	 * This function also sets the image_info, width, height, imagetype, width_height_string, mime, channels, and bits class data members.
 	 *
-	 * @param	$imagename				The name of the image.
-	 * @access	public
+	 * @param string $imagename The name of the image.
+	 * @return array|bool
 	 */
 	public function getImageInfo($imagename)
 	{
@@ -896,9 +891,9 @@ class FileHandler
 	 *
 	 * Returns the file extension of the passed image type constant. Returns NULL on failure.
 	 *
-	 * @param	$type					The image type constant - ie IMAGE_JPG.
-	 * @param	$dot					Whether to prepend a dot to the extension or not. Default to TRUE.
-	 * @access	public
+	 * @param @const $type The image type constant - ie IMAGE_JPG.
+	 * @param bool $dot    Whether to prepend a dot to the extension or not. Default to TRUE.
+	 * @return null|string
 	 */
 	public function getImageTypeExtenstion($type, $dot=TRUE)
 	{
@@ -932,8 +927,8 @@ class FileHandler
 	 *
 	 * Returns the mime type of the passed image type constant. Returns NULL on failure.
 	 *
-	 * @param	$type					The image type constant - ie IMAGE_JPG.
-	 * @access	public
+	 * @param @const $type The image type constant - ie IMAGE_JPG.
+	 * @return mixed|null|string
 	 */
 	public function getImageTypeMimeType($type='')
 	{
@@ -977,8 +972,8 @@ class FileHandler
 	 *
 	 * Derives the mime type from a passed file's($filename) extension and returns it. Returns FALSE on failure.
 	 *
-	 * @param	$filename				The file we're getting the mime type of.
-	 * @access	public
+	 * @param string $filename The file we're getting the mime type of.
+	 * @return bool|mixed
 	 */
 	public function getMimeTypeFromExtension($filename)
 	{
@@ -1064,8 +1059,8 @@ class FileHandler
 	 * Returns TRUE if it is, FALSE if it is not.
 	 * If the passed file is not a gif, it returns NULL and sends an error message.
 	 *
-	 * @param	$gif					The file we're checking. Must be a path, not URL.
-	 * @access	public
+	 * @param string $gif                    The file we're checking. Must be a path, not URL.
+	 * @return bool|null
 	 */
 	public function isAnimatedGif($gif)
 	{
@@ -1115,16 +1110,16 @@ class FileHandler
 	 *
 	 * Resizes an image and saves the new image to ($target) folder.
 	 *
-	 * @param	$source					The file we're resizing. Must be a path, not URL.
-	 * @param	$new_width				Width to resize to. Default is 0.
-	 * @param	$new_height				Height to resize to. Default is 0.
-	 * @param	$target					The folder and name of new file to save the resized image to. Must be a path, not URL.
-	 * @param	$quality				The quality to resize to: 1 to 100. Default is 75.
-	 * @param	$proportional			TRUE to maintain aspect ratio. FALSE won't. Default is TRUE.
-	 * @param	$output					Where to output the file to. Options are: browser, file, return. Default is file.
-	 * @param	$delete_original		TRUE to delete original file. Default is FALSE.
-	 * @param	$use_linux_commands		TRUE to use linux command when dealing with files. Default is FALSE.
-	 * @access	public
+	 * @param string $source           The file we're resizing. Must be a path, not URL.
+	 * @param int $new_width           Width to resize to. Default is 0.
+	 * @param int $new_height          Height to resize to. Default is 0.
+	 * @param string $target           The folder and name of new file to save the resized image to. Must be a path, not URL.
+	 * @param int $quality             The quality to resize to: 1 to 100. Default is 75.
+	 * @param bool $proportional       TRUE to maintain aspect ratio. FALSE won't. Default is TRUE.
+	 * @param string $output           Where to output the file to. Options are: browser, file, return. Default is file.
+	 * @param bool $delete_original    TRUE to delete original file. Default is FALSE.
+	 * @param bool $use_linux_commands TRUE to use linux command when dealing with files. Default is FALSE.
+	 * @return bool|string
 	 */
 	public function reduceImage($source, $target, $new_width=0, $new_height=0, $quality=75, $proportional=TRUE, $output='file', $delete_original=FALSE, $use_linux_commands=FALSE)
 	{
@@ -1243,15 +1238,15 @@ class FileHandler
 	 * Saves a new image to the $target as the specified image type.
 	 * Returns TRUE on success and FALSE on failure.
 	 *
-	 * @param	$image_in				Source image link resource.
-	 * @param	$image_out				Destination image link resource.
-	 * @param	$old_width				Source width.
-	 * @param	$old_height				Source height.
-	 * @param	$final_width			Destination width.
-	 * @param	$final_height			Destination height.
-	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant or equivalant int value.
-	 *										It may be left out if the $imagetype data member is already set.
-	 * @access	public
+	 * @param string $image_in                Source image link resource.
+	 * @param string $image_out               Destination image link resource.
+	 * @param int $old_width                  Source width.
+	 * @param int $old_height                 Source height.
+	 * @param int $final_width                Destination width.
+	 * @param int $final_height               Destination height.
+	 * @param @const $imagetype	              Must be a IMAGETYPE_XXX constant or equivalant int value.
+	 *                                        It may be left out if the $imagetype data member is already set.
+	 * @return bool
 	 */
 	public function resizeImageByType($image_in, $image_out, $old_width, $old_height, $final_width, $final_height, $imagetype=NULL)
 	{
@@ -1329,11 +1324,11 @@ class FileHandler
 	 * Saves a new image to the $target as the specified image type.
 	 * Returns TRUE on success and FALSE on failure.
 	 *
-	 * @param	$image					An image resource, returned by one of the image creation functions, such as imagecreatetruecolor().
-	 * @param	$target					The path to save the file to. Must be a path, not a URL. If not set or NULL, the raw image stream will be outputted directly.
-	 * @param	$quality				For jpg only: Ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file).
-	 * @param	$imagetype				Must be a IMAGETYPE_XXX constant or equivalant int value. It may be left out if the $imagetype data member is already set.
-	 * @access	public
+	 * @param string $image         An image resource, returned by one of the image creation functions, such as imagecreatetruecolor().
+	 * @param string $target        The path to save the file to. Must be a path, not a URL. If not set or NULL, the raw image stream will be outputted directly.
+	 * @param int $quality          For jpg only: Ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file).
+	 * @param @const $imagetype     Must be a IMAGETYPE_XXX constant or equivalant int value. It may be left out if the $imagetype data member is already set.
+	 * @return bool
 	 */
 	public function saveImageAs($image, $target, $quality=75, $imagetype=NULL)
 	{
@@ -1401,9 +1396,9 @@ class FileHandler
 	/**
 	 * serveAudio
 	 *
-	 * @param	$file					The name of the file to serve.
-	 * @param	$premium				TRUE if the file is a "premium" file, NULL if it is not..
-	 * @access	public
+	 * @param string $file  The name of the file to serve.
+	 * @param bool $premium TRUE if the file is a "premium" file, NULL if it is not..
+	 * @throws Exception
 	 */
 	public function serveAudio($file, $premium=NULL)
 	{
@@ -1454,8 +1449,8 @@ class FileHandler
 	 * Validates the file extension against the IMAGETYPE_XXX constant.
 	 * returns TRUE if they match, FALSE if they don't.
 	 *
-	 * @param	$source					The image file. Must be a path, not URL.
-	 * @access	public
+	 * @param string $source The image file. Must be a path, not URL.
+	 * @return bool
 	 */
 	public function validateExtensionFromImageType($source)
 	{
@@ -1490,5 +1485,4 @@ class FileHandler
 	} #==== End -- validateExtensionFromImageType
 
 	/*** End public methods ***/
-
-} # End FileHandler class.
+}

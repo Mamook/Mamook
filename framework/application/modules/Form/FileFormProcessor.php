@@ -24,10 +24,10 @@ class FileFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted file for upload.
 	 *
-	 * @param	$data					An array of values tp populate the form with.
-	 * @param	$max_size				The maximum allowed size of uploaded files.
-	 * @access	public
-	 * @return	string
+	 * @param array $data   An array of values tp populate the form with.
+	 * @param int $max_size The maximum allowed size of uploaded files.
+	 * @return string
+	 * @throws Exception
 	 */
 	public function processFile($data, $max_size=104857600)
 	{
@@ -375,7 +375,7 @@ class FileFormProcessor extends FormProcessor
 							# Run the sql query.
 							$db_post=$db->query($sql);
 							# Check if the query was successful.
-							if(TRUE)//if($db_post>0)
+							if($db_post>0)
 							{
 								# Remove the file session.
 								unset($_SESSION['form']['file']);
@@ -459,8 +459,6 @@ class FileFormProcessor extends FormProcessor
 	 * processFileBack
 	 *
 	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a file.
-	 *
-	 * @access	private
 	 */
 	private function processFileBack()
 	{
@@ -485,8 +483,6 @@ class FileFormProcessor extends FormProcessor
 	 * processFileDelete
 	 *
 	 * Removes a file from the `files` table and the actual file from the system. A wrapper method for the deleteFile method in the File class.
-	 *
-	 * @access	private
 	 */
 	private function processFileDelete()
 	{
@@ -501,8 +497,6 @@ class FileFormProcessor extends FormProcessor
 			# Set the Validator instance to a variable.
 			$validator=Validator::getInstance();
 
-			# Explicitly set the delete variable to FALSE; the POST will NOT be deleted.
-			$delete=FALSE;
 			$access=TRUE;
 			# Check if the file's id was passed via GET data and that GET data indicates this is a delete.
 			if(isset($_GET['file']) && isset($_GET['delete']))
@@ -510,6 +504,7 @@ class FileFormProcessor extends FormProcessor
 				# Check if the passed file id is an integer.
 				if($validator->isInt($_GET['file'])===TRUE)
 				{
+					$display='';
 					# Check if the form has been submitted.
 					if(array_key_exists('_submit_check', $_POST) && isset($_POST['do']) && (isset($_POST['delete_file']) && ($_POST['delete_file']==='delete')))
 					{
@@ -559,7 +554,7 @@ class FileFormProcessor extends FormProcessor
 								if($count>0)
 								{
 									# Set the product_returned variable to TRUE.
-									$product_returned===TRUE;
+									$product_returned=TRUE;
 									# Check if the user has access to this record.
 									$access=$login->checkAccess(MAN_USERS);
 								}
@@ -596,7 +591,7 @@ class FileFormProcessor extends FormProcessor
 								# Get rid of any CMS form sessions.
 								unset($_SESSION['form']['file']);
 								# Delete the file from the Database and set the returned value to a variable.
-								$deleted=$file->deleteFile($id, FALSE);
+								$deleted=$file_obj->deleteFile($id, FALSE);
 								if($deleted===TRUE)
 								{
 									$this->redirectFile($file_name, 'deleted');
@@ -634,6 +629,7 @@ class FileFormProcessor extends FormProcessor
 					{
 						# Create a delete form for this file and request confirmation from the user with the appropriate warnings.
 						require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_form.php');
+
 						return $display;
 					}
 				}
@@ -653,7 +649,6 @@ class FileFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted form selecting a file to add to a post.
 	 *
-	 * @access	protected
 	 * @return	string
 	 */
 	protected function processFileSelect()
@@ -704,8 +699,6 @@ class FileFormProcessor extends FormProcessor
 	 *
 	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User
 	 * to this form to aquire a file.
-	 *
-	 * @access	protected
 	 */
 	protected function redirectFile($file_name, $action)
 	{
@@ -762,8 +755,6 @@ class FileFormProcessor extends FormProcessor
 	 * setSession
 	 *
 	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
-	 *
-	 * @access	protected
 	 */
 	protected function setSession()
 	{

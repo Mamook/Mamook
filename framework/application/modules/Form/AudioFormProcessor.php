@@ -24,10 +24,10 @@ class AudioFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted audio for upload.
 	 *
-	 * @param	$data					An array of values to populate the form with.
-	 * @param	$max_size				The maximum allowed size of uploaded audio.
-	 * @access	public
-	 * @return	string
+	 * @param array $data   An array of values to populate the form with.
+	 * @param int $max_size The maximum allowed size of uploaded audio.
+	 * @return string
+	 * @throws Exception
 	 */
 	public function processAudio($data, $max_size=314572800)
 	{
@@ -116,7 +116,7 @@ class AudioFormProcessor extends FormProcessor
 				$category_ids='-'.implode('-', $categories).'-';
 			}
 			# Set the confirmation email template to a variable.
-			$confirmation_template=$audio_obj->getConfirmationTemplate();
+			//$confirmation_template=$audio_obj->getConfirmationTemplate();
 			# Set the audio contributor's id to a variable.
 			$contributor_id=$audio_obj->getContID();
 			# Set the audio's posting date to a variable.
@@ -165,6 +165,18 @@ class AudioFormProcessor extends FormProcessor
 				# Separate the category id's with dashes (-).
 				$playlist_ids='-'.implode('-', $playlists).'-';
 			}
+			# Set the file's premium status to a variable.
+			$premium=$audio_obj->getPremium();
+			# Set the indicator of whether the premium status changed to a local variable.
+			$premium_changed=$populator->getPremiumChange();
+			# Create an empty variable for the name of the "premium" folder.
+			$premium_path='';
+			# Is the uploaded file for "premium" content?
+			if($premium===0)
+			{
+				# Set the name of the "premium" folder (must end with backslash).
+				$premium_path='premium'.DS;
+			}
 			# Set the audio's publisher name to a variable.
 			$publisher_name=$audio_obj->getPublisher();
 			# Get the Publisher class.
@@ -196,9 +208,9 @@ class AudioFormProcessor extends FormProcessor
 				# Instantiate FormValidator object
 				$fv=new FormValidator();
 				# Check if the title field was empty (or less than 2 characters or more than 1024 characters long).
-				$empty_title=$fv->validateEmpty('title', 'Please enter a title for the audio.', 2, 1024);
+				$fv->validateEmpty('title', 'Please enter a title for the audio.', 2, 1024);
 				# Check if the title field was empty (or less than 2 characters or more than 1024 characters long).
-				$empty_title=$fv->validateEmpty('author', 'Please enter an author for the audio.', 2, 1024);
+				$fv->validateEmpty('author', 'Please enter an author for the audio.', 2, 1024);
 				if(empty($category_ids))
 				{
 					# Set an error.
@@ -222,10 +234,15 @@ class AudioFormProcessor extends FormProcessor
 				if($image_id!==NULL)
 				{
 					# Get the Image object.
-					$image_obj=$audio_obj->getImageObj();
+					//$image_obj=$audio_obj->getImageObj();
 					# Set the variable that remembers that a custom thumbnail has been chosen to TRUE.
 					$uploaded_thumbnail=TRUE;
 				}
+
+				# Get the Upload class.
+				require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
+				# Instantiate an Upload object.
+				$upload_obj=new Upload($_FILES['audio']);
 
 				# Get the FileHandler class.
 				require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
@@ -244,22 +261,18 @@ class AudioFormProcessor extends FormProcessor
 						# Set an error.
 						$fv->setErrors('You must select an audio file to upload.');
 					}
+
 					# Check if a audio was uploaded and if there have been no errors so far.
 					if(array_key_exists('audio', $_FILES) && ($fv->checkErrors()===FALSE))
 					{
-						# Get the Upload class.
-						require_once Utility::locateFile(MODULES.'Form'.DS.'Upload.php');
-						# Instantiate an Upload object.
-						$upload_obj=new Upload($_FILES['audio']);
-
 						# Check if the uploaded audio size is not NULL.
 						if($upload_obj->getSize()!==NULL)
 						{
 							try
 							{
-								# NOTE: How can we move this to a background script?
+								# TODO: How can we move this to a background script?
 								# Upload the audio file.
-								$document_upload=$upload_obj->uploadFile(BODEGA.'audio'.DS, array('mp3', 'flac', 'm4a', 'wav', 'wma'), BODEGA.'audio'.DS, $clean_filename, $max_size, FALSE);
+								$document_upload=$upload_obj->uploadFile(BODEGA.$premium_path.'audio'.DS, array('mp3', 'flac', 'm4a', 'wav', 'wma'), BODEGA.$premium_path.'audio'.DS, $clean_filename, $max_size, FALSE);
 								# Reset the audio file's name (ie: audio_file_name.mp3).
 								$new_audio_name=$upload_obj->getName();
 							}
@@ -272,7 +285,7 @@ class AudioFormProcessor extends FormProcessor
 							if($upload_obj->checkErrors()===TRUE)
 							{
 								# Remove uploaded audio.
-								$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+								$upload_obj->deleteFile(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 								# Get any errors.
 								$document_errors=$upload_obj->getErrors();
 								# Loop through the errors.
@@ -294,7 +307,7 @@ class AudioFormProcessor extends FormProcessor
 				elseif(empty($id) && $audio_type=='embed')
 				{
 					# Check if the embed field was empty (or less than 10 characters or more than 1024 characters long).
-					$empty_title=$fv->validateEmpty('embed_code', 'Please enter an embed code for the audio.', 10, 1024);
+					$fv->validateEmpty('embed_code', 'Please enter an embed code for the audio.', 10, 1024);
 					# Set to FALSE, just in case.
 					$uploaded_document=FALSE;
 				}
@@ -312,7 +325,7 @@ class AudioFormProcessor extends FormProcessor
 					if($uploaded_document===TRUE)
 					{
 						# Remove uploaded audio file.
-						$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+						$upload_obj->deleteFile(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 					}
 				}
 				else
@@ -365,6 +378,7 @@ class AudioFormProcessor extends FormProcessor
 									'institution'=>$dup_audio->getInstitution(),
 									'language'=>$dup_audio->getLanguage(),
 									'playlists'=>$dup_audio->getPlaylists(),
+									'premium'=>$dup_audio->getPremium(),
 									'publisher'=>$dup_audio->getPublisher(),
 									'title'=>$dup_audio->getTitle(),
 									'year'=>$dup_audio->getYear()
@@ -410,7 +424,7 @@ class AudioFormProcessor extends FormProcessor
 									require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
 									# Instantiate the new getID3 object.
 									$getID3_obj=new getID3;
-									$audio_file_info=$getID3_obj->analyze(BODEGA.'audio'.DS.$new_audio_name);
+									$audio_file_info=$getID3_obj->analyze(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 									if(isset($audio_file_info['comments']['picture'][0]))
 									{
 										# Get image data.
@@ -422,7 +436,7 @@ class AudioFormProcessor extends FormProcessor
 									if(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg'))
 									{
 										# Resize the image and save the new image to the target folder.
-										$resize_image=$file_handler->reduceImage(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg', IMAGES_PATH.$clean_filename.'.jpg', '320', '180', '75', FALSE);
+										$file_handler->reduceImage(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg', IMAGES_PATH.$clean_filename.'.jpg', '320', '180', '75', FALSE);
 
 										# Insert the thumbnail image into the `images` table.
 										$sql='INSERT INTO `'.DBPREFIX.'images` ('.
@@ -498,6 +512,7 @@ class AudioFormProcessor extends FormProcessor
 							' `date`,'.
 							(($image_id!==NULL) ? ' `image`,' : '').
 							' `institution`,'.
+							(($premium===0) ? ' `premium`,' : '').
 							((!empty($publisher_id)) ? ' `publisher`,' : '').
 							' `language`,'.
 							' `contributor`'.
@@ -515,6 +530,7 @@ class AudioFormProcessor extends FormProcessor
 							' '.$db->quote($date).','.
 							(($image_id!==NULL) ? ' '.$db->quote($image_id).',' : '').
 							' '.$db->quote($institution_id).','.
+							(($premium===0) ? ' '.$db->quote('0').',' : '').
 							((!empty($publisher_id)) ? ' '.$db->quote($publisher_id).',' : '').
 							' '.$db->quote($language_id).','.
 							' '.$db->quote($contributor_id).
@@ -537,6 +553,7 @@ class AudioFormProcessor extends FormProcessor
 								((!empty($embed_code)) ? ' `embed_code` = '.$db->quote($db->escape($embed_code)).',' : '').
 								((!empty($new_audio_name)) ? ' `file_name` = '.$db->quote($db->escape($new_audio_name)).',' : '').
 								' `institution` = '.$db->quote($institution_id).','.
+								' `premium` = '.(($premium===0) ? $db->quote('0') : 'NULL').','.
 								($image_id!==NULL ? ' `image` = '.$db->quote($image_id).',' : '').
 								' `language` = '.$db->quote($language_id).','.
 								((!empty($category_ids)) ? ' `category` = '.$db->quote($category_ids).',' : '').
@@ -553,7 +570,7 @@ class AudioFormProcessor extends FormProcessor
 							# Run the sql query.
 							$db_post=$db->query($sql);
 							# Check if the query was successful.
-							if(TRUE)
+							if($db_post>0)
 							{
 								# Set the ID from the insert SQL query.
 								$insert_id=$db->get_insert_id();
@@ -584,6 +601,7 @@ class AudioFormProcessor extends FormProcessor
 									'NewMedia'=>$new_media,
 									'OldImageID'=>(isset($old_image_id) ? $old_image_id : ''),
 									'Playlists'=>$playlist_ids,
+									'Premium'=>$premium,
 									'Title'=>$title,
 								);
 
@@ -604,12 +622,13 @@ class AudioFormProcessor extends FormProcessor
 									# NOTE: Moved to ConvertMedia.php script.
 									# Convert to 128bit mp3.
 									//$cl2=new CommandLine('ffmpeg');
-									//$cl2->runScript("-i ".BODEGA.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
+									//$cl2->runScript("-i ".BODEGA.$premium_path.'audio'.DS.$new_audio_name." -acodec libmp3lame -ac 2 -ab 128k ".AUDIO_PATH."files".DS.$clean_filename.".mp3");
 								}
 
 								# Check if the availability allows posting to social networks.
 								if($availability==1)
 								{
+									$post_url='';
 									# Check if the post should be posted on Twitter.com or Facebook.com.
 									if($twitter==='0' OR $facebook==='post')
 									{
@@ -660,7 +679,7 @@ class AudioFormProcessor extends FormProcessor
 								if($uploaded_document===TRUE)
 								{
 									# Remove uploaded audio file.
-									$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+									$upload_obj->deleteFile(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 								}
 							}
 						}
@@ -670,7 +689,7 @@ class AudioFormProcessor extends FormProcessor
 							if($uploaded_document===TRUE)
 							{
 								# Remove uploaded audio file.
-								$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+								$upload_obj->deleteFile(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 							}
 							throw $e;
 						}
@@ -681,7 +700,7 @@ class AudioFormProcessor extends FormProcessor
 						if($uploaded_document===TRUE)
 						{
 							# Remove uploaded audio file.
-							$upload_obj->deleteFile(BODEGA.'audio'.DS.$new_audio_name);
+							$upload_obj->deleteFile(BODEGA.$premium_path.'audio'.DS.$new_audio_name);
 						}
 					}
 				}
@@ -696,7 +715,7 @@ class AudioFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processFile
+	}
 
 	/*** End public methods ***/
 
@@ -709,8 +728,7 @@ class AudioFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted form selecting a audio to add to a post.
 	 *
-	 * @access	private
-	 * @return	string
+	 * @return string
 	 */
 	private function processAudioSelect()
 	{
@@ -753,14 +771,12 @@ class AudioFormProcessor extends FormProcessor
 				$this->redirectAudio($audio_name, 'selected');
 			}
 		}
-	} #==== End -- processAudioSelect
+	}
 
 	/**
 	 * processAudioDelete
 	 *
 	 * Removes a audio from the `audio` table and the actual file from the system. A wrapper method for the deleteAudio method in the Audio class.
-	 *
-	 * @access	private
 	 */
 	private function processAudioDelete()
 	{
@@ -776,7 +792,6 @@ class AudioFormProcessor extends FormProcessor
 			$validator=Validator::getInstance();
 
 			# Explicitly set the delete variable to FALSE; the POST will NOT be deleted.
-			$delete=FALSE;
 			$access=TRUE;
 			# Check if the audio's id was passed via GET data and that GET data indicates this is a delete.
 			if(isset($_GET['audio']) && isset($_GET['delete']))
@@ -890,6 +905,7 @@ class AudioFormProcessor extends FormProcessor
 					}
 					else
 					{
+						$display='';
 						# Create a delete form for this audio and request confirmation from the user with the appropriate warnings.
 						require Utility::locateFile(TEMPLATES.'forms'.DS.'delete_form.php');
 						return $display;
@@ -904,14 +920,12 @@ class AudioFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAudioDelete
+	}
 
 	/**
 	 * processAudioBack
 	 *
 	 * Processes a submitted form indicating that the User should be sent back to the form that sent them to fetch a file.
-	 *
-	 * @access	private
 	 */
 	private function processAudioBack()
 	{
@@ -931,15 +945,16 @@ class AudioFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- processAudioBack
+	}
 
 	/**
 	 * redirectAudio
 	 *
-	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User
-	 * to this form to aquire a audio.
+	 * Redirect the user to the appropriate page if their post data indicates that another form sent the User to this form to aquire a audio.
 	 *
-	 * @access	private
+	 * @param string $audio_name
+	 * @param string $action
+	 * @throws Exception
 	 */
 	private function redirectAudio($audio_name, $action)
 	{
@@ -983,14 +998,12 @@ class AudioFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- redirectAudio
+	}
 
 	/**
 	 * setSession
 	 *
 	 * Creates a session that holds all the POST data (it will be destroyed if it is not needed.)
-	 *
-	 * @access	private
 	 */
 	private function setSession()
 	{
@@ -1089,8 +1102,7 @@ class AudioFormProcessor extends FormProcessor
 		{
 			throw $e;
 		}
-	} #==== End -- setSession
+	}
 
 	/*** End private methods ***/
-
-} # End AudioFormProcessor class.
+}

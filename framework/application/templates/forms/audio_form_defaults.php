@@ -24,6 +24,7 @@ $audio_institution=9; # Set the default to "Other" (9)
 $audio_language=3; # Set the default to "English" (3)
 $audio_last_edit_date=NULL;
 $audio_playlists=NULL;
+$audio_premium='premium'; # Set the default to "premium" (0)
 $audio_publisher=NULL;
 $audio_recent_contributor_id=NULL;
 $audio_title=NULL;
@@ -64,7 +65,7 @@ if(isset($_GET['audio']))
 				$audio_categories.=$key.'-';
 			}
 		}
-		$audio_categories=$audio_categories;
+		//$audio_categories=$audio_categories;
 		$audio_contributor=$audio_obj->getContID();
 		$audio_date=$audio_obj->getDate();
 		$audio_description=$audio_obj->getDescription();
@@ -90,7 +91,8 @@ if(isset($_GET['audio']))
 				$audio_playlists.=$key.'-';
 			}
 		}
-		$audio_playlists=$audio_playlists;
+		//$audio_playlists=$audio_playlists;
+		$audio_premium=$audio_obj->getPremium();
 		$audio_publisher=$audio_obj->getPublisher();
 		$audio_recent_contributor_id=$contributor->getContID();
 		$audio_title=$audio_obj->getTitle();
@@ -123,6 +125,7 @@ $default_data=array(
 		'Language'=>$audio_language,
 		'LastEdit'=>$audio_last_edit_date,
 		'Playlists'=>$audio_playlists,
+		'Premium'=>$audio_premium,
 		'Publisher'=>$audio_publisher,
 		'RecentContID'=>$audio_recent_contributor_id,
 		'Title'=>$audio_title,

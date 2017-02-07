@@ -81,7 +81,7 @@ if(empty($duplicates))
 					(in_array('add', $product_categories)===TRUE) &&
 					(
 						isset($category_options['selected']) &&
-						in_array('Add Category', $category_options['selected']!==TRUE)
+						in_array('Add Category', $category_options['selected'])!==TRUE
 					)
 				)
 			{

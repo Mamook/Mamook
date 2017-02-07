@@ -19,7 +19,6 @@ class File extends Media
 	private $all_files=array();
 	private $file=NULL;
 	private static $file_obj;
-	private $premium;
 
 	/*** End data members ***/
 
@@ -32,8 +31,7 @@ class File extends Media
 	 *
 	 * Sets the data member $files.
 	 *
-	 * @param	$files					May be an array or a string. The method makes it into an array regardless.
-	 * @access	protected
+	 * @param array $files					May be an array or a string. The method makes it into an array regardless.
 	 */
 	protected function setAllFiles($files)
 	{
@@ -57,8 +55,7 @@ class File extends Media
 	 *
 	 * Sets the data member $file.
 	 *
-	 * @param	$file
-	 * @access	public
+	 * @param string $file
 	 */
 	public function setFile($file)
 	{
@@ -83,9 +80,9 @@ class File extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param	int $id					A numeric ID representing the file.
-	 * @param	string $media_type		The type of media that the ID represents. Default is "file".
-	 * @access	public
+	 * @param int $id            A numeric ID representing the file.
+	 * @param string $media_type The type of media that the ID represents. Default is "file".
+	 * @throws Exception
 	 */
 	public function setID($id, $media_type='file')
 	{
@@ -105,26 +102,6 @@ class File extends Media
 		}
 	} #==== End -- setID
 
-	/**
-	 * setPremium
-	 *
-	 * Sets the data member $premium.
-	 *
-	 * @param	$premium				NULL=Not Premium Content, 0=Premium Content
-	 * @access	public
-	 */
-	public function setPremium($premium)
-	{
-		# Check if the passed value is NULL.
-		if($premium!==NULL)
-		{
-			# Set the value to 0.
-			$premium=0;
-		}
-		# Explicitly set the data member to NULL.
-		$this->premium=$premium;
-	} #==== End -- setPremium
-
 	/*** End mutator methods ***/
 
 
@@ -135,8 +112,6 @@ class File extends Media
 	 * getAllFiles
 	 *
 	 * Returns the data member $all_files.
-	 *
-	 * @access	public
 	 */
 	public function getAllFiles()
 	{
@@ -147,25 +122,11 @@ class File extends Media
 	 * getFile
 	 *
 	 * Returns the data member $file.
-	 *
-	 * @access	public
 	 */
 	public function getFile()
 	{
 		return $this->file;
 	} #==== End -- getFile
-
-	/**
-	 * getPremium
-	 *
-	 * Returns the data member $premium.
-	 *
-	 * @access	public
-	 */
-	public function getPremium()
-	{
-		return $this->premium;
-	} #==== End -- getPremium
 
 	/*** End accessor methods ***/
 
@@ -178,9 +139,10 @@ class File extends Media
 	 *
 	 * Returns the number of files in the database.
 	 *
-	 * @param	$limit					The limit of records to count.
-	 * @param	$where					WHERE statements in the query.
-	 * @access	public
+	 * @param int $limit    The limit of records to count.
+	 * @param string $where WHERE statements in the query.
+	 * @return
+	 * @throws Exception
 	 */
 	public function countAllFiles($limit=NULL, $where=NULL)
 	{
@@ -190,6 +152,7 @@ class File extends Media
 			$db=DB::get_instance();
 			# Count the records.
 			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'files`'.(($where===NULL) ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+
 			return $count;
 		}
 		catch(ezDB_Error $ez)
@@ -207,8 +170,10 @@ class File extends Media
 	 *
 	 * Removes a file from the `files` table and the actual file from the system.
 	 *
-	 * @param	int $id					The id of the file in the `files` table.
-	 * @access	public
+	 * @param int $id The id of the file in the `files` table.
+	 * @param null $redirect
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function deleteFile($id, $redirect=NULL)
 	{
@@ -233,7 +198,7 @@ class File extends Media
 				if($redirect===FALSE)
 				{
 					# Set the value to NULL (no redirect).
-					$redirect===NULL;
+					$redirect=NULL;
 				}
 				# Validate the passed id as an integer.
 				if($validator->isInt($id)===TRUE)
@@ -277,8 +242,10 @@ class File extends Media
 										# Redirect the user.
 										$doc->redirect($redirect);
 									}
+
 									return TRUE;
 								}
+
 								return FALSE;
 							}
 							catch(ezDB_Error $ez)
@@ -314,6 +281,7 @@ class File extends Media
 					$doc->redirect($redirect);
 				}
 			}
+
 			return FALSE;
 		}
 		catch(Exception $e)
@@ -327,8 +295,9 @@ class File extends Media
 	 *
 	 * Returns a selectable list of files.
 	 *
-	 * @param	$select
-	 * @access	public
+	 * @param boolean $select
+	 * @return string
+	 * @throws Exception
 	 */
 	public function displayFileList($select=FALSE)
 	{
@@ -340,7 +309,7 @@ class File extends Media
 		try
 		{
 			# Set a default variable for the "WHERE" portion of the sql statement (1=have the legal rights to display this material 2=Internal document only).
-			$where_statement='`availability` = 1';
+			$where_statement=NULL;
 			# Check if the logged in User is a Managing User.
 			if($login->checkAccess(MAN_USERS)===TRUE)
 			{
@@ -351,7 +320,7 @@ class File extends Media
 			if($login->checkAccess(ADMIN_USERS)===TRUE)
 			{
 				# Set a variable for the "WHERE" portion of the sql statement.
-				$where_statement='(`availability` = 0 || `availability` = 1 || `availability` = 2 || `availability` = 3)';
+				$where_statement='`availability` = 1';
 			}
 			# Count the returned files.
 			$content_count=$this->countAllFiles(NULL, $where_statement);
@@ -587,13 +556,13 @@ class File extends Media
 	 *
 	 * Retrieves records from the `files` table.
 	 *
-	 * @param	$limit					The LIMIT of the records.
-	 * @param	$fields					The name of the field(s) to be retrieved.
-	 * @param	$order					The name of the field to order the records by.
-	 * @param	$direction				The direction to order the records.
-	 * @param	$and_sql				Extra AND statements in the query.
-	 * @return	boolean					TRUE if records are returned, FALSE if not.
-	 * @access	public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where     Extra AND statements in the query.
+	 * @return bool TRUE if records are returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getFiles($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -627,8 +596,6 @@ class File extends Media
 	 * getInstance
 	 *
 	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
 	 */
 	public static function getInstance()
 	{
@@ -644,10 +611,10 @@ class File extends Media
 	 *
 	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member.
 	 *
-	 * @param	string $value			The name or id of the file to retrieve.
-	 * @param	boolean $id				TRUE if the passed $value is an id, FALSE if not.
-	 * @return	boolean 				TRUE if a record is returned, FALSE if not.
-	 * @access	public
+	 * @param string $value The name or id of the file to retrieve.
+	 * @param boolean $id   TRUE if the passed $value is an id, FALSE if not.
+	 * @return bool TRUE    if a record is returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getThisFile($value, $id=TRUE)
 	{
@@ -664,7 +631,7 @@ class File extends Media
 				# Set the file id to the data member "cleaning" it.
 				$this->setID($value);
 				# Get the file id and reset it to the variable.
-				$id=$this->getID();
+				$value=$this->getID();
 			}
 			else
 			{
@@ -708,8 +675,10 @@ class File extends Media
 				$this->setTitle($file->title);
 				# Set the file publish year to the data member.
 				$this->setYear($file->year);
+
 				return TRUE;
 			}
+
 			# Return FALSE because the file wasn't in the table.
 			return FALSE;
 		}

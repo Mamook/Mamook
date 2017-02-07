@@ -1,14 +1,7 @@
 <?php /* framework/application/modules/CommandLine/CommandLine.php */
 
-
-/*** Constants ***/
-
-/**
- * Create a short constant for the Path Separator if it is not already defined.
- */
+# Create a short constant for the Path Separator if it is not already defined.
 if(!defined('PS')) define('PS', PATH_SEPARATOR);
-
-/*** end Constants ***/
 
 
 /**
@@ -30,6 +23,7 @@ class CommandLine
 	/*** data members ***/
 
 	private $language='php';
+	private $return_value=FALSE;
 	private $script=NULL;
 
 	/*** End data members ***/
@@ -43,21 +37,23 @@ class CommandLine
 	 *
 	 * Description of the constructor.
 	 *
-	 * @param	$language					The scripting language of the script to run.
-	 * @access	public
+	 * @param string $language The scripting language of the script to run.
+	 * @param boolean $return_value
+	 * @throws Exception
 	 */
-	public function __construct($language='php')
+	public function __construct($language='php', $return_value=FALSE)
 	{
 		try
 		{
 			# Set the script language to the data member.
 			$this->setLanguage($language);
+			$this->return_value;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- __construct
+	}
 
 	/*** End magic methods ***/
 
@@ -70,8 +66,7 @@ class CommandLine
 	 *
 	 * Sets the data member $language.
 	 *
-	 * @param	$language
-	 * @access	public
+	 * @param string $language
 	 */
 	public function setLanguage($language)
 	{
@@ -83,15 +78,15 @@ class CommandLine
 		}
 		# Set the data member.
 		$this->language=$language;
-	} #==== End -- setLanguage
+	}
 
 	/**
 	 * setScript
 	 *
 	 * Sets the data member $script.
 	 *
-	 * @param	$file
-	 * @access	public
+	 * @param string $script
+	 * @throws Exception
 	 */
 	public function setScript($script)
 	{
@@ -124,7 +119,7 @@ class CommandLine
 // 		}
 		# Set the data member.
 		$this->script=$script;
-	} #==== End -- setScript
+	}
 
 	/*** End mutator methods ***/
 
@@ -136,25 +131,29 @@ class CommandLine
 	 * getLanguage
 	 *
 	 * Returns the data member $language.
-	 *
-	 * @access	private
 	 */
 	private function getLanguage()
 	{
 		return $this->language;
-	} #==== End -- getLanguage
+	}
 
 	/**
 	 * getScript
 	 *
 	 * Returns the data member $script.
-	 *
-	 * @access	public
 	 */
 	public function getScript()
 	{
 		return $this->script;
-	} #==== End -- getScript
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getReturnValue()
+	{
+		return $this->return_value;
+	}
 
 	/*** End accessor methods ***/
 
@@ -167,9 +166,10 @@ class CommandLine
 	 *
 	 * Runs the passed script in the background. Errors on Linux are written to a log file.
 	 *
-	 * @access	public
-	 * @param	script						The path to the script to execute.
-	 * @param	$params						Add extra arguments after the script. Can be an array or a string, NOT an object.
+	 * @param string $script       The path to the script to execute.
+	 * @param array|string $params Add extra arguments after the script. Can be an array or a string, NOT an object.
+	 * @return string
+	 * @throws Exception
 	 */
 	public function runScript($script=NULL, $params=NULL)
 	{
@@ -186,7 +186,7 @@ class CommandLine
 			if(isset($params) && is_array($params))
 			{
 				# Call the flatten function.
-				$new_params=UTILITY::flattenArray($params);
+				$new_params=Utility::flattenArray($params);
 
 				# Get the array keys.
 				$keys=array_keys($new_params);
@@ -208,13 +208,13 @@ class CommandLine
 
 			//passthru($doc->$getExecutableMethod().' '.BASE_PATH.$script.' '.$argv_parameter.' >> '.LOGS.'log_file.log 2>&1 &');
 			# Run it in the background.
-			$this->execInBackground($command);
+			return $this->execInBackground($command);
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- runScript
+	}
 
 	/*** End public methods ***/
 
@@ -227,8 +227,9 @@ class CommandLine
 	 *
 	 * Execute the passed command in the background. On linux errors are written to a log file.
 	 *
-	 * @access	protected
-	 * @param	command					The command to execute in the background.
+	 * @param string $command The command to execute in the background.
+	 * @return null|string
+	 * @throws Exception
 	 */
 	protected function execInBackground($command)
 	{
@@ -245,9 +246,17 @@ class CommandLine
 			}
 			else
 			{
-				# Execute the script in the background Linux style. Writes errors to a log file.
-				exec($command.' >> '.LOGS.COMMAND_LINE_LOG.' &');
-				//exec($command." 2>&1 &", $error_result);
+				if($this->getReturnValue()===FALSE)
+				{
+					# Execute the script in the background Linux style. Writes errors to a log file.
+					exec($command.' >> '.LOGS.COMMAND_LINE_LOG.' &');
+					//exec($command." 2>&1 &", $error_result);
+				}
+				elseif($this->getReturnValue()!==FALSE)
+				{
+					# Execute the script in the background Linux style. Writes errors to a log file.
+					return system($command);
+				}
 			}
 			# NOTE: Doing the logging this way makes the browser hang.
 			# TODO: Use try and catch in the command line scripts instead.
@@ -270,12 +279,13 @@ class CommandLine
 				$logger_obj->closeLogFile();
 			}
 			*/
+			return NULL;
 		}
 		catch(Exception $e)
 		{
 			throw $e;
 		}
-	} #==== End -- execInBackground
+	}
 
 	/*** End protected methods ***/
 
@@ -288,14 +298,11 @@ class CommandLine
 	 *
 	 * Returns the path to the current executable as a String.
 	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
 	 */
 	public function getExecutable()
 	{
-		# Set the default executable path as FALSE.
-		$executable=FALSE;
-
 		try
 		{
 			# Get the correct executable.
@@ -313,15 +320,15 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- getExecutable
+	}
 
 	/**
 	 * getFFMPEG_Executable
 	 *
 	 * Determine the location of the ffmpeg executable.
 	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
 	 */
 	public function getFFMPEG_Executable()
 	{
@@ -340,7 +347,7 @@ class CommandLine
 				# Check if this is a windows server.
 				if($this->isWindows()===TRUE)
 				{
-					$ffmpeg_executable_path+='.exe';
+					$ffmpeg_executable_path.='.exe';
 					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
 					if(strstr($path, 'ffmpeg.exe'))
 					{
@@ -360,15 +367,63 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- getFFMPEG_Executable
+	}
+
+	/**
+	 * getFFPROBE_Executable
+	 *
+	 * Determine the location of the ffprobe executable.
+	 *
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
+	 */
+	public function getFFPROBE_Executable()
+	{
+		# Set the default executable path as FALSE.
+		$ffprobe_executable_path=FALSE;
+
+		try
+		{
+			# Explode the PATH into an array of individual paths.
+			$paths=explode(PS, getenv('PATH'));
+			# Loop through the paths.
+			foreach($paths as $path)
+			{
+				# Set the default executable to a local variable.
+				$ffprobe_executable_path=$path.DS.'ffprobe';
+				# Check if this is a windows server.
+				if($this->isWindows()===TRUE)
+				{
+					$ffprobe_executable_path.='.exe';
+					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
+					if(strstr($path, 'ffprobe.exe'))
+					{
+						$ffprobe_executable_path=$path;
+						break;
+					}
+				}
+				# Check if the path to the executable in the local variable actually exists.
+				if(file_exists($ffprobe_executable_path) && is_file($ffprobe_executable_path))
+				{
+					break;
+				}
+			}
+
+			return $ffprobe_executable_path;
+		}
+		catch(Exception $e)
+		{
+			throw $e;
+		}
+	}
 
 	/**
 	 * getNode_Executable
 	 *
 	 * Determine the location of the node executable.
 	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
 	 */
 	public function getNode_Executable()
 	{
@@ -387,7 +442,7 @@ class CommandLine
 				# Check if this is a windows server.
 				if($this->isWindows()===TRUE)
 				{
-					$node_executable_path+='.exe';
+					$node_executable_path.='.exe';
 					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
 					if(strstr($path, 'node.exe'))
 					{
@@ -407,15 +462,15 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- getNode_Executable
+	}
 
 	/**
 	 * getPHP_Executable
 	 *
 	 * Determine the location of the PHP executable.
 	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
 	 */
 	public function getPHP_Executable()
 	{
@@ -466,15 +521,15 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- getPHP_Executable
+	}
 
 	/**
 	 * getPYTHON_Executable
 	 *
 	 * Determine the location of the Python executable.
 	 *
-	 * @access	private
-	 * @return	The executable location on success, otherwise FALSE.
+	 * @return string The executable location on success, otherwise FALSE.
+	 * @throws Exception
 	 */
 	public function getPYTHON_Executable()
 	{
@@ -493,7 +548,7 @@ class CommandLine
 				# Check if this is a windows server.
 				if($this->isWindows()===TRUE)
 				{
-					$python_executable_path+='.exe';
+					$python_executable_path.='.exe';
 					# Check if "php.exe" explicitly exists in the path. Is so, set this path to the local variable.
 					if(strstr($path, 'python.exe'))
 					{
@@ -513,15 +568,15 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- getPYTHON_Executable
+	}
 
 	/**
 	 * isWindows
 	 *
 	 * Determines if PHP is installed on a Windows server or not.
 	 *
-	 * @access	private
-	 * @return	Boolean						TRUE if on Windows, FALSE if not.
+	 * @return bool TRUE if on Windows, FALSE if not.
+	 * @throws Exception
 	 */
 	private function isWindows()
 	{
@@ -534,8 +589,7 @@ class CommandLine
 		{
 			throw $e;
 		}
-	} #==== End -- isWindows
+	}
 
 	/*** End private methods ***/
-
-} #=== End CommandLine class.
+}

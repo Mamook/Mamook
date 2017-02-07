@@ -52,7 +52,7 @@ if(isset($_GET['product']))
 				$product_categories.=$key.'-';
 			}
 		}
-		$product_categories=$product_categories;
+		//$product_categories=$product_categories;
 		$product_content=$product_obj->getContent();
 		$product_currency=$product_obj->getCurrency();
 		$product_description=$product_obj->getDescription();

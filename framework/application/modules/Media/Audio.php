@@ -3,10 +3,11 @@
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
-
 # Get the Media class.
 require_once Utility::locateFile(MODULES.'Media'.DS.'Media.php');
 
+# TODO: Move premium audio files to bodega/premium/
+# TODO: Check if audio file is premium and delete it from bodega/premium/
 
 /**
  * Audio
@@ -50,8 +51,7 @@ class Audio extends Media
 	 *
 	 * Sets the data member $all_audio.
 	 *
-	 * @param	$audio					May be an array or a string. The method makes it into an array regardless.
-	 * @access	protected
+	 * @param mixed $audio					May be an array or a string. The method makes it into an array regardless.
 	 */
 	protected function setAllAudio($audio)
 	{
@@ -226,9 +226,9 @@ class Audio extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param	int $id					A numeric ID representing the audio.
-	 * @param	string $media_type		The type of media that the ID represents. Default is "audio".
-	 * @access	public
+	 * @param int $id            A numeric ID representing the audio.
+	 * @param string $media_type The type of media that the ID represents. Default is "audio".
+	 * @throws Exception
 	 */
 	public function setID($id, $media_type='audio')
 	{
@@ -410,7 +410,7 @@ class Audio extends Media
 	public function getFileName()
 	{
 		return $this->file_name;
-	} #==== End -- getFileName
+	}
 
 	/**
 	 * getIsPlaylist
@@ -422,7 +422,7 @@ class Audio extends Media
 	public function getIsPlaylist()
 	{
 		return $this->is_playlist;
-	} #==== End -- getIsPlaylist
+	}
 
 	/**
 	 * getNewAudio
@@ -434,15 +434,15 @@ class Audio extends Media
 	public function getNewAudio()
 	{
 		return $this->new_audio;
-	} #==== End -- getNewAudio
+	}
 
 	/**
 	 * getSoundcloudObject
 	 *
 	 * Returns the data member $soundcloud_obj.
 	 *
-	 * @param	$domain						Optional. This is set for cron and CommandLine scripts.
-	 * @access	public
+	 * @param string $domain Optional. This is set for cron and CommandLine scripts.
+	 * @return null
 	 */
 	public function getSoundcloudObject($domain=NULL)
 	{
@@ -487,7 +487,7 @@ class Audio extends Media
 	public function getThumbnailUrl()
 	{
 		return $this->thumbnail_url;
-	} #==== End -- getThumbnailUrl
+	}
 
 	/*** End accessor methods ***/
 
@@ -500,9 +500,9 @@ class Audio extends Media
 	 *
 	 * Returns the number of audio files in the database.
 	 *
-	 * @param	$where					The WHERE statements in the query.
-	 * @param	$limit					The limit of records to count.
-	 * @access	public
+	 * @param string $where The WHERE statements in the query.
+	 * @param int $limit    The limit of records to count.
+	 * @throws Exception
 	 */
 	public function countAllAudio($where=NULL, $limit=NULL)
 	{
@@ -512,6 +512,7 @@ class Audio extends Media
 			$db=DB::get_instance();
 			# Count the records.
 			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'audio`'.($where===NULL ? '' : ' WHERE '.$where).(($limit===NULL) ? '' : ' LIMIT '.$limit));
+
 			return $count;
 		}
 		catch(ezDB_Error $ez)
@@ -522,15 +523,16 @@ class Audio extends Media
 		{
 			throw $e;
 		}
-	} #==== End -- countAllAudio
+	}
 
 	/**
 	 * createPlaylistMenu
 	 *
 	 * Creates media XHTML elements and sets them to an array for display.
 	 *
-	 * @param	array $playlists
-	 * @access	public
+	 * @param array $playlists
+	 * @return string
+	 * @throws Exception
 	 */
 	public function createPlaylistMenu($playlists)
 	{
@@ -546,7 +548,7 @@ class Audio extends Media
 				foreach($playlists as $playlists_data)
 				{
 					$name=$playlists_data->name;
-					$url=AUDIO_URL.'?playlist='.$current_playlist_id;
+					$url=AUDIO_URL.'?playlist='.$playlists_data->id;
 					$here_class=$doc->addHereClass($url, FALSE, FALSE);
 					$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
 						'<a href="'.$url.'" title="'.$name.' audio playlist">'.
@@ -561,16 +563,17 @@ class Audio extends Media
 		{
 			throw $e;
 		}
-	} #==== End -- createPlaylistMenu
+	}
 
 	/**
 	 * deleteAudio
 	 *
 	 * Removes an audio record from the `audio` table and the actual audio file from the system.
 	 *
-	 * @param	int $id					The id of the audio in the `audio` table.
-	 * @param	$redirect
-	 * @access	public
+	 * @param int $id The id of the audio in the `audio` table.
+	 * @param $redirect
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function deleteAudio($id, $redirect=NULL)
 	{
@@ -595,7 +598,7 @@ class Audio extends Media
 				if($redirect===FALSE)
 				{
 					# Set the value to NULL (no redirect).
-					$redirect===NULL;
+					$redirect=NULL;
 				}
 				# Validate the passed id as an integer.
 				if($validator->isInt($id)===TRUE)
@@ -631,7 +634,7 @@ class Audio extends Media
 							try
 							{
 								# Delete the audio from the `audio` table.
-								$deleted=$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
+								$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
 								# Set a nice message to display to the user.
 								$_SESSION['message']='The audio '.$audio_name.' was successfully deleted.';
 								# Redirect the user back to the page without GET or POST data.
@@ -664,7 +667,7 @@ class Audio extends Media
 						try
 						{
 							# Delete the audio from the `audio` table.
-							$deleted=$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
+							$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
 							# Set a nice message to display to the user.
 							$_SESSION['message']='The audio '.$audio_name.' was successfully deleted.';
 							# Redirect the user back to the page without GET or POST data.
@@ -696,14 +699,12 @@ class Audio extends Media
 		{
 			throw $e;
 		}
-	} #==== End -- deleteAudio
+	}
 
 	/**
 	 * displayAudioFeed
 	 *
 	 * Prints the users audio feed.
-	 *
-	 * @access	public
 	 */
 	public function displayAudioFeed()
 	{
@@ -712,6 +713,7 @@ class Audio extends Media
 
 		try
 		{
+			$display='';
 			if($login->checkAccess(MAN_USERS)===TRUE)
 			{
 				# Count the returned files.
@@ -864,20 +866,20 @@ class Audio extends Media
 		{
 			throw $e;
 		}
-	} #==== End -- displayAudioFeed
+	}
 
 	/**
 	 * getAudio
 	 *
 	 * Retrieves records from the `audio` table.
 	 *
-	 * @param	$limit						The LIMIT of the records.
-	 * @param	$fields						The name of the field(s) to be retrieved.
-	 * @param	$order						The name of the field to order the records by.
-	 * @param	$direction					The direction to order the records.
-	 * @param	$and_sql					Extra AND statements in the query.
-	 * @return	boolean						TRUE if records are returned, FALSE if not.
-	 * @access	public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where     Extra AND statements in the query.
+	 * @return bool TRUE if records are returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getAudio($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -905,16 +907,16 @@ class Audio extends Media
 		{
 			throw $e;
 		}
-	} #==== End -- getAudio
+	}
 
 	/**
 	 * getFirstAudio
 	 *
 	 * Get's the first audio in an array element.
 	 *
-	 * @param	array $audio_search			Response array from either the database or an API.
-	 * @param	int $audio_key				Optional - Array key of $audio_search
-	 * @access	public
+	 * @param array $audio_search Response array from either the database or an API.
+	 * @param int $audio_key      Optional - Array key of $audio_search
+	 * @return string
 	 */
 	public function getFirstAudio($audio_search, $audio_key=NULL)
 	{
@@ -937,14 +939,12 @@ class Audio extends Media
 		$audio_display.='<div>';
 
 		return $audio_display;
-	} #==== End -- getFirstAudio
+	}
 
 	/**
 	 * getInstance
 	 *
 	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
 	 */
 	public static function getInstance()
 	{
@@ -953,17 +953,17 @@ class Audio extends Media
 			self::$audio_obj=new Audio();
 		}
 		return self::$audio_obj;
-	} #==== End -- getInstance
+	}
 
 	/**
 	 * getThisAudio
 	 *
 	 * Retrieves audio info from the `audio` table in the Database for the passed id or audio name and sets it to the data member.
 	 *
-	 * @param	string $value				The name or id of the audio to retrieve.
-	 * @param	boolean $id					TRUE if the passed $value is an id, FALSE if not.
-	 * @return	boolean						TRUE if a record is returned, FALSE if not.
-	 * @access	public
+	 * @param string $value The name or id of the audio to retrieve.
+	 * @param boolean $id   TRUE if the passed $value is an id, FALSE if not.
+	 * @return bool TRUE if a record is returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getThisAudio($value, $id=TRUE)
 	{
@@ -992,7 +992,7 @@ class Audio extends Media
 				$value=$this->getFileName();
 			}
 			# Get the audio info from the database.
-			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `category`, `playlist`, `availability`, `date`, `image`, `institution`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
+			$audio=$db->get_row('SELECT `id`, `title`, `description`, `file_name`, `api`, `author`, `year`, `category`, `playlist`, `availability`, `date`, `image`, `institution`, `premium`, `publisher`, `language`, `contributor` FROM `'.DBPREFIX.'audio` WHERE `'.$field.'` = '.$db->quote($db->escape($value)).' LIMIT 1');
 			# Check if a row was returned.
 			if($audio!==NULL)
 			{
@@ -1022,6 +1022,8 @@ class Audio extends Media
 				$this->setLanguage($audio->language);
 				# Pass the audio playlist id(s) to the setPlaylists method, thus setting the data member with the playlist name(s).
 				$this->setPlaylists($audio->playlist);
+				# Set whether or not the audio is "premium" content to the data member.
+				$this->setPremium($audio->premium);
 				# Pass the audio publisher id to the setPublisher method, thus setting the data member with the publisher name.
 				$this->setPublisher($audio->publisher);
 				# Set the audio title to the data member.
@@ -1043,15 +1045,15 @@ class Audio extends Media
 			# Re-throw any caught exceptions.
 			throw $e;
 		}
-	} #==== End -- getThisAudio
+	}
 
 	/**
 	 * markupManageAudio
 	 *
 	 * Returns the HTML markup that lists audio from the database or API.
 	 *
-	 * @param	array $audio_search
-	 * @access	public
+	 * @param array $audio_search
+	 * @return string
 	 */
 	public function markupManageAudio($audio_search)
 	{
@@ -1102,8 +1104,6 @@ class Audio extends Media
 			# If we have thumbnails from SoundCloud in our database...
 			if(isset($api_decoded->soundcloud_thumbnails->default->url))
 			{
-				# Set the image path to a variable.
-				$image_path='';
 				# Use the SoundCloud thumbnail.
 				$image_url=$api_decoded->soundcloud_thumbnails->default->url;
 			}
@@ -1141,15 +1141,15 @@ class Audio extends Media
 		$display.='</table>';
 
 		return $display;
-	} #==== End -- markupManageAudio
+	}
 
 	/**
 	 * markupLargeAudio
 	 *
 	 * Returns the HTML markup to display a large audio.
 	 *
-	 * @param	array $large_audio		The array for the large audio.
-	 * @access	public
+	 * @param array $large_audio The array for the large audio.
+	 * @return array
 	 */
 	public function markupLargeAudio($large_audio)
 	{
@@ -1225,15 +1225,15 @@ class Audio extends Media
 		}
 
 		return $display;
-	} #==== End -- markupLargeAudio
+	}
 
 	/**
 	 * markupSmallAudio
 	 *
 	 * Returns the HTML markup for the small audio.
 	 *
-	 * @param	array $small_audio			The array for the small audio.
-	 * @access	public
+	 * @param array $small_audio The array for the small audio.
+	 * @return string
 	 */
 	public function markupSmallAudio($small_audio, $playlist_value=NULL, $exclude_audio=NULL)
 	{
@@ -1312,8 +1312,7 @@ class Audio extends Media
 		'</div>';
 
 		return $display;
-	} #==== End -- markupSmallAudio
+	}
 
 	/*** End public methods ***/
-
-} # end Audio class
+}

@@ -30,8 +30,7 @@ class AudioFormPopulator extends FormPopulator
 	 *
 	 * Sets the data member $audio_object.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setAudioObject($object)
 	{
@@ -55,8 +54,6 @@ class AudioFormPopulator extends FormPopulator
 	 * getAudioObject
 	 *
 	 * Returns the data member $audio_object.
-	 *
-	 * @access	public
 	 */
 	public function getAudioObject()
 	{
@@ -75,8 +72,8 @@ class AudioFormPopulator extends FormPopulator
 	 * Populates a audio form with content from the `audio` table in the Databse using the id passed
 	 * via GET data, default audio data, values passed via POST, or saved SESSION data.
 	 *
-	 * @param	$data					An array of values to populate the form with.
-	 * @access	public
+	 * @param array $data An array of values to populate the form with.
+	 * @throws Exception
 	 */
 	public function populateAudioForm($data=array())
 	{
@@ -118,8 +115,6 @@ class AudioFormPopulator extends FormPopulator
 	 *
 	 * If there are new data values from POST data, they are set to the appropriate data
 	 * member (AudioFormPopulator or Audio).
-	 *
-	 * @access	private
 	 */
 	private function setPostDataToDataArray()
 	{
@@ -272,6 +267,27 @@ class AudioFormPopulator extends FormPopulator
 					}
 					# Set the Audio playlists data member.
 					$data['Playlists']=$_POST['playlist'];
+				}
+
+				# Set the previous premium value to a variable.
+				$previous_premium=$data['Premium'];
+				# Set the premium value to NULL by default.
+				$data['Premium']=NULL;
+				# Check if premium POST data was sent.
+				if(isset($_POST['premium']))
+				{
+					# Set the premium value to 0 indicating premium content.
+					$data['Premium']=0;
+				}
+
+				# Check if the previous value hase changed.
+				if($data['Premium']!==$previous_premium)
+				{
+					$this->setPremiumChange(TRUE);
+				}
+				else
+				{
+					$this->setPremiumChange(FALSE);
 				}
 
 				# Check if the publisher id POST data was sent.

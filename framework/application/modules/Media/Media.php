@@ -48,10 +48,12 @@ class Media
 	private $location=NULL;
 	private $playlists=NULL;
 	private $playlist_obj=NULL;
+	private $premium;
 	private $all_publishers=NULL;
 	# $publisher is an object or a string.
 	private $publisher=NULL;
 	private $publisher_id=NULL;
+	private $purchase_link=NULL;
 	private $title=NULL;
 	private $year=NULL;
 	private $video_obj=NULL;
@@ -67,9 +69,9 @@ class Media
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param	int $id					A numeric ID representing the media.
-	 * @param	string $media_type		The type of media that the ID represents. Default is "media".
-	 * @access	public
+	 * @param int $id            A numeric ID representing the media.
+	 * @param string $media_type The type of media that the ID represents. Default is "media".
+	 * @throws Exception
 	 */
 	public function setID($id, $media_type='media')
 	{
@@ -102,8 +104,7 @@ class Media
 	 *
 	 * Sets the data member $author.
 	 *
-	 * @param		$author
-	 * @access	public
+	 * @param string $author
 	 */
 	public function setAuthor($author)
 	{
@@ -129,8 +130,8 @@ class Media
 	 *
 	 * Sets the data member $availability.
 	 *
-	 * @param		$availability
-	 * @access	public
+	 * @param int $availability
+	 * @throws Exception
 	 */
 	public function setAvailability($availability)
 	{
@@ -151,13 +152,12 @@ class Media
 		}
 	} #==== End -- setAvailability
 
-	/*
+	/**
 	 * setCatObject
 	 *
 	 * Sets the data member $category.
 	 *
-	 * @param		$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setCatObject($object)
 	{
@@ -179,8 +179,7 @@ class Media
 	 *
 	 * Sets the data member $categories.
 	 *
-	 * @param	$value
-	 * @access	public
+	 * @param mixed $value
 	 */
 	public function setCategories($value)
 	{
@@ -295,8 +294,8 @@ class Media
 	 *
 	 * Sets the data member $category_id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setCategoryID($id)
 	{
@@ -329,8 +328,7 @@ class Media
 	 *
 	 * Sets the data member $content.
 	 *
-	 * @param		$content
-	 * @access	protected
+	 * @param string $content
 	 */
 	protected function setContent($content)
 	{
@@ -358,8 +356,7 @@ class Media
 	 *
 	 * Sets the data member $contributor.
 	 *
-	 * @param	$object
-	 * @access	public
+	 * @param object $object
 	 */
 	public function setContributor($object)
 	{
@@ -381,8 +378,8 @@ class Media
 	 *
 	 * Sets the data member $cont_id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setContID($id)
 	{
@@ -427,8 +424,7 @@ class Media
 	 *
 	 * Sets the data member $recent_contributor.
 	 *
-	 * @param	$object
-	 * @access	public
+	 * @param object $object
 	 */
 	public function setRecentContributor($object)
 	{
@@ -445,13 +441,13 @@ class Media
 		}
 	} #==== End -- setRecentContributor
 
-	/*
+	/**
 	 * setRecentContID
 	 *
 	 * Sets the data member $recent_cont_id.
 	 *
-	 * @param		$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setRecentContID($id)
 	{
@@ -496,8 +492,7 @@ class Media
 	 *
 	 * Sets the data member $date.
 	 *
-	 * @param		$date
-	 * @access	public
+	 * @param string $date
 	 */
 	public function setDate($date)
 	{
@@ -521,8 +516,7 @@ class Media
 	 *
 	 * Sets the data member $description.
 	 *
-	 * @param		$description
-	 * @access	protected
+	 * @param string $description
 	 */
 	public function setDescription($description)
 	{
@@ -550,8 +544,7 @@ class Media
 	 *
 	 * Sets the data member $all_files.
 	 *
-	 * @param		$files
-	 * @access	protected
+	 * @param array $files
 	 */
 	protected function setAllFiles($files)
 	{
@@ -564,8 +557,7 @@ class Media
 	 *
 	 * Sets the data member $file.
 	 *
-	 * @param		$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setFile($object)
 	{
@@ -587,8 +579,8 @@ class Media
 	 *
 	 * Sets the data member $file_id.
 	 *
-	 * @param		$id
-	 * @access	protected
+	 * @param int $id
+	 * @throws Exception
 	 */
 	protected function setFileID($id)
 	{
@@ -621,8 +613,7 @@ class Media
 	 *
 	 * Sets the data member $file_info_display.
 	 *
-	 * @param	$file_info_display
-	 * @access	protected
+	 * @param string $file_info_display
 	 */
 	protected function setFileInfoDisplay($file_info_display)
 	{
@@ -646,8 +637,7 @@ class Media
 	 *
 	 * Sets the data member $file_obj.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setFileObj($object)
 	{
@@ -669,8 +659,7 @@ class Media
 	 *
 	 * Sets the data member $images.
 	 *
-	 * @param		$images
-	 * @access	protected
+	 * @param array $images
 	 */
 	protected function setAllImages($images)
 	{
@@ -683,8 +672,7 @@ class Media
 	 *
 	 * Sets the data member $image_object.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setImageObj($object)
 	{
@@ -706,8 +694,8 @@ class Media
 	 *
 	 * Sets the data member $image_id.
 	 *
-	 * @param		$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setImageID($id)
 	{
@@ -742,8 +730,7 @@ class Media
 	 *
 	 * Sets the data member $institution.
 	 *
-	 * @param		$institution
-	 * @access	public
+	 * @param object $institution
 	 */
 	public function setInstitution($institution)
 	{
@@ -760,7 +747,7 @@ class Media
 				# Get the Institution class.
 				require_once Utility::locateFile(MODULES.'Content'.DS.'Institution.php');
 				# Instantiate a new Cnstitution object.
-				$inst=new institution();
+				$inst=new Institution();
 				# Get the institution name.
 				$inst->getThisInstitution($institution);
 				# Set the institution name to a variable.
@@ -781,8 +768,7 @@ class Media
 	 *
 	 * Sets the data member $language.
 	 *
-	 * @param		$language
-	 * @access	public
+	 * @param object $language
 	 */
 	public function setLanguage($language)
 	{
@@ -799,7 +785,7 @@ class Media
 				# Get the Language class.
 				require_once Utility::locateFile(MODULES.'Content'.DS.'Language.php');
 				# Instantiate a new Cnstitution object.
-				$lang=new language();
+				$lang=new Language();
 				# Get the language name.
 				$lang->getThisLanguage($language);
 				# Set the language name to a variable.
@@ -820,8 +806,8 @@ class Media
 	 *
 	 * Sets the data member $last_edit.
 	 *
-	 * @param	$date
-	 * @access	public
+	 * @param string $date
+	 * @throws Exception
 	 */
 	public function setLastEdit($date)
 	{
@@ -867,8 +853,7 @@ class Media
 	 *
 	 * Sets the data member $link.
 	 *
-	 * @param		$link
-	 * @access	protected
+	 * @param string $link
 	 */
 	protected function setLink($link)
 	{
@@ -889,13 +874,12 @@ class Media
 		}
 	} #==== End -- setLink
 
-	/*
+	/**
 	 * setLocation
 	 *
 	 * Sets the data member $location.
 	 *
-	 * @param		$location
-	 * @access	public
+	 * @param string $location
 	 */
 	public function setLocation($location)
 	{
@@ -923,8 +907,7 @@ class Media
 	 *
 	 * Sets the data member $playlists.
 	 *
-	 * @param	$value
-	 * @access	public
+	 * @param mixed $value
 	 */
 	public function setPlaylists($value)
 	{
@@ -986,13 +969,12 @@ class Media
 		$this->playlists=$playlists;
 	} #==== End -- setPlaylists
 
-	/*
+	/**
 	 * setPlaylistObject
 	 *
 	 * Sets the data member $playlist_obj.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setPlaylistObject($object)
 	{
@@ -1010,12 +992,30 @@ class Media
 	} #==== End -- setPlaylistObject
 
 	/**
+	 * setPremium
+	 *
+	 * Sets the data member $premium.
+	 *
+	 * @param int $premium NULL=Not Premium Content, 0=Premium Content
+	 */
+	public function setPremium($premium)
+	{
+		# Check if the passed value is NULL.
+		if($premium!==NULL)
+		{
+			# Set the value to 0.
+			$premium=0;
+		}
+		# Explicitly set the data member to NULL.
+		$this->premium=$premium;
+	} #==== End -- setPremium
+
+	/**
 	 * setAllPublishers
 	 *
 	 * Sets the data member $all_publishers.
 	 *
-	 * @param		$publishers
-	 * @access	protected
+	 * @param array $publishers
 	 */
 	protected function setAllPublishers($publishers)
 	{
@@ -1073,8 +1073,8 @@ class Media
 	 *
 	 * Sets the data member $publisher_id.
 	 *
-	 * @param		$id
-	 * @access	protected
+	 * @param int $id
+	 * @throws Exception
 	 */
 	protected function setPublisherID($id)
 	{
@@ -1107,8 +1107,7 @@ class Media
 	 *
 	 * Sets the data member $purchase_link.
 	 *
-	 * @param		$purchase_link
-	 * @access	protected
+	 * @param string $purchase_link
 	 */
 	protected function setPurchaseLink($purchase_link)
 	{
@@ -1129,13 +1128,12 @@ class Media
 		}
 	} #==== End -- setPurchaseLink
 
-	/*
+	/**
 	 * setTitle
 	 *
 	 * Sets the data member $title.
 	 *
-	 * @param		$title
-	 * @access	public
+	 * @param string $title
 	 */
 	public function setTitle($title)
 	{
@@ -1163,8 +1161,7 @@ class Media
 	 *
 	 * Sets the data member $year.
 	 *
-	 * @param		$year
-	 * @access	public
+	 * @param string $year
 	 */
 	public function setYear($year)
 	{
@@ -1188,20 +1185,19 @@ class Media
 	 *
 	 * Set the data member $audio_instance
 	 *
-	 * @param	string $audio_instance
-	 * @access	private
+	 * @param string $audio_instance
 	 */
 	private function setAudioObject($audio_instance)
 	{
 		# Check if the passed value is an object.
 		if(is_object($audio_instance))
 		{
-			$this->audio_instance=$audio_instance;
+			$this->audio_obj=$audio_instance;
 		}
 		else
 		{
 			# Explicitly set the data member to NULL.
-			$this->audio_instance=NULL;
+			$this->audio_obj=NULL;
 		}
 	} #==== End -- setAudioObject
 
@@ -1210,8 +1206,7 @@ class Media
 	 *
 	 * Set the data member $video_obj
 	 *
-	 * @param	string $video_obj
-	 * @access	private
+	 * @param string $video_obj
 	 */
 	private function setVideoObject($video_obj)
 	{
@@ -1269,7 +1264,7 @@ class Media
 		return $this->availability;
 	} #==== End -- getAvailability
 
-	/*
+	/**
 	 * getCatObject
 	 *
 	 * Returns the data member $category.
@@ -1329,7 +1324,7 @@ class Media
 		return $this->contributor;
 	} #==== End -- getContributor
 
-	/*
+	/**
 	 * getContID
 	 *
 	 * Returns the data member $cont_id.
@@ -1353,7 +1348,7 @@ class Media
 		return $this->recent_contributor;
 	} #==== End -- getRecentContributor
 
-	/*
+	/**
 	 * getRecentContID
 	 *
 	 * Returns the data member $recent_cont_id.
@@ -1497,7 +1492,7 @@ class Media
 		return $this->language;
 	} #==== End -- getLanguage
 
-	/*
+	/**
 	 * getLastEdit
 	 *
 	 * Returns the data member $last_edit.
@@ -1521,7 +1516,7 @@ class Media
 		return $this->link;
 	} #==== End -- getLink
 
-	/*
+	/**
 	 * getLocation
 	 *
 	 * Returns the data member $location.
@@ -1545,7 +1540,7 @@ class Media
 		return $this->playlists;
 	} #==== End -- getPlaylists
 
-	/*
+	/**
 	 * getPlaylistObject
 	 *
 	 * Returns the data member $playlist_obj.
@@ -1556,6 +1551,16 @@ class Media
 	{
 		return $this->playlist_obj;
 	} #==== End -- getPlaylistObject
+
+	/**
+	 * getPremium
+	 *
+	 * Returns the data member $premium.
+	 */
+	public function getPremium()
+	{
+		return $this->premium;
+	}
 
 	/**
 	 * getAllPublishers
@@ -1716,13 +1721,13 @@ class Media
 	 *
 	 * Retrieves records from the `files` table. A wrapper method for getFiles from the File class.
 	 *
-	 * @param	$limit			(The LIMIT of the records.)
-	 * @param	$fields			(The name of the field(s) to be retrieved.)
-	 * @param	$order			(The name of the field to order the records by.)
-	 * @param	$direction		(The direction to order the records.)
-	 * @param	$and_sql		(Extra AND statements in the query.)
-	 * @return	Boolean			(TRUE if records are returned, FALSE if not.)
-	 * @access	public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where     Extra AND statements in the query.
+	 * @return bool TRUE if records are returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getFiles($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -1757,9 +1762,9 @@ class Media
 	 *
 	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member. A wrapper method for getThisFile from the File class.
 	 *
-	 * @param	string $value		(The name or id of the file to retrieve.)
-	 * @param	boolean $id		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @access	public
+	 * @param string $value The name or id of the file to retrieve.
+	 * @param boolean $id   TRUE if the passed $value is an id, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getThisFile($value, $id=TRUE)
 	{
@@ -1787,13 +1792,13 @@ class Media
 	 *
 	 * Retrieves records from the `images` table. A wrapper method for getImages from the Image class.
 	 *
-	 * @param	$limit			(The LIMIT of the records.)
-	 * @param	$fields			(The name of the field(s) to be retrieved.)
-	 * @param	$order			(The name of the field to order the records by.)
-	 * @param	$direction		(The direction to order the records.)
-	 * @param	$and_sql		(Extra AND statements in the query.)
-	 * @return	boolean			(TRUE if records are returned, FALSE if not.)
-	 * @access	public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where     Extra AND statements in the query.
+	 * @return bool TRUE if records are returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getImages($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -1826,11 +1831,13 @@ class Media
 	/**
 	 * getThisImage
 	 *
-	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member. A wrapper method for getThisImage from the Image class.
+	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.
+	 * A wrapper method for getThisImage from the Image class.
 	 *
-	 * @param		String	$value 	(The name or id of the image to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @access	public
+	 * @param string $value The name or id of the image to retrieve.
+	 * @param bool $id      TRUE if the passed $value is an id, FALSE if not.
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function getThisImage($value, $id=TRUE)
 	{
@@ -1859,20 +1866,20 @@ class Media
 		{
 			throw $e;
 		}
-	} #==== End -- getThisImage
+	}
 
 	/**
 	 * getPublishers
 	 *
 	 * Retrieves records from the `publishers` table. A wrapper method for getPublishers from the Publisher class.
 	 *
-	 * @param		$limit (The LIMIT of the records.)
-	 * @param		$fields (The name of the field(s) to be retrieved.)
-	 * @param		$order (The name of the field to order the records by.)
-	 * @param		$direction (The direction to order the records.)
-	 * @param		$and_sql (Extra AND statements in the query.)
-	 * @return	Boolean (TRUE if records are returned, FALSE if not.)
-	 * @access	public
+	 * @param int $limit        The LIMIT of the records.
+	 * @param string $fields    The name of the field(s) to be retrieved.
+	 * @param string $order     The name of the field to order the records by.
+	 * @param string $direction The direction to order the records.
+	 * @param string $where     Extra AND statements in the query.
+	 * @return bool TRUE if records are returned, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getPublishers($limit=NULL, $fields='*', $order='id', $direction='ASC', $where='')
 	{
@@ -1905,11 +1912,12 @@ class Media
 	/**
 	 * getThisPublisher
 	 *
-	 * Retrieves publisher info from the `publishers` table in the Database for the passed id or publisher name and sets it to the data member. A wrapper method for getThisPublisher from the Publisher class.
+	 * Retrieves publisher info from the `publishers` table in the Database for the passed id or publisher name and sets it to the data member.
+	 * A wrapper method for getThisPublisher from the Publisher class.
 	 *
-	 * @param		String	$value 	(The name or id of the publisher to retrieve.)
-	 * @param		Boolean $id 		(TRUE if the passed $value is an id, FALSE if not.)
-	 * @access	public
+	 * @param string $value The name or id of the publisher to retrieve.
+	 * @param boolean $id   TRUE if the passed $value is an id, FALSE if not.
+	 * @throws Exception
 	 */
 	public function getThisPublisher($value, $id=TRUE)
 	{
@@ -1937,8 +1945,9 @@ class Media
 	 *
 	 * Displays which product, subcontent, or video that is attached to the media that's being edited.
 	 *
-	 * @param	string $media_type
-	 * @access	public
+	 * @param string $media_type
+	 * @return string
+	 * @throws Exception
 	 */
 	public function displayMediaUsage($media_type='image')
 	{
@@ -1964,6 +1973,7 @@ class Media
 					$field_name='file';
 					${'media_type'.'_obj'}=$this->getFileObject();
 					break;
+				default:
 				case 'image':
 					$field_name='image';
 					${'media_type'.'_obj'}=$this->getImageObject();
@@ -1977,10 +1987,10 @@ class Media
 			# If looking for an image, then search `product`, `subcontent`, and `videos` tables for the image ID.
 			#	If looking for anything other then an image, only search the `subcontent` table.
 			$sql=($media_type=='image' ?
-				'SELECT `id`, `title`, `category` AS branch, \'product_table\' AS table_name FROM `products` WHERE `'.$field_name.'`='.$this->getID().
-					' UNION ALL'.
-				' SELECT `id`, `title`, `category` AS branch, \'video_table\' AS table_name FROM `videos` WHERE `'.$field_name.'`='.$this->getID().
-					' UNION ALL'
+				"SELECT `id`, `title`, `category` AS branch, 'product_table' AS table_name FROM `products` WHERE `${field_name}`=".$this->getID()."
+					 UNION ALL
+				 SELECT `id`, `title`, `category` AS branch, 'video_table' AS table_name FROM `videos` WHERE `${field_name}`=".$this->getID()."
+					 UNION ALL"
 				:
 					'').
 				' SELECT `id`, `title`, `branch`, \'subcontent_table\' AS table_name FROM `subcontent` WHERE `'.$field_name.'`='.$this->getID();
@@ -2104,6 +2114,7 @@ class Media
 					$table_body.='</tr>'.
 					'</table>';
 					$display=$table_header.$table_body;
+
 					return $display;
 				}
 			}
@@ -2118,6 +2129,8 @@ class Media
 			# Re-throw any caught exceptions.
 			throw $e;
 		}
+
+		return FALSE;
 	} #==== End -- displayMediaUsage
 
 	/*** End public methods ***/

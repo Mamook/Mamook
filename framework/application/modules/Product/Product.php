@@ -48,26 +48,24 @@ class Product
 
 	/*** mutator methods ***/
 
-	/*
+	/**
 	 * setAllProducts
 	 *
 	 * Sets the data member $all_products.
 	 *
-	 * @param	$all_products
-	 * @access	protected
+	 * @param array $all_products
 	 */
 	protected function setAllProducts($all_products)
 	{
 		$this->all_products=$all_products;
 	} #==== End -- setAllProducts
 
-	/*
+	/**
 	 * setASIN
 	 *
 	 * Sets the data member $asin
 	 *
-	 * @param	$asin					The Amazon Standard Identification Number
-	 * @access	public
+	 * @param string $asin					The Amazon Standard Identification Number
 	 */
 	public function setASIN($asin)
 	{
@@ -86,13 +84,12 @@ class Product
 		}
 	} #==== End -- setASIN
 
-	/*
+	/**
 	 * setCollectedASINs
 	 *
 	 * Sets the data member $collected_asins
 	 *
-	 * @param	$asin					The Amazon Standard Identification Number. If the string 'reset' is passed, the data member will be set to an empty array.
-	 * @access	protected
+	 * @param string $asin					The Amazon Standard Identification Number. If the string 'reset' is passed, the data member will be set to an empty array.
 	 */
 	protected function setCollectedASINs($asin)
 	{
@@ -115,13 +112,12 @@ class Product
 		}
 	} #==== End -- setCollectedASINs
 
-	/*
+	/**
 	 * setAuthor
 	 *
 	 * Sets the data member $author.
 	 *
 	 * @param	$author
-	 * @access	public
 	 */
 	public function setAuthor($author)
 	{
@@ -142,13 +138,12 @@ class Product
 		}
 	} #==== End -- setAuthor
 
-	/*
+	/**
 	 * setButtonID
 	 *
 	 * Sets the data member $button_id
 	 *
-	 * @param	$button_id					The Amazon Standard Identification Number
-	 * @access	public
+	 * @param string $button_id					The Amazon Standard Identification Number
 	 */
 	public function setButtonID($button_id)
 	{
@@ -173,7 +168,6 @@ class Product
 	 * Sets the data member $categories.
 	 *
 	 * @param	$value
-	 * @access	public
 	 */
 	public function setCategories($value)
 	{
@@ -240,13 +234,12 @@ class Product
 		$this->categories=$categories;
 	} #==== End -- setCategories
 
-	/*
+	/**
 	 * setContent
 	 *
 	 * Sets the data member $content.
 	 *
 	 * @param	$content
-	 * @access	public
 	 */
 	public function setContent($content)
 	{
@@ -269,13 +262,12 @@ class Product
 		}
 	} #==== End -- setContent
 
-	/*
+	/**
 	 * setCurrency
 	 *
 	 * Sets the data member $currency.
 	 *
 	 * @param	$currency
-	 * @access	public
 	 */
 	public function setCurrency($currency)
 	{
@@ -294,13 +286,12 @@ class Product
 		}
 	} #==== End -- setCurrency
 
-	/*
+	/**
 	 * setDescription
 	 *
 	 * Sets the data member $description.
 	 *
 	 * @param	$description
-	 * @access	public
 	 */
 	public function setDescription($description)
 	{
@@ -323,26 +314,24 @@ class Product
 		}
 	} #==== End -- setDescription
 
-	/*
+	/**
 	 * setExplodedCategories
 	 *
 	 * Sets the data member $exploded_categories.
 	 *
 	 * @param	$exploded_categories
-	 * @access	protected
 	 */
 	protected function setExplodedCategories($exploded_categories)
 	{
 		$this->exploded_categories=$exploded_categories;
 	} #==== End -- setExplodedCategories
 
-	/*
+	/**
 	 * setAllFiles
 	 *
 	 * Sets the data member $all_files.
 	 *
 	 * @param	$files
-	 * @access	protected
 	 */
 	protected function setAllFiles($files)
 	{
@@ -350,26 +339,25 @@ class Product
 		$this->all_files=$files;
 	} #==== End -- setAllFiles
 
-	/*
+	/**
 	 * setFile
 	 *
 	 * Sets the data member $file.
 	 *
 	 * @param	$object
-	 * @access	protected
 	 */
 	protected function setFile($object)
 	{
 		$this->file=$object;
 	} #==== End -- setFile
 
-	/*
+	/**
 	 * setFileID
 	 *
 	 * Sets the data member $file_id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setFileID($id)
 	{
@@ -397,13 +385,12 @@ class Product
 		}
 	} #==== End -- setFileID
 
-	/*
+	/**
 	 * setFileInfoDisplay
 	 *
 	 * Sets the data member $file_info_display.
 	 *
 	 * @param	$file_info_display
-	 * @access	protected
 	 */
 	protected function setFileInfoDisplay($file_info_display)
 	{
@@ -422,13 +409,13 @@ class Product
 		}
 	} #==== End -- setFileInfoDisplay
 
-	/*
+	/**
 	 * setID
 	 *
 	 * Sets the data member $id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setID($id)
 	{
@@ -456,13 +443,12 @@ class Product
 		}
 	} #==== End -- setID
 
-	/*
+	/**
 	 * setAllImages
 	 *
 	 * Sets the data member $images.
 	 *
-	 * @param	$images
-	 * @access	protected
+	 * @param array $images
 	 */
 	protected function setAllImages($images)
 	{
@@ -470,13 +456,12 @@ class Product
 		$this->all_images=$images;
 	} #==== End -- setAllImages
 
-	/*
+	/**
 	 * setImage
 	 *
 	 * Sets the data member $image.
 	 *
-	 * @param	$object
-	 * @access	protected
+	 * @param object $object
 	 */
 	protected function setImage($object)
 	{
@@ -484,13 +469,13 @@ class Product
 		$this->image=$object;
 	} #==== End -- setImage
 
-	/*
+	/**
 	 * setImageID
 	 *
 	 * Sets the data member $image_id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setImageID($id)
 	{
@@ -518,13 +503,12 @@ class Product
 		}
 	} #==== End -- setImageID
 
-	/*
+	/**
 	 * setLink
 	 *
 	 * Sets the data member $link.
 	 *
-	 * @param	$link
-	 * @access	public
+	 * @param string $link
 	 */
 	public function setLink($link)
 	{
@@ -545,13 +529,12 @@ class Product
 		}
 	} #==== End -- setLink
 
-	/*
+	/**
 	 * setMore
 	 *
 	 * Sets the data member $more.
 	 *
-	 * @param	$more
-	 * @access	public
+	 * @param string $more
 	 */
 	public function setMore($more)
 	{
@@ -570,13 +553,12 @@ class Product
 		}
 	} #==== End -- setMore
 
-	/*
+	/**
 	 * setPrice
 	 *
 	 * Sets the data member $price.
 	 *
-	 * @param	$price
-	 * @access	public
+	 * @param double $price
 	 */
 	public function setPrice($price)
 	{
@@ -595,13 +577,12 @@ class Product
 		}
 	} #==== End -- setPrice
 
-	/*
+	/**
 	 * setProductType
 	 *
 	 * Sets the data member $product_type.
 	 *
-	 * @param	$product_type
-	 * @access	public
+	 * @param string $product_type
 	 */
 	public function setProductType($product_type)
 	{
@@ -609,26 +590,24 @@ class Product
 		$this->product_type=$product_type;
 	} #==== End -- setProductType
 
-	/*
+	/**
 	 * setAllPublishers
 	 *
 	 * Sets the data member $all_publishers.
 	 *
-	 * @param	$publishers
-	 * @access	protected
+	 * @param array $publishers
 	 */
 	protected function setAllPublishers($publishers)
 	{
 		$this->all_publishers=$publishers;
 	} #==== End -- setAllPublishers
 
-	/*
+	/**
 	 * setPublisher
 	 *
 	 * Sets the data member $publisher.
 	 *
 	 * @param	$publisher
-	 * @access	public
 	 */
 	public function setPublisher($publisher)
 	{
@@ -653,13 +632,13 @@ class Product
 		}
 	} #==== End -- setPublisher
 
-	/*
+	/**
 	 * setPublisherID
 	 *
 	 * Sets the data member $publisher_id.
 	 *
-	 * @param	$id
-	 * @access	public
+	 * @param int $id
+	 * @throws Exception
 	 */
 	public function setPublisherID($id)
 	{
@@ -687,13 +666,12 @@ class Product
 		}
 	} #==== End -- setPublisherID
 
-	/*
+	/**
 	 * setPurchaseLink
 	 *
 	 * Sets the data member $purchase_link.
 	 *
-	 * @param	$purchase_link
-	 * @access	public
+	 * @param string $purchase_link
 	 */
 	public function setPurchaseLink($purchase_link)
 	{
@@ -714,13 +692,13 @@ class Product
 		}
 	} #==== End -- setPurchaseLink
 
-	/*
+	/**
 	 * setSortBy
 	 *
 	 * Sets the data member $sort_by.
 	 *
-	 * @param	$sort_by
-	 * @access	public
+	 * @param int $sort_by
+	 * @throws Exception
 	 */
 	public function setSortBy($sort_by)
 	{
@@ -748,13 +726,12 @@ class Product
 		}
 	} #==== End -- setSortBy
 
-	/*
+	/**
 	 * setTitle
 	 *
 	 * Sets the data member $title.
 	 *
-	 * @param	$title
-	 * @access	public
+	 * @param string $title
 	 */
 	public function setTitle($title)
 	{
@@ -781,103 +758,91 @@ class Product
 
 	/*** accessor methods ***/
 
-	/*
+	/**
 	 * getAllProducts
 	 *
 	 * Returns the data member $all_products.
-	 *
-	 * @access	protected
 	 */
 	public function getAllProducts()
 	{
 		return $this->all_products;
 	} #==== End -- getAllProducts
 
-	/*
+	/**
 	 * getASIN
 	 *
 	 * Returns the data member $asin.
-	 *
-	 * @access	public
 	 */
 	public function getASIN()
 	{
 		return $this->asin;
 	} #==== End -- getASIN
 
-	/*
+	/**
 	 * getCollectedASINs
 	 *
 	 * Returns the data member $collected_asins.
-	 *
-	 * @access	public
 	 */
 	public function getCollectedASINs()
 	{
 		return $this->collected_asins;
 	} #==== End -- getCollectedASINs
 
-	/*
+	/**
 	 * getAuthor
 	 *
 	 * Returns the data member $author.
-	 *
-	 * @access	protected
 	 */
 	public function getAuthor()
 	{
 		return $this->author;
 	} #==== End -- getAuthor
 
-	/*
+	/**
 	 * getButtonID
 	 *
 	 * Returns the data member $button_id.
-	 *
-	 * @access	public
 	 */
 	public function getButtonID()
 	{
 		return $this->button_id;
 	} #==== End -- getButtonID
 
-	/*
+	/**
 	 * getCategories
 	 *
 	 * Returns the data member $categories.
-	 *
-	 * @access	public
 	 */
 	public function getCategories()
 	{
 		return $this->categories;
 	} #==== End -- getCategories
 
-	/*
+	/**
 	 * getCategory
 	 *
 	 * Returns the data member $category.
-	 *
-	 * @access	public
 	 */
+	/*
 	public function getCategory()
 	{
 		return $this->category;
 	} #==== End -- getCategory
+	*/
 
-	/*
+	/**
 	 * getCategoryID
 	 *
 	 * Returns the data member $category_id.
-	 *
-	 * @access	public
 	 */
+	/*
 	public function getCategoryID()
 	{
 		return $this->category_id;
 	} #==== End -- getCategoryID
+	*/
 
-	/*
+	/**
 	 * getContent
 	 *
 	 * Returns the data member $content.
@@ -889,252 +854,210 @@ class Product
 		return $this->content;
 	} #==== End -- getContent
 
-	/*
+	/**
 	 * getCurrency
 	 *
 	 * Returns the data member $currency.
-	 *
-	 * @access	public
 	 */
 	public function getCurrency()
 	{
 		return $this->currency;
 	} #==== End -- getCurrency
 
-	/*
+	/**
 	 * getDescription
 	 *
 	 * Returns the data member $description.
-	 *
-	 * @access	protected
 	 */
 	public function getDescription()
 	{
 		return $this->description;
 	} #==== End -- getDescription
 
-	/*
+	/**
 	 * getExplodedCategories
 	 *
 	 * Returns the data member $exploded_categories.
-	 *
-	 * @access	protected
 	 */
 	protected function getExplodedCategories()
 	{
 		return $this->exploded_categories;
 	} #==== End -- getExplodedCategories
 
-	/*
+	/**
 	 * getAllFiles
 	 *
 	 * Returns the data member $all_files.
-	 *
-	 * @access	public
 	 */
 	public function getAllFiles()
 	{
 		return $this->all_files;
 	} #==== End -- getAllFiles
 
-	/*
+	/**
 	 * getFile
 	 *
 	 * Returns the data member $file.
-	 *
-	 * @access	public
 	 */
 	public function getFile()
 	{
 		return $this->file;
 	} #==== End -- getFile
 
-	/*
+	/**
 	 * getFileID
 	 *
 	 * Returns the data member $file_id.
-	 *
-	 * @access	public
 	 */
 	public function getFileID()
 	{
 		return $this->file_id;
 	} #==== End -- getFileID
 
-	/*
+	/**
 	 * getFileInfoDisplay
 	 *
 	 * Returns the data member $file_info_display.
-	 *
-	 * @access	public
 	 */
 	public function getFileInfoDisplay()
 	{
 		return $this->file_info_display;
 	} #==== End -- getFileInfoDisplay
 
-	/*
+	/**
 	 * getID
 	 *
 	 * Returns the data member $id.
-	 *
-	 * @access	public
 	 */
 	public function getID()
 	{
 		return $this->id;
 	} #==== End -- getID
 
-	/*
+	/**
 	 * getAllImages
 	 *
 	 * Returns the data member $all_images.
-	 *
-	 * @access	public
 	 */
 	public function getAllImages()
 	{
 		return $this->all_images;
 	} #==== End -- getAllImages
 
-	/*
+	/**
 	 * getImage
 	 *
 	 * Returns the data member $image.
-	 *
-	 * @access	public
 	 */
 	public function getImage()
 	{
 		return $this->image;
 	} #==== End -- getImage
 
-	/*
+	/**
 	 * getImageID
 	 *
 	 * Returns the data member $image_id.
-	 *
-	 * @access	public
 	 */
 	public function getImageID()
 	{
 		return $this->image_id;
 	} #==== End -- getImageID
 
-	/*
+	/**
 	 * getLink
 	 *
 	 * Returns the data member $link.
-	 *
-	 * @access	protected
 	 */
 	public function getLink()
 	{
 		return $this->link;
 	} #==== End -- getLink
 
-	/*
+	/**
 	 * getMore
 	 *
 	 * Returns the data member $more.
-	 *
-	 * @access	public
 	 */
 	protected function getMore()
 	{
 		return $this->more;
 	} #==== End -- getMore
 
-	/*
+	/**
 	 * getPrice
 	 *
 	 * Returns the data member $price.
-	 *
-	 * @access	protected
 	 */
 	public function getPrice()
 	{
 		return $this->price;
 	} #==== End -- getPrice
 
-	/*
+	/**
 	 * getProductType
 	 *
 	 * Returns the data member $product_type.
-	 *
-	 * @access	public
 	 */
 	public function getProductType()
 	{
 		return $this->product_type;
 	} #==== End -- getProductType
 
-	/*
+	/**
 	 * getAllPublishers
 	 *
 	 * Returns the data member $all_publishers.
-	 *
-	 * @access	public
 	 */
 	public function getAllPublishers()
 	{
 		return $this->all_publishers;
 	} #==== End -- getAllPublishers
 
-	/*
+	/**
 	 * getPublisher
 	 *
 	 * Returns the data member $publisher.
-	 *
-	 * @access	public
 	 */
 	public function getPublisher()
 	{
 		return $this->publisher;
 	} #==== End -- getPublisher
 
-	/*
+	/**
 	 * getPublisherID
 	 *
 	 * Returns the data member $publisher_id.
-	 *
-	 * @access	public
 	 */
 	public function getPublisherID()
 	{
 		return $this->publisher_id;
 	} #==== End -- getPublisherID
 
-	/*
+	/**
 	 * getPurchaseLink
 	 *
 	 * Returns the data member $purchase_link.
-	 *
-	 * @access	public
 	 */
 	public function getPurchaseLink()
 	{
 		return $this->purchase_link;
 	} #==== End -- getPurchaseLink
 
-	/*
+	/**
 	 * getSortBy
 	 *
 	 * Returns the data member $sort_by.
-	 *
-	 * @access	protected
 	 */
 	public function getSortBy()
 	{
 		return $this->sort_by;
 	} #==== End -- getSortBy
 
-	/*
+	/**
 	 * getTitle
 	 *
 	 * Returns the data member $title.
-	 *
-	 * @access	protected
 	 */
 	public function getTitle()
 	{
@@ -1147,15 +1070,16 @@ class Product
 
 	/*** public methods ***/
 
-	/*
+	/**
 	 * countAllRecords
 	 *
 	 * Returns the number of products in the database that are marked available.
 	 *
-	 * @param	$category				The id of the category database table to access.
-	 * @param	$limit					The limit of records to count.
-	 * @param	$and_sql				Extra AND statements in the query.
-	 * @access	public
+	 * @param string $categories The id of the category database table to access.
+	 * @param int $limit         The limit of records to count.
+	 * @param string $and_sql    Extra AND statements in the query.
+	 * @return
+	 * @throws Exception
 	 */
 	public function countAllRecords($categories=NULL, $limit=NULL, $and_sql=NULL)
 	{
@@ -1181,6 +1105,7 @@ class Product
 				$where='WHERE'.((empty($where)) ? '' : ' '.$where).((empty($and_sql)) ? '' : ' '.((!empty($where)) ? 'AND ' : '').$and_sql);
 			}
 			$count=$db->query('SELECT `id` FROM `'.DBPREFIX.'products` '.$where.(($limit===NULL) ? '' : ' LIMIT '.$limit));
+
 			return $count;
 		}
 		catch(ezDB_Error $e)
@@ -1193,13 +1118,15 @@ class Product
 		}
 	} #==== End -- countAllRecords
 
-	/*
+	/**
 	 * deleteProduct
 	 *
 	 * Removes an product from the `product` table.
 	 *
-	 * @param	int						The id of the image in the `images` table.
-	 * @access	public
+	 * @param int $id The id of the image in the `images` table.
+	 * @param null $redirect
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function deleteProduct($id, $redirect=NULL)
 	{
@@ -1227,7 +1154,7 @@ class Product
 				if($redirect===FALSE)
 				{
 					# Set the value to NULL (no redirect).
-					$redirect===NULL;
+					$redirect=NULL;
 				}
 				# Validate the passed id as an integer.
 				if($validator->isInt($id)===TRUE)
@@ -1283,35 +1210,37 @@ class Product
 		}
 	} #==== End -- deleteProduct
 
-	/*
+	/**
 	 * displayProduct
 	 *
 	 * Creates product HTML elements and sets them to an array for display.
 	 *
-	 * @param	$page
-	 * @param	$identifier
-	 * @param $option				An Array of various options for displaying Products. The available options are:
-	 *												"image_size" => What size of image should be called from Amazon for Amazon products. the default is
-	 *																				"MediumImage". The possible values are:
-	 *																				"LargeImage"
-	 *																				"MediumImage"
-	 *																				"SmallImage"
-	 *																				"SwatchImage"
-	 *																				"ThumbnailImage"
-	 *																				"TinyImage"
-	 *												"max_char" => The maximum number of characters to display in product descriptions. The default is NULL
-	 *																			(unlimited).
-	 *												"access_level" => The access levels needed for a logged in User to modify the products - must be a
-	 *																					space sepparated string of numbers. The default is ADMIN_USERS.
-	 *												"labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is TRUE.
-	 *												"title_class" => The class for the title container. Default is "title".
-	 *												"title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to. If
-	 *																				the title should link to the details page, simply pass the value "default". Default is
-	 *																				"default".
-	 *												"title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag. If it WILL be,
-	 *																							pass the text to be used in the "title" attribute for the link. To use the product
-	 *																							title, "{PRODUCT_TITLE}", simply pass the value "default". The default is "default".
-	 * @access	public
+	 * @param string $page
+	 * @param string $identifier
+	 * @param array $options          An Array of various options for displaying Products. The available options are:
+	 *                                    "image_size" => What size of image should be called from Amazon for Amazon products.
+	 *                                                        The default is "MediumImage".
+	 *                                        The possible values are:
+	 *                                        "LargeImage"
+	 *                                        "MediumImage"
+	 *                                        "SmallImage"
+	 *                                        "SwatchImage"
+	 *                                        "ThumbnailImage"
+	 *                                        "TinyImage"
+	 *                                    "max_char" => The maximum number of characters to display in product descriptions. The default is NULL (unlimited).
+	 *                                    "access_level" => The access levels needed for a logged in User to modify the products - must be a space sepparated string of numbers.
+	 *                                                          The default is ADMIN_USERS.
+	 *                                    "labels" => TRUE if other buttons should be displayed (ie "download", "more") FALSE if not. The default is TRUE.
+	 *                                    "title_class" => The class for the title container. Default is "title".
+	 *                                    "title_link" => NULL if the title should NOT be wrapped in an anchor tag. Otherwise, the URL to link to.
+	 *                                                        If the title should link to the details page, simply pass the value "default".
+	 *                                                        Default is "default".
+	 *                                    "title_link_title" => This is NOT used if the title should NOT be wrapped in an anchor tag.
+	 *                                                              If it WILL be, pass the text to be used in the "title" attribute for the link.
+	 *                                                              To use the product title, "{PRODUCT_TITLE}", simply pass the value "default".
+	 *                                                              The default is "default".
+	 * @return array|bool
+	 * @throws Exception
 	 */
 	public function displayProduct($page, $identifier, $options=array())
 	{
@@ -1449,18 +1378,22 @@ class Product
 						$asins[]=$product->ASIN;
 					}
 				}
+				//print_r($asins);exit;
 				# Get the Amazon class.
 				require_once Utility::locateFile(MODULES.'Product'.DS.'Amazon.php');
 				# Instantiate a new Amazon object.
 				$amazon=new Amazon(AMAZON_ACCESS_KEY, AMAZON_ASS_TAG, AMAZON_SECRET_KEY);
 				# Set the Amazon product display HTML array to a variable.
 				$display_amazon=$amazon->displayAmazonProduct($asins, $page, $identifier, $options);
+				//print_r($display_amazon);
+				//exit;
 
 				# Loop through the products.
 				foreach($products as $product)
 				{
+					//print_r($product);exit;
 					# Create a variable to hold whether or not a "more" link should be displayed. Default is FALSE.
-					$more=FALSE;
+					//$more=FALSE;
 					# Set all relevant Data members.
 					$this->setDataMembers($product);
 					# Create a variable for the id.
@@ -1474,7 +1407,8 @@ class Product
 						$display_product[$id]=array('author'=>NULL, 'buy'=>NULL, 'content'=>NULL, 'button_id'=>NULL, 'currency'=>NULL, 'description'=>NULL, 'detailed_page_url'=>NULL, 'editorial_review'=>NULL, 'file'=>array(), 'image'=>NULL, 'link'=>NULL, 'price'=>NULL, 'publisher'=>NULL, 'purchase_link'=>NULL, 'title'=>NULL, 'edit'=>NULL, 'delete'=>NULL);
 						# Create a variable for the ASIN.
 						$asin=$this->getASIN();
-						# Set the Product data members to variables. (All the values in the `product` table may override the values returned from Amazon except 'detailed_page_url'.)
+						# Set the Product data members to variables.
+						# 	All the values in the `product` table may override the values returned from Amazon except 'detailed_page_url'.
 						# Set the author to a variable.
 						$author=$this->getAuthor();
 						# Set the product's Paypal button ID to a variable.
@@ -1499,13 +1433,13 @@ class Product
 						# Set the product Image object to a variable.
 						$image_obj=$this->getImage();
 						# Set the product link to a variable.
-						$link=$this->getLink();
+						//$link=$this->getLink();
 						# Set the product's price to a variable.
 						$price=$this->getPrice();
 						# Create variable for the Publisher object.
 						$publisher_obj=$this->getPublisher();
 						# Create a variable for the publisher.
-						$publisher=((!empty($publisher_obj)) ? $publisher_obj->getPublisher() : '');
+						$publisher=(!empty($publisher_obj) ? $publisher_obj->getPublisher() : '');
 						# Set the product's purchase link to a variable.
 						$purchase_link=$this->getPurchaseLink();
 						# Set the product's title to a variable.
@@ -1532,7 +1466,7 @@ class Product
 										# Add a "more" link to the description.
 										$description=sprintf($description, ' <a class="more" href="'.$detailed_page_url.'" title="more on: '.$title.'">'.$this->getMore().'</a>');
 										# Set the $more value to TRUE.
-										$more=TRUE;
+										//$more=TRUE;
 									}
 								}
 							}
@@ -1635,13 +1569,15 @@ class Product
 						# Set the product detailed page URL to the array.
 						$display_product[$id]['detailed_page_url']=$detailed_page_url;
 
+						# TODO: The file part of a product doesn't work. Needs looking into.
+
 						# Check if there is a file.
 						if($file_obj!==NULL)
 						{
 							# Set the file variables.
 							# Set the file's availability to a variable.
 							$file_availability=$file_obj->getAvailability();
-							$file_id=$file_obj->getID();
+							//$file_id=$file_obj->getID();
 							$file_name=$file_obj->getFile();
 							$file_title=$file_obj->getTitle();
 
@@ -1849,8 +1785,10 @@ class Product
 						}
 					}
 				}
+
 				return $display_product;
 			}
+
 			return FALSE;
 		}
 		catch(Exception $e)
@@ -1859,7 +1797,7 @@ class Product
 		}
 	} #==== End -- displayProduct
 
-	/*
+	/**
 	 * displayProductList
 	 *
 	 * Returns a list (table) of products.
@@ -2121,7 +2059,7 @@ class Product
 		}
 	} #==== End -- displayProductList
 
-	/*
+	/**
 	 * getFiles
 	 *
 	 * Retrieves records from the `files` table. A wrapper method for getFiles from the File class.
@@ -2162,7 +2100,7 @@ class Product
 		}
 	} #==== End -- getFiles
 
-	/*
+	/**
 	 * getThisFile
 	 *
 	 * Retrieves file info from the `files` table in the Database for the passed id or file name and sets it to the data member. A wrapper method for getThisFile from the File class.
@@ -2192,7 +2130,7 @@ class Product
 		}
 	} #==== End -- getThisFile
 
-	/*
+	/**
 	 * getImages
 	 *
 	 * Retrieves records from the `images` table. A wrapper method for getImages from the Image class.
@@ -2233,7 +2171,7 @@ class Product
 		}
 	} #==== End -- getImages
 
-	/*
+	/**
 	 * getThisImage
 	 *
 	 * Retrieves image info from the `images` table in the Database for the passed id or image name and sets it to the data member.
@@ -2264,19 +2202,19 @@ class Product
 		}
 	} #==== End -- getThisImage
 
-	/*
+	/**
 	 * getProducts
 	 *
 	 * Retrieves Products records from the database.
 	 *
-	 * @param	$category				The name of the category(ies) to be retrieved.
-	 *										May be multiple categories - separate with a dash, ie. 'Music-Books'
-	 * @param	$limit					The LIMIT of the records.
-	 * @param	$fields					The name of the field(s) to be retrieved.
-	 * @param	$order					The name of the field to order the records by.
-	 * @param	$direction				The direction to order the records.
-	 * @param	$and_sql				Any extra AND queries.
-	 * @access	public
+	 * @param string $categories              The name of the category(ies) to be retrieved.
+	 *                                        May be multiple categories - separate with a dash, ie. 'Music-Books'
+	 * @param int $limit                      The LIMIT of the records.
+	 * @param string $fields                  The name of the field(s) to be retrieved.
+	 * @param string $order                   The name of the field to order the records by.
+	 * @param string $direction               The direction to order the records.
+	 * @param string $and_sql                 Any extra AND queries.
+	 * @throws Exception
 	 */
 	public function getProducts($categories=NULL, $limit=NULL, $fields='*', $order='title', $direction='DESC', $and_sql=NULL)
 	{
@@ -2301,6 +2239,7 @@ class Product
 			{
 				$where='WHERE'.((empty($where)) ? '' : ' '.$where).((empty($and_sql)) ? '' : ' '.((!empty($where)) ? 'AND ' : '').$and_sql);
 			}
+			//echo 'SELECT '.$fields.' FROM `'.DBPREFIX.'products` '.$where.' ORDER BY `'.$order.'` '.$direction.(($limit===NULL) ? '' : ' LIMIT '.$limit);
 			# Get the records from the `products` table.
 			$records=$db->get_results('SELECT '.$fields.' FROM `'.DBPREFIX.'products` '.$where.' ORDER BY `'.$order.'` '.$direction.(($limit===NULL) ? '' : ' LIMIT '.$limit));
 			# Set the returned records to the data member.
@@ -2318,7 +2257,7 @@ class Product
 		}
 	} #==== End -- getProducts
 
-	/*
+	/**
 	 * getThisProduct
 	 *
 	 * Retrieves product info from the `products` table in the database for the passed id or product name and sets it to the data member.

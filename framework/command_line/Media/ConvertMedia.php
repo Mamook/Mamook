@@ -47,6 +47,17 @@ if($passed_data['MediaType']=='video')
 }
 elseif($passed_data['MediaType']=='audio')
 {
+	# Create an empty variable for the name of the "premium" folder.
+	$premium_path='';
+	# Is the uploaded file for "premium" content?
+	if($passed_data['Premium']===0)
+	{
+		# Set the name of the "premium" folder (must end with backslash).
+		$premium_path='premium'.DS;
+		# Create a sample of the 128bit mp3.
+		$commandline_obj_ffmpeg->runScript(Utility::locateFile(COMMAND_LINE.'Media'.DS.'ConvertMedia.php'), $passed_data);
+	}
+
 	# Convert to 128bit mp3.
-	$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.'audio'.DS.$passed_data['FileName'].' -acodec libmp3lame -ac 2 -ab 128k '.AUDIO_PATH.'files'.DS.$passed_data['FileNameNoExt'].'.mp3');
+	$commandline_obj_ffmpeg->runScript('-y -i '.BODEGA.$premium_path.'audio'.DS.$passed_data['FileName'].' -acodec libmp3lame -ac 2 -ab 128k '.AUDIO_PATH.'files'.DS.$passed_data['FileNameNoExt'].'.mp3');
 }

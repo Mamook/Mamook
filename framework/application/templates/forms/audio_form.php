@@ -143,7 +143,7 @@ elseif(!isset($_GET['select']))
 						(in_array('add', $audio_categories)===TRUE) &&
 						(
 							isset($category_options['selected']) &&
-							in_array('Add Category', $category_options['selected']!==TRUE)
+							in_array('Add Category', $category_options['selected'])!==TRUE
 						)
 					)
 				{
@@ -203,6 +203,16 @@ elseif(!isset($_GET['select']))
 			{
 				$language_options['selected']='Add Language';
 			}
+		}
+
+		$premium=$audio_obj->getPremium();
+		if($premium===0)
+		{
+			$premium=TRUE;
+		}
+		else
+		{
+			$premium='';
 		}
 
 		# Get the Publisher class.
@@ -273,7 +283,7 @@ elseif(!isset($_GET['select']))
 							(in_array('add', $audio_playlists)===TRUE) &&
 							(
 								isset($playlist_options['multiple_selected']) &&
-								in_array('Add Playlist', $playlist_options['multiple_selected']!==TRUE)
+								in_array('Add Playlist', $playlist_options['multiple_selected'])!==TRUE
 							)
 						)
 					{
@@ -395,38 +405,38 @@ elseif(!isset($_GET['select']))
 			$fg->addFormPart('</ul>');
 			$fg->addFormPart('</li>');
 			$fg->addFormPart('<li id="file">');
-			$fg->addFormPart('<label class="label" for="audio"><span class="required">*</span> Audio</label>');
-			$fg->addElement('file', array('name'=>'audio', 'id'=>'audio'));
-			if(!empty($file_name))
-			{
-				# Get the image information from the database, and set them to data members.
-				$audio_obj->getThisImage($audio_obj->getImageID());
-				# Set the Image object to a variable.
-				$image_obj=$audio_obj->getImageObj();
-				# Set the thumbnail to a variable.
-				$audio_obj->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
-				$fg->addFormPart('<ul>');
-				$fg->addFormPart('<li class="file-current">');
-				if($audio_obj->getAPI()!==NULL)
+				$fg->addFormPart('<label class="label" for="audio"><span class="required">*</span> Audio</label>');
+				$fg->addElement('file', array('name'=>'audio', 'id'=>'audio'));
+				if(!empty($file_name))
 				{
-					# Decode the `api` field.
-					$api_decoded=json_decode($audio_obj->getAPI());
-					# Set Soundcloud ID
-					$audio_obj->setAudioId($api_decoded->soundcloud_id);
-					# Create audio URL.
-					$audio_obj->setAudioUrl($yt->getSoundcloudUrl().$audio_obj->getAudioId());
-					$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+					# Get the image information from the database, and set them to data members.
+					$audio_obj->getThisImage($audio_obj->getImageID());
+					# Set the Image object to a variable.
+					$image_obj=$audio_obj->getImageObj();
+					# Set the thumbnail to a variable.
+					$audio_obj->setThumbnailUrl($db->sanitize(IMAGES.$image_obj->getImage()));
+					$fg->addFormPart('<ul>');
+						$fg->addFormPart('<li class="file-current">');
+							if($audio_obj->getAPI()!==NULL)
+							{
+								# Decode the `api` field.
+								$api_decoded=json_decode($audio_obj->getAPI());
+								# Set Soundcloud ID
+								$audio_obj->setAudioId($api_decoded->soundcloud_id);
+								# Create audio URL.
+								$audio_obj->setAudioUrl($yt->getSoundcloudUrl().$audio_obj->getAudioId());
+								$fg->addFormPart('<a href="'.$audio_obj->getAudioUrl().'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'"><img src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+							}
+							else
+							{
+								# NOTE: This audio is not in a public directory.
+								//$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
+								$fg->addFormPart('<span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span>');
+							}
+							$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
+						$fg->addFormPart('</li>');
+					$fg->addFormPart('</ul>');
 				}
-				else
-				{
-					# NOTE: This audio is not in a public directory.
-					//$fg->addFormPart('<a href="'.APPLICATION_URL.'audio/files/'.$file_name.'" title="Current Audio" rel="'.FW_POPUP_HANDLE.'" data-image="'.$audio_obj->getThumbnailUrl().'"><img class="image" src="'.$audio_obj->getThumbnailUrl().'" alt="Cover for '.$audio_obj->getTitle().'"/><span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span></a>');
-					$fg->addFormPart('<span>'.$file_name.' - "'.$audio_obj->getTitle().'"</span>');
-				}
-				$fg->addElement('hidden', array('name'=>'_audio', 'value'=>$file_name));
-				$fg->addFormPart('</li>');
-				$fg->addFormPart('</ul>');
-			}
 			$fg->addFormPart('</li>');
 		}
 		# Check if there is GET data. If there is, it's a audio edit, and don't show this part of the form.
@@ -441,6 +451,10 @@ elseif(!isset($_GET['select']))
 			$fg->addElement('text', array('name'=>'embed_code', 'id'=>'embed_code', 'value'=>htmlspecialchars($audio_obj->getEmbedCode())));
 			$fg->addFormPart('</li>');
 		}
+		$fg->addFormPart('<li>');
+		$fg->addFormPart('<label class="label" for="premium">Subscription Only Content</label>');
+		$fg->addElement('checkbox', array('name'=>'premium', 'value'=>'premium', 'id'=>'premium', 'checked'=>$premium));
+		$fg->addFormPart('</li>');
 		$fg->addFormPart('<li>');
 		$fg->addFormPart('<label class="label" for="imageOption">Thumbnail</label>');
 		$fg->addElement('select', array('name'=>'image_option', 'id'=>'imageOption'), $image_options, NULL, 'select');
