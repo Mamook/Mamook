@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        node(label: 'master')
+        node(label: 'jenkins')
       }
     }
   }
