@@ -4,13 +4,21 @@ abstract class JSGenerator
 {
 	private static $js=array();
 
-	# load external JavaScript validating functions
+	/**
+	 * load external JavaScript validating functions
+	 */
 	public function initializeFunctions()
 	{
 		self::$js['ext']='<script language="javascript" src="'.SCRIPTS.'JSForms.js"></script>';
 	}
 
-	# add JavaScript validating function to selected field
+	/**
+	 * add JavaScript validating function to selected field
+	 *
+	 * @param string $fieldName
+	 * @param array $valData
+	 * @throws Exception
+	 */
 	public function addValidation($fieldName, $valData)
 	{
 		if(!is_array($valData))
@@ -23,7 +31,11 @@ abstract class JSGenerator
 		self::$js['int']='if(!'.$valFunction.'('.$obj.',"'.$errorMessage.'")){'.$obj.'.focus();return false};';
 	}
 
-	# return JavaScript code
+	/**
+	 * return JavaScript code
+	 *
+	 * @return string
+	 */
 	public function getCode()
 	{
 		return self::$js['ext'].'<script language="javascript">function validate(){'.self::$js['int'].'}</script>';
