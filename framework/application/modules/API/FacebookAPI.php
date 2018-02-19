@@ -1,5 +1,12 @@
 <?php /* framework/application/modules/API/FacebookAPI.php */
 
+namespace Mamook\API;
+
+use Exception;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
+
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
 
@@ -26,8 +33,7 @@ class FacebookAPI
 	 *
 	 * Sets the data member $facebook_obj.
 	 *
-	 * @param	obj $facebook_obj
-	 * @access	public
+	 * @param object $facebook_obj
 	 */
 	public function setFacebookObj($facebook_obj)
 	{
@@ -42,7 +48,7 @@ class FacebookAPI
 			# Explicitly set the data member to NULL.
 			$this->facebook_obj=NULL;
 		}
-	} #==== End -- setFacebookObj
+	}
 
 	/*** End mutator methods ***/
 
@@ -54,13 +60,11 @@ class FacebookAPI
 	 * getFacebookObj
 	 *
 	 * Returns the data member $facebook_obj.
-	 *
-	 * @access	private
 	 */
 	private function getFacebookObj()
 	{
 		return $this->facebook_obj;
-	} #==== End -- getFacebookObj
+	}
 
 	/*** End accessor methods ***/
 
@@ -72,19 +76,14 @@ class FacebookAPI
 	 * __contruct
 	 *
 	 * Loads the Facebook PHP library and instantiates it.
-	 *
-	 * @access	public
-	 * @return	object
 	 */
 	public function __construct()
 	{
-		# Get the Facebook API Class.
-		require_once Utility::locateFile(MODULES.'Vendor'.DS.'Facebook'.DS.'src'.DS.'Facebook'.DS.'autoload.php');
 		# Check if there is a Facebook object.
 		if(empty($this->facebook_obj) OR !is_object($this->facebook_obj))
 		{
 			# Instantiate a new Facebook object.
-			$facebook_obj=new Facebook\Facebook([
+			$facebook_obj=new Facebook([
 				'app_id'=>FB_APP_ID,
 				'app_secret'=>FB_APP_SECRET,
 				'default_graph_version'=>'v2.5',
@@ -92,8 +91,9 @@ class FacebookAPI
 			]);
 			$this->setFacebookObj($facebook_obj);
 		}
+
 		return $this->getFacebookObj();
-	} #==== End -- __construct
+	}
 
 	/*** End magic methods ***/
 
@@ -106,8 +106,9 @@ class FacebookAPI
 	 *
 	 * Gets Facebook feeds.
 	 *
-	 * @param	$limit
-	 * @access	public
+	 * @param int $limit
+	 * @return mixed
+	 * @throws Exception
 	 */
 	public function getFeed($limit=20)
 	{
@@ -118,11 +119,11 @@ class FacebookAPI
 			# Return the JSON Decoded response (returns an array).
 			return json_decode($json_response);
 		}
-		catch(Facebook\Exceptions\FacebookResponseException $e)
+		catch(FacebookResponseException $e)
 		{
 			throw new Exception('Graph returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
 		}
-		catch(Facebook\Exceptions\FacebookSDKException $e)
+		catch(FacebookSDKException $e)
 		{
 			throw new Exception('Facebook SDK returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
 		}
@@ -130,7 +131,7 @@ class FacebookAPI
 		{
 			throw $e;
 		}
-	} #==== End -- getFeed
+	}
 
 	/**
 	 * post
@@ -138,13 +139,13 @@ class FacebookAPI
 	 * Wrapper function for the Facebook API.
 	 * Posts content to Facebook.
 	 *
-	 * @param	array $data				Array of data to post on Facebook.
+	 * @param array $data				Array of data to post on Facebook.
 	 *										Example:
 	 * 											$data=array(
 	 *												'link'=>'http://www.example.com',
 	 *												'message'=>'User provided message',
 	 *											);
-	 * @access	public
+	 * @throws Exception
 	 */
 	public function post($data)
 	{
@@ -152,11 +153,11 @@ class FacebookAPI
 		{
 			$this->getFacebookObj()->post('/me/feed', $data);
 		}
-		catch(Facebook\Exceptions\FacebookResponseException $e)
+		catch(FacebookResponseException $e)
 		{
 			throw new Exception('Graph returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
 		}
-		catch(Facebook\Exceptions\FacebookSDKException $e)
+		catch(FacebookSDKException $e)
 		{
 			throw new Exception('Facebook SDK returned an error: '.$e->getMessage(), E_RECOVERABLE_ERROR);
 		}
@@ -164,8 +165,8 @@ class FacebookAPI
 		{
 			throw $e;
 		}
-	} #==== End -- post
+	}
 
 	/*** End public methods ***/
 
-} #=== End FacebookAPI class.
+}

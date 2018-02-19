@@ -1,0 +1,35 @@
+---
+server:
+    install: '1'
+    packages: [build-essential, git]
+    timezone: UTC
+    locale: en_CA.UTF-8
+vagrant_local:
+    install: '1'
+    vm: { base_box: trusty64, hostname: default, ip: 192.168.2.99, memory: '512', sharedfolder: /vagrant, useVagrantCloud: '1', syncType: '0' }
+nginx:
+    install: '1'
+    ppa: nginx/stable
+    docroot: /vagrant/public
+    servername: framework.dev
+mysql:
+    install: '1'
+    root_password: '123'
+    database: example_db
+    user: example_user
+    password: 'example_password'
+    db_dump: dev/sql/initial_db.sql
+redis:
+    install: '1'
+    port: '6379'
+    password: 'foobared'
+php:
+    install: '1'
+    ppa: ondrej/php
+    packages: [php5.6-cli, php5.6-intl, php5.6-mcrypt, php5.6-fpm, php5.6-gd, php5.6-mbstring, php5.6-mysql, php5.6-curl, php5.6-xdebug, php5.6-dev, php5.6-xml]
+xdebug:
+    install: '1'
+composer:
+    install: '1'
+npm_packages:
+    install: '1'

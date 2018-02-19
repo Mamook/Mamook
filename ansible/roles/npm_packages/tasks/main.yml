@@ -1,0 +1,9 @@
+#- name: Install packages based on package.json.
+#  npm:
+#    path: /vagrant
+
+# Downloads and installs all the libs and dependencies outlined in the /path/to/project/composer.lock
+- name: Install Composer dependencies
+  composer:
+    command: install
+    working_dir: /vagrant

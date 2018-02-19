@@ -4,44 +4,39 @@
 define('DB_TYPE', 'mysqli');
 
 # Production site.
-if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
-{
-	# The hostname for the Database.
-	define('HOSTNAME', '');
-	# The name of the Database.
-	define('DBASE', '');
-	# The Database username
-	define('DBUSER', '');
-	# The Database password.
-	define('DBPASS', '');
-	# The prefix (if any) for our Database tables.
-	define('DBPREFIX', '');
-}
-# Staging site.
-elseif(RUN_ON_STAGING===TRUE)
-{
-	# The hostname for the Developement Database.
-	define('HOSTNAME', '');
-	# The name of the Developement Database.
-	define('DBASE', '');
-	# The Developement Database username
-	define('DBUSER', '');
-	# The Developement Database password.
-	define('DBPASS', '');
-	# The prefix (if any) for the Developement Database tables.
-	define('DBPREFIX', '');
-}
-# Dev site.
-else
-{
-	# The hostname for the Developement Database.
-	define('HOSTNAME', 'localhost');
-	# The name of the Developement Database.
-	define('DBASE', '');
-	# The Developement  username
-	define('DBUSER', 'jamtheforce');
-	# The Developement Database password.
-	define('DBPASS', '');
-	# The prefix (if any) for the Developement Database tables.
-	define('DBPREFIX', '');
+if (RUN_ON_DEVELOPMENT === false && RUN_ON_STAGING == false) {
+    # The hostname for the Database.
+    define('HOSTNAME', $_ENV['DB_HOST']);
+    # The name of the Database.
+    define('DBASE', $_ENV['DB_DATABASE']);
+    # The Database username
+    define('DBUSER', $_ENV['DB_USERNAME']);
+    # The Database password.
+    define('DBPASS', $_ENV['DB_PASSWORD']);
+    # The prefix (if any) for our Database tables.
+    define('DBPREFIX', '');
+} # Staging site.
+elseif (RUN_ON_STAGING === true) {
+    # The hostname for the Developement Database.
+    define('HOSTNAME', $_ENV['DB_HOST']);
+    # The name of the Developement Database.
+    define('DBASE', $_ENV['DB_DATABASE']);
+    # The Developement Database username
+    define('DBUSER', $_ENV['DB_USERNAME']);
+    # The Developement Database password.
+    define('DBPASS', $_ENV['DB_PASSWORD']);
+    # The prefix (if any) for the Developement Database tables.
+    define('DBPREFIX', '');
+} # Dev site.
+else {
+    # The hostname for the Developement Database.
+    define('HOSTNAME', $_ENV['DB_HOST']);
+    # The name of the Developement Database.
+    define('DBASE', $_ENV['DB_DATABASE']);
+    # The Developement  username
+    define('DBUSER', $_ENV['DB_USERNAME']);
+    # The Developement Database password.
+    define('DBPASS', $_ENV['DB_PASSWORD']);
+    # The prefix (if any) for the Developement Database tables.
+    define('DBPREFIX', '');
 }

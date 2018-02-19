@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/all.yml
+  roles:
+    - server
+    - vagrant_local
+    - nginx
+    - mysql
+    - redis
+    - php
+    - xdebug
+    - composer
+    - npm_packages
+    - app

@@ -1,8 +1,12 @@
 <?php /* framework/application/modules/Media/YouTube.php */
 
+namespace Mamook\API;
+
+use Google_Client;
+use Google_Service_YouTube;
+
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH')) exit('No direct script access allowed');
-
 
 /**
  * YouTube
@@ -53,7 +57,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->google_client=NULL;
 		}
-	} #==== End -- setGoogleClient
+	}
 
 	/**
 	 * setYouTubeClientId
@@ -79,7 +83,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_client_id=NULL;
 		}
-	} #==== End -- setYouTubeClientId
+	}
 
 	/**
 	 * setYouTubeClientSecret
@@ -105,7 +109,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_client_secret=NULL;
 		}
-	} #==== End -- setYouTubeClientSecret
+	}
 
 	/**
 	 * setYouTubeRedirectUri
@@ -131,7 +135,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_redirect_uri=NULL;
 		}
-	} #==== End -- setYouTubeRedirectUri
+	}
 
 	/**
 	 * setYouTubeDevKey
@@ -157,7 +161,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_dev_key=NULL;
 		}
-	} #==== End -- setYouTubeDevKey
+	}
 
 	/**
 	 * setYouTubeRefreshToken
@@ -183,7 +187,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_refresh_token=NULL;
 		}
-	} #==== End -- setYouTubeRefreshToken
+	}
 
 	/**
 	 * setYouTubeService
@@ -205,7 +209,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->youtube_service=NULL;
 		}
-	} #==== End -- setYouTubeService
+	}
 
 	/**
 	 * setYouTubeUsername
@@ -230,7 +234,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_username=NULL;
 		}
-	} #==== End -- setYouTubeUsername
+	}
 
 	/**
 	 * setYouTubeChannelId
@@ -255,7 +259,7 @@ class YouTube
 			# Explicitly set the data member to NULL.
 			$this->yt_channel_id=NULL;
 		}
-	} #==== End -- setYouTubeChannelId
+	}
 
 	/**
 	 * setSearch
@@ -268,7 +272,7 @@ class YouTube
 	private function setSearch($search)
 	{
 		$this->search=$search;
-	} #==== End -- setSearch
+	}
 
 	/*** End mutator methods ***/
 
@@ -286,7 +290,7 @@ class YouTube
 	public function getGoogleClient()
 	{
 		return $this->google_client;
-	} #==== End -- getGoogleClient
+	}
 
 	/**
 	 * getYouTubeClientId
@@ -298,7 +302,7 @@ class YouTube
 	public function getYouTubeClientId()
 	{
 		return $this->yt_client_id;
-	} #==== End -- getYouTubeClientId
+	}
 
 	/**
 	 * getYouTubeClientSecret
@@ -310,7 +314,7 @@ class YouTube
 	public function getYouTubeClientSecret()
 	{
 		return $this->yt_client_secret;
-	} #==== End -- getYouTubeClientSecret
+	}
 
 	/**
 	 * getYouTubeRedirectUri
@@ -322,7 +326,7 @@ class YouTube
 	public function getYouTubeRedirectUri()
 	{
 		return $this->yt_redirect_uri;
-	} #==== End -- getYouTubeRedirectUri
+	}
 
 	/**
 	 * getYouTubeDevKey
@@ -334,7 +338,7 @@ class YouTube
 	public function getYouTubeDevKey()
 	{
 		return $this->yt_dev_key;
-	} #==== End -- getYouTubeDevKey
+	}
 
 	/**
 	 * getYouTubeRefreshToken
@@ -346,7 +350,7 @@ class YouTube
 	public function getYouTubeRefreshToken()
 	{
 		return $this->yt_refresh_token;
-	} #==== End -- getYouTubeRefreshToken
+	}
 
 	/**
 	 * getYouTubeService
@@ -363,7 +367,7 @@ class YouTube
 			$this->startYouTubeService();
 		}
 		return $this->youtube_service;
-	} #==== End -- getYouTubeService
+	}
 
 	/**
 	 * getYouTubeUsername
@@ -375,7 +379,7 @@ class YouTube
 	public function getYouTubeUsername()
 	{
 		return $this->yt_username;
-	} #==== End -- getYouTubeUsername
+	}
 
 	/**
 	 * getYouTubeChannelId
@@ -387,7 +391,7 @@ class YouTube
 	public function getYouTubeChannelId()
 	{
 		return $this->yt_channel_id;
-	} #==== End -- getYouTubeChannelId
+	}
 
 	/**
 	 * getSearch
@@ -399,7 +403,7 @@ class YouTube
 	protected function getSearch()
 	{
 		return $this->search;
-	} #==== End -- getSearch
+	}
 
 	/**
 	 * getYoutubeUrl
@@ -411,7 +415,7 @@ class YouTube
 	public function getYoutubeUrl()
 	{
 		return $this->youtube_url;
-	} #==== End -- getYoutubeUrl
+	}
 
 	/*** End accessor methods ***/
 
@@ -424,9 +428,9 @@ class YouTube
 	 *
 	 * Returns details of $video_id
 	 *
-	 * @param	int $video_id				The video's ID on YouTube.
-	 * @param	array $optParams			Optional parameters.
-	 * @access	public
+	 * @param int $video_id    The video's ID on YouTube.
+	 * @param array $optParams Optional parameters.
+	 * @return bool
 	 */
 	public function deleteVideo($video_id, $optParams=array())
 	{
@@ -447,14 +451,12 @@ class YouTube
 		}
 		# No errors so return TRUE.
 		return TRUE;
-	} #==== End -- deleteVideo
+	}
 
 	/**
 	 * getInstance
 	 *
 	 * Gets the singleton instance of this class.
-	 *
-	 * @access	public
 	 */
 	public static function getInstance()
 	{
@@ -463,7 +465,7 @@ class YouTube
 			self::$youtube=new YouTube();
 		}
 		return self::$youtube;
-	} #==== End -- getInstance
+	}
 
 	/**
 	 * getYouTubeIdFromEmbedCode
@@ -471,11 +473,13 @@ class YouTube
 	 * Converts string to UTF-8. If the string is HTML then it strips the HTML and get's the first URL.
 	 * Then it get's the value after the last slash (/) in the URL which will be the Video ID (on YouTube).
 	 *
-	 * @param	string $embed_code
-	 * @access	public
+	 * @param string $embed_code
+	 * @return bool|string
 	 */
 	public function getYouTubeIdFromEmbedCode($embed_code)
 	{
+		$embed=FALSE;
+
 		# Check if the passed value is empty.
 		if(!empty($embed_code))
 		{
@@ -490,20 +494,20 @@ class YouTube
 				# Get's the value after the last slash in the URL (which will be the YouTube Video ID).
 				$embed=substr(strrchr(rtrim($matches[0], '/'), '/'), 1);
 			}
-			return $embed;
 		}
-	} #==== End -- getYouTubeIdFromEmbedCode
+
+		return $embed;
+	}
 
 	/**
 	 * insertThumbnail
 	 *
 	 * Create a request for the API's thumbnails.set method to upload the image and associate it with the appropriate video.
 	 *
-     * @param	string $video_id			The video_id parameter specifies a YouTube video ID for which the
+     * @param string $video_id			The video_id parameter specifies a YouTube video ID for which the
      *											custom video thumbnail is being provided.
-     * @param	array $optParams			Optional parameters.
-	 * @return	Google_Service_YouTube_ThumbnailSetResponse
-	 * @access	public
+     * @param array $optParams			Optional parameters.
+	 * @return mixed
 	 */
 	public function insertThumbnail($video_id, $optParams=array())
 	{
@@ -513,14 +517,14 @@ class YouTube
 		$thumbnail_set_response=$youtube_service->thumbnails->set($video_id, $optParams);
 
 		return $thumbnail_set_response;
-	} #==== End -- insertThumbnail
+	}
 
 	/**
 	 * insertVideo
 	 *
 	 * Returns details of $video_id
 	 *
-	 * @param	string $part				The part parameter serves two purposes in this operation.
+	 * @param string $part				The part parameter serves two purposes in this operation.
 	 *											It identifies the properties that the write operation will set
 	 *											as well as the properties that the API response will include.
      *										The part names that you can include in the parameter value are snippet,
@@ -531,9 +535,9 @@ class YouTube
      *											for a video and does not contain values that you can set or modify.
      *											If the parameter value specifies a part that does not contain
      *											mutable values, that part will still be included in the API response.
-     * @param	$postBody
-     * @param	array $optParams			Optional parameters.
-	 * @access	public
+     * @param $postBody
+     * @param array $optParams			Optional parameters.
+	 * @return mixed
 	 */
 	public function insertVideo($part='status,snippet', $postBody, $optParams=array())
 	{
@@ -543,7 +547,7 @@ class YouTube
 		$insert_response=$youtube_service->videos->insert($part, $postBody, $optParams);
 
 		return $insert_response;
-	} #==== End -- insertVideo
+	}
 
 	/**
 	 * listVideoCategories
@@ -569,7 +573,7 @@ class YouTube
 	 *			string regionCode			The regionCode parameter instructs the API to return the list of
 	 *											video categories available in the specified country.
 	 *											The parameter value is an ISO 3166-1 alpha-2 country code.
-	 * @access	public
+	 * @return mixed
 	 */
 	public function listVideoCategories($part='snippet', $optParams=array())
 	{
@@ -579,7 +583,7 @@ class YouTube
 		$list_categories_response=$youtube_service->videoCategories->listVideoCategories($part, $optParams);
 
 		return $list_categories_response;
-	} #==== End -- listVideoCategories
+	}
 
 	/**
 	 * listVideos
@@ -602,7 +606,7 @@ class YouTube
      *										The id parameter specifies a comma-separated list of the YouTube
      *											video ID(s) for the resource(s) that are being retrieved.
      *											In a video resource, the id property specifies the video's ID.
-	 * @access	public
+	 * @return mixed
 	 */
 	public function listVideos($part='snippet', $optParams=array())
 	{
@@ -612,15 +616,15 @@ class YouTube
 		$list_response=$youtube_service->videos->listVideos($part, $optParams);
 
 		return $list_response;
-	} #==== End -- listVideos
+	}
 
 	/**
 	 * PlaylistsListFeed
 	 *
 	 * Retrieves playlists from the YouTube user's channelId.
 	 *
-	 * @param	string $part				What part of the video to get from YouTube.
-	 * @return	array
+	 * @param string $part				What part of the video to get from YouTube.
+	 * @return array
 	 */
 	public function PlaylistsListFeed($part='snippet', $optParams=array('channelId'=>YOUTUBE_CHANNELID, 'maxResults'=>50))
 	{
@@ -632,7 +636,7 @@ class YouTube
 		$new_array=$this->rebuildArray($playlists, NULL, NULL, TRUE);
 
 		return $new_array;
-	} #==== End -- PlaylistsListFeed
+	}
 
 	/**
 	 * PlaylistItems
@@ -644,7 +648,6 @@ class YouTube
 	 * 											one or more playlistItem resource properties that the API
 	 * 											response will include. The part names that you can include
 	 * 											in the parameter value are id, snippet, and contentDetails.
-	 * @access	public
 	 */
 	public function PlaylistItems($playlist_id, $part='snippet', $playlistsItems_optParams=array('maxResults'=>50))
 	{
@@ -663,21 +666,20 @@ class YouTube
 		$items=$utility->sortByDate($new_array, 'publishedAt');
 
 		return $items;
-	} #==== End -- PlaylistItems
+	}
 
 	/**
 	 * PlaylistItemsInsert
 	 *
 	 * Inserts a video into playlists.
 	 *
-	 * @param	string $part				The part parameter specifies a comma-separated list of
+	 * @param string $part				The part parameter specifies a comma-separated list of
 	 * 											one or more playlistItem resource properties that the API
 	 * 											response will include. The part names that you can include
 	 * 											in the parameter value are id, snippet, and contentDetails.
-     * @param	$postBody
-     * @param	array $optParams			Optional parameters.
-	 * @return Google_Service_YouTube_PlaylistItem
-	 * @access	public
+     * @param $postBody
+     * @param array $optParams			Optional parameters.
+	 * @return mixed
 	 */
 	public function PlaylistItemsInsert($part='snippet', $postBody, $optParams=array())
 	{
@@ -687,7 +689,7 @@ class YouTube
 		$playlistsItemsInsert_response=$youtube_service->playlistItems->insert($part, $postBody, $optParams);
 
 		return $playlistsItemsInsert_response;
-	} #==== End -- PlaylistItemsInsert
+	}
 
 	/**
 	 * searchYouTube
@@ -703,7 +705,7 @@ class YouTube
 	 * @param	string $order				Optional - The order parameter specifies the method that
 	 * 											will be used to order resources in the API response.
 	 * 											Acceptable values are: date, rating, relevance, viewCount
-	 * @access	public
+	 * @return mixed
 	 */
 	public function searchYouTube($channel_id, $type=NULL, $part='snippet', $order='date', $search_optParams=array('maxResults'=>50))
 	{
@@ -728,7 +730,7 @@ class YouTube
 		$new_array=$this->rebuildArray($search);
 
 		return $new_array;
-	} #==== End -- searchYouTube
+	}
 
 	/**
 	 * startYouTubeService
@@ -740,7 +742,7 @@ class YouTube
 	public function startYouTubeService()
 	{
 		# Get the Google API.
-		require_once Utility::locateFile(MODULES.'Vendor'.DS.'Google'.DS.'src'.DS.'Google'.DS.'autoload.php');
+		//require_once Utility::locateFile(MODULES.'Vendor'.DS.'Google'.DS.'src'.DS.'Google'.DS.'autoload.php');
 
 		$client=new Google_Client();
 		$client->setApplicationName("API Project");
@@ -755,21 +757,20 @@ class YouTube
 
 		$this->setGoogleClient($client);
 		$this->setYouTubeService($youtube_service);
-	} #==== End -- startYouTubeService
+	}
 
 	/**
 	 * updateVideo
 	 *
 	 * Updates a video's metadata. (videos.update)
 	 *
-	 * @param	string $part			The part parameter specifies a comma-separated list of
+	 * @param string $part			The part parameter specifies a comma-separated list of
 	 * 										one or more search resource properties that the API response
 	 * 										will include. The part names that you can include in the
 	 * 										parameter value are id and snippet.
-	 * @param	$postBody
-	 * @param	array $optParams		Optional parameters.
-	 * @return	Google_Service_YouTube_Video
-	 * @access	public
+	 * @param $postBody
+	 * @param array $optParams		Optional parameters.
+	 * @return mixed
 	 */
 	public function updateVideo($part, $postBody, $optParams=array())
 	{
@@ -777,7 +778,7 @@ class YouTube
 		$youtube_service=$this->getYouTubeService();
 		$update_video=$youtube_service->videos->update($part, $postBody, $optParams);
 		return $update_video;
-	} #==== End -- updateVideo
+	}
 
 	/**
 	 * videoDetails
@@ -790,7 +791,6 @@ class YouTube
 	 * 										will include. The part names that you can include in the
 	 * 										parameter value are id, snippet, contentDetails, player,
 	 * 										statistics, status, and topicDetails.
-	 * @access	public
 	 * @return	array
 	 */
 	public function videoDetails($video_id, $part='snippet', $optParams=array())
@@ -804,7 +804,7 @@ class YouTube
 		$new_array=$this->rebuildArray($video, FALSE, TRUE);
 		# Return the new array.
 		return $new_array;
-	} #==== End -- videoDetails
+	}
 
 	/*** End public methods ***/
 
@@ -817,12 +817,11 @@ class YouTube
 	 *
 	 * Changes the array output.
 	 *
-	 * @param	array $array				Original array
-	 * @param	$is_playlist_items			Is this array PlaylistItems?
-	 * @param	$is_video_details			Is this array videoDetails()?
-	 * @param	$is_playlist_feed			Is this array PlaylistsListFeed()?
-	 * @access	private
-	 * @return	array
+	 * @param array $array				Original array
+	 * @param boolean $is_playlist_items			Is this array PlaylistItems?
+	 * @param boolean $is_video_details			Is this array videoDetails()?
+	 * @param boolean $is_playlist_feed			Is this array PlaylistsListFeed()?
+	 * @return array
 	 */
 	private function rebuildArray($array, $is_playlist_items=FALSE, $is_video_details=FALSE, $is_playlist_feed=FALSE)
 	{
@@ -869,4 +868,4 @@ class YouTube
 
 	/*** End protected methods ***/
 
-} # end YouTube class
+}

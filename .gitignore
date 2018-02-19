@@ -5,8 +5,9 @@
 # Root
 .env
 .idea/
-composer.lock
+/.vagrant
 /vendor
+settings.php
 
 # Bodega
 bodega/**
@@ -16,6 +17,10 @@ cache/**
 
 # Custom Sessions
 custom_sessions/**
+
+# Data
+/data
+!/data/*.sample
 
 # Logs
 logs/**

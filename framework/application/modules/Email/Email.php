@@ -1,5 +1,11 @@
 <?php /* Requires PHP5+ */
 
+namespace Mamoon\Email;
+
+use Exception;
+use PHPMailer;
+use phpmailerException;
+
 # Make sure the script is not accessed directly.
 if(!defined('BASE_PATH'))
 {
@@ -575,7 +581,7 @@ class Email
 			# Get the Utility Class.
 			require_once UTILITY_CLASS;
 			# Get the PHPMailer class.
-			require_once Utility::locateFile(MODULES.'Vendor'.DS.'PHPMailer'.DS.'PHPMailerAutoload.php');
+			//require_once Utility::locateFile(MODULES.'Vendor'.DS.'PHPMailer'.DS.'PHPMailerAutoload.php');
 			# Instantiate a new PHPMailer object.
 			$mail=new PHPMailer;
 

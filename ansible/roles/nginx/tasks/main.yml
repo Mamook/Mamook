@@ -1,0 +1,21 @@
+---
+- name: Install Nginx
+  become: yes
+  apt: pkg=nginx state=latest
+
+- name: Create ssl directory
+  become: yes
+  file: path=/etc/nginx/ssl state=directory
+
+- name: Copy crt file
+  become: yes
+  template: src=devcert.crt dest=/etc/nginx/ssl/devcert.crt
+
+- name: Copy key file
+  become: yes
+  template: src=devcert.key dest=/etc/nginx/ssl/devcert.key
+
+- name: Copy new nginx.conf
+  become: yes
+  template: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify: restart nginx

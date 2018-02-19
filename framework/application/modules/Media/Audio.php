@@ -50,8 +50,7 @@ class Audio extends Media
 	 *
 	 * Sets the data member $all_audio.
 	 *
-	 * @param	$audio					May be an array or a string. The method makes it into an array regardless.
-	 * @access	protected
+	 * @param array $audio					May be an array or a string. The method makes it into an array regardless.
 	 */
 	protected function setAllAudio($audio)
 	{
@@ -75,8 +74,7 @@ class Audio extends Media
 	 *
 	 * Sets the data member $api.
 	 *
-	 * @param	int $api
-	 * @access	public
+	 * @param int $api
 	 */
 	public function setAPI($api)
 	{
@@ -102,7 +100,6 @@ class Audio extends Media
 	 * This is the ID on Soundcloud.
 	 *
 	 * @param	string $audio_id
-	 * @access	public
 	 */
 	public function setAudioId($audio_id)
 	{
@@ -115,7 +112,6 @@ class Audio extends Media
 	 * Sets the data member $audio_type.
 	 *
 	 * @param	$audio_type
-	 * @access	public
 	 */
 	public function setAudioType($audio_type)
 	{
@@ -129,7 +125,6 @@ class Audio extends Media
 	 * Set the data member $audio_url
 	 *
 	 * @param	string $audio_url
-	 * @access	public
 	 */
 	public function setAudioUrl($audio_url)
 	{
@@ -142,7 +137,6 @@ class Audio extends Media
 	 * Sets the data member $confirmation_template.
 	 *
 	 * @param	$path
-	 * @access	public
 	 */
 	public function setConfirmationTemplate($path)
 	{
@@ -173,7 +167,6 @@ class Audio extends Media
 	 * Sets the data member $embed_code.
 	 *
 	 * @param	string $embed_code
-	 * @access	public
 	 */
 	public function setEmbedCode($embed_code)
 	{
@@ -200,7 +193,6 @@ class Audio extends Media
 	 * Sets the data member $file_name.
 	 *
 	 * @param	$file_name
-	 * @access	public
 	 */
 	public function setFileName($file_name)
 	{
@@ -226,9 +218,9 @@ class Audio extends Media
 	 * Sets the data member $id.
 	 * Extends setID in Media.
 	 *
-	 * @param	int $id					A numeric ID representing the audio.
-	 * @param	string $media_type		The type of media that the ID represents. Default is "audio".
-	 * @access	public
+	 * @param int $id            A numeric ID representing the audio.
+	 * @param string $media_type The type of media that the ID represents. Default is "audio".
+	 * @throws Exception
 	 */
 	public function setID($id, $media_type='audio')
 	{
@@ -254,7 +246,6 @@ class Audio extends Media
 	 * Set the data member $is_playlist
 	 *
 	 * @param	boolean $is_playlist
-	 * @access	private
 	 */
 	private function setIsPlaylist($is_playlist)
 	{
@@ -468,11 +459,11 @@ class Audio extends Media
 			{
 				$soundcloud_obj->setSoundcloudRedirectUri(APPLICATION_URL.HERE);
 			}
-			$soundcloud_obj->setSoundcloudDevKey(SOUNDCLOUD_DEV_KEY);
-			$soundcloud_obj->setSoundcloudRefreshToken(SOUNDCLOUD_REFRESH_TOKEN);
+			//$soundcloud_obj->setSoundcloudDevKey(SOUNDCLOUD_DEV_KEY);
+			//$soundcloud_obj->setSoundcloudRefreshToken(SOUNDCLOUD_REFRESH_TOKEN);
 
 			# Start the Soundcloud Service.
-			$soundcloud_obj->startSoundcloudService();
+			//$soundcloud_obj->startSoundcloudService();
 		}
 		return $this->soundcloud_obj;
 	} #==== End -- getSoundcloudObject
@@ -529,8 +520,9 @@ class Audio extends Media
 	 *
 	 * Creates media XHTML elements and sets them to an array for display.
 	 *
-	 * @param	array $playlists
-	 * @access	public
+	 * @param array $playlists
+	 * @return string
+	 * @throws Exception
 	 */
 	public function createPlaylistMenu($playlists)
 	{
@@ -546,7 +538,7 @@ class Audio extends Media
 				foreach($playlists as $playlists_data)
 				{
 					$name=$playlists_data->name;
-					$url=AUDIO_URL.'?playlist='.$current_playlist_id;
+					$url=AUDIO_URL.'?playlist='.$playlists_data->id;
 					$here_class=$doc->addHereClass($url, FALSE, FALSE);
 					$playlist_items.='<li class="list-nav-1'.$here_class.'">'.
 						'<a href="'.$url.'" title="'.$name.' audio playlist">'.
@@ -568,9 +560,10 @@ class Audio extends Media
 	 *
 	 * Removes an audio record from the `audio` table and the actual audio file from the system.
 	 *
-	 * @param	int $id					The id of the audio in the `audio` table.
-	 * @param	$redirect
-	 * @access	public
+	 * @param int $id The id of the audio in the `audio` table.
+	 * @param $redirect
+	 * @return bool
+	 * @throws Exception
 	 */
 	public function deleteAudio($id, $redirect=NULL)
 	{
@@ -595,7 +588,7 @@ class Audio extends Media
 				if($redirect===FALSE)
 				{
 					# Set the value to NULL (no redirect).
-					$redirect===NULL;
+					$redirect=NULL;
 				}
 				# Validate the passed id as an integer.
 				if($validator->isInt($id)===TRUE)
@@ -631,7 +624,7 @@ class Audio extends Media
 							try
 							{
 								# Delete the audio from the `audio` table.
-								$deleted=$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
+								$db->query('DELETE FROM `'.DBPREFIX.'audio` WHERE `id` = '.$db->quote($id).' LIMIT 1');
 								# Set a nice message to display to the user.
 								$_SESSION['message']='The audio '.$audio_name.' was successfully deleted.';
 								# Redirect the user back to the page without GET or POST data.
@@ -1086,7 +1079,9 @@ class Audio extends Media
 				# Set Soundcloud ID
 				$this->setAudioId($api_decoded->soundcloud_id);
 				# Create audio_url variable.
-				$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
+				//$audio_url=$soundcloud_obj->getSoundCloudUrl().$this->getAudioId();
+				# Temp variable.
+				$audio_url='';
 			}
 			# If it's not on Soundcloud, stream from the server.
 			else

@@ -24,10 +24,10 @@ class AudioFormProcessor extends FormProcessor
 	 *
 	 * Processes a submitted audio for upload.
 	 *
-	 * @param	$data					An array of values to populate the form with.
-	 * @param	$max_size				The maximum allowed size of uploaded audio.
-	 * @access	public
-	 * @return	string
+	 * @param array $data   An array of values to populate the form with.
+	 * @param int $max_size The maximum allowed size of uploaded audio.
+	 * @return string
+	 * @throws Exception
 	 */
 	public function processAudio($data, $max_size=314572800)
 	{
@@ -407,7 +407,7 @@ class AudioFormProcessor extends FormProcessor
 								if(file_exists(IMAGES_PATH.'original'.DS.$clean_filename.'.jpg')===FALSE)
 								{
 									# Get the getID3 Class.
-									require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
+									//require_once Utility::locateFile(MODULES.'Vendor'.DS.'getID3'.DS.'getid3'.DS.'getid3.php');
 									# Instantiate the new getID3 object.
 									$getID3_obj=new getID3;
 									$audio_file_info=$getID3_obj->analyze(BODEGA.'audio'.DS.$new_audio_name);
